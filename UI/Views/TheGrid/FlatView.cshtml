@@ -1,0 +1,120 @@
+﻿@model FsmViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (Model.entity == null)
+    {
+        return;
+    }
+
+    Model.PageTitle = Model.entityTitle;
+
+
+
+}
+
+
+@addTagHelper *,UI
+
+
+@if (Model.prefix == "p31" || Model.prefix == "p41")
+{
+    <table>
+        <tr>
+
+            <td>
+                @Html.EditorFor(m => m.period, "~/Views/Shared/_Period.cshtml")
+            </td>
+        </tr>
+    </table>
+
+}
+
+<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+
+
+
+
+<script type="text/javascript">
+    $(document.body).css("overflow", "hidden");
+
+    $(document).ready(function () {
+
+
+
+        @if(Model.period != null)
+        {
+        <text>
+        $("#PeriodValue").on("change", function () {
+            $.post("/Common/SetUserParam", { key: "grid-period-value-@Model.prefix",value:$(this).val()  }, function (data) {
+                reload();
+
+            });
+        });
+
+        if ($("#PeriodValue").val() != "0" && $("#PeriodValue").val() != "") {
+            $("#PeriodValue").css("background-color", "red");
+        }
+
+        $("#cmdRefreshPeriod").on("click", function () {
+            var k = [];
+            var v = [];
+            k.push("grid-period-value-@Model.prefix");
+            v.push($("#PeriodValue").val());
+            k.push("grid-period-d1-@Model.prefix");
+            v.push($("#d1helper").val());
+            k.push("grid-period-d2-@Model.prefix");
+            v.push($("#d2helper").val());
+
+            $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
+                reload();
+
+            });
+
+        });
+
+        </text>
+        }
+
+
+        _mainmenu_highlight_current("cmd@(Model.prefix.ToUpper())");
+
+
+    });
+
+        function reload() {
+            _showloading();
+            location.replace("/TheGrid/FlatView?prefix=@Model.prefix");
+
+        }
+
+
+
+        function change_grid(j72id) {
+            $.post("/Common/SetUserParam", { key: "flatview-j72id-@(Model.prefix)",value:j72id  }, function (data) {
+                reload();
+
+            });
+        }
+
+        function report_nocontext(x31id) {
+            _window_open("/x31/ReportNoContext?x31id=" + x31id, 2);
+        }
+
+
+        function reload() {
+            _showloading();
+            location.replace("/TheGrid/FlatView?prefix=@Model.prefix");
+        }
+
+        function switch_to_master(prefix) {    //zapnout spodní panel
+            $.post("/Common/SetUserParam", { key: "grid-" + prefix + "-show11", value: "1" }, function (data) {
+                location.replace("/TheGrid/MasterView?prefix=" + prefix);
+
+            });
+
+        }
+</script>
+

@@ -1,0 +1,206 @@
+﻿@model UI.Models.Record.j02Record
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    if (Model.Rec == null) return;
+    Model.PageTitle = _f.tra("Osobní profil");
+}
+@addTagHelper *, UI
+
+
+<div class="tabs_container_record">
+    <!-- Tab panes -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab1" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab1">@_f.tra("Vlastnosti")</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Uživatelská pole a štítky")</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Ostatní")</a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="modal_record_container">
+    <div class="tab-content">
+        <div class="tab-pane" id="tab1" role="tabpanel">
+            <!-- Tab1 -->
+            <div class="row">
+                <div class="col-sm-2 col-md-2">
+                    <myautocomplete asp-for="Rec.j02TitleBeforeName" o15flag="1" placeholder="@_f.tra("Titul")"></myautocomplete>
+
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <input class="form-control" asp-for="Rec.j02FirstName" placeholder="@_f.tra("Jméno")" />
+
+
+                </div>
+                <div class="col-sm-5 col-md-5">
+                    <input class="form-control" asp-for="Rec.j02LastName" placeholder="@_f.tra("Příjmení")" />
+
+                </div>
+                <div class="col-sm-2 col-md-2">
+                    <myautocomplete asp-for="Rec.j02TitleAfterName" o15flag="2"></myautocomplete>
+                </div>
+
+            </div>
+
+
+
+            <div class="row my-2">
+
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("E-mail"):</label>
+                <div class="col-sm-4 col-md-4">
+                    <input class="form-control" type="email" asp-for="Rec.j02Email" />
+
+                </div>
+
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kód/Osobní číslo"):</label>
+                <div class="col-sm-5 col-md-4">
+                    <input class="form-control" asp-for="Rec.j02Code" />
+
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pozice"):</label>
+                <div class="col-sm-5 col-md-4">
+                    <mycombo entity="j07PersonPosition" asp-for="Rec.j07ID" selectedtext="@Model.ComboJ07Name" view-flag="2"></mycombo>
+                </div>
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontakty"):</label>
+                <div class="col-sm-5 col-md-4">
+                    <input class="form-control" placeholder="@_f.tra("Mobil")" type="tel" asp-for="Rec.j02Mobile" />
+
+                </div>
+
+            </div>
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pracovní fond"):</label>
+                <div class="col-sm-5 col-md-4">
+                    <mycombo entity="c21FondCalendar" asp-for="Rec.c21ID" selectedtext="@Model.ComboC21Name" view-flag="2"></mycombo>
+                </div>
+                <label class="col-sm-1 col-md-2 col-form-label"></label>
+                <div class="col-sm-5 col-md-4">
+                    <input class="form-control" placeholder="@_f.tra("Pevný tel.")" type="tel" asp-for="Rec.j02Phone" />
+
+                </div>
+
+            </div>
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Středisko"):</label>
+                <div class="col-sm-5 col-md-4">
+                    <mycombo entity="j18Region" asp-for="Rec.j18ID" selectedtext="@Model.ComboJ18Name" view-flag="2"></mycombo>
+                </div>
+                <label class="col-sm-1 col-md-2 col-form-label"></label>
+                <div class="col-sm-5 col-md-4">
+                    <input class="form-control" placeholder="@_f.tra("Kancelář")" type="tel" asp-for="Rec.j02Office" />
+
+                </div>
+
+            </div>
+
+
+            <div class="row my-2">
+
+                <div class="col-sm-7 col-md-8">
+
+                </div>
+
+                <div class="col-sm-5 col-md-4">
+                    <myautocomplete asp-for="Rec.j02JobTitle" o15flag="3" placeholder="@_f.tra("Pracovní funkce")"></myautocomplete>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-floating my-2">
+                <textarea class="form-control" asp-for="Rec.j02EmailSignature"></textarea>
+                <label for="Rec_j02EmailSignature">@_f.tra("Podpis do faktury nebo poštovní zprávy")</label>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <!-- Tab2 -->
+
+        </div>
+
+        <div class="tab-pane" id="tab3" role="tabpanel">
+            <!-- Tab3 -->
+            <div class="card">
+                <div class="card-header">
+                    @_f.tra("Omezit zpětně vykazovat úkony")
+                </div>
+                <div class="card-body">
+                    <label>
+                        @_f.tra("Počet dní"):
+                    </label>
+                    <select asp-for="@Model.Rec.j02TimesheetEntryDaysBackLimit" class="form-select">
+                        <option value="">Bez omezen&#237;</option>
+                        <option selected="selected" value="999">Povolen pouze aktu&#225;ln&#237; t&#253;den</option>
+                        <option value="1">-1 @_f.tra("den")</option>
+                        <option value="2">-2 @_f.tra("dny")</option>
+                        <option value="3">-3 @_f.tra("dny")</option>
+                        <option value="4">-4 @_f.tra("dny")</option>
+                        <option value="5">-5 @_f.tra("dní")</option>
+                        <option value="6">-6 @_f.tra("dní")</option>
+                        <option value="7">-7 @_f.tra("dní")</option>
+                        <option value="8">-8 @_f.tra("dní")</option>
+                        <option value="9">-9 @_f.tra("dní")</option>
+                        <option value="10">-10 @_f.tra("dní")</option>
+                        <option value="14">-14 @_f.tra("dní")</option>
+                        <option value="20">-20 @_f.tra("dní")</option>
+                        <option value="30">-30 @_f.tra("dní")</option>
+
+                    </select>
+                    <mycombochecklist asp-for="@Model.Rec.j02TimesheetEntryDaysBackLimit_p34IDs" entity="p34ActivityGroup" selectedtext="@Model.p34Names" placeholder="@_f.tra("Vybrat sešity")..."></mycombochecklist>
+                </div>
+            </div>
+
+            <div class="card my-2">
+                <div class="card-header">
+                    @_f.tra("Omezit přístkup k již vyúčtovaným úkonům")
+                </div>
+                <div class="card-body">
+                    <select asp-for="@Model.Rec.j02WorksheetAccessFlag" class="form-select">
+                        <option value=""></option>
+                        <option value="1">@_f.tra("Nemá přístup k vyúčtovaným úkonům (vč. vlastních)")</option>
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="card my-2">
+                <div class="card-header">
+                    @_f.tra("Fakturační status pro vykázané ne-fakturovatelné hodiny")
+                </div>
+                <div class="card-body">
+                    <select asp-for="@Model.Rec.p72ID_NonBillable" class="form-select">
+                        <option value="_NotSpecified">@_f.tra("Rozhodne systém")</option>
+                        <option value="ZahrnoutDoPausalu">@_f.tra("Zahrnout do paušálu")</option>
+                        <option value="ViditelnyOdpis">@_f.tra("Viditelný odpis")</option>
+                        <option value="SkrytyOdpis">@_f.tra("Skrytý odpis")</option>
+
+                    </select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+
+
+
+</script>

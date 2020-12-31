@@ -1,0 +1,120 @@
+﻿@model BaseViewModel
+@inject BL.Factory _f
+@{
+    Model.PageTitle = "Dashboard";
+}
+
+<form id="form1" method="POST">
+
+
+    <div class="navbar-collapse p-4" id="navbarNavAltMarkup">
+
+
+        <div>
+
+
+            <div class="btn-group">
+                <button type="submit" id="cmdSaveMyToolbar" class="btn btn-success my-0">@_f.tra("Uložit změny")</button>
+
+            </div>
+            <div class="btn-group">
+                <button type="submit" id="cmdApply" class="btn btn-success">@_f.tra("Uložit a zůstat")</button>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal_record_container">
+
+
+
+        <div class="row">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Personální číslo"):</label>
+            <div class="col-sm-4 col-md-3">
+                <input class="form-control" />
+
+            </div>
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("E-mail"):</label>
+            <div class="col-sm-4 col-md-3">
+                <input class="form-control" type="email" />
+
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Mobil"):</label>
+            <div class="col-sm-4 col-md-3">
+                <input class="form-control" type="tel" />
+
+            </div>
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Pevný tel."):</label>
+            <div class="col-sm-4 col-md-3">
+                <input class="form-control" type="tel" />
+
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Adresa"):</label>
+            <div class="col-sm-9 col-md-7">
+                <input class="form-control" type="tel" />
+
+            </div>
+
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">Hodnota:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" readonly class="form-control-plaintext" value="email@example.com">
+
+            </div>
+
+        </div>
+
+
+        <div class="row my-2">
+            <div class="col-sm-3 col-md-3">
+                <input type="checkbox" />
+                <label class="col-form-label" for="Rec_j02IsInvitedPerson">@_f.tra("Může být přizvanou osobou v akci")</label>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+</form>
+
+
+<table class="table table-sm table-hover">
+    <tr>
+        <th>kdo</th>
+        <th>kdy</th>
+    </tr>
+    @for(int i=1; i <= 10; i++)
+    {
+        <tr>
+            <td>
+                já
+            </td>
+            <td>
+                @DateTime.Now
+            </td>
+        </tr>
+    }
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+
+    });
+
+</script>

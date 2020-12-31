@@ -1,0 +1,283 @@
+﻿@model MyProfileViewModel
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Můj profil");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+
+
+}
+@addTagHelper *, UI
+
+
+<div class="tabs_container_record">
+    <!-- Tab panes -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab1" class="nav-link active" data-bs-toggle="tab" role="tab" href="#tab1">@Model.CurrentUser.PersonAsc</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">Browser</a>
+        </li>
+
+    </ul>
+
+
+</div>
+
+<div class="modal_record_container">
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab1" role="tabpanel">
+            <form id="form1" asp-controller="Home" asp-action="MyProfile" method="POST">
+
+
+                <div>
+                    <button type="submit" class="btn btn-success">@_f.tra("Uložit změny")</button>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("E-mail"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <input class="form-control" asp-for="@Model.EmailAddres" />
+                        <span asp-validation-for="@Model.EmailAddres" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Mobilní telefon"):</label>
+                    <div class="col-sm-11 col-md-10">
+
+                        <input class="form-control" asp-for="@Model.Mobile" />
+                    </div>
+
+                </div>
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pevný telefon"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <input class="form-control" asp-for="@Model.Phone" />
+
+                    </div>
+
+                </div>
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Adresa kanceláře"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <input class="form-control" asp-for="@Model.Office" />
+
+                    </div>
+
+                </div>
+
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Velikost modálních oken"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <select asp-for="@Model.j03ModalWindowsFlag" class="form-select">
+                            <option value="1">@_f.tra("Nechat rozhodnutí na systému")</option>
+                            <option value="99">@_f.tra("Vždy na celou obrazovku")</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                
+                <div class="my-2">
+                    <input asp-for="@Model.IsGridClipboard" />
+                    <label for="IsGridClipboard">@_f.tra("Podporovat clipboard v textech Grid přehledu (schránka Ctrl+C & Ctrl+V)?")</label>
+                </div>
+
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label" data-trans-text="notifikace">@_f.tra("Přijímat e-mail notifikace?"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <select asp-for="@Model.j02NotifySubscriberFlag" class="form-control">
+                            <option value="0">@_f.tra("Nechť mi systém odesílá e-mail notifikace")</option>
+                            <option value="1">@_f.tra("Odhlašuji se z e-mail notfikací")</option>
+
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-floating my-2">
+                    <textarea class="form-control" asp-for="@Model.j02EmailSignature" style="height:80px;"></textarea>
+                    <label for="j02EmailSignature">@_f.tra("Podpis")</label>
+                </div>
+
+            </form>
+
+            <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="collapse" href="#kdojsem" role="button" aria-expanded="false" aria-controls="kdojsem">@_f.tra("Kdo jsem")</a>
+
+            <div class="collapse multi-collapse" id="kdojsem">
+                @if (Model.CurrentUser != null)
+                {
+
+                    <div class="row">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Uživatel"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <myval value="@Model.CurrentUser.j03Login"></myval>
+
+                        </div>
+
+                    </div>
+                    <div class="row my-2">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Aplikační role"):</label>
+                        <div class="col-sm-11 col-md-10">
+
+                            <myval value="@Model.RecJ03.j04Name"></myval>
+
+                        </div>
+
+                    </div>
+
+                }
+
+                @if (Model.RecJ02 != null)
+                {
+                    <div class="row my-2">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("E-mail"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <myval value="@Model.RecJ02.j02Email"></myval>
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="row my-2">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
+                        <div class="col-sm-11 col-md-10">
+
+                            <myval value="@Model.RecJ02.FullNameAsc"></myval>
+                        </div>
+
+                    </div>
+                    <div class="row my-2">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Osobní kód"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <myval value="@Model.RecJ02.j02Code"></myval>
+
+                        </div>
+
+                    </div>
+                    <div class="row my-2">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pozice"):</label>
+                        <div class="col-sm-11 col-md-10">
+
+                            <myval value="@Model.RecJ02.j07Name"></myval>
+                        </div>
+
+                    </div>
+                    <div class="row my-2">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Fond hodin"):</label>
+                        <div class="col-sm-11 col-md-10">
+
+                            <myval value="@Model.RecJ02.c21Name"></myval>
+                        </div>
+
+                    </div>
+                    <div class="row my-2">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Člen týmů"):</label>
+                        <div class="col-sm-11 col-md-10">
+
+                            <myval value="@Model.Teams"></myval>
+                        </div>
+
+                    </div>
+
+
+
+
+                }
+            </div>
+        </div>
+
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <table>
+                <tr>
+                    <td>
+                        Device:
+                    </td>
+                    <td>
+                        <span id="infoMobile"></span> @Model.client_info.Device.Family
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        OS:
+                    </td>
+                    <td>
+                        @Model.client_info.OS.Family @Model.client_info.OS.Major
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Browser:
+                    </td>
+                    <td>
+                        @Model.client_info.UA.Family @Model.client_info.UA.Major
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Avail resolution:
+                    </td>
+                    <td>
+                        <span id="infoAvailResolution"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Inner resolution:
+                    </td>
+                    <td>
+                        <span id="infoInnerResolution"></span>
+                    </td>
+                </tr>
+
+            </table>
+            <hr />
+            <span>@Model.userAgent</span>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#infoAvailResolution").text(_device.availWidth + " x " + _device.availHeight);
+        $("#infoInnerResolution").text(_device.innerWidth + " x " + _device.innerHeight);
+        $("#infoMobile").text(_device.type);
+
+
+
+
+    });
+
+
+</script>
+
+

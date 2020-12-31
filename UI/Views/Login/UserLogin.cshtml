@@ -1,0 +1,135 @@
+﻿@model BO.LoggingUser
+@inject BL.Factory _f
+
+@{
+    ViewData["Title"] = _f.trawi("Přihlášení",Model.LangIndex);
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
+    var _returnurl = @Context.Request.Query["returnurl"];
+}
+
+
+
+<div style="margin:auto;max-width:500px;">
+    
+        <form id="form1" asp-action="UserLogin" method="post">
+            
+            <h4>@_f.trawi("Přihlášení do aplikace",Model.LangIndex)</h4>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Login" class="control-label">@_f.trawi("Přihlašovací jméno (login)",Model.LangIndex)</label>
+                <input asp-for="@Model.Login" class="form-control" />
+                <span asp-validation-for="@Model.Login" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Password" class="control-label">@_f.trawi("Heslo", Model.LangIndex)</label>
+                <input type="password" asp-for="@Model.Password" class="form-control" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@_f.trawi("Přihlásit se",Model.LangIndex)" class="btn btn-default btn-primary" asp-route-returnurl="@_returnurl" />
+            </div>
+            <div class="form-group">
+
+                <select asp-for="@Model.CookieExpiresInHours" class="form-control">
+                    <option value="1">@_f.trawi("Trvalé přihlášení (1 hodina)",Model.LangIndex)</option>
+                    <option value="2">@_f.trawi("2 hodiny",Model.LangIndex)</option>
+                    <option value="6">@_f.trawi("6 hodin", Model.LangIndex)</option>
+                    <option value="12">@_f.trawi("12 hodin", Model.LangIndex)</option>
+                    <option value="24">@_f.trawi("24 hodin", Model.LangIndex)</option>
+                    <option value="48">@_f.trawi("48 hodin", Model.LangIndex)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <div class="dropdown">
+                    <a class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        @if (Model.LangIndex == 0)
+                        {
+                            <img src="~/images/czechrepublic.gif" />
+                        }
+                        @if (Model.LangIndex == 1)
+                        {
+                            <img src="~/images/uk.gif" />
+                        }
+                        @if (Model.LangIndex == 4)
+                        {
+                            <img src="~/images/slovakia.gif" />
+                        }
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="btn btn-light" href="javascript:change_lang(0)" style="width:200px;text-align:left;"><img src="~/images/czechrepublic.gif" /> Česky</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-light" href="javascript:change_lang(1)" style="width:200px;text-align:left;"><img src="~/images/uk.gif" /> English</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-light" href="javascript:change_lang(4)" style="width:200px;text-align:left;"><img src="~/images/slovakia.gif" /> Slovenčina</a>
+                        </li>
+                    </ul>
+                </div>
+
+                
+
+
+            </div>
+
+
+            <input type="hidden" asp-for="@Model.LangIndex" value="@Model.LangIndex" />
+            <input type="hidden" asp-for="@Model.IsChangedLangIndex" value="@Model.IsChangedLangIndex" />
+            <input type="hidden" asp-for="@Model.Browser_AvailWidth" />
+            <input type="hidden" asp-for="@Model.Browser_AvailHeight" />
+            <input type="hidden" asp-for="@Model.Browser_InnerWidth" />
+            <input type="hidden" asp-for="@Model.Browser_InnerHeight" />
+            <input type="hidden" asp-for="@Model.Browser_UserAgent" />
+            <input type="hidden" asp-for="@Model.Browser_DeviceType" />
+            <input type="hidden" asp-for="@Model.Browser_Host" />
+        </form>
+    
+
+
+
+</div>
+
+
+
+@if (Model.Message != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <h4>@Model.Message</h4>
+    </div>
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#Browser_UserAgent").val(navigator.userAgent);
+        $("#Browser_AvailWidth").val(screen.availWidth);
+        $("#Browser_AvailHeight").val(screen.availHeight);
+        $("#Browser_InnerWidth").val(window.innerWidth);
+        $("#Browser_InnerHeight").val(window.innerHeight);
+        $("#Browser_Host").val(location.host);
+
+        var devicetype = "Desktop";
+        if (screen.availHeight > screen.availWidth || screen.width < 800 || screen.height < 600) {   //mobilní zařízení výšku vyšší než šířku
+            devicetype = "Phone";
+        }
+        $("#Browser_DeviceType").val(devicetype);
+
+
+       
+
+
+    });
+
+    function change_lang(li) {
+        $("#LangIndex").val(li);
+        $("#IsChangedLangIndex").val(true);
+        form1.action = "/Login/UserLogin?oper=postback";
+        form1.submit();
+    }
+</script>
