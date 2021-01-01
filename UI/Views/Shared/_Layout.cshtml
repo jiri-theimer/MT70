@@ -23,28 +23,36 @@
 <body>
     <header>
         <nav id="mainmenu1" class="navbar navbar-expand-lg navbar-dark bg-dark py-0 px-0">
-            <div id="mainmenu1_container" class="container-fluid">
-                <a class="navbar-brand" href="#">MARKTIME</a>
+            <div id="mainmenu1_container" class="container-fluid px-0">
+                <div id="divHome" class="dropdown mx-0" style="width:220px;" >
+                    <a id="cmdHome" class="navbar-brand nav-link dropdown-toggle py-1" data-bs-toggle="dropdown">
+                        @_f.CurrentUser.AppName                        
+                    </a>
+                    <ul id="ulMainMenu" class="dropdown-menu" aria-labelledby="cmdHome" style="list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;">Loading....</ul>
+                </div>
+                
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Dashboard")">Home</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="cmdNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
+                            <ul id="ulNew" class="dropdown-menu" aria-labelledby="cmdNew"><li>Loading....</li></ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
+                            <a class="nav-link" href="/Dashboard/Index">DASHBOARD</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Home/Index">Features</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="cmdAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("Administrace")</a>
+                            <a class="nav-link dropdown-toggle" id="cmdAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("ADMINISTRACE")</a>
                             <ul id="ulAdmin" class="dropdown-menu" aria-labelledby="cmdAdmin"><li>Loading....</li></ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/TheGrid/FlatView?prefix=j02">Flat grid J02</a>
+                            <a class="nav-link" href="/TheGrid/FlatView?prefix=j02">LIDÉ</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/TheGrid/MasterView?prefix=j02">Master grid J02</a>
@@ -153,11 +161,13 @@
                 }
             });
 
-
+            register_menu("cmdHome", "ulMainMenu", "MainMenu");
+            register_menu("cmdNew", "ulNew", "MenuNewRecord");
             register_menu("cmdLangIndex", "ulLangIndex","CurrentUserLangIndex");
             register_menu("cmdFontSize", "ulFontSize", "CurrentUserFontSize");
             register_menu("cmdMyProfile", "ulMyProfile", "CurrentUserMyProfile");
             register_menu("cmdAdmin", "ulAdmin", "AdminMenu");
+            
 
 
             @if (_f.CurrentUser.Messages4Notify != null) {

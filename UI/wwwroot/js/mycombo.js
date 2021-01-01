@@ -11,7 +11,7 @@
     var _event_after_change = c.on_after_change;
     var _filterflag = c.filterflag;
     var _searchbox_serverfiltering_timeout;
-    var _placeholder = "<span class='k-icon k-i-zoom'></span>"+c.placeholder;
+    var _placeholder = c.placeholder;
     var _masterprefix = c.masterprefix;
     var _masterpid = c.masterpid;
 

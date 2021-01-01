@@ -70,9 +70,9 @@ namespace UI.Views.Shared.TagHelpers
 
             sb(string.Format("<div id='divDropdownContainer{0}' class='dropdown'>", strControlID));
 
-            sb(string.Format("<button type='button' id='cmdCombo{0}' class='btn dropdown-toggle form-control' data-bs-toggle='dropdown' aria-expanded='false' style='border: solid 1px #C8C8C8; border-radius: 3px;width:100%;text-align:left;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'><span class='k-icon k-i-zoom'></span>{1}</button>", strControlID, this.PlaceHolder));
+            sb(string.Format("<button type='button' id='cmdCombo{0}' class='btn dropdown-toggle form-control' data-bs-toggle='dropdown' aria-expanded='false' style='border: solid 1px #C8C8C8; border-radius: 3px;width:100%;text-align:left;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>{1}</button>", strControlID, this.PlaceHolder));
 
-            sb(string.Format("<button type='button' id='cmdClear{0}' class='btn btn-secondary' tabindex='-1' title='Vyčistit' style='position:absolute;top:0;right:0;border: solid 1px #C8C8C8; border-radius: 3px;'>", strControlID));
+            sb(string.Format("<button type='button' id='cmdClear{0}' class='btn btn-light' tabindex='-1' title='Vyčistit' style='position:absolute;top:0;right:0;border: solid 1px #C8C8C8; border-radius: 3px;'>", strControlID));
             sb("<span aria-hidden='true'>&times;</span>");
             sb("</button>");
 

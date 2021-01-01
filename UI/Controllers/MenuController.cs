@@ -57,7 +57,7 @@ namespace UI.Controllers
 
 
 
-            return FlushResult_UL();
+            return FlushResult_UL(true,false);
         }
         public string CurrentUserLangIndex()
         {
@@ -74,7 +74,7 @@ namespace UI.Controllers
                 }
                 
             }
-            return FlushResult_UL();            
+            return FlushResult_UL(true,false);            
         }
         public string CurrentUserFontSize()
         {            
@@ -90,7 +90,7 @@ namespace UI.Controllers
 
             }
           
-            return FlushResult_UL();
+            return FlushResult_UL(true,false);
         }
         public string AdminMenu()
         {
@@ -99,7 +99,7 @@ namespace UI.Controllers
             AMI("Vyúčtování", "/Admin/Billing", "k-i-dollar");
             AMI("Organizace projektů", "/Admin/Projects", "k-i-wrench");
             AMI("Ostatní", "/Admin/Misc", "k-i-gear");
-            return FlushResult_UL();
+            return FlushResult_UL(true,false);
         }
        
         public string AdminUsers(string prefix)
@@ -135,7 +135,7 @@ namespace UI.Controllers
                        
             handle_selected_item(prefix);
 
-            return FlushResult_UL();
+            return FlushResult_UL(false,true);
         }
         public string AdminWorksheet(string prefix)
         {
@@ -155,7 +155,7 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            return FlushResult_UL();
+            return FlushResult_UL(false,true);
         }
         public string AdminBilling(string prefix)
         {
@@ -176,7 +176,7 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            return FlushResult_UL();
+            return FlushResult_UL(false,true);
         }
         public string AdminProjects(string prefix)
         {
@@ -190,12 +190,11 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            return FlushResult_UL();
+            return FlushResult_UL(false,true);
         }
         public string AdminCiselniky(string prefix)
         {                        
-            
-            
+                        
             DIV_TRANS("Pevné tiskové sestavy");
             AMI("Report šablony", url_ciselniky("x31"));
 
@@ -204,7 +203,33 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            return FlushResult_UL();
+            return FlushResult_UL(false,true);
+        }
+
+        public string MainMenu(string prefix)
+        {
+            
+            AMI("Přehled úkonů", "/TheGrid/FlatView?prefix=p31");
+            AMI("Kalendář", "/TheGrid/FlatView?prefix=p31");
+            AMI("Dayline", "/TheGrid/FlatView?prefix=p31");
+            AMI("Součty", "/TheGrid/FlatView?prefix=p31");
+            DIV();
+            AMI("Klienti", "/TheGrid/FlatView?prefix=p28");
+
+            return FlushResult_UL(true, false);
+        }
+        public string MenuNewRecord(string prefix)
+        {
+            DIV();
+            AMI("Klient", "_edit('p28',0)");
+            AMI("Projekt", "_edit('p41',0)");
+            AMI("Dokument", "_edit('o23',0)");
+            DIV();
+            AMI("Poznámka/Odkaz/Příloha", "_edit('b07',0)");
+            DIV();
+            AMI("Osoba - uživatel", "_edit('j02',0)");
+            AMI("Kontaktní osoba klienta", "_edit('j02',0)");
+            return FlushResult_UL(true, false);
         }
         private string url_ciselniky(string prefix)
         {
@@ -263,12 +288,15 @@ namespace UI.Controllers
             _lis.Add(new UI.Models.MenuItem() { IsHeader = true, Name = BO.BAS.OM2(strName, 100)+":" });
         }
 
-        private string FlushResult_UL()
+        private string FlushResult_UL(bool bolSupportIcons, bool bolRenderUlContainer)
         {
             var sb = new System.Text.StringBuilder();
 
-            //sb.AppendLine("<ul class='dropdown-menu'>");
-            foreach(var c in _lis.Where(p=>p.ParentID==null))
+            if (bolRenderUlContainer)
+            {
+                sb.AppendLine("<ul style='border:0px;'>");
+            }
+            foreach (var c in _lis.Where(p=>p.ParentID==null))
             {                
                 if (c.IsDivider==true)
                 {
@@ -291,11 +319,16 @@ namespace UI.Controllers
                     else
                     {
                         string strStyle = "";
-                        string strImg = "<span class='k-icon' style='width:30px;'></span>";
-                        if (c.Icon != null)
+                        string strImg = "<span style='margin-left:10px;'></span>";
+                        if (bolSupportIcons)
                         {
-                            strImg = string.Format("<span class='k-icon {0}' style='width:30px;'></span>",c.Icon);
+                            strImg = "<span class='k-icon' style='width:30px;'></span>";
+                            if (c.Icon != null)
+                            {
+                                strImg = string.Format("<span class='k-icon {0}' style='width:30px;'></span>", c.Icon);
+                            }
                         }
+                        
                         if (c.IsActive == true)
                         {
                             strStyle = " style='background-color: #ADD8E6;' id='menu_active_item'";

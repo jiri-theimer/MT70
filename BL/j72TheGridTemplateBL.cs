@@ -114,8 +114,8 @@ namespace BL
             p.AddString("j72Entity", rec.j72Entity);
             p.AddString("j72MasterEntity", rec.j72MasterEntity);
             p.AddString("j72Columns", rec.j72Columns);
-           
 
+            p.AddBool("j72IsPublic", rec.j72IsPublic);
             p.AddBool("j72IsNoWrap", rec.j72IsNoWrap);
             
             p.AddInt("j72SelectableFlag", rec.j72SelectableFlag);

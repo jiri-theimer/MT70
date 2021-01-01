@@ -2,13 +2,44 @@
     margin: 0px;
 }
 
+.btn-light:hover {
+    background-color: #DCDCDC;
+}
+
 #mainmenu1_container {
     background-color: #2D89EF;
-    
 }
 
 
+    #mainmenu1_container li.nav-item {
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
 
+    #mainmenu1_container a.nav-link {
+        color: #FFFFFF;
+        padding: 5px;
+    }
+
+        #mainmenu1_container a.nav-link:hover {
+            background-color: royalblue;
+            color: white !important;
+        }
+
+    #mainmenu1_container .dropdown-menu {
+        min-width: 200px;
+        background-color: #E6F0FF;
+    }
+
+    #mainmenu1_container .dropdown-item:hover {
+        background-color: #DCDCDC;
+    }
+
+    #mainmenu1_container .active {
+        background-color: white;
+        border-radius: 3px;
+        color: #1e2de0 !important;
+    }
 
 .modal_record_container {
     max-width: 1050px;
@@ -29,10 +60,11 @@
         margin-right: 6px;
     }
 
-    #ulMyProfile {  /*odkaz Můj profil v hlavním menu, aby se jeho nabídka zobrazila úplně vpravo*/
+    #ulMyProfile { /*odkaz Můj profil v hlavním menu, aby se jeho nabídka zobrazila úplně vpravo*/
         margin-left: -190px;
         width: 300px;
     }
+
     #ulFontSize { /*odkaz Můj profil v hlavním menu, aby se jeho nabídka zobrazila úplně vpravo*/
         margin-left: -80px;
         width: 200px;
@@ -131,9 +163,11 @@ input:checked + label {
 
 
 /*link pro hamburger menu*/
+/*link pro hamburger menu*/
 a.cm {
     cursor: pointer;
-    
+    text-decoration: none;
+    color: black;
 }
 
     a.cm:hover {
@@ -694,13 +728,15 @@ a.cm {
     left: 0px;
     cursor: move;
 }
+
 #myModalContentContainerHeader {
     background-color: #2D89EF;
-    padding-bottom:2px;
-    padding-top:2px;
+    padding-bottom: 2px;
+    padding-top: 2px;
 }
-#myModalContentHeader{
-    color:white;
+
+#myModalContentHeader {
+    color: white;
 }
 
 
@@ -715,7 +751,7 @@ iframe {
 
 a.nav-link:hover {
     background-color: #F5F5F5;
-    color:black !important;
+    color: black !important;
 }
 
 #navtabs .nav-link {
@@ -791,6 +827,14 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     background-clip: padding-box;
     border: 1px solid #E5E5E5; /*původní barva byla: #ced4da*/
     border-radius: 0.25rem;
+}
+
+.val-readonly-wrap a {
+    text-decoration: none;
+}
+
+.val-readonly-wrap a:hover {
+    text-decoration: underline;
 }
 
 
@@ -1026,7 +1070,7 @@ a.reczoom {
     visibility: visible;
 }
 
-#site_loading1 {            /*loading info vlevo-nahoře*/
+#site_loading1 { /*loading info vlevo-nahoře*/
     position: absolute;
     font-weight: bold;
     z-index: 9999;
@@ -1039,7 +1083,7 @@ a.reczoom {
     width: 190px;
 }
 
-#site_loading2 {        /*loading info v podformuláři*/
+#site_loading2 { /*loading info v podformuláři*/
     position: absolute;
     font-weight: bold;
     z-index: 9999;
@@ -1047,3 +1091,13 @@ a.reczoom {
     padding: 4px;
     margin-left: 700px;
 }
+
+
+#cmdHome { /* HOME menu v hlavním menu*/
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+}
+

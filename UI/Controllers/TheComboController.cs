@@ -94,7 +94,7 @@ namespace UI.Controllers
 
             s.Append(string.Format("<table id='{0}' class='table table-hover'>", tableid));
 
-            s.Append("<thead style='background-color:#F5F5F5;'><tr>");
+            s.Append("<thead><tr style='font-weight:normal;'>");
             foreach (var col in cols)
             {
                 switch (Factory.CurrentUser.j03LangIndex)

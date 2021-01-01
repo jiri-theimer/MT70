@@ -59,7 +59,7 @@
     $(document.body).css("overflow", "hidden");
 
     $(document).ready(function () {
-
+    
         $.post("/Menu/AdminUsers", { prefix: "@Model.prefix" }, function (data) {
 
             $("#layout_sidebar").html(data);
