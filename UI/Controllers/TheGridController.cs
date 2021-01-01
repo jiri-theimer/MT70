@@ -56,11 +56,11 @@ namespace UI.Controllers
         {
             int master_pid = 0;
             string master_flag = null;
-            if (tgi.viewstate != null)
-            {
-                master_pid = Convert.ToInt32(tgi.viewstate[0]);
-                master_flag = tgi.viewstate[1];
-            }
+            //if (tgi.viewstate != null)
+            //{
+            //    master_pid = Convert.ToInt32(tgi.viewstate[0]);
+            //    master_flag = tgi.viewstate[1];
+            //}
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, master_flag);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridMenu(tgi.j72id);
