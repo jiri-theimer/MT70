@@ -439,3 +439,4 @@ function _reload_layout_and_close(pid, flag) {
         hardrefresh(pid, flag);
     }
 }
+

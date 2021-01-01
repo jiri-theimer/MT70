@@ -20,13 +20,15 @@ namespace BL
         private Ij72TheGridTemplateBL _j72;
         private IDataGridBL _grid;
         private Ix35GlobalParamBL _gp;
-        private Ij02PersonBL _j02;
+        private Ij02PersonBL _j02;        
         private Ij03UserBL _j03;
+        private Ij04UserRoleBL _j04;
         private Ij11TeamBL _j11;
         private Io15AutoCompleteBL _o15;
         private Ib65WorkflowMessageBL _b65;
         private Ip85TempboxBL _p85;
         private Ix55WidgetBL _x55;
+        private Ix67EntityRoleBL _x67;
 
         public Factory(BO.RunningUser c,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
@@ -126,6 +128,15 @@ namespace BL
                 return _gp;
             }
         }
+        
+        public Ij02PersonBL j02PersonBL
+        {
+            get
+            {
+                if (_j02 == null) _j02 = new j02PersonBL(this);
+                return _j02;
+            }
+        }
         public Ij03UserBL j03UserBL
         {
             get
@@ -134,12 +145,12 @@ namespace BL
                 return _j03;
             }
         }
-        public Ij02PersonBL j02PersonBL
+        public Ij04UserRoleBL j04UserRoleBL
         {
             get
             {
-                if (_j02 == null) _j02 = new j02PersonBL(this);
-                return _j02;
+                if (_j04 == null) _j04 = new j04UserRoleBL(this);
+                return _j04;
             }
         }
         public Ij11TeamBL j11TeamBL
@@ -182,6 +193,13 @@ namespace BL
                 return _x55;
             }
         }
-
+        public Ix67EntityRoleBL x67EntityRoleBL
+        {
+            get
+            {
+                if (_x67 == null) _x67 = new x67EntityRoleBL(this);
+                return _x67;
+            }
+        }
     }
 }

@@ -212,7 +212,7 @@ namespace UI.Controllers
                         default:
                             cc.text = col.Header; break;
                     }
-                    //cc.imageUrl = "/images/" + col.getImage();
+                    
                     cc.customvalue2 = "/images/" + col.getImage();
                     cc.customvalue3 = "tree_item";
                     if (col.IsTimestamp) cc.customvalue3 += " timestamp";
