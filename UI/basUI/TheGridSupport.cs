@@ -346,7 +346,7 @@ namespace UI
                 return;
             }
             _s.Append("<tr id='tabgrid1_tr_totals'>");
-            _s.Append(string.Format("<th class='th0' title='{0}' colspan=3 style='width:60px;'><span class='badge bg-primary'>{1}</span></th>", _Factory.tra("Celkový počet záznamů"), string.Format("{0:#,0}", dt.Rows[0]["RowsCount"])));
+            _s.Append(string.Format("<th class='th0' title='{0}' colspan=3><span class='badge bg-primary'>{1}</span></th>", _Factory.tra("Celkový počet záznamů"), string.Format("{0:#,0}", dt.Rows[0]["RowsCount"])));
            
             string strVal = "";
             foreach (var col in _grid.Columns)
@@ -519,41 +519,25 @@ namespace UI
         {
             var sb = new System.Text.StringBuilder();
             var recJ72 = _Factory.j72TheGridTemplateBL.LoadState(j72id, _Factory.CurrentUser.pid);
-
-            sb.AppendLine("<div style='background-color:#ADD8E6;padding-left:10px;font-weight:bold;'>" + _Factory.tra("VYBRANÉ (zaškrtlé) záznamy") + "</div>");
-            sb.AppendLine("<div style='padding-left:10px;'>");
-            sb.AppendLine(string.Format("<a href='javascript:tg_export(\"xlsx\",\"selected\")'>" + _Factory.tra("MS-EXCEL Export") + "</a>", j72id));
-            sb.AppendLine(string.Format("<a style='margin-left:20px;' href='javascript:tg_export(\"csv\",\"selected\")'>" + _Factory.tra("CSV Export") + "</a>", j72id));
-            sb.AppendLine("</div>");
-            sb.AppendLine("<hr class='hr-mini' />");
-
-            if ("a01,a03".Contains(recJ72.j72Entity.Substring(0, 3)))
-            {
-                sb.AppendLine("<a class='nav-link' href=\"javascript:tg_batchupdate('" + recJ72.j72Entity.Substring(0, 3) + "')\" >" + _Factory.tra("Hromadné operace") + "★</a>");
-
-            }
-            if ("j02,a01,a03,f06".Contains(recJ72.j72Entity.Substring(0, 3)))
-            {
-                sb.AppendLine("<a class='nav-link' href='javascript:tg_tagging();'>" + _Factory.tra("Hromadná kategorizace záznamů") + "★</a>");
-
-            }
-            
-            sb.AppendLine(string.Format("<div style='margin-top:20px;background-color:#ADD8E6;padding-left:10px;font-weight:bold;'>{0}</div>", _Factory.tra("Seznam pojmenovaných GRID šablon")));
+            sb.Append("<div style='background-color:#FFFFE0;padding-bottom:20px;'>");
+            sb.AppendLine(string.Format("<div style='font-weight:bold;'>{0}</div>", _Factory.tra("Seznam pojmenovaných GRID šablon")));
 
             var lis = _Factory.j72TheGridTemplateBL.GetList(recJ72.j72Entity, recJ72.j03ID, recJ72.j72MasterEntity);
-            sb.AppendLine("<table style='width:100%;margin-bottom:20px;'>");
+            sb.AppendLine("<table style='width:100%;'>");
             string strGridNavrhar = _Factory.tra("Grid návrhář");
             foreach (var c in lis)
             {
                 sb.AppendLine("<tr>");
                 if (c.j72HashJ73Query)
                 {
-                    sb.Append("<td><span class='k-icon k-i-filter'></span></td>");
+                    sb.Append("<td style='width:20px;'><span class='k-icon k-i-filter text-danger'></span></td>");
                 }
                 else
                 {
-                    sb.Append("<td><span class='k-icon k-i-table'></span></td>");
+                    sb.Append("<td style='width:20px;'><span class='k-icon k-i-table'></span></td>");
                 }
+                
+
                 if (c.j72IsSystem)
                 {
                     c.j72Name = _Factory.tra("Výchozí GRID");
@@ -564,25 +548,27 @@ namespace UI
                 }
                 sb.Append(string.Format("<td><a class='nav-link py-0' href='javascript:change_grid({0})'>{1}</a></td>", c.pid, c.j72Name));
 
-                sb.AppendLine(string.Format("<td style='width:30px;'><a title='" + strGridNavrhar + "' class='btn btn-sm btn-primary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={0}\",2);'>...</a></td>", c.pid));
+                sb.AppendLine(string.Format("<td style='width:50px;'><a title='" + strGridNavrhar + "' class='btn btn-sm btn-outline-secondary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={0}\",2);'>{1}</a></td>", c.pid,_Factory.tra("Upravit")));
                 sb.AppendLine("</tr>");
             }
             sb.AppendLine("</table>");
+            sb.Append("</div>");
+            
+            sb.AppendLine("<ul style='border:0px;list-style-type: none;background-color:#E6F0FF;border-top:solid 1px silver;'>");
+
+            
+            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='k-icon k-i-file-excel' style='width:30px;'></span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
+            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='k-icon k-i-file-csv' style='width:30px;'></span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
+           
+            
+            sb.AppendLine("<li><hr class='hr-mini' /></li>");
+            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(20)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 20)) + "</a></li>");
+            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(50)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 50)) + "</a></li>");
+            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(100)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 100)) + "</a></li>");
+            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(1000)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra("Zaškrtnout všechny záznamy na stránce") + "</a></li>");
 
 
-
-            sb.AppendLine("<div style='padding-left:10px;'>");
-            sb.AppendLine(string.Format("<a href='javascript:tg_export(\"xlsx\")'>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a>", j72id));
-            sb.AppendLine(string.Format("<a style='margin-left:20px;' href='javascript:tg_export(\"csv\")'>" + _Factory.tra("CSV Export (vše)") + "</a>", j72id));
-            sb.AppendLine("</div>");
-
-
-
-            sb.AppendLine("<hr class='hr-mini' />");
-            sb.AppendLine("<a  href='javascript:tg_select(20)'>" + _Factory.tra(string.Format("Vybrat prvních {0}", 20)) + "</a>⌾");
-            sb.AppendLine("<a  href='javascript:tg_select(50)'>" + _Factory.tra(string.Format("Vybrat prvních {0}", 50)) + "</a>⌾");
-            sb.AppendLine("<a href='javascript:tg_select(100)'>" + _Factory.tra(string.Format("Vybrat prvních {0}", 100)) + "</a>⌾");
-            sb.AppendLine("<a href='javascript:tg_select(1000)'>" + _Factory.tra("Vybrat všechny záznamy na stránce") + "</a>");
+            sb.AppendLine("</ul>");
 
             return sb.ToString();
         }

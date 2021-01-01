@@ -127,6 +127,8 @@ function tg_init(c) {
 
 
     _tg_filter_is_active = tg_is_filter_active();
+
+
 }
 
 
@@ -394,6 +396,14 @@ function tg_go2pid(pid) {       //již musí být ze serveru odstránkováno!
 
 }
 
+function tg_select_all_toggle() {
+    var pids = $("#tg_selected_pids").val();
+    if (pids === "") {
+        tg_select(1000);    //zaškrtnout vše
+    } else {
+        tg_clear_selection();   //odškrtnout vše
+    }
+}
 function tg_select(records_count) {     //označí prvních X (records_count) záznamů
     tg_clear_selection();
     var arr = [];

@@ -25,6 +25,8 @@ namespace BL
         private Ij04UserRoleBL _j04;
         private Ij11TeamBL _j11;
         private Io15AutoCompleteBL _o15;
+        private Io13AttachmentTypeBL _o13;
+        private Io27AttachmentBL _o27;
         private Ib65WorkflowMessageBL _b65;
         private Ip85TempboxBL _p85;
         private Ix55WidgetBL _x55;
@@ -177,6 +179,24 @@ namespace BL
                 return _b65;
             }
         }
+        public Io13AttachmentTypeBL o13AttachmentTypeBL
+        {
+            get
+            {
+                if (_o13 == null) _o13 = new o13AttachmentTypeBL(this);
+                return _o13;
+            }
+        }
+
+        public Io27AttachmentBL o27AttachmentBL
+        {
+            get
+            {
+                if (_o27 == null) _o27 = new o27AttachmentBL(this);
+                return _o27;
+            }
+        }
+
         public Ip85TempboxBL p85TempboxBL
         {
             get

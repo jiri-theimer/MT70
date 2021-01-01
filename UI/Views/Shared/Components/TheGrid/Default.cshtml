@@ -8,37 +8,8 @@
         <thead id="tabgrid1_thead">
             <tr id="tr_header_headline">
                 <th class="th0" colspan="3" style="width:60px;">
-                    @if (Model.GridState.j72SelectableFlag > 0)
-                    {
-                        @if (Model.GridState.j72HashJ73Query)
-                        {
-                            <div class="dropdown" style="padding:0px;">
-                                <button class="btn btn-danger dropdown-toggle py-0" title="GRID Menu" type="button" id="cmdTheGridBatchSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%;">
-                                    <img src="~/images/query.png" />
-                                    &#9776;
-                                </button>
-                                <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdTheGridBatchSelect" style="padding:0px;width:350px;">
-
-                                </div>
-
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="dropdown" style="padding:0px;">
-                                <button class="btn btn-secondary dropdown-toggle py-0" title="GRID Menu" type="button" id="cmdTheGridBatchSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%;">
-                                    <span class="k-icon k-i-table-properties"></span>
-
-                                </button>
-                                <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdTheGridBatchSelect" style="padding:0px;width:350px;background-color:aliceblue;">
-
-                                </div>
-
-                            </div>
-                        }
-
-                    }
-
+                  
+                    <input type="checkbox" id="chkSelectAll" onclick="tg_select_all_toggle()" />
                 </th>
 
 
@@ -215,6 +186,7 @@
 
 <script type="text/javascript">
     var _gridMenuFilled = false;
+    var _gridSelMenuFilled = false;
     $(document).ready(function () {
         var _thegrid={
             entity: "@Model.GridInput.entity",
@@ -237,13 +209,26 @@
 
         tg_refresh_sorter("@Model.firstdata.sortfield", "@Model.firstdata.sortdir");
 
-
         if (document.getElementById("cmdGridMenu")) {
+            @if (Model.GridState.j72HashJ73Query)
+            {
+                <text>
             
+                $("#TheGridIcon").attr("class", "k-icon k-i-filter text-danger");
+                </text>
+            }
+            @if (!Model.GridState.j72IsSystem)
+            {
+                <text>
+                $("#TheGridName").text("@Model.GridState.j72Name");
+                </text>
+            }
+
+
             var cmdGridDropdown = document.getElementById("cmdGridMenu");
             cmdGridDropdown.addEventListener("show.bs.dropdown", function () {
-                
-            if (_gridMenuFilled == true) return;
+
+                if (_gridMenuFilled == true) return;
 
                 $.post("/TheGrid/HandleTheGridMenu", { tgi: get_all_tgi_params() }, function (data) {
                     $("#divGridMenu").css("width", "500px");
@@ -257,30 +242,34 @@
                     $("#divGridMenu").html(data);
 
                     _gridMenuFilled = true;
+                });
+
+
+            });
+        }
+
+        if (document.getElementById("cmdGridSelMenu")) {
+            var cmdGridSelDropdown = document.getElementById("cmdGridSelMenu");
+            cmdGridSelDropdown.addEventListener("show.bs.dropdown", function () {
+
+
+                if (_gridSelMenuFilled == true) return;
+
+                $.post("/Menu/TheGridSelMenu", { tgi: get_all_tgi_params() }, function (data) {
+
+
+                    $("#ulGridSelMenu").html(data);
+
+                    _gridSelMenuFilled = true;
+                });
+
+
             });
 
 
-            })
         }
 
 
-
-        $("#cmdTheGridBatchSelect").click(function () {
-            if (_gridMenuFilled == true) return;
-
-            $.post("@Url.Action("HandleTheGridMenu", Model.GridInput.controllername)", { tgi: get_all_tgi_params()}, function (data) {
-                if (_device.innerHeight <= 300) {
-                    data = data.replace(/nav-link/g, "nav-link-mini");
-
-                    $("#divGridMenu").css("width", "700px");
-                }
-
-                $("#divGridMenu").html(data);
-
-                _gridMenuFilled = true;
-            });
-
-        });
 
 
 

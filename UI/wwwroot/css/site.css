@@ -26,20 +26,24 @@
             color: white !important;
         }
 
-    #mainmenu1_container .dropdown-menu {
-        min-width: 200px;
-        background-color: #E6F0FF;
-    }
 
-    #mainmenu1_container .dropdown-item:hover {
-        background-color: #DCDCDC;
-    }
 
-    #mainmenu1_container .active {
-        background-color: white;
-        border-radius: 3px;
-        color: #1e2de0 !important;
-    }
+.dynamicmenu_container {
+    min-width: 200px;
+    background-color: #E6F0FF;
+}
+
+
+
+#mainmenu1_container .dropdown-item:hover {
+    background-color: #DCDCDC;
+}
+
+#mainmenu1_container .active {
+    background-color: white;
+    border-radius: 3px;
+    color: #1e2de0 !important;
+}
 
 .modal_record_container {
     max-width: 1050px;
@@ -829,13 +833,13 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     border-radius: 0.25rem;
 }
 
-.val-readonly-wrap a {
-    text-decoration: none;
-}
+    .val-readonly-wrap a {
+        text-decoration: none;
+    }
 
-.val-readonly-wrap a:hover {
-    text-decoration: underline;
-}
+        .val-readonly-wrap a:hover {
+            text-decoration: underline;
+        }
 
 
 #subform_div_commands { /*2 záhlaví stránky v rámci záložek */
@@ -1100,4 +1104,3 @@ a.reczoom {
     cursor: pointer;
     width: 100%;
 }
-

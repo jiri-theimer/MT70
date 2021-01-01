@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BO;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
+using UI.Models;
 
 namespace UI.Controllers
 {
@@ -12,11 +13,11 @@ namespace UI.Controllers
     {
         
 
-        private List<UI.Models.MenuItem> _lis;
+        private List<MenuItem> _lis;
 
         public MenuController()
         {
-            _lis = new List<UI.Models.MenuItem>();
+            _lis = new List<MenuItem>();
         }
 
 
@@ -25,15 +26,7 @@ namespace UI.Controllers
             return View();
         }
 
-        public string GlobalNavigateMenu()
-        {
-            
-
-            DIV();
-            AMI("Odhlásit se", "/Home/logout", "k-i-logout");
-
-            return FlushResult_NAVLINKs();
-        }
+        
         public string CurrentUserMyProfile()
         {                
             AMI("Aktuální stránku uložit jako domovskou", "javascript:_save_as_home_page()", "k-i-heart-outline");
@@ -231,6 +224,25 @@ namespace UI.Controllers
             AMI("Kontaktní osoba klienta", "_edit('j02',0)");
             return FlushResult_UL(true, false);
         }
+
+        public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
+        {
+            AMI("MS EXCEL Export", "javascript:tg_export('xlsx','selected')", "k-i-file-excel");
+            AMI("CSV Export", "javascript:tg_export('csv','selected')", "k-i-file-csv");
+
+
+            if ("p31,p41,p28,j02".Contains(tgi.prefix))
+            {
+                DIV();
+                AMI("Hromadná kategorizace záznamů", "javascript:tg_tagging()", "k-i-categorize");
+
+
+
+
+            }
+
+            return FlushResult_UL(true, false);
+        }
         private string url_ciselniky(string prefix)
         {
             return "/Admin/Ciselniky?prefix=" + prefix;
@@ -263,29 +275,29 @@ namespace UI.Controllers
             }
         }
 
+
         
-       
-        
+
 
         private void AMI(string strName,string strUrl,string icon=null, string strParentID = null,string strID=null, string strTarget = null)
         {            
-            _lis.Add(new UI.Models.MenuItem() { Name = Factory.tra(strName), Url = strUrl,Target=strTarget,ID=strID,ParentID=strParentID,Icon=icon });
+            _lis.Add(new MenuItem() { Name = Factory.tra(strName), Url = strUrl,Target=strTarget,ID=strID,ParentID=strParentID,Icon=icon });
         }
         private void AMI_NOTRA(string strName, string strUrl,string icon=null, string strParentID = null, string strID = null, string strTarget = null)
         {           
-            _lis.Add(new UI.Models.MenuItem() { Name = strName, Url = strUrl, Target = strTarget, ID = strID, ParentID = strParentID,Icon=icon });
+            _lis.Add(new MenuItem() { Name = strName, Url = strUrl, Target = strTarget, ID = strID, ParentID = strParentID,Icon=icon });
         }
         private void DIV(string strName=null, string strParentID = null)
         {
-            _lis.Add(new UI.Models.MenuItem() { IsDivider = true, Name = BO.BAS.OM2(strName,30),ParentID=strParentID });
+            _lis.Add(new MenuItem() { IsDivider = true, Name = BO.BAS.OM2(strName,30),ParentID=strParentID });
         }
         private void DIV_TRANS(string strName = null)
         {
-            _lis.Add(new UI.Models.MenuItem() { IsDivider = true, Name = BO.BAS.OM2(Factory.tra(strName), 30) });
+            _lis.Add(new MenuItem() { IsDivider = true, Name = BO.BAS.OM2(Factory.tra(strName), 30) });
         }
         private void HEADER(string strName)
         {
-            _lis.Add(new UI.Models.MenuItem() { IsHeader = true, Name = BO.BAS.OM2(strName, 100)+":" });
+            _lis.Add(new MenuItem() { IsHeader = true, Name = BO.BAS.OM2(strName, 100)+":" });
         }
 
         private string FlushResult_UL(bool bolSupportIcons, bool bolRenderUlContainer)
@@ -382,33 +394,33 @@ namespace UI.Controllers
 
             return sb.ToString();
         }
-        private string FlushResult_NAVLINKs()
-        {
-            var sb = new System.Text.StringBuilder();
+        //private string FlushResult_NAVLINKs()
+        //{
+        //    var sb = new System.Text.StringBuilder();
 
-            foreach (var c in _lis)
-            {
-                if (c.Name == null)
-                {
-                    sb.Append("<hr>");  //divider
-                }
-                else
-                {
-                    if (c.Url == null)
-                    {
-                        sb.Append(string.Format("<span>{0}</span>", c.Name));
-                    }
-                    else
-                    {
-                        if (c.Target != null) c.Target = " target='" + c.Target + "'";
-                        sb.Append(string.Format("<a class='nav-link' style='color:black;' href=\"{0}\"{1}>{2}</a>", c.Url, c.Target, c.Name));
-                    }
-                }
+        //    foreach (var c in _lis)
+        //    {
+        //        if (c.Name == null)
+        //        {
+        //            sb.Append("<hr>");  //divider
+        //        }
+        //        else
+        //        {
+        //            if (c.Url == null)
+        //            {
+        //                sb.Append(string.Format("<span>{0}</span>", c.Name));
+        //            }
+        //            else
+        //            {
+        //                if (c.Target != null) c.Target = " target='" + c.Target + "'";
+        //                sb.Append(string.Format("<a class='nav-link' style='color:black;' href=\"{0}\"{1}>{2}</a>", c.Url, c.Target, c.Name));
+        //            }
+        //        }
 
-            }
+        //    }
 
 
-            return sb.ToString();
-        }
+        //    return sb.ToString();
+        //}
     }
 }

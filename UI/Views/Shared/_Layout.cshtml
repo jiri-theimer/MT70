@@ -28,7 +28,7 @@
                     <a id="cmdHome" class="navbar-brand nav-link dropdown-toggle py-1" data-bs-toggle="dropdown">
                         @_f.CurrentUser.AppName                        
                     </a>
-                    <ul id="ulMainMenu" class="dropdown-menu" aria-labelledby="cmdHome" style="list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;">Loading....</ul>
+                    <ul id="ulMainMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdHome" style="list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;">Loading....</ul>
                 </div>
                 
                 
@@ -39,7 +39,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="cmdNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
-                            <ul id="ulNew" class="dropdown-menu" aria-labelledby="cmdNew"><li>Loading....</li></ul>
+                            <ul id="ulNew" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdNew"><li>Loading....</li></ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Dashboard/Index">DASHBOARD</a>
@@ -49,7 +49,7 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="cmdAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("ADMINISTRACE")</a>
-                            <ul id="ulAdmin" class="dropdown-menu" aria-labelledby="cmdAdmin"><li>Loading....</li></ul>
+                            <ul id="ulAdmin" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdAdmin"><li>Loading....</li></ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/TheGrid/FlatView?prefix=j02">LIDÉ</a>
@@ -61,7 +61,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Dropdown link
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <ul class="dropdown-menu dynamicmenu_container" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" href="#">Action</a></li>
                                 <li><a class="dropdown-item" href="#">Another action</a></li>
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
@@ -72,15 +72,15 @@
                     <ul class="navbar-nav" style="margin-left:auto;">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="cmdLangIndex" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.CurrentUser.LangName</a>
-                            <ul id="ulLangIndex" class="dropdown-menu" aria-labelledby="cmdLangIndex"><li>Loading....</li></ul>
+                            <ul id="ulLangIndex" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdLangIndex"><li>Loading....</li></ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="cmdFontSize" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1"><span style="font-size:70%;">A</span>A</a>
-                            <ul id="ulFontSize" class="dropdown-menu" aria-labelledby="cmdFontSize"><li>Loading....</li></ul>
+                            <ul id="ulFontSize" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdFontSize"><li>Loading....</li></ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="cmdMyProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.CurrentUser.SiteMenuPersonalName</a>
-                            <ul id="ulMyProfile" class="dropdown-menu" aria-labelledby="cmdMyProfile"><li>Loading....</li></ul>
+                            <ul id="ulMyProfile" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdMyProfile"><li>Loading....</li></ul>
                         </li>
                     </ul>
                 </div>

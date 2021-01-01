@@ -20,22 +20,20 @@
 
 <div class="input-group">
     <div class="dropdown">
-        <button class="btn btn-light py-1 dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="k-icon k-i-table"></span>
-            @_f.tra("Přehled")
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="TheGridIcon" class="k-icon k-i-table"></span>
+            <span id="TheGridName">@_f.tra("Přehled")</span>
         </button>
         <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
             Loading...
         </div>
     </div>
     <div class="dropdown">
-        <button class="btn btn-light py-1 dropdown-toggle" type="button" id="cmdGridSelMenu" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridSelMenu" data-bs-toggle="dropdown" aria-expanded="false">
             <span class="k-icon k-i-checkbox-checked"></span>
             @_f.tra("Zaškrtlé záznamy")
         </button>
-        <ul class="dropdown-menu" aria-labelledby="cmdGridSelMenu">
-            Loading...
-        </ul>
+        <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
     </div>
 
     @if (Model.prefix == "p31" || Model.prefix == "p41")

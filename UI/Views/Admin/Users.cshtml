@@ -9,19 +9,37 @@
 @addTagHelper *, UI
 
 
-<div class="row py-1 bg-light m-0">
+<div class="row nowrap py-1 bg-light m-0">
     <div id="layout_sidebar_contextmenu" class="col-auto">
         <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminUsers',0,'@Model.prefix');">☰@Model.PageTitle</a>
         <h4 id="layout_sidebar_contextmenu_onlytext">@Model.PageTitle</h4>
     </div>
 
-    <div class="col-auto px-0">
+    <div class="col-auto px-0 nonmobile">
         <ul class="nav nav-tabs">
             <li class="nav-item onetab">
                 <a class="nav-link active" data-toggle="tab">@Model.entityTitle</a>
             </li>
         </ul>
     </div>
+
+    <div class="dropdown col-auto">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="TheGridIcon" class="k-icon k-i-table"></span>
+            <span id="TheGridName">@_f.tra("Přehled")</span>
+        </button>
+        <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
+            Loading...
+        </div>
+    </div>
+    <div class="dropdown col-auto">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridSelMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="k-icon k-i-checkbox-checked"></span>
+            @_f.tra("Zaškrtlé záznamy")
+        </button>
+        <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
+    </div>
+
     <div class="nonmobile ml-2 col-auto">
         <a class="btn btn-light" href="/Admin/Users?prefix=@Model.prefix" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
     </div>
@@ -59,7 +77,7 @@
     $(document.body).css("overflow", "hidden");
 
     $(document).ready(function () {
-    
+
         $.post("/Menu/AdminUsers", { prefix: "@Model.prefix" }, function (data) {
 
             $("#layout_sidebar").html(data);
@@ -90,7 +108,12 @@
     });
 
 
+    function change_grid(j72id) {
+            $.post("/Common/SetUserParam", { key: "Admin/@(Model.prefix)-j72id",value:j72id  }, function (data) {
+                location.replace("/Admin/Users?prefix=@Model.prefix");
 
+            });
+        }
 
 </script>
 

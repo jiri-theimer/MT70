@@ -268,7 +268,8 @@ namespace UI.Controllers
             gi.entity = entity;
             gi.go2pid = go2pid;
             gi.query = new BO.InitMyQuery().Load(prefix);
-
+            gi.j72id = Factory.CBL.LoadUserParamInt("Admin/" + prefix + "-j72id");
+            
             if (viewstate != null)
             {
                 if (viewstate[0] == "projects" && prefix == "x67")
