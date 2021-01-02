@@ -1,0 +1,103 @@
+﻿@model MyMainMenuLinks
+@inject BL.Factory _f
+
+
+@{
+    Model.PageTitle = _f.tra("Nastavit odkazy pro mé hlavní menu");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+@addTagHelper *, UI
+
+@section header_content{
+    <link href="/kendo/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="/kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
+}
+
+
+<script src="/kendo/js/kendo.core.min.js"></script>
+<script src="/kendo/js/kendo.userevents.min.js"></script>
+<script src="/kendo/js/kendo.data.min.js"></script>
+
+<script src="/kendo/js/kendo.selectable.min.js"></script>
+<script src="/kendo/js/kendo.listbox.min.js"></script>
+
+
+
+
+<h4>@Model.PageTitle</h4>
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdSave" class="btn btn-success">@_f.tra("Uložit změny")</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<form id="form1" asp-controller="Home" asp-action="MyMainMenuLinks" method="POST">
+
+    <label for="zdroj">@_f.tra("Vyberte odkazy pro vaše hlavní menu")</label>
+
+    <div class="row" style="width:100%;">
+        <div class="col-auto">
+            <select id="zdroj" style="height:100%;width:200px;">                
+            </select>
+        </div>
+        <div class="col-auto">
+            <select id="cil" style="width:200px;">               
+            </select>
+        </div>
+    </div>
+    
+    <input type="hidden" asp-for="@Model.SelectedItems" />
+</form>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var jsonZdroj = @Json.Serialize(Model.lisZdroj);
+        var jsonCil=@Json.Serialize(Model.lisCil);
+
+        $("#zdroj").kendoListBox({
+            dataSource: jsonZdroj,
+            dataTextField: "name",
+            dataValueField: "url",
+            connectWith: "cil",
+            toolbar: {
+                tools: ["transferTo", "transferFrom"]
+            }
+        });
+
+        $("#cil").kendoListBox({
+            dataSource: jsonCil,
+            dataTextField: "name",
+            dataValueField: "url",
+            connectWith: "cil",
+            toolbar: {
+                tools: ["moveUp", "moveDown"]
+            }
+        });
+
+
+        
+
+        $("#cmdSave").click(function () {
+            var listBox = $("#cil").data("kendoListBox");
+            var selectedHtmlItems = listBox.wrapper.find(".k-item");
+            var urls = [];
+            $.each(selectedHtmlItems, function (idx, item) {
+                urls.push(listBox.dataItem(item).url);
+            });
+
+            $("#SelectedItems").val(urls.join(","));
+
+            
+            form1.submit();
+        });
+
+    });
+
+</script>

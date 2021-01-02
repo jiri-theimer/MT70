@@ -19,7 +19,7 @@ namespace BO
         public string TranslateLang3 { get; set; }
         public string SqlSyntax { get; set; }
         public int DefaultColumnFlag { get; set; }  //1 - default grid sloupec i combo sloupec, 2 - pouze default grid sloupec
-        
+        public string DesignerGroup { get; set; }
         public bool IsSortable { get; set; } = true;
         public bool IsFilterable { get; set; } = true;
         public bool IsFulltext { get; set; }

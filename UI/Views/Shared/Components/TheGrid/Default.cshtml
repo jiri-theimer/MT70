@@ -213,7 +213,7 @@
             @if (Model.GridState.j72HashJ73Query)
             {
                 <text>
-            
+
                 $("#TheGridIcon").attr("class", "k-icon k-i-filter text-danger");
                 </text>
             }
@@ -223,7 +223,8 @@
                 $("#TheGridName").text("@Model.GridState.j72Name");
                 </text>
             }
-
+            
+            $("#TheGridRows").text($("#tabgrid1_rows").text());
 
             var cmdGridDropdown = document.getElementById("cmdGridMenu");
             cmdGridDropdown.addEventListener("show.bs.dropdown", function () {
@@ -231,12 +232,12 @@
                 if (_gridMenuFilled == true) return;
 
                 $.post("/TheGrid/HandleTheGridMenu", { tgi: get_all_tgi_params() }, function (data) {
-                    $("#divGridMenu").css("width", "500px");
+                    $("#divGridMenu").css("width", "300px");
 
                     if (_device.innerHeight <= 300) {
                         data = data.replace(/nav-link/g, "nav-link-mini");
 
-                        $("#divGridMenu").css("width", "700px");
+
                     }
 
                     $("#divGridMenu").html(data);

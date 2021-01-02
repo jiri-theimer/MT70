@@ -32,6 +32,53 @@ namespace UI.Controllers
 
             return View(new BaseViewModel());
         }
+        public IActionResult MyMainMenuLinks()
+        {
+            var v = new MyMainMenuLinks();
+            v.SelectedItems = Factory.CurrentUser.j03SiteMenuMyLinksV7;
+            RefreshState_MyMainMenuLinks(v);
+            
+
+            return View(v);
+        }
+
+        private void RefreshState_MyMainMenuLinks(MyMainMenuLinks v)
+        {
+            var c = new basUI.TheMenuSupport(Factory);
+            v.lisCil = c.getUserMenuLinks();
+            v.lisZdroj = c.getAllMainMenuLinks();
+            foreach (var rec in v.lisCil)
+            {
+                if (v.lisZdroj.Any(p => p.Url == rec.Url))
+                {
+                    v.lisZdroj.Remove(v.lisZdroj.Where(p => p.Url == rec.Url).First());
+                }
+            }
+
+            
+        }
+        [HttpPost]
+        public IActionResult MyMainMenuLinks(MyMainMenuLinks v)
+        {
+            RefreshState_MyMainMenuLinks(v);
+            if (string.IsNullOrEmpty(v.SelectedItems))
+            {
+                this.AddMessage("Musíte vybrat minimálně jeden menu odkaz.");
+                return View(v);
+            }
+            if (ModelState.IsValid)
+            {
+                var rec = Factory.j03UserBL.Load(Factory.CurrentUser.pid);
+                rec.j03SiteMenuMyLinksV7 = v.SelectedItems;
+                if (Factory.j03UserBL.Save(rec)>0)
+                {
+                    v.SetJavascript_CallOnLoad(rec.pid);
+                }
+                
+            }
+
+            return View(v);
+        }
 
         public IActionResult About()
         {

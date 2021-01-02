@@ -201,7 +201,8 @@ namespace UI.Controllers
 
         public string MainMenu(string prefix)
         {
-            
+            AMI("Nastavit odkazy pro mé hlavní menu", "javascript:_window_open('/Home/MyMainMenuLinks',1)");
+
             AMI("Přehled úkonů", "/TheGrid/FlatView?prefix=p31");
             AMI("Kalendář", "/TheGrid/FlatView?prefix=p31");
             AMI("Dayline", "/TheGrid/FlatView?prefix=p31");

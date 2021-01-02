@@ -56,14 +56,14 @@ namespace BL
             
         }
 
-        private BO.TheGridColumn AF(string strEntity, string strField, string strHeader, int intDefaultFlag = 0, string strSqlSyntax = null, string strFieldType = "string", bool bolIsShowTotals = false,bool bolNotShowRelInHeader=false)
+        private BO.TheGridColumn AF(string strEntity, string strField, string strHeader, int intDefaultFlag = 0, string strSqlSyntax = null, string strFieldType = "string", bool bolIsShowTotals = false,bool bolNotShowRelInHeader=false,string strGroup=null)
         {
             if (strEntity != _lastEntity)
             {
                 _curEntityAlias = _ep.ByTable(strEntity).AliasSingular;
             }
            
-            _lis.Add(new BO.TheGridColumn() { Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, DefaultColumnFlag = intDefaultFlag, SqlSyntax = strSqlSyntax, FieldType = strFieldType, IsShowTotals = bolIsShowTotals,NotShowRelInHeader= bolNotShowRelInHeader,FixedWidth= SetDefaultColWidth(strFieldType),TranslateLang1=strHeader,TranslateLang2=strHeader,TranslateLang3=strHeader });
+            _lis.Add(new BO.TheGridColumn() { Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, DefaultColumnFlag = intDefaultFlag, SqlSyntax = strSqlSyntax, FieldType = strFieldType, IsShowTotals = bolIsShowTotals,NotShowRelInHeader= bolNotShowRelInHeader,FixedWidth= SetDefaultColWidth(strFieldType),TranslateLang1=strHeader,TranslateLang2=strHeader,TranslateLang3=strHeader,DesignerGroup=strGroup });
             _lastEntity = strEntity;
             return _lis[_lis.Count - 1];
         }
@@ -77,7 +77,7 @@ namespace BL
             {
                 _curEntityAlias = _ep.ByTable(strEntity).AliasSingular;
             }
-            _lis.Add(new BO.TheGridColumn() { IsTimestamp = true, Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, SqlSyntax = strSqlSyntax, FieldType = strFieldType, FixedWidth = SetDefaultColWidth(strFieldType) });
+            _lis.Add(new BO.TheGridColumn() { IsTimestamp = true, Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, SqlSyntax = strSqlSyntax, FieldType = strFieldType, FixedWidth = SetDefaultColWidth(strFieldType),DesignerGroup="Časové razítko záznamu" });
             _lastEntity = strEntity;
         }
 
@@ -132,27 +132,10 @@ namespace BL
         {
             BO.TheGridColumn onecol;
 
-            //j02 = osoby
-            AF("j02Person", "fullname_desc", "Příjmení+Jméno", 1, "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string",false,true);
-            AF("j02Person", "fullname_asc", "Jméno+Příjmení", 0, "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string", false, true);
+            SetupJ02();
+            SetupP28();
+            SetupP91();
             
-                              
-            AF("j02Person", "j02Email", "E-mail", 1);
-            AF("j02Person", "j02FirstName", "Jméno");
-            AF("j02Person", "j02LastName", "Příjmení");
-            AF("j02Person", "j02TitleBeforeName", "Titul před");
-            AF("j02Person", "j02TitleAfterName", "Titul za");
-            AF("j02Person", "j02Phone", "TEL");
-            AF("j02Person", "j02Mobile", "Mobil");
-            AF("j02Person", "j02Code", "Kód");
-            AF("j02Person", "j02JobTitle", "Pozice na vizitce");
-            AF("j02Person", "j02Office", "Adresa");
-            AF("j02Person", "j02IsIntraPerson", "Interní osoba", 0, null, "bool");
-            AF("j02Person", "j02InvoiceSignatureFile", "Grafický podpis");
-            AF("j02Person", "j02Salutation", "Oslovení");
-            AF("j02Person", "j02EmailSignature", "E-mail podpis");
-            AppendTimestamp("j02Person");
-
             //j03 = uživatelé
             AF("j03User", "j03Login", "Login", 1,null,"string",false,true);
             AF("j03User", "j04Name", "Role", 1, "j03_j04.j04Name","string",false,true);
@@ -393,28 +376,116 @@ namespace BL
 
             AF("x15VatRateType", "x15Name", "Druh DPH", 1, null, "string", false, true);
 
-
-            SetupP28();
+            
         }
 
-        private void SetupP28()
+
+        private void SetupJ02(string stb="j02Person")
         {
-            AF("p28Contact", "p28Name", "Klient", 1, null, "string", false, true);
-            AF("p28Contact", "p28Code", "Kód");
-            AF("p28Contact", "p28CompanyShortName", "Zkrácený název");
-            
-            AF("p28Contact", "p28RegID", "IČ");
-            AF("p28Contact", "p28VatID", "DIČ", 2);
-            AF("p28Contact", "p28BillingMemo", "Fakturační poznámka");
+            AF(stb, "fullname_desc", "Příjmení+Jméno", 1, "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string", false, true);
+            AF(stb, "fullname_asc", "Jméno+Příjmení", 0, "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string", false, true);
 
-            AF("p28Contact", "p28Round2Minutes", "Zaokrouhlování času", 0, null, "num0");
-            
-            AF("p28Contact", "p28ICDPH_SK", "IČ DPH (SK)");
-            AF("p28Contact", "p28SupplierID", "Kód dodavatele");
-            
-            
+            AF(stb, "j02Email", "E-mail", 1);
+            AF(stb, "j02FirstName", "Jméno");
+            AF(stb, "j02LastName", "Příjmení");
+            AF(stb, "j02TitleBeforeName", "Titul před");
+            AF(stb, "j02TitleAfterName", "Titul za");
+            AF(stb, "j02Phone", "TEL");
+            AF(stb, "j02Mobile", "Mobil");
+            AF(stb, "j02Code", "Kód");
+            AF(stb, "j02JobTitle", "Pozice na vizitce");
+            AF(stb, "j02Office", "Adresa");
+            AF(stb, "j02IsIntraPerson", "Interní osoba", 0, null, "bool");
+            AF(stb, "j02InvoiceSignatureFile", "Grafický podpis");
+            AF(stb, "j02Salutation", "Oslovení");
+            AF(stb, "j02EmailSignature", "E-mail podpis");
+            AppendTimestamp(stb);
         }
-        
+        private void SetupP28(string stb="p28Contact")
+        {
+            AF(stb, "p28Name", "Klient", 1, null, "string", false, true);
+            AF(stb, "p28Code", "Kód");
+            AF(stb, "p28CompanyShortName", "Zkrácený název");
+            
+            AF(stb, "p28RegID", "IČ");
+            AF(stb, "p28VatID", "DIČ", 2);
+            AF(stb, "p28BillingMemo", "Fakturační poznámka");
+
+            AF(stb, "p28Round2Minutes", "Zaokrouhlování času", 0, null, "num0");
+            
+            AF(stb, "p28ICDPH_SK", "IČ DPH (SK)");
+            AF(stb, "p28SupplierID", "Kód dodavatele");
+            AppendTimestamp(stb);
+        }
+        private void SetupP91(string stb= "p91Invoice")
+        {
+            BO.TheGridColumn oc;
+
+            AF(stb, "p91Code", "Číslo", 1, null, "string", false, true);
+            AF(stb, "p91Client", "Klient vyúčtování", 1);
+
+            AF(stb, "p91IsDraft", "Draft",0,null,"bool",false,false);
+
+            var strG = "Datum";
+            AF(stb, "p91Date", "Vystaveno",2,null,"date",false,false,strG);
+            AF(stb, "p91DateSupply", "Datum plnění", 1, null, "date", false, false, strG);
+            AF(stb, "p91DateMaturity", "Splatnost", 2, null, "date", false, false, strG);
+            AF(stb, "DnuPoSplatnosti", "Dnů do splatnosti", 0, "case When a.p91Amount_Debt=0 Then null Else datediff(day, p91DateMaturity, dbo.get_today()) End", "num0", false, false, strG);
+            AF(stb, "p91DateBilled", "Datum úhrady", 0, null, "date", false, false, strG);
+            AF(stb, "p91DateExchange", "Datum měn.kurzu", 0, null, "date", false, false, strG);
+
+            strG = "Částka";
+            AF(stb, "p91Amount_WithoutVat", "Bez dph",1,null,"num",true,false,strG);
+            AF(stb, "BezDphKratKurz", "Bez dph x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_WithoutVat Else p91Amount_WithoutVat*p91ExchangeRate End", "num",true,false,strG);
+            AF(stb, "p91Amount_Debt", "Dluh", 0, null, "num",true,false,strG);
+            AF(stb, "DluhKratKurz", "Dluh x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_Debt Else p91Amount_Debt*p91ExchangeRate End", "num",true,false,strG);
+            AF(stb, "p91Amount_TotalDue", "Celkem", 1, null, "num",true,false,strG);
+            AF(stb, "CelkemKratKurz", "Celkem x Kurz", 0, "case When a.j27ID = a.j27ID_Domestic Then p91Amount_TotalDue Else p91Amount_TotalDue*p91ExchangeRate End", "num",true,false,strG);
+            AF(stb, "p91Amount_Vat", "Celkem dph", 0, null, "num",true,false,strG);
+            AF(stb, "p91Amount_WithVat", "Vč.dph", 0, null, "num",true,false,strG);
+            AF(stb, "p91RoundFitAmount", "Haléřové zaokrouhlení", 0, null, "num", true, false, strG);
+            AF(stb, "p91Amount_WithoutVat_None", "Základ v nulové DPH", 0, null, "num", true, false, strG);
+            AF(stb, "p91Amount_WithoutVat_Standard", "Základ ve standardní sazbě", 0, null, "num", true, false, strG);
+            AF(stb, "p91Amount_WithoutVat_Low", "Základ ve snížené sazbě", 0, null, "num", true, false, strG);
+            AF(stb, "p91Amount_WithoutVat_Special", "Základ ve speciální sazbě", 0, null, "num", true, false, strG);
+            AF(stb, "p91Amount_Vat_Standard", "DPH ve standardní sazbě", 0, null, "num", true, false, strG);
+            AF(stb, "p91Amount_Vat_Low", "DPH ve snížené sazbě", 0, null, "num", true, false, strG);
+            AF(stb, "p91Amount_Vat_Special", "DPH ve speciální sazbě", 0, null, "num", true, false, strG);
+            AF(stb, "p91VatRate_Standard", "DPH sazba standardní", 0, null, "num", true, false, strG);
+            AF(stb, "p91VatRate_Low", "DPH sazba snížená", 0, null, "num", true, false, strG);
+            AF(stb, "p91VatRate_Special", "DPH sazba speciální", 0, null, "num", true, false, strG);
+
+            AF(stb, "p91ProformaBilledAmount", "Uhrazené zálohy", 0, null, "num");
+            AF(stb, "p91ExchangeRate", "Měnový kurz", 0, null, "num");
+
+
+            AF(stb, "p91Text1", "Text faktury");
+            AF(stb, "p91Text2", "Technický text");
+
+            strG = "Klient ve faktuře";
+            oc=AF(stb, "p91Client_RegID", "IČ klienta");
+            oc.DesignerGroup = strG;
+
+            oc =AF(stb, "p91Client_VatID", "DIČ klienta", 2);
+            oc.DesignerGroup = strG;
+            oc =AF(stb, "p91Client_ICDPH_SK", "IČ DPH (SK)");
+            oc.DesignerGroup = strG;
+
+            oc=AF(stb, "p91ClientAddress1_Street", "Ulice klienta");
+            oc.DesignerGroup = strG;
+            oc=AF(stb, "p91ClientAddress1_City", "Město klienta");
+            oc.DesignerGroup = strG;
+            oc=AF(stb, "p91ClientAddress1_ZIP", "PSČ klienta");
+            oc.DesignerGroup = strG;
+            oc=AF(stb, "p91ClientAddress1_Country", "Stát klienta");
+            oc.DesignerGroup = strG;
+
+
+            AF(stb, "ZapojeneOsoby", "Zapojené osoby",0, "dbo.j02_invoiced_persons_inline(a.p91ID)");
+
+            AppendTimestamp(stb);
+        }
+
         public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
         {
             int intDefaultFlag1 = 1; int intDefaultFlag2 = 2;

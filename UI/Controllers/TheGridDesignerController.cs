@@ -196,13 +196,23 @@ namespace UI.Controllers
                 }
                 grp.customvalue2 = "/images/folder.png";
                 grp.customvalue3 = "tree_group";
+
                 grp.items = new List<kendoTreeItem>();
 
-                foreach (var col in v.AllColumns.Where(p => p.Entity == rel.TableName))
+                var qry = v.AllColumns.Where(p => p.Entity == rel.TableName);
+                foreach (string gg in qry.Where(p=>p.DesignerGroup !=null).Select(p => p.DesignerGroup).Distinct())
+                {
+                    var cc = new kendoTreeItem() { text = gg, customvalue2 = "/images/folder.png", customvalue3 = "tree_group" };                    
+                    grp.items.Add(cc);
+                }
+                
+                
+
+                foreach (var col in qry)
                 {
                     var cc = new kendoTreeItem() { id = rel.RelName + "__" + col.Entity + "__" + col.Field, text = col.Header };
                     cc.customvalue1 = rel.RelName + "__" + col.Entity;
-
+                    
                     switch (Factory.CurrentUser.j03LangIndex)
                     {
                         case 1:
@@ -216,7 +226,25 @@ namespace UI.Controllers
                     cc.customvalue2 = "/images/" + col.getImage();
                     cc.customvalue3 = "tree_item";
                     if (col.IsTimestamp) cc.customvalue3 += " timestamp";
-                    grp.items.Add(cc);
+
+                    if (col.DesignerGroup == null)
+                    {
+                        grp.items.Add(cc);
+                    }
+                    else
+                    {
+                        var findgrp = grp.items.Where(p => p.customvalue3 == "tree_group" && p.text == col.DesignerGroup);
+                        if (findgrp.Count() > 0)
+                        {
+                            if (findgrp.First().items == null)
+                            {
+                                findgrp.First().items= new List<kendoTreeItem>();
+                            }
+                            findgrp.First().items.Add(cc);
+                        }
+                        
+                    }
+                    
                 }
 
                 v.treeNodes.Add(grp);

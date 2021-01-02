@@ -219,7 +219,10 @@ function refresh_environment_after_post(strOper, data) {
     _tg_tablerows = $("#tabgrid1_tbody").find("tr");
     tg_setup_selectable();
 
-
+    if (document.getElementById("TheGridRows")) {
+        $("#TheGridRows").text($("#tabgrid1_rows").text());     //span TheGridRows je na hostitelské stránce gridu
+    }
+    
 }
 
 function tg_adjust_parts_width() {

@@ -109,7 +109,14 @@
 
             </form>
 
-            <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="collapse" href="#kdojsem" role="button" aria-expanded="false" aria-controls="kdojsem">@_f.tra("Kdo jsem")</a>
+            <div class="input-group">
+                <a class="btn btn-outline-info dropdown-toggle" data-bs-toggle="collapse" href="#kdojsem" role="button" aria-expanded="false" aria-controls="kdojsem">@_f.tra("Kdo jsem")</a>
+
+                <button id="cmdMainMenuLinks" type="button" class="btn btn-outline-secondary">@_f.tra("Nastavit odkazy pro mé hlavní menu")</button>
+            </div>
+            
+
+            
 
             <div class="collapse multi-collapse" id="kdojsem">
                 @if (Model.CurrentUser != null)
@@ -274,6 +281,9 @@
 
 
 
+        $("#cmdMainMenuLinks").click(function () {
+            _window_open("/Home/MyMainMenuLinks",1);
+        });
 
     });
 
