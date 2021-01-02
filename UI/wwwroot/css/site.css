@@ -987,11 +987,25 @@ div.tabs_container {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     margin-left: 1px;
-    background-color: #DCDCDC;
+    background-color: #DCDCDC;    
 }
 
 
-
+.tabovergrid {
+    border-top: solid 2px silver;
+    border-left: solid 1px silver;
+    border-right: solid 1px silver;
+    border-top-right-radius: 6px !important;
+    border-top-left-radius: 6px;    
+    margin-right: 4px;
+    margin-top: 2px;    
+    padding-top: 4px;
+    
+    padding-bottom:6px;
+    min-width:80px;
+    text-align:center;
+    
+}
 
 
 /* záložky v modálním formuláři */
