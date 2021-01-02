@@ -996,16 +996,20 @@ div.tabs_container {
     border-left: solid 1px silver;
     border-right: solid 1px silver;
     border-top-right-radius: 6px !important;
-    border-top-left-radius: 6px;    
+    border-top-left-radius: 6px;
     margin-right: 4px;
-    margin-top: 2px;    
+    
     padding-top: 4px;
-    
-    padding-bottom:6px;
-    min-width:80px;
-    text-align:center;
-    
+    padding-bottom: 6px;
+    min-width: 80px;
+    text-align: center;
+    cursor: default;
 }
+
+    .tabovergrid:hover {
+        background-color: #DCDCDC;
+    }
+
 
 
 /* záložky v modálním formuláři */
