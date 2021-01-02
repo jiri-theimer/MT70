@@ -18,13 +18,13 @@
 
     #mainmenu1_container a.nav-link {
         color: #FFFFFF;
-        padding: 5px;
+        padding: 5px 10px 5px 10px;        
     }
 
-        #mainmenu1_container a.nav-link:hover {
-            background-color: royalblue;
-            color: white !important;
-        }
+    #mainmenu1_container a.nav-link:not(.active):hover {
+        background-color: royalblue;
+        color: white !important;
+    }
 
 
 

@@ -90,6 +90,13 @@ namespace BL
             AE("p61ActivityCluster", "Klastry aktivit", "Klastr aktivit", "p61ActivityCluster a", "a.p61Name");
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
 
+            AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");
+            AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
+            AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a", "a.p31ID DESC");            
+            AE("o23Doc", "Dokumenty", "Dokument", "o23Doc a", "a.o23ID DESC");
+            AE("p91Invoice", "Vyúčtování", "Vyúčtování", "p91Invoice a", "a.p91ID DESC");
+            AE("p90Proforma", "Zálohy", "Záloha", "p90Proforma a", "a.p90ID DESC");
+
             AE("p42ProjectType", "Typy projektů", "Typ projektu", "p42ProjectType a", "a.p42Ordinary");
             AE("p51PriceList", "Ceníky sazeb", "Ceník sazeb", "p51PriceList a", "a.p51Ordinary");
             AE("c21FondCalendar", "Pracovní fondy", "Pracovní fond", "c21FondCalendar a", "a.c21Ordinary");

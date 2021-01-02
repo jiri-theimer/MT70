@@ -398,7 +398,7 @@ function tg_go2pid(pid) {       //již musí být ze serveru odstránkováno!
 
 function tg_select_all_toggle() {
     var pids = $("#tg_selected_pids").val();
-    if (pids === "") {
+    if (pids.indexOf(",") === -1) {
         tg_select(1000);    //zaškrtnout vše
     } else {
         tg_clear_selection();   //odškrtnout vše

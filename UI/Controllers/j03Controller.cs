@@ -109,7 +109,7 @@ namespace UI.Controllers
                 c.j03Login = v.Rec.j03Login;
                 c.j04ID = v.Rec.j04ID;
                 c.j03LangIndex = v.Rec.j03LangIndex;
-                c.j03IsDomainAccount = v.Rec.j03IsDomainAccount;
+                
                 c.j03IsMustChangePassword = v.Rec.j03IsMustChangePassword;
                 c.j03IsSystemAccount = v.Rec.j03IsSystemAccount;
                 c.j03LangIndex = v.Rec.j03LangIndex;

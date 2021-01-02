@@ -393,8 +393,27 @@ namespace BL
 
             AF("x15VatRateType", "x15Name", "Druh DPH", 1, null, "string", false, true);
 
+
+            SetupP28();
         }
 
+        private void SetupP28()
+        {
+            AF("p28Contact", "p28Name", "Klient", 1, null, "string", false, true);
+            AF("p28Contact", "p28Code", "Kód");
+            AF("p28Contact", "p28CompanyShortName", "Zkrácený název");
+            
+            AF("p28Contact", "p28RegID", "IČ");
+            AF("p28Contact", "p28VatID", "DIČ", 2);
+            AF("p28Contact", "p28BillingMemo", "Fakturační poznámka");
+
+            AF("p28Contact", "p28Round2Minutes", "Zaokrouhlování času", 0, null, "num0");
+            
+            AF("p28Contact", "p28ICDPH_SK", "IČ DPH (SK)");
+            AF("p28Contact", "p28SupplierID", "Kód dodavatele");
+            
+            
+        }
         
         public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
         {

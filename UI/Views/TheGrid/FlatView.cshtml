@@ -19,7 +19,7 @@
 @addTagHelper *,UI
 
 <div class="input-group m-0" style="padding-top:1px;">
-    <div class="tabovergrid nonmobile" style="margin-left:2px;">
+    <div class="tabovergrid nonmobile" style="margin-left:1px;">
         LIDÉ
     </div>
     
@@ -48,10 +48,10 @@
 
     }
 
-    <div style="margin-left:auto;">
+    <div style="margin-left:auto;width:170px;">
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="chkShowSubform" checked="checked">
-            <label class="form-check-label" for="chkShowSubform">@_f.tra("Zapnout spodní panel")</label>
+            <label class="form-check-label" for="chkShowSubform">@_f.tra("Spodní panel")</label>
         </div>
     </div>
 </div>
@@ -105,7 +105,7 @@
         }
 
 
-        _mainmenu_highlight_current("cmd@(Model.prefix.ToUpper())");
+        _mainmenu_highlight_current("cmd@(Model.prefix)");
 
 
     });

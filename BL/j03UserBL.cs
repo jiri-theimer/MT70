@@ -95,7 +95,8 @@ namespace BL
             p.AddString("j03Login", rec.j03Login);
                        
             p.AddBool("j03IsSystemAccount", rec.j03IsSystemAccount);
-            p.AddBool("j03IsMustChangePassword", rec.j03IsMustChangePassword);            
+            p.AddBool("j03IsMustChangePassword", rec.j03IsMustChangePassword);
+            p.AddBool("j03IsShallReadUpgradeInfo", rec.j03IsShallReadUpgradeInfo);
             
             p.AddEnumInt("j03Ping_DeviceTypeFlag", rec.j03Ping_DeviceTypeFlag);
             p.AddInt("j03Ping_InnerWidth", rec.j03Ping_InnerWidth);
@@ -106,8 +107,9 @@ namespace BL
             p.AddInt("j03GridSelectionModeFlag", rec.j03GridSelectionModeFlag);
             p.AddDateTime("j03LiveChatTimestamp", rec.j03LiveChatTimestamp);
             p.AddString("j03HomePageUrl",rec.j03HomePageUrl);
+            p.AddString("j03SiteMenuMyLinksV7", rec.j03SiteMenuMyLinksV7);
+            p.AddString("j03PageSplitterFlagV7", rec.j03PageSplitterFlagV7);
 
-            
             p.AddString("j03DefaultHoursFormat", rec.j03DefaultHoursFormat);
             p.AddInt("j03GlobalCssFlag", rec.j03GlobalCssFlag);
             p.AddInt("j03ModalWindowsFlag", rec.j03ModalWindowsFlag);

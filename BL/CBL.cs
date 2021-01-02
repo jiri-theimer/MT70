@@ -43,7 +43,7 @@ namespace BL
                 default:
                     return _db.RunSp(strSP, ref pars);                    
             }
-
+            
             return "";
         }
         public string EstimateRecordCode(string entity)

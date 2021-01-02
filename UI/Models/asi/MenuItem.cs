@@ -6,8 +6,7 @@ namespace UI.Models
 {
     public class MenuItem
     {
-        public string Name { get; set; }
-        
+        public string Name { get; set; }        
         public bool IsDivider { get; set; }
         public bool IsHeader { get; set; }
         public bool IsActive { get; set; }

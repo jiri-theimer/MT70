@@ -16,18 +16,20 @@ namespace BO
         public string j03PasswordHash { get; set; } //nový soupec verze 7
         public bool j03IsDebugLog { get; set; }     //nový sloupec verze 7
         public string j03HomePageUrl { get; set; }  //nový sloupec verze 7
+        public string j03SiteMenuMyLinksV7 { get; set; }    //nový sloupec verze 7
+        public string j03PageSplitterFlagV7 { get; set; }   //nový sloupec verze 7
         public int j03LangIndex { get; set; }
         public string j03Login { get; set; }
         public int j04ID { get; set; }
         public int j02ID { get; set; }
         public int j07ID { get; }
-        public bool j03IsDomainAccount { get; set; }
-        public string j03MembershipUserId { get; set; }
+        
+        
         public bool j03IsSystemAccount { get; set; }
        
         public DateTime? j03LiveChatTimestamp { get; set; }
 
-        public string j03SiteMenuSkin { get; set; }
+        
 
         public bool j03IsShallReadUpgradeInfo { get; set; }
         public bool j03IsMustChangePassword { get; set; }
@@ -40,8 +42,8 @@ namespace BO
         public int j03Ping_InnerHeight { get; set; }  // nový sloupec ve verzi 6
 
 
-        public int j03ProjectMaskIndex { get; set; }
-        public int j03ActivityMaskIndex { get; set; }
+        
+        
         public string j04Name { get; }
         protected string _j02LastName { get; set; }
         protected string _j02FirstName { get; set; }
