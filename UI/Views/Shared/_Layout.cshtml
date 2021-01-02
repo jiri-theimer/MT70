@@ -33,7 +33,8 @@
                     <a id="cmdHome" class="navbar-brand nav-link dropdown-toggle py-1" data-bs-toggle="dropdown">
                         @_f.CurrentUser.AppName
                     </a>
-                    <ul id="ulMainMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdHome" style="list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;">Loading....</ul>
+                    <div id="divMainMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdHome"></div>
+                    
                 </div>
 
 
@@ -161,7 +162,7 @@
                 }
             });
 
-            register_menu("cmdHome", "ulMainMenu", "MainMenu");
+            register_menu("cmdHome", "divMainMenu", "MainMenu");
             register_menu("cmdNew", "ulNew", "MenuNewRecord");
             register_menu("cmdLangIndex", "ulLangIndex","CurrentUserLangIndex");
             register_menu("cmdFontSize", "ulFontSize", "CurrentUserFontSize");
@@ -194,6 +195,7 @@
             }
 
             $.post("/Menu/" + method + "?userdevice=" + _device.type, function (data) {
+                
                 $("#" + ul_id).html(data);
                 $("#" + cmd_id).attr("nacteno", "1");
             })

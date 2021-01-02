@@ -201,16 +201,23 @@ namespace UI.Controllers
 
         public string MainMenu(string prefix)
         {
-            AMI("Nastavit odkazy pro mé hlavní menu", "javascript:_window_open('/Home/MyMainMenuLinks',1)");
-
+           
             AMI("Přehled úkonů", "/TheGrid/FlatView?prefix=p31");
             AMI("Kalendář", "/TheGrid/FlatView?prefix=p31");
             AMI("Dayline", "/TheGrid/FlatView?prefix=p31");
             AMI("Součty", "/TheGrid/FlatView?prefix=p31");
             DIV();
             AMI("Klienti", "/TheGrid/FlatView?prefix=p28");
+            
+            
+            var s = "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
+            s += FlushResult_UL(true, false);
+            s += "</ul>";
+            s += "<hr>";
+            s += "<div><button type='button' class='btn btn-sm btn-light' style='width:100%;' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='k-icon k-i-gear'></span>" + Factory.tra("Nastavit odkazy pro mé hlavní menu") + "</button></div>";
+           
 
-            return FlushResult_UL(true, false);
+            return s;
         }
         public string MenuNewRecord(string prefix)
         {
