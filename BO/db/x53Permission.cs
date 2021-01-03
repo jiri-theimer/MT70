@@ -158,8 +158,9 @@ namespace BO
 ,
         X18_ReadAndUpload = 4               // Číst vše + nahrávat přílohy/komentáře
     }
-    public class x53Permission:BaseBO
+    public class x53Permission
     {
+        public int x53ID { get; set; }
         public x29IdEnum x29ID { get; set; }
         public string x53Name { get; set; }
         public string x53Code { get; set; }

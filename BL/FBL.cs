@@ -22,7 +22,7 @@ namespace BL
 
         public IEnumerable<BO.x53Permission> GetListX53()
         {
-            return _db.GetList<BO.x53Permission>("SELECT * FROM x53Permission WHERE ORDER BY x53Ordinary");
+            return _db.GetList<BO.x53Permission>("SELECT * FROM x53Permission ORDER BY x53Ordinary");
         }
         
         

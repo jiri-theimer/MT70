@@ -8,6 +8,10 @@ namespace BL
         public BO.x67EntityRole Load(int pid);
         public IEnumerable<BO.x67EntityRole> GetList(BO.myQuery mq);
         public int Save(BO.x67EntityRole rec, List<int> x53ids);
+        public IEnumerable<BO.x53Permission> GetList_BoundX53(int x67id);
+        public void SaveO28(int x67id, List<BO.o28ProjectRole_Workload> lisO28);
+
+        public IEnumerable<BO.o28ProjectRole_Workload> GetListO28(int x67id);
 
     }
     class x67EntityRoleBL:BaseBL, Ix67EntityRoleBL
@@ -60,13 +64,17 @@ namespace BL
             p.AddString("x67RoleValue", strRoleValue);
 
             int intPID = _db.SaveRecord("x67EntityRole", p.getDynamicDapperPars(), rec);
-            if (rec.pid > 0)
+            if (intPID > 0)
             {
-                _db.RunSql("DELETE FROM x68EntityRole_Permission WHERE x67ID=@pid", new { pid = intPID });
-            }
-            _db.RunSql("INSERT INTO x68EntityRole_Permission(x67ID,x53ID) SELECT @pid,x53ID FROM x53Permission WHERE x53ID IN (" + string.Join(",", x53ids) + ")", new { pid = intPID });
+                if (rec.pid > 0)
+                {
+                    _db.RunSql("DELETE FROM x68EntityRole_Permission WHERE x67ID=@pid", new { pid = intPID });
+                }
+                _db.RunSql("INSERT INTO x68EntityRole_Permission(x67ID,x53ID) SELECT @pid,x53ID FROM x53Permission WHERE x53ID IN (" + string.Join(",", x53ids) + ")", new { pid = intPID });
 
-            
+            }
+
+
 
             return intPID;
         }
@@ -82,6 +90,26 @@ namespace BL
             }
 
             return true;
+        }
+
+        public IEnumerable<BO.x53Permission> GetList_BoundX53(int x67id)
+        {
+            string s = "SELECT * FROM x53Permission a inner join x68EntityRole_Permission b On a.x53ID=b.x53ID WHERE b.x67ID=@x67id ORDER BY x53Ordinary";
+            return _db.GetList<BO.x53Permission>(s, new { x67id = x67id });
+        }
+
+        public void SaveO28(int x67id,List<BO.o28ProjectRole_Workload> lisO28)
+        {
+            _db.RunSql("DELETE FROM o28ProjectRole_Workload WHERE x67ID=@x67id", new { x67id = x67id });
+            foreach(var c in lisO28)
+            {
+                _db.RunSql("INSERT INTO o28ProjectRole_Workload(x67ID,p34ID,o28EntryFlag,o28PermFlag) VALUES(@x67id,@p34id,@entryflag,@permflag)", new { x67id = x67id, p34id = c.p34ID, flag = (int)c.o28EntryFlag, permflag = (int)c.o28PermFlag });
+            }
+        }
+
+        public IEnumerable<BO.o28ProjectRole_Workload> GetListO28(int x67id)
+        {
+            return _db.GetList<BO.o28ProjectRole_Workload>("select a.*,p34.p34Name from o28ProjectRole_Workload a INNER JOIN p34ActivityGroup p34 ON a.p34ID=p34.p34ID WHERE a.x67ID=@pid" , new { pid = x67id });
         }
     }
 }

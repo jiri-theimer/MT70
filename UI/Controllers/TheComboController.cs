@@ -30,9 +30,18 @@ namespace UI.Controllers
         {
             var mq = new BO.InitMyQuery().Load(entity,masterprefix,masterpid);
             mq.SetPids(pids);
-            if (string.IsNullOrEmpty(param1) == false)
+            if (!string.IsNullOrEmpty(param1))
             {
-                mq.param1 = param1;
+                if (param1.Contains("="))
+                {
+                    //předává se sql podmínka
+                    mq.explicit_sqlwhere = BO.BAS.OcistitSQL(param1);
+                }
+                else
+                {
+                    mq.param1 = param1;
+                }
+                
             }
 
             var ce = Factory.EProvider.ByPrefix(mq.Prefix);

@@ -1,0 +1,82 @@
+﻿@model UI.Models.Record.p42Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Typ projektu");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-7 col-md-6">
+            <input class="form-control" asp-for="Rec.p42Name" />
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Index pořadí"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.p42Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Úroveň"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mycombo entity="p07ProjectLevel" asp-for="Rec.p07ID" selectedtext="@Model.ComboP07Name" view-flag="2"></mycombo>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Číselná řada"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" view-flag="2" param1="a.x29ID=141"></mycombo>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Workflow šablona"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mycombo entity="b01WorkflowTemplate" asp-for="Rec.b01ID" selectedtext="@Model.ComboB01Name" view-flag="2" param1="a.x29ID=141"></mycombo>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Povolené sešity pro vykazování úkonů")
+        </div>
+        <div class="card-body">
+            <mycheckboxlist asp-for="@Model.SelectedP34IDs" datasource="@Model.lisAllP34" valuefield="pid" textfield="p34Name"></mycheckboxlist>
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-3 col-form-label">@_f.tra("Ochrana proti archivování projektu"):</label>
+        <div class="col-sm-11 col-md-9">
+            <select asp-for="@Model.Rec.p42ArchiveFlag" class="form-select">
+                <option value="NoLimit">@_f.tra("Bez omezení")</option>
+                <option value="NoArchive_Waiting_Invoice">@_f.tra("Projekty nelze přesouvat do archivu, pokud v něm existují nevyúčtované úkony")</option>
+                <option value="NoArchive_Waiting_Approve">@_f.tra("Projekty nelze přesouvat do archivu, pokud v něm existují rozpracované úkony")</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-3 col-form-label">@_f.tra("Ochrana proti archivování úkonů"):</label>
+        <div class="col-sm-11 col-md-9">
+            <select asp-for="@Model.Rec.p42ArchiveFlagP31" class="form-select">
+                <option value="EditingOnly">@_f.tra("Do projektu povoleno přesouvat rozpracované úkony")</option>
+                <option value="EditingOrApproved">@_f.tra("Do archivu povoleno přesouvat rozpracované nebo schválené úkony")</option>
+                <option value="NoRecords">@_f.tra("Zákaz archivovat jakékoliv úkony")</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+

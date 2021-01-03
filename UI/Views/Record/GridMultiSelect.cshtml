@@ -1,0 +1,71 @@
+﻿@model GridMultiSelect
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Vybrat záznamy");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+
+
+@addTagHelper *,UI
+
+<div class="bg-light" style="padding:10px;">
+    <button id="cmdOK" onclick="ok()" class="btn btn-success">@_f.tra("Vybrat")</button>
+    <button id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+    <mark>@(Model.entityTitle)</mark>
+    <i style="margin-left:20px;">@_f.tra("Vyberte jeden nebo více záznamů")...</i>
+
+</div>
+
+<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+
+
+<script type="text/javascript">
+
+   
+
+    function ok() {
+        var pids = $("#tg_selected_pids").val();
+        if (pids === "") {
+            _notify_message("@_f.tra("Musíte vybrat minimálně jeden záznam.")");
+            return;
+        }
+
+        var prefix = "@Model.prefix";
+        var hiddenID = "hid" + prefix.toUpperCase() + "IDs";
+        var val = window.parent.document.getElementById(hiddenID).value;
+        if (val == "") {
+            val = pids;
+        } else {
+            val = val + "," + pids;
+        }
+        window.parent.document.getElementById(hiddenID).value = val;
+
+        if (prefix == "a03") {
+            window.parent.refresh_a03_table();
+        }
+        if (prefix == "j02") {
+            window.parent.refresh_j02_table();
+        }
+        if (prefix == "f06") {
+            window.parent.refresh_f06_table(pids);
+        }
+        if (prefix == "f21") {
+            window.parent.refresh_f21_table();
+        }
+
+        _window_close();
+    }
+
+
+    function change_grid(j72id) {
+            $.post("/Common/SetUserParam", { key: "GridMultiSelect-j72id-@(Model.prefix)",value:j72id  }, function (data) {
+                location.replace(location.href);
+
+            });
+        }
+
+</script>
+
+

@@ -29,6 +29,8 @@ namespace BL
         private Io27AttachmentBL _o27;
         private Ib65WorkflowMessageBL _b65;
         private Ip07ProjectLevelBL _p07;
+        private Ip34ActivityGroupBL _p34;
+        private Ip42ProjectTypeBL _p42;
         private Ip85TempboxBL _p85;
         private Ix55WidgetBL _x55;
         private Ix67EntityRoleBL _x67;
@@ -204,6 +206,22 @@ namespace BL
             {
                 if (_p07 == null) _p07 = new p07ProjectLevelBL(this);
                 return _p07;
+            }
+        }
+        public Ip34ActivityGroupBL p34ActivityGroupBL
+        {
+            get
+            {
+                if (_p34 == null) _p34 = new p34ActivityGroupBL(this);
+                return _p34;
+            }
+        }
+        public Ip42ProjectTypeBL p42ProjectTypeBL
+        {
+            get
+            {
+                if (_p42 == null) _p42 = new p42ProjectTypeBL(this);
+                return _p42;
             }
         }
 
