@@ -283,6 +283,9 @@ namespace BL
             AF("p36LockPeriod", "p36IsAllPersons", "Všechny osoby", 2, null, "bool");            
             AppendTimestamp("p36LockPeriod");
 
+            AF("p53VatRate", "p53Value", "Sazba DPH", 1, null, "num", false,true);
+            AppendTimestamp("p53VatRate");
+
             AF("p61ActivityCluster", "p61Name", "Klast aktivit", 1, null, "string", false, true);            
             AppendTimestamp("p61ActivityCluster");
 
@@ -298,6 +301,11 @@ namespace BL
             AF("p92InvoiceType", "p92Name", "Typ faktury", 1, null, "string", false, true);
             AF("p92InvoiceType", "p92Ordinary", "#", 2, null, "num0");
             AppendTimestamp("p92InvoiceType");
+
+            AF("p98Invoice_Round_Setting_Template", "p98Name", "Zaokrouhlovací pravidlo", 1, null, "string", false, true);
+            AF("p98Invoice_Round_Setting_Template", "p98IsDefault", "Výchozí pravidlo", 2, null, "bool");
+            AppendTimestamp("p98Invoice_Round_Setting_Template");
+            
 
             AF("p89ProformaType", "p89Name", "Typ zálohy", 1, null, "string", false, true);
             AppendTimestamp("p89ProformaType");            
@@ -539,6 +547,9 @@ namespace BL
                     break;
                 case "p51":
                     ret.Add(InhaleColumn4Relation("p51_j27", "j27Currency", "j27Code", rels, bolComboColumns));
+                    break;
+                case "p53":
+                    ret.Add(InhaleColumn4Relation("p53_j27", "j27Currency", "j27Code", rels, bolComboColumns));
                     break;
                 case "p32":
                     ret.Add(InhaleColumn4Relation("p32_p34", "p34ActivityGroup", "p34Name", rels, bolComboColumns));

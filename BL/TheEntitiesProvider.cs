@@ -87,6 +87,7 @@ namespace BL
             AE("p35Unit", "Kusovníkové jednotky", "Jednotka kusovníku", "p35Unit a", "a.p35Name");
             AE("p36LockPeriod", "Uzamčená období", "Uzamčené období", "p36LockPeriod a", "a.p36DateFrom");
             AE("p38ActivityTag", "Odvětví aktivit", "Odvětví aktivity", "p38ActivityTag a", "a.p38Ordinary");
+            AE("p53VatRate", "DPH sazby", "DPH sazba", "p53VatRate a", "a.p53ID DESC");
             AE("p61ActivityCluster", "Klastry aktivit", "Klastr aktivit", "p61ActivityCluster a", "a.p61Name");
             AE("p63Overhead", "Režijní přirážka k fakturaci", "Režijní přirážka", "p63Overhead a","a.p63Name");
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
@@ -187,6 +188,9 @@ namespace BL
                     break;
                 case "p51":
                     lis.Add(getREL("j27Currency", "p51_j27", "Měna", "LEFT OUTER JOIN j27Currency p51_j27 ON a.j27ID=p51_j27.j27ID"));
+                    break;
+                case "p53":
+                    lis.Add(getREL("j27Currency", "p53_j27", "Měna", "LEFT OUTER JOIN j27Currency p53_j27 ON a.j27ID=p53_j27.j27ID"));
                     break;
                 case "j18":
                     lis.Add(getREL("j17Country", "j18_j17", "Region", "LEFT OUTER JOIN j17Country j18_j17 ON a.j17ID=j18_j17.j17ID"));
