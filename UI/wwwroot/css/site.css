@@ -998,7 +998,7 @@ div.tabs_container {
     border-top-right-radius: 6px !important;
     border-top-left-radius: 6px;
     margin-right: 4px;
-    
+    background-color: white;
     padding-top: 4px;
     padding-bottom: 6px;
     min-width: 100px;

@@ -243,7 +243,15 @@ namespace BL
             AF("o15AutoComplete", "o15Flag", "Typ dat", 1, "case a.o15Flag when 1 then 'Titul před' when 2 then 'Titul za' when 3 then 'Pracovní funkce' when 328 then 'Stát' when 427 then 'URL adresa' end");
             AF("o15AutoComplete", "o15Ordinary", "#", 2, null, "num0");
 
-            AF("p42ProjectType", "p42Name", "Název", 1, null, "string", false, true);
+            AF("p07ProjectLevel", "p07NameSingular", "Úroveň", 1, null, "string", false, true);
+            AF("p07ProjectLevel", "p07Level", "Index úrovně", 1, null, "num0",false,true);
+            AF("p07ProjectLevel", "p07NamePlural", "Množné číslo",2);
+            AF("p07ProjectLevel", "p07NameInflection", "Koho čeho");
+            AppendTimestamp("p07ProjectLevel");
+
+            AF("p42ProjectType", "p42Name", "Typ", 1, null, "string", false, true);
+            AF("p42ProjectType", "p42Code", "Kód");
+            AF("p42ProjectType", "p42Ordinary", "#", 0, null, "num0");
             AppendTimestamp("p42ProjectType");
 
             AF("p51PriceList", "p51TypeFlag", "Typ ceníku", 1, "case a.p51TypeFlag when 1 then 'Fakturační sazby' when 2 then 'Nákladové sazby' when 3 then 'Režijní sazby' when 5 then 'Kořenový (ROOT) ceník' when 4 then 'Efektivní sazby' end", "string", false, true);
@@ -544,6 +552,10 @@ namespace BL
                     break;
                 case "b65":
                     ret.Add(InhaleColumn4Relation("b65_x29", "x29Entity", "x29Name", rels, bolComboColumns));
+                    break;
+                case "p42":
+                    ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07NameSingular", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07Level", rels, bolComboColumns));
                     break;
                 case "p51":
                     ret.Add(InhaleColumn4Relation("p51_j27", "j27Currency", "j27Code", rels, bolComboColumns));

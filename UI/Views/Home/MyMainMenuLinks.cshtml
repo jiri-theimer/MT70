@@ -38,15 +38,19 @@
 
 <form id="form1" asp-controller="Home" asp-action="MyMainMenuLinks" method="POST">
 
-    <label for="zdroj">@_f.tra("Vyberte odkazy pro vaše hlavní menu")</label>
+    
 
     <div class="row" style="width:100%;">
         <div class="col-auto">
-            <select id="zdroj" style="height:100%;width:200px;">                
+            <label for="zdroj">@_f.tra("Nabídka odkazů")</label>
+            <br />
+            <select id="zdroj" style="height:100%;width:200px;">
             </select>
         </div>
         <div class="col-auto">
-            <select id="cil" style="width:200px;">               
+            <label for="zdroj">@_f.tra("Vybrané odkazy")</label>
+            <br />
+            <select id="cil" style="width:200px;">
             </select>
         </div>
     </div>

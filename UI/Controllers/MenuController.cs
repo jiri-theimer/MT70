@@ -173,7 +173,7 @@ namespace UI.Controllers
         }
         public string AdminProjects(string prefix)
         {
-            AMI("Úrovně", url_admin_projects("p40"));
+            AMI("Úrovně", url_admin_projects("p07"));
             DIV();
             AMI("Typy", url_admin_projects("p42"));
             AMI("Role osob v projektech", url_admin_projects("x67"));
