@@ -88,7 +88,9 @@ namespace BL
             AE("p36LockPeriod", "Uzamčená období", "Uzamčené období", "p36LockPeriod a", "a.p36DateFrom");
             AE("p38ActivityTag", "Odvětví aktivit", "Odvětví aktivity", "p38ActivityTag a", "a.p38Ordinary");
             AE("p61ActivityCluster", "Klastry aktivit", "Klastr aktivit", "p61ActivityCluster a", "a.p61Name");
+            AE("p63Overhead", "Režijní přirážka k fakturaci", "Režijní přirážka", "p63Overhead a","a.p63Name");
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
+            AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura cenového rozpisu faktury", "p80InvoiceAmountStructure a", "a.p80Name");
 
             AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");

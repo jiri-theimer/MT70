@@ -286,9 +286,21 @@ namespace BL
             AF("p61ActivityCluster", "p61Name", "Klast aktivit", 1, null, "string", false, true);            
             AppendTimestamp("p61ActivityCluster");
 
+            AF("p63Overhead", "p63Name", "Režijní přirážka", 1, null, "string", false, true);
+            AppendTimestamp("p63Overhead");
+
+            AF("p80InvoiceAmountStructure", "p80Name", "Název rozpisu", 1, null, "string",false,true);
+            AF("p80InvoiceAmountStructure", "p80IsTimeSeparate", "Čas 1:1", 2, null, "bool");
+            AF("p80InvoiceAmountStructure", "p80IsExpenseSeparate", "Výdaje 1:1", 2, null, "bool");
+            AF("p80InvoiceAmountStructure", "p80IsFeeSeparate", "Pevné odměny 1:1", 2, null, "bool");
+            AppendTimestamp("p80InvoiceAmountStructure");
+
             AF("p92InvoiceType", "p92Name", "Typ faktury", 1, null, "string", false, true);
             AF("p92InvoiceType", "p92Ordinary", "#", 2, null, "num0");
             AppendTimestamp("p92InvoiceType");
+
+            AF("p89ProformaType", "p89Name", "Typ zálohy", 1, null, "string", false, true);
+            AppendTimestamp("p89ProformaType");            
 
             AF("p93InvoiceHeader", "p93Name", "Vystavovatel faktury", 1, null, "string", false, true);
             AF("p93InvoiceHeader", "p93Company", "Firma",1);
