@@ -103,7 +103,7 @@ namespace BL
             _db.RunSql("DELETE FROM o28ProjectRole_Workload WHERE x67ID=@x67id", new { x67id = x67id });
             foreach(var c in lisO28)
             {
-                _db.RunSql("INSERT INTO o28ProjectRole_Workload(x67ID,p34ID,o28EntryFlag,o28PermFlag) VALUES(@x67id,@p34id,@entryflag,@permflag)", new { x67id = x67id, p34id = c.p34ID, flag = (int)c.o28EntryFlag, permflag = (int)c.o28PermFlag });
+                _db.RunSql("INSERT INTO o28ProjectRole_Workload(x67ID,p34ID,o28EntryFlag,o28PermFlag) VALUES(@x67id,@p34id,@entryflag,@permflag)", new { x67id = x67id, p34id = c.p34ID, entryflag = (int)c.o28EntryFlag, permflag = (int)c.o28PermFlag });
             }
         }
 

@@ -98,7 +98,10 @@ namespace UI.Controllers
                 c.pid = Factory.x67EntityRoleBL.Save(c,v.SelectedX53IDs);
                 if (c.pid > 0)
                 {
-
+                    if (c.x29ID == BO.x29IdEnum.p41Project)
+                    {
+                        Factory.x67EntityRoleBL.SaveO28(c.pid, v.lisO28);
+                    }
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);
                 }
