@@ -55,8 +55,8 @@ namespace UI.Controllers
             
             foreach (var recP34 in lisP34)
             {
-                var c = new BO.o28ProjectRole_Workload() { p34ID = recP34.pid };
-
+                var c = new BO.o28ProjectRole_Workload() { p34ID = recP34.pid,p34Name = recP34.p34Name};
+                
                 v.lisO28.Add(c);
             }
 
@@ -68,8 +68,7 @@ namespace UI.Controllers
                     if (v.lisO28.Where(p => p.p34ID == c.p34ID).Any())
                     {
                         var rec = v.lisO28.Where(p => p.p34ID == c.p34ID).First();
-                        rec.p34ID = c.p34ID;
-                        rec.p34Name = c.p34Name;
+                        
                         rec.o28EntryFlag = c.o28EntryFlag;
                         rec.o28PermFlag = c.o28PermFlag;
                     }
