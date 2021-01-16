@@ -1,0 +1,25 @@
+{
+  "members": [
+    {
+      "Name": "LocalHost",
+      "Closed": false,
+      "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
+      "RobotUser": "lama@marktime50.net",
+      "DefaultProject": null,
+      "ExportProjects": true,
+      "ImportExpenses": true
+    },
+    {
+      "Name": "Pokus",
+      "Closed": false,
+      "ApiKey": "ewrwerwe",
+      "RobotUser": "omaha@marktime50.net",
+      "DefaultProject": null,
+      "ExportProjects": true,
+      "ImportExpenses": true
+    }
+  ]
+  
+
+}
+

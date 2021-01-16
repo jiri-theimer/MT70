@@ -58,7 +58,7 @@ namespace UI
 
             //aby se do html zapisovali originál unicode znaky:
             services.Configure<Microsoft.Extensions.WebEncoders.WebEncoderOptions>(options => { options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(System.Text.Unicode.UnicodeRanges.All); });
-
+            
             services.AddControllers();      //kvùli telerik reporting
             services.AddControllersWithViews();
             services.Configure<IISServerOptions>(options =>

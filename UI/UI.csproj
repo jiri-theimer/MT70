@@ -16,4 +16,8 @@
     <ProjectReference Include="..\BO\BO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\xapi\" />
+  </ItemGroup>
+
 </Project>
