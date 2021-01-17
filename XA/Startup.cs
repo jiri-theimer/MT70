@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace XA
 {
@@ -51,8 +52,10 @@ namespace XA
                 ,
                 AppRootFolder = System.IO.Directory.GetCurrentDirectory()
                 ,
-                TranslatorMode = Configuration.GetSection("App")["TranslatorMode"]                
-                
+                TranslatorMode = Configuration.GetSection("App")["TranslatorMode"]
+                ,
+                RobotOnBehind= Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind")
+
             });
 
             services.AddSingleton<BL.TheEntitiesProvider>();
@@ -62,10 +65,15 @@ namespace XA
             services.AddScoped<BO.RunningUser, BO.RunningUser>();
             services.AddScoped<BL.Factory, BL.Factory>();
 
+            if (Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind"))
+            {
+                services.AddHostedService<UI.TheRobot>();   //pohon pro robota na pozadí
+            }
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -96,6 +104,14 @@ namespace XA
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
+            loggerFactory.AddFile("Logs/info-{Date}.log", LogLevel.Information);
+            loggerFactory.AddFile("Logs/debug-{Date}.log", LogLevel.Debug);
+            loggerFactory.AddFile("Logs/error-{Date}.log", LogLevel.Error);
+
+
         }
     }
 }

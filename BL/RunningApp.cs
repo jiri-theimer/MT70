@@ -9,7 +9,7 @@ namespace BL
     {       
         public string ConnectString { get; set; }
         public string LogFolder { get; set; }
-
+        public bool RobotOnBehind { get; set; }
         public string AppRootFolder { get; set; }
         public string AppName { get; set; }
         public string AppVersion { get; set; }

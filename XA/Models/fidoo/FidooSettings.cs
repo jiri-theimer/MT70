@@ -15,6 +15,8 @@ namespace XA.Models.fidoo
     {
         public string ApiKey { get; set; }
         public bool Closed { get; set; }
+        public DateTime? LastRun { get; set; }
+        public DateTime? FirstExpenseModifyFrom { get; set; }
         public string Name { get; set; }
         public string RobotUser { get; set; }
         public string DefaultProject { get; set; }

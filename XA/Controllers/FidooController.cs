@@ -25,12 +25,21 @@ namespace XA.Controllers
         }
 
 
-        public string Uvod()
+        public string Spustit()
         {
             
             var strJson = System.IO.File.ReadAllText(_app.AppRootFolder + "\\FidooSettings.json");
 
             var cSetting = JsonSerializer.Deserialize<FidooSettings>(strJson);
+
+            cSetting.members.First().LastRun = DateTime.Now;
+
+            var options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+            
+            var strJson2Save = JsonSerializer.Serialize(cSetting, options);
+
+            System.IO.File.WriteAllText(_app.AppRootFolder + "\\FidooSettings.json", strJson2Save);
 
             return cSetting.members.First().Name+": "+cSetting.members.First().ApiKey;
         }
