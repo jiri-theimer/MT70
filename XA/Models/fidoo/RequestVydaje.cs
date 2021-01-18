@@ -10,6 +10,7 @@ namespace XA.Models.fidoo
         public DateTime from { get; set; }
         public DateTime to { get; set; }
         public DateTime lastModifyFrom { get; set; }
-        public int limit { get; set; }
+        public int limit { get; set; } = 100;
+
     }
 }

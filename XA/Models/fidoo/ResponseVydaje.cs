@@ -24,23 +24,23 @@ namespace XA.Models.fidoo
         public int amount { get; set; }
         public string currency { get; set; }
         public string shortId { get; set; }
-        public string[] receiptIds { get; set; }
+        public List<string> receiptIds { get; set; }
         public int privateAmount { get; set; }
         public string cardId { get; set; }
         public string travelReportId { get; set; }
-        public float vatAmount { get; set; }
-        public float vatRate { get; set; }
+        public float? vatAmount { get; set; }
+        public float? vatRate { get; set; }
         public string accountCode { get; set; }
-        public int accountCredit { get; set; }
-        public int accountDebit { get; set; }
+        public string accountCredit { get; set; }
+        public string accountDebit { get; set; }
         public string vatAccountCode { get; set; }
-        public int vatAccountCredit { get; set; }
-        public int vatAccountDebit { get; set; }
-        public string[] costCenterIds { get; set; }
-        public string[] projectIds { get; set; }
+        public string vatAccountCredit { get; set; }
+        public string vatAccountDebit { get; set; }
+        public List<string> costCenterIds { get; set; }
+        public List<string> projectIds { get; set; }
         public string vatBreakDownId { get; set; }
         public string taxableDate { get; set; }
-        public int merchantIdentificationNumber { get; set; }
+        public int? merchantIdentificationNumber { get; set; }
         public string merchantVatId { get; set; }
         public string merchantName { get; set; }
         public string merchantAddress { get; set; }
@@ -48,6 +48,6 @@ namespace XA.Models.fidoo
         public float exchangeRate { get; set; }
         public string description { get; set; }
         public bool closed { get; set; }
-        public string receiptUrls { get; set; }
+        public List<string> receiptUrls { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using XA.Models.fidoo;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace XA.Controllers
 {
@@ -27,38 +28,97 @@ namespace XA.Controllers
 
         public string Index()
         {
+            var strJobsFile = _app.AppRootFolder + "\\Settings\\FidooJobs.json";
+            if (!System.IO.File.Exists(strJobsFile))
+            {
+                return "File FidooJobs.json not exists";
+            }
+            var strJson = System.IO.File.ReadAllText(strJobsFile);
+            var cJobs = JsonSerializer.Deserialize<FidooJobs>(strJson);
+            var lisLaunched = new List<FidooJob>();
+
+            foreach(var cJob in cJobs.jobs.Where(p=>p.Closed==false))
+            {
+                if (cJob.LastRun==null || Convert.ToDateTime(cJob.LastRun).AddMinutes(cJob.RepeatMinuteInterval) < DateTime.Now)
+                {
+                    //nastal čas spustit job
+                    lisLaunched.Add(cJob);
+
+
+                    cJob.LastRun = DateTime.Now;    //aktualizovat poslední čas spuštění jobu
+                }
+            }
+
+
+            if (lisLaunched.Count() == 0)
+            {
+                return "no job launched"; //nebyl spuštěn žádný job -> odchod
+            }
+
             
-            var strJson = System.IO.File.ReadAllText(_app.AppRootFolder + "\\Settings\\FidooSettings.json");
-
-            var cSetting = JsonSerializer.Deserialize<FidooSettings>(strJson);
-
-            cSetting.members.First().LastRun = DateTime.Now;
-
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;
             
-            var strJson2Save = JsonSerializer.Serialize(cSetting, options);
+            var strJson2Save = JsonSerializer.Serialize(cJobs, options);
+            System.IO.File.WriteAllText(strJobsFile, strJson2Save);   //uložit LastRun jobů do json souboru
 
-            System.IO.File.WriteAllText(_app.AppRootFolder + "\\Settings\\FidooSettings.json", strJson2Save);
-
-            return cSetting.members.First().Name+": "+cSetting.members.First().ApiKey;
+            return "Launched jobs: "+string.Join(" ### ", lisLaunched.Select(p => p.Name));
+            
         }
 
         public int Pokus()
         {
             var ru = new BO.RunningUser() { j03Login = "lama@marktime50.net" };
             var f = new BL.Factory(ru,_app,_ep,_tt);
-            
 
-            var strediska = ListStrediska();
-            var projekty = ListProjekty();
+            var strKey = "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6";
+            var strediska = ListStrediska(strKey);
+            var projekty = ListProjekty(strKey);
 
             //return strediska.Result.costCenterList.Count() + projekty.Result.projects.Count();
 
             return f.j02PersonBL.GetList(new BO.myQueryJ02()).Count() + projekty.Result.projects.Count();
         }
 
-        public async Task<ResponseStrediska> ListStrediska()
+        public async Task<ResponseVydaje> ListVydaje(string apikey)
+        {
+
+            var httpclient = _httpclientfactory.CreateClient();
+
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/expense/get-expenses"))
+            {
+                request.Headers.TryAddWithoutValidation("Accept", "application/json");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
+
+                var input = new RequestVydaje();
+                input.from = DateTime.Now.AddDays(-100).ToLocalTime();
+                input.to = DateTime.Now.ToLocalTime();
+                input.lastModifyFrom = DateTime.Now.AddDays(-5).ToLocalTime();
+
+                var s = JsonSerializer.Serialize(input);
+
+                request.Content = new StringContent(s);
+                request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+
+                var response = await httpclient.SendAsync(request);
+
+                var strJson = await response.Content.ReadAsStringAsync();
+
+                //System.IO.File.WriteAllText("c:\\temp\\hovado.txt", strJson);
+
+                var options = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,NumberHandling=JsonNumberHandling.AllowReadingFromString };
+               
+                var xx = JsonSerializer.Deserialize<ResponseVydaje>(strJson,options);
+
+                return xx;
+
+                //return await response.Content.ReadAsStringAsync();
+            }
+
+        }
+
+        public async Task<ResponseStrediska> ListStrediska(string apikey)
         {
 
             var httpclient = _httpclientfactory.CreateClient();
@@ -66,7 +126,7 @@ namespace XA.Controllers
             using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/settings/get-cost-centers"))
             {
                 request.Headers.TryAddWithoutValidation("Accept", "application/json");
-                request.Headers.TryAddWithoutValidation("X-Api-Key", "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
 
                 var s = JsonSerializer.Serialize(new RequestRoot());
                 
@@ -89,7 +149,7 @@ namespace XA.Controllers
         }
 
 
-        public async Task<ResponseProjekty> ListProjekty()
+        public async Task<ResponseProjekty> ListProjekty(string apikey)
         {
 
             var httpclient = _httpclientfactory.CreateClient();
@@ -97,7 +157,7 @@ namespace XA.Controllers
             using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/settings/get-projects"))
             {
                 request.Headers.TryAddWithoutValidation("Accept", "application/json");
-                request.Headers.TryAddWithoutValidation("X-Api-Key", "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
 
                 var s = JsonSerializer.Serialize(new RequestRoot());
 

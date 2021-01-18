@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 namespace XA.Models.fidoo
 {
 
-    public class FidooSettings
+    public class FidooJobs
     {
-        public List<Member> members { get; set; }
+        public List<FidooJob> jobs { get; set; }
     }
 
-    public class Member
+    public class FidooJob
     {
         public string ApiKey { get; set; }
-        public bool Closed { get; set; }
-        public DateTime? LastRun { get; set; }
+        public bool Closed { get; set; }            //true: job je uzavřen a nemá se spouštět
+        public DateTime? LastRun { get; set; }      //kdy naposledy došlo ke spuštění jobu
+        public int RepeatMinuteInterval { get; set; } = 300;
         public DateTime? FirstExpenseModifyFrom { get; set; }
         public string Name { get; set; }
         public string RobotUser { get; set; }

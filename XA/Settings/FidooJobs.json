@@ -1,9 +1,10 @@
 {
-  "members": [
+  "jobs": [
     {
       "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
       "Closed": false,
-      "LastRun": "2021-01-17T23:07:45.8505993+01:00",
+      "LastRun": "2021-01-18T13:36:39.5603207+01:00",
+      "RepeatMinuteInterval": 5,
       "FirstExpenseModifyFrom": null,
       "Name": "LocalHost",
       "RobotUser": "lama@marktime50.net",
@@ -14,7 +15,8 @@
     {
       "ApiKey": "ewrwerwe",
       "Closed": false,
-      "LastRun": null,
+      "LastRun": "2021-01-18T13:36:39.5603214+01:00",
+      "RepeatMinuteInterval": 5,
       "FirstExpenseModifyFrom": null,
       "Name": "Pokus",
       "RobotUser": "omaha@marktime50.net",
