@@ -10,6 +10,8 @@ namespace BL
         public BO.p31Worksheet LoadByExternalPID(string externalpid);
         public BO.p31Worksheet LoadTempRecord(int pid, string guidTempData);
 
+        public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF);
+        public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQuery mq);
         
 
@@ -106,8 +108,10 @@ namespace BL
         }
 
 
-        public bool SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF)
+        public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF)
         {
+            int intSavedP31ID = 0;
+
             using (var sc = new System.Transactions.TransactionScope())     // ukládání podléhá transakci
             {
                 var p = new DL.Params4Dapper();
@@ -187,7 +191,7 @@ namespace BL
                 p.AddDouble("p31Value_Off", rec.Value_OffBilling);
 
 
-                int intSavedP31ID = _db.SaveRecord("p31Worksheet", p.getDynamicDapperPars(), rec, true, true);
+                intSavedP31ID = _db.SaveRecord("p31Worksheet", p.getDynamicDapperPars(), rec, true, true);
 
                 if (intSavedP31ID > 0)
                 {
@@ -211,17 +215,17 @@ namespace BL
                     }
                     else
                     {
-                        return false;
+                        return 0;
                     }
                         
                 }
                 else
                 {
-                    return false;
+                    return 0;
                 }
             }
             
-            return true;
+            return intSavedP31ID;
         }
 
 

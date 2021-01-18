@@ -27,6 +27,7 @@ namespace XA.Controllers
 
         public string Doba()
         {
+            
             var c = new BO.CLS.TimeSupport();
             var d1 = DateTime.Now;
             var d2 = d1.AddMinutes(1.4);
@@ -78,13 +79,10 @@ namespace XA.Controllers
             var ru = new BO.RunningUser() { j03Login = "lama@marktime50.net" };
             var f = new BL.Factory(ru,_app,_ep,_tt);
 
-            var strKey = "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6";
-            var strediska = ListStrediska(strKey);
-            var projekty = ListProjekty(strKey);
+            var rec = new BO.p31WorksheetEntryInput() { p31Date = DateTime.Today, p41ID = 7196, j02ID = 1,Value_Orig="00:45",p32ID= 1003 };
 
-            //return strediska.Result.costCenterList.Count() + projekty.Result.projects.Count();
-
-            return f.j02PersonBL.GetList(new BO.myQueryJ02()).Count() + projekty.Result.projects.Count();
+            int intP31ID = f.p31WorksheetBL.SaveOrigRecord(rec, BO.p33IdENUM.Cas, null);
+            return intP31ID;
         }
 
         public async Task<ResponseVydaje> ListVydaje(string apikey)
