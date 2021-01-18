@@ -187,8 +187,8 @@ namespace BO
                         {
                             case p33IdENUM.Cas:
                                 {
-                                    BO.clsTime cTime = new BO.clsTime();
-                                    _p31Minutes_Trimmed = cTime.ConvertTimeToSeconds(strValue) / (double)60;
+                                    var cTime = new BO.CLS.TimeSupport();
+                                    _p31Minutes_Trimmed = cTime.ConvertTimeToSeconds(strValue) / (int)60;
                                     if (_p31Minutes_Trimmed == 0)
                                     {
                                         _Error = "Pro korekci statusu [Fakturovat] musí být hodiny větší než nula.";
@@ -225,22 +225,23 @@ namespace BO
                     }
             }
         }
-        public bool ValidateEntryTime(int intRound2Minutes, bool bolEnglish)
+        public bool ValidateEntryTime(int intRound2Minutes)
         {
             int intSeconds_Orig = 0;
             // časový úkon
-            BO.clsTime cTime = new BO.clsTime();
+            var cTime = new BO.CLS.TimeSupport();
             switch (this.p31HoursEntryflag)
             {
                 case BO.p31HoursEntryFlagENUM.Hodiny:
                     {
                         if (this.p31RecordSourceFlag > 0)
                             // hodiny zadané mimo web aplikaci - desetinná čárka nebo tečka podle regional settings web.config                   
-                            intSeconds_Orig = cTime.ConvertMobileNumberToSeconds(this.Value_Orig);
+                            intSeconds_Orig = cTime.ConvertTimeToSeconds(this.Value_Orig);
                         else
                             intSeconds_Orig = cTime.ConvertTimeToSeconds(this.Value_Orig);
 
-                        if (!(this.TimeFrom == "" | this.TimeFrom == "00:00" | this.TimeUntil == "" | this.TimeUntil == "00:00"))
+
+                        if (!(string.IsNullOrEmpty(this.TimeFrom) || this.TimeFrom == "00:00" || string.IsNullOrEmpty(this.TimeUntil) || this.TimeUntil == "00:00"))
                         {
                             if (this.p31RecordSourceFlag == 0)
                             {
@@ -252,8 +253,7 @@ namespace BO
                                     if (intSeconds_Orig == 0)
                                     {
                                         _Error = "Chybí [Hodiny].";
-                                        if (bolEnglish)
-                                            _Error = "Field [Hours] is required.";
+                                        
                                         return false;
                                     }
                                     this.TimeFrom = ""; this.TimeUntil = "";
@@ -261,21 +261,20 @@ namespace BO
                                 if (intSeconds_Orig < 0)
                                 {
                                     _Error = "[Čas do] je menší než [Čas od].";
-                                    if (bolEnglish)
-                                        _Error = "[Time START] is lower then [Time END].";
+                                   
                                     return false;
                                 }
                             }
 
 
-                            if (this.TimeFrom != "" & this.TimeUntil != "")
+                            if (!string.IsNullOrEmpty(this.TimeFrom) && !string.IsNullOrEmpty(this.TimeUntil))
                             {
                                 _p31DateTimeFrom_Orig = this.p31Date.AddSeconds(cTime.ConvertTimeToSeconds(this.TimeFrom));
                                 _p31DateTimeUntil_Orig = this.p31Date.AddSeconds(cTime.ConvertTimeToSeconds(this.TimeUntil));
                             }
                             else
                             {
-                                _p31DateTimeFrom_Orig = default(Date?); _p31DateTimeUntil_Orig = default(Date?);
+                                _p31DateTimeFrom_Orig = null; _p31DateTimeUntil_Orig = null;
                             }
                         }
 
@@ -288,18 +287,14 @@ namespace BO
                         break;
                     }
             }
-            if (intSeconds_Orig == 0 & (this.Value_Orig == "0" | this.Value_Orig == "" | this.Value_Orig == "00:00"))
+            if (intSeconds_Orig == 0 & (this.Value_Orig == "0" || this.Value_Orig == "" || this.Value_Orig == "00:00"))
             {
-                _Error = "Čas úkonu nesmí být NULA.";
-                if (bolEnglish)
-                    _Error = "Field [Hours] is nullable.";
+                _Error = "Čas úkonu nesmí být NULA.";               
                 return false;
             }
-            if (intSeconds_Orig == 0 & this.Value_Orig != "")
+            if (intSeconds_Orig == 0 && this.Value_Orig != "")
             {
-                _Error = string.Format("Výraz [{0}] není podporovaný zápis času.", this.Value_Orig);
-                if (bolEnglish)
-                    _Error = string.Format("The expression [{0}] is not supported time format.", this.Value_Orig);
+                _Error = "Zadaný výraz není podporovaný zápis času.";                
                 return false;
             }
 

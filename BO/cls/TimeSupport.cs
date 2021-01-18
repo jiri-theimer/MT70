@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BO
+namespace BO.CLS
 {
     public class TimeSupport
     {
@@ -187,38 +187,56 @@ namespace BO
             return dbl;
         }
 
-        public string KolikZbyvaCasu(DateTime datFrom, DateTime datTo, int intMaxPocetUrovni, bool bolShowZeroUnits)
-        {
-            string s = "";
-            int x = 0;
-            TimeSpan dur = datFrom - datTo;
-            if (bolShowZeroUnits || dur.TotalDays > 0)
+        public string DurationFormatted(DateTime datFrom, DateTime datTo,string strFormat=null)
+        {            
+            TimeSpan span = datTo-datFrom;
+
+            string[] values = new string[4];  //4 slots: days, hours, minutes, seconds
+            StringBuilder readableTime = new StringBuilder();
+
+            if (span.Days > 0)
             {
-                s = dur.TotalDays.ToString() + "d";
-                x += 1;
+                values[0] = span.Days.ToString() + "d"; //day
+
+                readableTime.Append(values[0]);
+                readableTime.Append(" ");
             }
-            
-            if (bolShowZeroUnits || (dur.TotalHours-dur.TotalDays*24) > 0)
+            else
+                values[0] = String.Empty;
+
+
+            if (span.Hours > 0)
             {
-                
-                s = (dur.TotalHours-dur.TotalDays*24).ToString() + "h";
-                x += 1;
+                values[1] = span.Hours.ToString() + "h";  //hour
+
+                readableTime.Append(values[1]);
+                readableTime.Append(" ");
+
             }
+            else
+                values[1] = string.Empty;
 
-
-
-            if (x < intMaxPocetUrovni)
+            if (span.Minutes > 0)
             {
-                if (bolShowZeroUnits || (dur.TotalMinutes-(dur.TotalHours*60)) > 0)
-                {
+                values[2] = span.Minutes.ToString() + "m";  //minute
 
-                    s = (dur.TotalMinutes - dur.TotalHours * 60).ToString() + "m";
-                    x += 1;
-                }
-               
+                readableTime.Append(values[2]);
+                readableTime.Append(" ");
             }
+            else
+                values[2] = string.Empty;
 
-            return s.Trim();
+            if (span.Seconds > 0)
+            {
+                values[3] = span.Seconds.ToString() + "s";  //second
+
+                readableTime.Append(values[3]);
+            }
+            else
+                values[3] = string.Empty;
+
+
+            return readableTime.ToString();
         }
 
         public DateTime GetDateFromDecimal(double decHours)
