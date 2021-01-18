@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    public class p31WorksheetEntryInput
+    public class p31WorksheetEntryInput:BaseBO
     {
         public int p41ID { get; set; }
         public int p56ID { get; set; }

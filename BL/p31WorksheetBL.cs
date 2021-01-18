@@ -11,7 +11,7 @@ namespace BL
         public BO.p31Worksheet LoadTempRecord(int pid, string guidTempData);
 
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQuery mq);
-        public int Save(BO.p31Worksheet rec, List<int> j02ids);
+        
 
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
@@ -106,35 +106,125 @@ namespace BL
         }
 
 
-
-        public int Save(BO.p31Worksheet rec, List<int> j02ids)
+        public bool SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF)
         {
-            if (!ValidateBeforeSave(rec))
+            using (var sc = new System.Transactions.TransactionScope())     // ukládání podléhá transakci
             {
-                return 0;
-            }
-            var p = new DL.Params4Dapper();
-            p.AddInt("pid", rec.pid);
-            p.AddString("p31Name", rec.p31Name);
-            p.AddString("p31Description", rec.p31Description);
-            p.AddBool("p31IsAllUsers", rec.p31IsAllUsers);
+                var p = new DL.Params4Dapper();
+                
+                p.Add("pid", rec.PID);
+                if (rec.PID == 0)
+                {
+                    p.AddInt("j02ID_Owner", _mother.CurrentUser.j02ID, true);
+                    p.AddDouble("p31ExchangeRate_Fixed", 1);
+                }
+                else
+                {
+                    p.AddInt("j02ID_Owner", rec.j02ID, true);
+                }
 
-            int intPID = _db.SaveRecord("p31Worksheet", p.getDynamicDapperPars(), rec);
-            if (rec.pid > 0)
-            {
-                _db.RunSql("DELETE FROM j12Team_Person WHERE p31ID=@pid", new { pid = intPID });
-            }
-            if (j02ids.Count > 0)
-            {
-                _db.RunSql("INSERT INTO j12Team_Person(p31ID,j02ID) SELECT @pid,j02ID FROM j02Person WHERE j02ID IN (" + string.Join(",", j02ids) + ")", new { pid = intPID });
-            }
-            if (intPID > 0)    //vyčistit uživatelskou cache pro účty s vazbou na tento tým
-            {
-                _db.RunSql("UPDATE j03User_CacheData set j03DateCache=convert(datetime,'01.01.2000',104) WHERE j03ID IN (select a.j03ID FROM j03User a INNER JOIN j12Team_Person b ON a.j02ID=b.j02ID where b.p31ID=@pid)", new { pid = intPID });
-            }
+                p.AddInt("p41ID", rec.p41ID, true);
+                p.AddInt("j02ID", rec.j02ID, true);
+                p.AddInt("p56ID", rec.p56ID, true);
+                p.AddInt("p32ID", rec.p32ID, true);
+                p.AddEnumInt("p72ID_AfterTrimming", rec.p72ID_AfterTrimming);
+                p.AddInt("p28ID_Supplier", rec.p28ID_Supplier, true);
+                p.AddInt("j02ID_ContactPerson", rec.j02ID_ContactPerson, true);
 
-            return intPID;
+                p.AddString("p31Text", rec.p31Text);
+                p.AddEnumInt("p31HoursEntryflag", rec.p31HoursEntryflag);
+                p.AddDateTime("p31Date", rec.p31Date);
+                p.AddDateTime("p31DateUntil", rec.p31DateUntil);
+
+                p.AddDouble("p31Value_Orig", rec.p31Value_Orig);
+                p.AddDouble("p31Value_Trimmed", rec.p31Value_Trimmed);
+                p.AddInt("p31Minutes_Orig", rec.p31Minutes_Orig);
+                p.AddInt("p31Minutes_Trimmed", rec.p31Minutes_Trimmed);
+                p.AddString("p31HHMM_Orig", rec.p31HHMM_Orig);
+                p.AddDouble("p31Hours_Orig", rec.p31Hours_Orig);
+                p.AddDouble("p31Hours_Trimmed", rec.p31Hours_Trimmed);
+                p.AddDateTime("p31DateTimeFrom_Orig", rec.p31DateTimeFrom_Orig);
+                p.AddDateTime("p31DateTimeUntil_Orig", rec.p31DateTimeUntil_Orig);
+                p.AddString("p31Value_Orig_Entried", rec.Value_Orig_Entried.Substring(0,20));
+                p.AddString("p31ExternalPID", rec.p31ExternalPID);
+
+                p.AddString("p31PostRecipient", rec.p31PostRecipient);
+                p.AddString("p31PostCode", rec.p31PostCode);
+                p.AddInt("p31PostFlag", rec.p31PostFlag,true);
+
+                if (rec.PID==0 && rec.p31RecordSourceFlag == 0)
+                {
+                    p.AddInt("p31RecordSourceFlag", rec.p31RecordSourceFlag);
+                }
+                p.AddString("p31Code", rec.p31Code);
+
+                if (p33ID == BO.p33IdENUM.PenizeBezDPH || p33ID==BO.p33IdENUM.PenizeVcDPHRozpisu)
+                {
+                    p.AddDouble("p31Amount_WithoutVat_Orig", rec.p31Amount_WithoutVat_Orig);
+                    p.AddDouble("p31VatRate_Orig", rec.VatRate_Orig);
+                    p.AddDouble("p31Amount_WithVat_Orig", rec.p31Amount_WithVat_Orig);
+                    p.AddDouble("p31Amount_Vat_Orig", rec.p31Amount_Vat_Orig);
+                    p.AddInt("j27ID_Billing_Orig", rec.j27ID_Billing_Orig,true);
+                    p.AddDouble("p31Calc_Pieces", rec.p31Calc_Pieces);
+                    p.AddDouble("p31Calc_PieceAmount", rec.p31Calc_PieceAmount);
+                    p.AddInt("p35ID", rec.p35ID,true);
+                    p.AddInt("p49ID", rec.p49ID, true);
+                    p.AddInt("j19ID", rec.j19ID, true);
+                    p.AddDouble("p31MarginHidden", rec.p31MarginHidden);
+                    p.AddDouble("p31MarginTransparent", rec.p31MarginTransparent);
+                }
+
+                if ((p33ID == BO.p33IdENUM.Cas || p33ID == BO.p33IdENUM.Kusovnik) && rec.ManualFee != 0)
+                    p.AddDouble("p31Amount_WithoutVat_Orig", rec.ManualFee);    // pevný honorář
+
+                if (p33ID == BO.p33IdENUM.Cas)
+                    p.AddDateTime("p31TimerTimestamp", rec.p31TimerTimestamp);
+
+                if (rec.p31ValidUntil != null)
+                    p.AddDateTime("p31ValidUntil", rec.p31ValidUntil);
+
+
+                p.AddDouble("p31Value_Off", rec.Value_OffBilling);
+
+
+                int intSavedP31ID = _db.SaveRecord("p31Worksheet", p.getDynamicDapperPars(), rec, true, true);
+
+                if (intSavedP31ID > 0)
+                {
+                    
+                    //if (!lisFF == null)
+                    //    bas.SaveFreeFields(_cDB, lisFF, "p31Worksheet_FreeField", intSavedP31ID);
+
+
+                    var pars = new Dapper.DynamicParameters();
+                    {
+                        
+                        pars.Add("p31id", intSavedP31ID,System.Data.DbType.Int32);
+                        pars.Add("j03id_sys", _mother.CurrentUser.pid, System.Data.DbType.Int32);
+                        pars.Add("x45ids", null, System.Data.DbType.String, System.Data.ParameterDirection.Output, 50);
+                    }
+                    
+                    if (_db.RunSp("p31_aftersave",ref pars,false)=="1")
+                    {
+                        sc.Complete();
+                        
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                        
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            
+            return true;
         }
+
+
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec)
         {
             var p = new DL.Params4Dapper();
