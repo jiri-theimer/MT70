@@ -80,6 +80,7 @@ namespace XA.Controllers
             var f = new BL.Factory(ru,_app,_ep,_tt);
 
             var rec = new BO.p31WorksheetEntryInput() { p31Date = DateTime.Today, p41ID = 7196, j02ID = 1,Value_Orig="00:45",p32ID= 1003 };
+            rec.p31Text = "Jsi hovado.";
 
             int intP31ID = f.p31WorksheetBL.SaveOrigRecord(rec, BO.p33IdENUM.Cas, null);
             return intP31ID;

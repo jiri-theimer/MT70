@@ -20,7 +20,7 @@ namespace BO
         public string Value_Trimmed { get; set; }  // po korekci vstupní čas nebo počet kusovníku
         public p31HoursEntryFlagENUM p31HoursEntryflag { get; set; }
         public DateTime p31Date { get; set; }
-        public DateTime p31DateUntil { get; set; }
+        public DateTime? p31DateUntil { get; set; }
         public string TimeFrom { get; set; }
         public string TimeUntil { get; set; }
         public string p31Text { get; set; }

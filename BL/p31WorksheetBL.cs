@@ -131,7 +131,7 @@ namespace BL
                 p.AddInt("j02ID", rec.j02ID, true);
                 p.AddInt("p56ID", rec.p56ID, true);
                 p.AddInt("p32ID", rec.p32ID, true);
-                p.AddEnumInt("p72ID_AfterTrimming", rec.p72ID_AfterTrimming);
+                p.AddInt("p72ID_AfterTrimming", (int)rec.p72ID_AfterTrimming,true);
                 p.AddInt("p28ID_Supplier", rec.p28ID_Supplier, true);
                 p.AddInt("j02ID_ContactPerson", rec.j02ID_ContactPerson, true);
 
@@ -149,7 +149,8 @@ namespace BL
                 p.AddDouble("p31Hours_Trimmed", rec.p31Hours_Trimmed);
                 p.AddDateTime("p31DateTimeFrom_Orig", rec.p31DateTimeFrom_Orig);
                 p.AddDateTime("p31DateTimeUntil_Orig", rec.p31DateTimeUntil_Orig);
-                p.AddString("p31Value_Orig_Entried", rec.Value_Orig_Entried.Substring(0,20));
+                
+                p.AddString("p31Value_Orig_Entried",BO.BAS.LeftString(rec.Value_Orig_Entried,20));
                 p.AddString("p31ExternalPID", rec.p31ExternalPID);
 
                 p.AddString("p31PostRecipient", rec.p31PostRecipient);
