@@ -318,8 +318,10 @@ namespace BO
         {
             if (this.Amount_WithoutVat_Orig == 0 & _p31Value_Orig != 0)
                 this.Amount_WithoutVat_Orig = _p31Value_Orig;
+
             if (this.Amount_WithoutVat_Orig != 0 & _p31Value_Orig == 0)
                 _p31Value_Orig = this.Amount_WithoutVat_Orig;
+
             _p31Amount_WithoutVat_Orig = this.Amount_WithoutVat_Orig;
             _p31Amount_Vat_Orig = this.Amount_Vat_Orig;
             _p31Amount_WithVat_Orig = this.Amount_WithVat_Orig;

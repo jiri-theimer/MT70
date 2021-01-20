@@ -189,6 +189,21 @@ namespace BL
                         this.AddMessage(rec.ErrorMessage); return 0;
                     }
                     break;
+                case BO.p33IdENUM.PenizeBezDPH:
+                    if (rec.Value_OffBilling == 0)
+                    {
+                        if (rec.j27ID_Billing_Orig == 0)
+                        {
+                            this.AddMessage("Chybí měna"); return 0;
+                        }
+                        if (rec.Amount_WithoutVat_Orig == 0)
+                        {
+                            this.AddMessage("Částka nesmí být NULA."); return 0;
+                        }
+                    }
+                    rec.RecalcEntryAmount(rec.Amount_WithoutVat_Orig, vld.VatRate); //dopočítat částku vč. DPH
+                    rec.VatRate_Orig = vld.VatRate;
+                    break;
                 case BO.p33IdENUM.PenizeVcDPHRozpisu:
                     if (rec.Value_OffBilling == 0)
                     {

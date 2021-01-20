@@ -80,10 +80,13 @@ namespace XA.Controllers
             var ru = new BO.RunningUser() { j03Login = "lama@marktime50.net" };
             var f = new BL.Factory(ru,_app,_ep,_tt);
 
-            var rec = new BO.p31WorksheetEntryInput() { p31HoursEntryflag=BO.p31HoursEntryFlagENUM.Hodiny, p31Date = DateTime.Today, p41ID = 7196, j02ID = 1,Value_Orig="00:45",p32ID= 1003,p34ID=1 };
-            rec.p31Text = "Jsi hovado.";
+            //var rec = new BO.p31WorksheetEntryInput() { p31HoursEntryflag=BO.p31HoursEntryFlagENUM.Hodiny, p31Date = DateTime.Today, p41ID = 7196, j02ID = 1,Value_Orig="00:45",p32ID= 1003,p34ID=1 };
+            //rec.p31Text = "Jsi hovado.";
 
-            int intP31ID = f.p31WorksheetBL.SaveOrigRecord(rec, BO.p33IdENUM.Cas, null);
+            var rec = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, p31Date = DateTime.Today, p41ID = 7196, j02ID = 1, p34ID=6,p32ID=2,Amount_WithoutVat_Orig=1000,VatRate_Orig=21,Amount_WithVat_Orig=1222, j27ID_Billing_Orig=2 };
+            rec.p31Text = "NeJsi hovado: Expense.";
+
+            int intP31ID = f.p31WorksheetBL.SaveOrigRecord(rec, BO.p33IdENUM.PenizeVcDPHRozpisu, null);
             //foreach(var cc in f.CurrentUser.Messages4Notify)
             //{
             //    System.IO.File.WriteAllText("c:\\temp\\hovado.txt", cc.Key + ": " + cc.Value + " #### ");
