@@ -30,6 +30,7 @@ namespace BL
         private Ib65WorkflowMessageBL _b65;
         private Ip07ProjectLevelBL _p07;
         private Ip31WorksheetBL _p31;
+        private Ip32ActivityBL _p32;
         private Ip34ActivityGroupBL _p34;
         private Ip42ProjectTypeBL _p42;
         private Ip85TempboxBL _p85;
@@ -216,6 +217,14 @@ namespace BL
             {
                 if (_p31 == null) _p31 = new p31WorksheetBL(this);
                 return _p31;
+            }
+        }
+        public Ip32ActivityBL p32ActivityBL
+        {
+            get
+            {
+                if (_p32 == null) _p32 = new p32ActivityBL(this);
+                return _p32;
             }
         }
         public Ip34ActivityGroupBL p34ActivityGroupBL

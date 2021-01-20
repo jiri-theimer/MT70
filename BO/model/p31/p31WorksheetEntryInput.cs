@@ -294,7 +294,7 @@ namespace BO
             }
             if (intSeconds_Orig == 0 && this.Value_Orig != "")
             {
-                _Error = "Zadaný výraz není podporovaný zápis času.";                
+                _Error = "Zadaný výraz není podporovaný zápis času.";               
                 return false;
             }
 

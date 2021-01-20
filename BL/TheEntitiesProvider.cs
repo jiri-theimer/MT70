@@ -177,7 +177,7 @@ namespace BL
                     lis.Add(getREL("j03User", "j92_j03", "Uživatelský účet", "INNER JOIN j03User j92_j03 ON a.j03ID=j92_j03.j03ID INNER JOIN j04UserRole j03_j04 ON j92_j03.j04ID=j03_j04.j04ID"));
                     break;
                 case "p32":
-                    lis.Add(getREL("p34ActivityGroup", "p32_p34", "Sešit", "LEFT OUTER JOIN p34ActivityGroup p32_p34 ON a.p34ID=p32_p34.p34ID"));
+                    lis.Add(getREL("p34ActivityGroup", "p32_p34", "Sešit", "INNER JOIN p34ActivityGroup p32_p34 ON a.p34ID=p32_p34.p34ID"));
                     lis.Add(getREL("p95InvoiceRow", "p32_p95", "Fakturační oddíl", "LEFT OUTER JOIN p95InvoiceRow p32_p95 ON a.p95ID=p32_p95.p95ID"));
                     lis.Add(getREL("p38ActivityTag", "p32_p38", "Kategorie", "LEFT OUTER JOIN p38ActivityTag p32_p38 ON a.p38ID=p32_p38.p38ID"));
                     lis.Add(getREL("p35Unit", "p32_p35", "Jednotka kusovníku", "LEFT OUTER JOIN p35Unit p32_p35 ON a.p35ID=p32_p35.p35ID"));

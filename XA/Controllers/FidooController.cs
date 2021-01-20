@@ -76,13 +76,19 @@ namespace XA.Controllers
 
         public int Pokus()
         {
+           
             var ru = new BO.RunningUser() { j03Login = "lama@marktime50.net" };
             var f = new BL.Factory(ru,_app,_ep,_tt);
 
-            var rec = new BO.p31WorksheetEntryInput() { p31Date = DateTime.Today, p41ID = 7196, j02ID = 1,Value_Orig="00:45",p32ID= 1003 };
+            var rec = new BO.p31WorksheetEntryInput() { p31HoursEntryflag=BO.p31HoursEntryFlagENUM.Hodiny, p31Date = DateTime.Today, p41ID = 7196, j02ID = 1,Value_Orig="00:45",p32ID= 1003,p34ID=1 };
             rec.p31Text = "Jsi hovado.";
 
             int intP31ID = f.p31WorksheetBL.SaveOrigRecord(rec, BO.p33IdENUM.Cas, null);
+            //foreach(var cc in f.CurrentUser.Messages4Notify)
+            //{
+            //    System.IO.File.WriteAllText("c:\\temp\\hovado.txt", cc.Key + ": " + cc.Value + " #### ");
+            //}
+           
             return intP31ID;
         }
 

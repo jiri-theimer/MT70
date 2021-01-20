@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace BL
 {
@@ -137,6 +137,13 @@ namespace BL
                     this.AddMessage(String.Format("Sešit [{0}] vyžaduje zadat aktivitu.", recP34.p34Name));return 0;
                 }
                 //zkusit najít výchozí systémovou aktivitu, pokud se aktivita nemá zadávat
+                var mq = new BO.myQueryP32() { p34id = rec.p34ID,IsRecordValid=true };
+                var lisP32 = _mother.p32ActivityBL.GetList(mq).Where(p => p.p32IsSystemDefault == true);
+                if (lisP32.Count() > 0)
+                {
+                    rec.p32ID = lisP32.First().pid;
+                }
+                
                 
             }
             if (rec.pid == 0 && string.IsNullOrEmpty(rec.Value_Orig_Entried))
@@ -200,7 +207,8 @@ namespace BL
                     }
                     if (Math.Abs((rec.p31Amount_WithoutVat_Orig + rec.p31Amount_Vat_Orig) - rec.p31Amount_WithVat_Orig) > 0.02)
                     {
-                        this.AddMessage("Součet základu a částky DPH se liší od celkové částky vč. DPH!");return 0;
+                        this.AddMessage(string.Format("Součet základu a částky DPH se liší od celkové částky vč. DPH! Rozdíl: {0}",rec.p31Amount_WithoutVat_Orig+rec.p31Amount_Vat_Orig-rec.p31Amount_WithVat_Orig));
+                        return 0;
                     }
                   
                     break;

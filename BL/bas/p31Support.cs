@@ -136,7 +136,7 @@ namespace BL.bas
         {
             var p = new DL.Params4Dapper();
             p.AddInt("p31id", rec.PID, true);
-            p.AddInt("j03id_sys", _mother.CurrentUser.pid, true);
+            p.AddInt("j03id_sys", _f.CurrentUser.pid, true);
             p.AddInt("j02id_rec", rec.j02ID, true);
             p.AddInt("p41id", rec.p41ID, true);
             p.AddInt("p56id", rec.p56ID, true);
