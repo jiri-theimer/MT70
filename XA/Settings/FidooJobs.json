@@ -3,7 +3,7 @@
     {
       "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
       "Closed": false,
-      "LastRun": "2021-01-20T23:47:48.6827453+01:00",
+      "LastRun": "2021-01-22T23:36:22.3691833+01:00",
       "RepeatMinuteInterval": 5,
       "FirstExpenseModifyFrom": null,
       "Name": "LocalHost",
@@ -15,7 +15,7 @@
     {
       "ApiKey": "pak1lHKgSvgcSbMdtz2Erf2OzvZSVNepzPEXswV87WZMB7eUehY3WI09nLMrs85K",
       "Closed": false,
-      "LastRun": "2021-01-20T23:47:48.6827461+01:00",
+      "LastRun": "2021-01-22T23:36:22.3691839+01:00",
       "RepeatMinuteInterval": 5,
       "FirstExpenseModifyFrom": null,
       "Name": "Z/C/H",

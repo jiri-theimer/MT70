@@ -33,6 +33,14 @@ namespace XA.Controllers
             var d2 = d1.AddMinutes(1.4);
             return c.DurationFormatted(d1, d2);
         }
+        public string zch()
+        {
+
+            var ru = new BO.RunningUser() { j03Login = "admin1" };
+            var f = new BL.Factory(ru, _app, _ep, _tt);
+
+            return f.CurrentUser.PersonAsc;
+        }
 
         public string Index()
         {
@@ -84,7 +92,7 @@ namespace XA.Controllers
             //rec.p31Text = "Jsi hovado.";
 
             var rec = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, p31Date = DateTime.Today, p41ID = 7196, j02ID = 1, p34ID=6,p32ID=2,Amount_WithoutVat_Orig=1000,VatRate_Orig=21,Amount_WithVat_Orig=1222, j27ID_Billing_Orig=2 };
-            rec.p31Text = "NeJsi hovado: Expense.";
+            rec.p31Text = "Testovací výdaj: Expense.";
 
             int intP31ID = f.p31WorksheetBL.SaveOrigRecord(rec, BO.p33IdENUM.PenizeVcDPHRozpisu, null);
             //foreach(var cc in f.CurrentUser.Messages4Notify)

@@ -21,11 +21,11 @@ namespace XA.Models.fidoo
         public string name { get; set; }
         public string classState { get; set; }
         public string type { get; set; }
-        public int amount { get; set; }
+        public float amount { get; set; }
         public string currency { get; set; }
         public string shortId { get; set; }
         public List<string> receiptIds { get; set; }
-        public int privateAmount { get; set; }
+        public float privateAmount { get; set; }
         public string cardId { get; set; }
         public string travelReportId { get; set; }
         public float? vatAmount { get; set; }
