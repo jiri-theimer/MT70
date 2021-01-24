@@ -11,7 +11,9 @@ namespace BL
         public IEnumerable<BO.SysDbObject> GetList_SysObjects();
         public void GenerateCreateUpdateScript(IEnumerable<BO.SysDbObject> lis);
         public IEnumerable<BO.x53Permission> GetListX53();
-        
+        public BO.j27Currency LoadCurrencyByCode(string j27code);
+        public BO.j27Currency LoadCurrencyByID(int j27id);
+
     }
     class FBL : BaseBL, IFBL
     {
@@ -24,8 +26,15 @@ namespace BL
         {
             return _db.GetList<BO.x53Permission>("SELECT * FROM x53Permission ORDER BY x53Ordinary");
         }
-        
-        
+
+        public BO.j27Currency LoadCurrencyByCode(string j27code)
+        {
+            return _db.Load<BO.j27Currency>("select *,j27ID as pid FROM j27Currency WHERE j27Code LIKE @j27code", new { j27code = j27code });
+        }
+        public BO.j27Currency LoadCurrencyByID(int j27id)
+        {
+            return _db.Load<BO.j27Currency>("select * FROM j27Currency WHERE j27ID = @j27id", new { j27id = j27id });
+        }
 
         public IEnumerable<BO.SysDbObject> GetList_SysObjects()
         {

@@ -27,11 +27,13 @@ namespace BL
         private Io15AutoCompleteBL _o15;
         private Io13AttachmentTypeBL _o13;
         private Io27AttachmentBL _o27;
+        private Io58FieldBagBL _o58;
         private Ib65WorkflowMessageBL _b65;
         private Ip07ProjectLevelBL _p07;
         private Ip31WorksheetBL _p31;
         private Ip32ActivityBL _p32;
         private Ip34ActivityGroupBL _p34;
+        private Ip41ProjectBL _p41;
         private Ip42ProjectTypeBL _p42;
         private Ip85TempboxBL _p85;
         private Ix55WidgetBL _x55;
@@ -176,6 +178,14 @@ namespace BL
                 return _o15;
             }
         }
+        public Io58FieldBagBL o58FieldBagBL
+        {
+            get
+            {
+                if (_o58 == null) _o58 = new o58FieldBagBL(this);
+                return _o58;
+            }
+        }
         public Ib65WorkflowMessageBL b65WorkflowMessageBL
         {
             get
@@ -233,6 +243,15 @@ namespace BL
             {
                 if (_p34 == null) _p34 = new p34ActivityGroupBL(this);
                 return _p34;
+            }
+        }
+
+        public Ip41ProjectBL p41ProjectBL
+        {
+            get
+            {
+                if (_p41 == null) _p41 = new p41ProjectBL(this);
+                return _p41;
             }
         }
         public Ip42ProjectTypeBL p42ProjectTypeBL

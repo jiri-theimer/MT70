@@ -53,14 +53,12 @@ namespace XA.Controllers
             var cJobs = JsonSerializer.Deserialize<FidooJobs>(strJson);
             var lisLaunched = new List<FidooJob>();
 
-            foreach(var cJob in cJobs.jobs.Where(p=>p.Closed==false))
+            foreach(var cJob in cJobs.jobs.Where(p=>p.Closed==false))   //projet všechny fidoo joby
             {
                 if (cJob.LastRun==null || Convert.ToDateTime(cJob.LastRun).AddMinutes(cJob.RepeatMinuteInterval) < DateTime.Now)
                 {
                     //nastal čas spustit job
                     lisLaunched.Add(cJob);
-
-
                     cJob.LastRun = DateTime.Now;    //aktualizovat poslední čas spuštění jobu
                 }
             }
@@ -71,7 +69,10 @@ namespace XA.Controllers
                 return "no job launched"; //nebyl spuštěn žádný job -> odchod
             }
 
-            
+
+            Handle_Vydaje(lisLaunched);
+
+            //aktualizovat čas posledního jetí jobu v konfiguračním souboru FidooJobs.json
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;
             
@@ -80,6 +81,66 @@ namespace XA.Controllers
 
             return "Launched jobs: "+string.Join(" ### ", lisLaunched.Select(p => p.Name));
             
+        }
+
+        private void Handle_Vydaje(List<FidooJob> lisLaunched)  //zpracovat načtení výdajů z fidoo
+        {
+            foreach (var cJob in lisLaunched)
+            {
+                var ru = new BO.RunningUser() { j03Login = cJob.RobotUser };    //robot login
+                var f = new BL.Factory(ru, _app, _ep, _tt);
+                var lisVydaje = ListVydaje(cJob.ApiKey);    //fidoo výdaje k otestování
+                var lisUzivatele = new List<ResponseUzivatel>();
+
+                foreach (var vydaj in lisVydaje.Result.expenseList)
+                {
+                    if (f.p31WorksheetBL.LoadByExternalPID(vydaj.expenseId) == null)
+                    {
+                        //výdaj ještě chybí v MT       
+                        if (lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).Count() == 0)
+                        {
+                            var uzivatel = LoadUzivatel(cJob.ApiKey, vydaj.ownerUserId);
+                            if (uzivatel.Result != null)
+                            {
+                                lisUzivatele.Add(uzivatel.Result);
+                            }
+                        }
+                        var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, j02ID = 1, p34ID = 6, j27ID_Billing_Orig = 2 };                        
+                        recP31.p31ExternalPID = vydaj.expenseId;
+                        if (lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).Count() > 0)
+                        {
+                            string strUserCode=lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).First().employeeNumber;
+                            recP31.j02ID = f.j02PersonBL.LoadByCode(strUserCode,0).pid;
+                        }                        
+                        recP31.p31Date = vydaj.dateTime;
+                        recP31.Amount_WithVat_Orig = vydaj.amount;
+                        if (vydaj.vatRate !=null && vydaj.vatAmount !=null)
+                        {
+                            recP31.VatRate_Orig = Convert.ToDouble(vydaj.vatRate);
+                            recP31.Amount_WithoutVat_Orig = recP31.Amount_WithVat_Orig-Convert.ToDouble(vydaj.vatAmount);
+                        }
+                        recP31.p31Text = vydaj.name;
+                        if (!string.IsNullOrEmpty(vydaj.description))
+                        {
+                            recP31.p31Text += " ### " + vydaj.description;
+                        }
+
+                        var recJ27 = f.FBL.LoadCurrencyByCode(vydaj.currency);
+                        recP31.j27ID_Billing_Orig = recJ27.j27ID;
+
+                        if (cJob.DefaultP32ID > 0)
+                        {
+                            recP31.p32ID = cJob.DefaultP32ID;
+                        }
+                        if (cJob.DefaultP41ID > 0)
+                        {
+                            recP31.p41ID = cJob.DefaultP41ID;
+                        }
+                        
+                    }
+                }
+
+            }
         }
 
         public int Pokus()
@@ -137,6 +198,34 @@ namespace XA.Controllers
                 return xx;
 
                 //return await response.Content.ReadAsStringAsync();
+            }
+
+        }
+
+        public async Task<ResponseUzivatel> LoadUzivatel(string apikey,string userid)
+        {
+
+            var httpclient = _httpclientfactory.CreateClient();
+
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/user/get-user"))
+            {
+                request.Headers.TryAddWithoutValidation("Accept", "application/json");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
+
+                var s = JsonSerializer.Serialize(new RequestUzivatel() { userId = userid });
+
+                request.Content = new StringContent(s);
+
+                request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+
+                var response = await httpclient.SendAsync(request);
+
+                var strJson = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<ResponseUzivatel>(strJson);
+
+                
             }
 
         }

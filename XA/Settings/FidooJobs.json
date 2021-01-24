@@ -8,7 +8,8 @@
       "FirstExpenseModifyFrom": null,
       "Name": "LocalHost",
       "RobotUser": "lama@marktime50.net",
-      "DefaultProject": null,
+      "DefaultP41ID": null,
+      "DefaultP32ID": null,
       "ExportProjects": true,
       "ImportExpenses": true
     },
@@ -20,7 +21,8 @@
       "FirstExpenseModifyFrom": null,
       "Name": "Z/C/H",
       "RobotUser": "omaha@marktime50.net",
-      "DefaultProject": null,
+      "DefaultP41ID": null,
+      "DefaultP32ID": null,
       "ExportProjects": true,
       "ImportExpenses": true
     }

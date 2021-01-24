@@ -7,6 +7,7 @@ namespace BL
     {
         public BO.j02Person Load(int pid);
         public BO.j02Person LoadByEmail(string strEmail, int pid_exclude);
+        public BO.j02Person LoadByCode(string strCode, int pid_exclude);
         public IEnumerable<BO.j02Person> GetList(BO.myQueryJ02 mq);
         public int Save(BO.j02Person rec);
         public bool ValidateBeforeSave(BO.j02Person rec);
@@ -43,6 +44,10 @@ namespace BL
         public BO.j02Person LoadByEmail(string strEmail, int pid_exclude)
         {
             return _db.Load<BO.j02Person>(GetSQL1(" WHERE a.j02Email LIKE @email AND a.j02ID<>@pid_exclude"), new { email = strEmail, pid_exclude = pid_exclude });
+        }
+        public BO.j02Person LoadByCode(string strCode, int pid_exclude)
+        {
+            return _db.Load<BO.j02Person>(GetSQL1(" WHERE a.j02Code LIKE @code AND a.j02ID<>@pid_exclude"), new { code = strCode, pid_exclude = pid_exclude });
         }
 
         public IEnumerable<BO.j02Person>GetList(BO.myQueryJ02 mq)
@@ -127,6 +132,14 @@ namespace BL
             {
                 this.AddMessageTranslated(string.Format(_mother.tra("E-mail adresa [{0}] již je obsazena jinou osobou."), rec.j02Email));
                 return false;
+            }
+            if (rec.j02Code != null)
+            {
+                if (LoadByCode(rec.j02Code,rec.pid) != null)
+                {
+                    this.AddMessageTranslated(string.Format(_mother.tra("Osobní kód [{0}] již je obsazen jinou osobou."), rec.j02Code));
+                    return false;
+                }
             }
 
             return true;
