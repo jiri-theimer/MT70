@@ -41,13 +41,14 @@ namespace XA.Controllers
             var f = new BL.Factory(ru, _app, _ep, _tt);
 
             var lisVydaje = LoadVydaje(apikey);    //fidoo výdaje k otestování
-            var lisUzivatele = ListUzivateleFromVydaje(apikey, lisVydaje.Result);
+            var lisUzivatele = UzivateleFromVydaje(apikey, lisVydaje.Result,f);
 
-            return lisUzivatele.Count().ToString()+" ### "+ lisVydaje.Result.expenseList.Count().ToString();
+            return string.Join(", ", lisUzivatele.Select(p => p.employeeNumber+": "+p.j02ID.ToString()));
         }
 
         public string Index()
         {
+            
             var strJobsFile = _app.AppRootFolder + "\\Settings\\FidooJobs.json";
             if (!System.IO.File.Exists(strJobsFile))
             {
@@ -73,9 +74,12 @@ namespace XA.Controllers
                 return "no job launched"; //nebyl spuštěn žádný job -> odchod
             }
 
+            foreach (var onejob in lisLaunched.Where(p => p.ImportExpenses == true))
+            {
+                Handle_Import_Vydaje_OneJob(onejob);    //import fidoo výdajů
+            }
 
-            Handle_Vydaje(lisLaunched);
-
+            
             //aktualizovat čas posledního jetí jobu v konfiguračním souboru FidooJobs.json
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;
@@ -87,7 +91,7 @@ namespace XA.Controllers
             
         }
 
-        private List<ResponseUzivatel> ListUzivateleFromVydaje(string apikey,ResponseVydaje vydaje)
+        private List<ResponseUzivatel> UzivateleFromVydaje(string apikey,ResponseVydaje vydaje,BL.Factory f)
         {
             //vrátí ze seznamu výdajů seznam uživatelských fidoo profilů
             var ret = new List<ResponseUzivatel>();
@@ -95,63 +99,20 @@ namespace XA.Controllers
             {
                 var uzivatel = LoadUzivatel(apikey,userid);    //načíst profil fidoo uživatele
                 ret.Add(uzivatel.Result);
+
+                var recJ02 = f.j02PersonBL.LoadByCode(ret[ret.Count - 1].employeeNumber, 0);
+                if (recJ02 != null)
+                {
+                    ret[ret.Count - 1].j02ID = recJ02.pid;
+                }
                 
             }
 
             return ret;
         }
-        private void Handle_Vydaje(List<FidooJob> lisJobs)  //zpracovat načtení výdajů z fidoo
-        {
-            foreach (var cJob in lisJobs)
-            {
-                var ru = new BO.RunningUser() { j03Login = cJob.RobotUser };    //robot login
-                var f = new BL.Factory(ru, _app, _ep, _tt);
-                var lisVydaje = LoadVydaje(cJob.ApiKey);    //fidoo výdaje k otestování
-                var lisUzivatele = ListUzivateleFromVydaje(cJob.ApiKey, lisVydaje.Result);
+        
 
-               
-
-                foreach (var vydaj in lisVydaje.Result.expenseList)
-                {
-                    if (f.p31WorksheetBL.LoadByExternalPID(vydaj.expenseId) == null)
-                    {
-                        //výdaj chybí v MT                               
-                        var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, p34ID = 6, j27ID_Billing_Orig = 2 };                        
-                        recP31.p31ExternalPID = vydaj.expenseId;
-
-                        string strOsobniCislo = lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).First().employeeNumber;
-                        recP31.j02ID = f.j02PersonBL.LoadByCode(strOsobniCislo, 0).pid;
-
-                        recP31.p31Date = vydaj.dateTime;
-                        recP31.Amount_WithVat_Orig = vydaj.amount;
-                        if (vydaj.vatRate !=null && vydaj.vatAmount !=null)
-                        {
-                            recP31.VatRate_Orig = Convert.ToDouble(vydaj.vatRate);
-                            recP31.Amount_WithoutVat_Orig = recP31.Amount_WithVat_Orig-Convert.ToDouble(vydaj.vatAmount);
-                        }
-                        recP31.p31Text = vydaj.name;
-                        if (!string.IsNullOrEmpty(vydaj.description))
-                        {
-                            recP31.p31Text += " ### " + vydaj.description;
-                        }
-
-                        var recJ27 = f.FBL.LoadCurrencyByCode(vydaj.currency);
-                        recP31.j27ID_Billing_Orig = recJ27.j27ID;
-
-                        if (cJob.DefaultP32ID > 0)
-                        {
-                            recP31.p32ID = cJob.DefaultP32ID;
-                        }
-                        if (cJob.DefaultP41ID > 0)
-                        {
-                            recP31.p41ID = cJob.DefaultP41ID;
-                        }
-                        
-                    }
-                }
-
-            }
-        }
+        
 
         public int Pokus()
         {
@@ -189,7 +150,7 @@ namespace XA.Controllers
                 input.from = DateTime.Now.AddDays(-100).ToLocalTime();
                 input.to = DateTime.Now.ToLocalTime();
                 input.lastModifyFrom = DateTime.Now.AddDays(-5).ToLocalTime();
-
+               
                 var s = JsonSerializer.Serialize(input);
 
                 request.Content = new StringContent(s);
@@ -323,6 +284,77 @@ namespace XA.Controllers
 
         }
 
+       
+        private void Handle_Import_Vydaje_OneJob(FidooJob onejob)
+        {
+            var ru = new BO.RunningUser() { j03Login = onejob.RobotUser };    //robot login
+            var f = new BL.Factory(ru, _app, _ep, _tt);
+            var lisVydaje = LoadVydaje(onejob.ApiKey);    //fidoo výdaje k otestování
+            var lisUzivatele = UzivateleFromVydaje(onejob.ApiKey, lisVydaje.Result, f);
+            var lisProjekty = ListProjekty(onejob.ApiKey);
 
+            foreach (var vydaj in lisVydaje.Result.expenseList)
+            {
+                if (f.p31WorksheetBL.LoadByExternalPID(vydaj.expenseId) == null)
+                {
+                    //výdaj chybí v MT                               
+                    var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, j27ID_Billing_Orig = 2 };
+                    recP31.p31ExternalPID = vydaj.expenseId;
+
+                    if (lisUzivatele.Where(p => p.userId == vydaj.ownerUserId && p.j02ID > 0).Any())
+                    {
+                        recP31.j02ID = lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).First().j02ID;
+                    }
+
+
+                    recP31.p31Date = vydaj.dateTime;
+                    recP31.Amount_WithVat_Orig = vydaj.amount;
+                    if (vydaj.vatRate != null && vydaj.vatAmount != null)
+                    {
+                        recP31.VatRate_Orig = Convert.ToDouble(vydaj.vatRate);
+                        recP31.Amount_WithoutVat_Orig = recP31.Amount_WithVat_Orig - Convert.ToDouble(vydaj.vatAmount);
+                    }
+                    recP31.p31Text = vydaj.name;
+                    if (!string.IsNullOrEmpty(vydaj.description))
+                    {
+                        recP31.p31Text += " ### " + vydaj.description;
+                    }
+
+                    if (!string.IsNullOrEmpty(vydaj.currency))
+                    {
+                        var recJ27 = f.FBL.LoadCurrencyByCode(vydaj.currency);
+                        recP31.j27ID_Billing_Orig = recJ27.j27ID;
+                    }
+
+
+                    if (onejob.DefaultP32ID > 0)
+                    {
+                        recP31.p32ID = onejob.DefaultP32ID;
+                        recP31.p34ID = f.p32ActivityBL.Load(onejob.DefaultP32ID).p34ID;
+                    }
+                    if (onejob.DefaultP41ID > 0)
+                    {
+                        recP31.p41ID = onejob.DefaultP41ID;
+                    }
+                    if (vydaj.projectIds != null && vydaj.projectIds.Count() > 0)
+                    {
+                        if (lisProjekty.Any(p => p.id == vydaj.projectIds.First()))
+                        {
+                            var strProjectCode = lisProjekty.Where(p => p.id == vydaj.projectIds.First()).First().code;
+                            var recP41 = f.p41ProjectBL.LoadByCode(strProjectCode, 0);
+                            if (recP41 != null)
+                            {
+                                recP31.p41ID = recP41.pid;
+                            }
+                        }
+                    }
+
+                }
+            }
+            //výdaje jobu zpracovány
+
+        }
+
+        
     }
 }
