@@ -14,7 +14,7 @@ namespace XA.Models.fidoo
     {
         public int limit { get; set; } = 100;
         public int offset { get; set; }
-        public Sort[] sort { get; set; }
+        public List<Sort> sort { get; set; }
     }
 
     public class Sort

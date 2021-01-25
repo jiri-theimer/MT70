@@ -35,11 +35,15 @@ namespace XA.Controllers
         }
         public string zch()
         {
+            string apikey = "pak1lHKgSvgcSbMdtz2Erf2OzvZSVNepzPEXswV87WZMB7eUehY3WI09nLMrs85K";
 
             var ru = new BO.RunningUser() { j03Login = "admin1" };
             var f = new BL.Factory(ru, _app, _ep, _tt);
 
-            return f.CurrentUser.PersonAsc;
+            var lisVydaje = LoadVydaje(apikey);    //fidoo výdaje k otestování
+            var lisUzivatele = ListUzivateleFromVydaje(apikey, lisVydaje.Result);
+
+            return lisUzivatele.Count().ToString()+" ### "+ lisVydaje.Result.expenseList.Count().ToString();
         }
 
         public string Index()
@@ -83,35 +87,41 @@ namespace XA.Controllers
             
         }
 
-        private void Handle_Vydaje(List<FidooJob> lisLaunched)  //zpracovat načtení výdajů z fidoo
+        private List<ResponseUzivatel> ListUzivateleFromVydaje(string apikey,ResponseVydaje vydaje)
         {
-            foreach (var cJob in lisLaunched)
+            //vrátí ze seznamu výdajů seznam uživatelských fidoo profilů
+            var ret = new List<ResponseUzivatel>();
+            foreach (var userid in vydaje.expenseList.Select(p=>p.ownerUserId).Distinct())
+            {
+                var uzivatel = LoadUzivatel(apikey,userid);    //načíst profil fidoo uživatele
+                ret.Add(uzivatel.Result);
+                
+            }
+
+            return ret;
+        }
+        private void Handle_Vydaje(List<FidooJob> lisJobs)  //zpracovat načtení výdajů z fidoo
+        {
+            foreach (var cJob in lisJobs)
             {
                 var ru = new BO.RunningUser() { j03Login = cJob.RobotUser };    //robot login
                 var f = new BL.Factory(ru, _app, _ep, _tt);
-                var lisVydaje = ListVydaje(cJob.ApiKey);    //fidoo výdaje k otestování
-                var lisUzivatele = new List<ResponseUzivatel>();
+                var lisVydaje = LoadVydaje(cJob.ApiKey);    //fidoo výdaje k otestování
+                var lisUzivatele = ListUzivateleFromVydaje(cJob.ApiKey, lisVydaje.Result);
+
+               
 
                 foreach (var vydaj in lisVydaje.Result.expenseList)
                 {
                     if (f.p31WorksheetBL.LoadByExternalPID(vydaj.expenseId) == null)
                     {
-                        //výdaj ještě chybí v MT       
-                        if (lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).Count() == 0)
-                        {
-                            var uzivatel = LoadUzivatel(cJob.ApiKey, vydaj.ownerUserId);
-                            if (uzivatel.Result != null)
-                            {
-                                lisUzivatele.Add(uzivatel.Result);
-                            }
-                        }
-                        var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, j02ID = 1, p34ID = 6, j27ID_Billing_Orig = 2 };                        
+                        //výdaj chybí v MT                               
+                        var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, p34ID = 6, j27ID_Billing_Orig = 2 };                        
                         recP31.p31ExternalPID = vydaj.expenseId;
-                        if (lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).Count() > 0)
-                        {
-                            string strUserCode=lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).First().employeeNumber;
-                            recP31.j02ID = f.j02PersonBL.LoadByCode(strUserCode,0).pid;
-                        }                        
+
+                        string strOsobniCislo = lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).First().employeeNumber;
+                        recP31.j02ID = f.j02PersonBL.LoadByCode(strOsobniCislo, 0).pid;
+
                         recP31.p31Date = vydaj.dateTime;
                         recP31.Amount_WithVat_Orig = vydaj.amount;
                         if (vydaj.vatRate !=null && vydaj.vatAmount !=null)
@@ -164,7 +174,8 @@ namespace XA.Controllers
             return intP31ID;
         }
 
-        public async Task<ResponseVydaje> ListVydaje(string apikey)
+        
+        public async Task<ResponseVydaje> LoadVydaje(string apikey)
         {
 
             var httpclient = _httpclientfactory.CreateClient();
@@ -230,7 +241,7 @@ namespace XA.Controllers
 
         }
 
-        public async Task<ResponseStrediska> ListStrediska(string apikey)
+        public async Task<ResponseStrediska> LoadStrediska(string apikey)
         {
 
             var httpclient = _httpclientfactory.CreateClient();
@@ -260,9 +271,25 @@ namespace XA.Controllers
 
         }
 
-
-        public async Task<ResponseProjekty> ListProjekty(string apikey)
+        public List<Project> ListProjekty(string apikey)
         {
+            bool bolCompleted = false;
+            var ret = new List<Project>();
+            int intOffset = 0;
+
+            while (!bolCompleted)
+            {
+                var c = LoadProjekty(apikey, intOffset);
+                ret.InsertRange(0,c.Result.projects.Where(p=>p.state=="active"));
+                bolCompleted = c.Result.complete;
+                intOffset += 100;
+            }
+
+            return ret;
+        }
+        public async Task<ResponseProjekty> LoadProjekty(string apikey,int offset=0)
+        {
+            //offset je počet záznamů, které se mají přeskočit
 
             var httpclient = _httpclientfactory.CreateClient();
 
@@ -271,7 +298,12 @@ namespace XA.Controllers
                 request.Headers.TryAddWithoutValidation("Accept", "application/json");
                 request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
 
-                var s = JsonSerializer.Serialize(new RequestRoot());
+                var req = new RequestRoot();
+                
+                req.queryRequest = new Queryrequest() { offset = offset, limit = 100 };
+                req.queryRequest.sort = new List<Sort>();
+                req.queryRequest.sort.Add(new Sort() { ascendant = false, property = "id" });
+                var s = JsonSerializer.Serialize(req);
 
                 request.Content = new StringContent(s);
 

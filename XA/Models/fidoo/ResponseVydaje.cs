@@ -10,6 +10,7 @@ namespace XA.Models.fidoo
         public bool complete { get; set; }
         public string nextOffsetToken { get; set; }
         public List<Expenselist> expenseList { get; set; }
+        
     }
 
     public class Expenselist

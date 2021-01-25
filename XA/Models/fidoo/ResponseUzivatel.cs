@@ -17,6 +17,9 @@ namespace XA.Models.fidoo
         public string kycStatus { get; set; }
         public string language { get; set; }
         public string userId { get; set; }
+
+
+        public int j02ID { get; set; }  //úmělý atribut kvůli dohledání uživatele v MT
     }
 
 }
