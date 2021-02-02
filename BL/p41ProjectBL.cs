@@ -32,7 +32,8 @@ namespace BL
             sb(",p42.p42Name,p92.p92Name,b02.b02Name,j18.j18Name,a.p41ExternalPID,a.p41ParentID,a.p41BillingMemo");
             sb(",j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,p28client.p87ID as p87ID_Client,p42.b01ID,a.p41IsNoNotify,a.p72ID_NonBillable,a.p72ID_BillableHours,a.j02ID_ContactPerson_DefaultInWorksheet,a.j02ID_ContactPerson_DefaultInInvoice");
             sb(",a.p41BillingFlag,a.p41ReportingFlag");
-            sb(_db.GetSQL1_Ocas("p41"));
+            
+            sb(","+_db.GetSQL1_Ocas("p41"));
 
             sb(" FROM p41Project a INNER JOIN p42ProjectType p42 ON a.p42ID=p42.p42ID");
             sb(" LEFT OUTER JOIN p28Contact p28client ON a.p28ID_Client=p28client.p28ID");
@@ -42,8 +43,7 @@ namespace BL
 
            
             sb(" LEFT OUTER JOIN p87BillingLanguage p87 ON a.p87ID=p87.p87ID");
-            sb(" LEFT OUTER JOIN j02Person j02owner ON a.j02ID_Owner=j02owner.j02ID");
-
+            
             sb(" LEFT OUTER JOIN j18Region j18 ON a.j18ID=j18.j18ID");
             sb(" LEFT OUTER JOIN p41Project_FreeField p41free ON a.p41ID=p41free.p41ID");
             sb(" LEFT OUTER JOIN j02Person j02owner ON a.j02ID_Owner=j02owner.j02ID");

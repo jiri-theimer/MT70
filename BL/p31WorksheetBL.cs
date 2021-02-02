@@ -119,22 +119,26 @@ namespace BL
             }
             if (rec.p41ID == 0)
             {
-                this.AddMessage("Chybí projekt.");return 0;
+                rec.SetError("Chybí projekt.");
+                this.AddMessage(rec.ErrorMessage);return 0;
             }
             if (rec.j02ID == 0)
             {
-                this.AddMessage("Chybí osobní profil."); return 0;
+                rec.SetError("Chybí osobní profil.");
+                this.AddMessage(rec.ErrorMessage); return 0;
             }
             if (rec.p34ID == 0)
             {
-                this.AddMessage("Chybí sešit aktivity."); return 0;
+                rec.SetError("Chybí sešit aktivity.");
+                this.AddMessage(rec.ErrorMessage); return 0;
             }
             if (rec.p32ID == 0)
             {
                 var recP34 = _mother.p34ActivityGroupBL.Load(rec.p34ID);
                 if (recP34.p34ActivityEntryFlag == BO.p34ActivityEntryFlagENUM.AktivitaJePovinna)
                 {
-                    this.AddMessage(String.Format("Sešit [{0}] vyžaduje zadat aktivitu.", recP34.p34Name));return 0;
+                    rec.SetError(String.Format("Sešit [{0}] vyžaduje zadat aktivitu.", recP34.p34Name));
+                    this.AddMessage(rec.ErrorMessage);return 0;
                 }
                 //zkusit najít výchozí systémovou aktivitu, pokud se aktivita nemá zadávat
                 var mq = new BO.myQueryP32() { p34id = rec.p34ID,IsRecordValid=true };
@@ -194,11 +198,13 @@ namespace BL
                     {
                         if (rec.j27ID_Billing_Orig == 0)
                         {
-                            this.AddMessage("Chybí měna"); return 0;
+                            rec.SetError("Chybí měna.");
+                            this.AddMessage(rec.ErrorMessage); return 0;
                         }
                         if (rec.Amount_WithoutVat_Orig == 0)
                         {
-                            this.AddMessage("Částka nesmí být NULA."); return 0;
+                            rec.SetError("Částka nesmí být NULA.");
+                            this.AddMessage(rec.ErrorMessage); return 0;
                         }
                     }
                     rec.RecalcEntryAmount(rec.Amount_WithoutVat_Orig, vld.VatRate); //dopočítat částku vč. DPH
@@ -209,11 +215,13 @@ namespace BL
                     {
                         if (rec.j27ID_Billing_Orig == 0)
                         {
-                            this.AddMessage("Chybí měna"); return 0;
+                            rec.SetError("Chybí měna.");
+                            this.AddMessage(rec.ErrorMessage); return 0;
                         }
                         if (rec.Amount_WithoutVat_Orig == 0 && rec.Amount_WithVat_Orig==0)
                         {
-                            this.AddMessage("Částka nesmí být NULA."); return 0;
+                            rec.SetError("Částka nesmí být NULA.");
+                            this.AddMessage(rec.ErrorMessage); return 0;
                         }
                     }
                     rec.SetAmounts();
@@ -222,7 +230,8 @@ namespace BL
                     }
                     if (Math.Abs((rec.p31Amount_WithoutVat_Orig + rec.p31Amount_Vat_Orig) - rec.p31Amount_WithVat_Orig) > 0.02)
                     {
-                        this.AddMessage(string.Format("Součet základu a částky DPH se liší od celkové částky vč. DPH! Rozdíl: {0}",rec.p31Amount_WithoutVat_Orig+rec.p31Amount_Vat_Orig-rec.p31Amount_WithVat_Orig));
+                        rec.SetError(string.Format("Součet základu a částky DPH se liší od celkové částky vč. DPH! Rozdíl: {0}", rec.p31Amount_WithoutVat_Orig + rec.p31Amount_Vat_Orig - rec.p31Amount_WithVat_Orig));
+                        this.AddMessage(rec.ErrorMessage);
                         return 0;
                     }
                   

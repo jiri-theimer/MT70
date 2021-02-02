@@ -2,13 +2,10 @@
   "jobs": [
     {
       "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
-      "Closed": false,
-      "LastRun": "2021-01-22T23:36:22.3691833+01:00",
+      "LastRun": "2021-02-02T18:09:43.3943099+01:00",
       "RepeatMinuteInterval": 5,
-      "FirstExpenseModifyFrom": null,
       "Name": "LocalHost",
       "RobotUser": "lama@marktime50.net",
-      "DefaultP41ID": 0,
       "DefaultP32ID": 2,
       "ExportProjects": true,
       "ImportExpenses": true
@@ -18,11 +15,8 @@
       "Closed": true,
       "LastRun": "2021-01-22T23:36:22.3691839+01:00",
       "RepeatMinuteInterval": 5,
-      "FirstExpenseModifyFrom": null,
       "Name": "Z/C/H",
       "RobotUser": "omaha@marktime50.net",
-      "DefaultP41ID": 0,
-      "DefaultP32ID": 0,
       "ExportProjects": true,
       "ImportExpenses": true
     }
