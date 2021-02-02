@@ -36,8 +36,7 @@ namespace BO
 
         public int p49ID { get; set; }
         public int j19ID { get; set; }
-        public string p31ExternalPID { get; set; }
-
+        
         private double _p31Value_Orig { get; set; }
         public DateTime? p31ValidUntil { get; set; }
         public double p31MarginHidden { get; set; }   // nové pole verze 6

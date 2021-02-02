@@ -13,7 +13,7 @@ namespace BL
         public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF);
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQuery mq);
-        
+        public void UpdateExternalPID(int pid, string strExternalPID);
 
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
@@ -110,7 +110,10 @@ namespace BL
             return _db.GetList<BO.p31Worksheet>(fq.FinalSql, fq.Parameters);
         }
 
-
+        public void UpdateExternalPID(int pid, string strExternalPID)
+        {
+            BL.bas.p31Support.UpdateExternalPID(_mother, _db,pid,strExternalPID);
+        }
         public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF)
         {
             if (rec.p41ID==0 && rec.p56ID > 0)  //dohledat projekt podle úkolu
@@ -238,7 +241,7 @@ namespace BL
                     break;
             }
 
-
+            
             return BL.bas.p31Support.SaveOrigRecord(_mother,_db,rec, p33ID, lisFF);
         }
 

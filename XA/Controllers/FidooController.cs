@@ -158,8 +158,8 @@ namespace XA.Controllers
                 var input = new RequestVydaje();
                 input.from = DateTime.Now.AddDays(-100).ToLocalTime();
                 input.to = DateTime.Now.ToLocalTime();
-                input.lastModifyFrom = DateTime.Now.AddDays(-5).ToLocalTime();
-                input.closed = true;
+                input.lastModifyFrom = DateTime.Now.AddDays(-100).ToLocalTime();
+                //input.closed = true;
 
                 var s = JsonSerializer.Serialize(input);
 
@@ -171,7 +171,7 @@ namespace XA.Controllers
 
                 var strJson = await response.Content.ReadAsStringAsync();
 
-                //System.IO.File.WriteAllText("c:\\temp\\hovado.txt", strJson);
+                System.IO.File.WriteAllText(_app.LogFolder+"\\hovado.txt", strJson);
 
                 //var options = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,NumberHandling=JsonNumberHandling.AllowReadingFromString };
 
@@ -251,7 +251,8 @@ namespace XA.Controllers
             while (!bolCompleted)
             {
                 var c = LoadProjekty(apikey, intOffset);
-                ret.InsertRange(0, c.Result.projects.Where(p => p.state == "active"));
+                //ret.InsertRange(0, c.Result.projects.Where(p => p.state == "active"));
+                ret.InsertRange(0, c.Result.projects);
                 bolCompleted = c.Result.complete;
                 intOffset += 100;
             }
@@ -302,23 +303,33 @@ namespace XA.Controllers
             var lisVydaje = LoadVydaje(onejob.ApiKey);    //fidoo výdaje k otestování
             var lisUzivatele = UzivateleFromVydaje(onejob.ApiKey, lisVydaje.Result, f);
             var lisProjekty = ListProjekty(onejob.ApiKey);
+
+            LogInfo("lisProjekty, count: " + lisProjekty.Count().ToString());
+            
             BO.p33IdENUM p33id = BO.p33IdENUM.PenizeBezDPH;
 
-            foreach (var vydaj in lisVydaje.Result.expenseList.Where(p=>p.closed==true))    //importovat pouze uzavřené fidoo výdaje
+            foreach (var vydaj in lisVydaje.Result.expenseList)    //importovat pouze uzavřené fidoo výdaje
             {
                 bool bolGO = false;
-                var recExist = f.p31WorksheetBL.LoadByExternalPID(vydaj.expenseId);
-                if (recExist == null)
+                if (string.IsNullOrEmpty(onejob.ExpenseImportClassState) || vydaj.classState == onejob.ExpenseImportClassState)
                 {
-                    bolGO = true;                    
+                    bolGO = true;
                 }
-
+                if (bolGO)
+                {
+                    var recExist = f.p31WorksheetBL.LoadByExternalPID(vydaj.expenseId);
+                    if (recExist != null)
+                    {
+                        bolGO = false;  //výdaj už byl dříve importován
+                    }
+                }
+                
+               
                 if (bolGO)
                 {
                     //výdaj chybí v MT                               
                     var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, j27ID_Billing_Orig = 2 };
-                    recP31.p31ExternalPID = vydaj.expenseId;
-
+                    
                     if (lisUzivatele.Where(p => p.userId == vydaj.ownerUserId && p.j02ID > 0).Any())
                     {
                         recP31.j02ID = lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).First().j02ID;
@@ -343,8 +354,9 @@ namespace XA.Controllers
                     recP31.p31Text = vydaj.name;
                     if (!string.IsNullOrEmpty(vydaj.description))
                     {
-                        recP31.p31Text += " ### " + vydaj.description;
+                        recP31.p31Text += " ### " + vydaj.description.Replace(vydaj.name,"");
                     }
+                    
 
                     if (!string.IsNullOrEmpty(vydaj.currency))
                     {
@@ -365,25 +377,33 @@ namespace XA.Controllers
                     if (vydaj.projectIds != null && vydaj.projectIds.Count() > 0)
                     {
                         if (lisProjekty.Any(p => p.id == vydaj.projectIds.First()))
-                        {
+                        {                            
                             var strProjectCode = lisProjekty.Where(p => p.id == vydaj.projectIds.First()).First().code;
+                            LogInfo("Hledám projekt přes: "+ vydaj.projectIds.First()+ ",uživatelský kód: " + strProjectCode);
                             var recP41 = f.p41ProjectBL.LoadByCode(strProjectCode, 0);
                             if (recP41 != null)
                             {
                                 recP31.p41ID = recP41.pid;
                             }
+                            else
+                            {
+                                LogInfo("Projekt nebyl nalezen dle kódu: " + strProjectCode);
+                            }
                         }
                     }
-
+                    string curlogin = f.CurrentUser.j03Login;
+                    f.CurrentUser.j03Login = "fidoo";
                     int intPID = f.p31WorksheetBL.SaveOrigRecord(recP31, p33id, null);
                     if (intPID > 0)
                     {
-                        LogInfo(recP31.p31ExternalPID + ", saved to pid: " + intPID.ToString());
+                        f.p31WorksheetBL.UpdateExternalPID(intPID, vydaj.expenseId);
+                        LogInfo(vydaj.expenseId + ", saved to pid: " + intPID.ToString());
                     }
                     else
                     {
-                        LogInfo(recP31.p31ExternalPID + ", error: " + recP31.ErrorMessage);
+                        LogInfo(vydaj.expenseId + ", error: " + recP31.ErrorMessage);
                     }
+                    f.CurrentUser.j03Login = curlogin;
 
                     //System.IO.File.AppendAllText("c:\\temp\\hovado.txt", recP31.p31Text);
 

@@ -8,7 +8,10 @@ namespace BL.bas
 {
     public static class p31Support
     {
-        
+        public static void UpdateExternalPID(BL.Factory _f, DL.DbHandler _db, int pid,string strExternalPID)
+        {
+            _db.RunSql("UPDATE p31Worksheet set p31ExternalPID=@ep WHERE p31ID=@pid", new { ep = strExternalPID, pid = pid });
+        }
         public static int SaveOrigRecord(BL.Factory _f, DL.DbHandler _db,BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF)
         {
             int intSavedP31ID = 0;
@@ -52,7 +55,7 @@ namespace BL.bas
                 p.AddDateTime("p31DateTimeUntil_Orig", rec.p31DateTimeUntil_Orig);
 
                 p.AddString("p31Value_Orig_Entried", BO.BAS.LeftString(rec.Value_Orig_Entried, 20));
-                p.AddString("p31ExternalPID", rec.p31ExternalPID);
+                
 
                 p.AddString("p31PostRecipient", rec.p31PostRecipient);
                 p.AddString("p31PostCode", rec.p31PostCode);

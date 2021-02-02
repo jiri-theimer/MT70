@@ -18,12 +18,14 @@ namespace XA.Models.fidoo
         public DateTime? LastRun { get; set; }      //kdy naposledy došlo ke spuštění jobu
         public int RepeatMinuteInterval { get; set; } = 300;
         public DateTime? FirstExpenseModifyFrom { get; set; }
+        public string ExpenseImportClassState { get; set; }
         public string Name { get; set; }
         public string RobotUser { get; set; }
         public int DefaultP41ID { get; set; }
         public int DefaultP32ID { get; set; }
         public bool ExportProjects { get; set; }
         public bool ImportExpenses { get; set; }
+        
     }
 
 }
