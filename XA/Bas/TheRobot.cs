@@ -63,7 +63,7 @@ namespace UI
 
 
             var fidoo = new XA.Controllers.FidooController(_httpclientfactory, _ep, _app, _tt);
-            //fidoo.Index();
+            fidoo.Index();
 
             LogInfo("Alfter fidoo.Index();.");
         }

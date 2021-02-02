@@ -25,6 +25,15 @@ namespace XA.Controllers
             _tt = tt;
         }
 
+        private JsonSerializerOptions GetJsonOptions()
+        {
+            var options = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault, NumberHandling = JsonNumberHandling.AllowReadingFromString };
+           
+            options.WriteIndented = true;
+            
+            return options;
+        }
+
         public string Doba()
         {
             
@@ -55,7 +64,7 @@ namespace XA.Controllers
                 return "File FidooJobs.json not exists";
             }
             var strJson = System.IO.File.ReadAllText(strJobsFile);
-            var cJobs = JsonSerializer.Deserialize<FidooJobs>(strJson);
+            var cJobs = JsonSerializer.Deserialize<FidooJobs>(strJson,GetJsonOptions());
             var lisLaunched = new List<FidooJob>();
 
             foreach(var cJob in cJobs.jobs.Where(p=>p.Closed==false))   //projet všechny fidoo joby
@@ -76,15 +85,15 @@ namespace XA.Controllers
 
             foreach (var onejob in lisLaunched.Where(p => p.ImportExpenses == true))
             {
-                Handle_Import_Vydaje_OneJob(onejob);    //import fidoo výdajů
+                Handle_Import_Vydaje_OneJob(onejob);    //import fidoo výdajů pro joby s ImportExpenses=true
             }
 
             
             //aktualizovat čas posledního jetí jobu v konfiguračním souboru FidooJobs.json
-            var options = new JsonSerializerOptions();
-            options.WriteIndented = true;
+            //var options = new JsonSerializerOptions();
+            //options.WriteIndented = true;
             
-            var strJson2Save = JsonSerializer.Serialize(cJobs, options);
+            var strJson2Save = JsonSerializer.Serialize(cJobs, GetJsonOptions());
             System.IO.File.WriteAllText(strJobsFile, strJson2Save);   //uložit LastRun jobů do json souboru
 
             return "Launched jobs: "+string.Join(" ### ", lisLaunched.Select(p => p.Name));
@@ -163,9 +172,9 @@ namespace XA.Controllers
 
                 //System.IO.File.WriteAllText("c:\\temp\\hovado.txt", strJson);
 
-                var options = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,NumberHandling=JsonNumberHandling.AllowReadingFromString };
+                //var options = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,NumberHandling=JsonNumberHandling.AllowReadingFromString };
                
-                var xx = JsonSerializer.Deserialize<ResponseVydaje>(strJson,options);
+                var xx = JsonSerializer.Deserialize<ResponseVydaje>(strJson,GetJsonOptions());
 
                 return xx;
 
@@ -348,6 +357,8 @@ namespace XA.Controllers
                             }
                         }
                     }
+                    recP31.p31Text += "## p32id: " + recP31.p32ID.ToString() + ", p41ID: " + recP31.p41ID.ToString();
+                    System.IO.File.WriteAllText("c:\\temp\\hovado.txt", recP31.p31Text);
 
                 }
             }
