@@ -171,7 +171,7 @@ namespace XA.Controllers
 
                 var strJson = await response.Content.ReadAsStringAsync();
 
-                System.IO.File.WriteAllText(_app.LogFolder+"\\hovado.txt", strJson);
+                //System.IO.File.WriteAllText(_app.LogFolder+"\\hovado.txt", strJson);
 
                 //var options = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,NumberHandling=JsonNumberHandling.AllowReadingFromString };
 
@@ -242,7 +242,7 @@ namespace XA.Controllers
 
         }
 
-        public List<Project> ListProjekty(string apikey)
+        public List<Project> ListProjekty(string apikey, string projectId = null)
         {
             bool bolCompleted = false;
             var ret = new List<Project>();
@@ -250,16 +250,17 @@ namespace XA.Controllers
 
             while (!bolCompleted)
             {
-                var c = LoadProjekty(apikey, intOffset);
+                var c = LoadProjekty(apikey, intOffset, projectId);
                 //ret.InsertRange(0, c.Result.projects.Where(p => p.state == "active"));
                 ret.InsertRange(0, c.Result.projects);
+
                 bolCompleted = c.Result.complete;
                 intOffset += 100;
             }
 
             return ret;
         }
-        public async Task<ResponseProjekty> LoadProjekty(string apikey, int offset = 0)
+        public async Task<ResponseProjekty> LoadProjekty(string apikey, int offset = 0,string projectId=null)
         {
             //offset je počet záznamů, které se mají přeskočit
 
@@ -273,6 +274,11 @@ namespace XA.Controllers
                 var req = new RequestRoot();
 
                 req.queryRequest = new Queryrequest() { offset = offset, limit = 100 };
+                if (projectId != null)
+                {
+                    req.projectIds = new List<string>();
+                    req.projectIds.Add(projectId);
+                }
                 req.queryRequest.sort = new List<Sort>();
                 req.queryRequest.sort.Add(new Sort() { ascendant = false, property = "id" });
                 var s = JsonSerializer.Serialize(req);
@@ -295,21 +301,52 @@ namespace XA.Controllers
 
         }
 
-
+        private List<BO.o58FieldBag> GetFieldBag(BL.Factory f)
+        {
+            var lisBag = f.o58FieldBagBL.GetList(new BO.myQuery("o58"));
+            var b = false;
+            if (!lisBag.Any(p=>p.o58Code== "fidoo_merchantName"))
+            {
+                CreateBag(f, "fidoo_merchantName", "Název obchodníka");b = true;
+            }
+            if (!lisBag.Any(p => p.o58Code == "fidoo_merchantVatId"))
+            {
+                CreateBag(f, "fidoo_merchantVatId", "DIČ obchodníka");b = true;
+            }
+            if (!lisBag.Any(p => p.o58Code == "fidoo_merchantVatId"))
+            {
+                CreateBag(f, "fidoo_merchantAddress", "Adresa obchodníka");b = true;
+            }
+            if (!lisBag.Any(p => p.o58Code == "fidoo_merchantVatId"))
+            {
+                CreateBag(f, "fidoo_receiptUrl", "Obrázek účtenky");b = true;
+            }
+            if (b)
+            {
+                lisBag = f.o58FieldBagBL.GetList(new BO.myQuery("o58"));
+            }
+            return lisBag.ToList();
+        }
+       
+        private void CreateBag(BL.Factory f,string strCode,string strName,BO.x24IdENUM x24id=BO.x24IdENUM.tString)
+        {
+            var c = new BO.o58FieldBag() { o58Code = strCode, o58Name = strName, x24ID = x24id };
+            f.o58FieldBagBL.Save(c);
+        }
         private void Handle_Import_Vydaje_OneJob(FidooJob onejob)
         {
             var ru = new BO.RunningUser() { j03Login = onejob.RobotUser };    //robot login
             var f = new BL.Factory(ru, _app, _ep, _tt);
             var lisVydaje = LoadVydaje(onejob.ApiKey);    //fidoo výdaje k otestování
             var lisUzivatele = UzivateleFromVydaje(onejob.ApiKey, lisVydaje.Result, f);
-            var lisProjekty = ListProjekty(onejob.ApiKey);
+            var lisBag = GetFieldBag(f);
 
-            LogInfo("lisProjekty, count: " + lisProjekty.Count().ToString());
             
             BO.p33IdENUM p33id = BO.p33IdENUM.PenizeBezDPH;
 
             foreach (var vydaj in lisVydaje.Result.expenseList)    //importovat pouze uzavřené fidoo výdaje
             {
+                
                 bool bolGO = false;
                 if (string.IsNullOrEmpty(onejob.ExpenseImportClassState) || vydaj.classState == onejob.ExpenseImportClassState)
                 {
@@ -322,19 +359,38 @@ namespace XA.Controllers
                     {
                         bolGO = false;  //výdaj už byl dříve importován
                     }
+                    
+                }                
+                int intP41ID = onejob.DefaultP41ID;
+                if (bolGO && vydaj.projectIds != null && vydaj.projectIds.Count() > 0)
+                {
+                    var lisProjekty = ListProjekty(onejob.ApiKey, vydaj.projectIds.First());
+                    if (lisProjekty.Count() > 0)
+                    {                        
+                        var recP41 = f.p41ProjectBL.LoadByCode(lisProjekty.First().code, 0);
+                        if (recP41 != null)
+                        {
+                            intP41ID = recP41.pid;
+                        }
+                        else
+                        {
+                            LogInfo("Projekt nebyl nalezen: " + lisProjekty.First().code+" ## "+ lisProjekty.First().id);                            
+                        }
+                    }
+                    if (intP41ID == 0) bolGO = false;
                 }
                 
                
                 if (bolGO)
                 {
-                    //výdaj chybí v MT                               
-                    var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, j27ID_Billing_Orig = 2 };
-                    
+                    //výdaj chybí v MT
+
+                    var recP31 = new BO.p31WorksheetEntryInput() { p31HoursEntryflag = BO.p31HoursEntryFlagENUM.NeniCas, p41ID= intP41ID, j27ID_Billing_Orig = 2 };
+
                     if (lisUzivatele.Where(p => p.userId == vydaj.ownerUserId && p.j02ID > 0).Any())
                     {
                         recP31.j02ID = lisUzivatele.Where(p => p.userId == vydaj.ownerUserId).First().j02ID;
                     }
-
 
                     recP31.p31Date = vydaj.dateTime;
                     recP31.Amount_WithVat_Orig = vydaj.amount;
@@ -374,30 +430,28 @@ namespace XA.Controllers
                     {
                         recP31.p41ID = onejob.DefaultP41ID;
                     }
-                    if (vydaj.projectIds != null && vydaj.projectIds.Count() > 0)
-                    {
-                        if (lisProjekty.Any(p => p.id == vydaj.projectIds.First()))
-                        {                            
-                            var strProjectCode = lisProjekty.Where(p => p.id == vydaj.projectIds.First()).First().code;
-                            LogInfo("Hledám projekt přes: "+ vydaj.projectIds.First()+ ",uživatelský kód: " + strProjectCode);
-                            var recP41 = f.p41ProjectBL.LoadByCode(strProjectCode, 0);
-                            if (recP41 != null)
-                            {
-                                recP31.p41ID = recP41.pid;
-                            }
-                            else
-                            {
-                                LogInfo("Projekt nebyl nalezen dle kódu: " + strProjectCode);
-                            }
-                        }
-                    }
+                    
                     string curlogin = f.CurrentUser.j03Login;
                     f.CurrentUser.j03Login = "fidoo";
                     int intPID = f.p31WorksheetBL.SaveOrigRecord(recP31, p33id, null);
                     if (intPID > 0)
                     {
                         f.p31WorksheetBL.UpdateExternalPID(intPID, vydaj.expenseId);
+                        f.o58FieldBagBL.SetValue_String(lisBag.Where(p => p.o58Code == "fidoo_merchantName").First().pid,"p31",intPID,vydaj.merchantName);
+                        f.o58FieldBagBL.SetValue_String(lisBag.Where(p => p.o58Code == "fidoo_merchantVatId").First().pid, "p31", intPID, vydaj.merchantVatId);
+                        f.o58FieldBagBL.SetValue_String(lisBag.Where(p => p.o58Code == "fidoo_merchantAddress").First().pid, "p31", intPID, vydaj.merchantAddress);
+                        if (vydaj.receiptUrls !=null && vydaj.receiptUrls.Count() > 0)
+                        {
+                            foreach(var s in vydaj.receiptUrls)
+                            {
+                                f.o58FieldBagBL.SetValue_String(lisBag.Where(p => p.o58Code == "fidoo_receiptUrl").First().pid, "p31", intPID, s);
+                            }
+                        }
+                        
+
                         LogInfo(vydaj.expenseId + ", saved to pid: " + intPID.ToString());
+
+                        
                     }
                     else
                     {

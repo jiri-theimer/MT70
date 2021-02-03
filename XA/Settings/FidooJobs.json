@@ -2,8 +2,7 @@
   "jobs": [
     {
       "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
-      "Closed": true,
-      "LastRun": "2021-02-02T22:06:05.7866657+01:00",
+      "LastRun": "2021-02-03T22:54:12.5107673+01:00",
       "RepeatMinuteInterval": 5,
       "ExpenseImportClassState": "approved",
       "Name": "LocalHost",
@@ -14,8 +13,8 @@
     },
     {
       "ApiKey": "pak1lHKgSvgcSbMdtz2Erf2OzvZSVNepzPEXswV87WZMB7eUehY3WI09nLMrs85K",
-      "Closed": false,
-      "LastRun": "2021-01-22T23:36:22.3691839+01:00",
+      "Closed": true,
+      "LastRun": "2021-02-03T22:10:13.6717494+01:00",
       "RepeatMinuteInterval": 5,
       "ExpenseImportClassState": "approved",
       "Name": "Z/C/H",

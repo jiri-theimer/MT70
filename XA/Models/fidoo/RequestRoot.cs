@@ -8,6 +8,7 @@ namespace XA.Models.fidoo
     public class RequestRoot
     {
         public Queryrequest queryRequest { get; set; }
+        public List<string> projectIds { get; set; }
     }
 
     public class Queryrequest
@@ -23,3 +24,6 @@ namespace XA.Models.fidoo
         public string property { get; set; }
     }
 }
+
+
+

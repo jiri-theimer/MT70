@@ -167,7 +167,8 @@ namespace BO
                             return this.p41TreePath;
                         else
                             return this.PrefferedName; // nadřízený+podřízený projekt
-                        break;
+
+                       
                     }
 
                 default:

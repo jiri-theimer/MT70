@@ -12,7 +12,9 @@ namespace BL
         public BO.o58FieldBag LoadByCode(string strCode, int pid_exclude);
         public IEnumerable<BO.o58FieldBag> GetList(BO.myQuery mq);
         public int Save(BO.o58FieldBag rec);
-
+        public int SetValue_Bool(int o58id, string recprefix, int recpid, bool? val);
+        public int SetValue_String(int o58id, string recprefix, int recpid, string val);
+        public int SetValue_DateTime(int o58id, string recprefix, int recpid, DateTime? val);
 
     }
     class o58FieldBagBL : BaseBL, Io58FieldBagBL
@@ -94,5 +96,59 @@ namespace BL
             return true;
         }
 
+        public IEnumerable<BO.o59FieldBagValue> GetValues(string recprefix,int recpid)
+        {
+            
+            return _db.GetList<BO.o59FieldBagValue>("select a.*,"+ _db.GetSQL1_Ocas("o59",false,false,true)+",o58.o58Name,o58.o58Code FROM o59FieldBagValue a INNER JOIN o58FieldBag o58 ON a.o58ID=o58.o58ID WHERE a.o59RecPrefix=@prefix AND a.o59RecPid=@pid ORDER BY o58.o58Ordinary",new { prefix = recprefix, pid = recpid });
+        }
+        public int SetValue_Bool(int o58id,string recprefix, int recpid,bool? val)
+        {
+            if (val == null)
+            {
+                return 0;
+            }
+            var rec=new BO.o59FieldBagValue() { o58ID = o58id, o59RecPrefix=recprefix, o59RecPid=recpid, o59ValueBoolean =val };
+            return SetValue(rec);           
+        }
+        public int SetValue_String(int o58id, string recprefix, int recpid, string val)
+        {
+            if (string.IsNullOrEmpty(val))
+            {
+                return 0;
+            }
+            var rec = new BO.o59FieldBagValue() { o58ID = o58id, o59RecPrefix = recprefix, o59RecPid = recpid, o59ValueString = val };
+            return SetValue(rec);
+        }
+        public int SetValue_DateTime(int o58id, string recprefix, int recpid, DateTime? val)
+        {
+            if (val == null)
+            {
+                return 0;
+            }
+            var rec = new BO.o59FieldBagValue() { o58ID = o58id, o59RecPrefix = recprefix, o59RecPid = recpid, o59ValueDate = val };
+            return SetValue(rec);
+        }
+
+        private int SetValue(BO.o59FieldBagValue rec)
+        {
+            var p = new DL.Params4Dapper();
+            p.AddInt("o58ID", rec.o58ID, true);
+            p.AddString("o59RecPrefix", rec.o59RecPrefix);
+            p.AddInt("o59RecPid", rec.o59RecPid,true);
+            p.AddString("o59ValueString", rec.o59ValueString);
+            if (rec.o59ValueBoolean != null)
+            {
+                p.AddBool("o59ValueBoolean",Convert.ToBoolean( rec.o59ValueBoolean));
+            }
+            if (rec.o59ValueDate != null)
+            {
+                p.AddDateTime("o59ValueDate", rec.o59ValueDate);
+            }
+            p.AddDouble("o59ValueNum", rec.o59ValueNum);
+
+            int intPID = _db.SaveRecord("o59FieldBagValue", p.getDynamicDapperPars(), rec,false,true);
+
+            return intPID;
+        }
     }
 }
