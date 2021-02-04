@@ -19,6 +19,7 @@ namespace XA.Models.fidoo
         public int RepeatMinuteInterval { get; set; } = 300;
         public DateTime? FirstExpenseModifyFrom { get; set; }
         public string ExpenseImportClassState { get; set; }
+        public bool ExpenseImportClosedOnly { get; set; }
         public string Name { get; set; }
         public string RobotUser { get; set; }
         public int DefaultP41ID { get; set; }

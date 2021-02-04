@@ -49,7 +49,7 @@ namespace XA.Controllers
             var ru = new BO.RunningUser() { j03Login = "admin1" };
             var f = new BL.Factory(ru, _app, _ep, _tt);
 
-            var lisVydaje = LoadVydaje(apikey);    //fidoo výdaje k otestování
+            var lisVydaje = LoadVydaje(apikey,true);    //fidoo výdaje k otestování
             var lisUzivatele = UzivateleFromVydaje(apikey, lisVydaje.Result, f);
 
             return string.Join(", ", lisUzivatele.Select(p => p.employeeNumber + ": " + p.j02ID.ToString()));
@@ -145,7 +145,7 @@ namespace XA.Controllers
         }
 
 
-        public async Task<ResponseVydaje> LoadVydaje(string apikey)
+        public async Task<ResponseVydaje> LoadVydaje(string apikey,bool? closedonly)
         {
 
             var httpclient = _httpclientfactory.CreateClient();
@@ -159,8 +159,11 @@ namespace XA.Controllers
                 input.from = DateTime.Now.AddDays(-100).ToLocalTime();
                 input.to = DateTime.Now.ToLocalTime();
                 input.lastModifyFrom = DateTime.Now.AddDays(-100).ToLocalTime();
-                //input.closed = true;
-
+                if (closedonly !=null && closedonly == true)
+                {
+                    input.closed = true;
+                }
+                
                 var s = JsonSerializer.Serialize(input);
 
                 request.Content = new StringContent(s);
@@ -337,7 +340,7 @@ namespace XA.Controllers
         {
             var ru = new BO.RunningUser() { j03Login = onejob.RobotUser };    //robot login
             var f = new BL.Factory(ru, _app, _ep, _tt);
-            var lisVydaje = LoadVydaje(onejob.ApiKey);    //fidoo výdaje k otestování
+            var lisVydaje = LoadVydaje(onejob.ApiKey,onejob.ExpenseImportClosedOnly);    //fidoo výdaje k otestování
             var lisUzivatele = UzivateleFromVydaje(onejob.ApiKey, lisVydaje.Result, f);
             var lisBag = GetFieldBag(f);
 
