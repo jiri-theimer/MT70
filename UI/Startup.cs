@@ -58,7 +58,8 @@ namespace UI
 
             //aby se do html zapisovali originál unicode znaky:
             services.Configure<Microsoft.Extensions.WebEncoders.WebEncoderOptions>(options => { options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(System.Text.Unicode.UnicodeRanges.All); });
-            
+
+            services.AddMvc(options => options.EnableEndpointRouting = false);  //nutné kvùli podpoøe routingu Areas: Mobile
             services.AddControllers();      //kvùli telerik reporting
             services.AddControllersWithViews();
             services.Configure<IISServerOptions>(options =>
@@ -66,6 +67,9 @@ namespace UI
                 options.AllowSynchronousIO = true;      //kvùli telerik reporting
             });
 
+            
+            services.AddRazorPages();
+            
             //services.AddRazorPages().AddNewtonsoftJson();   //kvùli telerik reporting
 
 
@@ -143,13 +147,42 @@ namespace UI
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo(strCultureCode);
             System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo(strCultureCode);
 
+
+
+
+            //app.UseMvc(routes => {
+
+            //    routes.MapRoute(
+            //      name: "Mobile",
+            //      template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            //    routes.MapRoute(
+            //       name: "default",
+            //       template: "{controller=Dashboard}/{action=Index}/{id?}");
+            //}
+            //);
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers(); //kvùli teleri reporting
+
+                endpoints.MapAreaControllerRoute(
+                  name: "Mobile",
+                  areaName: "Mobile",
+                  pattern: "Mobile/{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+
+
+                endpoints.MapRazorPages();
+
             });
+
+
+
+
 
 
             //app.UseEndpoints(endpoints =>
@@ -159,7 +192,7 @@ namespace UI
             //        pattern: "{controller=Home}/{action=Index}/{id?}");
             //});
 
-            
+
 
 
             loggerFactory.AddFile("Logs/info-{Date}.log", LogLevel.Information);

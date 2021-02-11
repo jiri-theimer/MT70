@@ -26,13 +26,13 @@ namespace UI.Controllers
         public TheGridOutput HandleTheGridFilter(TheGridUIContext tgi,List<BO.StringPair> pathpars, List<BO.TheGridColumnFilter> filter) //TheGrid povinná metoda: sloupcový filtr
         {
             int master_pid = 0;
-            string master_flag = null;
+            string explicitquery = null;
             if (tgi.viewstate != null)
             {
                 master_pid = Convert.ToInt32(tgi.viewstate[0]);
-                master_flag = tgi.viewstate[1];
+                explicitquery = tgi.viewstate[1];
             }
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity,master_pid,master_flag);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity,master_pid, explicitquery);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
 
             return c.Event_HandleTheGridFilter(tgi, filter);
@@ -40,13 +40,13 @@ namespace UI.Controllers
         public TheGridOutput HandleTheGridOper(TheGridUIContext tgi, List<BO.StringPair> pathpars)    //TheGrid povinná metoda: změna třídění, pageindex, změna stránky
         {
             int master_pid = 0;
-            string master_flag = null;
+            string explicitquery = null;
             if (tgi.viewstate != null)
             {
                 master_pid = Convert.ToInt32(tgi.viewstate[0]);
-                master_flag = tgi.viewstate[1];
+                explicitquery = tgi.viewstate[1];
             }
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, master_flag);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, explicitquery);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
 
             return c.Event_HandleTheGridOper(tgi);
@@ -55,13 +55,8 @@ namespace UI.Controllers
         public string HandleTheGridMenu(TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda: zobrazení grid menu
         {
             int master_pid = 0;
-            string master_flag = null;
-            //if (tgi.viewstate != null)
-            //{
-            //    master_pid = Convert.ToInt32(tgi.viewstate[0]);
-            //    master_flag = tgi.viewstate[1];
-            //}
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, master_flag);
+            
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, null);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridMenu(tgi.j72id);
         }
@@ -69,13 +64,13 @@ namespace UI.Controllers
         public TheGridExportedFile HandleTheGridExport(string format, string pids, TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda pro export dat
         {
             int master_pid = 0;
-            string master_flag = null;
+            string explicitquery = null;
             if (tgi.viewstate != null)
             {
                 master_pid = Convert.ToInt32(tgi.viewstate[0]);
-                master_flag = tgi.viewstate[1];
+                explicitquery = tgi.viewstate[1];
             }
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, master_flag);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, explicitquery);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridExport(format, tgi.j72id, pids);
         }        
@@ -164,10 +159,10 @@ namespace UI.Controllers
                 return  "@pid";
             }
         }
-        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string master_flag)    //podřízený subform v rámci MasterView
+        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string explicitquery)    //podřízený subform v rámci MasterView
         {
            
-            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"slaveview", master_entity,master_pid,master_flag);
+            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"slaveview", master_entity,master_pid, explicitquery);
             
 
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("slaveview-j72id-" + prefix + "-" + master_entity);
@@ -215,9 +210,9 @@ namespace UI.Controllers
                     return true;
             }
         }
-        private FsmViewModel LoadFsmViewModel(string prefix,int go2pid,string pagename,string masterentity,int master_pid,string master_flag)
+        private FsmViewModel LoadFsmViewModel(string prefix,int go2pid,string pagename,string masterentity,int master_pid,string explicitquery)
         {
-            var v = new FsmViewModel() { prefix = prefix,master_pid=master_pid,master_flag=master_flag };
+            var v = new FsmViewModel() { prefix = prefix,master_pid=master_pid, explicitquery = explicitquery };
 
             BO.TheEntity c = Factory.EProvider.ByPrefix(prefix);
             v.entity = c.TableName;
@@ -235,7 +230,7 @@ namespace UI.Controllers
 
             if (master_pid>0)
             {
-                v.gridinput.viewstate = master_pid.ToString() + "|" + master_flag;
+                v.gridinput.viewstate = master_pid.ToString() + "|" + explicitquery;
                 
             }
 
@@ -243,7 +238,7 @@ namespace UI.Controllers
             {
                
                 default:
-                    v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, master_flag);
+                    v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, explicitquery);
                     break;
             }
 
