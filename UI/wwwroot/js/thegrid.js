@@ -8,6 +8,7 @@ var _tg_filterinput_timeout;
 var _tg_filter_is_active;
 var _tg_go2pid;
 var _tg_master_entity;
+var _tg_master_pid;
 var _tg_oncmclick;
 var _tg_ondblclick;
 var _tg_tablerows;
@@ -19,6 +20,9 @@ var _tg_current_pid;
 var _tg_is_enable_clipboard = true;
 var _tg_fixedcolumns;
 var _tg_viewstate;
+var _tg_myqueryinline;
+var _tg_langindex = 0;
+var _tg_musite_vybrat_zaznam = "Musíte vybrat minimálně jeden záznam.";
 
 const event_thegridbound = new Event("thegrid_rebound");
 //const event_thegridrowselect = new CustomEvent("thegrid_rowselect", { detail: { pid: 0 } });
@@ -31,11 +35,18 @@ function tg_init(c) {
     _tg_url_filter = c.filterurl;
     _tg_url_export = c.exporturl;
     _tg_go2pid = c.go2pid;
-    _tg_master_entity = c.master_entity;    
+    _tg_master_entity = c.master_entity;
+    _tg_master_pid = c.master_pid;
     _tg_oncmclick = c.oncmclick;
     _tg_ondblclick = c.ondblclick;
     _tg_fixedcolumns = c.fixedcolumns;
     _tg_viewstate = c.viewstate;
+    _tg_myqueryinline = c.myqueryinline;
+    _tg_langindex = c.langindex;
+
+    if (c.langindex === 2) {
+        _tg_musite_vybrat_zaznam = "Ви повинні вибрати принаймні один запис.";
+    }
 
     $("#container_grid").scroll(function () {
         $("#container_vScroll").width($("#container_grid").width() + $("#container_grid").scrollLeft());
@@ -127,8 +138,6 @@ function tg_init(c) {
 
 
     _tg_filter_is_active = tg_is_filter_active();
-
-
 }
 
 
@@ -171,7 +180,9 @@ function tg_post_handler(strOper, strKey, strValue) {
         oper: strOper,
         key: strKey,
         value: strValue,
-        master_entity: _tg_master_entity,        
+        master_entity: _tg_master_entity,
+        master_pid: _tg_master_pid,
+        myqueryinline: _tg_myqueryinline,
         oncmclick: _tg_oncmclick,
         ondblclick: _tg_ondblclick,
         fixedcolumns: _tg_fixedcolumns,
@@ -181,13 +192,13 @@ function tg_post_handler(strOper, strKey, strValue) {
     if (_tg_viewstate !== "") {
         params.viewstate = _tg_viewstate.split("|");
     }
-    
+
     $("#tabgrid1_tbody").html("<b>Loading...</b>");
     $.post(_tg_url_handler, { tgi: params, pathpars: get_all_path_values() }, function (data) {
         // _notify_message("vrátilo se: oper: " + strOper + ", key: " + strKey + ", value: " + strValue);
 
         refresh_environment_after_post(strOper, data);
-        
+
         document.dispatchEvent(event_thegridbound);
 
 
@@ -219,10 +230,7 @@ function refresh_environment_after_post(strOper, data) {
     _tg_tablerows = $("#tabgrid1_tbody").find("tr");
     tg_setup_selectable();
 
-    if (document.getElementById("TheGridRows")) {
-        $("#TheGridRows").text($("#tabgrid1_rows").text());     //span TheGridRows je na hostitelské stránce gridu
-    }
-    
+
 }
 
 function tg_adjust_parts_width() {
@@ -247,10 +255,10 @@ function tg_setup_selectable() {
 
         var pid_pre = $("#tg_selected_pid").val();
 
-        if (pid !== pid_pre) { 
-            var event_thegridrowselect = new CustomEvent("thegrid_rowselect", { detail: { pid: pid,pid_pre:pid_pre } });                  
+        if (pid !== pid_pre) {
+            var event_thegridrowselect = new CustomEvent("thegrid_rowselect", { detail: { pid: pid, pid_pre: pid_pre } });
             document.dispatchEvent(event_thegridrowselect);
-            
+
 
             //thegrid_handle_event("rowselect", pid); //již se nepoužívá
         }
@@ -399,14 +407,6 @@ function tg_go2pid(pid) {       //již musí být ze serveru odstránkováno!
 
 }
 
-function tg_select_all_toggle() {
-    var pids = $("#tg_selected_pids").val();
-    if (pids.indexOf(",") === -1) {
-        tg_select(1000);    //zaškrtnout vše
-    } else {
-        tg_clear_selection();   //odškrtnout vše
-    }
-}
 function tg_select(records_count) {     //označí prvních X (records_count) záznamů
     tg_clear_selection();
     var arr = [];
@@ -506,7 +506,13 @@ function tg_filter_ok() {
     $("#cmdDestroyShowOnlyPID").css("display", "none");
 
     if ($("input[name='chlfilter']:checked").length === 0) {
-        _notify_message("Musíte zaškrtnout jeden z filtrovacích operátorů.", "warning");
+        switch (_tg_langindex) {
+            case 2:
+                _notify_message("Ви повинні перевірити одного з операторів фільтра.", "warning"); break;
+            default:
+                _notify_message("Musíte zaškrtnout jeden z filtrovacích operátorů.", "warning"); break;
+        }
+
         return;
     }
     var c1 = document.getElementById("qryval1");
@@ -526,7 +532,12 @@ function tg_filter_ok() {
     if (coltypename === "string") {
         fv = c1.value;
         if (fv === "" && (operator === "3" || operator === "4" || operator === "5" || operator === "6" || operator === "7")) {
-            _notify_message("Musíte vyplnit filtrovací výraz.", "warning");
+            switch (_tg_langindex) {
+                case 2:
+                    _notify_message("Ви повинні заповнити вираз фільтра.", "warning"); break;
+                default:
+                    _notify_message("Musíte vyplnit filtrovací výraz.", "warning"); break;
+            }
             c1.focus();
             return;
         }
@@ -534,7 +545,12 @@ function tg_filter_ok() {
     }
     if (coltypename === "number" || coltypename === "date") {
         if (operator === "4" && (c1.value === "" || c2.value === "")) {
-            _notify_message("Musíte vyplnit hodnoty od - do.", "error");
+            switch (_tg_langindex) {
+                case 2:
+                    _notify_message("Ви повинні заповнити значення від - до.", "warning"); break;
+                default:
+                    _notify_message("Musíte vyplnit hodnoty od - do.", "warning"); break;
+            }
             c1.focus();
             return;
         }
@@ -590,11 +606,11 @@ function tg_filter_ok() {
     $("#hidoper_" + field).val(operator);
 
     _tg_filter_is_active = tg_is_filter_active();
-   
+
     if (_tg_filter_is_active === false && filter_before === true) {
         tg_filter_clear();
 
-        
+
     }
 
     tg_filter_hide_popup();
@@ -636,6 +652,15 @@ function tg_get_qry_value(field, coltypename) {
 
 function tg_filter_operator_as_alias(operator) {
     operator = String(operator);
+
+    if (_tg_langindex === 2) {
+        if (operator === "1") return "пусто";
+        if (operator === "2") return "не є порожнім";
+        if (operator === "8") return "ТАК";
+        if (operator === "9") return "НІ";
+        if (operator === "10") return "&gt;0";
+        if (operator === "11") return "0 або порожній";
+    }
     if (operator === "1") return "Je prázdné";
     if (operator === "2") return "Není prázdné";
     if (operator === "8") return "ANO";
@@ -817,7 +842,7 @@ function tg_filter_send2server() {
 
     })
         .fail(function (error) {
-            $("#tabgrid1_tbody").html("<code>"+error.responseJSON+"</code>");
+            $("#tabgrid1_tbody").html("<code>" + error.responseJSON + "</code>");
             alert(error.responseJSON)
         });
 
@@ -894,8 +919,29 @@ function tg_adjust_for_screen(strParentElementID) {
 
 function tg_dblclick(row) {
     var prefix = _tg_entity.substr(0, 3);
-    var pid = row.id.replace("r", "");    
-    
+    var pid = row.id.replace("r", "");
+
+    if (prefix === "a01" || prefix === "a03" || prefix === "j02") {
+        var url = "/" + prefix + "/RecPage?pid=" + pid;
+        if (window !== top) {   //voláno uvnitř iframe
+            window.open(url, "_top");
+        } else {
+            location.replace(url);
+        }
+        return;
+    }
+    if (prefix === "f06") {
+        location.replace("/AdminOneForm/Index?f06id=" + pid);
+        return;
+    }
+    if (prefix === "b01") {
+        location.replace("/AdminOneWorkflow/Index?b01id=" + pid);
+        return;
+    }
+    if (prefix === "z01") {
+        _window_open("/x31/ReportNoContext?x31id=" + pid, 2);
+        return;
+    }
     _edit(prefix, pid);
 }
 
@@ -904,35 +950,36 @@ function tg_export(format, scope) {
     if (scope === "selected") {
         pids = $("#tg_selected_pids").val();
         if (pids === "") {
-            _notify_message("Musíte vybrat minimálně jeden záznam.");
+            _notify_message(_tg_musite_vybrat_zaznam);
             return;
-        }        
+        }
     }
-    
+
 
     $.post(_tg_url_export, { format: format, pids: pids, tgi: get_all_tgi_params(), pathpars: get_all_path_values() }, function (data) {
         location.replace("/FileUpload/FileDownloadTempFileNDB?tempfilename=" + data.tempfilename + "&contenttype=" + data.contenttype + "&downloadfilename=" + data.downloadfilename);
-        
+
 
     });
-    
+
 
 }
 function tg_tagging() {
     var url = "/o51/Batch?j72id=" + _j72id;
     var pids = $("#tg_selected_pids").val();
     if (pids === "") {
-        _notify_message("Musíte vybrat minimálně jeden záznam.");
+        _notify_message(_tg_musite_vybrat_zaznam);
+
         return;
     }
     url = url + "&pids=" + pids;
-    _window_open(url, 2, "Zatřídit do kategorií");
+    _window_open(url, 2);
 
 }
 function tg_batchupdate(prefix) {
     var pids = $("#tg_selected_pids").val();
     if (pids === "") {
-        _notify_message("Musíte vybrat minimálně jeden záznam.");
+        _notify_message(_tg_musite_vybrat_zaznam);
         return;
     }
     var url = "/BatchUpdate/" + prefix + "?pids=" + pids;
@@ -994,16 +1041,18 @@ function tg_select_one_row(ctl, pid) {
 
 
 function get_all_tgi_params() {
-    
+
     var params = {
         entity: _tg_entity,
         j72id: _j72id,
         go2pid: _tg_go2pid,
-        master_entity: _tg_master_entity,        
+        master_entity: _tg_master_entity,
         oncmclick: _tg_oncmclick,
         ondblclick: _tg_ondblclick,
         fixedcolumns: _tg_fixedcolumns,
         viewstate: [],
+        master_pid: _tg_master_pid,
+        myqueryinline: _tg_myqueryinline,
         pathname: location.pathname
     }
     if (_tg_viewstate !== "") {
@@ -1026,4 +1075,14 @@ function get_all_path_values() {    //rozloží kompletní querystring do pole v
     });
 
     return pars;
+}
+
+
+function tg_select_all_toggle() {
+    var pids = $("#tg_selected_pids").val();
+    if (pids.indexOf(",") === -1) {
+        tg_select(1000);    //zaškrtnout vše
+    } else {
+        tg_clear_selection();   //odškrtnout vše
+    }
 }

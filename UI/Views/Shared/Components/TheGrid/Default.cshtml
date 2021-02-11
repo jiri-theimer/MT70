@@ -75,7 +75,7 @@
                                 <div class="input-group">
                                     <input type="text" id="txtqry_@c.UniqueName" class="form-control query_textbox" autocomplete="off" value="@strValue" style="@_strStyle" />
                                     <span class="qryalias" id="qryalias_@c.UniqueName" style="@strStyleAlias">@strValueAlias</span>
-                                    <button type='button' class="btn btn-light query_button py-0 px-1" id="cmdqry_@c.UniqueName" tabindex="-1">	&#9678;</button>
+                                    <button type='button' class="btn btn-light query_button py-0 px-1" id="cmdqry_@c.UniqueName" tabindex="-1">◎</button>
 
                                 </div>
                             </text>
@@ -83,7 +83,7 @@
                         else
                         {
                             <span class="qryalias" id="qryalias_@c.UniqueName" @_strStyle>@strValueAlias</span>
-                            <button type='button' id="cmdqry_@c.UniqueName" tabindex="-1" class="btn btn-light btn-sm py-0 px-1 query_button">&#9678;</button>
+                            <button type='button' id="cmdqry_@c.UniqueName" tabindex="-1" class="btn btn-light btn-sm py-0 px-1 query_button">◎</button>
                         }
                         <input type="hidden" id="hidqry_@c.UniqueName" value="@strValue" />
                         <input type="hidden" id="hidoper_@c.UniqueName" value="@strOper" />
@@ -200,6 +200,7 @@
             fixedcolumns:"@Model.GridInput.fixedcolumns",
             ondblclick: "@Model.GridInput.ondblclick",
             oncmclick: "@Model.GridInput.oncmclick",
+            myqueryinline:"@Model.GridInput.myqueryinline",
             viewstate:"@Model.GridInput.viewstate"
 
 
@@ -223,7 +224,7 @@
                 $("#TheGridName").text("@Model.GridState.j72Name");
                 </text>
             }
-            
+
             $("#TheGridRows").text($("#tabgrid1_rows").text());
 
             var cmdGridDropdown = document.getElementById("cmdGridMenu");

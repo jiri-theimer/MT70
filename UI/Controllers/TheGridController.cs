@@ -10,9 +10,7 @@ using UI.Models;
 namespace UI.Controllers
 {
     public class TheGridController : BaseController        
-    {
-       
-        
+    {              
         private readonly BL.TheColumnsProvider _colsProvider;
         private readonly BL.ThePeriodProvider _pp;
 
@@ -25,28 +23,14 @@ namespace UI.Controllers
         //-----------Začátek GRID událostí-------------
         public TheGridOutput HandleTheGridFilter(TheGridUIContext tgi,List<BO.StringPair> pathpars, List<BO.TheGridColumnFilter> filter) //TheGrid povinná metoda: sloupcový filtr
         {
-            int master_pid = 0;
-            string explicitquery = null;
-            if (tgi.viewstate != null)
-            {
-                master_pid = Convert.ToInt32(tgi.viewstate[0]);
-                explicitquery = tgi.viewstate[1];
-            }
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity,master_pid, explicitquery);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
 
             return c.Event_HandleTheGridFilter(tgi, filter);
         }
         public TheGridOutput HandleTheGridOper(TheGridUIContext tgi, List<BO.StringPair> pathpars)    //TheGrid povinná metoda: změna třídění, pageindex, změna stránky
         {
-            int master_pid = 0;
-            string explicitquery = null;
-            if (tgi.viewstate != null)
-            {
-                master_pid = Convert.ToInt32(tgi.viewstate[0]);
-                explicitquery = tgi.viewstate[1];
-            }
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, explicitquery);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
 
             return c.Event_HandleTheGridOper(tgi);
@@ -54,23 +38,14 @@ namespace UI.Controllers
         }
         public string HandleTheGridMenu(TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda: zobrazení grid menu
         {
-            int master_pid = 0;
-            
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, null);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridMenu(tgi.j72id);
         }
 
         public TheGridExportedFile HandleTheGridExport(string format, string pids, TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda pro export dat
         {
-            int master_pid = 0;
-            string explicitquery = null;
-            if (tgi.viewstate != null)
-            {
-                master_pid = Convert.ToInt32(tgi.viewstate[0]);
-                explicitquery = tgi.viewstate[1];
-            }
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, master_pid, explicitquery);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridExport(format, tgi.j72id, pids);
         }        
@@ -159,22 +134,19 @@ namespace UI.Controllers
                 return  "@pid";
             }
         }
-        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string explicitquery)    //podřízený subform v rámci MasterView
+        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string myqueryinline)    //podřízený subform v rámci MasterView
         {
-           
-            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"slaveview", master_entity,master_pid, explicitquery);
-            
+
+            FsmViewModel v = LoadFsmViewModel(prefix, go2pid, "slaveview", master_entity, master_pid, myqueryinline);
+
 
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("slaveview-j72id-" + prefix + "-" + master_entity);
-            
-            
-            
 
             if (String.IsNullOrEmpty(master_entity) || master_pid == 0)
             {
                 AddMessage("Musíte vybrat záznam z nadřízeného panelu.");
             }
-            
+
 
             return View(v);
         }
@@ -210,9 +182,9 @@ namespace UI.Controllers
                     return true;
             }
         }
-        private FsmViewModel LoadFsmViewModel(string prefix,int go2pid,string pagename,string masterentity,int master_pid,string explicitquery)
+        private FsmViewModel LoadFsmViewModel(string prefix,int go2pid,string pagename,string masterentity,int master_pid,string myqueryinline)
         {
-            var v = new FsmViewModel() { prefix = prefix,master_pid=master_pid, explicitquery = explicitquery };
+            var v = new FsmViewModel() { prefix = prefix,master_pid=master_pid, myqueryinline = myqueryinline };
 
             BO.TheEntity c = Factory.EProvider.ByPrefix(prefix);
             v.entity = c.TableName;
@@ -228,17 +200,13 @@ namespace UI.Controllers
                         
             
 
-            if (master_pid>0)
-            {
-                v.gridinput.viewstate = master_pid.ToString() + "|" + explicitquery;
-                
-            }
+            
 
             switch (v.prefix)
             {
                
                 default:
-                    v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, explicitquery);
+                    v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, myqueryinline);
                     break;
             }
 

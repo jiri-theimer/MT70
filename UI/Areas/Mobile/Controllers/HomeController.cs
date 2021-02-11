@@ -12,12 +12,18 @@ namespace UI.Areas.Mobile.Controllers
    
     public class HomeController : Controller
     {
+        private BL.RunningApp _app;
+        public HomeController(BL.RunningApp app)
+        {
+            _app = app;
+        }
         public IActionResult Index()
         {
             return View();
         }
         public IActionResult About()
         {
+            
             return View();
         }
 
