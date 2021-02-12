@@ -1,0 +1,157 @@
+﻿@model UI.Models.Record.c21Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Pracovní fond");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-7 col-md-6">
+            <input class="form-control" asp-for="Rec.c21Name" />
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Index pořadí"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.c21Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+
+    
+    <div class="row my-2">
+        <div class="col-8">
+            <select asp-for="@Model.Rec.c21ScopeFlag" class="form-select" onchange="scopeflag_change(this)">
+                <option value="Basic">@_f.tra("Standardní pracovní kalendář")</option>
+                <option value="PerTimesheet">@_f.tra("Fond hodin je shodný s počtem vykázaných hodin")</option>
+            </select>
+        </div>
+
+    </div>
+    @if (Model.Rec.c21ScopeFlag == BO.c21ScopeFlagENUM.Basic)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pondělí"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mynumber asp-for="Rec.c21Day1_Hours"></mynumber>
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Úterý"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mynumber asp-for="Rec.c21Day2_Hours"></mynumber>
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Středa"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mynumber asp-for="Rec.c21Day3_Hours"></mynumber>
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Čtvrtek"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mynumber asp-for="Rec.c21Day4_Hours"></mynumber>
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pátek"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mynumber asp-for="Rec.c21Day5_Hours"></mynumber>
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Sobota"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mynumber asp-for="Rec.c21Day5_Hours"></mynumber>
+            </div>
+        </div>
+    }
+
+
+
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Časová historie fondu")
+            <button type="button" class="btn btn-primary" onclick="handle_c28_append()">@_f.tra("Přidat")</button>
+        </div>
+        <div class="card-body">
+
+
+            <table class="table table-hover">
+                <tr>
+                    <th style="width:400px;">
+                        @_f.tra("Fond")
+                    </th>
+                    <th>
+                        @_f.tra("Platilo od")
+                    </th>
+                    <th>
+                        @_f.tra("Platilo do")
+                    </th>
+                    <th style="width:50px;">
+
+                    </th>
+
+                </tr>
+                @for (var i = 0; i < Model.lisC28.Count; i++)
+                {
+                    <tr style="@(Model.lisC28[i].CssTempDisplay)">
+                        <td>
+                            <input type="hidden" asp-for="lisC28[i].IsTempDeleted" value="@Model.lisC28[i].IsTempDeleted" />
+                            <input type="hidden" asp-for="lisC28[i].TempGuid" value="@Model.lisC28[i].TempGuid" />
+                            <mycombo entity="c21FondCalendar" asp-for="lisC28[i].c21ID_Log" selectedtext="lisC28[i].c21Name" view-flag="2"></mycombo>
+                        </td>
+                        <td>
+                            <mydate asp-for="lisC28[i].c28ValidFrom"></mydate>
+                        </td>
+                        <td>
+                            <mydate asp-for="lisC28[i].c28ValidUntil"></mydate>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_c28('@(Model.lisC28[i].TempGuid)')">x</button>
+                        </td>
+
+                    </tr>
+                }
+            </table>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+    });
+
+    function scopeflag_change(cbx) {
+        
+        form1.action = "/c21/Record?oper=postback";
+        form1.submit();
+
+    }
+
+
+    function handle_c28_append() {
+        form1.action = "/c21/Record?oper=add_c28";
+        form1.submit();
+    }
+    function handle_delete_c28(guid) {
+        form1.action = "/c21/Record?oper=delete_c28&guid=" + guid;
+        form1.submit();
+
+    }
+
+</script>
+

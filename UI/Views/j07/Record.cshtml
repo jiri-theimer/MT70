@@ -1,0 +1,92 @@
+﻿@model UI.Models.Record.j07Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Pozice");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-7 col-md-6">
+            <input class="form-control" asp-for="Rec.j07Name" />
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Index pořadí"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.j07Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Překlad do fakturačních jazyků")
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==1).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j07Name_BillingLang1" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==2).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j07Name_BillingLang2" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==3).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j07Name_BillingLang3" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==4).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j07Name_BillingLang4" />
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Volná pole")
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-12">
+                    <input class="form-control" asp-for="Rec.j07FreeText01" placeholder="@_f.tra("Volné pole #1")" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+
+                <div class="col-12">
+                    <input class="form-control" asp-for="Rec.j07FreeText02" placeholder="@_f.tra("Volné pole #2")" />
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+

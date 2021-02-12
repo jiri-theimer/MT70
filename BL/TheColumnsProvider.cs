@@ -149,6 +149,12 @@ namespace BL
 
             AF("j07PersonPosition", "j07Name", "Pozice", 1, null, "string", false, true);
             AF("j07PersonPosition", "j07Ordinary", "#", 2, null, "num0");
+            AF("j07PersonPosition", "j07Name_BillingLang1", "Fakturační jazyk #1");
+            AF("j07PersonPosition", "j07Name_BillingLang2", "Fakturační jazyk #2");
+            AF("j07PersonPosition", "j07Name_BillingLang3", "Fakturační jazyk #3");
+            AF("j07PersonPosition", "j07Name_BillingLang4", "Fakturační jazyk #4");
+            AF("j07PersonPosition", "j07FreeText01", "Volné pole #1");
+            AF("j07PersonPosition", "j07FreeText02", "Volné pole #2");
             AppendTimestamp("j07PersonPosition");
 
             AF("j18Region", "j18Name", "Středisko", 1, null, "string", false, true);
@@ -537,7 +543,8 @@ namespace BL
                 case "j02":
                     ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j03Login", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j04Name", rels, bolComboColumns));
-                    
+                    ret.Add(InhaleColumn4Relation("j02_j07", "j07PersonPosition", "j07Name", rels, bolComboColumns));
+
 
                     break;
                 

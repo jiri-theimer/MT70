@@ -23,6 +23,7 @@ namespace BL
         private Ij02PersonBL _j02;        
         private Ij03UserBL _j03;
         private Ij04UserRoleBL _j04;
+        private Ij07PersonPositionBL _j07;
         private Ij11TeamBL _j11;
         private Io15AutoCompleteBL _o15;
         private Io13AttachmentTypeBL _o13;
@@ -38,6 +39,8 @@ namespace BL
         private Ip85TempboxBL _p85;
         private Ix55WidgetBL _x55;
         private Ix67EntityRoleBL _x67;
+        private Ic21FondCalendarBL _c21;
+        private Ic26HolidayBL _c26;
 
         public Factory(BO.RunningUser c,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
@@ -162,6 +165,14 @@ namespace BL
                 return _j04;
             }
         }
+        public Ij07PersonPositionBL j07PersonPositionBL
+        {
+            get
+            {
+                if (_j07 == null) _j07 = new j07PersonPositionBL(this);
+                return _j07;
+            }
+        }
         public Ij11TeamBL j11TeamBL
         {
             get
@@ -192,6 +203,22 @@ namespace BL
             {
                 if (_b65 == null) _b65 = new b65WorkflowMessageBL(this);
                 return _b65;
+            }
+        }
+        public Ic21FondCalendarBL c21FondCalendarBL
+        {
+            get
+            {
+                if (_c21 == null) _c21 = new c21FondCalendarBL(this);
+                return _c21;
+            }
+        }
+        public Ic26HolidayBL c26HolidayBL
+        {
+            get
+            {
+                if (_c26 == null) _c26 = new c26HolidayBL(this);
+                return _c26;
             }
         }
         public Io13AttachmentTypeBL o13AttachmentTypeBL

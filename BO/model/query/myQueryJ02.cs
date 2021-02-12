@@ -6,6 +6,7 @@ namespace BO
 {
     public class myQueryJ02:baseQuery
     {
+        public bool? j02isintraperson { get; set; }
         public int j04id { get; set; }
         public int j11id { get; set; }
         public int j07id { get; set; }
@@ -22,6 +23,10 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
+            if (this.j02isintraperson != null)
+            {
+                AQ("a.j02IsIntraPerson=@isintra", "isintra", this.j02isintraperson);
+            }
             if (this.j04id > 0)
             {
                 AQ("a.j02ID IN (select j02ID FROM j03User WHERE j04ID=@j04id)", "j04id", this.j04id);
@@ -29,6 +34,10 @@ namespace BO
             if (this.j11id > 0)
             {
                 AQ("a.j02ID IN (select j02ID FROM j12Team_Person WHERE j11ID=@j11id)", "j11id", this.j11id);
+            }
+            if (this.j07id > 0)
+            {
+                AQ("a.j07ID=@j07id", "j07id", this.j07id);
             }
             if (this.j18id > 0)
             {

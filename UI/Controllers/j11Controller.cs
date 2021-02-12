@@ -37,9 +37,36 @@ namespace UI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(Models.Record.j11Record v)
+        public IActionResult Record(Models.Record.j11Record v,string oper,string pids,string prefix)
         {
+            var lisJ02IDs = BO.BAS.ConvertString2ListInt(v.j02IDs);
+            if (oper=="add" && prefix == "j02")
+            {
+                lisJ02IDs.AddRange(BO.BAS.ConvertString2ListInt(pids));
+            }
+            if (oper == "add" && prefix == "j07")
+            {
+                var lis=Factory.j02PersonBL.GetList(new BO.myQueryJ02() {IsRecordValid=true, j07id = BO.BAS.InInt(pids) });
+                lisJ02IDs.AddRange(lis.Select(p=>p.pid).ToList());
+            }
+            if (oper == "remove" && prefix == "j02")
+            {               
+                foreach(int x in BO.BAS.ConvertString2ListInt(pids))
+                {
+                    lisJ02IDs.Remove(x);
+
+                }
+            }            
+
+            if (oper != null)
+            {
+                v.j02IDs = string.Join(",", lisJ02IDs);
+                RefreshState(v);
+                return View(v);
+            }
+
             RefreshState(v);
+
             if (ModelState.IsValid)
             {
                 BO.j11Team c = new BO.j11Team();
@@ -69,7 +96,7 @@ namespace UI.Controllers
             {
                 strMyQuery = "pids@list_int@" + v.j02IDs;
             }
-            v.gridinput = new TheGridInput() { entity = "j02Person",myqueryinline= strMyQuery,oncmclick="",ondblclick="" };
+            v.gridinput = new TheGridInput() { entity = "j02Person", master_entity="inform",myqueryinline= strMyQuery,oncmclick="",ondblclick="" };
             v.gridinput.query = new BO.InitMyQuery().Load("j02", null, 0, strMyQuery);
             
 

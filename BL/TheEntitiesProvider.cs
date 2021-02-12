@@ -165,7 +165,8 @@ namespace BL
             {
                 case "j02":
                     lis.Add(getREL("j03User", "j02_j03", "Uživatelský účet", "LEFT OUTER JOIN j03User j02_j03 ON a.j02ID=j02_j03.j02ID LEFT OUTER JOIN j04UserRole j03_j04 ON j02_j03.j04ID=j03_j04.j04ID"));
-                    
+                    lis.Add(getREL("j07PersonPosition", "j02_j07", "Pozice", "LEFT OUTER JOIN j07PersonPosition j02_j07 ON a.j07ID=j02_j07.j07ID"));
+
                     break;
                 case "j03":
                     lis.Add(getREL("j02Person", "j03_j02", "Osobní profil", "LEFT OUTER JOIN j02Person j03_j02 ON a.j02ID=j03_j02.j02ID"));
@@ -203,6 +204,9 @@ namespace BL
                     lis.Add(getREL("j27Currency", "p92_j27", "Cílová měna", "LEFT OUTER JOIN j27Currency p92_j27 ON a.j27ID=p92_j27.j27ID"));
                     lis.Add(getREL("p93InvoiceHeader", "p92_p93", "Vystavovatel faktury", "LEFT OUTER JOIN p93InvoiceHeader p92_p93 ON a.p93ID=p92_p93.p93ID"));
                     lis.Add(getREL("x15VatRateType", "p92_x15", "Cílová DPH", "LEFT OUTER JOIN x15VatRateType p92_x15 ON a.x15ID=p92_x15.x15ID"));
+                    break;
+                case "c26":
+                    lis.Add(getREL("j17Country", "c26_j17", "Region", "LEFT OUTER JOIN j17Country c26_j17 ON a.j17ID=c26_j17.j17ID"));
                     break;
                 case "x31":
                 

@@ -26,23 +26,11 @@ namespace UI.Controllers
         //    return ret;
         //}
 
-        public string GetHtml4TheCombo(string entity, string tableid, string param1, string pids, string filterflag, string searchstring, string masterprefix, int masterpid) //Vrací HTML zdroj tabulky pro MyCombo
+        public string GetHtml4TheCombo(string entity, string tableid, string myqueryinline, string pids, string filterflag, string searchstring, string masterprefix, int masterpid) //Vrací HTML zdroj tabulky pro MyCombo
         {
-            var mq = new BO.InitMyQuery().Load(entity,masterprefix,masterpid);
+            var mq = new BO.InitMyQuery().Load(entity,masterprefix,masterpid,myqueryinline);
             mq.SetPids(pids);
-            if (!string.IsNullOrEmpty(param1))
-            {
-                if (param1.Contains("="))
-                {
-                    //předává se sql podmínka
-                    mq.explicit_sqlwhere = BO.BAS.OcistitSQL(param1);
-                }
-                else
-                {
-                    mq.param1 = param1;
-                }
-                
-            }
+            
 
             var ce = Factory.EProvider.ByPrefix(mq.Prefix);
             if (ce.IsWithoutValidity == false)

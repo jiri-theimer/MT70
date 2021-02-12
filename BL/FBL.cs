@@ -6,11 +6,11 @@ using System.Text;
 namespace BL
 {
     public interface IFBL
-    {
-       
+    {       
         public IEnumerable<BO.SysDbObject> GetList_SysObjects();
         public void GenerateCreateUpdateScript(IEnumerable<BO.SysDbObject> lis);
         public IEnumerable<BO.x53Permission> GetListX53();
+        public IEnumerable<BO.p87BillingLanguage> GetListP87();
         public BO.j27Currency LoadCurrencyByCode(string j27code);
         public BO.j27Currency LoadCurrencyByID(int j27id);
 
@@ -26,7 +26,10 @@ namespace BL
         {
             return _db.GetList<BO.x53Permission>("SELECT * FROM x53Permission ORDER BY x53Ordinary");
         }
-
+        public IEnumerable<BO.p87BillingLanguage> GetListP87()
+        {
+            return _db.GetList<BO.p87BillingLanguage>("SELECT "+ _db.GetSQL1_Ocas("p87")+ ",a.* FROM p87BillingLanguage a");
+        }
         public BO.j27Currency LoadCurrencyByCode(string j27code)
         {
             return _db.Load<BO.j27Currency>("select *,j27ID as pid FROM j27Currency WHERE j27Code LIKE @j27code", new { j27code = j27code });

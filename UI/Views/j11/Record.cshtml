@@ -9,7 +9,7 @@
 }
 @addTagHelper *, UI
 
-<input type="hidden" id="hidJ02IDs" asp-for="@Model.j02IDs" />
+<input type="hidden" id="hidJ02IDs" asp-for="@Model.j02IDs" value="@Model.j02IDs" />
 
 <div class="modal_record_container">
     <div class="row">
@@ -32,7 +32,7 @@
             <div class="row my-2">
                 <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vybrat osobu"):</label>
                 <div class="col-sm-11 col-md-10">
-                    <mycombo entity="j02Person" asp-for="@Model.SelectedJ02ID" selectedtext="@Model.SelectedPerson" filter-flag="1" placeholder="@_f.tra("Vybrat osobní profil")..." event_after_changevalue="handle_j02id_append"></mycombo>
+                    <mycombo entity="j02Person" asp-for="@Model.SelectedJ02ID" selectedtext="@Model.SelectedPerson" filter-flag="1" myqueryinline="j02isintraperson@bool@1" placeholder="@_f.tra("Vybrat osobní profil")..." event_after_changevalue="handle_j02id_append"></mycombo>
                 </div>
 
             </div>
@@ -45,7 +45,9 @@
             </div>
         </div>
     </div>
-
+    <div>
+        <button type="button" class="btn btn-danger" onclick="handle_remove_selected()">@_f.tra("Odstranit vybrané")</button>
+    </div>
 
     <vc:the-grid input="@Model.gridinput"></vc:the-grid>
 
@@ -67,7 +69,9 @@
             _notify_message("Musíte vybrat osobu.");
             return;
         }
-       
+        
+        form1.action = "/j11/Record?prefix=j02&oper=add&pids="+j02id;
+        form1.submit();
 
     }
     
@@ -78,15 +82,24 @@
             return;
         }
         
-
+        form1.action = "/j11/Record?prefix=j07&oper=add&pids=" + j07id;
+        form1.submit();
     }
 
     
 
-    function clear_all() {
-        $("#hidJ02IDs").val("");
-        
+    function handle_remove_selected() {
+        var pids = $("#tg_selected_pids").val();
+        if (pids === "") {
+            _notify_message("@_f.tra("Musíte zaškrtnout minimálně jeden záznam.")");
+            return;
+        }
         _toolbar_warn2save_changes();
+
+        form1.action = "/j11/Record?prefix=j02&oper=remove&pids=" + pids;
+        form1.submit();
+        
+        
     }
    
 </script>
