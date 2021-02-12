@@ -30,14 +30,14 @@
         </div>
         <div class="card-body">
             <div class="row my-2">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vybrat osobu"):</label>
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Přidat osobu"):</label>
                 <div class="col-sm-11 col-md-10">
                     <mycombo entity="j02Person" asp-for="@Model.SelectedJ02ID" selectedtext="@Model.SelectedPerson" filter-flag="1" myqueryinline="j02isintraperson@bool@1" placeholder="@_f.tra("Vybrat osobní profil")..." event_after_changevalue="handle_j02id_append"></mycombo>
                 </div>
 
             </div>
             <div class="row my-2">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Přidat podle pozice"):</label>
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Přidat osoby s pozicí"):</label>
                 <div class="col-sm-11 col-md-10">
                     <mycombo entity="j07PersonPosition" asp-for="@Model.SelectedJ07ID" selectedtext="@Model.SelectedPosition" placeholder="@_f.tra("Vybrat pozici")..." event_after_changevalue="handle_j07id_append"></mycombo>
                 </div>
