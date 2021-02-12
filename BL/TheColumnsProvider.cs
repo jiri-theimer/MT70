@@ -169,7 +169,7 @@ namespace BL
             AF("c26Holiday", "c26Name", "Název svátku", 1, null, "string", false, true);            
             AppendTimestamp("c26Holiday");
 
-            AF("j11Team", "j11Name", "Tým osob", 1, null, "string", false, true);           
+            AF("j11Team", "j11Name", "Tým osob", 1, null, "string", false, true);
             AppendTimestamp("j11Team");
 
             AF("j27Currency", "j27Code", "Měna", 1, null, "string", false, true);

@@ -1122,3 +1122,12 @@ a.reczoom {
     cursor: pointer;
     width: 100%;
 }
+
+table.table-thecombo {
+    background-color: #E6F0FF;
+}
+
+    table.table-thecombo tbody tr:hover {
+        background-color: dodgerblue;
+        color: white;
+    }

@@ -101,7 +101,7 @@ namespace UI.Controllers
 
             }
 
-            s.Append(string.Format("<table id='{0}' class='table table-hover'>", tableid));
+            s.Append(string.Format("<table id='{0}' class='table table-thecombo'>", tableid));
 
             s.Append("<thead><tr style='font-weight:normal;'>");
             foreach (var col in cols)

@@ -24,6 +24,8 @@ namespace UI.Controllers
         public TheGridOutput HandleTheGridFilter(TheGridUIContext tgi,List<BO.StringPair> pathpars, List<BO.TheGridColumnFilter> filter) //TheGrid povinná metoda: sloupcový filtr
         {
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            v.gridinput.ondblclick = tgi.ondblclick;
+            v.gridinput.oncmclick = tgi.oncmclick;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
 
             return c.Event_HandleTheGridFilter(tgi, filter);
@@ -31,6 +33,8 @@ namespace UI.Controllers
         public TheGridOutput HandleTheGridOper(TheGridUIContext tgi, List<BO.StringPair> pathpars)    //TheGrid povinná metoda: změna třídění, pageindex, změna stránky
         {
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            v.gridinput.ondblclick = tgi.ondblclick;
+            v.gridinput.oncmclick = tgi.oncmclick;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
 
             return c.Event_HandleTheGridOper(tgi);
@@ -39,13 +43,18 @@ namespace UI.Controllers
         public string HandleTheGridMenu(TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda: zobrazení grid menu
         {
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            v.gridinput.ondblclick = tgi.ondblclick;
+            v.gridinput.oncmclick = tgi.oncmclick;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridMenu(tgi.j72id);
+            
         }
 
         public TheGridExportedFile HandleTheGridExport(string format, string pids, TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda pro export dat
         {
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            v.gridinput.ondblclick = tgi.ondblclick;
+            v.gridinput.oncmclick = tgi.oncmclick;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridExport(format, tgi.j72id, pids);
         }        

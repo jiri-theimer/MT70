@@ -519,8 +519,8 @@ namespace UI
         {
             var sb = new System.Text.StringBuilder();
             var recJ72 = _Factory.j72TheGridTemplateBL.LoadState(j72id, _Factory.CurrentUser.pid);
-            sb.Append("<div style='background-color:#FFFFE0;padding-bottom:20px;'>");
-            sb.AppendLine(string.Format("<div style='font-weight:bold;'>{0}</div>", _Factory.tra("Seznam pojmenovaných GRID šablon")));
+            sb.Append("<div style='background-color:white;padding-bottom:20px;'>");
+            sb.AppendLine($"<div style='font-weight:bold;text-align:center;'>{_Factory.tra("Seznam pojmenovaných GRID šablon")}</div>");
 
             var lis = _Factory.j72TheGridTemplateBL.GetList(recJ72.j72Entity, recJ72.j03ID, recJ72.j72MasterEntity);
             sb.AppendLine("<table style='width:100%;'>");

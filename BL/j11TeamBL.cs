@@ -48,9 +48,8 @@ namespace BL
             }
             var p = new DL.Params4Dapper();
             p.AddInt("pid", rec.pid);            
-            p.AddString("j11Name", rec.j11Name);
-            p.AddString("j11Description", rec.j11Description);        
-            p.AddBool("j11IsAllUsers", rec.j11IsAllUsers);
+            p.AddString("j11Name", rec.j11Name);            
+            p.AddBool("j11IsAllPersons", rec.j11IsAllPersons);
 
             int intPID = _db.SaveRecord("j11Team", p.getDynamicDapperPars(), rec);
             if (rec.pid > 0)
