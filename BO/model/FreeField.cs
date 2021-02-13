@@ -11,7 +11,7 @@ namespace BO
         public object DBValue { get; set; }
         public string ComboText { get; set; }
         public bool IsExternalDataSource { get; set; }
-
+        private string _TypeName;
         public void SetTypeFromName(string strTypeName)
         {
             _TypeName = strTypeName;

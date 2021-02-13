@@ -44,6 +44,7 @@ namespace BL
         private Ix67EntityRoleBL _x67;
         private Ic21FondCalendarBL _c21;
         private Ic26HolidayBL _c26;
+        private Ix28EntityFieldBL _x28;
 
         public Factory(BO.RunningUser ru,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
@@ -300,6 +301,14 @@ namespace BL
             {
                 if (_p85 == null) _p85 = new p85TempboxBL(this);
                 return _p85;
+            }
+        }
+        public Ix28EntityFieldBL x28EntityFieldBL
+        {
+            get
+            {
+                if (_x28 == null) _x28 = new x28EntityFieldBL(this);
+                return _x28;
             }
         }
         public Ix55WidgetBL x55WidgetBL

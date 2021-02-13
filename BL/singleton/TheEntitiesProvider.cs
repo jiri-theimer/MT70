@@ -122,13 +122,17 @@ namespace BL
 
 
 
-
+            AE_TINY("x28EntityField", "Uživatelská pole", "Uživatelské pole");
+            AE_TINY("x27EntityFieldGroup", "Skupiny uživatelských polí", "Skupina uživatelských polí");
             AE_TINY("x31Report", "Report šablony", "Pevná tisková sestava");
+            AE_TINY("j25ReportCategory", "Kategorie sestav", "Kategorie sestavy");
+            AE_TINY("x38CodeLogic", "Číselné řady", "Číselná řada");
+            AE_TINY("x46EventNotification", "Aplikační události", "Událost");
 
             AE_TINY("x55Widget", "Widgety", "Widget");
-            AE_TINY("x97Translate", "Aplikační překlad", "Aplikační překlad");
-            ByPrefix("x97").IsWithoutValidity = true;
-
+            AE_TINY("x91Translate", "Aplikační překlad", "Aplikační překlad");
+            ByPrefix("x91").IsWithoutValidity = true;
+            
             
         }
 
@@ -209,7 +213,8 @@ namespace BL
                     lis.Add(getREL("j17Country", "c26_j17", "Region", "LEFT OUTER JOIN j17Country c26_j17 ON a.j17ID=c26_j17.j17ID"));
                     break;
                 case "x31":
-                
+                    lis.Add(getREL("x29Entity", "x31_x29", "Kontext", "LEFT OUTER JOIN x29Entity x31_x29 ON a.x29ID=x31_x29.x29ID"));
+                    break;
                 default:
                     break;
             }

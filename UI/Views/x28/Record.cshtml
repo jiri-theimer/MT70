@@ -1,0 +1,100 @@
+﻿@model UI.Models.Record.x28Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Uživatelské pole");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-9 col-md-8">
+            <input class="form-control" asp-for="Rec.x28Name" />
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Index pořadí"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.x28Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Entita"):</label>
+        <div class="col-sm-11 col-md-10">
+            <select asp-for="Rec.x29ID" class="form-select">
+                <option value="p41Project">@_f.tra("Projekt")</option>
+                <option value="p28Contact">@_f.tra("Klient")</option>
+                <option value="p31Worksheet">@_f.tra("Úkon")</option>
+                <option value="p91Invoice">@_f.tra("Vyúčtování")</option>
+                <option value="p90Proforma">@_f.tra("Záloha")</option>
+                <option value="j02Person">@_f.tra("Osoba")</option>
+                <option value="p56Task">@_f.tra("Úkol")</option>
+                <option value="o23Doc">@_f.tra("Dokument")</option>
+
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Druh pole"):</label>
+        <div class="col-sm-11 col-md-10">
+            <select asp-for="Rec.x28Flag" class="form-select">
+                <option value="UserField">@_f.tra("Formulářové pole")</option>
+                <option value="GridField">@_f.tra("Grid sloupec na míru")</option>
+
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datový formát"):</label>
+        <div class="col-sm-11 col-md-10">
+            <select asp-for="Rec.x24ID" class="form-select">
+                <option value="tInteger">@_f.tra("Integer (celé číslo)")</option>
+                <option value="tString">@_f.tra("String (libovolný text)")</option>
+                <option value="tDecimal">@_f.tra("Decimal (číslo s desetinnou čárkou)")</option>
+                <option value="tDate">@_f.tra("Date (datum)")</option>
+                <option value="tDateTime">@_f.tra("Datetime (datum+čas)")</option>
+                <option value="tBoolean">@_f.tra("Boolen (checkbox)")</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Skupina polí"):</label>
+        <div class="col-sm-3 col-md-2">
+            <mycombo entity="x27EntityFieldGroup" asp-for="Rec.x27ID" selectedtext="@Model.ComboX27Name" view-flag="2"></mycombo>
+        </div>
+
+    </div>
+    <div class="my-2">
+
+        <input type="checkbox" asp-for="Rec.x28IsRequired" />
+        <label class="col-form-label" for="Rec_x28IsRequired">@_f.tra("Povinné k vyplnění")</label>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výška textového pole"):</label>
+        <div class="col-sm-2 col-md-2">
+            <mynumber asp-for="Rec.x28TextboxHeight" decimal-digits="0"></mynumber>
+        </div>
+
+    </div>
+
+    <div class="my-2">
+        <textarea class="form-control" asp-for="Rec.x28DataSource" placeholder="@_f.tra("Obor možných hodnot pole (oddělovač středník)")"></textarea>
+    </div>
+    <div>
+        <input type="checkbox" asp-for="Rec.x28IsFixedDataSource" />
+        <label class="col-form-label" for="Rec_x28IsFixedDataSource">@_f.tra("Výběr z oboru hodnot je zafixován (pro uživatele se nabízí roletová nabídka (combo))")</label>
+    </div>
+    <div class="my-2">
+        <textarea class="form-control" asp-for="Rec.x28HelpText" placeholder="@_f.tra("Uživatelská nápověda k poli")"></textarea>
+    </div>
+</div>

@@ -98,36 +98,7 @@ namespace UI.Controllers
             return View(v);
         }
 
-        public IActionResult Misc(string prefix, int go2pid, string view)
-        {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
-            handle_default_link(v, "Misc", "x38");
-            
-            inhale_entity(ref v, v.prefix);
-            
-            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid,BO.BAS.ConvertString2List("misc"));
-            //if (v.prefix == "o13" || v.prefix == "x32")
-            //{
-            //    if (string.IsNullOrEmpty(v.view) == true)
-            //    {
-            //        v.view = Factory.CBL.LoadUserParam("Admin-Ciselniky-View-" + v.prefix, "tree");
-            //    }
-            //    else
-            //    {
-            //        Factory.CBL.SetUserParam("Admin-Ciselniky-View-" + v.prefix, v.view);
-            //    }
-            //    if (v.prefix == "o13" && v.view == "tree")
-            //    {
-            //        inhale_tree_o13(v);
-            //    }
-            //    if (v.prefix == "x32" && v.view == "tree")
-            //    {
-            //        inhale_tree_x32(v);
-            //    }
-            //}
-
-            return View(v);
-        }
+        
         public IActionResult Users(string prefix, int go2pid)
         {
             var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
@@ -167,7 +138,16 @@ namespace UI.Controllers
             v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("projects"));
             v.gridinput.viewstate = "projects";
 
-            
+            return View(v);
+        }
+        public IActionResult Misc(string prefix, int go2pid)
+        {
+            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
+            handle_default_link(v,"Misc", "x38");
+
+            inhale_entity(ref v, v.prefix);
+            v.gridinput = GetGridInput(v.entity, v.prefix, v.go2pid, BO.BAS.ConvertString2List("misc"));
+            v.gridinput.viewstate = "misc";
 
             return View(v);
         }

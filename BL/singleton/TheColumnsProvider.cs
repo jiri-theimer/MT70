@@ -170,6 +170,10 @@ namespace BL
             AF("j11Team", "j11Name", "Tým osob", 1, null, "string", false, true);
             AppendTimestamp("j11Team");
 
+            AF("j25ReportCategory", "j25Name", "Kategorie sestav", 1, null, "string", false, true);
+            AF("j25ReportCategory", "j25Ordinary", "#", 2, null, "num0");
+            AppendTimestamp("j25ReportCategory");
+
             AF("j27Currency", "j27Code", "Měna", 1, null, "string", false, true);
             AF("j27Currency", "j27Name", "Název měny");
 
@@ -363,19 +367,37 @@ namespace BL
 
 
 
-            //x31 = tisková sestava
+            //x31 = tisková sestava            
             AF("x31Report", "x31Name", "Tisková sestava", 1, null, "string", false, true);
-            AF("x31Report", "x31PID", "Kód sestavy",2);
-            AF("x31Report", "x31Is4SingleRecord", "Kontextová sestava", 2, null, "bool");
+            AF("x31Report", "RepFormat", "Formát", 1, "case a.x31FormatFlag when 1 then 'REPORT' when 2 then 'DOCX' when 3 then 'PLUGIN' when 4 then 'XLS' end");
+            AF("x31Report", "x31Code", "Kód sestavy");
+            AF("x31Report", "x31IsPeriodRequired", "Filtr čaového období", 0, null, "bool");
             
-            AF("x31Report", "Roles", "Oprávnění", 2, "dbo._core_x31_get_role_inline(a.x31ID)");
-            AF("x31Report", "Categories", "Kategorie", 1, "dbo._core_x31_get_category_inline(a.x31ID)");
-            AF("x31Report", "a10Names", "Typy akcí", 2, "dbo._core_x31_get_a10name_inline(a.x31ID)");
-            AF("x31Report", "a08Names", "Témata akcí", 2, "dbo._core_x31_get_a08name_inline(a.x31ID)");
-            AF("x31Report", "RepFormat", "Formát", 1, "case a.x31ReportFormat when 1 then 'REP' when 2 then 'DOCX' when 3 then 'XLSX' when 4 then 'MSREP' end");
-            AF("x31Report", "x31Description", "Popis");
+            AF("x31Report", "x31FileName", "Soubor šablony", 1);
+            AF("x31Report", "x31Ordinary", "#", 1, null, "num0");
+            
+            AF("x31Report", "x31ExportFileNameMask", "Maska export souboru");            
+            AF("x31Report", "x31IsScheduling", "Pravidelné odesílání");
+            AF("x31Report", "x31Description", "Poznámka");
             AppendTimestamp("x31Report");
 
+            //uživatelská pole
+            AF("x28EntityField", "x28Name", "Uživatelské pole", 1, null, "string", false, true);
+            AF("x28EntityField", "x28Field", "Fyzický název", 1);            
+            AF("x28EntityField", "x28IsRequired", "Povinné",1,null,"bool");            
+            AF("x28EntityField", "x28Ordinary", "#", 1, null, "num0");
+            AppendTimestamp("x28EntityField");
+
+            //skupina uživatelských polí
+            AF("x27EntityFieldGroup", "x27Name", "Skupina polí", 1, null, "string", false, true);
+            AF("x27EntityFieldGroup", "x27Ordinary", "#", 1, null, "num0");
+
+            //číselné řady
+            AF("x38CodeLogic", "x38Name", "Číselná řada", 1, null, "string", false, true);            
+            AF("x38CodeLogic", "x38ConstantBeforeValue", "Konstanta před", 1);
+            AF("x38CodeLogic", "x38ConstantAfterValue", "Konstanta za", 1);
+            AF("x38CodeLogic", "x38Scale", "Rozsah", 1,null, "num0");
+            AppendTimestamp("x38CodeLogic");
 
             //x55 = dashboard widget
             AF("x55Widget", "x55Name", "Widget", 1, null, "string", false, true);
@@ -394,11 +416,12 @@ namespace BL
             AF("x29Entity", "x29Name", "Entita", 1, null, "string", false, true);
             AF("x29Entity", "x29NamePlural", "Plurál", 2);
             AF("x29Entity", "x29IsAttachment", "Přílohy", 2,null,"bool");
-
-            //x91 = entita
-            AF("x97Translate", "x97Code", "Originál", 1, null, "string", false, true);
-            AF("x97Translate", "x97Lang1", "English", 1);
-            AF("x97Translate", "x97Lang4", "Slovenčina", 1);
+            
+            //x91 = překlad
+            AF("x91Translate", "x91Code", "Originál", 1, null, "string", false, true);
+            AF("x91Translate", "x91Lang1", "English", 1);
+            AF("x91Translate", "x91Lang2", "Deutsch", 1);
+            AF("x91Translate", "x91Lang4", "Slovenčina", 1);
 
             AF("x15VatRateType", "x15Name", "Druh DPH", 1, null, "string", false, true);
 
@@ -571,6 +594,9 @@ namespace BL
                     ret.Add(InhaleColumn4Relation("p92_j27", "j27Currency", "j27Code", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p92_p93", "p93InvoiceHeader", "p93Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p92_x15", "x15VatRateType", "x15Name", rels, bolComboColumns));
+                    break;
+                case "x31":
+                    ret.Add(InhaleColumn4Relation("x31_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     break;
 
             }

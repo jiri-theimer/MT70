@@ -91,7 +91,7 @@ namespace UI.Controllers
             AMI("Vykazování úkonů", "/Admin/Worksheet", "k-i-clock");
             AMI("Vyúčtování", "/Admin/Billing", "k-i-dollar");
             AMI("Organizace projektů", "/Admin/Projects", "k-i-wrench");
-            AMI("Ostatní", "/Admin/Misc", "k-i-gear");
+            AMI("Různé", "/Admin/Misc", "k-i-gear");
             return FlushResult_UL(true,false);
         }
        
@@ -185,11 +185,21 @@ namespace UI.Controllers
 
             return FlushResult_UL(false,true);
         }
-        public string AdminCiselniky(string prefix)
-        {                        
-                        
+        public string AdminMisc(string prefix)
+        {            
+            DIV_TRANS("Uživatelská pole");
+            AMI("Katalog uživatelských polí", url_ciselniky("x28"));
+            AMI("Skupiny uživatelských polí", url_ciselniky("x27"));
+
             DIV_TRANS("Pevné tiskové sestavy");
             AMI("Report šablony", url_ciselniky("x31"));
+            AMI("Kategorie sestav", url_ciselniky("j25"));
+
+            DIV_TRANS("Ostatní");
+            AMI("Číselné řady", url_ciselniky("x38"));
+            AMI("Střediska", url_ciselniky("j18"));
+            AMI("Daňové regiony", url_ciselniky("j17"));
+            AMI("Notifikace událostí", url_ciselniky("x46"));
 
             AMI("Uživatelská nápověda", url_ciselniky("x51"));
             AMI("Aplikační překlad", url_ciselniky("x91"));
@@ -253,7 +263,7 @@ namespace UI.Controllers
         }
         private string url_ciselniky(string prefix)
         {
-            return "/Admin/Ciselniky?prefix=" + prefix;
+            return "/Admin/Misc?prefix=" + prefix;
         }
        
         private string url_users(string prefix)
