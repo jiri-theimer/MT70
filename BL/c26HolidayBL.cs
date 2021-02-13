@@ -62,7 +62,7 @@ namespace BL
             }
             return intPID;
         }
-        public bool ValidateBeforeSave(BO.c26Holiday rec)
+        private bool ValidateBeforeSave(BO.c26Holiday rec)
         {
             if (string.IsNullOrEmpty(rec.c26Name))
             {

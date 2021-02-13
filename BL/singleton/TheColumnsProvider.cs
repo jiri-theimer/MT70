@@ -8,21 +8,21 @@ namespace BL
 {
     public class TheColumnsProvider
     {
-        private readonly BL.RunningApp _app;
+        //private readonly BL.RunningApp _app;
         private readonly BL.TheEntitiesProvider _ep;
         private readonly BL.TheTranslator _tt;
         private List<BO.TheGridColumn> _lis;        
         private string _lastEntity;
         private string _curEntityAlias;
         
-        public TheColumnsProvider(BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
+        public TheColumnsProvider(BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
-            _app = runningapp;
+            //_app = runningapp;
             _ep = ep;
             _tt = tt;
             _lis = new List<BO.TheGridColumn>();
             SetupPallete();
-            Handle_DbOpers();
+            Handle_Translate();
 
         }
 
@@ -30,7 +30,7 @@ namespace BL
         {
             _lis = new List<BO.TheGridColumn>();
             SetupPallete();
-            Handle_DbOpers();
+            Handle_Translate();
         }
 
         private int SetDefaultColWidth(string strFieldType)
@@ -98,9 +98,9 @@ namespace BL
             
         }
 
-        private void Handle_DbOpers()
+        private void Handle_Translate()
         {
-            //Překlad do ostatních jazyků: Musí být před načtením kategorií, aby se názvy kategorií nepřekládali!
+            //Překlad do ostatních jazyků
             foreach (var col in _lis)
             {
                 bool b = true;
@@ -116,15 +116,7 @@ namespace BL
 
             }
 
-            BO.TheGridColumn onecol;
-            DL.DbHandler db = new DL.DbHandler(_app.ConnectString, new BO.RunningUser(), _app.LogFolder);
-            var dt = db.GetDataTable("select * from o53TagGroup WHERE o53Field IS NOT NULL AND o53Entities IS NOT NULL ORDER BY o53Ordinary");
-            foreach (System.Data.DataRow dbrow in dt.Rows)
-            {
-               
-                onecol = AF("o54TagBindingInline", dbrow["o53Field"].ToString(), dbrow["o53Name"].ToString(), 0, null, "string", false, true);
-                onecol.VisibleWithinEntityOnly = dbrow["o53Entities"].ToString();
-            }
+            
             
             
         }

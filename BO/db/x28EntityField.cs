@@ -60,46 +60,17 @@ namespace BO
         public string x28Query_sqlComboSource { get; set; }
 
 
-        protected string _x29Name { get; set; }
-        public string x29Name
-        {
-            get
-            {
-                return _x29Name;
-            }
-        }
-        protected string _x27Name { get; set; }
-        public string x27Name
-        {
-            get
-            {
-                return _x27Name;
-            }
-        }
-        protected string _TypeName;
-        public string TypeName
-        {
-            get
-            {
-                return _TypeName;
-            }
-        }
-        protected string _x23Name { get; set; }
-        public string x23Name
-        {
-            get
-            {
-                return _x23Name;
-            }
-        }
-        protected string _x23DataSource { get; set; }
-        public string x23DataSource
-        {
-            get
-            {
-                return _x23DataSource;
-            }
-        }
+        protected string x29Name { get; }
+     
+        protected string x27Name { get; }
+        
+       
+        public string TypeName { get; }
+        
+        protected string x23Name { get; }
+      
+        protected string x23DataSource { get; }
+       
 
         public string SourceTableName
         {

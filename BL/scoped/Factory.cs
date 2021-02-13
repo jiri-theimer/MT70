@@ -13,8 +13,11 @@ namespace BL
         public BL.RunningApp App { get; set; }
         
         public BL.TheEntitiesProvider EProvider { get; set; }
+        
         public BL.TheTranslator Translator { get; set; }
 
+
+        
         private ICBL _cbl;
         private IFBL _fbl;
         private Ij72TheGridTemplateBL _j72;
@@ -42,18 +45,18 @@ namespace BL
         private Ic21FondCalendarBL _c21;
         private Ic26HolidayBL _c26;
 
-        public Factory(BO.RunningUser c,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
+        public Factory(BO.RunningUser ru,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
            
-            this.CurrentUser = c;
+            this.CurrentUser = ru;
             this.App = runningapp;
-            this.EProvider = ep;
-            
+            this.EProvider = ep;            
             this.Translator = tt;
-            
-            if (c.pid == 0 && string.IsNullOrEmpty(c.j03Login)==false)
+           
+
+            if (ru.pid == 0 && string.IsNullOrEmpty(ru.j03Login)==false)
             {
-                InhaleUserByLogin(c.j03Login);
+                InhaleUserByLogin(ru.j03Login);
                 
             }
             
@@ -100,6 +103,7 @@ namespace BL
             return this.Translator.DoTranslate(strExpression, langindex);
         }
 
+        
         public ICBL CBL
         {
             get

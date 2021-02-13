@@ -44,8 +44,7 @@ namespace UI.Controllers
             if (Factory.CurrentUser.j03IsMustChangePassword && context.RouteData.Values["action"].ToString() != "ChangePassword")
             {
 
-                context.Result = new RedirectResult("~/Home/ChangePassword");
-                // RedirectToAction("ChangePassword", "Home");
+                context.Result = new RedirectResult("~/Home/ChangePassword");                
             }
 
          

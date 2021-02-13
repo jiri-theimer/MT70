@@ -58,7 +58,7 @@ namespace BL
 
             return _db.SaveRecord("j07PersonPosition", p.getDynamicDapperPars(), rec);
         }
-        public bool ValidateBeforeSave(BO.j07PersonPosition rec)
+        private bool ValidateBeforeSave(BO.j07PersonPosition rec)
         {
             if (string.IsNullOrEmpty(rec.j07Name))
             {

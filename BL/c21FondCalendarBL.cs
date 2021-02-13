@@ -90,7 +90,7 @@ namespace BL
             }
             return intPID;
         }
-        public bool ValidateBeforeSave(BO.c21FondCalendar rec)
+        private bool ValidateBeforeSave(BO.c21FondCalendar rec)
         {
             if (string.IsNullOrEmpty(rec.c21Name))
             {
