@@ -422,7 +422,7 @@ namespace BL
             AF("x91Translate", "x91Lang1", "English", 1);
             AF("x91Translate", "x91Lang2", "Deutsch", 1);
             AF("x91Translate", "x91Lang4", "Slovenčina", 1);
-
+            
             AF("x15VatRateType", "x15Name", "Druh DPH", 1, null, "string", false, true);
 
             

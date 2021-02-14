@@ -41,10 +41,13 @@ namespace UI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(x28Record v)
+        public IActionResult Record(x28Record v,string oper)
         {
             RefreshState(v);
-
+            if (oper == "postback")
+            {
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
                 BO.x28EntityField c = new BO.x28EntityField();

@@ -120,7 +120,7 @@ namespace UI.Controllers
             AMI("PING Log", url_users("j92"));
             
             AMI("LOGIN Log", url_users("j90"));
-            AMI("WORKFLOW Log", url_users("b05"));
+            
             DIV_TRANS("Pošta");
             AMI("Poštovní účty", url_users("j40"));
             AMI("OUTBOX", url_users("x40"));

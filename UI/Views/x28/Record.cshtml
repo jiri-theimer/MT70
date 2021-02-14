@@ -9,8 +9,19 @@
 @addTagHelper *, UI
 
 <div class="modal_record_container">
-
     <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Druh pole"):</label>
+        <div class="col-sm-2 col-md-2">
+            <select asp-for="Rec.x28Flag" class="form-select bg-info">
+                <option value="UserField">@_f.tra("Formulářové pole")</option>
+                <option value="GridField">@_f.tra("Grid sloupec na míru")</option>
+
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
         <div class="col-sm-9 col-md-8">
             <input class="form-control" asp-for="Rec.x28Name" />
@@ -39,17 +50,7 @@
 
     </div>
 
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Druh pole"):</label>
-        <div class="col-sm-11 col-md-10">
-            <select asp-for="Rec.x28Flag" class="form-select">
-                <option value="UserField">@_f.tra("Formulářové pole")</option>
-                <option value="GridField">@_f.tra("Grid sloupec na míru")</option>
 
-            </select>
-        </div>
-
-    </div>
 
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datový formát"):</label>
@@ -65,36 +66,124 @@
         </div>
 
     </div>
+    @if (Model.Rec.x28Flag == BO.x28FlagENUM.UserField)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Skupina polí"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mycombo entity="x27EntityFieldGroup" asp-for="Rec.x27ID" selectedtext="@Model.ComboX27Name" view-flag="2"></mycombo>
+            </div>
 
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Skupina polí"):</label>
-        <div class="col-sm-3 col-md-2">
-            <mycombo entity="x27EntityFieldGroup" asp-for="Rec.x27ID" selectedtext="@Model.ComboX27Name" view-flag="2"></mycombo>
         </div>
-
-    </div>
-    <div class="my-2">
-
-        <input type="checkbox" asp-for="Rec.x28IsRequired" />
-        <label class="col-form-label" for="Rec_x28IsRequired">@_f.tra("Povinné k vyplnění")</label>
-    </div>
-
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výška textového pole"):</label>
-        <div class="col-sm-2 col-md-2">
-            <mynumber asp-for="Rec.x28TextboxHeight" decimal-digits="0"></mynumber>
+        <div class="my-2">
+            <input type="checkbox" asp-for="Rec.x28IsRequired" />
+            <label class="col-form-label" for="Rec_x28IsRequired">@_f.tra("Povinné k vyplnění")</label>
         </div>
+       
+        @if (Model.Rec.x24ID == BO.x24IdENUM.tString)
+        {
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výška textového pole"):</label>
+                <div class="col-sm-2 col-md-2">
+                    <mynumber asp-for="Rec.x28TextboxHeight" decimal-digits="0"></mynumber>
+                </div>
 
-    </div>
+            </div>
+
+            <div class="my-2">
+                <textarea class="form-control" asp-for="Rec.x28DataSource" placeholder="@_f.tra("Obor možných hodnot pole (oddělovač středník)")"></textarea>
+            </div>
+            <div>
+                <input type="checkbox" asp-for="Rec.x28IsFixedDataSource" />
+                <label class="col-form-label label-checkbox" for="Rec_x28IsFixedDataSource">@_f.tra("Výběr z oboru hodnot je zafixován (pro uživatele se nabízí roletová nabídka (combo))")</label>
+            </div>
+        }
+
+        <div class="my-2">
+            <textarea class="form-control" asp-for="Rec.x28HelpText" placeholder="@_f.tra("Uživatelská nápověda k poli")"></textarea>
+        </div>
+    }
+
+
+    @if (Model.Rec.x28Flag == BO.x28FlagENUM.GridField)
+    {
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("SQL pro GRID sloupec")
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("SQL-SELECT syntaxe"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <textarea class="form-control" asp-for="Rec.x28Grid_SqlSyntax"></textarea>
+                    </div>
+
+                </div>
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("SQL-FROM syntaxe"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <textarea class="form-control" asp-for="Rec.x28Grid_SqlFrom"></textarea>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
 
     <div class="my-2">
-        <textarea class="form-control" asp-for="Rec.x28DataSource" placeholder="@_f.tra("Obor možných hodnot pole (oddělovač středník)")"></textarea>
+
+        <input type="checkbox" asp-for="Rec.x28IsPublic" />
+        <label class="col-form-label" for="Rec_x28IsPublic">@_f.tra("Obsah pole je dostupný všem uživatelům s přístupem k záznamu")</label>
     </div>
-    <div>
-        <input type="checkbox" asp-for="Rec.x28IsFixedDataSource" />
-        <label class="col-form-label" for="Rec_x28IsFixedDataSource">@_f.tra("Výběr z oboru hodnot je zafixován (pro uživatele se nabízí roletová nabídka (combo))")</label>
-    </div>
-    <div class="my-2">
-        <textarea class="form-control" asp-for="Rec.x28HelpText" placeholder="@_f.tra("Uživatelská nápověda k poli")"></textarea>
-    </div>
+    @if (!Model.Rec.x28IsPublic)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Oprávnění pouze pro role"):</label>
+            <div class="col-sm-11 col-md-10">
+                <mycombochecklist asp-for="@Model.SelectedJ04IDs" entity="j04UserRole" selectedtext="@Model.SelectedJ04Names"></mycombochecklist>
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Oprávnění pouze pro pozice"):</label>
+            <div class="col-sm-11 col-md-10">
+                <mycombochecklist asp-for="@Model.SelectedJ07IDs" sele entity="j07PersonPosition" selectedtext="@Model.SelectedJ07Names"></mycombochecklist>
+            </div>
+        </div>
+    }
 </div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#Rec_x28Flag").on("change", function () {
+            postback();
+
+        });
+
+        $("#Rec_x29ID").on("change", function () {
+            postback();
+
+        });
+
+        $("#Rec_x24ID").on("change", function () {
+            postback();
+
+        });
+
+        $("#Rec_x28IsPublic").on("change", function () {
+            postback();
+
+        });
+    });
+
+
+
+
+    function postback() {
+        form1.action = "/x28/Record?oper=postback";
+        form1.submit();
+    }
+
+</script>

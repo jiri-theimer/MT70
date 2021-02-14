@@ -18,13 +18,13 @@
 
     #mainmenu1_container a.nav-link {
         color: #FFFFFF;
-        padding: 5px 10px 5px 10px;        
+        padding: 5px 10px 5px 10px;
     }
 
-    #mainmenu1_container a.nav-link:not(.active):hover {
-        background-color: royalblue;
-        color: white !important;
-    }
+        #mainmenu1_container a.nav-link:not(.active):hover {
+            background-color: royalblue;
+            color: white !important;
+        }
 
 
 
@@ -139,18 +139,27 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
-    input[type="checkbox"] + label {
-        cursor: pointer;
-    }
 
-        input[type="checkbox"] + label:hover {
-            background-color: aliceblue;
-        }
 
-input:checked + label {
+input[type="checkbox"] + label:hover {
+    color: cornflowerblue;
+    cursor:pointer;
+}
+
+input[type="checkbox"]:checked + label {
     color: blue;
 }
 
+
+/*asp.net core doplňuje k checkboxům hidden element navíc!!!*/
+input[type="checkbox"]:checked + input[type="hidden"] + label {
+    color: blue;
+}
+
+input[type="checkbox"] + input[type="hidden"] + label:hover {
+    cursor: pointer;
+    color:cornflowerblue;
+}
 
 
 
@@ -987,7 +996,7 @@ div.tabs_container {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     margin-left: 1px;
-    background-color: #DCDCDC;    
+    background-color: #DCDCDC;
 }
 
 
