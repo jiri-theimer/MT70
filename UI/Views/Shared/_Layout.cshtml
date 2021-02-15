@@ -90,9 +90,7 @@
         </nav>
     </header>
     <script type="text/javascript">
-        var _rp = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
-
-        
+        var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři        
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -180,9 +178,9 @@
 
             @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  notifikační zprávy pro uživatele
-            <text>
-            _notify_message("@c.Value","@c.Key");
-            </text>
+           
+                @:_notify_message("@c.Value","@c.Key");
+            
              }
         }
 
@@ -281,9 +279,9 @@
             if (typeof flag === "undefined") flag = 2;   //automaticky maximalizovat okno
             @if (_f.CurrentUser.j03ModalWindowsFlag == 99)
             {
-                <text>
-            flag = 2;   //vždy maximalizovat modální okno
-                </text>
+                
+                @:flag = 2;   //vždy maximalizovat modální okno
+                
             }
 
             if (!$(_modal).attr("initialized") && flag !== 2) {

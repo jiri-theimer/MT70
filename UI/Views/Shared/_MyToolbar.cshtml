@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown" style="border-bottom:solid 1px silver;border-top:solid 1px silver;">
             <ul class="navbar-nav m-0">
                 <li class="nav-item m-2">
-                    <button type="submit" id="cmdSaveMyToolbar" action="@Model.ControllorName" class="btn btn-success"><span class="k-icon k-i-save" style="margin-right:6px;"></span>@_f.tra("Uložit změny")</button>
+                    <button type="button" id="cmdSaveMyToolbar" action="@Model.ControllorName" class="btn btn-success"><span class="k-icon k-i-save" style="margin-right:6px;"></span>@_f.tra("Uložit změny")</button>
 
                 </li>
                 @if (Model.IsApply)
@@ -111,6 +111,13 @@
 
 
         $("#cmdSaveMyToolbar").click(function () {
+            document.dispatchEvent(event_form1_beforesave);
+            
+            if (event_form1_beforesave.detail.cancel == true) {                
+                _notify_message("@_f.tra("Uložení formuláře zrušeno.")","info");
+                return;
+            }
+
             $(this).text("Processing...");
             $(this).attr("disabled", true);
             if (document.getElementById("form1")) {

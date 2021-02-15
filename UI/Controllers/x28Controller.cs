@@ -52,8 +52,7 @@ namespace UI.Controllers
             {
                 BO.x28EntityField c = new BO.x28EntityField();
                 if (v.rec_pid > 0) c = Factory.x28EntityFieldBL.Load(v.rec_pid);
-                c.x28Name = v.Rec.x28Name;
-                c.x28Field = v.Rec.x28Field;
+                c.x28Name = v.Rec.x28Name;                
                 c.x24ID = v.Rec.x24ID;
                 c.x29ID = v.Rec.x29ID;
                 c.x23ID = v.Rec.x23ID;                
@@ -73,14 +72,14 @@ namespace UI.Controllers
                 c.x28Grid_Field = v.Rec.x28Grid_Field;
                 c.x28Grid_SqlSyntax = v.Rec.x28Grid_SqlSyntax;
                 c.x28Grid_SqlFrom = v.Rec.x28Grid_SqlFrom;
-                c.x28Pivot_SelectSql = v.Rec.x28Pivot_SelectSql;
-                c.x28Pivot_GroupBySql = v.Rec.x28Pivot_GroupBySql;
-                c.x28Query_SqlSyntax = v.Rec.x28Query_SqlSyntax;
-                c.x28Query_Field = v.Rec.x28Query_Field;
-                c.x28Query_sqlComboSource = v.Rec.x28Query_sqlComboSource;
+                //c.x28Pivot_SelectSql = v.Rec.x28Pivot_SelectSql;
+                //c.x28Pivot_GroupBySql = v.Rec.x28Pivot_GroupBySql;
+                //c.x28Query_SqlSyntax = v.Rec.x28Query_SqlSyntax;
+                //c.x28Query_Field = v.Rec.x28Query_Field;
+                //c.x28Query_sqlComboSource = v.Rec.x28Query_sqlComboSource;
 
                 c.x28TextboxHeight = v.Rec.x28TextboxHeight;
-                c.x28TextboxWidth = v.Rec.x28TextboxWidth;
+                
                 c.x28HelpText = v.Rec.x28HelpText;
 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);

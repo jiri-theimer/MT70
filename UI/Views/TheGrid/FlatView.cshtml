@@ -73,7 +73,7 @@
         {
         <text>
         $("#PeriodValue").on("change", function () {
-            $.post("/Common/SetUserParam", { key: "grid-period-value-@Model.prefix",value:$(this).val()  }, function (data) {
+            $.post(_ep("/Common/SetUserParam"), { key: "grid-period-value-@Model.prefix",value:$(this).val()  }, function (data) {
                 reload();
 
             });
@@ -93,7 +93,7 @@
             k.push("grid-period-d2-@Model.prefix");
             v.push($("#d2helper").val());
 
-            $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
+            $.post(_ep("/Common/SetUserParams"), { keys: k, values:v  }, function (data) {
                 reload();
 
             });
@@ -118,25 +118,25 @@
 
 
         function change_grid(j72id) {
-            $.post("/Common/SetUserParam", { key: "flatview-j72id-@(Model.prefix)",value:j72id  }, function (data) {
+            $.post(_ep("/Common/SetUserParam"), { key: "flatview-j72id-@(Model.prefix)",value:j72id  }, function (data) {
                 reload();
 
             });
         }
 
         function report_nocontext(x31id) {
-            _window_open("/x31/ReportNoContext?x31id=" + x31id, 2);
+            _window_open(_ep("/x31/ReportNoContext?x31id=" + x31id), 2);
         }
 
 
         function reload() {
             //_showloading();
-            location.replace("/TheGrid/FlatView?prefix=@Model.prefix");
+            location.replace(_ep("/TheGrid/FlatView?prefix=@Model.prefix"));
         }
 
         function switch_to_master(prefix) {    //zapnout spodní panel
-            $.post("/Common/SetUserParam", { key: "grid-" + prefix + "-show11", value: "1" }, function (data) {
-                location.replace("/TheGrid/MasterView?prefix=" + prefix);
+            $.post(_ep("/Common/SetUserParam"), { key: "grid-" + prefix + "-show11", value: "1" }, function (data) {
+                location.replace(_ep("/TheGrid/MasterView?prefix=" + prefix));
 
             });
 

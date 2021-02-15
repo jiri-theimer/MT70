@@ -177,7 +177,7 @@ function myautocomplete_init(c) {
     function handle_load_options() {
         var strCurPlaceHolder = $("#" + c.controlid).attr("placeholder");
         $("#" + c.controlid).attr("placeholder", "Loading...");
-        $.post(_rp(c.posturl), { o15flag: c.o15flag }, function (data) {
+        $.post(_re(c.posturl), { o15flag: c.o15flag }, function (data) {
 
             $("#" + _listid).html(data);
 
@@ -224,7 +224,7 @@ function mycombochecklist_init(c) {
 
         if ($("#divDropdown" + c.controlid).prop("filled") === true) return;    //combo už bylo dříve otevřeno
 
-        $.post(_rp(c.posturl), { controlid: c.controlid, entity: c.entity, selectedvalues: c.selectedvalues, masterprefix: c.masterprefix, masterpid: c.masterpid, param1: c.param1 }, function (data) {
+        $.post(_r(c.posturl), { controlid: c.controlid, entity: c.entity, selectedvalues: c.selectedvalues, masterprefix: c.masterprefix, masterpid: c.masterpid, param1: c.param1 }, function (data) {
 
             $("#divData" + c.controlid).html(data);
 
@@ -349,7 +349,7 @@ function mysearch_init(c) {
 
             return;
         }
-        $.post(_rp(c.posturl) + "Setting", { controlid: c.controlid, entity: c.entity }, function (data) {
+        $.post(_re(c.posturl) + "Setting", { controlid: c.controlid, entity: c.entity }, function (data) {
 
             $("#divData" + c.controlid).html(data);
 
@@ -384,7 +384,7 @@ function mysearch_init(c) {
     function handle_mysearch_server_filtering() {
         var expr = $("#" + c.controlid).val();
 
-        $.post(_rp(c.posturl), { entity: c.entity, searchstring: expr }, function (data) {
+        $.post(_re(c.posturl), { entity: c.entity, searchstring: expr }, function (data) {
             
             $("#divData" + c.controlid).html(data);
 
@@ -428,7 +428,7 @@ function mysearch_save_setting() {
     keys.push("mysearch_closedrecs");
     vals.push($("#mysearch_closedrecs").val());
 
-    $.post(_rp("Common/SetUserParams"), { keys: keys, values: vals }, function (data) {
+    $.post(_re("Common/SetUserParams"), { keys: keys, values: vals }, function (data) {
 
         _notify_message("Nastavení bylo uloženo.", "info");
 
@@ -513,7 +513,7 @@ function myselect_focus(e, cbx, entity, textfield,orderfield) { //zpracování u
     $(cbx).val("0");
     
   
-    $.post(_rp("TheCombo/GetMySelectHtmlOptions"), { textfield: textfield, entity: entity, orderfield: orderfield }, function (data) {
+    $.post(_re("TheCombo/GetMySelectHtmlOptions"), { textfield: textfield, entity: entity, orderfield: orderfield }, function (data) {
 
         $(cbx).html(firstrow + data);
 

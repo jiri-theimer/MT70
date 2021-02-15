@@ -232,14 +232,14 @@ namespace UI.Controllers
         public string MenuNewRecord(string prefix)
         {
             DIV();
-            AMI("Klient", "_edit('p28',0)");
-            AMI("Projekt", "_edit('p41',0)");
-            AMI("Dokument", "_edit('o23',0)");
+            AMI("Klient", "javascript:_edit('p28',0)");
+            AMI("Projekt", "javascript:_edit('p41',0)");
+            AMI("Dokument", "javascript:_edit('o23',0)");
             DIV();
-            AMI("Poznámka/Odkaz/Příloha", "_edit('b07',0)");
+            AMI("Poznámka/Odkaz/Příloha", "javascript:_edit('b07',0)");
             DIV();
-            AMI("Osoba - uživatel", "_edit('j02',0)");
-            AMI("Kontaktní osoba klienta", "_edit('j02',0)");
+            AMI("Osoba - uživatel", "javascript:_edit('j02',0)");
+            AMI("Kontaktní osoba klienta", "javascript:_edit('j02',0)");
             return FlushResult_UL(true, false);
         }
 

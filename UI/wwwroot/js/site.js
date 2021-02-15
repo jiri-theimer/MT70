@@ -13,9 +13,16 @@ if (screen.availHeight > screen.availWidth || screen.width < 800 || screen.heigh
 
 }
 
-function _rp(url) {
+function _ep(url)   //vrací relativní cestu z url výrazu
+{    
+    if (url.indexOf("//") > 0) {
+        return url;
+    }
     if (_relpath==="/" && url.substring(0, 1) === "/") {
         return url;
+    }
+    if (url.substring(0, 1) === "/") {
+        url = url.substring(1, url.length - 1);
     }
     return _relpath + url;
 }
@@ -67,8 +74,8 @@ function _edit(controller, pid, header) {
             url = "/" + controller + "/record?pid=" + pid;
             break;
     }
-
-    _window_open(url, 1, header);
+   
+    _window_open(_ep(url), 1, header);
 
 }
 

@@ -26,6 +26,9 @@
 <body>
     <script type="text/javascript">
         var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
+        
+        var event_form1_beforesave = new CustomEvent("form1_beforesave", { detail: { cancel: false } });
+        
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -47,6 +50,8 @@
 
 
     }
+
+       
     </script>
 
 
@@ -90,6 +95,8 @@
 
     $(document).ready(function ()
     {
+        
+
         if (document.getElementById("link_tab1")) {
             $("#tab@(Model.ActiveTabIndex)").attr("class", "tab-pane active");
             $("#link_tab@(Model.ActiveTabIndex)").attr("class", "nav-link active");
@@ -106,10 +113,10 @@
 
         @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
-            <text>
-            _notify_message("@c.Value","@c.Key");
-            </text>
-             }
+            
+                @:_notify_message("@c.Value","@c.Key");
+            
+            }
         }
         if ($("#toolbar_changeinfo").length) {
             //události na editačních formulářích
@@ -144,6 +151,8 @@
 
 
         _init_qtip_onpage(document);
+
+       
 
     });
 
@@ -239,8 +248,8 @@
             $("#iframe_is_loading").text("");
         }
 
-
-
+        
+        
     </script>
 
     @RenderSection("Scripts", required: false)

@@ -79,7 +79,7 @@
             <input type="checkbox" asp-for="Rec.x28IsRequired" />
             <label class="col-form-label" for="Rec_x28IsRequired">@_f.tra("Povinné k vyplnění")</label>
         </div>
-       
+
         @if (Model.Rec.x24ID == BO.x24IdENUM.tString)
         {
             <div class="row my-2">
@@ -156,6 +156,31 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        
+
+        @if (Model.rec_pid > 0)
+        {
+            @:$("#Rec_x28Flag").prop("disabled", true);
+
+            @if (Model.Rec.x28Flag == BO.x28FlagENUM.UserField)
+            {
+                @:$("#Rec_x24ID").prop("disabled", true);
+                @:$("#Rec_x29ID").prop("disabled", true);
+            }
+
+
+        }
+
+
+        
+
+        document.addEventListener("form1_beforesave", function (e) {    //událost před uložením formuláře
+            e.detail.cancel = false;
+            enablefields();
+            
+        });
+
+
 
         $("#Rec_x28Flag").on("change", function () {
             postback();
@@ -180,9 +205,16 @@
 
 
 
+    function enablefields() {
+        $("#Rec_x28Flag").prop("disabled", false);
+        $("#Rec_x24ID").prop("disabled", false);
+        $("#Rec_x29ID").prop("disabled", false);
+    }
+
 
     function postback() {
-        form1.action = _rp+"x28/Record?oper=postback";
+        enablefields();
+        form1.action = _ep("x28/Record?oper=postback");
         form1.submit();
     }
 

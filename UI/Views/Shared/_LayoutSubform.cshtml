@@ -92,10 +92,10 @@
 
         @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
-            <text>
-            _notify_message("@c.Value","@c.Key");
-            </text>
-             }
+            
+                @:_notify_message("@c.Value","@c.Key");
+            
+            }
         }
 
         _init_qtip_onpage(document);

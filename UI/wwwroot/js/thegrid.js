@@ -922,7 +922,7 @@ function tg_dblclick(row) {
     var pid = row.id.replace("r", "");
 
     if (prefix === "a01" || prefix === "a03" || prefix === "j02") {
-        var url = "/" + prefix + "/RecPage?pid=" + pid;
+        var url = _ep("/" + prefix + "/RecPage?pid=" + pid);
         if (window !== top) {   //voláno uvnitř iframe
             window.open(url, "_top");
         } else {
@@ -930,18 +930,8 @@ function tg_dblclick(row) {
         }
         return;
     }
-    if (prefix === "f06") {
-        location.replace("/AdminOneForm/Index?f06id=" + pid);
-        return;
-    }
-    if (prefix === "b01") {
-        location.replace("/AdminOneWorkflow/Index?b01id=" + pid);
-        return;
-    }
-    if (prefix === "z01") {
-        _window_open("/x31/ReportNoContext?x31id=" + pid, 2);
-        return;
-    }
+    
+    
     _edit(prefix, pid);
 }
 
@@ -957,7 +947,7 @@ function tg_export(format, scope) {
 
 
     $.post(_tg_url_export, { format: format, pids: pids, tgi: get_all_tgi_params(), pathpars: get_all_path_values() }, function (data) {
-        location.replace("/FileUpload/FileDownloadTempFileNDB?tempfilename=" + data.tempfilename + "&contenttype=" + data.contenttype + "&downloadfilename=" + data.downloadfilename);
+        location.replace(_ep("/FileUpload/FileDownloadTempFileNDB?tempfilename=" + data.tempfilename + "&contenttype=" + data.contenttype + "&downloadfilename=" + data.downloadfilename));
 
 
     });
