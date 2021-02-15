@@ -86,9 +86,9 @@
                 <div class="col-sm-1 col-md-2">
                     <select asp-for="@Model.Rec.x55Skin" class="form-select">
                         <option value="">@_f.tra("Bez omezení")</option>
-                        
+
                         <option value="index">index</option>
-                        
+
                     </select>
                 </div>
             </div>
@@ -140,13 +140,13 @@
                     <td>
                         <button type="button" style="border:none;" onclick="$('#Rec_x55BoxBackColor').val(null)">&times;</button>
                     </td>
-                    <td >
+                    <td>
                         <i>@_f.tra("Černá = žádná barva!")</i>
                     </td>
                 </tr>
             </table>
-           
-          
+
+
         </div>
         <div class="tab-pane" id="tab2" role="tabpanel">
             <div class="row">
@@ -206,7 +206,6 @@
 
 </div>
 
-
 <script type="text/javascript">
     $(document).ready(function () {
         var ofs = $("#divForm").offset();
@@ -229,7 +228,7 @@
         });
 
 
-        
+
     });
 
 

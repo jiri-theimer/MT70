@@ -2,8 +2,7 @@
 @inject BL.Factory _f
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
+    
     if (Model.entity == null)
     {
         return;
@@ -11,7 +10,7 @@
 
     Model.PageTitle = Model.entityTitle;
 
-
+   
 
 }
 
@@ -22,7 +21,7 @@
         KLIENTI
         <span id="TheGridRows" class="badge bg-primary"></span>
     </div>
-
+    
     <div class="dropdown">
         <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
             <span id="TheGridIcon" class="k-icon k-i-table"></span>

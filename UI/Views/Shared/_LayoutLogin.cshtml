@@ -14,9 +14,13 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
+
 <body>
     <header>
     </header>
+    <script type="text/javascript">
+        var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
+    </script>
     <div class="container-fluid px-0">
         <div id="divLoginHeader">
             <img id="imgLoginHeader" src="/images/logo_login.jpg" />

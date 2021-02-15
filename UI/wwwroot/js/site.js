@@ -5,12 +5,19 @@ var _device = {
     availHeight: screen.availHeight,
     availWidth: screen.availWidth,
     innerWidth: window.innerWidth,
-    innerHeight: window.innerHeight
+    innerHeight: window.innerHeight    
 }
 if (screen.availHeight > screen.availWidth || screen.width < 800 || screen.height < 600) {   //mobilní zařízení výšku vyšší než šířku
     _device.isMobile = true;
     _device.type = "Phone";
 
+}
+
+function _rp(url) {
+    if (_relpath==="/" && url.substring(0, 1) === "/") {
+        return url;
+    }
+    return _relpath + url;
 }
 
 function _format_number(val) {

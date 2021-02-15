@@ -119,7 +119,7 @@ namespace UI.Views.Shared.TagHelpers
             sb(string.Format("mycombo_init(c{0})",strControlID));
 
             sb("</script>");
-
+            
             output.Content.AppendHtml(_sb.ToString());
         }
 

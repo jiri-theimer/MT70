@@ -35,7 +35,7 @@
                         @_f.CurrentUser.AppName
                     </a>
                     <div id="divMainMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdHome"></div>
-                    
+
                 </div>
 
 
@@ -58,7 +58,7 @@
                             <a class="nav-link dropdown-toggle" id="cmdAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("ADMINISTRACE")</a>
                             <ul id="ulAdmin" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdAdmin"><li>Loading....</li></ul>
                         </li>
-                       
+
                         <li class="nav-item">
                             <a class="nav-link" href="/TheGrid/MasterView?prefix=j02">Master grid J02</a>
                         </li>
@@ -89,6 +89,11 @@
             </div>
         </nav>
     </header>
+    <script type="text/javascript">
+        var _rp = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
+
+        
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
@@ -97,6 +102,7 @@
     <script src="~/js/thegrid.js" asp-append-version="true"></script>
     <script src="~/js/contextmenu.js" asp-append-version="true"></script>
 
+   
     <div>
         <main role="main" class="p-0 m-0">
             @RenderBody()
@@ -196,7 +202,7 @@
             }
 
             $.post("/Menu/" + method + "?userdevice=" + _device.type, function (data) {
-                
+
                 $("#" + ul_id).html(data);
                 $("#" + cmd_id).attr("nacteno", "1");
             })
