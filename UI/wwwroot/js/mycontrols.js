@@ -177,7 +177,7 @@ function myautocomplete_init(c) {
     function handle_load_options() {
         var strCurPlaceHolder = $("#" + c.controlid).attr("placeholder");
         $("#" + c.controlid).attr("placeholder", "Loading...");
-        $.post(_re(c.posturl), { o15flag: c.o15flag }, function (data) {
+        $.post(_ep(c.posturl), { o15flag: c.o15flag }, function (data) {
 
             $("#" + _listid).html(data);
 
@@ -224,7 +224,7 @@ function mycombochecklist_init(c) {
 
         if ($("#divDropdown" + c.controlid).prop("filled") === true) return;    //combo už bylo dříve otevřeno
 
-        $.post(_r(c.posturl), { controlid: c.controlid, entity: c.entity, selectedvalues: c.selectedvalues, masterprefix: c.masterprefix, masterpid: c.masterpid, param1: c.param1 }, function (data) {
+        $.post(_ep(c.posturl), { controlid: c.controlid, entity: c.entity, selectedvalues: c.selectedvalues, masterprefix: c.masterprefix, masterpid: c.masterpid, param1: c.param1 }, function (data) {
 
             $("#divData" + c.controlid).html(data);
 
@@ -349,7 +349,7 @@ function mysearch_init(c) {
 
             return;
         }
-        $.post(_re(c.posturl) + "Setting", { controlid: c.controlid, entity: c.entity }, function (data) {
+        $.post(_ep(c.posturl) + "Setting", { controlid: c.controlid, entity: c.entity }, function (data) {
 
             $("#divData" + c.controlid).html(data);
 
@@ -384,7 +384,7 @@ function mysearch_init(c) {
     function handle_mysearch_server_filtering() {
         var expr = $("#" + c.controlid).val();
 
-        $.post(_re(c.posturl), { entity: c.entity, searchstring: expr }, function (data) {
+        $.post(_ep(c.posturl), { entity: c.entity, searchstring: expr }, function (data) {
             
             $("#divData" + c.controlid).html(data);
 
@@ -402,7 +402,7 @@ function mysearch_init(c) {
                 if (c.on_after_search !== "") {
                     eval(c.on_after_search + "('" + pid + "')");
                 } else {
-                    location.replace("/" + c.entity.substring(0, 3) + "/Recpage?pid=" + pid);
+                    location.replace(_ep("/" + c.entity.substring(0, 3) + "/Recpage?pid=" + pid));
                 }
 
                 
