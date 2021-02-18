@@ -224,7 +224,7 @@ function mycombochecklist_init(c) {
 
         if ($("#divDropdown" + c.controlid).prop("filled") === true) return;    //combo už bylo dříve otevřeno
 
-        $.post(_ep(c.posturl), { controlid: c.controlid, entity: c.entity, selectedvalues: c.selectedvalues, masterprefix: c.masterprefix, masterpid: c.masterpid, param1: c.param1 }, function (data) {
+        $.post(_ep(c.posturl), { controlid: c.controlid, entity: c.entity, selectedvalues: c.selectedvalues, masterprefix: c.masterprefix, masterpid: c.masterpid, myqueryinline: c.myqueryinline }, function (data) {
 
             $("#divData" + c.controlid).html(data);
 

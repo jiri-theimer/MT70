@@ -39,6 +39,7 @@ namespace BL
         private Ip34ActivityGroupBL _p34;
         private Ip41ProjectBL _p41;
         private Ip42ProjectTypeBL _p42;
+        private Ip29ContactTypeBL _p29;
         private Ip85TempboxBL _p85;
         private Ix55WidgetBL _x55;
         private Ix67EntityRoleBL _x67;
@@ -292,6 +293,14 @@ namespace BL
             {
                 if (_p42 == null) _p42 = new p42ProjectTypeBL(this);
                 return _p42;
+            }
+        }
+        public Ip29ContactTypeBL p29ContactTypeBL
+        {
+            get
+            {
+                if (_p29 == null) _p29 = new p29ContactTypeBL(this);
+                return _p29;
             }
         }
 

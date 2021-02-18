@@ -151,6 +151,33 @@
             </div>
         </div>
     }
+
+    @if(Model.lisX26 != null)
+    {
+        <table class="table table-sm table-hover">
+        @for(int i=0;i<Model.lisX26.Count();i++)
+        {
+            <tr>
+                <td>
+                    @(Model.lisX26[i].EntityTypeName):
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@Model.lisX26[i].IsChecked" />
+                    <input type="hidden" asp-for="@Model.lisX26[i].x29ID_EntityType" />
+                    <input type="hidden" asp-for="@Model.lisX26[i].x26EntityTypePID" />
+                    <label for="lisX26_@(i)__IsChecked">@_f.tra("Vyplňovat pole")</label>
+                </td>
+
+                <td>
+                    <input type="checkbox" asp-for="@Model.lisX26[i].x26IsEntryRequired" />
+
+                    <label for="lisX26_@(i)__x26IsEntryRequired">@_f.tra("Povinné k vyplnění")</label>
+                </td>
+
+            </tr>
+        }
+        </table>
+    }
 </div>
 
 
@@ -183,22 +210,22 @@
 
 
         $("#Rec_x28Flag").on("change", function () {
-            postback();
+            postback("postback");
 
         });
 
         $("#Rec_x29ID").on("change", function () {
-            postback();
+            postback("x29id");
 
         });
 
         $("#Rec_x24ID").on("change", function () {
-            postback();
+            postback("postback");
 
         });
 
         $("#Rec_x28IsPublic").on("change", function () {
-            postback();
+            postback("postback");
 
         });
     });
@@ -212,9 +239,9 @@
     }
 
 
-    function postback() {
+    function postback(oper) {
         enablefields();
-        form1.action = _ep("x28/Record?oper=postback");
+        form1.action = _ep("x28/Record?oper=" + oper);
         form1.submit();
     }
 

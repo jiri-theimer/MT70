@@ -162,13 +162,9 @@ namespace UI.Controllers
 
 
         //zdroj checkboxů pro taghelper mycombochecklist:
-        public string GetHtml4Checkboxlist(string controlid, string entity, string selectedvalues, string masterprefix, int masterpid, string param1) //Vrací HTML seznam checkboxů pro taghelper: mycombochecklist
+        public string GetHtml4Checkboxlist(string controlid, string entity, string selectedvalues, string masterprefix, int masterpid, string myqueryinline) //Vrací HTML seznam checkboxů pro taghelper: mycombochecklist
         {            
-            var mq = new BO.InitMyQuery().Load(entity,masterprefix,masterpid);
-            if (string.IsNullOrEmpty(param1) == false)
-            {
-                mq.param1 = param1;
-            }
+            var mq = new BO.InitMyQuery().Load(entity,masterprefix,masterpid,myqueryinline);
             
             mq.explicit_columns = _colsProvider.getDefaultPallete(false, mq);
             var ce = Factory.EProvider.ByPrefix(mq.Prefix);

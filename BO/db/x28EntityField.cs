@@ -62,7 +62,7 @@ namespace BO
 
         protected string x29Name { get; }
      
-        protected string x27Name { get; }
+        public string x27Name { get; }
         
        
         public string TypeName { get; }
@@ -70,6 +70,7 @@ namespace BO
         protected string x23Name { get; }
       
         protected string x23DataSource { get; }
+        
        
 
         public string SourceTableName

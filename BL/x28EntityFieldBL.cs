@@ -10,7 +10,8 @@ namespace BL
     {
         public BO.x28EntityField Load(int pid);
         public IEnumerable<BO.x28EntityField> GetList(BO.myQuery mq);
-        public int Save(BO.x28EntityField rec);
+        public int Save(BO.x28EntityField rec,List<BO.x26EntityField_Binding> lisX26);
+        public IEnumerable<BO.x26EntityField_Binding> GetList_x26(int x28id);
 
     }
     class x28EntityFieldBL : BaseBL, Ix28EntityFieldBL
@@ -40,10 +41,14 @@ namespace BL
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.x28EntityField>(fq.FinalSql, fq.Parameters);
         }
+        public IEnumerable<BO.x26EntityField_Binding> GetList_x26(int x28id)
+        {
+            return _db.GetList<BO.x26EntityField_Binding>("select *,convert(bit,1) as IsChecked from x26EntityField_Binding where x28ID=@pid", new { pid = x28id });
+        }
 
 
 
-        public int Save(BO.x28EntityField rec)
+        public int Save(BO.x28EntityField rec, List<BO.x26EntityField_Binding> lisX26)
         {
             if (string.IsNullOrEmpty(rec.x28Field) && rec.x28Flag == BO.x28FlagENUM.UserField)
             {
@@ -67,6 +72,10 @@ namespace BL
             p.AddBool("x28IsRequired", rec.x28IsRequired);
             p.AddBool("x28IsAllEntityTypes", rec.x28IsAllEntityTypes);
             p.AddBool("x28IsPublic", rec.x28IsPublic);
+            if (rec.x28IsPublic)
+            {
+                rec.x28NotPublic_j04IDs = null; rec.x28NotPublic_j07IDs = null;
+            }
             p.AddString("x28NotPublic_j04IDs", rec.x28NotPublic_j04IDs);
             p.AddString("x28NotPublic_j07IDs", rec.x28NotPublic_j07IDs);
 
@@ -86,7 +95,20 @@ namespace BL
 
             p.AddString("x28HelpText", rec.x28HelpText);
 
-            return _db.SaveRecord("x28EntityField", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("x28EntityField", p.getDynamicDapperPars(), rec);
+            if (lisX26 != null)
+            {
+                if (intPID > 0)
+                {
+                    _db.RunSql("DELETE FROM x26EntityField_Binding WHERE x28ID=@pid", new { pid = intPID });
+                    foreach(var c in lisX26.Where(p=>p.IsChecked))
+                    {
+                        _db.RunSql("INSERT INTO x26EntityField_Binding(x28ID,x26EntityTypePID,x29ID_EntityType,x26IsEntryRequired) VALUES(@pid,@typepid,@x29id,@b)",new { pid=intPID, typepid=c.x26EntityTypePID, x29id=c.x29ID_EntityType,b=c.x26IsEntryRequired});
+                    }
+                }
+            }
+
+            return intPID;
         }
         private bool ValidateBeforeSave(BO.x28EntityField rec)
         {
@@ -127,7 +149,13 @@ namespace BL
             {
                 this.AddMessage("Chybí vyplnit [Název]."); return false;
             }
-            
+            if (!rec.x28IsPublic)
+            {
+                if (string.IsNullOrEmpty(rec.x28NotPublic_j04IDs) && string.IsNullOrEmpty(rec.x28NotPublic_j07IDs))
+                {
+                    this.AddMessage("Pokud pole není dostupné všem uživatelům, zaškrtněte okruh rolí nebo pozic.");return false;
+                }
+            }
             
 
             return true;

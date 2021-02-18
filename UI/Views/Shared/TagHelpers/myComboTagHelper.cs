@@ -28,7 +28,7 @@ namespace UI.Views.Shared.TagHelpers
 
         [HtmlAttributeName("placeholder")]
         public string PlaceHolder { get; set; }
-        //public string Param1 { get; set; }
+        
         public string myqueryinline { get; set; }
 
         [HtmlAttributeName("masterpid")]
