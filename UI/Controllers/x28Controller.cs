@@ -39,6 +39,7 @@ namespace UI.Controllers
             }
             else
             {
+                v.Rec.x28IsAllEntityTypes = true;
                 v.Rec.x28Flag = BO.x28FlagENUM.UserField;
                 v.Rec.x29ID = BO.x29IdEnum.p41Project;
                 v.Rec.x24ID = BO.x24IdENUM.tInteger;
@@ -91,6 +92,13 @@ namespace UI.Controllers
                         foreach (var c in lis3)
                         {
                             v.lisX26.Add(new BO.x26EntityField_Binding() { EntityTypeName = c.p29Name, x26EntityTypePID = c.pid, x29ID_EntityType=329 });
+                        }
+                        break;
+                    case BO.x29IdEnum.j02Person:
+                        var lis4 = Factory.j07PersonPositionBL.GetList(new BO.myQuery("j07"));
+                        foreach (var c in lis4)
+                        {
+                            v.lisX26.Add(new BO.x26EntityField_Binding() { EntityTypeName = c.j07Name, x26EntityTypePID = c.pid, x29ID_EntityType = 107 });
                         }
                         break;
                     case BO.x29IdEnum.p91Invoice:

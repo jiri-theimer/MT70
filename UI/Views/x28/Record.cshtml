@@ -152,7 +152,29 @@
         </div>
     }
 
-    @if(Model.lisX26 != null)
+<div class="my-2">
+    <input type="checkbox" asp-for="Rec.x28IsAllEntityTypes" />
+    @switch (Model.Rec.x29ID)
+    {
+        case BO.x29IdEnum.p41Project:
+            <label class="col-form-label" for="Rec_x28IsAllEntityTypes">@_f.tra("Pole je použitelné pro všechny typy projektů")</label>
+            break;
+        case BO.x29IdEnum.p31Worksheet:
+            <label class="col-form-label" for="Rec_x28IsAllEntityTypes">@_f.tra("Pole je použitelné pro všechny sešity")</label>
+            break;
+        case BO.x29IdEnum.p28Contact:
+            <label class="col-form-label" for="Rec_x28IsAllEntityTypes">@_f.tra("Pole je použitelné pro všechny typy klientů")</label>
+            break;
+        case BO.x29IdEnum.p91Invoice:
+            <label class="col-form-label" for="Rec_x28IsAllEntityTypes">@_f.tra("Pole je použitelné pro všechny typy faktur")</label>
+            break;
+        case BO.x29IdEnum.j02Person:
+            <label class="col-form-label" for="Rec_x28IsAllEntityTypes">@_f.tra("Pole je použitelné pro všechny pozice")</label>
+            break;
+    }
+
+</div>
+    @if(Model.lisX26 != null && !Model.Rec.x28IsAllEntityTypes)
     {
         <table class="table table-sm table-hover">
         @for(int i=0;i<Model.lisX26.Count();i++)
@@ -211,23 +233,25 @@
 
         $("#Rec_x28Flag").on("change", function () {
             postback("postback");
-
         });
 
         $("#Rec_x29ID").on("change", function () {
             postback("x29id");
-
         });
 
         $("#Rec_x24ID").on("change", function () {
             postback("postback");
-
         });
 
         $("#Rec_x28IsPublic").on("change", function () {
             postback("postback");
-
         });
+
+        $("#Rec_x28IsAllEntityTypes").on("change", function () {
+            postback("postback");
+        });
+
+        
     });
 
 
