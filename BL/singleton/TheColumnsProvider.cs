@@ -396,7 +396,8 @@ namespace BL
             AF("x38CodeLogic", "x38Name", "Číselná řada", 1, null, "string", false, true);            
             AF("x38CodeLogic", "x38ConstantBeforeValue", "Konstanta před", 1);
             AF("x38CodeLogic", "x38ConstantAfterValue", "Konstanta za", 1);
-            AF("x38CodeLogic", "x38Scale", "Rozsah", 1,null, "num0");
+            AF("x38CodeLogic", "x38Scale", "Rozsah nul", 1,null, "num0");
+            AF("x38CodeLogic", "Maska", "Min-Max", 0, "case when a.x38MaskSyntax IS NULL then ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('000000001',a.x38Scale)+' - '+ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('99999999999',a.x38Scale) else a.x38MaskSyntax end");
             AppendTimestamp("x38CodeLogic");
 
             //x55 = dashboard widget
