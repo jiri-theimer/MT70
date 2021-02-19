@@ -69,8 +69,7 @@ namespace BL
             p.AddInt("x23ID", rec.x23ID, true);
             p.AddString("x28datasource", rec.x28DataSource);
             p.AddBool("x28IsFixedDataSource", rec.x28IsFixedDataSource);
-            p.AddBool("x28IsRequired", rec.x28IsRequired);
-            p.AddBool("x28IsAllEntityTypes", rec.x28IsAllEntityTypes);
+            p.AddBool("x28IsRequired", rec.x28IsRequired);            
             p.AddBool("x28IsPublic", rec.x28IsPublic);
             if (rec.x28IsPublic)
             {
@@ -94,18 +93,25 @@ namespace BL
             p.AddInt("x28TextboxWidth", rec.x28TextboxWidth);
 
             p.AddString("x28HelpText", rec.x28HelpText);
+            p.AddBool("x28IsAllEntityTypes", rec.x28IsAllEntityTypes);
 
             int intPID = _db.SaveRecord("x28EntityField", p.getDynamicDapperPars(), rec);
             if (lisX26 != null)
             {
-                if (intPID > 0)
+                rec.x28IsAllEntityTypes = true;
+                if (rec.pid > 0 && intPID>0)
                 {
                     _db.RunSql("DELETE FROM x26EntityField_Binding WHERE x28ID=@pid", new { pid = intPID });
-                    foreach(var c in lisX26.Where(p=>p.IsChecked))
+                }
+                if (intPID > 0)
+                {
+                    foreach (var c in lisX26.Where(p => p.IsChecked))
                     {
-                        _db.RunSql("INSERT INTO x26EntityField_Binding(x28ID,x26EntityTypePID,x29ID_EntityType,x26IsEntryRequired) VALUES(@pid,@typepid,@x29id,@b)",new { pid=intPID, typepid=c.x26EntityTypePID, x29id=c.x29ID_EntityType,b=c.x26IsEntryRequired});
+                        _db.RunSql("INSERT INTO x26EntityField_Binding(x28ID,x26EntityTypePID,x29ID_EntityType,x26IsEntryRequired) VALUES(@pid,@typepid,@x29id,@b)", new { pid = intPID, typepid = c.x26EntityTypePID, x29id = c.x29ID_EntityType, b = c.x26IsEntryRequired });
+                        rec.x28IsAllEntityTypes = false;
                     }
                 }
+                _db.RunSql("UPDATE x28EntityField set x28IsAllEntityTypes=@b WHERE x28ID=@pid", new { pid = intPID, b = rec.x28IsAllEntityTypes });
             }
 
             return intPID;
@@ -166,7 +172,7 @@ namespace BL
         {
 
             string stype = x24id.ToString().ToLower();
-            stype = stype.Substring(1, stype.Length);
+            stype = stype.Substring(1, stype.Length-1);
 
             return _db.Load<BO.GetString>("select dbo.x28_getFirstUsableField('" + strPrefix + "','" + stype + "'," + intX23ID.ToString() + ") as Value").Value;
         }

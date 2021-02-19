@@ -42,7 +42,7 @@ namespace UI.Controllers
                 v.Rec.x28IsAllEntityTypes = true;
                 v.Rec.x28Flag = BO.x28FlagENUM.UserField;
                 v.Rec.x29ID = BO.x29IdEnum.p41Project;
-                v.Rec.x24ID = BO.x24IdENUM.tInteger;
+                v.Rec.x24ID = BO.x24IdENUM.tString;
             }
             RefreshState(v);
             if (v.rec_pid > 0)

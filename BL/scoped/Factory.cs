@@ -45,7 +45,9 @@ namespace BL
         private Ix67EntityRoleBL _x67;
         private Ic21FondCalendarBL _c21;
         private Ic26HolidayBL _c26;
+        private Ix27EntityFieldGroupBL _x27;
         private Ix28EntityFieldBL _x28;
+        private Ix38CodeLogicBL _x38;
 
         public Factory(BO.RunningUser ru,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
@@ -312,12 +314,28 @@ namespace BL
                 return _p85;
             }
         }
+        public Ix27EntityFieldGroupBL x27EntityFieldGroupBL
+        {
+            get
+            {
+                if (_x27 == null) _x27 = new x27EntityFieldGroupBL(this);
+                return _x27;
+            }
+        }
         public Ix28EntityFieldBL x28EntityFieldBL
         {
             get
             {
                 if (_x28 == null) _x28 = new x28EntityFieldBL(this);
                 return _x28;
+            }
+        }
+        public Ix38CodeLogicBL x38CodeLogicBL
+        {
+            get
+            {
+                if (_x38 == null) _x38 = new x38CodeLogicBL(this);
+                return _x38;
             }
         }
         public Ix55WidgetBL x55WidgetBL

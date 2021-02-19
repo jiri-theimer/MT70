@@ -6,7 +6,6 @@ namespace BO
    
     public class o27Attachment:BaseBO
     {
-        [Key]
         
         public int o13ID { get; set; }
         public int b07ID { get; set; }
