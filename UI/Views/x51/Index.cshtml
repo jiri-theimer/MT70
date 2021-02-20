@@ -1,0 +1,100 @@
+﻿@model UI.Models.Recpage.x51RecPage
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Nápověda");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+
+}
+
+@addTagHelper *, UI
+
+
+<div class="bg-light" style="padding:0px;margin:0px;">
+
+    @if (Model.Rec != null)
+    {
+
+        <div style="padding:10px;">
+            <h4>@Model.Rec.x51Name</h4>
+            <div>
+                <i>
+                    @Model.InputViewUrl
+                </i>
+
+                @if (_f.CurrentUser.TestPermission(BO.x53PermValEnum.GR_Admin))
+                {
+
+                    <a class="btn btn-primary" style="margin-left:20px;" href="/x51/Record?source=helppage&pid=@(Model.Rec.pid)">@_f.tra("Upravit")</a>
+
+                }
+                <a class="btn btn-light" style="margin-left:20px;" href="/x51/Index?listflag=1&viewurl=@Model.InputViewUrl">@_f.tra("Rejstřík")</a>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div>
+            <div class="row" style="padding:0px;margin:0px;">
+                <div class="col-auto">
+                    <h4>@Model.InputViewUrl</h4>
+
+                </div>
+                <div class="col-auto">
+                    <code>@Model.PageTitle</code>
+                </div>
+                <div class="col-auto">
+                    @if (_f.CurrentUser.TestPermission(BO.x53PermValEnum.GR_Admin))
+                    {
+                        <a class="btn btn-primary" href="/x51/Record?source=helppage&pid=0&viewurl=@Model.InputViewUrl&pagetitle=@Model.PageTitle">@_f.tra("Založit záznam nápovědy")</a>
+
+                    }
+                </div>
+            </div>
+
+
+        </div>
+
+
+    }
+
+
+</div>
+
+@if (Model.lisNear != null)
+{
+    <div class="row" style="padding:0px;margin:0px;">
+        <div class="col-sm-9 col-md-9">
+            @Html.Raw(Model.HtmlContent)
+
+        </div>
+        <div class="col-sm-3 col-md-3">
+            @foreach (var c in Model.lisNear)
+            {
+                <div title="@(@c.UserInsert+"/"+BO.BAS.ObjectDateTime2String(c.DateInsert))">
+
+                    @if (Model.Rec != null && c.pid == Model.Rec.pid)
+                    {
+
+                        <a class="nav-link selected" href="/x51/Index?listflag=@Model.NearListFlag&viewurl=@c.x51ViewUrl"><img src="~/images/bullet6.gif" />@c.x51Name</a>
+                    }
+                    else
+                    {
+                        <a class="nav-link" href="/x51/Index?listflag=@Model.NearListFlag&viewurl=@c.x51ViewUrl"><img src="~/images/bullet6.gif" />@c.x51Name</a>
+                    }
+
+                </div>
+            }
+        </div>
+    </div>
+
+
+
+}
+else
+{
+    @Html.Raw(Model.HtmlContent)
+}
+
+

@@ -67,7 +67,7 @@ namespace BO
         public bool MyRecordsDisponible { get; set; }
         public bool? IsRecordValid { get; set; }
         public List<int> o51ids { get; set; }
-
+        public int x29id { get; set; }
         
         public DateTime? global_d1;
         private DateTime? _global_d2;
@@ -135,6 +135,10 @@ namespace BO
                 {
                     AQ("GETDATE() NOT BETWEEN a." + _prefix + "ValidFrom AND a." + _prefix + "ValidUntil", "", null);
                 }
+            }
+            if (this.x29id > 0)
+            {
+                AQ("a.x29ID=@x29id", "x29id", this.x29id);
             }
             if (this.o51ids != null && this.o51ids.Count > 0)
             {

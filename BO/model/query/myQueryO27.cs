@@ -10,8 +10,7 @@ namespace BO
         public int x40id { get; set; }
         public int x31id { get; set; }
         public int b07id { get; set; }
-        
-        public int x29id { get; set; }
+                
         public int recpid { get; set; }
         public string tempguid { get; set; }
 

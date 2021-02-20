@@ -1,0 +1,42 @@
+﻿@model UI.Models.Record.j18Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Středisko");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-7 col-md-6">
+            <input class="form-control" asp-for="Rec.j18Name" />
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Index pořadí"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.j18Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kód"):</label>
+        <div class="col-sm-5 col-md-4">
+            <input class="form-control" asp-for="Rec.j18Code" />
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("DPH region"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name" view-flag="2"></mycombo>
+        </div>
+
+    </div>
+
+    
+
+
+</div>

@@ -129,6 +129,7 @@ namespace BL
             AE_TINY("x38CodeLogic", "Číselné řady", "Číselná řada");
             AE_TINY("x46EventNotification", "Aplikační události", "Událost");
 
+            AE_TINY("x51HelpCore", "Uživatelská nápověda", "Uživatelská nápověda");
             AE_TINY("x55Widget", "Widgety", "Widget");
             AE_TINY("x91Translate", "Aplikační překlad", "Aplikační překlad");
             ByPrefix("x91").IsWithoutValidity = true;

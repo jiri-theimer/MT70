@@ -30,14 +30,14 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Číselná řada"):</label>
         <div class="col-sm-7 col-md-6">
-            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" view-flag="2" param1="a.x29ID=141"></mycombo>
+            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" view-flag="2" myqueryinline="x29id@int@141"></mycombo>
         </div>
 
     </div>
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Workflow šablona"):</label>
         <div class="col-sm-7 col-md-6">
-            <mycombo entity="b01WorkflowTemplate" asp-for="Rec.b01ID" selectedtext="@Model.ComboB01Name" view-flag="2" param1="a.x29ID=141"></mycombo>
+            <mycombo entity="b01WorkflowTemplate" asp-for="Rec.b01ID" selectedtext="@Model.ComboB01Name" view-flag="2" myqueryinline="x29id@int@141"></mycombo>
         </div>
 
     </div>

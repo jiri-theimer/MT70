@@ -28,6 +28,8 @@ namespace BL
         private Ij04UserRoleBL _j04;
         private Ij07PersonPositionBL _j07;
         private Ij11TeamBL _j11;
+        private Ij17CountryBL _j17;
+        private Ij18RegionBL _j18;
         private Io15AutoCompleteBL _o15;
         private Io13AttachmentTypeBL _o13;
         private Io27AttachmentBL _o27;
@@ -41,6 +43,7 @@ namespace BL
         private Ip42ProjectTypeBL _p42;
         private Ip29ContactTypeBL _p29;
         private Ip85TempboxBL _p85;
+        private Ix51HelpCoreBL _x51;
         private Ix55WidgetBL _x55;
         private Ix67EntityRoleBL _x67;
         private Ic21FondCalendarBL _c21;
@@ -187,6 +190,22 @@ namespace BL
             {
                 if (_j11 == null) _j11 = new j11TeamBL(this);
                 return _j11;
+            }
+        }
+        public Ij17CountryBL j17CountryBL
+        {
+            get
+            {
+                if (_j17 == null) _j17 = new j17CountryBL(this);
+                return _j17;
+            }
+        }
+        public Ij18RegionBL j18RegionBL
+        {
+            get
+            {
+                if (_j18 == null) _j18 = new j18RegionBL(this);
+                return _j18;
             }
         }
         public Io15AutoCompleteBL o15AutoCompleteBL
@@ -336,6 +355,14 @@ namespace BL
             {
                 if (_x38 == null) _x38 = new x38CodeLogicBL(this);
                 return _x38;
+            }
+        }
+        public Ix51HelpCoreBL x51HelpCoreBL
+        {
+            get
+            {
+                if (_x51 == null) _x51 = new x51HelpCoreBL(this);
+                return _x51;
             }
         }
         public Ix55WidgetBL x55WidgetBL

@@ -400,6 +400,13 @@ namespace BL
             AF("x38CodeLogic", "Maska", "Min-Max", 0, "case when a.x38MaskSyntax IS NULL then ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('000000001',a.x38Scale)+' - '+ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('99999999999',a.x38Scale) else a.x38MaskSyntax end");
             AppendTimestamp("x38CodeLogic");
 
+            //x51 = nápověda
+            AF("x51HelpCore", "x51Name", "Nápověda", 1, null, "string", false, true);
+            AF("x51HelpCore", "x51ViewUrl", "View Url", 2);
+            AF("x51HelpCore", "x51NearUrls", "Související Urls", 2);
+            AF("x51HelpCore", "x51ExternalUrl", "Externí Url");
+            AppendTimestamp("x51HelpCore");
+
             //x55 = dashboard widget
             AF("x55Widget", "x55Name", "Widget", 1, null, "string", false, true);
             AF("x55Widget", "x55Code", "Kód widgetu", 0, null, "string", false, true);
