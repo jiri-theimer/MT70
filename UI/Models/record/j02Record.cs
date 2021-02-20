@@ -15,5 +15,7 @@ namespace UI.Models.Record
 
         
         public string p34Names { get; set; }
+
+        public int RadioIsIntraPerson { get; set; }
     }
 }

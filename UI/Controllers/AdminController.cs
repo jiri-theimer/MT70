@@ -243,11 +243,22 @@ namespace UI.Controllers
 
         private TheGridInput GetGridInput(string entity,string prefix,int go2pid,List<string> viewstate)
         {
+            string strMyQueryInline = null;
+            switch (prefix)
+            {
+                case "j02":
+                    strMyQueryInline = "j02isintraperson@bool@1";
+                    break;
+            }
+
             var gi = new TheGridInput();
             gi.controllername = "Admin";
             gi.entity = entity;
             gi.go2pid = go2pid;
-            gi.query = new BO.InitMyQuery().Load(prefix);
+            gi.ondblclick = "handle_dblclick";
+
+            gi.query = new BO.InitMyQuery().Load(prefix,null,0, strMyQueryInline);
+            
             gi.j72id = Factory.CBL.LoadUserParamInt("Admin/" + prefix + "-j72id");
             
             if (viewstate != null)

@@ -30,6 +30,23 @@
     <div class="tab-content">
         <div class="tab-pane" id="tab1" role="tabpanel">
             <!-- Tab1 -->
+
+            @if (Model.rec_pid == 0)
+            {
+                <div class="card">
+                    <div class="card-body">
+
+                        <input type="radio" id="RadioIsIntraPerson1" asp-for="@Model.RadioIsIntraPerson" value="1">
+                        <label for="RadioIsIntraPerson1">@_f.tra("Osobní profil s uživatelským účtem")</label>
+                        <br />
+                        <input type="radio" id="RadioIsIntraPerson0" asp-for="@Model.RadioIsIntraPerson" value="0">
+                        <label for="RadioIsIntraPerson0">@_f.tra("Kontaktní osoba klienta")</label>
+
+                    </div>
+                </div>
+            }
+
+
             <div class="row">
                 <div class="col-sm-2 col-md-2">
                     <myautocomplete asp-for="Rec.j02TitleBeforeName" o15flag="1" placeholder="@_f.tra("Titul")"></myautocomplete>
@@ -170,7 +187,7 @@
                 </div>
                 <div class="card-body">
                     <select asp-for="@Model.Rec.j02WorksheetAccessFlag" class="form-select">
-                        <option value=""></option>
+                        <option value="0"></option>
                         <option value="1">@_f.tra("Nemá přístup k vyúčtovaným úkonům (vč. vlastních)")</option>
 
                     </select>

@@ -56,19 +56,33 @@ namespace UI.Controllers
         //Test probíhá po spuštění každé Akce:
         public override void OnActionExecuted(Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext context)
         {
-            if (ModelState.IsValid == false)
+            if (!ModelState.IsValid)
             {
-                var modelErrors = new List<string>();
-                foreach (var ms in ModelState.Values)
+                foreach (var modelError in ModelState)
                 {
-                    foreach (var modelError in ms.Errors)
+                    string propertyName = modelError.Key;                    
+                    if (modelError.Value.Errors.Count > 0)
                     {
-                        
-                        modelErrors.Add(modelError.ErrorMessage);
-                        
-                        Factory.CurrentUser.AddMessage(context.HttpContext.Request.Path+" | "+Factory.tra("Kontrola chyb")+": "+modelError.ErrorMessage);
+                        var s = context.HttpContext.Request.Path + " | " + Factory.tra("Chyba v poli") + " [" + propertyName + "]: " + modelError.Value.Errors.First().ErrorMessage;
+                        Factory.CurrentUser.AddMessage(s);
                     }
                 }
+
+                //var Errors = ModelState.Keys.Where(i => ModelState[i].Errors.Count > 0).Select(k => new KeyValuePair<string, string>(k, ModelState[k].Errors.First().ErrorMessage));
+
+                //var modelErrors = new List<string>();
+                //foreach (var ms in ModelState.Values)
+                //{
+                    
+                //    foreach (var modelError in ms.Errors)
+                //    {
+                        
+                //        modelErrors.Add(modelError.ErrorMessage);
+                        
+                //        Factory.CurrentUser.AddMessage(context.HttpContext.Request.Path+" | "+Factory.tra("Kontrola chyb")+": "+modelError.ErrorMessage+ ModelState.Keys.ToString());
+                //    }
+                    
+                //}
             }
             
             base.OnActionExecuted(context);

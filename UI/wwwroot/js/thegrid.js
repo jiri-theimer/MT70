@@ -921,7 +921,7 @@ function tg_dblclick(row) {
     var prefix = _tg_entity.substr(0, 3);
     var pid = row.id.replace("r", "");
 
-    if (prefix === "a01" || prefix === "a03" || prefix === "j02") {
+    if (prefix === "p41" || prefix === "p28" || prefix==="p91" || prefix === "j02") {
         var url = _ep("/" + prefix + "/RecPage?pid=" + pid);
         if (window !== top) {   //voláno uvnitř iframe
             window.open(url, "_top");

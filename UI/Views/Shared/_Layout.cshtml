@@ -45,8 +45,8 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="cmdNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
-                            <ul id="ulNew" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdNew"><li>Loading....</li></ul>
+                            <a class="nav-link dropdown-toggle" id="cmdMainMenuNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
+                            <ul id="ulNew" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdMainMenuNew"><li>Loading....</li></ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Dashboard/Index">DASHBOARD</a>
@@ -168,7 +168,7 @@
             });
 
             register_menu("cmdHome", "divMainMenu", "MainMenu");
-            register_menu("cmdNew", "ulNew", "MenuNewRecord");
+            register_menu("cmdMainMenuNew", "ulNew", "MenuNewRecord");
             register_menu("cmdLangIndex", "ulLangIndex","CurrentUserLangIndex");
             register_menu("cmdFontSize", "ulFontSize", "CurrentUserFontSize");
             register_menu("cmdMyProfile", "ulMyProfile", "CurrentUserMyProfile");

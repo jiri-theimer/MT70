@@ -141,6 +141,10 @@ namespace UI.Controllers
                     
                 }
             }
+            else
+            {
+                v.RadioIsIntraPerson = 1;
+            }
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)
             {
@@ -153,11 +157,25 @@ namespace UI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Record(Models.Record.j02Record v)
         {
-
+            
             if (ModelState.IsValid)
             {
                 BO.j02Person c = new BO.j02Person();
-                if (v.rec_pid > 0) c = Factory.j02PersonBL.Load(v.rec_pid);
+                if (v.rec_pid > 0)
+                {
+                    c = Factory.j02PersonBL.Load(v.rec_pid);
+                }
+                else
+                {
+                    if (v.RadioIsIntraPerson == 1)
+                    {
+                        c.j02IsIntraPerson = true;
+                    }
+                    else
+                    {
+                        c.j02IsIntraPerson = false;
+                    }
+                }
                 c.j07ID = v.Rec.j07ID;
                 c.c21ID = v.Rec.c21ID;
                 c.j18ID = v.Rec.j18ID;
@@ -185,8 +203,6 @@ namespace UI.Controllers
                 c.pid = Factory.j02PersonBL.Save(c);
                 if (c.pid > 0)
                 {
-                    
-
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);
                 }

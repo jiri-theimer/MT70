@@ -40,7 +40,7 @@
     <div class="nonmobile ml-2 col-auto">
         <a class="btn btn-light" href="/Admin/Users?prefix=@Model.prefix" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
     </div>
-    @if (Model.prefix == "j03" || Model.prefix == "j02" || Model.prefix == "j02" || Model.prefix == "j04" || Model.prefix == "j11" || Model.prefix == "j40" || Model.prefix == "x55")
+    @if (Model.prefix != "j92" && Model.prefix != "j90" || Model.prefix == "j04" && Model.prefix != "x40")
     {
         <div class="ml-2 col-auto">
             <button id="cmdNew" type="button" class="btn btn-primary">@_f.tra("Nový záznam")</button>
@@ -88,7 +88,8 @@
         });
 
         $("#cmdNew").click(function () {
-            var url = "/@(Model.prefix)/Record?pid=0";
+            var url = _ep("/@(Model.prefix)/Record?pid=0");
+            
             _window_open(url,1,"@Model.entityTitleSingle");
         });
 
@@ -112,6 +113,14 @@
             });
         }
 
+
+
+    function handle_dblclick(row) {
+        var prefix = "@Model.prefix";
+        var pid = row.id.replace("r", "");
+        
+        _edit(prefix, pid);
+    }
 </script>
 
 

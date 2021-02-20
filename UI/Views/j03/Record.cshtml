@@ -106,7 +106,7 @@
         {
             <div id="divPersonalProfileBind" class="card-body">
 
-                <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.ComboPerson" filter-flag="1" placeholder="@_f.tra("Vybrat osobní profil")..."></mycombo>
+                <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.ComboPerson" filter-flag="1" myqueryinline="j02isintraperson@bool@1" placeholder="@_f.tra("Vybrat osobní profil")..."></mycombo>
 
             </div>
         }
