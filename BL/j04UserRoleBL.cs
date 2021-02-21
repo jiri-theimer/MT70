@@ -10,8 +10,9 @@ namespace BL
         public BO.j04UserRole Load(int pid);
         public IEnumerable<BO.j04UserRole> GetList(BO.myQueryJ04 mq);
         public int Save(BO.j04UserRole rec, List<int> x53ids);
+        public IEnumerable<BO.x53Permission> GetList_BoundX53(int j04id);
 
-        
+
     }
     class j04UserRoleBL: BaseBL,Ij04UserRoleBL
     {
@@ -37,8 +38,12 @@ namespace BL
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.j04UserRole>(fq.FinalSql, fq.Parameters);
         }
+        public IEnumerable<BO.x53Permission> GetList_BoundX53(int j04id)
+        {
+            string s = "SELECT a.* FROM x53Permission a inner join x68EntityRole_Permission b On a.x53ID=b.x53ID INNER JOIN x67EntityRole c ON b.x67ID=c.x67ID INNER JOIN j04UserRole d ON c.x67ID=d.x67ID WHERE d.j04ID=@j04id ORDER BY x53Ordinary";
+            return _db.GetList<BO.x53Permission>(s, new { j04id = j04id });
+        }
 
-    
         public int Save(BO.j04UserRole rec,List<int>x53ids)
         {
             if (ValidateBeforeSave(rec, x53ids) == false)

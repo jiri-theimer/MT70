@@ -258,6 +258,7 @@ namespace UI.Controllers
             gi.ondblclick = "handle_dblclick";
 
             gi.query = new BO.InitMyQuery().Load(prefix,null,0, strMyQueryInline);
+            gi.query.IsRecordValid = null;
             
             gi.j72id = Factory.CBL.LoadUserParamInt("Admin/" + prefix + "-j72id");
             

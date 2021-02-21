@@ -65,7 +65,7 @@ namespace BO
         public List<BO.TheGridColumnFilter> TheGridFilter { get; set; }     //sloupcový filtr
         public IEnumerable<BO.j73TheGridQuery> lisJ73 { get; set; }         //uložený filtr z návrháře sloupců
         public bool MyRecordsDisponible { get; set; }
-        public bool? IsRecordValid { get; set; }
+        public bool? IsRecordValid { get; set; } = true;
         public List<int> o51ids { get; set; }
         public int x29id { get; set; }
         

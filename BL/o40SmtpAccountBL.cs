@@ -73,7 +73,7 @@ namespace BL
         {
             if (string.IsNullOrEmpty(rec.o40Name))
             {
-                this.AddMessage("Chybí vyplnit [Název]."); return false;
+                this.AddMessage("Chybí vyplnit [Jméno odesílatele]."); return false;
             }
             if (string.IsNullOrEmpty(rec.o40EmailAddress))
             {

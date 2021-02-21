@@ -1,0 +1,59 @@
+﻿@model UI.Models.Record.j04Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Aplikační role");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.j04Name" />
+        </div>
+        
+    </div>
+    
+
+   <div class="row my-2">
+       <div class="col-auto">
+           <div class="card">
+               <div class="card-header">
+                   @_f.tra("Oprávnění aplikační role")
+               </div>
+               <div class="card-body">
+                   <mycheckboxlist asp-for="@Model.SelectedX53IDs" datasource="@Model.lisAllX53" valuefield="x53ID" textfield="x53Name"></mycheckboxlist>
+               </div>
+           </div>
+       </div>
+       <div class="col-auto">
+           <div class="card">
+               <div class="card-header">
+                   @_f.tra("Přístupné moduly")
+               </div>
+               <div class="card-body">
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Worksheet" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_Worksheet">@_f.tra("ÚKONY")</label>
+                   </div>
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Project" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_Project">@_f.tra("PROJEKTY")</label>
+                   </div>
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Contact" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_Contact">@_f.tra("KLIENTI")</label>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+
+
+    
+
+</div>

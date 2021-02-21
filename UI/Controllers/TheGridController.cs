@@ -216,6 +216,7 @@ namespace UI.Controllers
                
                 default:
                     v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, myqueryinline);
+                    v.gridinput.query.IsRecordValid = null;
                     break;
             }
 
