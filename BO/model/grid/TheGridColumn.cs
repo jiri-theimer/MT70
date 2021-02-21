@@ -4,6 +4,13 @@ using System.Text;
 
 namespace BO
 {
+    public enum TheGridDefColFlag
+    {
+        _none = 0,
+        GridAndCombo = 1,
+        GridOnly = 2,
+        ComboOnly = 3
+    }
     public class TheGridColumn
     {
         private string _CssClass;
@@ -18,7 +25,7 @@ namespace BO
         public string TranslateLang2 { get; set; }
         public string TranslateLang3 { get; set; }
         public string SqlSyntax { get; set; }
-        public int DefaultColumnFlag { get; set; }  //1 - default grid sloupec i combo sloupec, 2 - pouze default grid sloupec
+        public TheGridDefColFlag DefaultColumnFlag { get; set; }
         public string DesignerGroup { get; set; }
         public bool IsSortable { get; set; } = true;
         public bool IsFilterable { get; set; } = true;

@@ -117,6 +117,7 @@ namespace BL
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura rozpisu částky faktury", "p80InvoiceAmountStructure a", "a.p80Name");
             AE("p89ProformaType", "Typy záloh", "Typ zálohy", "p89ProformaType a", "a.p89Name");
 
+            AE("o40SmtpAccount", "Poštovní účty", "Poštovní účet", "o40SmtpAccount a", "a.o40ID DESC");
             AE("x29Entity", "Entity", "Entita", "x29Entity a","a.x29Name");
             ByPrefix("x29").IsWithoutValidity = true;
             AE("x15VatRateType", "Entity", "Entita", "x15VatRateType a", "a.x15Ordinary");
@@ -220,6 +221,9 @@ namespace BL
                     break;
                 case "x31":
                     lis.Add(getREL("x29Entity", "x31_x29", "Kontext", "LEFT OUTER JOIN x29Entity x31_x29 ON a.x29ID=x31_x29.x29ID"));
+                    break;
+                case "o40":
+                    lis.Add(getREL("j02Person", "o40_j02", "Osoba", "LEFT OUTER JOIN j02Person o40_j02 ON a.j02ID_Owner=o40_j02.j02ID"));
                     break;
                 default:
                     break;

@@ -122,7 +122,7 @@ namespace UI.Controllers
             AMI("LOGIN Log", url_users("j90"));
             
             DIV_TRANS("Pošta");
-            AMI("Poštovní účty", url_users("j40"));
+            AMI("SMTP poštovní účty", url_users("o40"));
             AMI("OUTBOX", url_users("x40"));
             AMI("MAIL fronta", "/mail/MailBatchFramework");
                        

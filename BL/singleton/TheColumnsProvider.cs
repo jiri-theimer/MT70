@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BL
 {
+    
     public class TheColumnsProvider
     {
         //private readonly BL.RunningApp _app;
@@ -56,14 +57,14 @@ namespace BL
             
         }
 
-        private BO.TheGridColumn AF(string strEntity, string strField, string strHeader, int intDefaultFlag = 0, string strSqlSyntax = null, string strFieldType = "string", bool bolIsShowTotals = false,bool bolNotShowRelInHeader=false,string strGroup=null)
+        private BO.TheGridColumn AF(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf=BO.TheGridDefColFlag._none, string strSqlSyntax = null, string strFieldType = "string", bool bolIsShowTotals = false,bool bolNotShowRelInHeader=false,string strGroup=null)
         {
             if (strEntity != _lastEntity)
             {
                 _curEntityAlias = _ep.ByTable(strEntity).AliasSingular;
             }
            
-            _lis.Add(new BO.TheGridColumn() { Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, DefaultColumnFlag = intDefaultFlag, SqlSyntax = strSqlSyntax, FieldType = strFieldType, IsShowTotals = bolIsShowTotals,NotShowRelInHeader= bolNotShowRelInHeader,FixedWidth= SetDefaultColWidth(strFieldType),TranslateLang1=strHeader,TranslateLang2=strHeader,TranslateLang3=strHeader,DesignerGroup=strGroup });
+            _lis.Add(new BO.TheGridColumn() { Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, DefaultColumnFlag = dcf, SqlSyntax = strSqlSyntax, FieldType = strFieldType, IsShowTotals = bolIsShowTotals,NotShowRelInHeader= bolNotShowRelInHeader,FixedWidth= SetDefaultColWidth(strFieldType),TranslateLang1=strHeader,TranslateLang2=strHeader,TranslateLang3=strHeader,DesignerGroup=strGroup });
             _lastEntity = strEntity;
             return _lis[_lis.Count - 1];
         }
@@ -123,24 +124,27 @@ namespace BL
         private void SetupPallete()
         {
             BO.TheGridColumn onecol;
+            BO.TheGridDefColFlag gdc1 = BO.TheGridDefColFlag.GridAndCombo;
+            BO.TheGridDefColFlag gdc0 = BO.TheGridDefColFlag._none;
+            BO.TheGridDefColFlag gdc2 = BO.TheGridDefColFlag.GridOnly;
 
             SetupJ02();
             SetupP28();
             SetupP91();
             
             //j03 = uživatelé
-            AF("j03User", "j03Login", "Login", 1,null,"string",false,true);
-            AF("j03User", "j04Name", "Role", 1, "j03_j04.j04Name","string",false,true);
-            AF("j03User", "Lang", "Jazyk", 1, "case isnull(a.j03LangIndex,0) when 0 then 'Česky' when 1 then 'English' when 4 then 'Slovenčina' end");
-            AF("j03User", "j03Ping_TimeStamp", "Last ping", 0, "a.j03PingTimestamp", "datetime");
-            AF("j03User", "j03IsDebugLog", "Debug log", 0, null, "bool");
+            AF("j03User", "j03Login", "Login", gdc1, null,"string",false,true);
+            AF("j03User", "j04Name", "Role", gdc1, "j03_j04.j04Name","string",false,true);
+            AF("j03User", "Lang", "Jazyk", gdc1, "case isnull(a.j03LangIndex,0) when 0 then 'Česky' when 1 then 'English' when 4 then 'Slovenčina' end");
+            AF("j03User", "j03Ping_TimeStamp", "Last ping", gdc0, "a.j03PingTimestamp", "datetime");
+            AF("j03User", "j03IsDebugLog", "Debug log", gdc0, null, "bool");
             AppendTimestamp("j03User");
             
-            AF("j04UserRole", "j04Name", "Aplikační role", 1,null,"string",false,true);
+            AF("j04UserRole", "j04Name", "Aplikační role", gdc1, null,"string",false,true);
             AppendTimestamp("j04UserRole");
 
-            AF("j07PersonPosition", "j07Name", "Pozice", 1, null, "string", false, true);
-            AF("j07PersonPosition", "j07Ordinary", "#", 2, null, "num0");
+            AF("j07PersonPosition", "j07Name", "Pozice", gdc1, null, "string", false, true);
+            AF("j07PersonPosition", "j07Ordinary", "#", gdc1, null, "num0");
             AF("j07PersonPosition", "j07Name_BillingLang1", "Fakturační jazyk #1");
             AF("j07PersonPosition", "j07Name_BillingLang2", "Fakturační jazyk #2");
             AF("j07PersonPosition", "j07Name_BillingLang3", "Fakturační jazyk #3");
@@ -149,133 +153,133 @@ namespace BL
             AF("j07PersonPosition", "j07FreeText02", "Volné pole #2");
             AppendTimestamp("j07PersonPosition");
 
-            AF("j18Region", "j18Name", "Středisko", 1, null, "string", false, true);
-            AF("j18Region", "j18Ordinary", "#", 2, null, "num0");
+            AF("j18Region", "j18Name", "Středisko", gdc1, null, "string", false, true);
+            AF("j18Region", "j18Ordinary", "#", gdc2, null, "num0");
             AF("j18Region", "j18Code", "Kód");
             AppendTimestamp("j18Region");
 
-            AF("j17Country", "j17Name", "Region", 1, null, "string", false, true);
-            AF("j17Country", "j17Ordinary", "#", 2, null, "num0");
+            AF("j17Country", "j17Name", "Region", gdc1, null, "string", false, true);
+            AF("j17Country", "j17Ordinary", "#", gdc0, null, "num0");
             AF("j17Country", "j17Code", "Kód");
             AppendTimestamp("j17Country");
 
-            AF("c21FondCalendar", "c21Name", "Název fondu", 1, null, "string", false, true);
-            AF("c21FondCalendar", "c21Ordinary", "#", 2, null, "num0");
+            AF("c21FondCalendar", "c21Name", "Název fondu", gdc1, null, "string", false, true);
+            AF("c21FondCalendar", "c21Ordinary", "#", gdc2, null, "num0");
             AppendTimestamp("c21FondCalendar");
 
-            AF("c26Holiday", "c26Date", "Datum", 1, null, "date");
-            AF("c26Holiday", "c26Name", "Název svátku", 1, null, "string", false, true);            
+            AF("c26Holiday", "c26Date", "Datum", gdc1, null, "date");
+            AF("c26Holiday", "c26Name", "Název svátku", gdc1, null, "string", false, true);            
             AppendTimestamp("c26Holiday");
 
-            AF("j11Team", "j11Name", "Tým osob", 1, null, "string", false, true);
+            AF("j11Team", "j11Name", "Tým osob", gdc1, null, "string", false, true);
             AppendTimestamp("j11Team");
 
-            AF("j25ReportCategory", "j25Name", "Kategorie sestav", 1, null, "string", false, true);
-            AF("j25ReportCategory", "j25Ordinary", "#", 2, null, "num0");
+            AF("j25ReportCategory", "j25Name", "Kategorie sestav", gdc1, null, "string", false, true);
+            AF("j25ReportCategory", "j25Ordinary", "#", gdc2, null, "num0");
             AppendTimestamp("j25ReportCategory");
 
-            AF("j27Currency", "j27Code", "Měna", 1, null, "string", false, true);
+            AF("j27Currency", "j27Code", "Měna", gdc1, null, "string", false, true);
             AF("j27Currency", "j27Name", "Název měny");
 
 
             //b01 = workflow šablona            
-            AF("b01WorkflowTemplate", "b01Name", "Workflow šablona", 1, null, "string", false, true);
-            onecol=AF("b01WorkflowTemplate", "b01Code", "Kód", 2);
+            AF("b01WorkflowTemplate", "b01Name", "Workflow šablona", gdc1, null, "string", false, true);
+            onecol=AF("b01WorkflowTemplate", "b01Code", "Kód", gdc2);
             onecol.FixedWidth = 70;
             AppendTimestamp("b01WorkflowTemplate");
 
             //b02 = workflow stav            
             //AF("b02WorkflowStatus", "b02Name", "Stav", 1, null, "string", false, true);
-            AF("b02WorkflowStatus", "b02Name", "Stav", 1);
-            onecol =AF("b02WorkflowStatus", "b02Ident", "Kód stavu", 1);
+            AF("b02WorkflowStatus", "b02Name", "Stav", gdc1);
+            onecol =AF("b02WorkflowStatus", "b02Ident", "Kód stavu", gdc1);
             onecol.FixedWidth = 70;
-            AF("b02WorkflowStatus", "b02IsDefaultStatus", "Výchozí stav", 2, null, "bool");
-            AF("b02WorkflowStatus", "b02IsHoldStatus", "Záchytný stav", 2, null, "bool");
-            AF("b02WorkflowStatus", "b02Order", "#", 2, null, "num0");           
+            AF("b02WorkflowStatus", "b02IsDefaultStatus", "Výchozí stav", gdc2, null, "bool");
+            //AF("b02WorkflowStatus", "b02IsHoldStatus", "Záchytný stav", 2, null, "bool");
+            AF("b02WorkflowStatus", "b02Order", "#", gdc2, null, "num0");           
             AppendTimestamp("b02WorkflowStatus");
 
 
 
 
             //b05 = workflow historie          
-            AF("b05Workflow_History", "Kdy", "Čas", 1, "a.b05DateInsert", "datetime");
-            AF("b05Workflow_History", "b05Comment", "Text", 1, null, "string", false, true);
+            AF("b05Workflow_History", "Kdy", "Čas", gdc1, "a.b05DateInsert", "datetime");
+            AF("b05Workflow_History", "b05Comment", "Text", gdc1, null, "string", false, true);
             
-            AF("b05Workflow_History", "b05IsCommentOnly", "Pouze komentář", 2, null, "bool");
+            AF("b05Workflow_History", "b05IsCommentOnly", "Pouze komentář", gdc2, null, "bool");
             AF("b05Workflow_History", "b05IsManualStep", "Ruční krok", 0, null, "bool");
-            AF("b05Workflow_History", "b05IsNominee", "Nominace řešitele", 2, null, "bool");
-            AF("b05Workflow_History", "b05IsCommentRestriction", "Interní komentář", 2, null, "bool");            
+            AF("b05Workflow_History", "b05IsNominee", "Nominace řešitele", gdc2, null, "bool");
+            AF("b05Workflow_History", "b05IsCommentRestriction", "Interní komentář", gdc2, null, "bool");            
             AppendTimestamp("b05Workflow_History",false);
 
             //b06 = workflow krok
-            AF("b06WorkflowStep", "b06Name", "Workflow krok", 1, null, "string", false, true);
-            AF("b06WorkflowStep", "b06Order", "#", 2, null, "num0");
+            AF("b06WorkflowStep", "b06Name", "Workflow krok", gdc1, null, "string", false, true);
+            AF("b06WorkflowStep", "b06Order", "#", gdc2, null, "num0");
             AppendTimestamp("b06WorkflowStep");
 
             //b65 = notifikační šablona
-            AF("b65WorkflowMessage", "b65Name", "Notifikační šablona", 1, null, "string", false, true);
-            AF("b65WorkflowMessage", "b65MessageSubject", "Předmět zprávy", 2);
-            AF("b65WorkflowMessage", "SystemFlag", "🚩", 1, "case when isnull(a.b65SystemFlag,0)>0 then '<div style='+char(34)+'background-color:red;'+char(34)+'>&nbsp;</div>' end");
+            AF("b65WorkflowMessage", "b65Name", "Notifikační šablona",gdc1, null, "string", false, true);
+            AF("b65WorkflowMessage", "b65MessageSubject", "Předmět zprávy", gdc2);
+            AF("b65WorkflowMessage", "SystemFlag", "🚩", gdc1, "case when isnull(a.b65SystemFlag,0)>0 then '<div style='+char(34)+'background-color:red;'+char(34)+'>&nbsp;</div>' end");
             AppendTimestamp("b65WorkflowMessage");
             
             
             //j90 = access log uživatelů
-            AF("j90LoginAccessLog", "j90Date", "Čas", 1, null, "datetime");
-            AF("j90LoginAccessLog", "j90BrowserFamily", "Prohlížeč", 1);
-            AF("j90LoginAccessLog", "j90Platform", "OS", 1);
+            AF("j90LoginAccessLog", "j90Date", "Čas", gdc1, null, "datetime");
+            AF("j90LoginAccessLog", "j90BrowserFamily", "Prohlížeč", gdc1);
+            AF("j90LoginAccessLog", "j90Platform", "OS", gdc1);
             AF("j90LoginAccessLog", "j90BrowserDeviceType", "Device");
-            AF("j90LoginAccessLog", "j90ScreenPixelsWidth", "Šířka (px)", 1);
-            AF("j90LoginAccessLog", "j90ScreenPixelsHeight", "Výška (px)", 1);
-            AF("j90LoginAccessLog", "j90UserHostAddress", "Host", 1);
-            AF("j90LoginAccessLog", "j90LoginMessage", "Chyba", 1);
-            AF("j90LoginAccessLog", "j90CookieExpiresInHours", "Expirace přihlášení", 1, null, "num0");
-            AF("j90LoginAccessLog", "j90LoginName", "Login", 1);
+            AF("j90LoginAccessLog", "j90ScreenPixelsWidth", "Šířka (px)", gdc1);
+            AF("j90LoginAccessLog", "j90ScreenPixelsHeight", "Výška (px)", gdc1);
+            AF("j90LoginAccessLog", "j90UserHostAddress", "Host", gdc1);
+            AF("j90LoginAccessLog", "j90LoginMessage", "Chyba", gdc1);
+            AF("j90LoginAccessLog", "j90CookieExpiresInHours", "Expirace přihlášení", gdc1, null, "num0");
+            AF("j90LoginAccessLog", "j90LoginName", "Login", gdc1);
 
             //j92 = ping log uživatelů
-            AF("j92PingLog", "j92Date", "Čas", 1, null, "datetime");
-            AF("j92PingLog", "j92BrowserFamily", "Prohlížeč", 1);
-            AF("j92PingLog", "j92BrowserOS", "OS", 1);
-            AF("j92PingLog", "j92BrowserDeviceType", "Device", 1);
-            AF("j92PingLog", "j92BrowserAvailWidth", "Šířka (px)", 1);
-            AF("j92PingLog", "j92BrowserAvailHeight", "Výška (px)", 1);
-            AF("j92PingLog", "j92RequestURL", "Url", 1);
+            AF("j92PingLog", "j92Date", "Čas", gdc1, null, "datetime");
+            AF("j92PingLog", "j92BrowserFamily", "Prohlížeč", gdc1);
+            AF("j92PingLog", "j92BrowserOS", "OS", gdc1);
+            AF("j92PingLog", "j92BrowserDeviceType", "Device", gdc1);
+            AF("j92PingLog", "j92BrowserAvailWidth", "Šířka (px)", gdc1);
+            AF("j92PingLog", "j92BrowserAvailHeight", "Výška (px)", gdc1);
+            AF("j92PingLog", "j92RequestURL", "Url", gdc1);
 
 
-            AF("o15AutoComplete", "o15Value", "Hodnota", 1);
-            AF("o15AutoComplete", "o15Flag", "Typ dat", 1, "case a.o15Flag when 1 then 'Titul před' when 2 then 'Titul za' when 3 then 'Pracovní funkce' when 328 then 'Stát' when 427 then 'URL adresa' end");
-            AF("o15AutoComplete", "o15Ordinary", "#", 2, null, "num0");
+            AF("o15AutoComplete", "o15Value", "Hodnota", gdc1);
+            AF("o15AutoComplete", "o15Flag", "Typ dat", gdc1, "case a.o15Flag when 1 then 'Titul před' when 2 then 'Titul za' when 3 then 'Pracovní funkce' when 328 then 'Stát' when 427 then 'URL adresa' end");
+            AF("o15AutoComplete", "o15Ordinary", "#", gdc2, null, "num0");
 
-            AF("p07ProjectLevel", "p07NameSingular", "Úroveň", 1, null, "string", false, true);
-            AF("p07ProjectLevel", "p07Level", "Index úrovně", 1, null, "num0",false,true);
-            AF("p07ProjectLevel", "p07NamePlural", "Množné číslo",2);
+            AF("p07ProjectLevel", "p07NameSingular", "Úroveň", gdc1, null, "string", false, true);
+            AF("p07ProjectLevel", "p07Level", "Index úrovně", gdc1, null, "num0",false,true);
+            AF("p07ProjectLevel", "p07NamePlural", "Množné číslo", gdc2);
             AF("p07ProjectLevel", "p07NameInflection", "Koho čeho");
             AppendTimestamp("p07ProjectLevel");
 
-            AF("p42ProjectType", "p42Name", "Typ", 1, null, "string", false, true);
+            AF("p42ProjectType", "p42Name", "Typ", gdc1, null, "string", false, true);
             AF("p42ProjectType", "p42Code", "Kód");
-            AF("p42ProjectType", "p42Ordinary", "#", 0, null, "num0");
+            AF("p42ProjectType", "p42Ordinary", "#", gdc0, null, "num0");
             AppendTimestamp("p42ProjectType");
 
-            AF("p51PriceList", "p51TypeFlag", "Typ ceníku", 1, "case a.p51TypeFlag when 1 then 'Fakturační sazby' when 2 then 'Nákladové sazby' when 3 then 'Režijní sazby' when 5 then 'Kořenový (ROOT) ceník' when 4 then 'Efektivní sazby' end", "string", false, true);
-            AF("p51PriceList", "p51Name", "Pojmenovaný ceník", 1, null, "string", false, true);
-            AF("p51PriceList", "p51DefaultRateT", "Výchozí hod.sazba",0,null,"num");
-            AF("p51PriceList", "p51Ordinary", "#", 0, null, "num0");
-            AF("p51PriceList", "p51IsCustomTailor", "Sazby na míru", 0, null, "bool");
+            AF("p51PriceList", "p51TypeFlag", "Typ ceníku", gdc2, "case a.p51TypeFlag when 1 then 'Fakturační sazby' when 2 then 'Nákladové sazby' when 3 then 'Režijní sazby' when 5 then 'Kořenový (ROOT) ceník' when 4 then 'Efektivní sazby' end", "string", false, true);
+            AF("p51PriceList", "p51Name", "Pojmenovaný ceník", gdc1, null, "string", false, true);
+            AF("p51PriceList", "p51DefaultRateT", "Výchozí hod.sazba", gdc0, null,"num");
+            AF("p51PriceList", "p51Ordinary", "#", gdc0, null, "num0");
+            AF("p51PriceList", "p51IsCustomTailor", "Sazby na míru",gdc2, null, "bool");
             AppendTimestamp("p51PriceList");
 
-            AF("p34ActivityGroup", "p34Name", "Sešit", 1, null, "string", false, true);
-            AF("p34ActivityGroup", "p34Code", "Kód", 2);
-            AF("p34ActivityGroup", "p33ID", "Vstupí data", 1, "case a.p33ID when 1 then 'Čas' when 2 then 'Peníze bez DPH' when 3 then 'Kusovník' when 5 then 'Peníze+DPH' end");
+            AF("p34ActivityGroup", "p34Name", "Sešit", gdc1, null, "string", false, true);
+            AF("p34ActivityGroup", "p34Code", "Kód", gdc2);
+            AF("p34ActivityGroup", "p33ID", "Vstupí data", gdc2, "case a.p33ID when 1 then 'Čas' when 2 then 'Peníze bez DPH' when 3 then 'Kusovník' when 5 then 'Peníze+DPH' end");
             AppendTimestamp("p34ActivityGroup");
 
-            AF("p32Activity", "p32Name", "Aktivita", 1, null, "string", false, true);
-            AF("p32Activity", "p32Code", "Kód", 2);
-            AF("p32Activity", "p32IsBillable", "Fakturovatelný úkon", 1, null, "bool");
-            AF("p32Activity", "p32Ordinary", "#", 2, null, "num0");
-            AF("p32Activity", "p32IsTextRequired", "Povinný text úkonu", 2, null, "bool");            
-            AF("p32Activity", "p32Value_Default", "Výchozí hodnota úkonu", 0, null, "num");
-            AF("p32Activity", "p32Value_Minimum", "MIN", 0, null, "num");
-            AF("p32Activity", "p32Value_Maximum", "MAX", 0, null, "num");            
+            AF("p32Activity", "p32Name", "Aktivita", gdc1, null, "string", false, true);
+            AF("p32Activity", "p32Code", "Kód", gdc2);
+            AF("p32Activity", "p32IsBillable", "Fakturovatelný úkon", gdc2, null, "bool");
+            AF("p32Activity", "p32Ordinary", "#", gdc2, null, "num0");
+            AF("p32Activity", "p32IsTextRequired", "Povinný text úkonu", gdc2, null, "bool");            
+            AF("p32Activity", "p32Value_Default", "Výchozí hodnota úkonu", gdc0, null, "num");
+            AF("p32Activity", "p32Value_Minimum", "MIN", gdc0, null, "num");
+            AF("p32Activity", "p32Value_Maximum", "MAX", gdc0, null, "num");            
             AF("p32Activity", "p32DefaultWorksheetText", "Výchozí text úkonu");
             AF("p32Activity", "p32Name_BillingLang1", "Aktivita €1");
             AF("p32Activity", "p32Name_BillingLang2", "Aktivita €2");
@@ -283,98 +287,105 @@ namespace BL
             AF("p32Activity", "p32Name_BillingLang4", "Aktivita €4");
             AppendTimestamp("p32Activity");
 
-            AF("p38ActivityTag", "p38Name", "Odvětví aktivity", 1, null, "string", false, true);
-            AF("p38ActivityTag", "p38Ordinary", "#", 2, null, "num0");
+            AF("p38ActivityTag", "p38Name", "Odvětví aktivity", gdc1, null, "string", false, true);
+            AF("p38ActivityTag", "p38Ordinary", "#", gdc2, null, "num0");
             AppendTimestamp("p38ActivityTag");
 
-            AF("p36LockPeriod", "p36DateFrom", "Od", 1, null, "date");
-            AF("p36LockPeriod", "p36DateUntil", "Do", 1, null, "date");
-            AF("p36LockPeriod", "p36IsAllSheets", "Všechny sešity", 2, null,"bool");
-            AF("p36LockPeriod", "p36IsAllPersons", "Všechny osoby", 2, null, "bool");            
+            AF("p36LockPeriod", "p36DateFrom", "Od", gdc1, null, "date");
+            AF("p36LockPeriod", "p36DateUntil", "Do", gdc1, null, "date");
+            AF("p36LockPeriod", "p36IsAllSheets", "Všechny sešity", gdc2, null,"bool");
+            AF("p36LockPeriod", "p36IsAllPersons", "Všechny osoby", gdc2, null, "bool");            
             AppendTimestamp("p36LockPeriod");
 
-            AF("p53VatRate", "p53Value", "Sazba DPH", 1, null, "num", false,true);
+            AF("p53VatRate", "p53Value", "Sazba DPH", gdc1, null, "num", false,true);
             AppendTimestamp("p53VatRate");
 
-            AF("p61ActivityCluster", "p61Name", "Klast aktivit", 1, null, "string", false, true);            
+            AF("p61ActivityCluster", "p61Name", "Klast aktivit", gdc1, null, "string", false, true);            
             AppendTimestamp("p61ActivityCluster");
 
-            AF("p63Overhead", "p63Name", "Režijní přirážka", 1, null, "string", false, true);
+            AF("p63Overhead", "p63Name", "Režijní přirážka", gdc1, null, "string", false, true);
             AppendTimestamp("p63Overhead");
 
-            AF("p80InvoiceAmountStructure", "p80Name", "Název rozpisu", 1, null, "string",false,true);
-            AF("p80InvoiceAmountStructure", "p80IsTimeSeparate", "Čas 1:1", 2, null, "bool");
-            AF("p80InvoiceAmountStructure", "p80IsExpenseSeparate", "Výdaje 1:1", 2, null, "bool");
-            AF("p80InvoiceAmountStructure", "p80IsFeeSeparate", "Pevné odměny 1:1", 2, null, "bool");
+            AF("p80InvoiceAmountStructure", "p80Name", "Název rozpisu", gdc1, null, "string",false,true);
+            AF("p80InvoiceAmountStructure", "p80IsTimeSeparate", "Čas 1:1", gdc2, null, "bool");
+            AF("p80InvoiceAmountStructure", "p80IsExpenseSeparate", "Výdaje 1:1", gdc2, null, "bool");
+            AF("p80InvoiceAmountStructure", "p80IsFeeSeparate", "Pevné odměny 1:1", gdc2, null, "bool");
             AppendTimestamp("p80InvoiceAmountStructure");
 
-            AF("p92InvoiceType", "p92Name", "Typ faktury", 1, null, "string", false, true);
-            AF("p92InvoiceType", "p92Ordinary", "#", 2, null, "num0");
+            AF("p92InvoiceType", "p92Name", "Typ faktury", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
+            AF("p92InvoiceType", "p92Ordinary", "#", gdc2, null, "num0");
             AppendTimestamp("p92InvoiceType");
 
-            AF("p98Invoice_Round_Setting_Template", "p98Name", "Zaokrouhlovací pravidlo", 1, null, "string", false, true);
-            AF("p98Invoice_Round_Setting_Template", "p98IsDefault", "Výchozí pravidlo", 2, null, "bool");
+            AF("p98Invoice_Round_Setting_Template", "p98Name", "Zaokrouhlovací pravidlo", gdc1, null, "string", false, true);
+            AF("p98Invoice_Round_Setting_Template", "p98IsDefault", "Výchozí pravidlo", gdc2, null, "bool");
             AppendTimestamp("p98Invoice_Round_Setting_Template");
             
 
-            AF("p89ProformaType", "p89Name", "Typ zálohy", 1, null, "string", false, true);
+            AF("p89ProformaType", "p89Name", "Typ zálohy", gdc1, null, "string", false, true);
             AppendTimestamp("p89ProformaType");            
 
-            AF("p93InvoiceHeader", "p93Name", "Vystavovatel faktury", 1, null, "string", false, true);
-            AF("p93InvoiceHeader", "p93Company", "Firma",1);
-            AF("p93InvoiceHeader", "p93RegID", "IČ",2);
-            AF("p93InvoiceHeader", "p93VatID", "DIČ",2);
+            AF("p93InvoiceHeader", "p93Name", "Vystavovatel faktury", gdc1, null, "string", false, true);
+            AF("p93InvoiceHeader", "p93Company", "Firma",gdc2);
+            AF("p93InvoiceHeader", "p93RegID", "IČ",gdc2);
+            AF("p93InvoiceHeader", "p93VatID", "DIČ",gdc2);
             AF("p93InvoiceHeader", "p93City", "Město");
             AF("p93InvoiceHeader", "p93Street", "Ulice");
             AF("p93InvoiceHeader", "p93Zip", "PSČ");            
             AppendTimestamp("p93InvoiceHeader");
 
-            AF("p86BankAccount", "p86Name", "Bankovní účet", 1, null, "string", false, true);
-            AF("p86BankAccount", "p86BankAccount", "Číslo účtu",1);
-            AF("p86BankAccount", "p86BankCode", "Kód banky", 1);
-            AF("p86BankAccount", "p93Names", "Vazba na vystavovatele faktur", 2, "dbo.p86_get_p93names(a.p86ID)");
+            AF("p86BankAccount", "p86Name", "Bankovní účet", gdc2, null, "string", false, true);
+            AF("p86BankAccount", "p86BankAccount", "Číslo účtu", gdc1);
+            AF("p86BankAccount", "p86BankCode", "Kód banky", gdc1);
+            AF("p86BankAccount", "p93Names", "Vazba na vystavovatele faktur", gdc2, "dbo.p86_get_p93names(a.p86ID)");
             AF("p86BankAccount", "p86BankName", "Banka");
             AF("p86BankAccount", "p86SWIFT", "SWIFT");
             AF("p86BankAccount", "p86IBAN", "IBAN");
             AF("p86BankAccount", "p86BankAddress", "Adresa banky");
             AppendTimestamp("p86BankAccount");
 
-            AF("p95InvoiceRow", "p95Name", "Fakturační oddíl", 1, null, "string", false, true);
+            AF("p95InvoiceRow", "p95Name", "Fakturační oddíl", gdc1, null, "string", false, true);
             AF("p95InvoiceRow", "p95Code", "Kód");
-            AF("p95InvoiceRow", "p95Ordinary", "#", 2, null, "num0");
+            AF("p95InvoiceRow", "p95Ordinary", "#", gdc2, null, "num0");
             AF("p95InvoiceRow", "p95Name_BillingLang1", "Název €1");
             AF("p95InvoiceRow", "p95Name_BillingLang2", "Název €2");
             AF("p95InvoiceRow", "p95Name_BillingLang3", "Název €3");
             AF("p95InvoiceRow", "p95Name_BillingLang4", "Název €4");
             AppendTimestamp("p95InvoiceRow");
 
-            AF("p35Unit", "p35Name", "Kusovníková jednotka", 1, null, "string", false, true);                        
+            AF("p35Unit", "p35Name", "Kusovníková jednotka", gdc1, null, "string", false, true);
+
+
+            //o40 = smtp poštovní účty                        
+            AF("o40SmtpAccount", "o40Name", "Jméno odesílatele", gdc1, null, "string", false, true);
+            AF("o40SmtpAccount", "o40Server", "Smtp server", gdc2);
+            AF("o40SmtpAccount", "o40EmailAddress", "Adresa odesílatele", gdc1);
+            AF("o40SmtpAccount", "o40Port", "Smtp Port", gdc2, null, "num0");
 
             //x40 = OUTBOX            
-            AF("x40MailQueue", "MessageTime", "Čas", 1, "case when a.x40DatetimeProcessed is not null then a.x40DatetimeProcessed else a.x40DateInsert end", "datetime",false,true);            
+            AF("x40MailQueue", "MessageTime", "Čas", gdc1, "case when a.x40DatetimeProcessed is not null then a.x40DatetimeProcessed else a.x40DateInsert end", "datetime",false,true);            
             AF("x40MailQueue", "x40SenderName", "Odesílatel", 0);
             AF("x40MailQueue", "x40SenderAddress", "Odesílatel (adresa)");
-            AF("x40MailQueue", "x40Recipient", "Komu", 1);
+            AF("x40MailQueue", "x40Recipient", "Komu", BO.TheGridDefColFlag.GridAndCombo);
             AF("x40MailQueue", "x40CC", "Cc");
             AF("x40MailQueue", "x40BCC", "Bcc");
-            AF("x40MailQueue", "x40Status", "Stav", 1, "case a.x40Status when 1 then 'Čeká na odeslání' when 2 then 'Chyba' when 3 then 'Odesláno' when 4 then 'Zastaveno' when 5 then 'Čeká na schválení' end");
-            AF("x40MailQueue", "x40Subject", "Předmět zprávy", 1);
-            AF("x40MailQueue", "x40Body", "Text zprávy", 1, "convert(varchar(150),a.x40Body)+'...'");
+            AF("x40MailQueue", "x40Status", "Stav", BO.TheGridDefColFlag.GridAndCombo, "case a.x40Status when 1 then 'Čeká na odeslání' when 2 then 'Chyba' when 3 then 'Odesláno' when 4 then 'Zastaveno' when 5 then 'Čeká na schválení' end");
+            AF("x40MailQueue", "x40Subject", "Předmět zprávy", BO.TheGridDefColFlag.GridAndCombo);
+            AF("x40MailQueue", "x40Body", "Text zprávy", BO.TheGridDefColFlag.GridAndCombo, "convert(varchar(150),a.x40Body)+'...'");
             AF("x40MailQueue", "x40Attachments", "Přílohy");
             AF("x40MailQueue", "x40EmlFileSize_KB", "Velikost (kB)", 0, "a.x40EmlFileSize/1024", "num0", true);
             AF("x40MailQueue", "x40EmlFileSize_MB", "Velikost (MB)", 0, "convert(float,a.x40EmlFileSize)/1048576", "num", true);
-            AF("x40MailQueue", "x40ErrorMessage", "Chyba", 1);
+            AF("x40MailQueue", "x40ErrorMessage", "Chyba", BO.TheGridDefColFlag.GridAndCombo);
 
 
 
             //x31 = tisková sestava            
-            AF("x31Report", "x31Name", "Tisková sestava", 1, null, "string", false, true);
-            AF("x31Report", "RepFormat", "Formát", 1, "case a.x31FormatFlag when 1 then 'REPORT' when 2 then 'DOCX' when 3 then 'PLUGIN' when 4 then 'XLS' end");
+            AF("x31Report", "x31Name", "Tisková sestava",gdc1, null, "string", false, true);
+            AF("x31Report", "RepFormat", "Formát",gdc1, "case a.x31FormatFlag when 1 then 'REPORT' when 2 then 'DOCX' when 3 then 'PLUGIN' when 4 then 'XLS' end");
             AF("x31Report", "x31Code", "Kód sestavy");
             AF("x31Report", "x31IsPeriodRequired", "Filtr čaového období", 0, null, "bool");
             
-            AF("x31Report", "x31FileName", "Soubor šablony", 1);
-            AF("x31Report", "x31Ordinary", "#", 1, null, "num0");
+            AF("x31Report", "x31FileName", "Soubor šablony", gdc1);
+            AF("x31Report", "x31Ordinary", "#",gdc1, null, "num0");
             
             AF("x31Report", "x31ExportFileNameMask", "Maska export souboru");            
             AF("x31Report", "x31IsScheduling", "Pravidelné odesílání");
@@ -382,56 +393,56 @@ namespace BL
             AppendTimestamp("x31Report");
 
             //uživatelská pole
-            AF("x28EntityField", "x28Name", "Uživatelské pole", 1, null, "string", false, true);
-            AF("x28EntityField", "x28Field", "Fyzický název", 1);            
-            AF("x28EntityField", "x28IsRequired", "Povinné",1,null,"bool");            
-            AF("x28EntityField", "x28Ordinary", "#", 1, null, "num0");
+            AF("x28EntityField", "x28Name", "Uživatelské pole",gdc1, null, "string", false, true);
+            AF("x28EntityField", "x28Field", "Fyzický název", gdc2);            
+            AF("x28EntityField", "x28IsRequired", "Povinné", gdc1, null,"bool");            
+            AF("x28EntityField", "x28Ordinary", "#", gdc1, null, "num0");
             AppendTimestamp("x28EntityField");
 
             //skupina uživatelských polí
-            AF("x27EntityFieldGroup", "x27Name", "Skupina polí", 1, null, "string", false, true);
-            AF("x27EntityFieldGroup", "x27Ordinary", "#", 1, null, "num0");
+            AF("x27EntityFieldGroup", "x27Name", "Skupina polí", gdc1, null, "string", false, true);
+            AF("x27EntityFieldGroup", "x27Ordinary", "#", gdc2, null, "num0");
 
             //číselné řady
-            AF("x38CodeLogic", "x38Name", "Číselná řada", 1, null, "string", false, true);            
-            AF("x38CodeLogic", "x38ConstantBeforeValue", "Konstanta před", 1);
-            AF("x38CodeLogic", "x38ConstantAfterValue", "Konstanta za", 1);
-            AF("x38CodeLogic", "x38Scale", "Rozsah nul", 1,null, "num0");
+            AF("x38CodeLogic", "x38Name", "Číselná řada", gdc1, null, "string", false, true);            
+            AF("x38CodeLogic", "x38ConstantBeforeValue", "Konstanta před", gdc2);
+            AF("x38CodeLogic", "x38ConstantAfterValue", "Konstanta za", gdc2);
+            AF("x38CodeLogic", "x38Scale", "Rozsah nul", gdc2, null, "num0");
             AF("x38CodeLogic", "Maska", "Min-Max", 0, "case when a.x38MaskSyntax IS NULL then ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('000000001',a.x38Scale)+' - '+ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('99999999999',a.x38Scale) else a.x38MaskSyntax end");
             AppendTimestamp("x38CodeLogic");
 
             //x51 = nápověda
-            AF("x51HelpCore", "x51Name", "Nápověda", 1, null, "string", false, true);
-            AF("x51HelpCore", "x51ViewUrl", "View Url", 2);
-            AF("x51HelpCore", "x51NearUrls", "Související Urls", 2);
+            AF("x51HelpCore", "x51Name", "Nápověda", gdc1, null, "string", false, true);
+            AF("x51HelpCore", "x51ViewUrl", "View Url", gdc2);
+            AF("x51HelpCore", "x51NearUrls", "Související Urls", gdc2);
             AF("x51HelpCore", "x51ExternalUrl", "Externí Url");
             AppendTimestamp("x51HelpCore");
 
             //x55 = dashboard widget
-            AF("x55Widget", "x55Name", "Widget", 1, null, "string", false, true);
-            AF("x55Widget", "x55Code", "Kód widgetu", 0, null, "string", false, true);
-            AF("x55Widget", "x55Description", "Poznámka", 1);
+            AF("x55Widget", "x55Name", "Widget", gdc1, null, "string", false, true);
+            AF("x55Widget", "x55Code", "Kód widgetu", gdc2, null, "string", false, true);
+            AF("x55Widget", "x55Description", "Poznámka", gdc2);
             AF("x55Widget", "x55Skin", "Cílový dashboard");
-            AF("x55Widget", "x55DataTablesLimit", "Minimum záznamů pro [DataTables]", 2);
-            AF("x55Widget", "x55Ordinal", "#", 2, null, "num0");
+            AF("x55Widget", "x55DataTablesLimit", "Minimum záznamů pro [DataTables]", gdc2);
+            AF("x55Widget", "x55Ordinal", "#", gdc2, null, "num0");
             AppendTimestamp("x55Widget");
 
-            AF("x67EntityRole", "x67Name", "Název role", 1, null, "string", false, true);
-            AF("x67EntityRole", "x67Ordinary", "#", 2, null, "num0");
+            AF("x67EntityRole", "x67Name", "Název role", gdc1, null, "string", false, true);
+            AF("x67EntityRole", "x67Ordinary", "#", gdc2, null, "num0");
             AppendTimestamp("x67EntityRole");
 
             //x29 = entita
-            AF("x29Entity", "x29Name", "Entita", 1, null, "string", false, true);
-            AF("x29Entity", "x29NamePlural", "Plurál", 2);
-            AF("x29Entity", "x29IsAttachment", "Přílohy", 2,null,"bool");
+            AF("x29Entity", "x29Name", "Entita", gdc1, null, "string", false, true);
+            AF("x29Entity", "x29NamePlural", "Plurál", gdc2);
+            AF("x29Entity", "x29IsAttachment", "Přílohy", gdc0, null,"bool");
             
             //x91 = překlad
-            AF("x91Translate", "x91Code", "Originál", 1, null, "string", false, true);
-            AF("x91Translate", "x91Lang1", "English", 1);
-            AF("x91Translate", "x91Lang2", "Deutsch", 1);
-            AF("x91Translate", "x91Lang4", "Slovenčina", 1);
+            AF("x91Translate", "x91Code", "Originál", gdc1, null, "string", false, true);
+            AF("x91Translate", "x91Lang1", "English", gdc1);
+            AF("x91Translate", "x91Lang2", "Deutsch", gdc1);
+            AF("x91Translate", "x91Lang4", "Slovenčina", gdc1);
             
-            AF("x15VatRateType", "x15Name", "Druh DPH", 1, null, "string", false, true);
+            AF("x15VatRateType", "x15Name", "Druh DPH", gdc1, null, "string", false, true);
 
             
         }
@@ -439,10 +450,10 @@ namespace BL
 
         private void SetupJ02(string stb="j02Person")
         {
-            AF(stb, "fullname_desc", "Příjmení+Jméno", 1, "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string", false, true);
-            AF(stb, "fullname_asc", "Jméno+Příjmení", 0, "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string", false, true);
+            AF(stb, "fullname_desc", "Příjmení+Jméno", BO.TheGridDefColFlag.GridAndCombo, "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string", false, true);
+            AF(stb, "fullname_asc", "Jméno+Příjmení", BO.TheGridDefColFlag._none, "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string", false, true);
 
-            AF(stb, "j02Email", "E-mail", 1);
+            AF(stb, "j02Email", "E-mail", BO.TheGridDefColFlag.GridAndCombo);
             AF(stb, "j02FirstName", "Jméno");
             AF(stb, "j02LastName", "Příjmení");
             AF(stb, "j02TitleBeforeName", "Titul před");
@@ -460,12 +471,12 @@ namespace BL
         }
         private void SetupP28(string stb="p28Contact")
         {
-            AF(stb, "p28Name", "Klient", 1, null, "string", false, true);
+            AF(stb, "p28Name", "Klient", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
             AF(stb, "p28Code", "Kód");
             AF(stb, "p28CompanyShortName", "Zkrácený název");
             
-            AF(stb, "p28RegID", "IČ",1);
-            AF(stb, "p28VatID", "DIČ", 1);
+            AF(stb, "p28RegID", "IČ", BO.TheGridDefColFlag.GridOnly);
+            AF(stb, "p28VatID", "DIČ", BO.TheGridDefColFlag.GridAndCombo);
             AF(stb, "p28BillingMemo", "Fakturační poznámka");
 
             AF(stb, "p28Round2Minutes", "Zaokrouhlování času", 0, null, "num0");
@@ -474,9 +485,9 @@ namespace BL
             AF(stb, "p28SupplierID", "Kód dodavatele");
             AppendTimestamp(stb);
 
-            AF("view_PrimaryAddress","FullAddress", "Fakturační adresa", 1, "isnull(a.o38City+', ','')+isnull('<code>'+a.o38Street+'</code>','')+isnull(', '+a.o38ZIP,'')+isnull(' <var>'+a.o38Country+'</var>','')","string",false,true);
-            AF("view_PrimaryAddress", "o38Street", "Ulice", 1);
-            AF("view_PrimaryAddress", "o38City", "Město", 1);
+            AF("view_PrimaryAddress","FullAddress", "Fakturační adresa", BO.TheGridDefColFlag.GridOnly, "isnull(a.o38City+', ','')+isnull('<code>'+a.o38Street+'</code>','')+isnull(', '+a.o38ZIP,'')+isnull(' <var>'+a.o38Country+'</var>','')","string",false,true);
+            AF("view_PrimaryAddress", "o38Street", "Ulice", BO.TheGridDefColFlag.GridOnly);
+            AF("view_PrimaryAddress", "o38City", "Město", BO.TheGridDefColFlag.GridAndCombo);
             AF("view_PrimaryAddress", "o38ZIP", "PSČ");
             AF("view_PrimaryAddress", "o38Country", "Stát");
             AF("view_PrimaryAddress", "o38Name", "Název");
@@ -486,25 +497,25 @@ namespace BL
         {
             BO.TheGridColumn oc;
 
-            AF(stb, "p91Code", "Číslo", 1, null, "string", false, true);
-            AF(stb, "p91Client", "Klient vyúčtování", 1);
+            AF(stb, "p91Code", "Číslo", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
+            AF(stb, "p91Client", "Klient vyúčtování", BO.TheGridDefColFlag.GridAndCombo);
 
             AF(stb, "p91IsDraft", "Draft",0,null,"bool",false,false);
 
             var strG = "Datum";
-            AF(stb, "p91Date", "Vystaveno",2,null,"date",false,false,strG);
-            AF(stb, "p91DateSupply", "Datum plnění", 1, null, "date", false, false, strG);
-            AF(stb, "p91DateMaturity", "Splatnost", 2, null, "date", false, false, strG);
+            AF(stb, "p91Date", "Vystaveno", BO.TheGridDefColFlag.GridOnly, null,"date",false,false,strG);
+            AF(stb, "p91DateSupply", "Datum plnění", BO.TheGridDefColFlag.GridAndCombo, null, "date", false, false, strG);
+            AF(stb, "p91DateMaturity", "Splatnost", BO.TheGridDefColFlag.GridOnly, null, "date", false, false, strG);
             AF(stb, "DnuPoSplatnosti", "Dnů do splatnosti", 0, "case When a.p91Amount_Debt=0 Then null Else datediff(day, p91DateMaturity, dbo.get_today()) End", "num0", false, false, strG);
             AF(stb, "p91DateBilled", "Datum úhrady", 0, null, "date", false, false, strG);
             AF(stb, "p91DateExchange", "Datum měn.kurzu", 0, null, "date", false, false, strG);
 
             strG = "Částka";
-            AF(stb, "p91Amount_WithoutVat", "Bez dph",1,null,"num",true,false,strG);
+            AF(stb, "p91Amount_WithoutVat", "Bez dph", BO.TheGridDefColFlag.GridAndCombo, null,"num",true,false,strG);
             AF(stb, "BezDphKratKurz", "Bez dph x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_WithoutVat Else p91Amount_WithoutVat*p91ExchangeRate End", "num",true,false,strG);
             AF(stb, "p91Amount_Debt", "Dluh", 0, null, "num",true,false,strG);
             AF(stb, "DluhKratKurz", "Dluh x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_Debt Else p91Amount_Debt*p91ExchangeRate End", "num",true,false,strG);
-            AF(stb, "p91Amount_TotalDue", "Celkem", 1, null, "num",true,false,strG);
+            AF(stb, "p91Amount_TotalDue", "Celkem", BO.TheGridDefColFlag.GridAndCombo, null, "num",true,false,strG);
             AF(stb, "CelkemKratKurz", "Celkem x Kurz", 0, "case When a.j27ID = a.j27ID_Domestic Then p91Amount_TotalDue Else p91Amount_TotalDue*p91ExchangeRate End", "num",true,false,strG);
             AF(stb, "p91Amount_Vat", "Celkem dph", 0, null, "num",true,false,strG);
             AF(stb, "p91Amount_WithVat", "Vč.dph", 0, null, "num",true,false,strG);
@@ -531,7 +542,7 @@ namespace BL
             oc=AF(stb, "p91Client_RegID", "IČ klienta");
             oc.DesignerGroup = strG;
 
-            oc =AF(stb, "p91Client_VatID", "DIČ klienta", 2);
+            oc =AF(stb, "p91Client_VatID", "DIČ klienta", BO.TheGridDefColFlag.GridOnly);
             oc.DesignerGroup = strG;
             oc =AF(stb, "p91Client_ICDPH_SK", "IČ DPH (SK)");
             oc.DesignerGroup = strG;
@@ -553,19 +564,23 @@ namespace BL
 
         public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
         {
-            int intDefaultFlag1 = 1; int intDefaultFlag2 = 2;
-            if (bolComboColumns == true)
+            
+            List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
+            IEnumerable<BO.TheGridColumn> qry = null;
+            if (bolComboColumns)
             {
-                intDefaultFlag2 = 3;
+                qry = _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag==BO.TheGridDefColFlag.ComboOnly));
+                
+            }
+            else
+            {
+                qry = _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag == BO.TheGridDefColFlag.GridOnly));
             }
 
-            List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
-            foreach (BO.TheGridColumn c in _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == intDefaultFlag1 || p.DefaultColumnFlag == intDefaultFlag2)))
+            foreach (BO.TheGridColumn c in qry)
             {
                 ret.Add(Clone2NewInstance(c));
             }
-
-            //List<BO.TheGridColumn> ret = _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == intDefaultFlag1 || p.DefaultColumnFlag == intDefaultFlag2)).ToList();
 
             List<BO.EntityRelation> rels = _ep.getApplicableRelations(mq.Prefix);
 
@@ -592,7 +607,15 @@ namespace BL
                     ret.Add(InhaleColumn4Relation("b65_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     break;
                 case "p28":
-                    ret.Add(InhaleColumn4Relation("p28_address_primary", "view_PrimaryAddress", "FullAddress", rels, bolComboColumns));
+                    if (bolComboColumns)
+                    {
+                        ret.Add(InhaleColumn4Relation("p28_address_primary", "view_PrimaryAddress", "o38City", rels, bolComboColumns));
+                    }
+                    else
+                    {
+                        ret.Add(InhaleColumn4Relation("p28_address_primary", "view_PrimaryAddress", "FullAddress", rels, bolComboColumns));
+                    }
+                    
                     break;
                     
                 case "p42":
@@ -618,6 +641,9 @@ namespace BL
                 case "x31":
                     ret.Add(InhaleColumn4Relation("x31_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     break;
+                case "o40":
+                    ret.Add(InhaleColumn4Relation("o40_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
+                    break;
 
             }
 
@@ -636,8 +662,7 @@ namespace BL
         {
             BO.TheGridColumn c0 = ByUniqueName("a__" + strFieldEntity + "__" + strFieldName);
             BO.TheGridColumn c = Clone2NewInstance(c0);
-
-
+            
             BO.EntityRelation rel = applicable_rels.Where(p => p.RelName == strRelName).First();
             c.RelName = strRelName;
             c.RelSql = rel.SqlFrom;
@@ -651,7 +676,7 @@ namespace BL
                 return c;   //nezobrazovat u sloupce název relace
             }
 
-            if (bolComboColumns == true)
+            if (bolComboColumns)
             {
                 c.Header = rel.AliasSingular;
             }

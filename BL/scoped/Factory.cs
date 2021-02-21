@@ -52,6 +52,7 @@ namespace BL
         private Ix27EntityFieldGroupBL _x27;
         private Ix28EntityFieldBL _x28;
         private Ix38CodeLogicBL _x38;
+        private Io40SmtpAccountBL _o40;
 
         public Factory(BO.RunningUser ru,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
@@ -387,6 +388,15 @@ namespace BL
             {
                 if (_x67 == null) _x67 = new x67EntityRoleBL(this);
                 return _x67;
+            }
+        }
+
+        public Io40SmtpAccountBL o40SmtpAccountBL
+        {
+            get
+            {
+                if (_o40 == null) _o40 = new o40SmtpAccountBL(this);
+                return _o40;
             }
         }
     }
