@@ -66,48 +66,56 @@ namespace BL
             {
                 return 0;
             }
-            var p = new DL.Params4Dapper();
-            p.AddInt("pid", rec.pid);           
-            p.AddInt("j07ID", rec.j07ID, true);
-            p.AddInt("j17ID", rec.j17ID, true);
-            p.AddInt("j18ID", rec.j18ID, true);
-            p.AddInt("c21ID", rec.c21ID, true);
-            p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable);
-
-            p.AddString("j02FirstName", rec.j02FirstName);
-            p.AddString("j02LastName", rec.j02LastName);
-            p.AddString("j02TitleBeforeName", rec.j02TitleBeforeName);
-            p.AddString("j02TitleAfterName", rec.j02TitleAfterName);
-
-            p.AddBool("j02IsIntraPerson", rec.j02IsIntraPerson);
-            p.AddString("j02Email", rec.j02Email);
-            p.AddString("j02EmailSignature", rec.j02EmailSignature);
-            p.AddString("j02Code", rec.j02Code);
-
-            p.AddString("j02Mobile", rec.j02Mobile);
-            p.AddString("j02Phone", rec.j02Phone);
-            p.AddString("j02JobTitle", rec.j02JobTitle);            
-            p.AddString("j02Office", rec.j02Office);
-            p.AddString("j02ExternalPID", rec.j02ExternalPID);
-            p.AddString("j02Description", rec.j02Description);
-
-            p.AddInt("j02TimesheetEntryDaysBackLimit", rec.j02TimesheetEntryDaysBackLimit);
-            p.AddString("j02TimesheetEntryDaysBackLimit_p34IDs", rec.j02TimesheetEntryDaysBackLimit_p34IDs);
-
-
-            p.AddBool("j02IsInvoiceEmail", rec.j02IsInvoiceEmail);
-            p.AddString("j02Salutation", rec.j02Salutation);
-            p.AddString("j02InvoiceSignatureFile", rec.j02InvoiceSignatureFile);
-            p.AddInt("j02WorksheetAccessFlag", rec.j02WorksheetAccessFlag);
-            p.AddInt("j02NotifySubscriberFlag", rec.j02NotifySubscriberFlag);
-            
-            int intPID = _db.SaveRecord("j02Person", p.getDynamicDapperPars(),rec);
-            if (intPID > 0)
+            using (var sc = new System.Transactions.TransactionScope()) //ukládání podléhá transakci
             {
-                _db.RunSql("exec dbo.j02_aftersave @j02id,@j03id_sys", new { j02id = intPID, j03id_sys = _mother.CurrentUser.pid });
-               
+                var p = new DL.Params4Dapper();
+                p.AddInt("pid", rec.pid);
+                p.AddInt("j07ID", rec.j07ID, true);
+                p.AddInt("j17ID", rec.j17ID, true);
+                p.AddInt("j18ID", rec.j18ID, true);
+                p.AddInt("c21ID", rec.c21ID, true);
+                p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable);
+
+                p.AddString("j02FirstName", rec.j02FirstName);
+                p.AddString("j02LastName", rec.j02LastName);
+                p.AddString("j02TitleBeforeName", rec.j02TitleBeforeName);
+                p.AddString("j02TitleAfterName", rec.j02TitleAfterName);
+
+                p.AddBool("j02IsIntraPerson", rec.j02IsIntraPerson);
+                p.AddString("j02Email", rec.j02Email);
+                p.AddString("j02EmailSignature", rec.j02EmailSignature);
+                p.AddString("j02Code", rec.j02Code);
+
+                p.AddString("j02Mobile", rec.j02Mobile);
+                p.AddString("j02Phone", rec.j02Phone);
+                p.AddString("j02JobTitle", rec.j02JobTitle);
+                p.AddString("j02Office", rec.j02Office);
+                p.AddString("j02ExternalPID", rec.j02ExternalPID);
+                p.AddString("j02Description", rec.j02Description);
+
+                p.AddInt("j02TimesheetEntryDaysBackLimit", rec.j02TimesheetEntryDaysBackLimit);
+                p.AddString("j02TimesheetEntryDaysBackLimit_p34IDs", rec.j02TimesheetEntryDaysBackLimit_p34IDs);
+
+
+                p.AddBool("j02IsInvoiceEmail", rec.j02IsInvoiceEmail);
+                p.AddString("j02Salutation", rec.j02Salutation);
+                p.AddString("j02InvoiceSignatureFile", rec.j02InvoiceSignatureFile);
+                p.AddInt("j02WorksheetAccessFlag", rec.j02WorksheetAccessFlag);
+                p.AddInt("j02NotifySubscriberFlag", rec.j02NotifySubscriberFlag);
+
+                int intPID = _db.SaveRecord("j02Person", p.getDynamicDapperPars(), rec);
+                if (intPID > 0)
+                {
+                    _db.RunSql("exec dbo.j02_aftersave @j02id,@j03id_sys", new { j02id = intPID, j03id_sys = _mother.CurrentUser.pid });
+                    sc.Complete();
+                    return intPID;
+                }
+
+                return 0;
+                
             }
-            return intPID;
+            
+            
         }
 
         public bool ValidateBeforeSave(BO.j02Person rec)

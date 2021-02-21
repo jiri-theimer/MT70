@@ -142,8 +142,7 @@ namespace BL
 
                     if (_db.RunSp("p41_aftersave", ref pars, false) == "1")
                     {
-                        sc.Complete();
-
+                        sc.Complete();                        
                     }
                     else
                     {

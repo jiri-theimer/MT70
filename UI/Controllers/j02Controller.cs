@@ -122,7 +122,7 @@ namespace UI.Controllers
         }
 
 
-        public IActionResult Record(int pid, bool isclone)
+        public IActionResult Record(int pid, bool isclone,bool isintraperson)
         {
             var v = new j02Record() { rec_pid = pid, rec_entity = "j02" };
             v.Rec = new BO.j02Person();
@@ -136,14 +136,17 @@ namespace UI.Controllers
                 v.ComboC21Name = v.Rec.c21Name;
                 v.ComboJ07Name = v.Rec.j07Name;
                 v.ComboJ18Name = v.Rec.j18Name;
+                
+                
                 if (v.Rec.j02TimesheetEntryDaysBackLimit_p34IDs != null)
                 {
                     
                 }
+                v.RadioIsIntraPerson = Convert.ToInt32(BO.BAS.GB(v.Rec.j02IsIntraPerson));
             }
             else
             {
-                v.RadioIsIntraPerson = 1;
+                v.RadioIsIntraPerson = Convert.ToInt32(BO.BAS.GB(isintraperson));
             }
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)
@@ -155,11 +158,19 @@ namespace UI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(Models.Record.j02Record v)
+        public IActionResult Record(Models.Record.j02Record v,string oper)
         {
-            
+            if (oper == "postback")
+            {
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
+                if (v.RadioIsIntraPerson==0 && v.SelectedP28ID == 0)
+                {
+                    this.AddMessage("U kontaktní osoby musíte vybrat klienta.");
+                    return View(v);
+                }
                 BO.j02Person c = new BO.j02Person();
                 if (v.rec_pid > 0)
                 {
@@ -170,15 +181,16 @@ namespace UI.Controllers
                     if (v.RadioIsIntraPerson == 1)
                     {
                         c.j02IsIntraPerson = true;
+                        c.j07ID = v.Rec.j07ID;
+                        c.c21ID = v.Rec.c21ID;
+                        c.j18ID = v.Rec.j18ID;
                     }
                     else
                     {
                         c.j02IsIntraPerson = false;
                     }
                 }
-                c.j07ID = v.Rec.j07ID;
-                c.c21ID = v.Rec.c21ID;
-                c.j18ID = v.Rec.j18ID;
+                
                 c.j02TitleBeforeName = v.Rec.j02TitleBeforeName;
                 c.j02FirstName = v.Rec.j02FirstName;
                 c.j02LastName = v.Rec.j02LastName;
@@ -190,12 +202,17 @@ namespace UI.Controllers
                 c.j02Mobile = v.Rec.j02Mobile;
                 c.j02JobTitle = v.Rec.j02JobTitle;
                 c.j02Office = v.Rec.j02Office;
-                c.j02EmailSignature = v.Rec.j02EmailSignature;
 
-                c.j02TimesheetEntryDaysBackLimit_p34IDs = v.Rec.j02TimesheetEntryDaysBackLimit_p34IDs;
-                c.j02TimesheetEntryDaysBackLimit = v.Rec.j02TimesheetEntryDaysBackLimit;
-                c.j02WorksheetAccessFlag = v.Rec.j02WorksheetAccessFlag;
-                c.p72ID_NonBillable = v.Rec.p72ID_NonBillable;
+                if (c.j02IsIntraPerson)
+                {
+                    c.j02EmailSignature = v.Rec.j02EmailSignature;
+
+                    c.j02TimesheetEntryDaysBackLimit_p34IDs = v.Rec.j02TimesheetEntryDaysBackLimit_p34IDs;
+                    c.j02TimesheetEntryDaysBackLimit = v.Rec.j02TimesheetEntryDaysBackLimit;
+                    c.j02WorksheetAccessFlag = v.Rec.j02WorksheetAccessFlag;
+                    c.p72ID_NonBillable = v.Rec.p72ID_NonBillable;
+                }
+                
 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
@@ -203,6 +220,11 @@ namespace UI.Controllers
                 c.pid = Factory.j02PersonBL.Save(c);
                 if (c.pid > 0)
                 {
+                    if (v.RadioIsIntraPerson == 0)
+                    {
+                        var recP30 = new BO.p30Contact_Person() { j02ID = c.pid, p28ID = v.SelectedP28ID };
+                        Factory.p30Contact_PersonBL.Save(recP30);
+                    }
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);
                 }

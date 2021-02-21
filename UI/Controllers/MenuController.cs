@@ -238,8 +238,8 @@ namespace UI.Controllers
             DIV();
             AMI("Poznámka/Odkaz/Příloha", "javascript:_edit('b07',0)");
             DIV();
-            AMI("Osoba - uživatel", "javascript:_edit('j02',0)");
-            AMI("Kontaktní osoba klienta", "javascript:_edit('j02',0)");
+            AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
+            AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)");
             return FlushResult_UL(true, false);
         }
 

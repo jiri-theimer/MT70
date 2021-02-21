@@ -464,8 +464,8 @@ namespace BL
             AF(stb, "p28Code", "Kód");
             AF(stb, "p28CompanyShortName", "Zkrácený název");
             
-            AF(stb, "p28RegID", "IČ");
-            AF(stb, "p28VatID", "DIČ", 2);
+            AF(stb, "p28RegID", "IČ",1);
+            AF(stb, "p28VatID", "DIČ", 1);
             AF(stb, "p28BillingMemo", "Fakturační poznámka");
 
             AF(stb, "p28Round2Minutes", "Zaokrouhlování času", 0, null, "num0");
@@ -473,6 +473,14 @@ namespace BL
             AF(stb, "p28ICDPH_SK", "IČ DPH (SK)");
             AF(stb, "p28SupplierID", "Kód dodavatele");
             AppendTimestamp(stb);
+
+            AF("view_PrimaryAddress","FullAddress", "Fakturační adresa", 1, "isnull(a.o38City+', ','')+isnull('<code>'+a.o38Street+'</code>','')+isnull(', '+a.o38ZIP,'')+isnull(' <var>'+a.o38Country+'</var>','')","string",false,true);
+            AF("view_PrimaryAddress", "o38Street", "Ulice", 1);
+            AF("view_PrimaryAddress", "o38City", "Město", 1);
+            AF("view_PrimaryAddress", "o38ZIP", "PSČ");
+            AF("view_PrimaryAddress", "o38Country", "Stát");
+            AF("view_PrimaryAddress", "o38Name", "Název");
+            
         }
         private void SetupP91(string stb= "p91Invoice")
         {
@@ -583,6 +591,10 @@ namespace BL
                 case "b65":
                     ret.Add(InhaleColumn4Relation("b65_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     break;
+                case "p28":
+                    ret.Add(InhaleColumn4Relation("p28_address_primary", "view_PrimaryAddress", "FullAddress", rels, bolComboColumns));
+                    break;
+                    
                 case "p42":
                     ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07NameSingular", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07Level", rels, bolComboColumns));

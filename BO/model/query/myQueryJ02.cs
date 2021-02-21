@@ -49,7 +49,7 @@ namespace BO
             }
             if (this.p28id > 0)
             {
-                AQ("a.j02ID IN (select j02ID FROM p30Contact_Person WHERE WHERE p28ID=@p28id OR p41ID IN (SELECT p41ID FROM p41Project WHERE p28ID_Client=@p28id))", "p28id", this.p28id);
+                AQ("a.j02ID IN (select j02ID FROM p30Contact_Person WHERE p28ID=@p28id OR p41ID IN (SELECT p41ID FROM p41Project WHERE p28ID_Client=@p28id))", "p28id", this.p28id);
             }
             if (this.p91id > 0)
             {

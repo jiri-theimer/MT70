@@ -36,6 +36,7 @@ namespace BL
         private Io58FieldBagBL _o58;
         private Ib65WorkflowMessageBL _b65;
         private Ip07ProjectLevelBL _p07;
+        private Ip30Contact_PersonBL _p30;
         private Ip31WorksheetBL _p31;
         private Ip32ActivityBL _p32;
         private Ip34ActivityGroupBL _p34;
@@ -274,7 +275,14 @@ namespace BL
                 return _p07;
             }
         }
-
+        public Ip30Contact_PersonBL p30Contact_PersonBL
+        {
+            get
+            {
+                if (_p30 == null) _p30 = new p30Contact_PersonBL(this);
+                return _p30;
+            }
+        }
         public Ip31WorksheetBL p31WorksheetBL
         {
             get

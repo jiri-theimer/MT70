@@ -95,6 +95,8 @@ namespace BL
 
             AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
+            AE("view_PrimaryAddress", "Adresy", "Adresa", "view_PrimaryAddress a",null);
+            
             AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a", "a.p31ID DESC");            
             AE("o23Doc", "Dokumenty", "Dokument", "o23Doc a", "a.o23ID DESC");
             AE("p91Invoice", "Vyúčtování", "Vyúčtování", "p91Invoice a", "a.p91ID DESC");
@@ -188,6 +190,9 @@ namespace BL
                     lis.Add(getREL("p38ActivityTag", "p32_p38", "Kategorie", "LEFT OUTER JOIN p38ActivityTag p32_p38 ON a.p38ID=p32_p38.p38ID"));
                     lis.Add(getREL("p35Unit", "p32_p35", "Jednotka kusovníku", "LEFT OUTER JOIN p35Unit p32_p35 ON a.p35ID=p32_p35.p35ID"));
                     
+                    break;
+                case "p28":
+                    lis.Add(getREL("view_PrimaryAddress", "p28_address_primary", "Fakturační adresa", "LEFT OUTER JOIN view_PrimaryAddress p28_address_primary ON a.p28ID=p28_address_primary.p28ID"));
                     break;
                 case "p36":
                     lis.Add(getREL("j02Person", "p36_j02", "Osoba", "LEFT OUTER JOIN j02Person p36_j02 ON a.j02ID=p36_j02.j02ID"));
