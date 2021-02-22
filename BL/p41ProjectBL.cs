@@ -11,7 +11,7 @@ namespace BL
         public BO.p41Project Load(int pid);
         public BO.p41Project LoadByCode(string strCode, int pid_exclude);
         public BO.p41Project LoadByExternalPID(string externalpid);
-        public IEnumerable<BO.p41Project> GetList(BO.myQuery mq);
+        public IEnumerable<BO.p41Project> GetList(BO.myQueryP41 mq);
         public int Save(BO.p41Project rec);
 
 
@@ -73,7 +73,7 @@ namespace BL
             return _db.Load<BO.p41Project>(GetSQL1(" WHERE a.p41ExternalPID=@externalpid"), new { externalpid = externalpid });
         }
 
-        public IEnumerable<BO.p41Project> GetList(BO.myQuery mq)
+        public IEnumerable<BO.p41Project> GetList(BO.myQueryP41 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p41Project>(fq.FinalSql, fq.Parameters);

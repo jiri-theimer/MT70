@@ -1,0 +1,77 @@
+﻿@model UI.Models.Record.p51Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Ceník sazeb");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Druh sazeb"):</label>
+        <div class="col-sm-3 col-md-3">
+            <select asp-for="Rec.p51TypeFlag" class="form-select">
+                <option value="BillingRates">@_f.tra("Fakturační hodinové sazby")</option>
+                <option value="RootBillingRates">@_f.tra("Kořenové (ROOT) fakturační sazby")</option>
+                <option value="CostRates">@_f.tra("Nákladové hodinové sazby")</option>
+                <option value="OverheadRates">@_f.tra("Režijní hodinové sazby")</option>
+                <option value="EfectiveRates">@_f.tra("Globální sazby k výpočtu efektivních sazeb z pevných odměn")</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Měna sazeb"):</label>
+        <div class="col-sm-3 col-md-3">
+            <mycombo entity="j27Currency" asp-for="Rec.j27ID" selectedtext="@Model.ComboJ27Code" view-flag="2"></mycombo>
+        </div>
+        <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Výchozí (nejpoužívanější) sazba"):</label>
+        <div class="col-sm-2 col-md-2">
+            <mynumber asp-for="Rec.p51DefaultRateT" decimal-digits="2"></mynumber>
+
+
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název ceníku"):</label>
+        <div class="col-sm-9 col-md-8">
+            <input class="form-control" asp-for="Rec.p51Name" />
+        </div>
+        
+        
+    </div>
+    
+
+
+
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#Rec_p51TypeFlag").on("change", function () {
+            postback("postback");
+        });
+        
+
+
+
+    });
+
+
+
+
+
+    function postback(oper) {
+
+        form1.action = _ep("p51/Record?oper=" + oper);
+        form1.submit();
+    }
+
+</script>
