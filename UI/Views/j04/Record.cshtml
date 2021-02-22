@@ -24,14 +24,16 @@
            <div class="card">
                <div class="card-header">
                    @_f.tra("Oprávnění aplikační role")
+                   <button type="button" id="cmdUnCheckAll" class="btn btn-sm btn-primary">@_f.tra("Odškrtnout vše")</button>
+                   <button type="button" id="cmdCheckAll" class="btn btn-sm btn-primary">@_f.tra("Zaškrtnout vše")</button>
                </div>
-               <div class="card-body">
+               <div class="card-body" id="divX53">
                    <mycheckboxlist asp-for="@Model.SelectedX53IDs" datasource="@Model.lisAllX53" valuefield="x53ID" textfield="x53Name"></mycheckboxlist>
                </div>
            </div>
        </div>
        <div class="col-auto">
-           <div class="card">
+           <div class="card" id="divMenu">
                <div class="card-header">
                    @_f.tra("Přístupné moduly")
                </div>
@@ -48,6 +50,30 @@
                        <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Contact" />
                        <label class="col-form-label" for="Rec_j04IsMenu_Contact">@_f.tra("KLIENTI")</label>
                    </div>
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Invoice" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_Invoice">@_f.tra("VYÚČTOVÁNÍ")</label>
+                   </div>
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Proforma" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_Proforma">@_f.tra("ZÁLOHY")</label>
+                   </div>
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_People" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_People">@_f.tra("LIDÉ")</label>
+                   </div>
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Notepad" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_Notepad">@_f.tra("DOKUMENTY")</label>
+                   </div>
+                   <div class="my-2">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_MyProfile" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_MyProfile">@_f.tra("MůJ PROFIL")</label>
+                   </div>
+                   <div class="my-2" style="display:none;">
+                       <input type="checkbox" asp-for="@Model.Rec.j04IsMenu_Task" />
+                       <label class="col-form-label" for="Rec_j04IsMenu_Task">@_f.tra("ÚKOLY a TERMÍNY")</label>
+                   </div>
                </div>
            </div>
        </div>
@@ -57,3 +83,31 @@
     
 
 </div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        $("#cmdCheckAll").on("click", function () {
+            form1.action = _ep("/j04/Record?oper=checkall");
+            form1.submit();
+        });
+
+        $("#cmdUnCheckAll").on("click", function () {
+            form1.action = _ep("/j04/Record?oper=uncheckall");
+            form1.submit();
+        });
+        
+
+    });
+
+
+
+    
+
+
+    
+
+</script>

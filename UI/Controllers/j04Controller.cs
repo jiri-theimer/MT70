@@ -26,10 +26,10 @@ namespace UI.Controllers
                 v.SelectedX53IDs = Factory.j04UserRoleBL.GetList_BoundX53(v.rec_pid).Select(p => p.x53ID).ToList();
                 
             }
-           
-           
-            v.lisAllX53 = Factory.FBL.GetListX53().Where(p => p.x29ID==BO.x29IdEnum.j03User);
-            
+
+
+
+            RefreshState(v);
 
 
             v.Toolbar = new MyToolbarViewModel(v.Rec);
@@ -42,11 +42,27 @@ namespace UI.Controllers
         }
 
        
+        private void RefreshState(j04Record v)
+        {
+            v.lisAllX53 = Factory.FBL.GetListX53().Where(p => p.x29ID == BO.x29IdEnum.j03User);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(j04Record v)
+        public IActionResult Record(j04Record v,string oper)
         {
+            RefreshState(v);
 
+            if (oper == "checkall")
+            {
+                v.SelectedX53IDs = v.lisAllX53.Select(p => p.x53ID).ToList();
+                return View(v);
+            }
+            if (oper == "uncheckall")
+            {
+                v.SelectedX53IDs = new List<int>();
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
                 BO.j04UserRole c = new BO.j04UserRole();
@@ -61,6 +77,8 @@ namespace UI.Controllers
                 c.j04IsMenu_Invoice = v.Rec.j04IsMenu_Invoice;
                 c.j04IsMenu_Proforma = v.Rec.j04IsMenu_Proforma;
                 c.j04IsMenu_Notepad = v.Rec.j04IsMenu_Notepad;
+                c.j04IsMenu_MyProfile = v.Rec.j04IsMenu_MyProfile;
+                c.j04IsMenu_Task = v.Rec.j04IsMenu_Task;
 
 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);

@@ -72,7 +72,8 @@ namespace BL
             p.AddBool("j04IsMenu_Invoice", rec.j04IsMenu_Invoice);
             p.AddBool("j04IsMenu_Proforma", rec.j04IsMenu_Proforma);
             p.AddBool("j04IsMenu_Notepad", rec.j04IsMenu_Notepad);
-            
+            p.AddBool("j04IsMenu_Task", rec.j04IsMenu_Task);
+            p.AddBool("j04IsMenu_MyProfile", rec.j04IsMenu_MyProfile);
 
             int intPID= _db.SaveRecord("j04UserRole", p.getDynamicDapperPars(), rec);
                                    

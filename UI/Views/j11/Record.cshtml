@@ -70,7 +70,7 @@
             return;
         }
         
-        form1.action = "/j11/Record?prefix=j02&oper=add&pids="+j02id;
+        form1.action = _ep("/j11/Record?prefix=j02&oper=add&pids=" + j02id);
         form1.submit();
 
     }
@@ -82,7 +82,7 @@
             return;
         }
         
-        form1.action = "/j11/Record?prefix=j07&oper=add&pids=" + j07id;
+        form1.action = _ep("/j11/Record?prefix=j07&oper=add&pids=" + j07id);
         form1.submit();
     }
 
@@ -96,7 +96,7 @@
         }
         _toolbar_warn2save_changes();
 
-        form1.action = "/j11/Record?prefix=j02&oper=remove&pids=" + pids;
+        form1.action = _ep("/j11/Record?prefix=j02&oper=remove&pids=" + pids);
         form1.submit();
         
         

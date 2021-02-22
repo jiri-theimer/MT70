@@ -43,7 +43,10 @@ namespace BL
         private Ip41ProjectBL _p41;
         private Ip42ProjectTypeBL _p42;
         private Ip29ContactTypeBL _p29;
+        private Ip38ActivityTagBL _p38;
+        private Ip61ActivityClusterBL _p61;
         private Ip85TempboxBL _p85;
+        private Ip95InvoiceRowBL _p95;
         private Ix51HelpCoreBL _x51;
         private Ix55WidgetBL _x55;
         private Ix67EntityRoleBL _x67;
@@ -333,13 +336,36 @@ namespace BL
                 return _p29;
             }
         }
-
+        public Ip38ActivityTagBL p38ActivityTagBL
+        {
+            get
+            {
+                if (_p38 == null) _p38 = new p38ActivityTagBL(this);
+                return _p38;
+            }
+        }
+        public Ip61ActivityClusterBL p61ActivityClusterBL
+        {
+            get
+            {
+                if (_p61 == null) _p61 = new p61ActivityClusterBL(this);
+                return _p61;
+            }
+        }
         public Ip85TempboxBL p85TempboxBL
         {
             get
             {
                 if (_p85 == null) _p85 = new p85TempboxBL(this);
                 return _p85;
+            }
+        }
+        public Ip95InvoiceRowBL p95InvoiceRowBL
+        {
+            get
+            {
+                if (_p95 == null) _p95 = new p95InvoiceRowBL(this);
+                return _p95;
             }
         }
         public Ix27EntityFieldGroupBL x27EntityFieldGroupBL
@@ -399,5 +425,7 @@ namespace BL
                 return _o40;
             }
         }
+
+        
     }
 }

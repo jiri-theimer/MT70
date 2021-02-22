@@ -105,7 +105,14 @@
                 location.replace("/Admin/Worksheet?prefix=@Model.prefix");
 
             });
-        }
+    }
+
+    function handle_dblclick(row) {
+        var prefix = "@Model.prefix";
+        var pid = row.id.replace("r", "");
+
+        _edit(prefix, pid);
+    }
 
 </script>
 

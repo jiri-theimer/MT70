@@ -25,15 +25,15 @@ namespace BO
         {
             if (this.p34id > 0)
             {
-                AQ("a.p34ID=@p34id)", "p34id", this.p34id);
+                AQ("a.p34ID=@p34id", "p34id", this.p34id);
             }
             if (this.p38id > 0)
             {
-                AQ("a.p38ID=@p38id)", "p38id", this.p38id);
+                AQ("a.p38ID=@p38id", "p38id", this.p38id);
             }
             if (this.p95id > 0)
             {
-                AQ("a.p95ID=@p95id)", "p95id", this.p95id);
+                AQ("a.p95ID=@p95id", "p95id", this.p95id);
             }
             if (this.p33id > 0)
             {
@@ -41,7 +41,7 @@ namespace BO
             }
             if (this.x15id > 0)
             {
-                AQ("a.x15ID=@x15id)", "x15id", this.x15id);
+                AQ("a.x15ID=@x15id", "x15id", this.x15id);
             }
             if (this.p61id > 0)
             {
@@ -60,7 +60,7 @@ namespace BO
             }
             if (this.isbillable != null)
             {
-                AQ("a.p32IsBillable=@billable)", "billable", this.isbillable);
+                AQ("a.p32IsBillable=@billable", "billable", this.isbillable);
             }
 
             return this.InhaleRows();

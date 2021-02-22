@@ -21,6 +21,7 @@ namespace UI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSetting("detailedErrors", "true");    //zajistí detail výpisu pøípadných chyb i zde na úvod v Program.cs a Startup.cs
                 });
     }
 }

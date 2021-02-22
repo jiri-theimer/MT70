@@ -24,7 +24,7 @@ namespace BL
 
         public IEnumerable<BO.x53Permission> GetListX53()
         {
-            return _db.GetList<BO.x53Permission>("SELECT * FROM x53Permission ORDER BY x53Ordinary");
+            return _db.GetList<BO.x53Permission>("SELECT * FROM x53Permission WHERE GETDATE() between x53ValidFrom AND x53ValidUntil ORDER BY x53Ordinary");
         }
         public IEnumerable<BO.p87BillingLanguage> GetListP87()
         {

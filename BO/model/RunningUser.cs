@@ -15,9 +15,7 @@ namespace BO
         public bool j04IsMenu_Proforma { get; set; }
         public bool j04IsMenu_Notepad { get; set; }
         public bool j04IsMenu_Task { get; set; }
-        public bool j04IsMenu_Scheduler { get; set; }
-
-
+        public bool j04IsMenu_MyProfile { get; set; }
 
         private bool _IsApprovingPerson { get; set; }    // detekce, zda uživatel může potenciálně schvalovat nějaký worksheet
         private bool _IsMasterPerson { get; set; }       // detekce, zda osoba má pod sebou nějaké podřízené

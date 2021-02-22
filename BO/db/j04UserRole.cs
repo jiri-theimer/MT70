@@ -17,7 +17,9 @@ namespace BO
         
         public bool j04IsMenu_Notepad { get; set; }
         public bool j04IsMenu_Inbox { get; set; }  // nové pole verze 6
-        
+        public bool j04IsMenu_Task { get; set; }
+        public bool j04IsMenu_MyProfile { get; set; }
+
         private string _x67RoleValue { get; set; }
         public int j04MobileStreamEnum { get; set; }  // výčet povolených dat pro mobilní aplikaci
 

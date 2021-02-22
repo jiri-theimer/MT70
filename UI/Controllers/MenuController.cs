@@ -37,7 +37,12 @@ namespace UI.Controllers
             AMI("Tovární HOME stránka (Dashboard)", "/Dashboard/Index", "k-i-star-outline");
 
             DIV();
-            AMI("Můj profil", "/Home/MyProfile", "k-i-user");
+            
+            if (Factory.CurrentUser.j04IsMenu_MyProfile)
+            {
+                AMI("Můj profil", "/Home/MyProfile", "k-i-user");
+            }
+            
             AMI("Odeslat zprávu", "javascript:_sendmail()", "k-i-email");
 
             AMI("Změnit přístupové heslo", "/Home/ChangePassword", "k-i-password");

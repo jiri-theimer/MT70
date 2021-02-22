@@ -140,6 +140,10 @@ namespace UI.Controllers
 
         public IActionResult MyProfile()
         {
+            if (!Factory.CurrentUser.j04IsMenu_MyProfile)
+            {
+                return this.StopPage(false, "Nemáte oprávnění k této funkci.");
+            }
             var v = new MyProfileViewModel();
             v.userAgent = Request.Headers["User-Agent"];
 
