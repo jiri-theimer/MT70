@@ -49,6 +49,11 @@ namespace UI.Controllers
                 var lis = Factory.p32ActivityBL.GetList(new BO.myQueryP32() { p34id = BO.BAS.InInt(pids) });
                 lisp32IDs.AddRange(lis.Select(p => p.pid).ToList());
             }
+            if (oper == "add" && prefix == "p38")
+            {
+                var lis = Factory.p32ActivityBL.GetList(new BO.myQueryP32() { p38id = BO.BAS.InInt(pids) });
+                lisp32IDs.AddRange(lis.Select(p => p.pid).ToList());
+            }
             if (oper == "remove" && prefix == "p32")
             {
                 foreach (int x in BO.BAS.ConvertString2ListInt(pids))

@@ -14,6 +14,8 @@ namespace UI.Models.Record
         public string SelectedP32Name { get; set; }
         public int SelectedP34ID { get; set; }
         public string SelectedP34Name { get; set; }
+        public int SelectedP38ID { get; set; }
+        public string SelectedP38Name { get; set; }
 
         public TheGridInput gridinput { get; set; }
     }
