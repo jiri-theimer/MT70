@@ -55,13 +55,16 @@ namespace BL
                 p.AddString("p61Name", rec.p61Name);
 
                 int intPID = _db.SaveRecord("p61ActivityCluster", p.getDynamicDapperPars(), rec);
-                if (rec.pid > 0)
+                if (p32ids != null)
                 {
-                    _db.RunSql("DELETE FROM p62ActivityCluster_Item WHERE p61ID=@pid", new { pid = intPID });
-                }
-                if (p32ids.Count > 0)
-                {
-                    _db.RunSql("INSERT INTO p62ActivityCluster_Item(p61ID,p32ID) SELECT @pid,p32ID FROM p32Activity WHERE p32ID IN (" + string.Join(",", p32ids) + ")", new { pid = intPID });
+                    if (rec.pid > 0)
+                    {
+                        _db.RunSql("DELETE FROM p62ActivityCluster_Item WHERE p61ID=@pid", new { pid = intPID });
+                    }
+                    if (p32ids.Count > 0)
+                    {
+                        _db.RunSql("INSERT INTO p62ActivityCluster_Item(p61ID,p32ID) SELECT @pid,p32ID FROM p32Activity WHERE p32ID IN (" + string.Join(",", p32ids) + ")", new { pid = intPID });
+                    }
                 }
                 sc.Complete();
                 return intPID;

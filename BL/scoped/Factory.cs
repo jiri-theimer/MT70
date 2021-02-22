@@ -43,6 +43,8 @@ namespace BL
         private Ip41ProjectBL _p41;
         private Ip42ProjectTypeBL _p42;
         private Ip29ContactTypeBL _p29;
+        private Ip35UnitBL _p35;
+        private Ip36LockPeriodBL _p36;
         private Ip38ActivityTagBL _p38;
         private Ip61ActivityClusterBL _p61;
         private Ip85TempboxBL _p85;
@@ -334,6 +336,22 @@ namespace BL
             {
                 if (_p29 == null) _p29 = new p29ContactTypeBL(this);
                 return _p29;
+            }
+        }
+        public Ip35UnitBL p35UnitBL
+        {
+            get
+            {
+                if (_p35 == null) _p35 = new p35UnitBL(this);
+                return _p35;
+            }
+        }
+        public Ip36LockPeriodBL p36LockPeriodBL
+        {
+            get
+            {
+                if (_p36 == null) _p36 = new p36LockPeriodBL(this);
+                return _p36;
             }
         }
         public Ip38ActivityTagBL p38ActivityTagBL

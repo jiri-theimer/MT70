@@ -353,7 +353,8 @@ namespace BL
             AppendTimestamp("p95InvoiceRow");
 
             AF("p35Unit", "p35Name", "Kusovníková jednotka", gdc1, null, "string", false, true);
-
+            AF("p35Unit", "p35Code", "Kód");
+            AppendTimestamp("p35Unit");
 
             //o40 = smtp poštovní účty                        
             AF("o40SmtpAccount", "o40Name", "Jméno odesílatele", gdc1, null, "string", false, true);
@@ -617,7 +618,10 @@ namespace BL
                     }
                     
                     break;
-                    
+                case "p36":
+                    ret.Add(InhaleColumn4Relation("p36_j02","j02Person", "fullname_desc", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("p36_j11", "j11Team", "j11Name", rels, bolComboColumns));
+                    break;
                 case "p42":
                     ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07NameSingular", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07Level", rels, bolComboColumns));

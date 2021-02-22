@@ -1,0 +1,117 @@
+﻿@model UI.Models.Record.p36Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Uzamknuté období");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div>
+        <input type="radio" id="ScopeJ02" asp-for="@Model.ScopePrefix" value="j02">
+        <label for="ScopeJ02">@_f.tra("Zámek se vztahuje na jednu osobu")</label>
+        <br />
+        <input type="radio" id="ScopeJ11" asp-for="@Model.ScopePrefix" value="j11">
+        <label for="ScopeJ11">@_f.tra("Zámek se vztahuje na tým osob")</label>
+        <br />
+        <input type="radio" id="ScopeAll" asp-for="@Model.ScopePrefix" value="all">
+        <label for="ScopeAll">@_f.tra("Zámek se vztahuje na všechny osoby")</label>
+    </div>
+
+    @if (Model.ScopePrefix == "j02")
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Osoba"):</label>
+            <div class="col-sm-11 col-md-10">
+                <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.ComboPerson" view-flag="1" myqueryinline="j02isintraperson@bool@1"></mycombo>
+            </div>
+
+        </div>
+    }
+    @if (Model.ScopePrefix == "j11")
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Tým osob"):</label>
+            <div class="col-sm-11 col-md-10">
+                <mycombo entity="j11Team" asp-for="Rec.j11ID" selectedtext="@Model.ComboTeam" view-flag="2"></mycombo>
+            </div>
+
+        </div>
+    }
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum od"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mydate asp-for="@Model.Rec.p36DateFrom" include-time="false"></mydate>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum do"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mydate asp-for="@Model.Rec.p36DateUntil" include-time="false"></mydate>
+        </div>
+
+    </div>
+
+    <div class="my-2">
+
+        <input type="checkbox" asp-for="Rec.p36IsAllSheets" />
+        <label class="col-form-label" for="Rec_p36IsAllSheets">@_f.tra("Zámek se vztahuje na všechny sešity")</label>
+    </div>
+
+
+    @if (!Model.Rec.p36IsAllSheets)
+    {
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Uzamknuté sešity")
+            </div>
+            <div class="card-body">
+                <mycheckboxlist asp-for="@Model.SelectedP34IDs" datasource="@Model.lisAllP34" valuefield="pid" textfield="p34Name"></mycheckboxlist>
+            </div>
+        </div>
+    }
+
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+       
+        $("#ScopeJ02").on("change", function () {
+            postback("postback");
+        });
+        $("#ScopeJ11").on("change", function () {
+            postback("postback");
+        });
+        $("#ScopeAll").on("change", function () {
+            postback("postback");
+        });
+
+        $("#Rec_p36IsAllSheets").on("change", function () {
+            postback("postback");
+        });
+
+
+
+    });
+
+
+
+  
+
+    function postback(oper) {
+        
+        form1.action = _ep("p36/Record?oper=" + oper);
+        form1.submit();
+    }
+
+</script>

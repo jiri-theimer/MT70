@@ -25,8 +25,9 @@ namespace BL
         private string GetSQL1(string strAppend = null)
         {
             sb("SELECT a.*,");
+            sb("j02.j02LastName+' '+j02.j02FirstName as Person,j11.j11Name,");
             sb(_db.GetSQL1_Ocas("p36"));
-            sb(" FROM p36LockPeriod a");
+            sb(" FROM p36LockPeriod a LEFT OUTER JOIN j02Person j02 ON a.j02ID=j02.j02ID LEFT OUTER JOIN j11Team j11 ON a.j11ID=j11.j11ID");
             sb(strAppend);
             return sbret();
         }
@@ -45,21 +46,51 @@ namespace BL
 
         public int Save(BO.p36LockPeriod rec, List<int> p34ids)
         {
+            if (rec.j02ID > 0)
+            {
+                rec.j11ID = 0;
+            }
+
+            if (rec.j11ID > 0)
+            {
+                rec.j02ID = 0;
+            }
+            
+
             if (!ValidateBeforeSave(rec,p34ids))
             {
                 return 0;
             }
-            var p = new DL.Params4Dapper();
-            p.AddInt("pid", rec.pid);
-           
-            p.AddInt("j02ID", rec.j02ID,true);
-            p.AddInt("j11ID", rec.j11ID, true);
-            p.AddBool("p36IsAllSheets", rec.p36IsAllSheets);
-            p.AddBool("p36IsAllSheets", rec.p36IsAllSheets);
-            p.AddDateTime("p36DateFrom", rec.p36DateFrom);
-            p.AddDateTime("p36DateUntil", rec.p36DateUntil);
+            using (var sc = new System.Transactions.TransactionScope()) //ukládání podléhá transakci
+            {
+                var p = new DL.Params4Dapper();
+                p.AddInt("pid", rec.pid);
 
-            return _db.SaveRecord("p36LockPeriod", p.getDynamicDapperPars(), rec);
+                p.AddInt("j02ID", rec.j02ID, true);
+                p.AddInt("j11ID", rec.j11ID, true);
+                p.AddBool("p36IsAllPersons", rec.p36IsAllPersons);
+                p.AddBool("p36IsAllSheets", rec.p36IsAllSheets);
+                p.AddDateTime("p36DateFrom", rec.p36DateFrom);
+                p.AddDateTime("p36DateUntil", rec.p36DateUntil);
+
+                int intPID = _db.SaveRecord("p36LockPeriod", p.getDynamicDapperPars(), rec);
+
+                if (p34ids != null)
+                {
+                    if (rec.pid > 0)
+                    {
+                        _db.RunSql("DELETE FROM p37LockPeriod_Sheet WHERE p36ID = @pid", new { pid = intPID });
+                    }
+                    if (p34ids.Count > 0)
+                    {
+                        _db.RunSql("INSERT INTO p37LockPeriod_Sheet(p36ID,p34ID) SELECT @pid,p34ID FROM p34ActivityGroup WHERE p34ID IN (" + string.Join(",", p34ids) + ")", new { pid = intPID });
+                    }
+                }
+                
+                sc.Complete();
+                return intPID;
+            }
+                
 
 
         }
