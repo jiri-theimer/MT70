@@ -61,6 +61,7 @@ function _format_date(d, is_include_time) {
 
 function _edit(controller, pid, header) {
     var url = "";
+    var winflag = 1;
     switch (controller) {
         case "x40":
             url = "/Mail/Record?pid=" + pid;
@@ -74,8 +75,11 @@ function _edit(controller, pid, header) {
             url = "/" + controller + "/record?pid=" + pid;
             break;
     }
+    if (controller === "p51") {
+        winflag = 2;
+    }
    
-    _window_open(_ep(url), 1, header);
+    _window_open(_ep(url), winflag, header);
 
 }
 

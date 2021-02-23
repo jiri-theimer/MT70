@@ -51,11 +51,11 @@ namespace BO
             {
                 if (this.ismoneyinput==true)
                 {
-                    AQ("p34.p33ID IN (2,5)", null, null);
+                    AQ("a.p34ID IN (select p34ID FROM p34ActivityGroup WHERE p33ID IN (2,5))", null, null);
                 }
                 else
                 {
-                    AQ("p34.p33ID NOT IN (2,5)", null, null);
+                    AQ("a.p34ID IN (select p34ID FROM p34ActivityGroup WHERE p33ID IN (1,3))", null, null);
                 }
             }
             if (this.isbillable != null)

@@ -17,8 +17,8 @@ namespace BO
         public string j07Name { get; }
         public string p34Name { get; }
         public string p32Name { get; }
+
+      
         
-
-
     }
 }

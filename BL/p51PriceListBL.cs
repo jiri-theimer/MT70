@@ -13,6 +13,7 @@ namespace BL
         public IEnumerable<BO.p51PriceList> GetList(BO.myQuery mq);
         public int Save(BO.p51PriceList rec, List<BO.p52PriceList_Item> lisP52);
 
+        public IEnumerable<BO.p52PriceList_Item> GetList_p52(int p51id);
     }
     class p51PriceListBL : BaseBL, Ip51PriceListBL
     {
@@ -44,6 +45,17 @@ namespace BL
             return _db.GetList<BO.p51PriceList>(fq.FinalSql, fq.Parameters);
         }
 
+        public IEnumerable<BO.p52PriceList_Item> GetList_p52(int p51id)
+        {
+            sb("select a.*,j02.j02LastName+' '+j02.j02FirstName as Person,j07.j07Name,p34.p34Name,p32.p32Name,");
+            sb(_db.GetSQL1_Ocas("p52",false,false,true));
+            sb(" FROM p52PriceList_Item a LEFT OUTER JOIN j02Person j02 ON a.j02ID=j02.j02ID");
+            sb(" LEFT OUTER JOIN j07PersonPosition j07 ON a.j07ID=j07.j07ID");
+            sb(" LEFT OUTER JOIN p34ActivityGroup p34 ON a.p34ID=p34.p34ID");
+            sb(" LEFT OUTER JOIN p32Activity p32 ON a.p32ID=p32.p32ID");
+            sb(" WHERE a.p51ID=@p51id");
+            return _db.GetList<BO.p52PriceList_Item>(sbret(),new { p51id = p51id });
+        }
 
 
         public int Save(BO.p51PriceList rec,List<BO.p52PriceList_Item> lisP52)
@@ -89,7 +101,7 @@ namespace BL
                             p.AddBool("p52IsMaster", c.p52IsMaster);
                             p.AddBool("p52IsPlusAllTimeSheets", c.p52IsPlusAllTimeSheets);
 
-                            _db.SaveRecord("p52PriceList_Item", p.getDynamicDapperPars(), c);
+                            _db.SaveRecord("p52PriceList_Item", p.getDynamicDapperPars(), c,false,true);
                         }
                     }
                     var pars = new Dapper.DynamicParameters();
@@ -114,6 +126,7 @@ namespace BL
         }
         private bool ValidateBeforeSave(BO.p51PriceList rec)
         {
+            
             if (string.IsNullOrEmpty(rec.p51Name))
             {
                 this.AddMessage("Chybí vyplnit [Název]."); return false;

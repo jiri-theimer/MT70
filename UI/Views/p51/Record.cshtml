@@ -27,8 +27,11 @@
         <div class="col-sm-3 col-md-3">
             <mycombo entity="j27Currency" asp-for="Rec.j27ID" selectedtext="@Model.ComboJ27Code" view-flag="2"></mycombo>
         </div>
-        <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Výchozí (nejpoužívanější) sazba"):</label>
-        <div class="col-sm-2 col-md-2">
+        
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí sazba"):</label>
+        <div class="col-sm-3 col-md-3">
             <mynumber asp-for="Rec.p51DefaultRateT" decimal-digits="2"></mynumber>
 
 
@@ -39,15 +42,90 @@
         <div class="col-sm-9 col-md-8">
             <input class="form-control" asp-for="Rec.p51Name" />
         </div>
-        
-        
+
+
     </div>
-    
 
 
 
 
 
+
+</div>
+
+<div class="card">
+    <div class="card-header">
+        @_f.tra("Položkové sazby (vyjímky z výchozí (nejpoužívanější sazby)")
+
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="handle_add_row()">@_f.tra("Přidat řádek")</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="handle_clear_rows()" style="margin-left:100px;">@_f.tra("Vyčistit řádky")</button>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover" style="table-layout: fixed;min-width:1000px;">
+            <tr>
+                <th style="width:100px;"></th>
+                <th>@_f.tra("Pozice/Osoba")</th>
+                <th style="width:100px;">@_f.tra("Sazba")</th>
+                <th style="width:140px;">@_f.tra("Sešit/Aktivita")</th>
+                <th></th>
+                <th style="width:40px;"></th>
+                <th style="width:40px;"></th>
+            </tr>
+            @for (int i = 0; i < Model.lisP52.Count; i++)
+            {
+                <tr style="@(Model.lisP52[i].CssTempDisplay)">
+                    <td>
+                        <input type="hidden" asp-for="lisP52[i].IsTempDeleted" value="@Model.lisP52[i].IsTempDeleted" />
+                        <input type="hidden" asp-for="lisP52[i].TempGuid" value="@Model.lisP52[i].TempGuid" />
+
+                        <select class="form-select" asp-for="@Model.lisP52[i].RowPrefixWho" onchange="postback()">
+                            <option value="j02">@_f.tra("Osoba")</option>
+                            <option value="j07">@_f.tra("Pozice")</option>
+                            <option value="all">@_f.tra("Všichni")</option>
+                        </select>
+                    </td>
+                    <td>
+                        @if (Model.lisP52[i].RowPrefixWho == "j02")
+                        {
+                            <mycombo entity="j02Person" asp-for="@Model.lisP52[i].j02ID" selectedtext="@Model.lisP52[i].ComboPerson" view-flag="1" myqueryinline="j02isintraperson@bool@1"></mycombo>
+                        }
+                        @if (Model.lisP52[i].RowPrefixWho == "j07")
+                        {
+                            <mycombo entity="j07PersonPosition" asp-for="@Model.lisP52[i].j07ID" selectedtext="@Model.lisP52[i].ComboJ07Name" view-flag="2"></mycombo>
+                        }
+
+                    </td>
+                    <td>
+                        <mynumber asp-for="@Model.lisP52[i].p52Rate" decimal-digits="2"></mynumber>
+                    </td>
+                    <td>
+                        <select class="form-select" asp-for="@Model.lisP52[i].RowPrefixActivity" onchange="postback()">
+                            <option value="p32">@_f.tra("Jedna aktivita")</option>
+                            <option value="p34">@_f.tra("Jeden sešit")</option>
+                            <option value="all">@_f.tra("Všechny časové sešity")</option>
+                        </select>
+                    </td>
+                    <td>
+                        @if (Model.lisP52[i].RowPrefixActivity == "p32")
+                        {
+                            <mycombo entity="p32Activity" asp-for="@Model.lisP52[i].p32ID" selectedtext="@Model.lisP52[i].ComboP32Name" view-flag="2" myqueryinline="ismoneyinput@bool@0"></mycombo>
+                        }
+                        @if (Model.lisP52[i].RowPrefixActivity == "p34")
+                        {
+                            <mycombo entity="p34ActivityGroup" asp-for="@Model.lisP52[i].p34ID" selectedtext="@Model.lisP52[i].ComboP34Name" view-flag="2" myqueryinline="ismoneyinput@bool@0"></mycombo>
+                        }
+                    </td>
+
+                    <td>
+                        <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_row('@(Model.lisP52[i].TempGuid)')">x</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default" title="@_f.tra("Kopírovat řádek")" onclick="handle_clone_row('@(Model.lisP52[i].TempGuid)')"><span class="k-icon k-i-copy"></span></button>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
 </div>
 
 
@@ -56,9 +134,9 @@
 
 
         $("#Rec_p51TypeFlag").on("change", function () {
-            postback("postback");
+            postback();
         });
-        
+
 
 
 
@@ -68,10 +146,29 @@
 
 
 
-    function postback(oper) {
+    function postback() {
 
-        form1.action = _ep("p51/Record?oper=" + oper);
+        form1.action = _ep("p51/Record?oper=postback");
         form1.submit();
     }
 
+
+    function handle_delete_row(guid) {
+        form1.action = _ep("/p51/Record?oper=delete_row&guid=" + guid);
+        form1.submit();
+
+    }
+    function handle_add_row() {
+        form1.action = _ep("/p51/Record?oper=add_row");
+        form1.submit();
+    }
+
+    function handle_clear_rows() {
+        form1.action = _ep("/p51/Record?oper=clear_rows");
+        form1.submit();
+    }
+    function handle_clone_row(guid) {
+        form1.action = _ep("/p51/Record?oper=clone_row&guid=" + guid);
+        form1.submit();
+    }
 </script>

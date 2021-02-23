@@ -144,7 +144,7 @@ namespace BL
             AppendTimestamp("j04UserRole");
 
             AF("j07PersonPosition", "j07Name", "Pozice", gdc1, null, "string", false, true);
-            AF("j07PersonPosition", "j07Ordinary", "#", gdc1, null, "num0");
+            AF("j07PersonPosition", "j07Ordinary", "#", gdc2, null, "num0");
             AF("j07PersonPosition", "j07Name_BillingLang1", "Fakturační jazyk #1");
             AF("j07PersonPosition", "j07Name_BillingLang2", "Fakturační jazyk #2");
             AF("j07PersonPosition", "j07Name_BillingLang3", "Fakturační jazyk #3");
@@ -588,8 +588,11 @@ namespace BL
             switch (mq.Prefix)
             {
                 case "j02":
-                    ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j03Login", rels, bolComboColumns));
-                    ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j04Name", rels, bolComboColumns));
+                    if (!bolComboColumns)
+                    {
+                        ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j03Login", rels, bolComboColumns));
+                        ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j04Name", rels, bolComboColumns));
+                    }                                       
                     ret.Add(InhaleColumn4Relation("j02_j07", "j07PersonPosition", "j07Name", rels, bolComboColumns));
 
 
