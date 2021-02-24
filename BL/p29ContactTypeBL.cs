@@ -10,7 +10,7 @@ namespace BL
     {
         public BO.p29ContactType Load(int pid);
         public IEnumerable<BO.p29ContactType> GetList(BO.myQuery mq);
-        public int Save(BO.p29ContactType rec, List<int> p34ids);
+        public int Save(BO.p29ContactType rec);
 
 
     }
@@ -42,7 +42,7 @@ namespace BL
         }
 
 
-        public int Save(BO.p29ContactType rec, List<int> p34ids)
+        public int Save(BO.p29ContactType rec)
         {
             if (!ValidateBeforeSave(rec))
             {
