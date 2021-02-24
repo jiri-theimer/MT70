@@ -87,7 +87,7 @@
                     <td>
                         @if (Model.lisP52[i].RowPrefixWho == "j02")
                         {
-                            <mycombo entity="j02Person" asp-for="@Model.lisP52[i].j02ID" selectedtext="@Model.lisP52[i].ComboPerson" view-flag="1" myqueryinline="j02isintraperson@bool@1"></mycombo>
+                            <mycombo entity="j02Person" asp-for="@Model.lisP52[i].j02ID" selectedtext="@Model.lisP52[i].ComboPerson" view-flag="1" myqueryinline="j02isintraperson|bool|1"></mycombo>
                         }
                         @if (Model.lisP52[i].RowPrefixWho == "j07")
                         {
@@ -108,11 +108,11 @@
                     <td>
                         @if (Model.lisP52[i].RowPrefixActivity == "p32")
                         {
-                            <mycombo entity="p32Activity" asp-for="@Model.lisP52[i].p32ID" selectedtext="@Model.lisP52[i].ComboP32Name" view-flag="2" myqueryinline="ismoneyinput@bool@0"></mycombo>
+                            <mycombo entity="p32Activity" asp-for="@Model.lisP52[i].p32ID" selectedtext="@Model.lisP52[i].ComboP32Name" view-flag="2" myqueryinline="ismoneyinput|bool|0"></mycombo>
                         }
                         @if (Model.lisP52[i].RowPrefixActivity == "p34")
                         {
-                            <mycombo entity="p34ActivityGroup" asp-for="@Model.lisP52[i].p34ID" selectedtext="@Model.lisP52[i].ComboP34Name" view-flag="2" myqueryinline="ismoneyinput@bool@0"></mycombo>
+                            <mycombo entity="p34ActivityGroup" asp-for="@Model.lisP52[i].p34ID" selectedtext="@Model.lisP52[i].ComboP34Name" view-flag="2" myqueryinline="ismoneyinput|bool|0"></mycombo>
                         }
                     </td>
 

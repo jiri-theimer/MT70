@@ -99,43 +99,43 @@ namespace UI.Controllers
         }
 
         
-        public IActionResult Users(string prefix, int go2pid)
+        public IActionResult Users(string prefix, int go2pid, string myqueryinline)
         {
             var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
             handle_default_link(v, "Users", "j03");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,go2pid,BO.BAS.ConvertString2List("users"),null);
+            v.gridinput = GetGridInput(v.entity,v.prefix,go2pid,BO.BAS.ConvertString2List("users"), myqueryinline);
             
             return View(v);
         }
-        public IActionResult Billing(string prefix, int go2pid)
+        public IActionResult Billing(string prefix, int go2pid, string myqueryinline)
         {
             var v = new AdminPage() { prefix = prefix, go2pid = go2pid  };
             handle_default_link(v, "Billing", "p92");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("billing"),null);            
+            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("billing"), myqueryinline);            
 
             return View(v);
         }
-        public IActionResult Worksheet(string prefix, int go2pid)
+        public IActionResult Worksheet(string prefix, int go2pid, string myqueryinline)
         {
             var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
             handle_default_link(v, "Worksheet", "p32");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("worksheet"),null);
+            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("worksheet"), myqueryinline);
 
             return View(v);
         }
-        public IActionResult Projects(string prefix, int go2pid)
+        public IActionResult Projects(string prefix, int go2pid, string myqueryinline)
         {
             var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
             handle_default_link(v, "Projects", "p42");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("projects"),null);
+            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("projects"), myqueryinline);
             v.gridinput.viewstate = "projects";
 
             return View(v);
@@ -259,7 +259,7 @@ namespace UI.Controllers
             switch (prefix)
             {
                 case "j02":
-                    strMyQueryInline = "j02isintraperson@bool@1";
+                    strMyQueryInline = "j02isintraperson|bool|1";
                     break;
             }
             if (!string.IsNullOrEmpty(myqueryinline))
@@ -270,7 +270,7 @@ namespace UI.Controllers
                 }
                 else
                 {
-                    strMyQueryInline += "@"+myqueryinline;
+                    strMyQueryInline += "|"+myqueryinline;
                 }
                 
             }

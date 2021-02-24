@@ -26,7 +26,7 @@
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Osoba"):</label>
             <div class="col-sm-11 col-md-10">
-                <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.ComboPerson" view-flag="1" myqueryinline="j02isintraperson@bool@1"></mycombo>
+                <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.ComboPerson" view-flag="1" myqueryinline="j02isintraperson|bool|1"></mycombo>
             </div>
 
         </div>

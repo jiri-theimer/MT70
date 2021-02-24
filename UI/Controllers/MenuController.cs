@@ -157,6 +157,7 @@ namespace UI.Controllers
             DIV_TRANS("Hodinové sazby");
             AMI("Ceníky sazeb", aurl("Worksheet?prefix=p51"));
 
+            AMI("Uživatelská pole", aurl("Projects?prefix=x28&myqueryinline=x29id|int|331"));
             handle_selected_item(prefix);
 
             return FlushResult_UL(false,true);
@@ -178,6 +179,8 @@ namespace UI.Controllers
             DIV_TRANS("Hodinové sazby");
             AMI("Ceníky sazeb", aurl("Billing?prefix=p51"));
 
+            AMI("Uživatelská pole", aurl("Projects?prefix=x28&myqueryinline=x29id|int|391"));
+
             handle_selected_item(prefix);
 
             return FlushResult_UL(false,true);
@@ -187,10 +190,10 @@ namespace UI.Controllers
             AMI("Úrovně", aurl("Projects?prefix=p07"));
             DIV();
             AMI("Typy", aurl("Projects?prefix=p42"));
-            AMI("Role osob v projektech", aurl("Projects?prefix=x67"));
+            AMI("Role osob v projektech", aurl("Projects?prefix=x67&myqueryinline=x29id|int|141"));
 
 
-            AMI("Uživatelská pole", aurl("Projects?prefix=x28"));
+            AMI("Uživatelská pole", aurl("Projects?prefix=x28&myqueryinline=x29id|int|141"));
 
             handle_selected_item(prefix);
 
@@ -199,9 +202,9 @@ namespace UI.Controllers
         public string AdminClients(string prefix)
         {
             AMI("Typy klientů", aurl("Clients?prefix=p29"));
-            AMI("Role osob v klientech", aurl("Clients?prefix=x67"));
+            AMI("Role osob v klientech", aurl("Clients?prefix=x67&myqueryinline=x29id|int|328"));
 
-            AMI("Uživatelská pole", aurl("Clients?prefix=x28&myqueryinline=x29id@int@328"));
+            AMI("Uživatelská pole", aurl("Clients?prefix=x28&myqueryinline=x29id|int|328"));
 
             handle_selected_item(prefix);
 

@@ -17,7 +17,7 @@ namespace BO
             {
                 return;
             }
-            _mqi = BO.BAS.ConvertString2List(myqueryinline, "@");
+            _mqi = BO.BAS.ConvertString2List(myqueryinline, "|");
         }
         public BO.baseQuery Load(string prefix, string master_prefix=null, int master_pid=0, string myqueryinline = null)
         {
