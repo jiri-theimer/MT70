@@ -2,7 +2,7 @@
 @inject BL.Factory _f
 
 @{
-    Model.PageTitle = _f.tra("Projekty");
+    Model.PageTitle = _f.tra("Klienti");
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,7 +11,7 @@
 
 <div class="row pt-1 bg-light m-0">
     <div id="layout_sidebar_contextmenu" class="col-auto">
-        <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminProjects',0,'@Model.prefix');">☰@Model.PageTitle</a>
+        <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminClients',0,'@Model.prefix');">☰@Model.PageTitle</a>
         <h4 id="layout_sidebar_contextmenu_onlytext">@Model.PageTitle</h4>
     </div>
 
@@ -36,7 +36,7 @@
         <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
     </div>
     <div class="nonmobile ml-2 col-auto">
-        <a class="btn btn-light" href="/Admin/Projects?prefix=@Model.prefix" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+        <a class="btn btn-light" href="/Admin/Clients?prefix=@Model.prefix" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
     </div>
     <div class="ml-2 col-auto">
         <button id="cmdCreate" type="button" class="btn btn-primary">@_f.tra("Nový záznam")</button>
@@ -73,7 +73,7 @@
 
 
 
-        $.post("/Menu/AdminProjects", { prefix: "@Model.prefix" }, function (data) {
+        $.post("/Menu/AdminClients", { prefix: "@Model.prefix" }, function (data) {
 
             $("#layout_sidebar").html(data);
 
@@ -109,7 +109,7 @@
 
     function change_grid(j72id) {
             $.post("/Common/SetUserParam", { key: "Admin/@(Model.prefix)-j72id",value:j72id  }, function (data) {
-                location.replace("/Admin/Projects?prefix=@Model.prefix");
+                location.replace("/Admin/Clients?prefix=@Model.prefix");
 
             });
     }
@@ -122,8 +122,3 @@
     }
 
 </script>
-
-
-
-
-

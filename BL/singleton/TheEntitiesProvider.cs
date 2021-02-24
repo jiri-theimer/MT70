@@ -82,6 +82,7 @@ namespace BL
 
             AE("o15AutoComplete", "AutoComplete položky", "AutoComplete položka", "o15AutoComplete a", "a.o15Flag");
 
+            AE("p29ContactType", "Typy klientů", "Typ klienta", "p29ContactType a", "a.p29Ordinary");
             AE("p34ActivityGroup", "Sešity aktivit", "Sešit", "p34ActivityGroup a", "a.p34Ordinary");
             AE("p32Activity", "Aktivity", "Aktivita", "p32Activity a", "a.p32Ordinary");
             AE("p35Unit", "Kusovníkové jednotky", "Jednotka kusovníku", "p35Unit a", "a.p35Name");

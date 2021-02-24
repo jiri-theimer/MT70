@@ -92,64 +92,70 @@ namespace UI.Controllers
         }
         public string AdminMenu()
         {
-            AMI("Správa uživatelů", "/Admin/Users", "k-i-user");            
-            AMI("Vykazování úkonů", "/Admin/Worksheet", "k-i-clock");
-            AMI("Vyúčtování", "/Admin/Billing", "k-i-dollar");
-            AMI("Organizace projektů", "/Admin/Projects", "k-i-wrench");
-            AMI("Různé", "/Admin/Misc", "k-i-gear");
+            AMI("Správa uživatelů", aurl("Users"), "k-i-user");            
+            AMI("Vykazování úkonů", aurl("Worksheet"), "k-i-clock");
+            AMI("Vyúčtování", aurl("Billing"), "k-i-dollar");
+            AMI("Projekty", aurl("Projects"), "k-i-wrench");
+            AMI("Klienti", aurl("Clients"), "k-i-wrench");
+            AMI("Různé", aurl("Misc"), "k-i-gear");
             return FlushResult_UL(true,false);
         }
        
         public string AdminUsers(string prefix)
         {
             //DIV_TRANS("Správa uživatelů");
-            AMI("Uživatelské účty", url_users("j03"));
-            AMI("Aplikační role", url_users("j04"));
+            AMI("Uživatelské účty", aurl("Users?prefix=j03"));
+            AMI("Aplikační role", aurl("Users?prefix=j04"));
             DIV();
-            AMI("Přihlásit se pod jinou identitou", "/Admin/LogAsUser");
+            AMI("Přihlásit se pod jinou identitou", aurl("LogAsUser"));
             
             DIV_TRANS("Osobní profily");
-            AMI("Osobní profily", url_users("j02"));
-            AMI("Pozice", url_users("j07"));
-            AMI("Týmy osob", url_users("j11"));
-            AMI("Nadřízení/Podřízení", url_users("j05"));
+            AMI("Osobní profily", aurl("Users?prefix=j02"));
+            AMI("Pozice", aurl("Users?prefix=j07"));
+            AMI("Týmy osob", aurl("Users?prefix=j11"));
+            AMI("Nadřízení/Podřízení", aurl("Users?prefix=j05"));
 
             DIV_TRANS("Časový fond");
-            AMI("Pracovní fondy", url_users("c21"));
-            AMI("Dny svátků", url_users("c26"));
+            AMI("Pracovní fondy", aurl("Users?prefix=c21"));
+            AMI("Dny svátků", aurl("Users?prefix=c26"));
 
             DIV_TRANS("Dashboard");
-            AMI("Widgety", url_users("x55"));
+            AMI("Widgety", aurl("Users?prefix=x55"));
 
             DIV_TRANS("Provoz");
-            AMI("PING Log", url_users("j92"));
+            AMI("PING Log", aurl("Users?prefix=j92"));
             
-            AMI("LOGIN Log", url_users("j90"));
+            AMI("LOGIN Log", aurl("Users?prefix=j90"));
             
             DIV_TRANS("Pošta");
-            AMI("SMTP poštovní účty", url_users("o40"));
-            AMI("OUTBOX", url_users("x40"));
+            AMI("SMTP poštovní účty", aurl("Users?prefix=o40"));
+            AMI("OUTBOX", aurl("Users?prefix=x40"));
             AMI("MAIL fronta", "/mail/MailBatchFramework");
                        
             handle_selected_item(prefix);
 
             return FlushResult_UL(false,true);
         }
+
+        public string aurl(string ocas)
+        {
+            return "/Admin/" + ocas;
+        }
         public string AdminWorksheet(string prefix)
         {
-            AMI("Sešity", url_admin_worksheet("p34"));
-            AMI("Aktivity", url_admin_worksheet("p32"));
+            AMI("Sešity", aurl("Worksheet?prefix=p34"));
+            AMI("Aktivity", aurl("Worksheet?prefix=p32"));
             DIV();
-            AMI("Fakturační oddíly", url_admin_worksheet("p95"));
-            AMI("Odvětví aktivit", url_admin_worksheet("p38"));
-            AMI("Klastry aktivit", url_admin_worksheet("p61"));
-            
+            AMI("Fakturační oddíly", aurl("Worksheet?prefix=p95"));
+            AMI("Odvětví aktivit", aurl("Worksheet?prefix=p38"));
+            AMI("Klastry aktivit", aurl("Worksheet?prefix=p61"));
+
             DIV();
-            AMI("Uzamknutá období", url_admin_worksheet("p36"));
-            AMI("Jednotky kusovníkových úkonů", url_admin_worksheet("p35"));
+            AMI("Uzamknutá období", aurl("Worksheet?prefix=p36"));
+            AMI("Jednotky kusovníkových úkonů", aurl("Worksheet?prefix=p35"));
 
             DIV_TRANS("Hodinové sazby");
-            AMI("Ceníky sazeb", url_admin_worksheet("p51"));
+            AMI("Ceníky sazeb", aurl("Worksheet?prefix=p51"));
 
             handle_selected_item(prefix);
 
@@ -157,20 +163,20 @@ namespace UI.Controllers
         }
         public string AdminBilling(string prefix)
         {
-            AMI("Typy faktur", url_admin_billing("p92"));
-            AMI("Bankovní účty", url_admin_billing("p86"));            
-            AMI("Vystavovatelé faktur", url_admin_billing("p93"));
+            AMI("Typy faktur", aurl("Billing?prefix=p92"));
+            AMI("Bankovní účty", aurl("Billing?prefix=p86"));            
+            AMI("Vystavovatelé faktur", aurl("Billing?prefix=p93"));
             DIV();
-            AMI("Měnové kurzy", url_admin_billing("m62"));
-            AMI("DPH sazby", url_admin_billing("p53"));
-            AMI("Fakturační oddíly", url_admin_billing("p95"));
-            AMI("Zaokrouhlovací pravidla", url_admin_billing("p98"));
-            AMI("Struktury rozpisu faktury", url_admin_billing("p80"));
-            AMI("Režijní přirážky k fakturaci", url_admin_billing("p63"));
+            AMI("Měnové kurzy", aurl("Billing?prefix=m62"));
+            AMI("DPH sazby", aurl("Billing?prefix=p53"));
+            AMI("Fakturační oddíly", aurl("Billing?prefix=p95"));
+            AMI("Zaokrouhlovací pravidla", aurl("Billing?prefix=p98"));
+            AMI("Struktury rozpisu faktury", aurl("Billing?prefix=p80"));
+            AMI("Režijní přirážky k fakturaci", aurl("Billing?prefix=p63"));
             DIV();
-            AMI("Typy záloh", url_admin_billing("p89"));
+            AMI("Typy záloh", aurl("Billing?prefix=p89"));
             DIV_TRANS("Hodinové sazby");
-            AMI("Ceníky sazeb", url_admin_billing("p51"));
+            AMI("Ceníky sazeb", aurl("Billing?prefix=p51"));
 
             handle_selected_item(prefix);
 
@@ -178,36 +184,47 @@ namespace UI.Controllers
         }
         public string AdminProjects(string prefix)
         {
-            AMI("Úrovně", url_admin_projects("p07"));
+            AMI("Úrovně", aurl("Projects?prefix=p07"));
             DIV();
-            AMI("Typy", url_admin_projects("p42"));
-            AMI("Role osob v projektech", url_admin_projects("x67"));
+            AMI("Typy", aurl("Projects?prefix=p42"));
+            AMI("Role osob v projektech", aurl("Projects?prefix=x67"));
 
-            DIV_TRANS("Hodinové sazby");
-            AMI("Ceníky sazeb", url_admin_projects("p51"));
+
+            AMI("Uživatelská pole", aurl("Projects?prefix=x28"));
 
             handle_selected_item(prefix);
 
             return FlushResult_UL(false,true);
         }
+        public string AdminClients(string prefix)
+        {
+            AMI("Typy klientů", aurl("Clients?prefix=p29"));
+            AMI("Role osob v klientech", aurl("Clients?prefix=x67"));
+
+            AMI("Uživatelská pole", aurl("Clients?prefix=x28&myqueryinline=x29id@int@328"));
+
+            handle_selected_item(prefix);
+
+            return FlushResult_UL(false, true);
+        }
         public string AdminMisc(string prefix)
         {            
             DIV_TRANS("Uživatelská pole");
-            AMI("Katalog uživatelských polí", url_ciselniky("x28"));
-            AMI("Skupiny uživatelských polí", url_ciselniky("x27"));
+            AMI("Katalog uživatelských polí", aurl("Misc?prefix=x28"));
+            AMI("Skupiny uživatelských polí", aurl("Misc?prefix=x27"));
 
             DIV_TRANS("Pevné tiskové sestavy");
-            AMI("Report šablony", url_ciselniky("x31"));
-            AMI("Kategorie sestav", url_ciselniky("j25"));
+            AMI("Report šablony", aurl("Misc?prefix=x31"));
+            AMI("Kategorie sestav", aurl("Misc?prefix=j25"));
 
             DIV_TRANS("Ostatní");
-            AMI("Číselné řady", url_ciselniky("x38"));
-            AMI("Střediska", url_ciselniky("j18"));
-            AMI("Daňové regiony", url_ciselniky("j17"));
-            AMI("Notifikace událostí", url_ciselniky("x46"));
+            AMI("Číselné řady", aurl("Misc?prefix=x38"));
+            AMI("Střediska", aurl("Misc?prefix=j18"));
+            AMI("Daňové regiony", aurl("Misc?prefix=j17"));
+            AMI("Notifikace událostí", aurl("Misc?prefix=x46"));
 
-            AMI("Uživatelská nápověda", url_ciselniky("x51"));
-            AMI("Aplikační překlad", url_ciselniky("x91"));
+            AMI("Uživatelská nápověda", aurl("Misc?prefix=x51"));
+            AMI("Aplikační překlad", aurl("Misc?prefix=x91"));
 
             handle_selected_item(prefix);
 
@@ -266,27 +283,12 @@ namespace UI.Controllers
 
             return FlushResult_UL(true, false);
         }
-        private string url_ciselniky(string prefix)
-        {
-            return "/Admin/Misc?prefix=" + prefix;
-        }
+        
        
-        private string url_users(string prefix)
-        {
-            return "/Admin/Users?prefix=" + prefix;
-        }
-        private string url_admin_projects(string prefix)
-        {
-            return "/Admin/Projects?prefix=" + prefix;
-        }
-        private string url_admin_worksheet(string prefix)
-        {
-            return "/Admin/Worksheet?prefix=" + prefix;
-        }
-        private string url_admin_billing(string prefix)
-        {
-            return "/Admin/Billing?prefix=" + prefix;
-        }
+        
+        
+        
+       
         private void handle_selected_item(string prefix)
         {
             if (prefix != null)

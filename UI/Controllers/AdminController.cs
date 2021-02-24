@@ -21,25 +21,25 @@ namespace UI.Controllers
         public TheGridOutput HandleTheGridFilter(TheGridUIContext tgi, List<BO.StringPair> pathpars, List<BO.TheGridColumnFilter> filter) //TheGrid povinná metoda: sloupcový filtr
         {
             
-            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate), Factory, _colsProvider);
+            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate,tgi.myqueryinline), Factory, _colsProvider);
             
             return c.Event_HandleTheGridFilter(tgi, filter);
 
         }
         public TheGridOutput HandleTheGridOper(TheGridUIContext tgi, List<BO.StringPair> pathpars)    //TheGrid povinná metoda: změna třídění, pageindex, změna stránky
         {
-            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate), Factory, _colsProvider);
+            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate,tgi.myqueryinline), Factory, _colsProvider);
             return c.Event_HandleTheGridOper(tgi);
 
         }
         public string HandleTheGridMenu(TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda: zobrazení grid menu
         {
-            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate), Factory, _colsProvider);
+            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate,tgi.myqueryinline), Factory, _colsProvider);
             return c.Event_HandleTheGridMenu(tgi.j72id);
         }
         public TheGridExportedFile HandleTheGridExport(string format, string pids, TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda pro export dat
         {           
-            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate), Factory, _colsProvider);
+            var c = new UI.TheGridSupport(GetGridInput(tgi.entity,tgi.prefix,0, tgi.viewstate,tgi.myqueryinline), Factory, _colsProvider);
             return c.Event_HandleTheGridExport(format, tgi.j72id, pids);
         }
         //-----------Konec GRID událostí-------------
@@ -105,7 +105,7 @@ namespace UI.Controllers
             handle_default_link(v, "Users", "j03");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,go2pid,BO.BAS.ConvertString2List("users"));
+            v.gridinput = GetGridInput(v.entity,v.prefix,go2pid,BO.BAS.ConvertString2List("users"),null);
             
             return View(v);
         }
@@ -115,7 +115,7 @@ namespace UI.Controllers
             handle_default_link(v, "Billing", "p92");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("billing"));            
+            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("billing"),null);            
 
             return View(v);
         }
@@ -125,7 +125,7 @@ namespace UI.Controllers
             handle_default_link(v, "Worksheet", "p32");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("worksheet"));
+            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("worksheet"),null);
 
             return View(v);
         }
@@ -135,8 +135,20 @@ namespace UI.Controllers
             handle_default_link(v, "Projects", "p42");
             
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("projects"));
+            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("projects"),null);
             v.gridinput.viewstate = "projects";
+
+            return View(v);
+        }
+        public IActionResult Clients(string prefix, int go2pid,string myqueryinline)
+        {
+            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
+            handle_default_link(v, "Clients", "p29");
+
+            inhale_entity(ref v, v.prefix);
+            v.gridinput = GetGridInput(v.entity, v.prefix, v.go2pid, BO.BAS.ConvertString2List("clients"),myqueryinline);
+            
+            v.gridinput.viewstate = "clients";
 
             return View(v);
         }
@@ -146,7 +158,7 @@ namespace UI.Controllers
             handle_default_link(v,"Misc", "x38");
 
             inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix, v.go2pid, BO.BAS.ConvertString2List("misc"));
+            v.gridinput = GetGridInput(v.entity, v.prefix, v.go2pid, BO.BAS.ConvertString2List("misc"),null);
             v.gridinput.viewstate = "misc";
 
             return View(v);
@@ -155,7 +167,7 @@ namespace UI.Controllers
         {
             var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
             inhale_entity(ref v, prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("workflow"));
+            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("workflow"),null);
             return View(v);
         }
 
@@ -241,7 +253,7 @@ namespace UI.Controllers
             return new BO.Result(false, "Soubor byl vygenerován (do TEMPu)");
         }
 
-        private TheGridInput GetGridInput(string entity,string prefix,int go2pid,List<string> viewstate)
+        private TheGridInput GetGridInput(string entity,string prefix,int go2pid,List<string> viewstate,string myqueryinline)
         {
             string strMyQueryInline = null;
             switch (prefix)
@@ -250,25 +262,38 @@ namespace UI.Controllers
                     strMyQueryInline = "j02isintraperson@bool@1";
                     break;
             }
+            if (!string.IsNullOrEmpty(myqueryinline))
+            {
+                if (strMyQueryInline == null)
+                {
+                    strMyQueryInline = myqueryinline;
+                }
+                else
+                {
+                    strMyQueryInline += "@"+myqueryinline;
+                }
+                
+            }
 
             var gi = new TheGridInput();
             gi.controllername = "Admin";
             gi.entity = entity;
             gi.go2pid = go2pid;
             gi.ondblclick = "handle_dblclick";
+            gi.myqueryinline = strMyQueryInline;
 
             gi.query = new BO.InitMyQuery().Load(prefix,null,0, strMyQueryInline);
             gi.query.IsRecordValid = null;
             
             gi.j72id = Factory.CBL.LoadUserParamInt("Admin/" + prefix + "-j72id");
             
-            if (viewstate != null)
-            {
-                if (viewstate[0] == "projects" && prefix == "x67")
-                {
-                    gi.query.explicit_sqlwhere = "a.x29ID=141";
-                }
-            }
+            //if (viewstate != null)
+            //{
+            //    if (viewstate[0] == "projects" && prefix == "x67")
+            //    {
+            //        gi.query.explicit_sqlwhere = "a.x29ID=141";
+            //    }
+            //}
             
             
 

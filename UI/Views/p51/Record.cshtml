@@ -27,7 +27,7 @@
         <div class="col-sm-3 col-md-3">
             <mycombo entity="j27Currency" asp-for="Rec.j27ID" selectedtext="@Model.ComboJ27Code" view-flag="2"></mycombo>
         </div>
-        
+
     </div>
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí sazba"):</label>
@@ -46,7 +46,7 @@
 
     </div>
 
-
+    
 
 
 
@@ -126,6 +126,10 @@
             }
         </table>
     </div>
+</div>
+<div class="my-5">
+    <input type="checkbox" asp-for="Rec.p51IsCustomTailor" />
+    <label class="col-form-label" for="Rec_p51IsCustomTailor">@_f.tra("Sazby na míru pouze pro jeden projekt/klient")</label>
 </div>
 
 

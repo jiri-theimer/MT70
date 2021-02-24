@@ -255,6 +255,10 @@ namespace BL
             AF("p07ProjectLevel", "p07NameInflection", "Koho čeho");
             AppendTimestamp("p07ProjectLevel");
 
+            AF("p29ContactType", "p29Name", "Typ klienta", gdc1, null, "string", false, true);            
+            AF("p29ContactType", "p29Ordinary", "#", gdc0, null, "num0");
+            AppendTimestamp("p29ContactType");
+
             AF("p42ProjectType", "p42Name", "Typ", gdc1, null, "string", false, true);
             AF("p42ProjectType", "p42Code", "Kód");
             AF("p42ProjectType", "p42Ordinary", "#", gdc0, null, "num0");
