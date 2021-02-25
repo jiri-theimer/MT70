@@ -60,7 +60,15 @@ namespace BL
             p.AddInt("p34ID", rec.p34ID,true);
             p.AddInt("p95ID", rec.p95ID, true);
             p.AddInt("p35ID", rec.p35ID, true);
-            p.AddEnumInt("x15ID", rec.x15ID);
+            if (rec.x15ID == BO.x15IdEnum.Nic)
+            {
+                p.AddInt("x15ID", 0,true);
+            }
+            else
+            {
+                p.AddEnumInt("x15ID", rec.x15ID);
+            }
+            
             p.AddInt("p38ID", rec.p38ID, true);
 
             p.AddString("p32Name", rec.p32Name);

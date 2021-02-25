@@ -72,6 +72,12 @@ namespace UI.Controllers
                 c.p32Name_BillingLang3 = v.Rec.p32Name_BillingLang3;
                 c.p32Name_BillingLang4 = v.Rec.p32Name_BillingLang4;
 
+                c.p32DefaultWorksheetText = v.Rec.p32DefaultWorksheetText;
+                c.p32DefaultWorksheetText_Lang1 = v.Rec.p32DefaultWorksheetText_Lang1;
+                c.p32DefaultWorksheetText_Lang2 = v.Rec.p32DefaultWorksheetText_Lang2;
+                c.p32DefaultWorksheetText_Lang3 = v.Rec.p32DefaultWorksheetText_Lang3;
+                c.p32DefaultWorksheetText_Lang4 = v.Rec.p32DefaultWorksheetText_Lang4;
+
                 c.p32Value_Default = v.Rec.p32Value_Default;
                 c.p32Value_Minimum = v.Rec.p32Value_Minimum;
                 c.p32Value_Maximum = v.Rec.p32Value_Maximum;

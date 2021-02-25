@@ -29,6 +29,7 @@
         <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Výchozí sazba DPH"):</label>
         <div class="col-sm-2 col-md-2">
             <select asp-for="@Model.Rec.x15ID" class="form-select">
+                <option value="Nic"></option>
                 <option value="BezDPH">@_f.tra("0% (Bez DPH)")</option>
                 <option value="SnizenaSazba">@_f.tra("Snížená sazba DPH")</option>
                 <option value="ZakladniSazba">@_f.tra("Základní sazba DPH")</option>
@@ -190,11 +191,49 @@
         </div>
         <div class="tab-pane" id="tab4" role="tabpanel">
 
+            <input type="radio" id="p32ManualFeeFlag0" asp-for="@Model.Rec.p32ManualFeeFlag" value="0">
+            <label for="p32ManualFeeFlag0">@_f.tra("Honorář časového úkonu se počítá násobkem hodin a fakturační hodinové sazby")</label>
+            <br />
+            <input type="radio" id="p32ManualFeeFlag1" asp-for="@Model.Rec.p32ManualFeeFlag" value="1">
+            <label for="p32ManualFeeFlag1">@_f.tra("Výši honoráře zadává uživatel ručně ve formuláři časového úkonu jako [Pevný honorář]")</label>
+            <br />
+            @if (Model.Rec.p32ManualFeeFlag == 1)
+            {                                
+                <div class="row my-2">
+                    <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Výchozí hodnota pevného honoráře"):</label>
+                    <div class="col-sm-4 col-md-4">
+                        <mynumber asp-for="Rec.p32ManualFeeDefAmount" decimal-digits="2"></mynumber>
+                    </div>
+                </div>
+            }
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Externí kód aktivity"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p32ExternalPID" />
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Předkontace v účetním IS"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p32AccountingIDS" />
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kód činnosti v účetním IS"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p32ActivityIDS" />
+                </div>
+            </div>
+            <div class="form-floating my-2">
+                <textarea class="form-control" asp-for="Rec.p32HelpText"></textarea>
+                <label for="Rec_p32HelpText">@_f.tra("Uživatelská nápověda k zapisování úkonu")</label>
+            </div>
         </div>
     </div>
 
 
-    
+
 
 
 
@@ -206,9 +245,12 @@
     $(document).ready(function () {
 
 
-
-
-
+        $("#p32ManualFeeFlag0").on("change", function () {
+            postback();
+        });
+        $("#p32ManualFeeFlag1").on("change", function () {
+            postback();
+        });
 
 
     });
