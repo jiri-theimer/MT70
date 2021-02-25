@@ -49,6 +49,8 @@ namespace BL
         private Ip51PriceListBL _p51;
         private Ip61ActivityClusterBL _p61;
         private Ip85TempboxBL _p85;
+        private Ip86BankAccountBL _p86;
+        private Ip93InvoiceHeaderBL _p93;
         private Ip95InvoiceRowBL _p95;
         private Ix51HelpCoreBL _x51;
         private Ix55WidgetBL _x55;
@@ -385,6 +387,22 @@ namespace BL
             {
                 if (_p85 == null) _p85 = new p85TempboxBL(this);
                 return _p85;
+            }
+        }
+        public Ip86BankAccountBL p86BankAccountBL
+        {
+            get
+            {
+                if (_p86 == null) _p86 = new p86BankAccountBL(this);
+                return _p86;
+            }
+        }
+        public Ip93InvoiceHeaderBL p93InvoiceHeaderBL
+        {
+            get
+            {
+                if (_p93 == null) _p93 = new p93InvoiceHeaderBL(this);
+                return _p93;
             }
         }
         public Ip95InvoiceRowBL p95InvoiceRowBL

@@ -1,0 +1,138 @@
+﻿@model UI.Models.Record.p93Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Vystavovatel faktur");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="row modal_record_container">
+    <div class="col-8">
+        <div class="row">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input class="form-control" asp-for="Rec.p93Name" />
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název firmy"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input class="form-control" asp-for="Rec.p93Company" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Ulice"):</label>
+            <div class="col-sm-11 col-md-10">
+                <textarea class="form-control" asp-for="Rec.p93Street"></textarea>
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Město"):</label>
+            <div class="col-sm-2 col-md-2">
+                <input class="form-control" asp-for="Rec.p93City" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("PSČ"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input class="form-control" asp-for="Rec.p93Zip" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Stát"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input class="form-control" asp-for="Rec.p93Country" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("ISDOC kód státu"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input asp-for="@Model.Rec.p93CountryCode" class="form-control" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontaktní TEL"):</label>
+            <div class="col-sm-11 col-md-10">
+                <textarea class="form-control" asp-for="Rec.p93Street"></textarea>
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontaktní e-mail"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input asp-for="@Model.Rec.p93Email" class="form-control" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input asp-for="@Model.Rec.p93RegID" class="form-control" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("DIČ"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input asp-for="@Model.Rec.p93VatID" class="form-control" />
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-floating my-2">
+            <textarea class="form-control" asp-for="Rec.p93Registration"></textarea>
+            <label for="Rec_p32HelpText">@_f.tra("Registrace v rejstříku")</label>
+        </div>
+        <div>
+            <input asp-for="@Model.Rec.p93Signature" class="form-control" placeholder="@_f.tra("Podpis")" />
+        </div>
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Obrázek podpisu")
+            </div>
+            <div class="card-body p-0 m-0">
+                <iframe id="fraUpload" src="/FileUpload/SingleUpload?guid=@Model.UploadGuidSignature" frameborder="0" scrolling="no"></iframe>
+            </div>
+        </div>
+
+
+        <div class="form-floating mt-2">
+            <textarea class="form-control" asp-for="Rec.p93Referent"></textarea>
+            <label for="Rec_p32HelpText">@_f.tra("Referent (doklad vystavil)")</label>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Obrázek loga")
+            </div>
+            <div class="card-body p-0 m-0">
+                <iframe id="fraUpload" src="/FileUpload/SingleUpload?guid=@Model.UploadGuidLogo" frameborder="0" scrolling="no"></iframe>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<input type="hidden" asp-for="@Model.UploadGuidLogo" />
+<input type="hidden" asp-for="@Model.UploadGuidSignature" />

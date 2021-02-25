@@ -105,6 +105,7 @@ namespace BL
             p.AddString("p32ExternalPID", rec.p32ExternalPID);
             p.AddEnumInt("p32AttendanceFlag", rec.p32AttendanceFlag);
             p.AddInt("p32ManualFeeFlag", rec.p32ManualFeeFlag);
+            
             p.AddDouble("p32ManualFeeDefAmount", rec.p32ManualFeeDefAmount);
             p.AddDouble("p32MarginHidden", rec.p32MarginHidden);
             p.AddDouble("p32MarginTransparent", rec.p32MarginTransparent);
