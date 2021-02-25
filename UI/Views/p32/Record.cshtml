@@ -1,0 +1,229 @@
+﻿@model UI.Models.Record.p32Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Aktivita");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-6 col-md-5">
+            <input class="form-control" asp-for="Rec.p32Name" />
+        </div>
+        <label class="col-sm-2 col-md-2 col-form-label">#@_f.tra("Pořadí v nabídce aktivit"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.p32Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Sešit"):</label>
+        <div class="col-sm-6 col-md-5">
+            <mycombo entity="p34ActivityGroup" asp-for="@Model.Rec.p34ID" selectedtext="@Model.ComboP34Name" filter-flag="1" event_after_changevalue="change_p34id"></mycombo>
+
+        </div>
+        <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Výchozí sazba DPH"):</label>
+        <div class="col-sm-2 col-md-2">
+            <select asp-for="@Model.Rec.x15ID" class="form-select">
+                <option value="BezDPH">@_f.tra("0% (Bez DPH)")</option>
+                <option value="SnizenaSazba">@_f.tra("Snížená sazba DPH")</option>
+                <option value="ZakladniSazba">@_f.tra("Základní sazba DPH")</option>
+                <option value="SpecialniSazba">@_f.tra("Speciální sazba DPH")</option>
+            </select>
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <div class="col-sm-2 col-md-2">
+            <input type="checkbox" asp-for="@Model.Rec.p32IsBillable" />
+            <label class="col-form-label" for="Rec_p32IsBillable">@_f.tra("Fakturovatelný úkon")</label>
+        </div>
+        <div class="col-sm-5 col-md-5">
+            <input type="checkbox" asp-for="@Model.Rec.p32IsTextRequired" />
+            <label class="col-form-label" for="Rec_p32IsTextRequired">@_f.tra("Zadávání popisu úkonu je povinné")</label>
+        </div>
+
+        <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Výchozí hodnota úkonu"):</label>
+        <div class="col-sm-2 col-md-2">
+            <mynumber asp-for="Rec.p32Value_Default" decimal-digits="2"></mynumber>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Fakturační oddíl"):</label>
+        <div class="col-sm-6 col-md-5">
+            <mycombo entity="p95InvoiceRow" asp-for="@Model.Rec.p95ID" selectedtext="@Model.ComboP95Name" filter-flag="1"></mycombo>
+        </div>
+        <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Minimální povolená hodnota"):</label>
+        <div class="col-sm-2 col-md-2">
+            <mynumber asp-for="Rec.p32Value_Minimum" decimal-digits="2"></mynumber>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Odvětví aktivity"):</label>
+        <div class="col-sm-6 col-md-5">
+            <mycombo entity="p95InvoiceRow" asp-for="@Model.Rec.p38ID" selectedtext="@Model.ComboP38Name" filter-flag="1"></mycombo>
+        </div>
+        <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Maximální povolená hodnota"):</label>
+        <div class="col-sm-2 col-md-2">
+            <mynumber asp-for="Rec.p32Value_Maximum" decimal-digits="2"></mynumber>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <div class="col-sm-4 col-md-4">
+            <input type="checkbox" asp-for="Rec.p32IsSupplier" />
+            <label class="col-form-label" for="Rec_p32IsSupplier">@_f.tra("V úkonu nabízet k vyplnění odkaz na dodavatele")</label>
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <input type="checkbox" asp-for="Rec.p32IsCP" />
+            <label class="col-form-label" for="Rec_p32IsCP">@_f.tra("V úkonu nabízet k vyplnění informace o poštovní zásilce")</label>
+        </div>
+
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Kód aktivity"):</label>
+        <div class="col-sm-2 col-md-2">
+            <input class="form-control" asp-for="Rec.p32Code" />
+        </div>
+    </div>
+
+    <div class="tabs_container_record">
+        <!-- Tab panes -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item onetab">
+                <a id="link_tab1" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab1">@_f.tra("Překlady do fakturačních jazyků")</a>
+            </li>
+            <li class="nav-item onetab">
+                <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Výchozí text úkonu")</a>
+            </li>
+            <li class="nav-item onetab">
+                <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Integrace s kalendářem")</a>
+            </li>
+            <li class="nav-item onetab">
+                <a id="link_tab4" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab4">@_f.tra("Ostatní")</a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="tab-content">
+        <div class="tab-pane" id="tab1" role="tabpanel">
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==1).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p32Name_BillingLang1" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==2).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p32Name_BillingLang2" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==3).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p32Name_BillingLang3" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==4).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p32Name_BillingLang4" />
+
+                </div>
+
+            </div>
+        </div>
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí text úkonu"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <textarea class="form-control" asp-for="Rec.p32DefaultWorksheetText"></textarea>
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==1).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <textarea class="form-control" asp-for="Rec.p32DefaultWorksheetText_Lang1"></textarea>
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==2).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <textarea class="form-control" asp-for="Rec.p32DefaultWorksheetText_Lang2"></textarea>
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==3).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <textarea class="form-control" asp-for="Rec.p32DefaultWorksheetText_Lang3"></textarea>
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==4).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <textarea class="form-control" asp-for="Rec.p32DefaultWorksheetText_Lang4"></textarea>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="tab-pane" id="tab3" role="tabpanel">
+
+        </div>
+        <div class="tab-pane" id="tab4" role="tabpanel">
+
+        </div>
+    </div>
+
+
+    
+
+
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+
+
+
+    });
+
+
+    function change_p34id(p34id) {
+        postback();
+    }
+
+
+    function postback() {
+
+        form1.action = _ep("p32/Record?oper=postback");
+        form1.submit();
+    }
+
+
+</script>

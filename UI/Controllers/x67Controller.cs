@@ -25,6 +25,7 @@ namespace UI.Controllers
                 
                 v.SelectedX53IDs = Factory.x67EntityRoleBL.GetList_BoundX53(v.rec_pid).Select(p => p.x53ID).ToList();
                 prefix = BO.BASX29.GetPrefix(v.Rec.x29ID);
+                
             }
             if (prefix == null)
             {

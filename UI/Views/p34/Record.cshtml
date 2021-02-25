@@ -1,0 +1,148 @@
+﻿@model UI.Models.Record.p34Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Sešit");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-6 col-md-5">
+            <input class="form-control" asp-for="Rec.p34Name" />
+        </div>
+        <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Pořadí v nabídce sešitů"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.p34Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Formát vykazování"):</label>
+        <div class="col-sm-6 col-md-5">
+            <select asp-for="@Model.Rec.p33ID" class="form-select">
+                <option value="Cas">@_f.tra("Čas")</option>
+                <option value="PenizeBezDPH">@_f.tra("Peníze bez DPH")</option>
+                <option value="Kusovnik">@_f.tra("Kusovník")</option>
+                <option value="PenizeVcDPHRozpisu">@_f.tra("Peníze s rozpisem DPH")</option>
+            </select>
+        </div>
+        <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Kód sešitu"):</label>
+        <div class="col-sm-1 col-md-1">
+            <input class="form-control" asp-for="Rec.p34Code" />
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vykazování aktivity"):</label>
+        <div class="col-sm-6 col-md-5">
+            <select asp-for="Rec.p34ActivityEntryFlag" class="form-select">
+                <option value="AktivitaJePovinna">@_f.tra("Ve vykazování úkonů uživatel aktivitu zadává")</option>
+                <option value="AktivitaSeNezadava">@_f.tra("Ve vykazování úkonů uživatel aktivitu nezadává")</option>
+
+            </select>
+
+        </div>
+        <div class="col-auto">
+            <select asp-for="@Model.Rec.p34IncomeStatementFlag" class="form-select">
+                <option value="Vydaj">@_f.tra("Pro výpočet výsledovky má povahu nákladu")</option>
+                <option value="Prijem">@_f.tra("Pro výpočet výsledovky má povahu výnosu")</option>
+
+            </select>
+
+        </div>
+    </div>
+    @if (Model.Rec.p34ActivityEntryFlag == BO.p34ActivityEntryFlagENUM.AktivitaSeNezadava)
+    {
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Na pozadí uložená aktivita do úkonu")
+            </div>
+            <div class="card-body">
+                <i>@_f.tra("Technicky je nutné, aby v záznamu úkonu systém na pozadí nějakou aktivitu uložil.")</i>
+                <br />
+                <i>@_f.tra("Vyberte aktivitu:")</i>
+                <mycombo entity="p32Activity" asp-for="@Model.p32ID" selectedtext="@Model.ComboP32Name" filter-flag="1" myqueryinline="p34id|int|@Model.rec_pid" placeholder="@_f.tra("Vyberte aktivitu")..."></mycombo>
+            </div>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Překlad do fakturačních jazyků")
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==1).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p34Name_BillingLang1" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==2).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p34Name_BillingLang2" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==3).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p34Name_BillingLang3" />
+
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@(Model.lisP87.First(p=>p.p87LangIndex==4).p87Name):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.p34Name_BillingLang4" />
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div>
+        <input type="checkbox" asp-for="@Model.IsOffBilling" />
+        <label class="col-form-label" for="IsOffBilling">@_f.tra("Možnost vykazovat i OffBilling hodnotu úkonu")</label>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#Rec_p34ActivityEntryFlag").on("change", function () {
+            postback();
+        });
+
+
+
+
+    });
+
+
+
+
+
+    function postback() {
+
+        form1.action = _ep("p34/Record?oper=postback");
+        form1.submit();
+    }
+
+
+</script>

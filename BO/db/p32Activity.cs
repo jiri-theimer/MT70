@@ -76,7 +76,7 @@ namespace BO
         public bool p32IsSupplier { get; set; }    // v peněžním úkonu nabízet vazbu na dodavatele
         public bool p32IsCP { get; set; }          // v úkonu nabízet adresáta zásilky české pošty
 
-        private string p34Name { get; }
+        public string p34Name { get; }
         
         private int p33ID { get; }
         
@@ -111,14 +111,14 @@ namespace BO
             }
         }
 
-        private string p95Name { get; }
+        public string p95Name { get; }
        
         public string p38Name { get; }
 
         public int p38Ordinary { get; }
 
 
-        private string x15Name { get; }
+        public string x15Name { get; }
         
     }
 

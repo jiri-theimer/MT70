@@ -70,27 +70,47 @@ namespace BL
             {
                 return 0;
             }
+            using (var sc = new System.Transactions.TransactionScope())     //ukládání v transakci
+            {
+                var p = new DL.Params4Dapper();
 
-            var p = new DL.Params4Dapper();
+                p.AddInt("pid", rec.pid);
+                p.AddInt("p34Ordinary", rec.p34Ordinary);
+                p.AddString("p34Name", rec.p34Name);
+                p.AddString("p34Code", rec.p34Code);
+                p.AddEnumInt("p33ID", rec.p33ID);
+                p.AddEnumInt("p34ActivityEntryFlag", rec.p34ActivityEntryFlag);
+                p.AddEnumInt("p34IncomeStatementFlag", rec.p34IncomeStatementFlag);
+                p.AddInt("p34ValueOffFlag", rec.p34ValueOffFlag);
+                p.AddString("p34Name_BillingLang1", rec.p34Name_BillingLang1);
+                p.AddString("p34Name_BillingLang2", rec.p34Name_BillingLang2);
+                p.AddString("p34Name_BillingLang3", rec.p34Name_BillingLang3);
+                p.AddString("p34Name_BillingLang4", rec.p34Name_BillingLang4);
 
-            p.AddInt("pid", rec.pid);
-            p.AddInt("p34Ordinary", rec.p34Ordinary);
-            p.AddString("p34Name", rec.p34Name);
-            p.AddEnumInt("p33ID", rec.p33ID);
-            p.AddEnumInt("p34ActivityEntryFlag", rec.p34ActivityEntryFlag);
-            p.AddEnumInt("p34IncomeStatementFlag", rec.p34IncomeStatementFlag);
-            p.AddInt("p34ValueOffFlag", rec.p34ValueOffFlag);
-            p.AddString("p34Name_BillingLang1", rec.p34Name_BillingLang1);
-            p.AddString("p34Name_BillingLang2", rec.p34Name_BillingLang2);
-            p.AddString("p34Name_BillingLang3", rec.p34Name_BillingLang3);
-            p.AddString("p34Name_BillingLang4", rec.p34Name_BillingLang4);
+                int intPID = _db.SaveRecord("p34ActivityGroup", p.getDynamicDapperPars(), rec);
 
-            int intPID = _db.SaveRecord("p34ActivityGroup", p.getDynamicDapperPars(), rec);
+                if (intPID > 0)
+                {
+                    if (rec.p34ActivityEntryFlag == BO.p34ActivityEntryFlagENUM.AktivitaSeNezadava)
+                    {
+                        _db.RunSql("UPDATE p32Activity SET p32IsSystemDefault=0 WHERE p34ID=@pid", new { pid = intPID });
+                        if (intP32ID_SystemDefault > 0)
+                        {
+                            _db.RunSql("UPDATE p32Activity SET p32IsSystemDefault=1 WHERE p32ID=@p32id", new { p32id = intP32ID_SystemDefault });
+                        }
+                    }
+                    if (rec.pid == 0)   //nový sešit
+                    {
+                        _db.RunSql("INSERT INTO o28ProjectRole_Workload(p34ID,x67ID,o28EntryFlag,o28PermFlag) select @p34id,x67ID,1,case when x67ID=3 THEN 3 else 0 end FROM x67EntityRole WHERE x29ID=141 AND getdate() BETWEEN x67ValidFrom AND x67ValidUntil", new { p34id = intPID });
+                        _db.RunSql("INSERT INTO p43ProjectType_Workload(p42ID,p34ID) SELECT p42ID,@p34id FROM p42ProjectType WHERE getdate() BETWEEN p42ValidFrom AND p42ValidUntil", new { p34id = intPID });
+                    }
+                    sc.Complete();
+                }
 
 
-
-
-            return intPID;
+                return intPID;
+            }
+                
         }
 
 
@@ -99,9 +119,12 @@ namespace BL
 
             if (string.IsNullOrEmpty(rec.p34Name))
             {
-                this.AddMessage("Názvy úrovně pro jednotné a množné číslo jsou povinná pole."); return false;
+                this.AddMessage("Chybí vyplnit [Název]."); return false;
             }
-
+            if (rec.p34ActivityEntryFlag == BO.p34ActivityEntryFlagENUM.AktivitaSeNezadava && rec.pid == 0)
+            {
+                this.AddMessage("Technicky vkládanou aktivitu lze nastavit až po uložení sešitu."); return false;
+            }
             if (rec.p34ActivityEntryFlag==BO.p34ActivityEntryFlagENUM.AktivitaSeNezadava && intP32ID_SystemDefault==0)
             {
                 this.AddMessage("Chybí vazba na technicky vkládanou aktivitu."); return false;
