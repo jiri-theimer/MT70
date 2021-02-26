@@ -97,7 +97,9 @@ namespace UI.Controllers
             AMI("Vyúčtování", aurl("Billing"), "k-i-dollar");
             AMI("Projekty", aurl("Projects"), "k-i-wrench");
             AMI("Klienti", aurl("Clients"), "k-i-wrench");
-            AMI("Různé", aurl("Misc"), "k-i-gear");
+            AMI("Různé", aurl("Misc"), "k-i-more-vertical");
+            DIV();
+            AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
             return FlushResult_UL(true,false);
         }
        

@@ -67,9 +67,29 @@ namespace BO
             return lis;
         }
 
-        
 
-        
-        
+        public static List<string> GetFileListFromDir(string strDir, string strMask, SearchOption so = SearchOption.TopDirectoryOnly, bool bolRetFullPath = false)
+        {
+            List<string> lis = new List<string>();
+            if (!System.IO.Directory.Exists(strDir))
+                return lis;
+
+
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(strDir);
+
+            System.IO.FileInfo[] diar1 = di.GetFiles(strMask, so);
+                        
+            foreach (System.IO.FileInfo dra in diar1)
+            {
+                if (bolRetFullPath)
+                    lis.Add(dra.FullName);
+                else
+                    lis.Add(dra.Name);
+            }
+            return lis;
+        }
+
+
+
     }
 }

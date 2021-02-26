@@ -1,0 +1,225 @@
+﻿@model UI.Models.x35ParamsViewModel
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Globální parametry");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div>
+    <h4>@_f.tra("Globální parametry")</h4>
+</div>
+<div class="bg-light" style="padding:10px;">
+    <button id="cmdSave" class="btn btn-success">@_f.tra("Uložit změny")</button>
+    <button id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<form id="form1" asp-controller="x35" asp-action="x35Params" method="POST">
+    <div class="modal_record_container">
+
+
+        <div class="row">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název databáze"):</label>
+            <div class="col-sm-7 col-md-6">
+                <input class="form-control" asp-for="@Model.AppName" />
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Veřejná URL adresa"):</label>
+            <div class="col-sm-7 col-md-6">
+                <input class="form-control" asp-for="@Model.AppHost" />
+            </div>
+            <div class="col-sm-3 col-md-4">
+                @_f.tra("MARKTIME url adresa uváděná v odeslané poště")
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Vykázané hodiny zaokrouhlovat na"):</label>
+            <div class="col-sm-5 col-md-5">
+                <mynumber asp-for="@Model.Round2Minutes" decimal-digits="0"></mynumber>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                @_f.tra("Minuty směrem nahoru")
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("UPLOAD složka"):</label>
+            <div class="col-sm-7 col-md-6">
+                <input class="form-control" asp-for="@Model.Upload_Folder" />
+            </div>
+            <div class="col-sm-3 col-md-4">
+                @_f.tra("Absolutní file-system cesta z pohledu serveru")
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Domácí stát"):</label>
+            <div class="col-sm-7 col-md-6">
+                <select asp-for="@Model.COUNTRY_CODE" class="form-select">
+                    <option value="CZ">CZ</option>
+                    <option value="SK">SK</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Domácí měna"):</label>
+            <div class="col-sm-7 col-md-6">
+                <mycombo entity="j27Currency" asp-for="@Model.j27ID_Domestic" selectedtext="@Model.ComboJ27_Domestic" view-flag="1"></mycombo>
+            </div>
+
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí splatnost faktury"):</label>
+            <div class="col-sm-7 col-md-6">
+                <mynumber asp-for="@Model.DefMaturityDays" decimal-digits="0"></mynumber>
+            </div>
+            <div class="col-sm-3 col-md-4">
+                @_f.tra("Dny")
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Obnovení zapomenutého hesla")
+            </div>
+            <div class="card-body">
+                <input type="checkbox" asp-for="@Model.IsAllowPasswordRecovery" />
+                <label class="col-form-label" for="IsAllowPasswordRecovery">@_f.tra("Povolit uživatelům obnovu zapomenutého hesla")</label>
+                <hr />
+                <i>Pokud není vyplněno otázka a odpověď, systém bude ověřovat uživatele přes GOOGLE reCAPTCHA</i>
+            </div>
+        </div>
+
+        <div class="card my-2">
+            <div class="card-header">
+                @_f.tra("Názvy fakturačních jazyků")
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <td>
+                            @_f.tra("Fakturační jazyk")#0:
+                        </td>
+                        <td>
+                            Domácí jazyk
+                        </td>
+                        <td>
+                            Čeština/Slovenčina
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Fakturační jazyk")#1:
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.BillingLang1" />
+                        </td>
+                        <td>
+                            <select class="form-select" asp-for="@Model.BillingIcon1">
+                                @foreach(var c in Model.LangFlags)
+                                {
+                                    <option value="@c">@c</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Fakturační jazyk")#2:
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.BillingLang2" />
+                        </td>
+                        <td>
+                            <select class="form-select" asp-for="@Model.BillingIcon2">
+                                @foreach (var c in Model.LangFlags)
+                                {
+                                    <option value="@c">@c</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Fakturační jazyk")#3:
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.BillingLang3" />
+                        </td>
+                        <td>
+                            <select class="form-select" asp-for="@Model.BillingIcon3">
+                                @foreach (var c in Model.LangFlags)
+                                {
+                                    <option value="@c">@c</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Fakturační jazyk")#4:
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.BillingLang4" />
+                        </td>
+                        <td>
+                            <select class="form-select" asp-for="@Model.BillingIcon4">
+                                @foreach (var c in Model.LangFlags)
+                                {
+                                    <option value="@c">@c</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card my-2">
+            <div class="card-header">
+                Česká pošta: Nastavení podacího archu
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <label class="col-sm-1 col-md-2 col-form-label">Název podavatele:</label>
+                    <div class="col-sm-7 col-md-6">
+                        <input class="form-control" asp-for="@Model.cp_podavatel" />
+                    </div>
+
+                </div>
+                <div class="row">
+                    <label class="col-sm-1 col-md-2 col-form-label">Název odesílatele:</label>
+                    <div class="col-sm-7 col-md-6">
+                        <input class="form-control" asp-for="@Model.cp_odesilatel" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdSave").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+
+
+        });
+
+    })
+</script>

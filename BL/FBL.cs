@@ -13,6 +13,7 @@ namespace BL
         public IEnumerable<BO.p87BillingLanguage> GetListP87();
         public BO.j27Currency LoadCurrencyByCode(string j27code);
         public BO.j27Currency LoadCurrencyByID(int j27id);
+        public int SaveP87(BO.p87BillingLanguage rec);
 
     }
     class FBL : BaseBL, IFBL
@@ -29,6 +30,15 @@ namespace BL
         public IEnumerable<BO.p87BillingLanguage> GetListP87()
         {
             return _db.GetList<BO.p87BillingLanguage>("SELECT "+ _db.GetSQL1_Ocas("p87")+ ",a.* FROM p87BillingLanguage a");
+        }
+        public int SaveP87(BO.p87BillingLanguage rec)
+        {
+            var p = new DL.Params4Dapper();
+            p.AddInt("pid", rec.pid);
+            p.AddString("p87Name", rec.p87Name);
+            p.AddString("p87Icon", rec.p87Icon);
+
+            return _db.SaveRecord("p87BillingLanguage", p.getDynamicDapperPars(),rec);
         }
         public BO.j27Currency LoadCurrencyByCode(string j27code)
         {

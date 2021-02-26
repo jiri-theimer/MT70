@@ -13,6 +13,13 @@ namespace BL
         public string TempFolder();
         public string UploadFolder();
 
+        public BO.x35GlobalParam Load(int pid); //pracuje napřímo s databází
+        public BO.x35GlobalParam LoadByKey(string x35key, bool ifnullnew);  //pracuje napřímo s databází   
+        public int Save(BO.x35GlobalParam rec); //pracuje napřímo s databází
+        public int Save(string key, string value);  //pracuje napřímo s databází
+
+
+
     }
 
     class x35GlobalParamBL: BaseBL, Ix35GlobalParamBL
@@ -25,6 +32,7 @@ namespace BL
         }
 
         
+
         public string TempFolder()
         {
             return LoadParam("Upload_Folder") + "\\TEMP";
@@ -70,6 +78,45 @@ namespace BL
             {
                 return BO.BAS.String2Date(s);
             }
+        }
+
+        //níže jsou metody pracující napřímo s databází:------------------------------------------------------------------------
+        private string GetSQL1(string strAppend = null)
+        {
+            sb("SELECT a.*,");
+            sb(_db.GetSQL1_Ocas("x35"));
+            sb(" FROM x35GlobalParam a");
+            sb(strAppend);
+            return sbret();
+        }
+        public BO.x35GlobalParam Load(int pid)  
+        {
+            return _db.Load<BO.x35GlobalParam>(GetSQL1(" WHERE a.x35ID=@pid"), new { pid = pid });
+        }
+        public BO.x35GlobalParam LoadByKey(string x35key,bool ifnullnew)
+        {
+            BO.x35GlobalParam rec = _db.Load<BO.x35GlobalParam>(GetSQL1(" WHERE a.x35Key LIKE @key"), new { key = x35key });
+            if (ifnullnew && rec == null)
+            {
+                rec = new BO.x35GlobalParam() { x35Key = x35key };
+            }
+            return rec;
+        }
+        public int Save(BO.x35GlobalParam rec)
+        {            
+            var p = new DL.Params4Dapper();
+            p.AddInt("pid", rec.pid);
+            p.AddString("x35Key", rec.x35Key);
+            p.AddString("x35Value", rec.x35Value);
+            
+            return _db.SaveRecord("x35GlobalParam", p.getDynamicDapperPars(), rec);
+        }
+
+        public int Save(string x35key,string value)
+        {
+            var rec = LoadByKey(x35key, true);
+            rec.x35Value = value;
+            return Save(rec);
         }
 
     }
