@@ -136,6 +136,7 @@ namespace UI.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 if (Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).Count() == 0)
                 {
                     this.AddMessage("Pro změnu loga musíte nahrát soubor grafického loga.");
@@ -144,6 +145,11 @@ namespace UI.Controllers
                 else
                 {
                     var tempfile = Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).First();
+                    if (!(tempfile.o27FileExtension == ".png" || tempfile.o27FileExtension==".jpg" || tempfile.o27FileExtension == ".gif" || tempfile.o27FileExtension == ".jpeg"))
+                    {
+                        this.AddMessage("Jako grafické logo lze nahrát pouze PNG, JPG nebo GIF soubor.");
+                        return View(v);
+                    }
                     var strOrigFileName = "company_logo_original" + tempfile.o27FileExtension;                    
                     System.IO.File.Copy(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strOrigFileName, true);
 
