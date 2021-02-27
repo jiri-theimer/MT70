@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using UI.Models;
 using UI.Models.Record;
 
 namespace UI.Controllers
 {
     public class p93Controller : BaseController
-    {
+    {        
         public IActionResult Record(int pid, bool isclone)
         {
             var v = new p93Record() { rec_pid = pid, rec_entity = "p93", UploadGuidLogo=BO.BAS.GetGuid(),UploadGuidSignature=BO.BAS.GetGuid() };
@@ -22,7 +23,7 @@ namespace UI.Controllers
                     return RecNotFound(v);
                 }
 
-
+                
             }
             RefreshState(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);
@@ -47,6 +48,7 @@ namespace UI.Controllers
 
             if (ModelState.IsValid)
             {
+                
                 BO.p93InvoiceHeader c = new BO.p93InvoiceHeader();
                 if (v.rec_pid > 0) c = Factory.p93InvoiceHeaderBL.Load(v.rec_pid);
                 c.p93Name = v.Rec.p93Name;
@@ -79,10 +81,35 @@ namespace UI.Controllers
                 c.pid = Factory.p93InvoiceHeaderBL.Save(c,null);
                 if (c.pid > 0)
                 {
+                    if (Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).Count() > 0)
+                    {
+                        var tempfile = Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).First();
+                        var strOrigFileName = "p93_logo_" + c.pid.ToString() + "_original"+ tempfile.o27FileExtension;
+                        System.IO.File.Copy(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strOrigFileName, true);
 
+                        var strDestLogoFileName = "p93_logo_" + c.pid.ToString() + tempfile.o27FileExtension;
+                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestLogoFileName, 250, 100);
+
+                        c = Factory.p93InvoiceHeaderBL.Load(c.pid);
+                        c.p93LogoFile = strDestLogoFileName;
+                        Factory.p93InvoiceHeaderBL.Save(c, null);
+                    }
+                    if (Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidSignature).Count() > 0)
+                    {
+                        var strOrigFileName = "p93_signature_" + c.pid.ToString() + "_original"+Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).First().o27FileExtension;
+                        System.IO.File.Copy(Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).First().FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strOrigFileName, true);
+
+                        c = Factory.p93InvoiceHeaderBL.Load(c.pid);
+                        c.p93SignatureFile = strOrigFileName;
+                        Factory.p93InvoiceHeaderBL.Save(c, null);
+                    }
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);
                 }
+
+
+                    
+                
 
             }
 

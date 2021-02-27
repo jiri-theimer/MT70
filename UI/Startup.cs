@@ -22,9 +22,12 @@ namespace UI
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        private string _wwwrootfolder;
 
         public Startup(IWebHostEnvironment env)
         {
+            _wwwrootfolder = env.WebRootPath;
+
             Configuration = new ConfigurationBuilder()
                  .SetBasePath(env.ContentRootPath)
                  .AddJsonFile("appsettings.json", false, true)
@@ -101,6 +104,8 @@ namespace UI
                 LogFolder = strLogFolder
                 ,
                 AppRootFolder = System.IO.Directory.GetCurrentDirectory()
+                ,
+                WwwRootFolder=_wwwrootfolder
                 ,
                 TranslatorMode = Configuration.GetSection("App")["TranslatorMode"]                
                 ,

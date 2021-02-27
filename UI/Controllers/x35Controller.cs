@@ -80,7 +80,11 @@ namespace UI.Controllers
                 Factory.x35GlobalParamBL.Save("COUNTRY_CODE", v.COUNTRY_CODE);
                 Factory.x35GlobalParamBL.Save("DefMaturityDays", v.DefMaturityDays.ToString());
                 Factory.x35GlobalParamBL.Save("IsAllowPasswordRecovery", BO.BAS.GB(v.IsAllowPasswordRecovery));
-                Factory.x35GlobalParamBL.Save("Upload_Folder", v.Upload_Folder);
+                if (!Factory.App.IsCloud)
+                {
+                    Factory.x35GlobalParamBL.Save("Upload_Folder", v.Upload_Folder);
+                }
+                
                 Factory.x35GlobalParamBL.Save("cp_odesilatel", v.cp_odesilatel);
 
                 var lisP87 = Factory.FBL.GetListP87();
@@ -101,7 +105,7 @@ namespace UI.Controllers
                 }
                 if (bolOK)
                 {
-
+                    Factory.j03UserBL.RecoveryUserCache(Factory.CurrentUser.pid, 0);
                     v.SetJavascript_CallOnLoad(1);
                     return View(v);
                 }

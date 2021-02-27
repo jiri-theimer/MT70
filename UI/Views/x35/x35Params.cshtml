@@ -49,15 +49,19 @@
                 @_f.tra("Minuty směrem nahoru")
             </div>
         </div>
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("UPLOAD složka"):</label>
-            <div class="col-sm-7 col-md-6">
-                <input class="form-control" asp-for="@Model.Upload_Folder" />
+        @if (!_f.App.IsCloud)
+        {
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Server UPLOAD složka"):</label>
+                <div class="col-sm-7 col-md-6">
+                    <input class="form-control" asp-for="@Model.Upload_Folder" />
+                </div>
+                <div class="col-sm-3 col-md-4">
+                    @_f.tra("Absolutní file-system cesta z pohledu serveru")
+                </div>
             </div>
-            <div class="col-sm-3 col-md-4">
-                @_f.tra("Absolutní file-system cesta z pohledu serveru")
-            </div>
-        </div>
+        }
+
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Domácí stát"):</label>
             <div class="col-sm-7 col-md-6">
@@ -126,7 +130,7 @@
                         </td>
                         <td>
                             <select class="form-select" onchange="postback()" asp-for="@Model.BillingIcon1">
-                                @foreach(var c in Model.LangFlags)
+                                @foreach (var c in Model.LangFlags)
                                 {
                                     <option value="@c">@c</option>
                                 }
