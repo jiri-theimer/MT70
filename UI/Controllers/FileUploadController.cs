@@ -179,7 +179,28 @@ namespace UI.Controllers
             }
 
         }
-        
+
+        //[HttpGet]
+        public ActionResult LogoFile(string logofilename)            
+        {            
+            string fullPath = Factory.App.WwwRootFolder + "\\Plugins\\" + logofilename;
+            if (System.IO.File.Exists(fullPath))
+            {
+                var bytes = System.IO.File.ReadAllBytes(fullPath);
+                MemoryStream ms = new MemoryStream(bytes);
+                ms.Write(bytes, 0, bytes.Length);
+                ms.Position = 0;
+
+                string strContentType = "image/" + BO.BASFILE.GetFileInfo(fullPath).Extension.Replace(".","").Replace("jpg", "jpeg");
+               
+                return new FileStreamResult(ms, strContentType);
+               
+            }
+            else
+            {
+                return FileDownloadNotFound();
+            }
+        }
 
         public ActionResult FileDownloadTempFile(string tempfilename)
         {
@@ -231,6 +252,14 @@ namespace UI.Controllers
         {
             var fullPath = Factory.x35GlobalParamBL.TempFolder() + "\\notfound.txt";
             System.IO.File.WriteAllText(fullPath, string.Format("Soubor [{0}] na serveru [??????\\{1}] neexistuje!", c.o27OriginalFileName, c.o27ArchiveFolder));
+            Response.Headers["Content-Disposition"] = string.Format("inline; filename={0}", "notfound.txt");
+            var fileContentResult = new FileContentResult(System.IO.File.ReadAllBytes(fullPath), "text/plain");
+            return fileContentResult;
+        }
+        public ActionResult FileDownloadNotFound()
+        {
+            var fullPath = Factory.x35GlobalParamBL.TempFolder() + "\\notfound.txt";
+            System.IO.File.WriteAllText(fullPath, "File not exists!");
             Response.Headers["Content-Disposition"] = string.Format("inline; filename={0}", "notfound.txt");
             var fileContentResult = new FileContentResult(System.IO.File.ReadAllBytes(fullPath), "text/plain");
             return fileContentResult;

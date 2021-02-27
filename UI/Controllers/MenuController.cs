@@ -55,7 +55,7 @@ namespace UI.Controllers
 
 
 
-            return FlushResult_UL(true,false);
+            return basCMSupport.FlushResult_UL(_lis,true,false);
         }
         public string CurrentUserLangIndex()
         {
@@ -72,7 +72,7 @@ namespace UI.Controllers
                 }
                 
             }
-            return FlushResult_UL(true,false);            
+            return basCMSupport.FlushResult_UL(_lis,true,false);            
         }
         public string CurrentUserFontSize()
         {            
@@ -88,7 +88,7 @@ namespace UI.Controllers
 
             }
           
-            return FlushResult_UL(true,false);
+            return basCMSupport.FlushResult_UL(_lis,true,false);
         }
         
         private string tmclass(string area,string curarea)
@@ -116,7 +116,7 @@ namespace UI.Controllers
             c.CssClass = tmclass("projects", area);
             c =AMI("Klienti", aurl("clients"), "k-i-wrench");
             c.CssClass = tmclass("clients", area);
-            c =AMI("Různé", aurl("misc"), "k-i-more-vertical");
+            c =AMI("Různé", aurl("misc"), "k-i-fields-more");
             c.CssClass = tmclass("misc", area);
 
             //AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
@@ -138,9 +138,8 @@ namespace UI.Controllers
 
             }
             
-            // FlushResult_UL(true,false);
-
-            return FlushResult_UL(true,true);
+            
+            return basCMSupport.FlushResult_UL(_lis,true,true);
         }
        
         private void Handle_AdminUsers(string prefix)
@@ -175,7 +174,7 @@ namespace UI.Controllers
             AMI("MAIL fronta", "/mail/MailBatchFramework");
                        
             handle_selected_item(prefix);
-            //return FlushResult_UL(false,true);
+            
         }
 
         public string aurl(string area,string prefix)
@@ -211,7 +210,6 @@ namespace UI.Controllers
             AMI("Uživatelská pole", aurl("worksheet","x28","myqueryinline=x29id|int|331"));
             handle_selected_item(prefix);
 
-            //return FlushResult_UL(false,true);
         }
         public void Handle_AdminBilling(string prefix)
         {            
@@ -234,7 +232,6 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            //return FlushResult_UL(false,true);
         }
         public void Handle_AdminProjects(string prefix)
         {            
@@ -248,7 +245,6 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            //return FlushResult_UL(false,true);
         }
         private void Handle_AdminClients(string prefix)
         {
@@ -260,7 +256,6 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            //return FlushResult_UL(false, true);
         }
         private void Handle_AdminMisc(string prefix)
         {            
@@ -283,7 +278,6 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
 
-            //return FlushResult_UL(false,true);
         }
 
         public string MainMenu(string prefix)
@@ -298,7 +292,7 @@ namespace UI.Controllers
             
             
             var s = "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
-            s += FlushResult_UL(true, false);
+            s += basCMSupport.FlushResult_UL(_lis,true, false);
             s += "</ul>";
             s += "<hr>";
             s += "<div><button type='button' class='btn btn-sm btn-light' style='width:100%;' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='k-icon k-i-gear'></span>" + Factory.tra("Nastavit odkazy pro mé hlavní menu") + "</button></div>";
@@ -317,7 +311,7 @@ namespace UI.Controllers
             DIV();
             AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
             AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)");
-            return FlushResult_UL(true, false);
+            return basCMSupport.FlushResult_UL(_lis,true, false);
         }
 
         public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
@@ -336,7 +330,7 @@ namespace UI.Controllers
 
             }
 
-            return FlushResult_UL(true, false);
+            return basCMSupport.FlushResult_UL(_lis,true, false);
         }
         
        
@@ -382,133 +376,7 @@ namespace UI.Controllers
             _lis.Add(new MenuItem() { IsHeader = true, Name = BO.BAS.OM2(strName, 100)+":" });
         }
 
-        private string FlushResult_UL(bool bolSupportIcons, bool bolRenderUlContainer)
-        {
-            var sb = new System.Text.StringBuilder();
-
-            if (bolRenderUlContainer)
-            {
-                sb.AppendLine("<ul style='border:0px;'>");
-            }
-            foreach (var c in _lis.Where(p=>p.ParentID==null))
-            {                
-                if (c.IsDivider==true)
-                {
-                    if (c.Name == null)
-                    {
-                        sb.Append("<li><hr></li>");  //divider
-                    }
-                    else
-                    {
-                        sb.Append("<div class='hr-text'>" + c.Name + "</div>");
-                    }
-                    
-                }
-                else
-                {
-                    if (c.IsHeader)
-                    {
-                        sb.Append("<div style='color:silver;font-style: italic;'>" + c.Name + "</div>");
-                    }
-                    else
-                    {
-                        string strStyle = null;
-                        string strImg = "<span style='margin-left:10px;'></span>";
-                        string strCssClass = "dropdown-item";
-                        if (c.CssClass != null)
-                        {
-                            strCssClass = c.CssClass;
-                        }
-                        if (bolSupportIcons)
-                        {
-                            strImg = "<span class='k-icon' style='width:30px;'></span>";
-                            if (c.Icon != null)
-                            {
-                                strImg = string.Format("<span class='k-icon {0}' style='width:30px;'></span>", c.Icon);
-                            }
-                        }
-                        
-                        if (c.IsActive == true)
-                        {
-                            strStyle = " style='background-color: #ADD8E6;' id='menu_active_item'";
-                        }
-                        bool bolHasChilds = false;
-                        if (c.ID != null && _lis.Where(p => p.ParentID == c.ID).Count() > 0)
-                        {
-                            bolHasChilds = true;
-                            c.Name += "<span style='float:right;'> ▶</span>";
-                        }
-                        
-
-                        if (c.Url == null)
-                        {
-                            sb.Append(string.Format("<li{0}><a>{1}</a>", strStyle, c.Name));
-                        }
-                        else
-                        {                            
-                            if (c.Target != null) c.Target = " target='" + c.Target + "'";
-                            sb.Append($"<li{strStyle}><a class='{strCssClass} px-0' href=\"{c.Url}\"{c.Target}>{strImg}{c.Name}</a>");
-                                                       
-                            
-                        }
-                        if (bolHasChilds)
-                        {
-                            //podřízené nabídky -> druhá úroveň »
-                            sb.Append("<ul class='cm_submenu'>");
-                            foreach (var cc in _lis.Where(p => p.ParentID == c.ID))
-                            {
-                                if (cc.IsDivider)
-                                {
-                                    sb.Append("<li><hr></li>");  //divider
-                                }
-                                else
-                                {
-                                    if (cc.Target != null) cc.Target = " target='" + cc.Target + "'";
-                                    sb.Append(string.Format("<li><a class='dropdown-item' href=\"{0}\"{1}>{2}</a></li>", cc.Url, cc.Target, cc.Name));
-                                }
-
-                            }
-                            sb.Append("</ul>");
-                        }
-
-                        sb.Append("</li>");
-                    }
-                    
-                }                                
-
-            }
-
-            //sb.AppendLine("</ul>");
-
-            return sb.ToString();
-        }
-        //private string FlushResult_NAVLINKs()
-        //{
-        //    var sb = new System.Text.StringBuilder();
-
-        //    foreach (var c in _lis)
-        //    {
-        //        if (c.Name == null)
-        //        {
-        //            sb.Append("<hr>");  //divider
-        //        }
-        //        else
-        //        {
-        //            if (c.Url == null)
-        //            {
-        //                sb.Append(string.Format("<span>{0}</span>", c.Name));
-        //            }
-        //            else
-        //            {
-        //                if (c.Target != null) c.Target = " target='" + c.Target + "'";
-        //                sb.Append(string.Format("<a class='nav-link' style='color:black;' href=\"{0}\"{1}>{2}</a>", c.Url, c.Target, c.Name));
-        //            }
-        //        }
-
-        //    }
-
-
-        //    return sb.ToString();
-        //}
+        
+       
     }
 }

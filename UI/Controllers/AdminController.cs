@@ -100,8 +100,8 @@ namespace UI.Controllers
 
         public IActionResult Index()
         {
-            var v = new AdminPage();           
-
+            var v = new AdminHome();
+            v.lisP87 = Factory.FBL.GetListP87().ToList();
             return View(v);
         }
         public IActionResult Page(string area,string prefix, int go2pid, string myqueryinline)
@@ -125,75 +125,58 @@ namespace UI.Controllers
 
             return View(v);
         }
-        public IActionResult Users(string prefix, int go2pid, string myqueryinline)
+        public IActionResult CompanyLogo()
         {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
-            handle_default_link(v, "Users", "j03");
-            
-            inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,go2pid,BO.BAS.ConvertString2List("users"), myqueryinline);
-            
+            var v = new AdminCompanyLogo() { UploadGuidLogo = BO.BAS.GetGuid(),IsMakeResize=true };           
             return View(v);
         }
-        public IActionResult Billing(string prefix, int go2pid, string myqueryinline)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CompanyLogo(AdminCompanyLogo v)
         {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid  };
-            handle_default_link(v, "Billing", "p92");
-            
-            inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("billing"), myqueryinline);            
+            if (ModelState.IsValid)
+            {
+                if (Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).Count() == 0)
+                {
+                    this.AddMessage("Pro změnu loga musíte nahrát soubor grafického loga.");
+                    return View(v);
+                }
+                else
+                {
+                    var tempfile = Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).First();
+                    var strOrigFileName = "company_logo_original" + tempfile.o27FileExtension;                    
+                    System.IO.File.Copy(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strOrigFileName, true);
 
-            return View(v);
-        }
-        public IActionResult Worksheet(string prefix, int go2pid, string myqueryinline)
-        {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
-            handle_default_link(v, "Worksheet", "p32");
-            
-            inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("worksheet"), myqueryinline);
+                    var strDestFileName = "company_logo";
+                    if (Factory.App.IsCloud)
+                    {
+                        strDestFileName = BO.BAS.ParseDbNameFromCloudLogin(Factory.CurrentUser.j03Login) + "_logo";
+                    }                                        
+                    var files2delete = BO.BASFILE.GetFileListFromDir(Factory.App.WwwRootFolder + "\\Plugins", strDestFileName + ".*", System.IO.SearchOption.TopDirectoryOnly, true);
+                    foreach (string file2delete in files2delete)
+                    {
+                        System.IO.File.Delete(file2delete); //odstranit stávající logo soubory
+                    }
 
-            return View(v);
-        }
-        public IActionResult Projects(string prefix, int go2pid, string myqueryinline)
-        {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
-            handle_default_link(v, "Projects", "p42");
-            
-            inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix,v.go2pid, BO.BAS.ConvertString2List("projects"), myqueryinline);
-            v.gridinput.viewstate = "projects";
+                    strDestFileName += tempfile.o27FileExtension;
 
-            return View(v);
-        }
-        public IActionResult Clients(string prefix, int go2pid,string myqueryinline)
-        {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
-            handle_default_link(v, "Clients", "p29");
+                    if (v.IsMakeResize)
+                    {
+                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 250, 100);
+                    }
+                    else
+                    {
+                        System.IO.File.Copy(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, true);
+                    }
+                    
 
-            inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix, v.go2pid, BO.BAS.ConvertString2List("clients"),myqueryinline);
-            
-            v.gridinput.viewstate = "clients";
+                    
 
-            return View(v);
-        }
-        public IActionResult Misc(string prefix, int go2pid)
-        {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
-            handle_default_link(v,"Misc", "x38");
-
-            inhale_entity(ref v, v.prefix);
-            v.gridinput = GetGridInput(v.entity, v.prefix, v.go2pid, BO.BAS.ConvertString2List("misc"),null);
-            v.gridinput.viewstate = "misc";
-
-            return View(v);
-        }
-        public IActionResult Workflow(string prefix, int go2pid)
-        {
-            var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
-            inhale_entity(ref v, prefix);
-            v.gridinput = GetGridInput(v.entity,v.prefix,v.go2pid, BO.BAS.ConvertString2List("workflow"),null);
+                    v.SetJavascript_CallOnLoad(1);
+                    return View(v);
+                }
+               
+            }
             return View(v);
         }
 
@@ -235,38 +218,8 @@ namespace UI.Controllers
             }
         }
 
-        //private void inhale_tree_o13(UI.Models.AdminPage v)
-        //{
-        //    v.treeNodes = new List<myTreeNode>();
-        //    var lis = Factory.o13AttachmentTypeBL.GetList(new BO.myQuery("o13AttachmentType"));
-        //    foreach (var rec in lis)
-        //    {
-        //        var c = new myTreeNode()
-        //        {
-        //            TreeIndex = rec.o13TreeIndex,
-        //            TreeLevel = rec.o13TreeLevel,
-        //            Text = rec.o13Name,
-        //            TreeIndexFrom = rec.o13TreeIndexFrom,
-        //            TreeIndexTo = rec.o13TreeIndexTo,
-        //            Pid = rec.pid,
-        //            ParentPid = rec.o13ParentID,
-        //            Prefix = "o13",
-        //            Expanded=true
-
-        //        };
-
-        //        v.treeNodes.Add(c);
-
-        //    }
-        //}
-        
-
-
-        public IActionResult System()
-        {
-
-            return View();
-        }
+       
+       
         public BO.Result GenerateSpGenerateCreateUpdateScript(string scope)
         {
             var lis = Factory.FBL.GetList_SysObjects();

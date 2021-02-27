@@ -25,9 +25,9 @@ namespace UI.Models
 
         public string dblclick { get; set; } = "tg_dblclick";
 
-        public string TreeState { get; set; }
+        //public string TreeState { get; set; }
 
-        public List<UI.Models.myTreeNode> treeNodes { get; set; }
+        //public List<UI.Models.myTreeNode> treeNodes { get; set; }
 
         public TheGridInput gridinput { get; set; }
     }

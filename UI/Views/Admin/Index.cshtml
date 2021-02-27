@@ -1,4 +1,4 @@
-﻿@model AdminPage
+﻿@model AdminHome
 @inject BL.Factory _f
 
 @{
@@ -54,10 +54,148 @@
 
 <div id="layout_main">
 
-    <h4 style="margin:20px;">@Model.PageTitle</h4>
+    <div class="row p-4 m-0">
+        <div class="col-auto">
+            <button id="cmdGlobalParams" type="button" class="btn btn-primary"><span class="k-icon k-i-gear"></span> @_f.tra("Globální parametry")</button>
+        </div>
+        <div class="col-auto">
+            <button id="cmdLogo" type="button" class="btn btn-primary"><span class="k-icon k-i-image"></span> @_f.tra("Nahrát grafické logo")</button>
+            
+        </div>
+        <div class="col-auto">
+            <iframe frameborder="1" src="/FileUpload/LogoFile?logofilename=@(_f.x35GlobalParamBL.CompanyLogoFile())"></iframe>
+            
+        </div>
+    </div>
 
+    <div class="card" style="max-width:700px;">
+        <div class="card-header">
+            @_f.tra("Globální parametry")
+        </div>
+        <div class="card-body">
+            <table class="table table-sm">
+                <tr>
+                    <td>
+                        @_f.tra("Verze aplikace"):
+                    </td>
+                    <td>
+                        @(_f.App.AppVersion+", "+ _f.App.AppBuild)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @_f.tra("Veřejná URL adresa"):
+                    </td>
+                    <td>
+                        @_f.x35GlobalParamBL.LoadParam("AppHost")
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @_f.tra("Název databáze"):
+                    </td>
+                    <td>
+                        @_f.x35GlobalParamBL.LoadParam("AppName")
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @_f.tra("Zaokrouhlovat vykázané hodiny"):
+                    </td>
+                    <td>
+                        @_f.x35GlobalParamBL.LoadParam("Round2Minutes")
+                    </td>
+                    <td>
+                        @_f.tra("Minuty nahoru")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @_f.tra("Povolit uživatelům obnovu zapomenutého hesla"):
+                    </td>
+                    <td>
+                        @_f.x35GlobalParamBL.LoadParam("IsAllowPasswordRecovery")
+                    </td>
+                    <td>
+                        @_f.tra("Tlačítko [Obnovit zapomenuté heslo] na přihlašovací stránce")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @_f.tra("Domácí měna"):
+                    </td>
+                    <td>
+                        @_f.x35GlobalParamBL.LoadParam("j27ID_Domestic")
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @_f.tra("Domácí stát"):
+                    </td>
+                    <td>
+                        @_f.x35GlobalParamBL.LoadParam("COUNTRY_CODE")
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @_f.tra("Čas posledního spuštění robota"):
+                    </td>
+                    <td>
+                        @_f.x35GlobalParamBL.LoadParam("robot_cache_lastrequest")
+                    </td>
+                    <td>
+                    </td>
+                </tr>
 
-
+            </table>
+        </div>
+    </div>
+    <p></p>
+    <div class="card" style="max-width:500px;">
+        <div class="card-header">
+            @_f.tra("Nastavení fakturačních jazyků")
+        </div>
+        <div class="card-body">
+            <table class="table table-sm">
+                <tr>
+                    <td>
+                        @(_f.tra("Fakturační jazyk")+" #0:")
+                    </td>
+                    <td>
+                        @_f.tra("Domácí jazyk")
+                    </td>
+                    <td>
+                        <i>Čeština/Slovenčina</i>
+                    </td>
+                </tr>
+                @for (int i = 0; i < Model.lisP87.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            @(_f.tra("Fakturační jazyk")+" #"+Model.lisP87[i].p87LangIndex.ToString()+":")
+                        </td>
+                        <td>
+                            @(Model.lisP87[i].p87Name)
+                        </td>
+                        <td>
+                            <img src="/images/flags/@(Model.lisP87[i].p87Icon)" />
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    
 </div>
 
 
@@ -86,7 +224,12 @@
         h_vertical = parseInt(h_vertical) + 10;
         $("#layout_sidebar").css("height", h_vertical + "px");
 
-
+        $("#cmdGlobalParams").on("click", function () {
+            _window_open("/x35/x35Params",1);
+        });
+        $("#cmdLogo").on("click", function () {
+            _window_open("/Admin/CompanyLogo", 1);
+        });
     });
 
 

@@ -12,6 +12,7 @@ namespace BL
         public DateTime? LoadParamDate(string strKey);
         public string TempFolder();
         public string UploadFolder();
+        public string CompanyLogoFile();
 
         public BO.x35GlobalParam Load(int pid); //pracuje napřímo s databází
         public BO.x35GlobalParam LoadByKey(string x35key, bool ifnullnew);  //pracuje napřímo s databází   
@@ -40,6 +41,28 @@ namespace BL
         public string UploadFolder()
         {
             return LoadParam("Upload_Folder");
+        }
+        public string CompanyLogoFile()
+        {
+            string logofilename = "company_logo";
+            if (_mother.App.IsCloud)
+            {
+                logofilename = BO.BAS.ParseDbNameFromCloudLogin(_mother.CurrentUser.j03Login) + "_logo";
+            }
+            if (test_ifexist_logofile(logofilename + ".png")) return logofilename + ".png";
+            if (test_ifexist_logofile(logofilename+".jpg")) return logofilename+".jpg";            
+            if (test_ifexist_logofile(logofilename + ".gif")) return logofilename + ".gif";
+
+
+            return "company_logo_default.png";
+        }
+        private bool test_ifexist_logofile(string logofilename)
+        {
+            if (System.IO.File.Exists(_mother.App.WwwRootFolder + "\\Plugins\\" + logofilename))
+            {
+                return true;
+            }
+            return false;
         }
         public string LoadParam(string strKey, string strDefault = null)
         {
