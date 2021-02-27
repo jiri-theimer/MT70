@@ -12,7 +12,7 @@
 
 <div class="row pt-1 bg-light m-0">
     <div id="layout_sidebar_contextmenu" class="col-auto">
-        <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminMisc',0,'@Model.prefix');">☰@Model.PageTitle</a>
+        <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminMenu',0,'@Model.area');">☰@Model.PageTitle</a>
         <h4 id="layout_sidebar_contextmenu_onlytext">@Model.PageTitle</h4>
     </div>
 
@@ -72,8 +72,6 @@
     $(document.body).css("overflow", "hidden");
 
     $(document).ready(function () {
-
-
 
         $.post("/Menu/AdminMenu", {area: "@Model.area", prefix: "@Model.prefix" }, function (data) {
 

@@ -100,8 +100,9 @@ namespace UI.Controllers
             AMI("Projekty", aurl("projects"), "k-i-wrench");
             AMI("Klienti", aurl("clients"), "k-i-wrench");
             AMI("Různé", aurl("misc"), "k-i-more-vertical");
-            DIV();
-            AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
+            
+            DIV(area);
+            //AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
 
             switch (area)
             {

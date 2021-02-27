@@ -1,0 +1,79 @@
+﻿@model AdminPage
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Administrace");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@addTagHelper *, UI
+
+
+<div class="row pt-1 bg-light m-0">
+    <div id="layout_sidebar_contextmenu" class="col-auto">
+        <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminMenu',0,'');">☰@Model.PageTitle</a>
+        <h4 id="layout_sidebar_contextmenu_onlytext">@Model.PageTitle</h4>
+    </div>
+
+    <div class="col-auto nonmobile tabovergrid">
+        @_f.tra("ÚVOD")
+        <span id="TheGridRows" class="badge bg-primary"></span>
+    </div>
+  
+    <div class="nonmobile ml-2 col-auto">
+        <a class="btn btn-light" href="/Admin/Index" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+    </div>
+   
+</div>
+
+<div id="layout_sidebar" class="cm_recpage"></div>
+
+
+
+<div id="layout_main">
+
+    <h4 style="margin:20px;">@Model.PageTitle</h4>
+
+
+
+</div>
+
+
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+
+        $.post("/Menu/AdminMenu", function (data) {
+
+            $("#layout_sidebar").html(data);
+
+            if (document.getElementById("menu_active_item")) {
+                document.getElementById("menu_active_item").scrollIntoView(true);
+            }
+
+
+
+        });
+
+
+        _mainmenu_highlight_current("cmdAdmin");
+
+
+        var offset = $("#layout_sidebar").offset();
+        var h_vertical = _device.innerHeight - offset.top;
+        h_vertical = parseInt(h_vertical) + 10;
+        $("#layout_sidebar").css("height", h_vertical + "px");
+
+
+    });
+
+
+   
+
+</script>
+
+
+
+
+

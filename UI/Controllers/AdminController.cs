@@ -43,8 +43,8 @@ namespace UI.Controllers
             return c.Event_HandleTheGridExport(format, tgi.j72id, pids);
         }
         //-----------Konec GRID událostí-------------
-        
 
+        
         public IActionResult LogAsUser(string login, string code)
         {
             var v = new AdminLogAsUser() { Login = login, Code = code };
@@ -98,7 +98,33 @@ namespace UI.Controllers
             return View(v);
         }
 
-        
+        public IActionResult Index()
+        {
+            var v = new AdminPage();           
+
+            return View(v);
+        }
+        public IActionResult Page(string area,string prefix, int go2pid, string myqueryinline)
+        {
+            var v = new AdminPage() {area=area, prefix = prefix, go2pid = go2pid };
+            string defprefix = null;
+            switch (area)
+            {
+                case "users":defprefix = "j03";break;
+                case "projects": defprefix = "p42"; break;
+                case "billing": defprefix = "p92"; break;
+                case "clients": defprefix = "p29"; break;
+                case "worksheet": defprefix = "p32"; break;
+                case "misc": defprefix = "x38"; break;
+                
+            }
+            handle_default_link(v, area, defprefix);
+
+            inhale_entity(ref v, v.prefix);
+            v.gridinput = GetGridInput(v.entity, v.prefix, go2pid, null, myqueryinline);
+
+            return View(v);
+        }
         public IActionResult Users(string prefix, int go2pid, string myqueryinline)
         {
             var v = new AdminPage() { prefix = prefix, go2pid = go2pid };
