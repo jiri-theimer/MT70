@@ -104,8 +104,9 @@ namespace UI.Controllers
         }
         public string AdminMenu(string area, string prefix)
         {
-
-            MenuItem c=AMI("Správa uživatelů", aurl("users"), "k-i-user");
+            MenuItem c = AMI("Úvod", "/Admin/Index", "k-i-home");
+            c.CssClass = BO.BAS.IIFS(area == null, "topmenulink_active", "topmenulink");
+            c =AMI("Správa uživatelů", aurl("users"), "k-i-user");
             c.CssClass = tmclass("users", area);
             c =AMI("Vykazování úkonů", aurl("worksheet"), "k-i-clock");
             c.CssClass = tmclass("worksheet", area);

@@ -96,10 +96,10 @@ namespace UI.Controllers
 
         private void RefreshState(Models.Record.p61Record v)
         {
-            string strMyQuery = "pids@list_int@-1";
+            string strMyQuery = "pids|list_int|-1";
             if (!string.IsNullOrEmpty(v.p32IDs))
             {
-                strMyQuery = "pids@list_int@" + v.p32IDs;
+                strMyQuery = "pids|list_int|" + v.p32IDs;
             }
             v.gridinput = new TheGridInput() { entity = "p32Activity", master_entity = "inform", myqueryinline = strMyQuery, oncmclick = "", ondblclick = "" };
             v.gridinput.query = new BO.InitMyQuery().Load("p32", null, 0, strMyQuery);
