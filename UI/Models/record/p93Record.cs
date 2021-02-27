@@ -13,5 +13,7 @@ namespace UI.Models.Record
 
         public string UploadGuidLogo { get; set; }
         public string UploadGuidSignature { get; set; }
+
+        
     }
 }

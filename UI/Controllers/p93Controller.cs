@@ -23,7 +23,14 @@ namespace UI.Controllers
                     return RecNotFound(v);
                 }
 
-                
+                if (v.Rec.p93LogoFile != null)
+                {
+                    v.LogoFile = "/Plugins/" + v.Rec.p93LogoFile;
+                }
+                if (v.Rec.p93SignatureFile != null)
+                {
+                    v.SignatureFile = "/Plugins/" + v.Rec.p93SignatureFile;
+                }
             }
             RefreshState(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);
@@ -66,10 +73,7 @@ namespace UI.Controllers
                 c.p93FreeText02 = v.Rec.p93FreeText02;
                 c.p93FreeText03 = v.Rec.p93FreeText03;
                 c.p93FreeText04 = v.Rec.p93FreeText04;
-
-                c.p93LogoFile = v.LogoFile;
-                c.p93SignatureFile = v.SignatureFile;
-
+                
                 c.p93Country = v.Rec.p93Country;
                 c.p93CountryCode = v.Rec.p93CountryCode;
                 c.p93Email = v.Rec.p93Email;

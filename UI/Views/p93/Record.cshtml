@@ -97,34 +97,49 @@
             </div>
 
         </div>
-    </div>
-    <div class="col-4">
         <div class="form-floating my-2">
             <textarea class="form-control" asp-for="Rec.p93Registration"></textarea>
             <label for="Rec_p32HelpText">@_f.tra("Registrace v rejstříku")</label>
         </div>
+        <div class="form-floating my-2">
+            <textarea class="form-control" asp-for="Rec.p93Referent"></textarea>
+            <label for="Rec_p32HelpText">@_f.tra("Referent (doklad vystavil)")</label>
+        </div>
+    </div>
+    <div class="col-4">
+        
         <div>
             <input asp-for="@Model.Rec.p93Signature" class="form-control" placeholder="@_f.tra("Podpis")" />
         </div>
+        
         <div class="card">
             <div class="card-header">
                 @_f.tra("Obrázek podpisu")
             </div>
             <div class="card-body p-0 m-0">
+                <input type="hidden" asp-for="@Model.SignatureFile" />
+
+                @if (!string.IsNullOrEmpty(Model.SignatureFile))
+                {
+                    <img src="@Model.SignatureFile" />
+                }
                 <iframe id="fraUpload" src="/FileUpload/SingleUpload?guid=@Model.UploadGuidSignature" frameborder="0" scrolling="no"></iframe>
             </div>
         </div>
 
 
-        <div class="form-floating mt-2">
-            <textarea class="form-control" asp-for="Rec.p93Referent"></textarea>
-            <label for="Rec_p32HelpText">@_f.tra("Referent (doklad vystavil)")</label>
-        </div>
+        
         <div class="card">
             <div class="card-header">
                 @_f.tra("Obrázek loga")
             </div>
             <div class="card-body p-0 m-0">
+                <input type="hidden" asp-for="@Model.LogoFile" />
+
+                @if (!string.IsNullOrEmpty(Model.LogoFile))
+                {
+                    <img src="@Model.LogoFile" />
+                }
                 <iframe id="fraUpload" src="/FileUpload/SingleUpload?guid=@Model.UploadGuidLogo" frameborder="0" scrolling="no"></iframe>
             </div>
         </div>
