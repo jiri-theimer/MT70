@@ -29,6 +29,7 @@ namespace UI.Models
             }
         }
 
+        public string CssClass { get; set; }
         
 
     }

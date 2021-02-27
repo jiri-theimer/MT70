@@ -91,16 +91,33 @@ namespace UI.Controllers
             return FlushResult_UL(true,false);
         }
         
+        private string tmclass(string area,string curarea)
+        {
+            if (area == curarea)
+            {
+                return "topmenulink_active";
+            }
+            else
+            {
+                return "topmenulink";
+            }
+        }
         public string AdminMenu(string area, string prefix)
         {
 
-            AMI("Správa uživatelů", aurl("users"), "k-i-user");
-            AMI("Vykazování úkonů", aurl("worksheet"), "k-i-clock");
-            AMI("Vyúčtování", aurl("billing"), "k-i-dollar");
-            AMI("Projekty", aurl("projects"), "k-i-wrench");
-            AMI("Klienti", aurl("clients"), "k-i-wrench");
-            AMI("Různé", aurl("misc"), "k-i-more-vertical");
-            
+            MenuItem c=AMI("Správa uživatelů", aurl("users"), "k-i-user");
+            c.CssClass = tmclass("users", area);
+            c =AMI("Vykazování úkonů", aurl("worksheet"), "k-i-clock");
+            c.CssClass = tmclass("worksheet", area);
+            c =AMI("Vyúčtování", aurl("billing"), "k-i-dollar");
+            c.CssClass = tmclass("billing", area);
+            c =AMI("Projekty", aurl("projects"), "k-i-wrench");
+            c.CssClass = tmclass("projects", area);
+            c =AMI("Klienti", aurl("clients"), "k-i-wrench");
+            c.CssClass = tmclass("clients", area);
+            c =AMI("Různé", aurl("misc"), "k-i-more-vertical");
+            c.CssClass = tmclass("misc", area);
+
             //AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
 
             switch (area)
@@ -127,7 +144,7 @@ namespace UI.Controllers
        
         private void Handle_AdminUsers(string prefix)
         {
-            DIV_TRANS("Správa uživatelů");
+            //DIV_TRANS("Správa uživatelů");
             AMI("Uživatelské účty", aurl("users","j03"));
             AMI("Aplikační role", aurl("users","j04"));
             DIV();
@@ -175,7 +192,7 @@ namespace UI.Controllers
 
         private void Handle_AdminWorksheet(string prefix)
         {
-            DIV_TRANS("Vykazování úkonů");
+            //DIV_TRANS("Vykazování úkonů");
             AMI("Sešity", aurl("worksheet","p34"));
             AMI("Aktivity", aurl("worksheet","p32"));
             DIV();
@@ -196,8 +213,7 @@ namespace UI.Controllers
             //return FlushResult_UL(false,true);
         }
         public void Handle_AdminBilling(string prefix)
-        {
-            DIV_TRANS("Vyúčtování");
+        {            
             AMI("Typy faktur", aurl("billing","p92"));
             AMI("Bankovní účty", aurl("billing","p86"));            
             AMI("Vystavovatelé faktur", aurl("billing","p93"));
@@ -220,11 +236,10 @@ namespace UI.Controllers
             //return FlushResult_UL(false,true);
         }
         public void Handle_AdminProjects(string prefix)
-        {
-            DIV_TRANS("Projekty");
-            AMI("Úrovně", aurl("projects","p07"));
+        {            
+            AMI("Úrovně projektů", aurl("projects","p07"));
             DIV();
-            AMI("Typy", aurl("projects","p42"));
+            AMI("Typy projektů", aurl("projects","p42"));
             AMI("Role osob v projektech", aurl("projects","x67","myqueryinline=x29id|int|141"));
 
 
@@ -236,7 +251,7 @@ namespace UI.Controllers
         }
         private void Handle_AdminClients(string prefix)
         {
-            DIV_TRANS("Klienti");
+            
             AMI("Typy klientů", aurl("clients","p29"));
             AMI("Role osob v klientech", aurl("clients","x67","myqueryinline=x29id|int|328"));
 
@@ -248,7 +263,7 @@ namespace UI.Controllers
         }
         private void Handle_AdminMisc(string prefix)
         {            
-            DIV_TRANS("Různé");
+            
             AMI("Katalog uživatelských polí", aurl("misc","x28"));
             AMI("Skupiny uživatelských polí", aurl("misc","x27"));
 
@@ -343,9 +358,11 @@ namespace UI.Controllers
         
 
 
-        private void AMI(string strName,string strUrl,string icon=null, string strParentID = null,string strID=null, string strTarget = null)
-        {            
-            _lis.Add(new MenuItem() { Name = Factory.tra(strName), Url = strUrl,Target=strTarget,ID=strID,ParentID=strParentID,Icon=icon });
+        private MenuItem AMI(string strName,string strUrl,string icon=null, string strParentID = null,string strID=null, string strTarget = null)
+        {
+            var c = new MenuItem() { Name = Factory.tra(strName), Url = strUrl, Target = strTarget, ID = strID, ParentID = strParentID, Icon = icon };
+            _lis.Add(c);
+            return c;
         }
         private void AMI_NOTRA(string strName, string strUrl,string icon=null, string strParentID = null, string strID = null, string strTarget = null)
         {           
@@ -394,8 +411,13 @@ namespace UI.Controllers
                     }
                     else
                     {
-                        string strStyle = "";
+                        string strStyle = null;
                         string strImg = "<span style='margin-left:10px;'></span>";
+                        string strCssClass = "dropdown-item";
+                        if (c.CssClass != null)
+                        {
+                            strCssClass = c.CssClass;
+                        }
                         if (bolSupportIcons)
                         {
                             strImg = "<span class='k-icon' style='width:30px;'></span>";
@@ -415,6 +437,7 @@ namespace UI.Controllers
                             bolHasChilds = true;
                             c.Name += "<span style='float:right;'> ▶</span>";
                         }
+                        
 
                         if (c.Url == null)
                         {
@@ -423,7 +446,7 @@ namespace UI.Controllers
                         else
                         {                            
                             if (c.Target != null) c.Target = " target='" + c.Target + "'";
-                            sb.Append(string.Format("<li{0}><a class='dropdown-item px-0' href=\"{1}\"{2}>{3}{4}</a>", strStyle, c.Url, c.Target,strImg, c.Name));
+                            sb.Append($"<li{strStyle}><a class='{strCssClass} px-0' href=\"{c.Url}\"{c.Target}>{strImg}{c.Name}</a>");
                                                        
                             
                         }
