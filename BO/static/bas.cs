@@ -410,6 +410,21 @@ namespace BO
 
         }
 
+        public static string ParseDbNameFromCloudLogin(string strLogin)
+        {
+            int pos = strLogin.IndexOf("@");
+            if (pos == -1)
+                return "";
+
+            int tecka = strLogin.IndexOf(".", pos);
+            if (tecka > -1)
+                tecka = strLogin.Length - tecka;
+            else
+                tecka = 0;
+
+            return strLogin.Substring(pos + 1, strLogin.Length - pos - 1 - tecka);
+        }
+
     }
 
 }

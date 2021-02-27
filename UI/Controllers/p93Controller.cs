@@ -87,20 +87,32 @@ namespace UI.Controllers
                         var strOrigFileName = "p93_logo_" + c.pid.ToString() + "_original"+ tempfile.o27FileExtension;
                         System.IO.File.Copy(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strOrigFileName, true);
 
-                        var strDestLogoFileName = "p93_logo_" + c.pid.ToString() + tempfile.o27FileExtension;
-                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestLogoFileName, 250, 100);
+                        var strDestFileName = "p93_logo_" + c.pid.ToString() + tempfile.o27FileExtension;
+                        if (Factory.App.IsCloud)
+                        {
+                            strDestFileName = BO.BAS.ParseDbNameFromCloudLogin(Factory.CurrentUser.j03Login) + "_" + strDestFileName;
+                        }
+                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 250, 100);
 
                         c = Factory.p93InvoiceHeaderBL.Load(c.pid);
-                        c.p93LogoFile = strDestLogoFileName;
+                        c.p93LogoFile = strDestFileName;
                         Factory.p93InvoiceHeaderBL.Save(c, null);
                     }
                     if (Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidSignature).Count() > 0)
                     {
-                        var strOrigFileName = "p93_signature_" + c.pid.ToString() + "_original"+Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).First().o27FileExtension;
-                        System.IO.File.Copy(Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).First().FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strOrigFileName, true);
+                        var tempfile = Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidSignature).First();
+                        var strOrigFileName = "p93_signature_" + c.pid.ToString() + "_original"+tempfile.o27FileExtension;
+                        System.IO.File.Copy(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strOrigFileName, true);
+
+                        var strDestFileName = "p93_signature_" + c.pid.ToString() + tempfile.o27FileExtension;
+                        if (Factory.App.IsCloud)
+                        {
+                            strDestFileName = BO.BAS.ParseDbNameFromCloudLogin(Factory.CurrentUser.j03Login) + "_" + strDestFileName;
+                        }
+                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 300, 130);
 
                         c = Factory.p93InvoiceHeaderBL.Load(c.pid);
-                        c.p93SignatureFile = strOrigFileName;
+                        c.p93SignatureFile = strDestFileName;
                         Factory.p93InvoiceHeaderBL.Save(c, null);
                     }
                     v.SetJavascript_CallOnLoad(c.pid);
