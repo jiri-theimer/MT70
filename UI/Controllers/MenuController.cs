@@ -101,7 +101,6 @@ namespace UI.Controllers
             AMI("Klienti", aurl("clients"), "k-i-wrench");
             AMI("Různé", aurl("misc"), "k-i-more-vertical");
             
-            DIV(area);
             //AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
 
             switch (area)
@@ -127,7 +126,8 @@ namespace UI.Controllers
         }
        
         private void Handle_AdminUsers(string prefix)
-        {            
+        {
+            DIV_TRANS("Správa uživatelů");
             AMI("Uživatelské účty", aurl("users","j03"));
             AMI("Aplikační role", aurl("users","j04"));
             DIV();
@@ -175,6 +175,7 @@ namespace UI.Controllers
 
         private void Handle_AdminWorksheet(string prefix)
         {
+            DIV_TRANS("Vykazování úkonů");
             AMI("Sešity", aurl("worksheet","p34"));
             AMI("Aktivity", aurl("worksheet","p32"));
             DIV();
@@ -196,6 +197,7 @@ namespace UI.Controllers
         }
         public void Handle_AdminBilling(string prefix)
         {
+            DIV_TRANS("Vyúčtování");
             AMI("Typy faktur", aurl("billing","p92"));
             AMI("Bankovní účty", aurl("billing","p86"));            
             AMI("Vystavovatelé faktur", aurl("billing","p93"));
@@ -219,6 +221,7 @@ namespace UI.Controllers
         }
         public void Handle_AdminProjects(string prefix)
         {
+            DIV_TRANS("Projekty");
             AMI("Úrovně", aurl("projects","p07"));
             DIV();
             AMI("Typy", aurl("projects","p42"));
@@ -233,6 +236,7 @@ namespace UI.Controllers
         }
         private void Handle_AdminClients(string prefix)
         {
+            DIV_TRANS("Klienti");
             AMI("Typy klientů", aurl("clients","p29"));
             AMI("Role osob v klientech", aurl("clients","x67","myqueryinline=x29id|int|328"));
 
@@ -244,7 +248,7 @@ namespace UI.Controllers
         }
         private void Handle_AdminMisc(string prefix)
         {            
-            DIV_TRANS("Uživatelská pole");
+            DIV_TRANS("Různé");
             AMI("Katalog uživatelských polí", aurl("misc","x28"));
             AMI("Skupiny uživatelských polí", aurl("misc","x27"));
 
