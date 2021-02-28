@@ -80,6 +80,10 @@ namespace BL
                        
                         _db.SaveRecord("p97Invoice_Round_Setting", p.getDynamicDapperPars(), c, true, true);
                     }
+                    if (rec.p98IsDefault)
+                    {
+                        _db.RunSql("UPDATE p98Invoice_Round_Setting_Template set p98IsDefault=0 WHERE p98ID<>@pid", new { pid = intPID });
+                    }
                     sc.Complete();                    
                 }
 
