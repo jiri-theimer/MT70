@@ -52,6 +52,7 @@ namespace BL
         private Ip86BankAccountBL _p86;
         private Ip93InvoiceHeaderBL _p93;
         private Ip95InvoiceRowBL _p95;
+        private Ip98Invoice_Round_Setting_TemplateBL _p98;
         private Ix51HelpCoreBL _x51;
         private Ix55WidgetBL _x55;
         private Ix67EntityRoleBL _x67;
@@ -412,6 +413,14 @@ namespace BL
             {
                 if (_p95 == null) _p95 = new p95InvoiceRowBL(this);
                 return _p95;
+            }
+        }
+        public Ip98Invoice_Round_Setting_TemplateBL p98Invoice_Round_Setting_TemplateBL
+        {
+            get
+            {
+                if (_p98 == null) _p98 = new p98Invoice_Round_Setting_TemplateBL(this);
+                return _p98;
             }
         }
         public Ix27EntityFieldGroupBL x27EntityFieldGroupBL
