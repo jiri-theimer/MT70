@@ -67,6 +67,7 @@ namespace BO
         j77WorksheetStatTemplate = 177,
         x18EntityCategory = 918,
         x48SqlTask = 948,
+        x97Translate=997,
         Approving = 999,
         _NotSpecified = 0
     }

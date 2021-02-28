@@ -274,7 +274,7 @@ namespace UI.Controllers
             AMI("Notifikace událostí", aurl("misc","x46"));
 
             AMI("Uživatelská nápověda", aurl("misc","x51"));
-            AMI("Aplikační překlad", aurl("misc","x91"));
+            AMI("Aplikační překlad", aurl("misc","x97"));
 
             handle_selected_item(prefix);
 

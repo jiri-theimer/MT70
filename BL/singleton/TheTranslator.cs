@@ -44,7 +44,7 @@ namespace BL
             SetupPallete();
         }
 
-        public string DoTranslate(string strCode,int langindex)
+        public string DoTranslate(string strCode,int langindex,string strCodeSource=null)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace BL
                 if (_app.TranslatorMode == "Collect")
                 {
                     DL.DbHandler db = new DL.DbHandler(_app.ConnectString, new BO.RunningUser(), _app.LogFolder);
-                    db.RunSql("INSERT INTO x97Translate(x97Code,x97Orig,x97UserInsert,x97UserUpdate,x97DateInsert,x97DateUpdate) VALUES(@code,@orig,'collect','collect',GETDATE(),GETDATE())", new { code = strCode,orig=strCode });
+                    db.RunSql("INSERT INTO x97Translate(x97Code,x97Orig,x97UserInsert,x97UserUpdate,x97DateInsert,x97DateUpdate,x97OrigSource) VALUES(@code,@orig,'collect','collect',GETDATE(),GETDATE(),@origsource)", new { code = strCode,orig=strCode,origsource= strCodeSource });
                     SetupPallete();
                 }
                 return "?" + strCode + "?";

@@ -135,8 +135,8 @@ namespace BL
 
             AE_TINY("x51HelpCore", "Uživatelská nápověda", "Uživatelská nápověda");
             AE_TINY("x55Widget", "Widgety", "Widget");
-            AE_TINY("x91Translate", "Aplikační překlad", "Aplikační překlad");
-            ByPrefix("x91").IsWithoutValidity = true;
+            AE_TINY("x97Translate", "Aplikační překlad", "Aplikační překlad");
+            ByPrefix("x97").IsWithoutValidity = true;
             
             
         }
@@ -146,8 +146,8 @@ namespace BL
             
             if (strSqlOrderBy == null) strSqlOrderBy = "a." + strTabName.Substring(0, 3) + "ID DESC";
             BO.TheEntity c = new BO.TheEntity() { TableName = strTabName, AliasPlural = strPlural, AliasSingular = strSingular, SqlFromGrid = strSqlFromGrid, SqlOrderByCombo = strSqlOrderByCombo, SqlOrderBy = strSqlOrderBy };
-            c.TranslateLang1 = _tt.DoTranslate(strPlural, 1);
-            c.TranslateLang2 = _tt.DoTranslate(strPlural, 2);
+            c.TranslateLang1 = _tt.DoTranslate(strPlural, 1,"TheEntitiesProvider:AE");
+            c.TranslateLang2 = _tt.DoTranslate(strPlural, 2, "TheEntitiesProvider:AE");
             _lis.Add(c);
 
         }
@@ -158,7 +158,7 @@ namespace BL
         }
         private BO.EntityRelation getREL(string strTabName, string strRelName, string strSingular, string strSqlFrom, string strDependOnRel = null)
         {
-            return new BO.EntityRelation() { TableName = strTabName, RelName = strRelName, AliasSingular = strSingular, SqlFrom = strSqlFrom, RelNameDependOn = strDependOnRel,Translate1=_tt.DoTranslate(strSingular,1), Translate2 = _tt.DoTranslate(strSingular, 2) };
+            return new BO.EntityRelation() { TableName = strTabName, RelName = strRelName, AliasSingular = strSingular, SqlFrom = strSqlFrom, RelNameDependOn = strDependOnRel,Translate1=_tt.DoTranslate(strSingular,1), Translate2 = _tt.DoTranslate(strSingular, 2, "TheEntitiesProvider:getREL") };
 
 
 

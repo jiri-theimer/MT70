@@ -64,6 +64,7 @@ namespace BO
                 case "c21": return BO.x29IdEnum.c21FondCalendar;
                 case "p98": return BO.x29IdEnum.p98Invoice_Round_Setting_Template;
                 case "x67": return BO.x29IdEnum.x67EntityRole;
+                case "x97":return BO.x29IdEnum.x97Translate;
                 default:
                     return BO.x29IdEnum._NotSpecified;
             }

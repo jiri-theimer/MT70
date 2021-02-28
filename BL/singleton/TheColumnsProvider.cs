@@ -102,7 +102,7 @@ namespace BL
         private void Handle_Translate()
         {
             //Překlad do ostatních jazyků
-            foreach (var col in _lis)
+            foreach (var col in _lis.Where(p=>p.Header.Length>2))
             {
                 bool b = true;
                 if (col.Header.Length > 3 && col.Header.Substring(0, 3) == "Col")
@@ -111,8 +111,8 @@ namespace BL
                 }
                 if (b)
                 {
-                    col.TranslateLang1 = _tt.DoTranslate(col.Header, 1);
-                    col.TranslateLang2 = _tt.DoTranslate(col.Header, 2);
+                    col.TranslateLang1 = _tt.DoTranslate(col.Header, 1,"TheColumnsProvider");
+                    col.TranslateLang2 = _tt.DoTranslate(col.Header, 2, "TheColumnsProvider");
                 }
 
             }
@@ -441,12 +441,14 @@ namespace BL
             AF("x29Entity", "x29NamePlural", "Plurál", gdc2);
             AF("x29Entity", "x29IsAttachment", "Přílohy", gdc0, null,"bool");
             
-            //x91 = překlad
-            AF("x91Translate", "x91Code", "Originál", gdc1, null, "string", false, true);
-            AF("x91Translate", "x91Lang1", "English", gdc1);
-            AF("x91Translate", "x91Lang2", "Deutsch", gdc1);
-            AF("x91Translate", "x91Lang4", "Slovenčina", gdc1);
-            
+            //x97 = překlad
+            AF("x97Translate", "x97Code", "Originál", gdc1, null, "string", false, true);
+            AF("x97Translate", "x97Lang1", "English", gdc1);
+            AF("x97Translate", "x97Lang2", "Deutsch", gdc1);
+            AF("x97Translate", "x97Lang4", "Slovenčina", gdc1);
+            AF("x97Translate", "x97OrigSource", "Zdroj");
+            AppendTimestamp("x97Translate",false);
+
             AF("x15VatRateType", "x15Name", "Druh DPH", gdc1, null, "string", false, true);
 
             

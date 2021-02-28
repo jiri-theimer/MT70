@@ -12,6 +12,6 @@ namespace BO
         public string x97Lang2 { get; set; }
         public string x97Lang3 { get; set; }
         public string x97Lang4 { get; set; }
-        public string x97Page { get; set; }
+        public string x97OrigSource { get; set; }
     }
 }

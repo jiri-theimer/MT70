@@ -1,0 +1,80 @@
+﻿@model UI.Models.Record.x97Record
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    if (Model.Rec == null) return;
+    Model.PageTitle = "Jazykový překlad";
+}
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Originál"):</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.x97Code" />
+
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">English:</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.x97Lang1" />
+
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">Deutsch:</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.x97Lang2" />
+
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">Slovensky:</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.x97Lang4" />
+
+        </div>
+    </div>
+    <hr />
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">Lokalita výrazu:</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.x97OrigSource" />
+
+        </div>
+    </div>
+</div>
+<div>
+    <button id="cmdRecovery" type="button" class="btn btn-primary">@_f.tra("Občerstvit cache překladů na serveru")</button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+
+        $("#cmdRecovery").click(function () {
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.action = "/x97/Record?oper=recovery";
+            form1.submit();
+        });
+
+
+
+
+
+
+
+    });
+</script>
+
+
+
