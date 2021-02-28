@@ -35,36 +35,30 @@
         </div>
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Město"):</label>
-            <div class="col-sm-2 col-md-2">
+            <div class="col-sm-6 col-md-5">
                 <input class="form-control" asp-for="Rec.p93City" />
 
             </div>
-
-        </div>
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("PSČ"):</label>
-            <div class="col-sm-11 col-md-10">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("PSČ"):</label>
+            <div class="col-sm-2 col-md-2">
                 <input class="form-control" asp-for="Rec.p93Zip" />
 
             </div>
-
         </div>
+        
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Stát"):</label>
-            <div class="col-sm-11 col-md-10">
+            <div class="col-sm-6 col-md-5">
                 <input class="form-control" asp-for="Rec.p93Country" />
 
             </div>
-
-        </div>
-        <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("ISDOC kód státu"):</label>
-            <div class="col-sm-11 col-md-10">
+            <div class="col-sm-1 col-md-1">
                 <input asp-for="@Model.Rec.p93CountryCode" class="form-control" />
 
             </div>
-
         </div>
+        
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontaktní TEL"):</label>
             <div class="col-sm-11 col-md-10">
@@ -83,20 +77,17 @@
         </div>
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
-            <div class="col-sm-11 col-md-10">
+            <div class="col-sm-5 col-md-4">
                 <input asp-for="@Model.Rec.p93RegID" class="form-control" />
 
             </div>
-
-        </div>
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("DIČ"):</label>
-            <div class="col-sm-11 col-md-10">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DIČ"):</label>
+            <div class="col-sm-5 col-md-5">
                 <input asp-for="@Model.Rec.p93VatID" class="form-control" />
 
             </div>
-
         </div>
+        
         <div class="form-floating my-2">
             <textarea class="form-control" asp-for="Rec.p93Registration"></textarea>
             <label for="Rec_p32HelpText">@_f.tra("Registrace v rejstříku")</label>
@@ -121,6 +112,7 @@
 
                 @if (!string.IsNullOrEmpty(Model.SignatureFile))
                 {
+                    <button type="button" id="cmdDeleteSignature" class="btn btn-danger">@_f.tra("Odstranit obrázek")</button>
                     <img src="@Model.SignatureFile" />
                 }
                 <iframe id="fraUpload" src="/FileUpload/SingleUpload?guid=@Model.UploadGuidSignature" frameborder="0" scrolling="no"></iframe>
@@ -138,6 +130,7 @@
 
                 @if (!string.IsNullOrEmpty(Model.LogoFile))
                 {
+                    <button type="button" id="cmdDeleteLogo" class="btn btn-danger">@_f.tra("Odstranit obrázek")</button>
                     <img src="@Model.LogoFile" />
                 }
                 <iframe id="fraUpload" src="/FileUpload/SingleUpload?guid=@Model.UploadGuidLogo" frameborder="0" scrolling="no"></iframe>
@@ -149,5 +142,83 @@
 
 </div>
 
-<input type="hidden" asp-for="@Model.UploadGuidLogo" />
-<input type="hidden" asp-for="@Model.UploadGuidSignature" />
+<div class="card">
+    <div class="card-header">
+        @_f.tra("Bankovní účty")
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="handle_add_row()">@_f.tra("Přidat řádek")</button>        
+    </div>
+    <div class="card-body">
+        <table class="table table-hover" style="table-layout: fixed;">
+            <tr>                
+                <th>@_f.tra("Měna")</th>
+                <th>@_f.tra("Bankovní účet")</th>              
+                <th style="width:40px;"></th>
+            </tr>
+            @for (int i = 0; i < Model.lisP88.Count; i++)
+            {
+                <tr style="@(Model.lisP88[i].CssTempDisplay)">
+                    <td>
+                        <input type="hidden" asp-for="lisP88[i].IsTempDeleted" value="@Model.lisP88[i].IsTempDeleted" />
+                        <input type="hidden" asp-for="lisP88[i].TempGuid" value="@Model.lisP88[i].TempGuid" />
+
+                        <mycombo entity="j27Currency" asp-for="@Model.lisP88[i].j27ID" selectedtext="@Model.lisP88[i].ComboJ27" view-flag="2"></mycombo>
+                    </td>
+                    <td>
+                        <mycombo entity="p86BankAccount" asp-for="@Model.lisP88[i].p86ID" selectedtext="@Model.lisP88[i].ComboP86" view-flag="2"></mycombo>
+
+                    </td>
+                   
+                   
+                    <td>
+                        <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_row('@(Model.lisP88[i].TempGuid)')">x</button>
+                    </td>
+                  
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<input type="hidden" asp-for="@Model.IsDeleteLogo" value="@Model.IsDeleteLogo" />
+<input type="hidden" asp-for="@Model.IsDeleteSignature" value="@Model.IsDeleteSignature" />
+<input type="hidden" asp-for="@Model.UploadGuidLogo" value="@Model.UploadGuidLogo" />
+<input type="hidden" asp-for="@Model.UploadGuidSignature" value="@Model.UploadGuidSignature" />
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+       
+
+
+        $("#cmdDeleteLogo").on("click", function () {
+            postback("delete_logo");
+        });
+
+        $("#cmdDeleteSignature").on("click", function () {
+            postback("delete_signature");
+        });
+
+
+    });
+
+
+
+    
+
+    function postback(oper) {        
+        form1.action = _ep("p93/Record?oper="+oper);
+        form1.submit();
+    }
+
+    function handle_delete_row(guid) {
+        form1.action = _ep("/p93/Record?oper=delete_row&guid=" + guid);
+        form1.submit();
+
+    }
+    function handle_add_row() {
+        form1.action = _ep("/p93/Record?oper=add_row");
+        form1.submit();
+    }
+
+</script>

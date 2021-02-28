@@ -12,6 +12,7 @@ namespace BL
 
         public IEnumerable<BO.p93InvoiceHeader> GetList(BO.myQuery mq);
         public int Save(BO.p93InvoiceHeader rec, List<BO.p88InvoiceHeader_BankAccount> lisP88);
+        public IEnumerable<BO.p88InvoiceHeader_BankAccount> GetList_p88(int p93id);
 
     }
     class p93InvoiceHeaderBL : BaseBL, Ip93InvoiceHeaderBL
@@ -40,7 +41,13 @@ namespace BL
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p93InvoiceHeader>(fq.FinalSql, fq.Parameters);
         }
-
+        public IEnumerable<BO.p88InvoiceHeader_BankAccount> GetList_p88(int p93id)
+        {
+            sb("select a.*");            
+            sb(" FROM p88InvoiceHeader_BankAccount a");          
+            sb(" WHERE a.p93ID=@p93id");
+            return _db.GetList<BO.p88InvoiceHeader_BankAccount>(sbret(), new { p93id = p93id });
+        }
 
 
         public int Save(BO.p93InvoiceHeader rec,List<BO.p88InvoiceHeader_BankAccount> lisP88)

@@ -31,6 +31,17 @@ namespace UI.Controllers
                 {
                     v.SignatureFile = "/Plugins/" + v.Rec.p93SignatureFile;
                 }
+                var lis = Factory.p93InvoiceHeaderBL.GetList_p88(v.rec_pid).ToList();
+                v.lisP88 = new List<p88Repeater>();
+                foreach(var c in lis)
+                {
+                    var recP86 = Factory.p86BankAccountBL.Load(c.p86ID);
+                    v.lisP88.Add(new p88Repeater() {
+                        TempGuid=BO.BAS.GetGuid(),j27ID=c.j27ID,p86ID=c.p86ID
+                        ,ComboJ27=Factory.FBL.LoadCurrencyByID(c.j27ID).j27Code
+                        ,ComboP86=recP86.p86BankAccount+"/"+recP86.p86BankCode+" ("+recP86.p86Name+")"
+                    });
+                }
             }
             RefreshState(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);
@@ -44,15 +55,48 @@ namespace UI.Controllers
 
         private void RefreshState(p93Record v)
         {
-
+            if (v.lisP88 == null)
+            {
+                v.lisP88 = new List<p88Repeater>();
+            }
 
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(p93Record v)
+        public IActionResult Record(p93Record v,string oper,string guid)
         {
             RefreshState(v);
-
+            if (oper == "postback")
+            {
+                return View(v);
+            }
+            if (oper == "add_row")
+            {
+                var c = new p88Repeater() { TempGuid = BO.BAS.GetGuid() };                
+                v.lisP88.Add(c);
+                return View(v);
+            }
+            if (oper == "delete_row")
+            {
+                v.lisP88.First(p => p.TempGuid == guid).IsTempDeleted = true;
+                return View(v);
+            }
+           
+                    
+            if (oper == "delete_logo")
+            {
+                v.UploadGuidLogo = BO.BAS.GetGuid();
+                v.IsDeleteLogo = true;
+                this.AddMessage("Změny se potvrdí až po uložení záznamu.", "info");
+                return View(v);
+            }
+            if (oper== "delete_signature")
+            {
+                v.UploadGuidSignature = BO.BAS.GetGuid();
+                v.IsDeleteSignature = true;
+                this.AddMessage("Změny se potvrdí až po uložení záznamu.", "info");
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
                 
@@ -81,8 +125,17 @@ namespace UI.Controllers
 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
+                if (v.IsDeleteLogo) c.p93LogoFile = null;
+                if (v.IsDeleteSignature) c.p93SignatureFile = null;
 
-                c.pid = Factory.p93InvoiceHeaderBL.Save(c,null);
+                var lis = new List<BO.p88InvoiceHeader_BankAccount>();
+                foreach (var row in v.lisP88.Where(p => p.IsTempDeleted == false))
+                {
+                    var cc = new BO.p88InvoiceHeader_BankAccount() { j27ID = row.j27ID,p86ID=row.p86ID };
+                    lis.Add(cc);
+                }
+
+                c.pid = Factory.p93InvoiceHeaderBL.Save(c,lis);
                 if (c.pid > 0)
                 {
                     if (Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidLogo).Count() > 0)
@@ -102,6 +155,7 @@ namespace UI.Controllers
                         c.p93LogoFile = strDestFileName;
                         Factory.p93InvoiceHeaderBL.Save(c, null);
                     }
+                    
                     if (Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidSignature).Count() > 0)
                     {
                         var tempfile = Factory.o27AttachmentBL.GetTempFiles(v.UploadGuidSignature).First();
