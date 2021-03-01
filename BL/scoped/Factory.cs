@@ -52,6 +52,7 @@ namespace BL
         private Ip80InvoiceAmountStructureBL _p80;
         private Ip85TempboxBL _p85;
         private Ip86BankAccountBL _p86;
+        private Ip92InvoiceTypeBL _p92;
         private Ip93InvoiceHeaderBL _p93;
         private Ip95InvoiceRowBL _p95;
         private Ip98Invoice_Round_Setting_TemplateBL _p98;
@@ -415,6 +416,14 @@ namespace BL
             {
                 if (_p86 == null) _p86 = new p86BankAccountBL(this);
                 return _p86;
+            }
+        }
+        public Ip92InvoiceTypeBL p92InvoiceTypeBL
+        {
+            get
+            {
+                if (_p92 == null) _p92 = new p92InvoiceTypeBL(this);
+                return _p92;
             }
         }
         public Ip93InvoiceHeaderBL p93InvoiceHeaderBL

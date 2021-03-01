@@ -1,0 +1,107 @@
+﻿@model UI.Models.Record.p92Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Typ faktury");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název pravidla"):</label>
+        <div class="col-sm-9 col-md-8">
+            <input class="form-control" asp-for="Rec.p92Name" />
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Index pořadí"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.p92Ordinary" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Číselná řada faktury"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" filter-flag="1" myqueryinline="x29id|int|391"></mycombo>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí měna faktury"):</label>
+        <div class="col-sm-5 col-md-4">
+            <mycombo entity="j27Currency" asp-for="Rec.j27ID" selectedtext="@Model.ComboJ27Code" filter-flag="1"></mycombo>
+        </div>
+        <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Výchozí zaokrouhlovací pravidlo"):</label>
+        <div class="col-sm-3 col-md-3">
+            <mycombo entity="p80InvoiceAmountStructure" asp-for="Rec.p98ID" selectedtext="@Model.ComboP98Name" filter-flag="1"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vystavovatel faktury"):</label>
+        <div class="col-sm-5 col-md-4">
+            <mycombo entity="p93InvoiceHeader" asp-for="Rec.p93ID" selectedtext="@Model.ComboP93Name" filter-flag="1"></mycombo>
+        </div>
+        <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Výchozí struktura cenového rozpisu"):</label>
+        <div class="col-sm-3 col-md-3">
+            <mycombo entity="p80InvoiceAmountStructure" asp-for="Rec.p80ID" selectedtext="@Model.ComboP80Name" filter-flag="1"></mycombo>
+        </div>
+    </div>
+   
+   
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Předkontace v účetním IS"):</label>
+        <div class="col-sm-5 col-md-4">
+            <input class="form-control" asp-for="Rec.p92AccountingIDS" />
+        </div>
+        <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Klasifikace DPH v účetním IS"):</label>
+        <div class="col-sm-3 col-md-3">
+            <input class="form-control" asp-for="Rec.p92ClassificationVATIDS" />
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Výchozí DPH faktury")
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <label class="col-sm-4 col-md-3 col-form-label">@_f.tra("Po vystavení převést všechny úkony na DPH"):</label>
+                <div class="col-sm-3 col-md-3">
+                    <select asp-for="@Model.Rec.x15ID" class="form-select">
+                        <option value="Nic"></option>
+                        <option value="BezDPH">@_f.tra("0% (Bez DPH)")</option>
+                        <option value="SnizenaSazba">@_f.tra("Snížená sazba DPH")</option>
+                        <option value="ZakladniSazba">@_f.tra("Základní sazba DPH")</option>
+                        <option value="SpecialniSazba">@_f.tra("Speciální sazba DPH")</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-4 col-md-3 col-form-label">@_f.tra("Výchozí DPH region"):</label>
+                <div class="col-sm-3 col-md-3">
+                    <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name" filter-flag="1"></mycombo>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p92ReportConstantPreText1"></textarea>
+        <label for="Rec_p92ReportConstantPreText1">@_f.tra("Preambule hlavního textu faktury")</label>
+    </div>
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p92InvoiceDefaultText1"></textarea>
+        <label for="Rec_p92InvoiceDefaultText1">@_f.tra("Výchozí hlavní text faktury")</label>
+    </div>
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p92ReportConstantText"></textarea>
+        <label for="Rec_p92ReportConstantText">@_f.tra("Preambule technického textu")</label>
+    </div>
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p92InvoiceDefaultText2"></textarea>
+        <label for="Rec_p92InvoiceDefaultText2">@_f.tra("Výchozí technický text")</label>
+    </div>
+</div>
