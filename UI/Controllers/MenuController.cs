@@ -160,8 +160,7 @@ namespace UI.Controllers
             AMI("Pracovní fondy", aurl("users","c21"));
             AMI("Dny svátků", aurl("users","c26"));
 
-            DIV_TRANS("Dashboard");
-            AMI("Widgety", aurl("users","x55"));
+            
 
             DIV_TRANS("Provoz");
             AMI("PING Log", aurl("users","j92"));
@@ -271,7 +270,8 @@ namespace UI.Controllers
 
             DIV_TRANS("Ostatní");
             AMI("Číselné řady", aurl("misc","x38"));
-            AMI("Střediska", aurl("misc","j18"));
+            AMI("Střediska", aurl("misc","j18"));            
+            AMI("Dashboard Widgety", aurl("misc", "x55"));
             AMI("Daňové regiony", aurl("misc","j17"));
             AMI("Notifikace událostí", aurl("misc","x46"));
 
