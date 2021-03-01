@@ -63,14 +63,14 @@
 
     <div class="card">
         <div class="card-header">
-            @_f.tra("Výchozí DPH faktury")
+            @_f.tra("DPH režim faktury")
         </div>
         <div class="card-body">
             <div class="row">
-                <label class="col-sm-4 col-md-3 col-form-label">@_f.tra("Po vystavení převést všechny úkony na DPH"):</label>
-                <div class="col-sm-3 col-md-3">
+                <label class="col-sm-5 col-md-4 col-form-label">@_f.tra("Po vystavení nahodit u všech fakturovaných úkonů DPH"):</label>
+                <div class="col-sm-2 col-md-2">
                     <select asp-for="@Model.Rec.x15ID" class="form-select">
-                        <option value="Nic"></option>
+                        <option value="Nic">@_f.tra("Ponechat stávající DPH sazby")</option>
                         <option value="BezDPH">@_f.tra("0% (Bez DPH)")</option>
                         <option value="SnizenaSazba">@_f.tra("Snížená sazba DPH")</option>
                         <option value="ZakladniSazba">@_f.tra("Základní sazba DPH")</option>
@@ -78,13 +78,12 @@
                     </select>
 
                 </div>
-            </div>
-            <div class="row my-2">
-                <label class="col-sm-4 col-md-3 col-form-label">@_f.tra("Výchozí DPH region"):</label>
+                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("DPH region dokladu"):</label>
                 <div class="col-sm-3 col-md-3">
                     <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name" filter-flag="1"></mycombo>
                 </div>
             </div>
+           
         </div>
     </div>
 
