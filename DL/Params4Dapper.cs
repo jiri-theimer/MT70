@@ -58,10 +58,13 @@ namespace DL
             _lis.Add(c);
             
         }
-        public void AddEnumInt(string name, Enum value)
-        {
-            
+        public void AddEnumInt(string name, Enum value, bool bolIsDbKey = false)
+        {            
             DL.Param4DT c = new DL.Param4DT() { ParamType = "int", ParName = name, ParValue = Convert.ToInt32(value) };
+            if (bolIsDbKey && Convert.ToInt32(value) == 0)
+            {
+                c.ParValue = null;
+            }
             _lis.Add(c);
         }
         public void AddBool(string name, bool value)

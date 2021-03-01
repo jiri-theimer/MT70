@@ -64,6 +64,7 @@ namespace BL
             AE("j17Country", "Regiony", "Region", "j17Country a ", "a.j17Ordinary");
             
             AE("j27Currency", "Měny", "Měna", "j27Currency a ", "a.j27Ordinary,a.j27Code");
+            AE("j61TextTemplate", "Šablony poštovních zpráv", "Šablona poštovní zprávy", "j61TextTemplate a ", "a.j61Ordinary");
 
             AE_TINY("j90LoginAccessLog", "LOGIN Log", "LOGIN Log");
             ByPrefix("j90").IsWithoutValidity = true;
@@ -75,10 +76,10 @@ namespace BL
 
             AE("b01WorkflowTemplate", "Workflow šablony", "Workflow šablona", "b01WorkflowTemplate a", "a.b01Name");
             AE("b02WorkflowStatus", "Workflow stavy", "Workflow stav", "b02WorkflowStatus a", "a.b01ID,a.b02Order,a.b02Name", "a.b01ID,a.b02Order,a.b02Name");
-            AE("b05Workflow_History", "Workflow historie", "Workflow historie", "b05Workflow_History a", "a.b05ID DESC");
-            ByPrefix("b05").IsWithoutValidity = true;
-            AE("b06WorkflowStep", "Workflow kroky", "Workflow krok", "b06WorkflowStep a", "a.b06Order", "a.b06Order");
-            AE("b65WorkflowMessage", "Šablony notifikačních zpráv", "Workflow notifikační zpráva", "b65WorkflowMessage a", "a.b65Name");
+            //AE("b05Workflow_History", "Workflow historie", "Workflow historie", "b05Workflow_History a", "a.b05ID DESC");
+            //ByPrefix("b05").IsWithoutValidity = true;
+            //AE("b06WorkflowStep", "Workflow kroky", "Workflow krok", "b06WorkflowStep a", "a.b06Order", "a.b06Order");
+            //AE("b65WorkflowMessage", "Šablony notifikačních zpráv", "Workflow notifikační zpráva", "b65WorkflowMessage a", "a.b65Name");
 
             AE("o15AutoComplete", "AutoComplete položky", "AutoComplete položka", "o15AutoComplete a", "a.o15Flag");
 
@@ -219,6 +220,9 @@ namespace BL
                     break;
                 case "c26":
                     lis.Add(getREL("j17Country", "c26_j17", "Region", "LEFT OUTER JOIN j17Country c26_j17 ON a.j17ID=c26_j17.j17ID"));
+                    break;
+                case "j61":
+                    lis.Add(getREL("x29Entity", "j61_x29", "Kontext", "LEFT OUTER JOIN x29Entity j61_x29 ON a.x29ID=j61_x29.x29ID"));
                     break;
                 case "x31":
                     lis.Add(getREL("x29Entity", "x31_x29", "Kontext", "LEFT OUTER JOIN x29Entity x31_x29 ON a.x29ID=x31_x29.x29ID"));

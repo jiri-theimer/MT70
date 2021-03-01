@@ -68,7 +68,7 @@ namespace UI.Models
             if (_rec.pid > 0)
             {
                 var sb = new System.Text.StringBuilder();
-                sb.AppendLine("<div style='border-top:solid 1px #F5F5F5;margin-top:20px;'>");
+                //sb.AppendLine("<div style='border-top:solid 1px #F5F5F5;margin-top:20px;'>");
                 if (_rec.DateInsert != null)
                 {
                     sb.Append("<small>"+f.tra("Záznam založen")+ ":&nbsp;</small>");
@@ -104,7 +104,7 @@ namespace UI.Models
                     sb.Append("</small>");
                 }
 
-                sb.AppendLine("</div>");
+                //sb.AppendLine("</div>");
                 return sb.ToString();
             }
             else

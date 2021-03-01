@@ -57,7 +57,7 @@ namespace BL
             p.AddInt("p92Ordinary", rec.p92Ordinary);
 
             p.AddInt("j27ID", rec.j27ID, true);
-            p.AddEnumInt("x15ID", rec.x15ID);
+            p.AddEnumInt("x15ID", rec.x15ID,true);
             p.AddInt("j17ID", rec.j17ID, true);
             p.AddInt("x38ID", rec.x38ID, true);
             p.AddInt("p98ID", rec.p98ID, true);

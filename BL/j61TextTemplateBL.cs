@@ -1,0 +1,91 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BL
+{
+    public interface Ij61TextTemplateBL
+    {
+        public BO.j61TextTemplate Load(int pid);
+        public IEnumerable<BO.j61TextTemplate> GetList(BO.myQuery mq);
+        public int Save(BO.j61TextTemplate rec);
+
+    }
+    class j61TextTemplateBL : BaseBL, Ij61TextTemplateBL
+    {
+        public j61TextTemplateBL(BL.Factory mother) : base(mother)
+        {
+
+        }
+
+
+        private string GetSQL1(string strAppend = null)
+        {
+            sb("SELECT a.*,");
+            sb(_db.GetSQL1_Ocas("j61"));
+            sb(" FROM j61TextTemplate a");
+            sb(strAppend);
+            return sbret();
+        }
+        public BO.j61TextTemplate Load(int pid)
+        {
+            return _db.Load<BO.j61TextTemplate>(GetSQL1(" WHERE a.j61ID=@pid"), new { pid = pid });
+        }
+
+        public IEnumerable<BO.j61TextTemplate> GetList(BO.myQuery mq)
+        {
+            DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
+            return _db.GetList<BO.j61TextTemplate>(fq.FinalSql, fq.Parameters);
+        }
+
+
+
+        public int Save(BO.j61TextTemplate rec)
+        {
+            if (!ValidateBeforeSave(rec))
+            {
+                return 0;
+            }
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                var p = new DL.Params4Dapper();
+                p.AddInt("pid", rec.pid);
+                p.AddEnumInt("x29ID", rec.x29ID, true);
+                p.AddString("j61Name", rec.j61Name);
+                p.AddInt("j02ID_Owner", rec.j02ID_Owner, true);
+                p.AddString("j61HtmlBody", rec.j61HtmlBody);
+                p.AddString("j61MailSubject", rec.j61MailSubject);
+                p.AddString("j61MailTO", rec.j61MailTO);
+                p.AddString("j61MailCC", rec.j61MailCC);
+                p.AddString("j61MailBCC", rec.j61MailBCC);
+                p.AddString("j61MessageFields", rec.j61MessageFields);
+                p.AddString("j61HtmlTemplateFile", rec.j61HtmlTemplateFile);
+
+                p.AddInt("j61Ordinary", rec.j61Ordinary);
+
+                int intPID = _db.SaveRecord("j61TextTemplate", p.getDynamicDapperPars(), rec);
+                if (intPID > 0)
+                {
+                    sc.Complete();
+                }
+
+                return intPID;
+            }
+                
+
+        }
+        private bool ValidateBeforeSave(BO.j61TextTemplate rec)
+        {
+            if (string.IsNullOrEmpty(rec.j61Name))
+            {
+                this.AddMessage("Chybí vyplnit [Název]."); return false;
+            }
+
+
+            return true;
+        }
+
+    }
+}

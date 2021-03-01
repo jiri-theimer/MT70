@@ -30,6 +30,7 @@ namespace BL
         private Ij11TeamBL _j11;
         private Ij17CountryBL _j17;
         private Ij18RegionBL _j18;
+        private Ij61TextTemplateBL _j61;
         private Io15AutoCompleteBL _o15;
         private Io13AttachmentTypeBL _o13;
         private Io27AttachmentBL _o27;
@@ -221,6 +222,14 @@ namespace BL
             {
                 if (_j18 == null) _j18 = new j18RegionBL(this);
                 return _j18;
+            }
+        }
+        public Ij61TextTemplateBL j61TextTemplateBL
+        {
+            get
+            {
+                if (_j61 == null) _j61 = new j61TextTemplateBL(this);
+                return _j61;
             }
         }
         public Io15AutoCompleteBL o15AutoCompleteBL

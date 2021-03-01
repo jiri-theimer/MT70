@@ -59,10 +59,13 @@ namespace UI.Controllers.Admin
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(p92Record v)
+        public IActionResult Record(p92Record v,string oper)
         {
             RefreshState(v);
-
+            if (oper == "postback")
+            {
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
                 BO.p92InvoiceT c = new BO.p92InvoiceT();

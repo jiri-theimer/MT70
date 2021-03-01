@@ -20,6 +20,13 @@
             <mynumber asp-for="Rec.p92Ordinary" decimal-digits="0"></mynumber>
         </div>
     </div>
+    <div>
+        <input type="radio" id="p92InvoiceType1" asp-for="@Model.Rec.p92InvoiceType" value="ClientInvoice">
+        <label for="p92InvoiceType1">@_f.tra("Klientská faktura")</label>
+        <br />
+        <input type="radio" id="p92InvoiceType2" asp-for="@Model.Rec.p92InvoiceType" value="CreditNote">
+        <label for="p92InvoiceType2">@_f.tra("Opravný doklad (dobropis)")</label>
+    </div>
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Číselná řada faktury"):</label>
         <div class="col-sm-11 col-md-10">
@@ -47,8 +54,8 @@
             <mycombo entity="p80InvoiceAmountStructure" asp-for="Rec.p80ID" selectedtext="@Model.ComboP80Name" filter-flag="1"></mycombo>
         </div>
     </div>
-   
-   
+
+
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Předkontace v účetním IS"):</label>
         <div class="col-sm-5 col-md-4">
@@ -60,32 +67,35 @@
         </div>
 
     </div>
-
-    <div class="card">
-        <div class="card-header">
-            @_f.tra("DPH režim faktury")
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <label class="col-sm-5 col-md-4 col-form-label">@_f.tra("Po vystavení nahodit u všech fakturovaných úkonů DPH"):</label>
-                <div class="col-sm-2 col-md-2">
-                    <select asp-for="@Model.Rec.x15ID" class="form-select">
-                        <option value="Nic">@_f.tra("Ponechat stávající DPH sazby")</option>
-                        <option value="BezDPH">@_f.tra("0% (Bez DPH)")</option>
-                        <option value="SnizenaSazba">@_f.tra("Snížená sazba DPH")</option>
-                        <option value="ZakladniSazba">@_f.tra("Základní sazba DPH")</option>
-                        <option value="SpecialniSazba">@_f.tra("Speciální sazba DPH")</option>
-                    </select>
-
-                </div>
-                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("DPH region dokladu"):</label>
-                <div class="col-sm-3 col-md-3">
-                    <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name" filter-flag="1"></mycombo>
-                </div>
+    @if (Model.Rec.p92InvoiceType == BO.p92InvoiceTypeENUM.ClientInvoice)
+    {
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("DPH režim faktury")
             </div>
-           
+            <div class="card-body">
+                <div class="row">
+                    <label class="col-sm-5 col-md-4 col-form-label">@_f.tra("Po vystavení nahodit u všech fakturovaných úkonů DPH"):</label>
+                    <div class="col-sm-2 col-md-2">
+                        <select asp-for="@Model.Rec.x15ID" class="form-select">
+                            <option value="Nic">@_f.tra("Ponechat stávající DPH úkonů")</option>
+                            <option value="BezDPH">@_f.tra("0% (Bez DPH)")</option>
+                            <option value="SnizenaSazba">@_f.tra("Snížená sazba DPH")</option>
+                            <option value="ZakladniSazba">@_f.tra("Základní sazba DPH")</option>
+                            <option value="SpecialniSazba">@_f.tra("Speciální sazba DPH")</option>
+                        </select>
+
+                    </div>
+                    <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("DPH region dokladu"):</label>
+                    <div class="col-sm-3 col-md-3">
+                        <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name" filter-flag="1"></mycombo>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
+
+    }
 
     <div class="form-floating my-2">
         <textarea class="form-control" asp-for="Rec.p92ReportConstantPreText1"></textarea>
@@ -104,3 +114,28 @@
         <label for="Rec_p92InvoiceDefaultText2">@_f.tra("Výchozí technický text")</label>
     </div>
 </div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#p92InvoiceType1").on("change", function () {
+            postback();
+        });
+        $("#p92InvoiceType2").on("change", function () {
+            postback();
+        });
+
+
+    });
+
+
+
+
+    function postback() {        
+        form1.action = _ep("p92/Record?oper=postback");
+        form1.submit();
+    }
+
+</script>

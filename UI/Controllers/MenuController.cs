@@ -169,7 +169,8 @@ namespace UI.Controllers
             AMI("LOGIN Log", aurl("users","j90"));
             
             DIV_TRANS("Pošta");
-            AMI("SMTP poštovní účty", aurl("users","o40"));
+            AMI("Poštovní účty", aurl("users","o40"));
+            AMI("Šablony poštovních zpráv", aurl("users", "j61"));
             AMI("OUTBOX", aurl("users","x40"));
             AMI("MAIL fronta", "/mail/MailBatchFramework");
                        
@@ -229,6 +230,7 @@ namespace UI.Controllers
             AMI("Ceníky sazeb", aurl("billing","p51"));
 
             AMI("Uživatelská pole", aurl("billing","x28","myqueryinline=x29id|int|391"));
+            AMI("Šablony poštovních zpráv", aurl("billing", "j61", "myqueryinline=x29id|int|391"));
 
             handle_selected_item(prefix);
 

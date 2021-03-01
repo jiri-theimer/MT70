@@ -181,6 +181,12 @@ namespace BL
             AF("j27Currency", "j27Code", "Měna", gdc1, null, "string", false, true);
             AF("j27Currency", "j27Name", "Název měny");
 
+            AF("j61TextTemplate", "j61Name", "Šablona zprávy", gdc1, null, "string", false, true);
+            AF("j61TextTemplate", "j61MailSubject", "Předmět zprávy", gdc2);
+            AF("j61TextTemplate", "j61MailTO", "TO");
+            AF("j61TextTemplate", "j61MailCC", "CC");
+            AF("j61TextTemplate", "j61MailBCC", "BCC");
+            AppendTimestamp("j61TextTemplate");
 
             //b01 = workflow šablona            
             AF("b01WorkflowTemplate", "b01Name", "Workflow šablona", gdc1, null, "string", false, true);
@@ -201,26 +207,26 @@ namespace BL
 
 
 
-            //b05 = workflow historie          
-            AF("b05Workflow_History", "Kdy", "Čas", gdc1, "a.b05DateInsert", "datetime");
-            AF("b05Workflow_History", "b05Comment", "Text", gdc1, null, "string", false, true);
+            ////b05 = workflow historie          
+            //AF("b05Workflow_History", "Kdy", "Čas", gdc1, "a.b05DateInsert", "datetime");
+            //AF("b05Workflow_History", "b05Comment", "Text", gdc1, null, "string", false, true);
             
-            AF("b05Workflow_History", "b05IsCommentOnly", "Pouze komentář", gdc2, null, "bool");
-            AF("b05Workflow_History", "b05IsManualStep", "Ruční krok", 0, null, "bool");
-            AF("b05Workflow_History", "b05IsNominee", "Nominace řešitele", gdc2, null, "bool");
-            AF("b05Workflow_History", "b05IsCommentRestriction", "Interní komentář", gdc2, null, "bool");            
-            AppendTimestamp("b05Workflow_History",false);
+            //AF("b05Workflow_History", "b05IsCommentOnly", "Pouze komentář", gdc2, null, "bool");
+            //AF("b05Workflow_History", "b05IsManualStep", "Ruční krok", 0, null, "bool");
+            //AF("b05Workflow_History", "b05IsNominee", "Nominace řešitele", gdc2, null, "bool");
+            //AF("b05Workflow_History", "b05IsCommentRestriction", "Interní komentář", gdc2, null, "bool");            
+            //AppendTimestamp("b05Workflow_History",false);
 
-            //b06 = workflow krok
-            AF("b06WorkflowStep", "b06Name", "Workflow krok", gdc1, null, "string", false, true);
-            AF("b06WorkflowStep", "b06Order", "#", gdc2, null, "num0");
-            AppendTimestamp("b06WorkflowStep");
+            ////b06 = workflow krok
+            //AF("b06WorkflowStep", "b06Name", "Workflow krok", gdc1, null, "string", false, true);
+            //AF("b06WorkflowStep", "b06Order", "#", gdc2, null, "num0");
+            //AppendTimestamp("b06WorkflowStep");
 
-            //b65 = notifikační šablona
-            AF("b65WorkflowMessage", "b65Name", "Notifikační šablona",gdc1, null, "string", false, true);
-            AF("b65WorkflowMessage", "b65MessageSubject", "Předmět zprávy", gdc2);
-            AF("b65WorkflowMessage", "SystemFlag", "🚩", gdc1, "case when isnull(a.b65SystemFlag,0)>0 then '<div style='+char(34)+'background-color:red;'+char(34)+'>&nbsp;</div>' end");
-            AppendTimestamp("b65WorkflowMessage");
+            ////b65 = notifikační šablona
+            //AF("b65WorkflowMessage", "b65Name", "Notifikační šablona",gdc1, null, "string", false, true);
+            //AF("b65WorkflowMessage", "b65MessageSubject", "Předmět zprávy", gdc2);
+            //AF("b65WorkflowMessage", "SystemFlag", "🚩", gdc1, "case when isnull(a.b65SystemFlag,0)>0 then '<div style='+char(34)+'background-color:red;'+char(34)+'>&nbsp;</div>' end");
+            //AppendTimestamp("b65WorkflowMessage");
             
             
             //j90 = access log uživatelů
@@ -439,7 +445,6 @@ namespace BL
             //x29 = entita
             AF("x29Entity", "x29Name", "Entita", gdc1, null, "string", false, true);
             AF("x29Entity", "x29NamePlural", "Plurál", gdc2);
-            AF("x29Entity", "x29IsAttachment", "Přílohy", gdc0, null,"bool");
             
             //x97 = překlad
             AF("x97Translate", "x97Code", "Originál", gdc1, null, "string", false, true);
@@ -605,16 +610,16 @@ namespace BL
                     break;
                 
                
-                case "b02":
-                    ret.Add(InhaleColumn4Relation("b02_b01", "b01WorkflowTemplate", "b01Name", rels, bolComboColumns));
+                //case "b02":
+                //    ret.Add(InhaleColumn4Relation("b02_b01", "b01WorkflowTemplate", "b01Name", rels, bolComboColumns));
                    
-                    break;
-                case "b05":
-                    ret.Add(InhaleColumn4Relation("b05_j03", "j03User", "j03Login", rels, bolComboColumns));
-                    ret.Add(InhaleColumn4Relation("b05_b06", "b06WorkflowStep", "b06Name", rels, bolComboColumns));
-                    break;
-                case "b65":
-                    ret.Add(InhaleColumn4Relation("b65_x29", "x29Entity", "x29Name", rels, bolComboColumns));
+                //    break;
+                //case "b05":
+                //    ret.Add(InhaleColumn4Relation("b05_j03", "j03User", "j03Login", rels, bolComboColumns));
+                //    ret.Add(InhaleColumn4Relation("b05_b06", "b06WorkflowStep", "b06Name", rels, bolComboColumns));
+                //    break;
+                case "j61":
+                    ret.Add(InhaleColumn4Relation("j61_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     break;
                 case "p28":
                     if (bolComboColumns)

@@ -70,32 +70,33 @@
             @RenderBody()
 
         </form>
-        @if (Model.rec_pid > 0)
+        <div style="border-top:solid 1px #F5F5F5;margin-top:20px;">
+            @if (Model.rec_pid > 0)
+            {
+                @Html.Raw(Model.Toolbar.getTimeStampHtml(_f));
+
+
+
+            }
+            @if (Model.Toolbar.AllowArchive)
+            {
+                <button type="button" onclick="toolbar_handle_validity(event)" class="btn btn-light btn-sm px-0">@_f.tra("Časová platnost ručně")</button>
+            }
+            </div>
+        </div>
+        @if (IsSectionDefined("after_form"))
         {
-            @Html.Raw(Model.Toolbar.getTimeStampHtml(_f));
-
-            
-
-        }
-        @if (Model.Toolbar.AllowArchive)
-        {
-            <button type="button" onclick="toolbar_handle_validity(event)" class="btn btn-light btn-sm px-0">@_f.tra("Časová platnost ručně")</button>
+            @RenderSection("after_form")
         }
 
-    </div>
-    @if (IsSectionDefined("after_form"))
-    {
-        @RenderSection("after_form")
-    }
 
 
-
-    <script type="text/javascript">
+        <script type="text/javascript">
         var _modal;
 
     $(document).ready(function ()
     {
-        
+
 
         if (document.getElementById("link_tab1")) {
             $("#tab@(Model.ActiveTabIndex)").attr("class", "tab-pane active");
@@ -113,9 +114,9 @@
 
         @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
-            
+
                 @:_notify_message("@c.Value","@c.Key");
-            
+
             }
         }
         if ($("#toolbar_changeinfo").length) {
@@ -152,7 +153,7 @@
 
         _init_qtip_onpage(document);
 
-       
+
 
     });
 
@@ -248,11 +249,11 @@
             $("#iframe_is_loading").text("");
         }
 
-        
-        
-    </script>
 
-    @RenderSection("Scripts", required: false)
+
+        </script>
+
+        @RenderSection("Scripts", required: false)
 
 
 </body>
