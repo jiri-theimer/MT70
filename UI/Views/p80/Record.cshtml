@@ -1,0 +1,45 @@
+﻿@model UI.Models.Record.p80Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Struktury rozpisu částky faktury");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název pravidla"):</label>
+        <div class="col-sm-7 col-md-6">
+            <input class="form-control" asp-for="Rec.p80Name" />
+        </div>
+        
+    </div>
+
+    <div class="card my-2">
+        <div class="card-header">
+            @_f.tra("Způsob agregace částek v cenovém rozpisu faktury")
+        </div>
+        <div class="card-body">
+            <div>
+                <input type="checkbox" asp-for="Rec.p80IsExpenseSeparate" />
+                <label class="col-form-label" for="Rec_p80IsExpenseSeparate">@_f.tra("Výdaje 1:1 po úkonech")</label>
+            </div>
+            <div class="my-2">
+                <input type="checkbox" asp-for="Rec.p80IsFeeSeparate" />
+                <label class="col-form-label" for="Rec_p80IsFeeSeparate">@_f.tra("Pevné (paušální) odměny 1:1 po úkonech")</label>
+            </div>
+            <div class="my-2">
+                <input type="checkbox" asp-for="Rec.p80IsTimeSeparate" />
+                <label class="col-form-label" for="Rec_p80IsTimeSeparate">@_f.tra("Hodiny 1:1 po úkonech")</label>
+            </div>
+            <div class="alert alert-primary">
+                @_f.tra(" Pokud nezaškrtnete ani jednu volbu, výsledek cenového rozpisu bude pouze jedna celková částka faktury bez uvedení fakturačního oddílu.")
+            </div>
+        </div>
+    </div>
+
+
+</div>

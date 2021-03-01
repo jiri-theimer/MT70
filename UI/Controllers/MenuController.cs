@@ -220,8 +220,8 @@ namespace UI.Controllers
             AMI("Měnové kurzy", aurl("billing","m62"));
             AMI("DPH sazby", aurl("billing","p53"));
             AMI("Fakturační oddíly", aurl("billing","p95"));
-            AMI("Zaokrouhlovací pravidla", aurl("billing","p98"));
-            AMI("Struktury rozpisu faktury", aurl("billing","p80"));
+            AMI("Zaokrouhlovací pravidla faktury", aurl("billing","p98"));
+            AMI("Struktury rozpisu částky faktury", aurl("billing","p80"));
             AMI("Režijní přirážky k fakturaci", aurl("billing","p63"));
             DIV();
             AMI("Typy záloh", aurl("billing","p89"));

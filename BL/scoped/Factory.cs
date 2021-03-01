@@ -48,6 +48,8 @@ namespace BL
         private Ip38ActivityTagBL _p38;
         private Ip51PriceListBL _p51;
         private Ip61ActivityClusterBL _p61;
+        private Ip63OverheadBL _p63;
+        private Ip80InvoiceAmountStructureBL _p80;
         private Ip85TempboxBL _p85;
         private Ip86BankAccountBL _p86;
         private Ip93InvoiceHeaderBL _p93;
@@ -381,6 +383,22 @@ namespace BL
             {
                 if (_p61 == null) _p61 = new p61ActivityClusterBL(this);
                 return _p61;
+            }
+        }
+        public Ip63OverheadBL p63OverheadBL
+        {
+            get
+            {
+                if (_p63 == null) _p63 = new p63OverheadBL(this);
+                return _p63;
+            }
+        }
+        public Ip80InvoiceAmountStructureBL p80InvoiceAmountStructureBL
+        {
+            get
+            {
+                if (_p80 == null) _p80 = new p80InvoiceAmountStructureBL(this);
+                return _p80;
             }
         }
         public Ip85TempboxBL p85TempboxBL
