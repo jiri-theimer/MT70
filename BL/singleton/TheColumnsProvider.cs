@@ -143,6 +143,11 @@ namespace BL
             AF("j04UserRole", "j04Name", "Aplikační role", gdc1, null,"string",false,true);
             AppendTimestamp("j04UserRole");
 
+            AF("j05MasterSlave", "MasterPerson", "Nadřízený", gdc1, "j02master.j02LastName+' '+j02master.j02FirstName+isnull(' '+j02master.j02TitleBeforeName,'')", "string", false, true);
+            AF("j05MasterSlave", "SlavePerson", "Podřízený (jednotlivec)", gdc1, "j02slave.j02LastName+' '+j02slave.j02FirstName+isnull(' '+j02slave.j02TitleBeforeName,'')", "string");
+            AF("j05MasterSlave", "SlaveTeam", "Podřízený tým", gdc1, "j11slave.j11Name", "string");
+            AppendTimestamp("j05MasterSlave");
+
             AF("j07PersonPosition", "j07Name", "Pozice", gdc1, null, "string", false, true);
             AF("j07PersonPosition", "j07Ordinary", "#", gdc2, null, "num0");
             AF("j07PersonPosition", "j07Name_BillingLang1", "Fakturační jazyk #1");
@@ -444,7 +449,7 @@ namespace BL
 
             //x29 = entita
             AF("x29Entity", "x29Name", "Entita", gdc1, null, "string", false, true);
-            AF("x29Entity", "x29NamePlural", "Plurál", gdc2);
+            //AF("x29Entity", "x29NameSingle", "Jednotné číslo", gdc2);
             
             //x97 = překlad
             AF("x97Translate", "x97Code", "Originál", gdc1, null, "string", false, true);
@@ -620,6 +625,8 @@ namespace BL
                 //    break;
                 case "j61":
                     ret.Add(InhaleColumn4Relation("j61_x29", "x29Entity", "x29Name", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("j61_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
+                    
                     break;
                 case "p28":
                     if (bolComboColumns)

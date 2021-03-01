@@ -868,6 +868,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     background-color: #F8F9FA;
     border-right: solid 1px #F5F5F5;
     overflow-x: visible;
+    overflow-y:auto;
     transition: 0.5s;
 }
 

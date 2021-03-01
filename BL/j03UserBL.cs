@@ -180,7 +180,7 @@ namespace BL
 
         public void UpdateCurrentUserPing(BO.j92PingLog c) //zápis pravidelně po 2 minutách do PING logu
         {
-            _db.RunSql("UPDATE j03User set j03PingTimestamp=GETDATE() WHERE j03ID=@pid", new { pid = _mother.CurrentUser.pid });    //ping aktualizace
+            _db.RunSql("UPDATE j03User set j03Ping_Timestamp=GETDATE() WHERE j03ID=@pid", new { pid = _mother.CurrentUser.pid });    //ping aktualizace
 
             string s = "INSERT INTO j92PingLog(j03ID,j92Date,j92BrowserUserAgent,j92BrowserFamily,j92BrowserOS,j92BrowserDeviceType,j92BrowserDeviceFamily,j92BrowserAvailWidth,j92BrowserAvailHeight,j92BrowserInnerWidth,j92BrowserInnerHeight,j92RequestUrl)";
             s += " VALUES(@j03id,GETDATE(),@useragent,@browser,@os,@devicetype,@devicefamily,@aw,@ah,@iw,@ih,@requesturl)";

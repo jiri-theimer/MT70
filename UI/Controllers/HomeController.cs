@@ -257,5 +257,18 @@ namespace UI.Controllers
             Response.Cookies.Append("marktime.langindex", langindex.ToString(), co);
             return new BO.Result(false);
         }
+
+        public BO.Result UpdateCurrentUserPing(BO.j92PingLog c)
+        {
+            var uaParser = UAParser.Parser.GetDefault();
+            UAParser.ClientInfo client_info = uaParser.Parse(c.j92BrowserUserAgent);
+            c.j92BrowserOS = client_info.OS.Family + " " + client_info.OS.Major;
+            c.j92BrowserFamily = client_info.UA.Family + " " + client_info.UA.Major;
+            c.j92BrowserDeviceFamily = client_info.Device.Family;
+
+            Factory.j03UserBL.UpdateCurrentUserPing(c);
+
+            return new BO.Result(false);
+        }
     }
 }

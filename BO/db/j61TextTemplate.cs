@@ -21,7 +21,7 @@ namespace BO
 
         public string x29Name { get; }
         
-        public string _Owner { get; }
+        public string Owner { get; }
      
     }
 }

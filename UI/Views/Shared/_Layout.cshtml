@@ -48,17 +48,7 @@
                             <a class="nav-link dropdown-toggle" id="cmdMainMenuNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
                             <ul id="ulNew" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdMainMenuNew"><li>Loading....</li></ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Dashboard/Index">DASHBOARD</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Home/Index">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="cmdAdmin" class="nav-link" href="/Admin/Index">@_f.tra("ADMINISTRACE")</a>
-                        </li>
-                        
-
+                       
                         <li class="nav-item">
                             <a class="nav-link" href="/TheGrid/MasterView?prefix=j02">Master grid J02</a>
                         </li>
@@ -175,12 +165,17 @@
             register_menu("cmdAdmin", "ulAdmin", "AdminMenu");
 
 
+            @if (_f.CurrentUser.j03Ping_TimeStamp == null || _f.CurrentUser.j03Ping_TimeStamp.Value.AddSeconds(120) < DateTime.Now)
+            {               
+                @:_update_user_ping();     //aktualizace ping logu po 120 sekundách              
+            }
+
 
             @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  notifikační zprávy pro uživatele
-           
+
                 @:_notify_message("@c.Value","@c.Key");
-            
+
              }
         }
 
@@ -279,9 +274,9 @@
             if (typeof flag === "undefined") flag = 2;   //automaticky maximalizovat okno
             @if (_f.CurrentUser.j03ModalWindowsFlag == 99)
             {
-                
+
                 @:flag = 2;   //vždy maximalizovat modální okno
-                
+
             }
 
             if (!$(_modal).attr("initialized") && flag !== 2) {

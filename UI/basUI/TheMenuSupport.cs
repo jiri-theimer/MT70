@@ -47,7 +47,10 @@ namespace UI.basUI
             var ret = new List<MenuItem>();
 
             ret.Add(new MenuItem() { Name = _f.tra("Dashboard"), Url = "/Dashboard/Index",ID="cmdDashboard" });
-
+            if (_f.CurrentUser.IsAdmin)
+            {
+                ret.Add(new MenuItem() { Name = _f.tra("Administrace"), Url = "/Admin/Index", ID = "cmdAdmin" });
+            }
             if (_f.CurrentUser.j04IsMenu_Worksheet)
             {
                 ret.Add(GRD("p31"));

@@ -58,6 +58,7 @@ namespace BL
             AE("j02Person", "Osobní profily", "Osobní profil", "j02Person a", "a.j02LastName,a.j02FirstName");
             AE("j03User", "Uživatelské účty", "Uživatel", "j03User a INNER JOIN j04UserRole j03_j04 ON a.j04ID=j03_j04.j04ID", "a.j03Login");
             AE("j04UserRole", "Aplikační role", "Aplikační role", "j04UserRole a ", "a.j04Name");
+            AE("j05MasterSlave", "Nadřízený/Podřízený", "Nadřízení/Podřízení", "j05MasterSlave a INNER JOIN j02Person j02master ON a.j02ID_Master=j02master.j02ID LEFT OUTER JOIN j02Person j02slave ON a.j02ID_Slave=j02slave.j02ID LEFT OUTER JOIN j11Team j11slave ON a.j11ID_Slave=j11slave.j11ID", "a.j05ID DESC");
             AE("j11Team", "Týmy osob", "Tým", "j11Team a ", "a.j11Name");
             AE("j07PersonPosition", "Pozice osob", "Pozice", "j07PersonPosition a ", "a.j07Ordinary");
             AE("j18Region", "Střediska", "Středisko", "j18Region a ", "a.j18Ordinary");
@@ -223,6 +224,7 @@ namespace BL
                     break;
                 case "j61":
                     lis.Add(getREL("x29Entity", "j61_x29", "Kontext", "LEFT OUTER JOIN x29Entity j61_x29 ON a.x29ID=j61_x29.x29ID"));
+                    lis.Add(getREL("j02Person", "j61_j02", "Vlastník záznamu", "LEFT OUTER JOIN j02Person j61_j02 ON a.j02ID_Owner=j61_j02.j02ID"));
                     break;
                 case "x31":
                     lis.Add(getREL("x29Entity", "x31_x29", "Kontext", "LEFT OUTER JOIN x29Entity x31_x29 ON a.x29ID=x31_x29.x29ID"));

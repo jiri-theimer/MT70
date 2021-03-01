@@ -22,10 +22,11 @@ namespace BL
         private IFBL _fbl;
         private Ij72TheGridTemplateBL _j72;
         private IDataGridBL _grid;
-        private Ix35GlobalParamBL _gp;
+        private Ix35GlobalParamBL _gp;        
         private Ij02PersonBL _j02;        
         private Ij03UserBL _j03;
         private Ij04UserRoleBL _j04;
+        private Ij05MasterSlaveBL _j05;
         private Ij07PersonPositionBL _j07;
         private Ij11TeamBL _j11;
         private Ij17CountryBL _j17;
@@ -190,6 +191,14 @@ namespace BL
             {
                 if (_j04 == null) _j04 = new j04UserRoleBL(this);
                 return _j04;
+            }
+        }
+        public Ij05MasterSlaveBL j05MasterSlaveBL
+        {
+            get
+            {
+                if (_j05 == null) _j05 = new j05MasterSlaveBL(this);
+                return _j05;
             }
         }
         public Ij07PersonPositionBL j07PersonPositionBL

@@ -36,6 +36,7 @@ namespace BO
         public DateTime? j03PasswordExpiration { get; set; }
 
         public DateTime? j03Ping_TimeStamp { get; set; }
+        
 
         public DeviceTypeFlag j03Ping_DeviceTypeFlag { get; set; } = DeviceTypeFlag.Desktop;   // nový sloupec ve verzi 6
         public int j03Ping_InnerWidth { get; set; }   // nový sloupec ve verzi 6

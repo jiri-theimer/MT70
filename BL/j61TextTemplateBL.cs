@@ -23,9 +23,9 @@ namespace BL
 
         private string GetSQL1(string strAppend = null)
         {
-            sb("SELECT a.*,");
+            sb("SELECT a.*,own.j02LastName+' '+own.j02FirstName as Owner,");
             sb(_db.GetSQL1_Ocas("j61"));
-            sb(" FROM j61TextTemplate a");
+            sb(" FROM j61TextTemplate a LEFT OUTER JOIN j02Person own ON a.j02ID_Owner=own.j02ID");
             sb(strAppend);
             return sbret();
         }
@@ -82,7 +82,14 @@ namespace BL
             {
                 this.AddMessage("Chybí vyplnit [Název]."); return false;
             }
-
+            if (rec.x29ID == BO.x29IdEnum._NotSpecified)
+            {
+                this.AddMessage("Chybí vyplnit [Kontext]."); return false;
+            }
+            if (rec.j02ID_Owner == 0)
+            {
+                this.AddMessage("Chybí vyplnit [Vlastník záznamu]."); return false;
+            }
 
             return true;
         }

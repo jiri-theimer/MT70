@@ -1,0 +1,123 @@
+﻿@model UI.Models.Record.j61Record
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    if (Model.Rec == null) return;
+    Model.PageTitle = _f.tra("Šablona poštovní zprávy");
+
+}
+@addTagHelper *, UI
+
+
+<div class="tabs_container_record">
+    <!-- Tab panes -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab1" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab1">@_f.tra("Vlastnosti")</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Ostatní")</a>
+        </li>
+
+    </ul>
+</div>
+
+<div class="modal_record_container">
+
+    <div class="tab-content">
+        <div class="tab-pane" id="tab1" role="tabpanel">
+            <!-- Tab1 -->
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontext"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <select asp-for="Rec.x29ID" class="form-select">
+                        <option value="p41Project">@_f.tra("Projekt")</option>
+                        <option value="p28Contact">@_f.tra("Klient")</option>
+                        <option value="p91Invoice">@_f.tra("Vyúčtování (faktura)")</option>
+                        <option value="p90Proforma">@_f.tra("Záloha")</option>
+                        <option value="p31Worksheet">@_f.tra("Úkon")</option>
+                        <option value="o23Doc">@_f.tra("Dokument")</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název šablony"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j61Name" />
+                </div>
+
+            </div>
+            <div class="my-2">
+                <textarea class="form-control" asp-for="Rec.j61PlainTextBody" placeholder="@_f.tra("Text poštovní zprávy")"></textarea>
+
+            </div>
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Předmět zprávy"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j61MailSubject" />
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí příjemce zprávy"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j61MailTO" />
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("V kopii (CC)"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j61MailCC" />
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Skrytá kopie (BCC)"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.j61MailBCC" />
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <!-- Tab2 -->
+            <div class="row">
+                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Vlastník záznamu"):</label>
+                <div class="col-sm-10 col-md-9">
+                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.ComboOwner" view-flag="2" myqueryinline="j02isintraperson|bool|1"></mycombo>
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Název souboru pro HTML šablonu"):</label>
+                <div class="col-sm-10 col-md-9">
+                    <input class="form-control" asp-for="Rec.j61HtmlTemplateFile" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+
+    });
+
+    function postback() {
+
+        form1.action = _ep("j61/Record?oper=postback");
+        form1.submit();
+    }
+
+
+</script>
