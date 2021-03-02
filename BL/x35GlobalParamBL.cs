@@ -12,6 +12,7 @@ namespace BL
         public DateTime? LoadParamDate(string strKey);
         public string TempFolder();
         public string UploadFolder();
+        public string ReportFolder();
         public string CompanyLogoFile();
 
         public BO.x35GlobalParam Load(int pid); //pracuje napřímo s databází
@@ -41,6 +42,10 @@ namespace BL
         public string UploadFolder()
         {
             return LoadParam("Upload_Folder");
+        }
+        public string ReportFolder()
+        {
+           return LoadParam("Upload_Folder") + "\\x31";
         }
         public string CompanyLogoFile()
         {

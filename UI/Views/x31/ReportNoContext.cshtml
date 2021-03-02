@@ -1,0 +1,279 @@
+﻿@model ReportNoContextViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = null;
+}
+@addTagHelper *, UI
+
+
+<!DOCTYPE html>
+
+<html lang="cs">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/qtip/jquery.qtip.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="~/css/@_f.CurrentUser.getFontSizeCss()" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link href="/kendo/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="/kendo/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="/kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+   
+    <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/datepicker/bootstrap-datepicker.cs.min.js"></script>
+    <script src="~/lib/qtip/jquery.qtip.min.js"></script>
+
+    @switch (_f.CurrentUser.j03LangIndex)
+    {
+        case 1:
+            <script src="/js/reporting/resources.en.js"></script>
+            break;
+        case 2:
+            <script src="/js/reporting/resources.ua.js"></script>
+            break;
+        default:
+            <script src="/js/reporting/resources.cs.js"></script>
+            break;
+    }
+
+
+
+
+
+
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/mycombo.js" asp-append-version="true"></script>
+
+    <script src="~/js/contextmenu.js" asp-append-version="true"></script>
+    <script src="~/js/mycontrols.js" asp-append-version="true"></script>
+
+    <script src="/api/reports/resources/js/telerikReportViewer"></script>
+    @if (Model.IsPeriodFilter || Model.lisJ72 != null)
+    {
+        <style>
+            #reportViewer1 {
+                position: absolute;
+                left: 5px;
+                right: 5px;
+                top: 100px;
+                bottom: 3px;
+                overflow: hidden;
+                font-family: Verdana, Arial;
+            }
+        </style>
+    }
+    else
+    {
+        <style>
+            #reportViewer1 {
+                position: absolute;
+                left: 5px;
+                right: 5px;
+                top: 50px;
+                bottom: 3px;
+                overflow: hidden;
+                font-family: Verdana, Arial;
+            }
+        </style>
+    }
+
+</head>
+
+<body>
+
+
+    <script type="text/javascript">
+        @if(Model.Javascript_CallOnLoad != null)
+    {
+        @Html.Raw(Model.Javascript_CallOnLoad);
+
+
+    }
+    </script>
+  
+    <div>
+        <form id="form1" asp-controller="x31" asp-action="ReportNoContext" method="POST">
+
+            <input type="hidden" asp-for="@Model.IsPeriodFilter" />
+
+            <div class="row">
+                <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Tisková sestava"):</label>
+                <div class="col-sm-9 col-md-9">
+                    <span>@Model.SelectedX31ID</span>
+                    <strong>@Model.SelectedReport</strong>
+                    
+                </div>
+                <div class="col-sm-1 col-md-1">
+                    @if (Model.RecX31.x31LangIndex>0)
+                    {
+                        <select asp-for="@Model.LangIndex" class="form-control" onchange="refresh()">
+                            <option value="0">Česky</option>
+                            
+                            <option value="2">Українська</option>
+                        </select>
+                    }
+                </div>
+                <div class="col-sm-1 col-md-1 btn-group">
+                    <button id="cmdClose" type="button" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+                    <button type="button" onclick="_helppage()" title="@_f.tra("Nápověda")" class="btn btn-light"><b>?</b></button>
+                </div>
+            </div>
+            @if (Model.lisJ72 != null)
+            {
+                <div class="row">
+                    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Pojmenovaný GRID filtr"):</label>
+                    <div class="col-sm-5 col-md-5">
+                        <mydropdown asp-for="@Model.SelectedJ72ID" datasource="@Model.lisJ72" textfield="j72Name" valuefield="pid" firstemptyrowvalue="0" isfirstemptyrow="true" event_after_changevalue="j72id_change"></mydropdown>
+
+                    </div>
+                    <div class="col-sm-1 col-md-1 btn-group">
+                        <button id="cmdRefresh" type="button" onclick="refresh()" class="btn btn-primary">@_f.tra("Občerstvit")</button>
+
+                    </div>
+                </div>
+            }
+
+
+            @if (Model.IsPeriodFilter)
+            {
+                @Html.EditorFor(m => m.PeriodFilter, "~/Views/Shared/_Period.cshtml")
+
+            }
+
+        </form>
+    </div>
+
+    <div id="reportViewer1">
+        @if (Model.ReportFileName != null)
+        {
+            
+                @:loading...
+       
+        }
+
+    </div>
+
+    <script type="text/javascript">
+
+
+    $(document).ready(function ()
+    {
+        var d1;
+        var d2;
+
+        @if(Model.PeriodFilter != null)
+        {
+       
+            @:d1 = new Date("@Model.PeriodFilter.d1_iso");
+            @:d2 = new Date("@Model.PeriodFilter.d2_iso");
+        
+        }
+        
+
+    @if(Model.ReportFileName != null)
+       {
+           <text>
+        
+        $("#reportViewer1")
+            .telerik_ReportViewer(
+                {
+                serviceUrl: "/api/reports",
+                    reportSource: {
+                        report: "@(Model.ReportFileName+"###"+_f.CurrentUser.j03Login+"###"+Model.SelectedJ72ID)",
+                        parameters: { j02id: @_f.CurrentUser.j02ID, datFrom: d1, datUntil: d2,langindex:"@Model.LangIndex", langsource:""}
+                    },
+                viewMode: telerikReportViewer.ViewModes.INTERACTIVE,
+                scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+                scale: 1.0,                
+                    enableAccessibility: false,
+                    parameters: {
+                        editors: {
+                            singleSelect: telerikReportViewer.ParameterEditorTypes.COMBO_BOX, //  defineds the editor type for the single select parameters
+                            multiSelect: telerikReportViewer.ParameterEditorTypes.COMBO_BOX, //defineds the editor type for the multi select parameters
+                        }
+                    },
+                sendEmail: { enabled: false }
+                }
+            );
+
+            </text>
+       }
+
+
+
+
+
+        @if (_f.CurrentUser.Messages4Notify != null) {
+            @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
+            
+            @:_notify_message("@c.Value","@c.Key");
+            
+             }
+        }
+
+
+
+        $("#PeriodValue").on("change", function () {
+            $.post("/Common/SetUserParam", { key: "report-period-value",value:$(this).val()  }, function (data) {
+                form1.action = "/x31/ReportNoContext?oper=change_period";
+                form1.submit();
+
+            });
+        });
+        $("#cmdRefreshPeriod").on("click", function () {
+            var k = [];
+            var v = [];
+            k.push("report-period-value");
+            v.push($("#PeriodValue").val());
+            k.push("report-period-d1");
+            v.push($("#d1helper").val());
+            k.push("report-period-d2");
+            v.push($("#d2helper").val());
+
+
+            $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
+                location.replace("/x31/ReportNoContext?x31id=@Model.SelectedX31ID");
+
+            });
+
+        });
+
+       
+
+
+    });
+
+
+
+        function x31id_change(x31id) {
+            form1.action = "/x31/ReportNoContext?oper=change_x31id";
+            form1.submit();
+
+
+        }
+
+        function j72id_change(j72id) {
+            form1.action = "/x31/ReportNoContext?oper=change_j72id";
+            form1.submit();
+        }
+        function refresh() {
+            form1.action = "/x31/ReportNoContext?oper=postback";
+            form1.submit();
+        }
+
+    </script>
+
+
+</body>
+</html>
+

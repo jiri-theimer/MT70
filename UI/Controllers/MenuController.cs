@@ -266,7 +266,7 @@ namespace UI.Controllers
 
             DIV_TRANS("Pevné tiskové sestavy");
             AMI("Report šablony", aurl("misc","x31"));
-            AMI("Kategorie sestav", aurl("misc","j25"));
+            AMI("Report kategorie", aurl("misc","j25"));
 
             DIV_TRANS("Ostatní");
             AMI("Číselné řady", aurl("misc","x38"));

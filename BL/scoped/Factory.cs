@@ -31,6 +31,7 @@ namespace BL
         private Ij11TeamBL _j11;
         private Ij17CountryBL _j17;
         private Ij18RegionBL _j18;
+        private Ij25ReportCategoryBL _j25;
         private Ij61TextTemplateBL _j61;
         private Io15AutoCompleteBL _o15;
         private Io13AttachmentTypeBL _o13;
@@ -65,6 +66,7 @@ namespace BL
         private Ic26HolidayBL _c26;
         private Ix27EntityFieldGroupBL _x27;
         private Ix28EntityFieldBL _x28;
+        private Ix31ReportBL _x31;
         private Ix38CodeLogicBL _x38;
         private Ix97TranslateBL _x97;
         private Io40SmtpAccountBL _o40;
@@ -231,6 +233,14 @@ namespace BL
             {
                 if (_j18 == null) _j18 = new j18RegionBL(this);
                 return _j18;
+            }
+        }
+        public Ij25ReportCategoryBL j25ReportCategoryBL
+        {
+            get
+            {
+                if (_j25 == null) _j25 = new j25ReportCategoryBL(this);
+                return _j25;
             }
         }
         public Ij61TextTemplateBL j61TextTemplateBL
@@ -482,6 +492,14 @@ namespace BL
             {
                 if (_x28 == null) _x28 = new x28EntityFieldBL(this);
                 return _x28;
+            }
+        }
+        public Ix31ReportBL x31ReportBL
+        {
+            get
+            {
+                if (_x31 == null) _x31 = new x31ReportBL(this);
+                return _x31;
             }
         }
         public Ix38CodeLogicBL x38CodeLogicBL

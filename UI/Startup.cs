@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-//using Telerik.Reporting.Services;
-//using Telerik.Reporting.Services.AspNetCore;
+using Telerik.Reporting.Services;
+using Telerik.Reporting.Services.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace UI
@@ -71,9 +71,9 @@ namespace UI
             });
 
             
-            services.AddRazorPages();
+            //services.AddRazorPages();
             
-            //services.AddRazorPages().AddNewtonsoftJson();   //kvùli telerik reporting
+            services.AddRazorPages().AddNewtonsoftJson();   //kvùli telerik reporting
 
 
             var strLogFolder = Configuration.GetSection("Folders")["Log"];
@@ -126,7 +126,16 @@ namespace UI
             services.AddSingleton<BL.TheTranslator>();
             services.AddSingleton<BL.TheColumnsProvider>();
             services.AddSingleton<BL.ThePeriodProvider>();
-            
+
+            services.TryAddSingleton<IReportServiceConfiguration>(sp =>
+            new ReportServiceConfiguration
+            {
+                ReportingEngineConfiguration = ConfigurationHelper.ResolveConfiguration(sp.GetService<IWebHostEnvironment>()),
+                HostAppId = "ReportingCore3App",
+                Storage = new Telerik.Reporting.Cache.File.FileStorage()                
+            });
+
+
             services.AddScoped<BO.RunningUser, BO.RunningUser>();
             services.AddScoped<BL.Factory, BL.Factory>();
 
