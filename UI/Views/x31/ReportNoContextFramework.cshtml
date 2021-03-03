@@ -16,7 +16,7 @@
     </div>
 
     <div class="col-auto nonmobile tabovergrid">
-        Vybraná sestava, bla bla ha, výpis...
+        <span id="spanX31Name"></span>
 
     </div>
 
@@ -46,7 +46,7 @@
                         @foreach(var c in Model.lisX31.Where(p => p.j25ID == recJ25.j25ID))
                         {
                         <li>
-                            <a class="nav-link" href="javascript:showrep(@(c.pid))">@(c.x31Name)</a>
+                            <a class="nav-link" id="report@(c.pid)" href="javascript:showrep(@(c.pid),'@(c.x31Name)','@(c.x31Code)')">@(c.x31Name)</a>
                         </li>
                         }
                     </ul>
@@ -94,8 +94,11 @@
     });
 
 
-    function showrep(x31id) {
+    function showrep(x31id,x31name,x31code) {
+        $("#spanX31Name").text(x31name+" ["+x31code+"]");
         $("#fra1").attr("src", "/x31/ReportNoContext?x31id=" + x31id);
+        $(".nav-link").removeClass("selected");
+        $("#report" + x31id).addClass("selected");
     }
 
 
