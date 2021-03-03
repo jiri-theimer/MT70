@@ -23,7 +23,19 @@ namespace UI.Controllers
         {            
             _pp = pp;
         }
+        public IActionResult ReportNoContextFramework(int x31id,string code)
+        {
+            var v = new ReportNoContextFrameworkViewModel();
 
+            if (!Factory.CurrentUser.j04IsMenu_Report)
+            {            
+                return this.StopPage(false, "Nemáte oprávnění pro tuto stránku.");
+            }
+            v.lisX31 = Factory.x31ReportBL.GetList(new BO.myQuery("x31")).Where(p => p.x29ID == BO.x29IdEnum._NotSpecified);
+            var qry = v.lisX31.Select(p => new { p.j25ID, p.j25Name, p.j25Ordinary }).Distinct().OrderBy(p => p.j25Ordinary);
+            return View(v);
+
+        }
         public IActionResult ReportNoContext(int x31id,string code)
         {
             var v = new ReportNoContextViewModel();

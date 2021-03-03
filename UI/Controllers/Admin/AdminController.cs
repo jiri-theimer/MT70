@@ -98,8 +98,26 @@ namespace UI.Controllers
             return View(v);
         }
 
-        public IActionResult Index()
+        
+        public IActionResult Index(bool? signpost)
         {
+            if (signpost != null)
+            {
+                if (signpost==true)
+                {   //odkaz do administrace z hlavního menu -> najít naposledy zobrazovanou sekci admin stránek
+                    string strArea = Factory.CBL.LoadUserParam("Admin/last-area");
+                    if (strArea != null && strArea !="index")
+                    {
+                        return RedirectToAction("Page", new { area = strArea });
+                    }
+                }
+                else
+                {
+                    //kliknutí na [Úvod] v administraci
+                    Factory.CBL.SetUserParam("Admin/last-area", "index");
+                }
+            }
+            
             var v = new AdminHome();
             v.lisP87 = Factory.FBL.GetListP87().ToList();
             return View(v);
@@ -107,6 +125,13 @@ namespace UI.Controllers
         public IActionResult Page(string area,string prefix, int go2pid, string myqueryinline)
         {
             var v = new AdminPage() {area=area, prefix = prefix, go2pid = go2pid };
+            if (area !=null && prefix == null)
+            {
+                if (Factory.CBL.LoadUserParam("Admin/last-area") != area)
+                {
+                    Factory.CBL.SetUserParam("Admin/last-area", area);
+                }
+            }
             string defprefix = null;
             switch (area)
             {
@@ -116,7 +141,9 @@ namespace UI.Controllers
                 case "clients": defprefix = "p29"; break;
                 case "worksheet": defprefix = "p32"; break;
                 case "misc": defprefix = "x38"; break;
-                
+                case "index":
+                    return RedirectToAction("Index");
+
             }
             handle_default_link(v, area, defprefix);
 

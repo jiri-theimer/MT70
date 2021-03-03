@@ -49,7 +49,7 @@ namespace UI.basUI
             ret.Add(new MenuItem() { Name = _f.tra("Dashboard"), Url = "/Dashboard/Index",ID="cmdDashboard" });
             if (_f.CurrentUser.IsAdmin)
             {
-                ret.Add(new MenuItem() { Name = _f.tra("Administrace"), Url = "/Admin/Index", ID = "cmdAdmin" });
+                ret.Add(new MenuItem() { Name = _f.tra("Administrace"), Url = "/Admin/Index?signpost=true", ID = "cmdAdmin" });
             }
             if (_f.CurrentUser.j04IsMenu_Worksheet)
             {
@@ -84,7 +84,7 @@ namespace UI.basUI
             }
             if (_f.CurrentUser.j04IsMenu_Report)
             {
-                ret.Add(new MenuItem() { Name = _f.tra("Tiskové (pevné) sestavy"), Url = "/x31/Reports",ID="cmdReports" });
+                ret.Add(new MenuItem() { Name = _f.tra("Tiskové sestavy"), Url = "/x31/ReportNoContextFramework",ID="cmdReports" });
             }
 
             return ret;

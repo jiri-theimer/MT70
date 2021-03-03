@@ -98,14 +98,78 @@
 
     </div>
 
-    <h1>nazdar</h1>
+    
 </div>
 
 
 <a asp-area="mobile" asp-controller="Home" asp-action="about">Go to Mobile Area</a>
 
+<div>
+    <div class="accordion" id="accordionExample" style="width:400px;">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button id="cmdOne" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Accordion Item #1
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body p-0">
+                    <ul style='list-style:none;padding:0px;'>
+                        <li>
+                            <a class="nav-link" href="#">Report Alfa</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#">Podrobný výpis vykázaných hodin podle klient->projekt</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#">Rozpracovanost klienta do 2 tabulek (na výšku)</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#">Simulace efektivních sazeb v paušálních odměnách, pouze status [Zahrnout do paušálu]</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#">Simulace efektivních sazeb v paušálních odměnách projektu</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button id="cmdTwo" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Accordion Item #2
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Accordion Item #3
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script type="text/javascript">
+
+    
+    
+    $("#cmdTwo").removeClass("collapsed");
+    $("#collapseTwo").addClass("show");
 
     var myDropdown = document.getElementById('divCBX')
     myDropdown.addEventListener("show.bs.dropdown", function () {

@@ -1,0 +1,108 @@
+﻿@model ReportNoContextFrameworkViewModel
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = "Reporting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@addTagHelper *, UI
+
+<div class="row pt-1 bg-light m-0">
+    <div id="layout_sidebar_contextmenu" class="col-auto">
+        <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminMenu',0,'');">☰@Model.PageTitle</a>
+        <h4 id="layout_sidebar_contextmenu_onlytext">@Model.PageTitle</h4>
+    </div>
+
+    <div class="col-auto nonmobile tabovergrid">
+        Vybraná sestava, bla bla ha, výpis...
+
+    </div>
+
+    <div class="nonmobile ml-2 col-auto">
+        <a class="btn btn-light" href="/x31/ReportNoContextFramework" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+    </div>
+
+</div>
+
+<div id="layout_sidebar" class="cm_recpage">
+
+
+    <div class="accordion bg-white" id="accordionReports">
+        @foreach (var recJ25 in Model.lisX31.Select(p => new { p.j25ID, p.j25Name, p.j25Ordinary }).Distinct().OrderBy(p => p.j25Ordinary))
+        {
+            <div class="according-item">
+                <h2 class="accordion-header" id="heading@(recJ25.j25ID)">
+                    <button id="cmd@(recJ25.j25ID)" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(recJ25.j25ID)" aria-expanded="false" aria-controls="collapse@(recJ25.j25ID)">
+                        @recJ25.j25Name
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapse@(recJ25.j25ID)" class="accordion-collapse collapse" aria-labelledby="heading@(recJ25.j25ID)" data-bs-parent="#accordionReports">
+                <div class="accordion-body p-0">
+                    <ul style="list-style:none;padding:0px;">
+                        @foreach(var c in Model.lisX31.Where(p => p.j25ID == recJ25.j25ID))
+                        {
+                        <li>
+                            <a class="nav-link" href="javascript:showrep(@(c.pid))">@(c.x31Name)</a>
+                        </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+
+        }
+       
+        
+    </div>
+
+</div>
+
+
+
+<div id="layout_main">
+
+    <iframe id="fra1" scrolling="no"></iframe>
+   
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+
+
+        _mainmenu_highlight_current("cmdReports");
+
+
+        var offset = $("#layout_sidebar").offset();
+        var h_vertical = _device.innerHeight - offset.top;
+        h_vertical = parseInt(h_vertical) + 10;
+        $("#layout_sidebar").css("height", h_vertical + "px");
+
+        h_vertical = _device.innerHeight - $("#fra1").offset().top-10;
+        $("#fra1").css("height", h_vertical + "px");
+        
+
+    });
+
+
+    function showrep(x31id) {
+        $("#fra1").attr("src", "/x31/ReportNoContext?x31id=" + x31id);
+    }
+
+
+
+</script>
+
+
+
+
+

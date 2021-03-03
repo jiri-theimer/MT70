@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TelerikReportingBAS
 {
-    public static class Class1
+    public static class Class1  //je nutné dodržet Class1 kvůli kompatibilitě s předchozí MT verzí 5+6
     {
         public static string ShowAsHHMM(double dblHours)
         {
@@ -15,14 +15,8 @@ namespace TelerikReportingBAS
         {
             return "hovado GetDateFormat";
         }
-    }
-}
-namespace UI
-{
-   
-    public static class UF  //prostor k deklaraci user functions pro telerik reporting
-    {
-        public static string tra(string vyraz,string langindex,string langsource)  //překlad popisků
+
+        public static string tra(string vyraz, string langindex, string langsource)  //překlad popisků
         {
             int intLangIndex = BO.BAS.InInt(langindex);
             if (intLangIndex == 0)
@@ -32,18 +26,19 @@ namespace UI
             var lis = BO.BAS.ConvertString2List(langsource, "&#xD;&#xA;");
             foreach (string s in lis)
             {
-                if (s.IndexOf(vyraz+"|")>-1)
+                if (s.IndexOf(vyraz + "|") > -1)
                 {
                     var arr = BO.BAS.ConvertString2List(s, "|");
                     return arr[intLangIndex];
-                    
 
-                    
                 }
             }
-
             return vyraz + "?";
-            
         }
     }
+}
+namespace UI
+{
+   
+    
 }
