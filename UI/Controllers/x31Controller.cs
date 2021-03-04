@@ -32,7 +32,18 @@ namespace UI.Controllers
                 return this.StopPage(false, "Nemáte oprávnění pro tuto stránku.");
             }
             v.lisX31 = Factory.x31ReportBL.GetList(new BO.myQuery("x31")).Where(p => p.x29ID == BO.x29IdEnum._NotSpecified);
-            var qry = v.lisX31.Select(p => new { p.j25ID, p.j25Name, p.j25Ordinary }).Distinct().OrderBy(p => p.j25Ordinary);
+            var qry = v.lisX31.Select(p => new { p.j25ID, p.j25Name, p.j25Ordinary }).Distinct();
+            v.lisJ25 = new List<BO.j25ReportCategory>();
+            foreach (var c in qry)
+            {
+                var cc = new BO.j25ReportCategory() { pid = c.j25ID, j25Name = c.j25Name, j25Ordinary = c.j25Ordinary };
+                if (cc.j25Name == null)
+                {
+                    cc.j25Ordinary = -999999;
+                    cc.j25Name = "** "+Factory.tra("Bez kategorie");
+                }
+                v.lisJ25.Add(cc);
+            }
             return View(v);
 
         }

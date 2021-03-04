@@ -8,7 +8,7 @@ namespace UI.Models
     public class ReportNoContextFrameworkViewModel:BaseViewModel
     {
         public IEnumerable<BO.x31Report> lisX31 { get; set; }
-        
+        public List<BO.j25ReportCategory> lisJ25 { get; set; }
 
         public int LastJ25ID { get; set; }
     }

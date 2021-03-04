@@ -2,18 +2,63 @@
 @inject BL.Factory _f
 
 @{
-    Model.PageTitle = "Reporting";
+    Model.PageTitle = _f.tra("Tiskové sestavy");
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
 
 @addTagHelper *, UI
 
+<style type="text/css">
+    .sidebar {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #F8F9FA;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 45px;
+    }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            text-decoration: none;
+        }
+        .sidebar .header {
+            position: absolute;
+            top: 0;
+            right: 105px;           
+            margin-left: 10px;
+            margin-top:20px;            
+        }
+
+    .openbtn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+    }
+
+    #main {
+        transition: margin-left .5s;
+        padding: 0px;
+    }
+</style>
+
 <div class="row pt-1 bg-light m-0">
-    <div id="layout_sidebar_contextmenu" class="col-auto">
-        <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" onclick="_cm(event, 'AdminMenu',0,'');">☰@Model.PageTitle</a>
-        <h4 id="layout_sidebar_contextmenu_onlytext">@Model.PageTitle</h4>
+    <div class="col-auto" style="width:250px;">
+        <button class="btn btn-primary" onclick="openNav()">☰ MENU</button>
     </div>
+
 
     <div class="col-auto nonmobile tabovergrid">
         <span id="spanX31Name"></span>
@@ -26,28 +71,35 @@
 
 </div>
 
-<div id="layout_sidebar" class="cm_recpage">
+<div id="mySidebar" class="sidebar">
+    <h4 class="header">
+        @Model.PageTitle
+    </h4>
+
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+
+
 
 
     <div class="accordion bg-white" id="accordionReports">
-        @foreach (var recJ25 in Model.lisX31.Select(p => new { p.j25ID, p.j25Name, p.j25Ordinary }).Distinct().OrderBy(p => p.j25Ordinary))
+        @foreach (var recJ25 in Model.lisJ25.OrderBy(p => p.j25Ordinary))
         {
             <div class="according-item">
-                <h2 class="accordion-header" id="heading@(recJ25.j25ID)">
-                    <button id="cmd@(recJ25.j25ID)" class="accordion-button collapsed" style="        background-color: #2D89EF;color: white;" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(recJ25.j25ID)" aria-expanded="false" aria-controls="collapse@(recJ25.j25ID)">
+                <div class="accordion-header" id="heading@(recJ25.pid)">
+                    <button id="cmd@(recJ25.pid)" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(recJ25.pid)" aria-expanded="false" aria-controls="collapse@(recJ25.pid)">
                         @recJ25.j25Name
                     </button>
-                </h2>
+                </div>
             </div>
 
-            <div id="collapse@(recJ25.j25ID)" class="accordion-collapse collapse" aria-labelledby="heading@(recJ25.j25ID)" data-bs-parent="#accordionReports">
+            <div id="collapse@(recJ25.pid)" class="accordion-collapse collapse" aria-labelledby="heading@(recJ25.pid)" data-bs-parent="#accordionReports">
                 <div class="accordion-body p-0">
                     <ul style="list-style:none;padding:0px;">
-                        @foreach(var c in Model.lisX31.Where(p => p.j25ID == recJ25.j25ID))
+                        @foreach (var c in Model.lisX31.Where(p => p.j25ID == recJ25.pid))
                         {
-                        <li>
-                            <a class="nav-link" id="report@(c.pid)" href="javascript:showrep(@(c.pid),'@(c.x31Name)','@(c.x31Code)')">@(c.x31Name)</a>
-                        </li>
+                            <li>
+                                <a class="nav-link" id="report@(c.pid)" href="javascript:showrep(@(c.pid),'@(c.x31Name)','@(c.x31Code)')">@(c.x31Name)</a>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -55,18 +107,18 @@
 
 
         }
-       
-        
+
+
     </div>
 
 </div>
 
 
 
-<div id="layout_main">
+<div id="main">
 
     <iframe id="fra1" scrolling="no"></iframe>
-   
+
 
 
 </div>
@@ -76,33 +128,43 @@
 
     $(document).ready(function () {
 
-
+        if (_device.isMobile == true) {
+            closeNav();
+        }
 
 
         _mainmenu_highlight_current("cmdReports");
 
 
-        var offset = $("#layout_sidebar").offset();
-        var h_vertical = _device.innerHeight - offset.top;
-        h_vertical = parseInt(h_vertical) + 10;
-        $("#layout_sidebar").css("height", h_vertical + "px");
+        //var offset = $("#mySidebar").offset();
+        //var h_vertical = _device.innerHeight - offset.top;
+        //h_vertical = parseInt(h_vertical) + 10;
+        //$("#mySidebar").css("height", h_vertical + "px");
 
-        h_vertical = _device.innerHeight - $("#fra1").offset().top-10;
+        var h_vertical = _device.innerHeight - $("#fra1").offset().top - 10;
         $("#fra1").css("height", h_vertical + "px");
-        
+
 
     });
 
 
-    function showrep(x31id,x31name,x31code) {
-        $("#spanX31Name").text(x31name+" ["+x31code+"]");
+    function showrep(x31id, x31name, x31code) {
+        $("#spanX31Name").text(x31name + " [" + x31code + "]");
         $("#fra1").attr("src", "/x31/ReportNoContext?x31id=" + x31id);
         $(".nav-link").removeClass("selected");
         $("#report" + x31id).addClass("selected");
     }
 
 
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
 
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
 </script>
 
 
