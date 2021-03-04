@@ -25,9 +25,12 @@
     <link href="/kendo/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
     <link href="/kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
 
+    <script type="text/javascript">
+        var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-   
+
     <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
     <script src="~/lib/datepicker/bootstrap-datepicker.cs.min.js"></script>
     <script src="~/lib/qtip/jquery.qtip.min.js"></script>
@@ -63,9 +66,9 @@
         <style>
             #reportViewer1 {
                 position: absolute;
-                left: 5px;
-                right: 5px;
-                top: 100px;
+                left: 1px;
+                right: 1px;
+                top: 36px;
                 bottom: 3px;
                 overflow: hidden;
                 font-family: Verdana, Arial;
@@ -77,10 +80,10 @@
         <style>
             #reportViewer1 {
                 position: absolute;
-                left: 5px;
-                right: 5px;
-                top: 50px;
-                bottom: 3px;
+                left: 1px;
+                right: 1px;
+                top: 3px;
+                bottom: 1px;
                 overflow: hidden;
                 font-family: Verdana, Arial;
             }
@@ -100,41 +103,41 @@
 
     }
     </script>
-  
-    <div>
+
+    <td>
         <form id="form1" asp-controller="x31" asp-action="ReportNoContext" method="POST">
-
+            <input type="hidden" asp-for="@Model.SelectedJ72ID" />
+            <input type="hidden" asp-for="@Model.SelectedX31ID" />
             <input type="hidden" asp-for="@Model.IsPeriodFilter" />
-
-            <div class="row">
-                
-                
-                <div class="col-sm-2 col-md-2">
-                    @if (Model.RecX31.x31LangIndex>0)
+            <table>
+                <tr>
+                    @if (Model.RecX31.x31LangIndex > 0)
                     {
-                        <select asp-for="@Model.LangIndex" class="form-control" onchange="refresh()">
-                            <option value="0">Česky</option>
-                            
-                            <option value="2">Українська</option>
-                        </select>
+                        <td>
+                            <select asp-for="@Model.LangIndex" class="form-control" onchange="refresh()">
+                                <option value="0">Česky</option>
+
+                                <option value="2">Українська</option>
+                            </select>
+                        </td>
                     }
-                </div>
-                
-            </div>
-            @if (Model.lisJ72 != null)
-            {
-                <div class="row">
-                    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Pojmenovaný GRID filtr"):</label>
-                    <div class="col-sm-5 col-md-5">
-                        <mydropdown asp-for="@Model.SelectedJ72ID" datasource="@Model.lisJ72" textfield="j72Name" valuefield="pid" firstemptyrowvalue="0" isfirstemptyrow="true" event_after_changevalue="j72id_change"></mydropdown>
+                    @if (Model.lisJ72 != null)
+                    {
+                        <td>
+                            <mydropdown asp-for="@Model.SelectedJ72ID" datasource="@Model.lisJ72" textfield="j72Name" valuefield="pid" firstemptyrowvalue="0" isfirstemptyrow="true" event_after_changevalue="j72id_change"></mydropdown>
 
-                    </div>
-                    <div class="col-sm-1 col-md-1 btn-group">
-                        <button id="cmdRefresh" type="button" onclick="refresh()" class="btn btn-primary">@_f.tra("Občerstvit")</button>
+                        </td>
+                        @if (!Model.IsPeriodFilter)
+                        {
+                            <td style="width:40px;">
+                                <button id="cmdRefresh" type="button" onclick="refresh()" class="btn btn-primary"><span class="k-icon k-i-reload"></span></button>
+                            </td>
+                        }
+                    }
+                </tr>
+            </table>
 
-                    </div>
-                </div>
-            }
+
 
 
             @if (Model.IsPeriodFilter)
@@ -144,19 +147,19 @@
             }
 
         </form>
-    </div>
+        </div>
 
-    <div id="reportViewer1">
-        @if (Model.ReportFileName != null)
-        {
-            
+        <div id="reportViewer1">
+            @if (Model.ReportFileName != null)
+            {
+
                 @:loading...
-       
-        }
 
-    </div>
+            }
 
-    <script type="text/javascript">
+        </div>
+
+        <script type="text/javascript">
 
 
     $(document).ready(function ()
@@ -166,17 +169,17 @@
 
         @if(Model.PeriodFilter != null)
         {
-       
+
             @:d1 = new Date("@Model.PeriodFilter.d1_iso");
             @:d2 = new Date("@Model.PeriodFilter.d2_iso");
-        
+
         }
-        
+
 
     @if(Model.ReportFileName != null)
        {
            <text>
-        
+
         $("#reportViewer1")
             .telerik_ReportViewer(
                 {
@@ -187,7 +190,7 @@
                     },
                 viewMode: telerikReportViewer.ViewModes.INTERACTIVE,
                 scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
-                scale: 1.0,                
+                scale: 1.0,
                     enableAccessibility: false,
                     parameters: {
                         editors: {
@@ -208,9 +211,9 @@
 
         @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
-            
+
             @:_notify_message("@c.Value","@c.Key");
-            
+
              }
         }
 
@@ -235,13 +238,13 @@
 
 
             $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
-                location.replace("/x31/ReportNoContext?x31id=@Model.SelectedX31ID");
+                location.replace(_ep("/x31/ReportNoContext?x31id=@Model.SelectedX31ID"));
 
             });
 
         });
 
-       
+
 
 
     });
@@ -249,22 +252,22 @@
 
 
         function x31id_change(x31id) {
-            form1.action = "/x31/ReportNoContext?oper=change_x31id";
+            form1.action = _ep("/x31/ReportNoContext?oper=change_x31id");
             form1.submit();
 
 
         }
 
         function j72id_change(j72id) {
-            form1.action = "/x31/ReportNoContext?oper=change_j72id";
+            form1.action = _ep("/x31/ReportNoContext?oper=change_j72id");
             form1.submit();
         }
         function refresh() {
-            form1.action = "/x31/ReportNoContext?oper=postback";
+            form1.action = _ep("/x31/ReportNoContext?oper=postback");
             form1.submit();
         }
 
-    </script>
+        </script>
 
 
 </body>

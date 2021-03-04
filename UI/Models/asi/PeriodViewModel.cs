@@ -26,7 +26,7 @@ namespace UI.Models
         {
             get
             {
-                if (d2 == null) return "2000-01-01";
+                if (d2 == null) return "3000-01-01";
                 return Convert.ToDateTime(d2).ToString("o").Substring(0,10);
             }
         }

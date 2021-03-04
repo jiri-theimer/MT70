@@ -10,6 +10,7 @@ namespace UI.Models
         public IEnumerable<BO.x31Report> lisX31 { get; set; }
         public List<BO.j25ReportCategory> lisJ25 { get; set; }
 
-        public int LastJ25ID { get; set; }
+        
+        public BO.x31Report SelectedReport { get; set; }
     }
 }

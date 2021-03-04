@@ -24,24 +24,41 @@ namespace UI.Controllers
             _pp = pp;
         }
         public IActionResult ReportNoContextFramework(int x31id,string code)
-        {
+        {           
+            if (x31id==0 && !string.IsNullOrEmpty(code))
+            {
+                x31id = Factory.x31ReportBL.LoadByCode(code,0).pid;
+            }
             var v = new ReportNoContextFrameworkViewModel();
 
             if (!Factory.CurrentUser.j04IsMenu_Report)
             {            
                 return this.StopPage(false, "Nemáte oprávnění pro tuto stránku.");
             }
+            if (x31id == 0)
+            {
+                x31id = Factory.CBL.LoadUserParamInt("x31/last-reportnocontext-x31id");
+            }
+            if (x31id > 0)
+            {
+                v.SelectedReport = Factory.x31ReportBL.Load(x31id);
+            }
             v.lisX31 = Factory.x31ReportBL.GetList(new BO.myQuery("x31")).Where(p => p.x29ID == BO.x29IdEnum._NotSpecified);
             var qry = v.lisX31.Select(p => new { p.j25ID, p.j25Name, p.j25Ordinary }).Distinct();
             v.lisJ25 = new List<BO.j25ReportCategory>();
             foreach (var c in qry)
             {
-                var cc = new BO.j25ReportCategory() { pid = c.j25ID, j25Name = c.j25Name, j25Ordinary = c.j25Ordinary };
+                var cc = new BO.j25ReportCategory() { pid = c.j25ID, j25Name = c.j25Name, j25Ordinary = c.j25Ordinary,j25Code= "accordion-button collapsed py-2" };
                 if (cc.j25Name == null)
                 {
                     cc.j25Ordinary = -999999;
-                    cc.j25Name = "** "+Factory.tra("Bez kategorie");
+                    cc.j25Name = "** "+Factory.tra("Bez kategorie");                    
                 }
+                if (v.SelectedReport != null && c.j25ID == v.SelectedReport.j25ID)
+                {
+                    cc.j25Code = "accordion-button py-2";
+                }
+                cc.j25Name += " (" + v.lisX31.Where(p => p.j25ID == cc.pid).Count().ToString() + ")";
                 v.lisJ25.Add(cc);
             }
             return View(v);
@@ -59,6 +76,14 @@ namespace UI.Controllers
             v.SelectedX31ID = x31id;
             RefreshStateReportNoContext(v);
 
+            if (x31id > 0)
+            {
+                int intLastSaved = Factory.CBL.LoadUserParamInt("x31/last-reportnocontext-x31id");
+                if (intLastSaved != x31id)
+                {
+                    Factory.CBL.SetUserParam("x31/last-reportnocontext-x31id", x31id.ToString());
+                }
+            }
 
             return View(v);
             
@@ -93,7 +118,8 @@ namespace UI.Controllers
                     {
                         var xmlReportSource = new Telerik.Reporting.XmlReportSource();
                         var strXmlContent = System.IO.File.ReadAllText(Factory.x35GlobalParamBL.ReportFolder() + "\\" + v.ReportFileName);
-                        if (strXmlContent.Contains("datFrom") && strXmlContent.Contains("datUntil"))
+                        
+                        if (strXmlContent.Contains("datFrom",StringComparison.OrdinalIgnoreCase) && strXmlContent.Contains("datUntil", StringComparison.OrdinalIgnoreCase))
                         {
                             v.IsPeriodFilter = true;
                             v.PeriodFilter = new PeriodViewModel();
@@ -102,6 +128,7 @@ namespace UI.Controllers
                             v.PeriodFilter.PeriodValue = per.pid;
                             v.PeriodFilter.d1 = per.d1;
                             v.PeriodFilter.d2 = per.d2;
+                            
                         }
                         else
                         {
@@ -294,16 +321,24 @@ namespace UI.Controllers
         {
             var ret = _pp.ByPid(0);
             int x = Factory.CBL.LoadUserParamInt("report-period-value");
-            if (x > 0)
+            switch (x)
             {
-                ret = _pp.ByPid(x);
+                case 0:
+                    ret.d1 = new DateTime(2000,1,1);
+                    ret.d2 = new DateTime(3000, 1, 1);
+                    return ret;
+                case 1:
+                    ret = _pp.ByPid(x);
+                    ret.d1 = Factory.CBL.LoadUserParamDate("report-period-d1");                    
+                    ret.d2 = Factory.CBL.LoadUserParamDate("report-period-d2");
+                    if (ret.d1 == null) ret.d1 = new DateTime(2000, 1, 1);
+                    if (ret.d2 == null) ret.d1 = new DateTime(3000, 1, 1);
+                    break;
+                default:
+                    ret = _pp.ByPid(x);
+                    break;
             }
-            else
-            {
-                ret.d1 = Factory.CBL.LoadUserParamDate("report-period-d1");
-                ret.d2 = Factory.CBL.LoadUserParamDate("report-period-d2");
-
-            }
+           
             
             return ret;
         }

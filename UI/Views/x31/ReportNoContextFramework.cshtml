@@ -12,14 +12,14 @@
 <style type="text/css">
     .sidebar {
         height: 100%;
-        width: 250px;
+        width: 0px;
         position: fixed;
         z-index: 1;
         top: 0;
         left: 0;
         background-color: #F8F9FA;
         overflow-x: hidden;
-        transition: 0.5s;
+        
         padding-top: 45px;
     }
 
@@ -49,13 +49,13 @@
     }
 
     #main {
-        transition: margin-left .5s;
+        
         padding: 0px;
     }
 </style>
 
 <div class="row pt-1 bg-light m-0">
-    <div class="col-auto" style="width:250px;">
+    <div class="col-auto" style="width:300px;">
         <button class="btn btn-primary" onclick="openNav()">☰ MENU</button>
     </div>
 
@@ -128,11 +128,16 @@
 
     $(document).ready(function () {
 
-        if (_device.isMobile == true) {
-            closeNav();
+        if (_device.isMobile == false) {
+            openNav();
         }
 
-
+        @if(Model.SelectedReport != null)
+        {
+            @:$("#cmd@(Model.SelectedReport.j25ID)").attr("class", "accordion-button py-2");
+            @:$("#collapse@(Model.SelectedReport.j25ID)").attr("class", "accordion-collapse collapse show");
+            @:showrep("@Model.SelectedReport.pid", "@Model.SelectedReport.x31Name", "@Model.SelectedReport.x31Code");
+        }
         _mainmenu_highlight_current("cmdReports");
 
 
@@ -149,7 +154,8 @@
 
 
     function showrep(x31id, x31name, x31code) {
-        $("#spanX31Name").text(x31name + " [" + x31code + "]");
+        $("#spanX31Name").text(x31name);
+        $("#spanX31Name").attr("title","Report code: "+x31code);
         $("#fra1").attr("src", "/x31/ReportNoContext?x31id=" + x31id);
         $(".nav-link").removeClass("selected");
         $("#report" + x31id).addClass("selected");
@@ -157,8 +163,8 @@
 
 
     function openNav() {
-        document.getElementById("mySidebar").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
+        document.getElementById("mySidebar").style.width = "300px";
+        document.getElementById("main").style.marginLeft = "300px";
     }
 
     function closeNav() {

@@ -1,0 +1,56 @@
+﻿@model UI.Models.PeriodViewModel
+@inject BL.ThePeriodProvider _pp
+@inject BL.Factory _f
+@{
+    if (Model == null)
+    {
+        return;
+    }
+    var _lisPeriods = _pp.getPallete();
+    if (_f.CurrentUser.j03LangIndex > 0)
+    {
+        foreach (BO.ThePeriod c in _lisPeriods)
+        {
+            c.PeriodName = _f.tra(c.PeriodName);
+        }
+    }
+}
+
+@addTagHelper *, UI
+
+<div class="input-group">
+
+    <div style="min-width:170px;">
+        <mydropdown asp-for="@Model.PeriodValue" datasource="@_lisPeriods" valuefield="pid" textfield="Header" isfirstemptyrow="false"></mydropdown>
+
+    </div>
+    <div id="div_d1helper" >
+        <mydate asp-for="@Model.d1"></mydate>
+    </div>
+    <div id="div_d2helper" >
+        <mydate asp-for="@Model.d2"></mydate>
+    </div>
+    @if (Model.IsShowButtonRefresh)
+    {
+        <div id="div_cmdRefreshPeriod" style="margin-left:2px;">
+            <button type="button" id="cmdRefreshPeriod" class="btn btn-light" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></button>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+    $("#d1helper").on("change", function () {
+        $("#PeriodValue").val("1");
+    })
+    $("#d2helper").on("change", function () {
+        $("#PeriodValue").val("1");
+    })
+
+    if ($("#PeriodValue").val() == "0") {
+        $("#div_d1helper").css("display", "none");
+        $("#div_d2helper").css("display", "none");
+        $("#div_cmdRefreshPeriod").css("display", "none");
+        
+    }
+</script>

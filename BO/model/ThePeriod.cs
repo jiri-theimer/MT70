@@ -16,7 +16,7 @@ namespace BO
         {
             get
             {
-                if (this.PeriodInterval == null)
+                if (string.IsNullOrEmpty(this.PeriodInterval))
                 {
                     return this.PeriodName;
                 }
