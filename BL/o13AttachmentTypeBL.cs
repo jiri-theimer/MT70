@@ -23,7 +23,7 @@ namespace BL
         private string GetSQL1(string strAppend = null)
         {
             sb("SELECT a.*,x29.x29Name,");            
-            sb("replace(a.o27ArchiveFolder,CHAR(92),CHAR(92)+CHAR(92)) as SharpFolder,");
+            sb("replace(a.o13ArchiveFolder,CHAR(92),CHAR(92)+CHAR(92)) as SharpFolder,");
             sb(_db.GetSQL1_Ocas("o13"));
             sb(" FROM o13AttachmentType a LEFT OUTER JOIN x29Entity x29 ON a.x29ID=x29.x29ID");
             sb(strAppend);

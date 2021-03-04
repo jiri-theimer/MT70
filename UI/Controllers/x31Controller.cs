@@ -119,7 +119,7 @@ namespace UI.Controllers
                         var xmlReportSource = new Telerik.Reporting.XmlReportSource();
                         var strXmlContent = System.IO.File.ReadAllText(Factory.x35GlobalParamBL.ReportFolder() + "\\" + v.ReportFileName);
                         
-                        if (strXmlContent.Contains("datFrom",StringComparison.OrdinalIgnoreCase) && strXmlContent.Contains("datUntil", StringComparison.OrdinalIgnoreCase))
+                        if (v.RecX31.x31IsPeriodRequired || (strXmlContent.Contains("datFrom", StringComparison.OrdinalIgnoreCase) && strXmlContent.Contains("datUntil", StringComparison.OrdinalIgnoreCase)))      
                         {
                             v.IsPeriodFilter = true;
                             v.PeriodFilter = new PeriodViewModel();
@@ -332,7 +332,7 @@ namespace UI.Controllers
                     ret.d1 = Factory.CBL.LoadUserParamDate("report-period-d1");                    
                     ret.d2 = Factory.CBL.LoadUserParamDate("report-period-d2");
                     if (ret.d1 == null) ret.d1 = new DateTime(2000, 1, 1);
-                    if (ret.d2 == null) ret.d1 = new DateTime(3000, 1, 1);
+                    if (ret.d2 == null) ret.d2= new DateTime(3000, 1, 1);
                     break;
                 default:
                     ret = _pp.ByPid(x);

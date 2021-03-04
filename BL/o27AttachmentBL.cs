@@ -46,7 +46,7 @@ namespace BL
         }
         public BO.o27Attachment LoadByGuid(string guid)
         {
-            return _db.Load<BO.o27Attachment>(GetSQL1(" WHERE a.o27DownloadGUID=@guid"), new { guid = guid });
+            return _db.Load<BO.o27Attachment>(GetSQL1(" WHERE a.o27GUID=@guid"), new { guid = guid });
         }
 
 
@@ -160,7 +160,7 @@ namespace BL
                 var lisO27Saved = GetList(mq);
 
               
-                var lisO13 = _mother.o13AttachmentTypeBL.GetList(new BO.myQuery("o13")).Where(p => p.x29ID == x29id);
+                var lisO13 = _mother.o13AttachmentTypeBL.GetList(new BO.myQuery("o13")).Where(p => (int)p.x29ID == x29id);
                 if (lisO13.Count() == 0)
                 {
                     this.AddMessage("Nelze najít vhodný typ dokumentu.");return false;                    

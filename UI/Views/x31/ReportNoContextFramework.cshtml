@@ -19,7 +19,6 @@
         left: 0;
         background-color: #F8F9FA;
         overflow-x: hidden;
-        
         padding-top: 45px;
     }
 
@@ -31,12 +30,13 @@
             margin-left: 50px;
             text-decoration: none;
         }
+
         .sidebar .header {
             position: absolute;
             top: 0;
-            right: 105px;           
+            right: 105px;
             margin-left: 10px;
-            margin-top:20px;            
+            margin-top: 20px;
         }
 
     .openbtn {
@@ -49,7 +49,6 @@
     }
 
     #main {
-        
         padding: 0px;
     }
 </style>
@@ -64,10 +63,13 @@
         <span id="spanX31Name"></span>
 
     </div>
+    @if (_f.CurrentUser.IsAdmin)
+    {
+        <div class="col-auto nonmobile" style="width:40px;">
+            <button id="cmdRecord" type="button" onclick="settings()" class="btn btn-sm btn-outline-secondary" title="@_f.tra("Administrace sestavy")"><span class="k-icon k-i-cogs"></span></button>
+        </div>
+    }
 
-    <div class="nonmobile ml-2 col-auto">
-        <a class="btn btn-light" href="/x31/ReportNoContextFramework" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
-    </div>
 
 </div>
 
@@ -171,6 +173,11 @@
         document.getElementById("mySidebar").style.width = "0";
         document.getElementById("main").style.marginLeft = "0";
     }
+
+    function settings() {
+        _window_open(_ep("/x31/Record?pid=@Model.SelectedReport.pid"),1);
+    }
+
 </script>
 
 

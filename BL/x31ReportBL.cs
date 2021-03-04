@@ -114,10 +114,7 @@ namespace BL
             {
                 this.AddMessage("Chybí vyplnit [Kód sestavy]."); return false;
             }
-            if (rec.x29ID == BO.x29IdEnum._NotSpecified)
-            {
-                this.AddMessage("Chybí vyplnit [Entita]."); return false;
-            }
+            
             
            
             if (LoadByCode(rec.x31Code, rec.pid) != null)
