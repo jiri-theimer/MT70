@@ -10,6 +10,7 @@ namespace BL
         public string ConnectString { get; set; }
         public string LogFolder { get; set; }
         public bool RobotOnBehind { get; set; }
+        public string RobotHostUrl { get; set; }
         public string AppRootFolder { get; set; }
         public string WwwRootFolder { get; set; }
         public string AppName { get; set; }

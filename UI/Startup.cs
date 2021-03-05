@@ -27,7 +27,7 @@ namespace UI
         public Startup(IWebHostEnvironment env)
         {
             _wwwrootfolder = env.WebRootPath;
-
+            
             Configuration = new ConfigurationBuilder()
                  .SetBasePath(env.ContentRootPath)
                  .AddJsonFile("appsettings.json", false, true)
@@ -70,9 +70,9 @@ namespace UI
                 options.AllowSynchronousIO = true;      //kvùli telerik reporting
             });
 
-            
+            services.AddHttpClient();       //kvùli práci s httpclient v rámci IHttpClientFactory
             //services.AddRazorPages();
-            
+
             services.AddRazorPages().AddNewtonsoftJson();   //kvùli telerik reporting
 
 
@@ -102,6 +102,10 @@ namespace UI
                 DefaultLangIndex = BO.BAS.InInt(Configuration.GetSection("App")["DefaultLangIndex"])                                         
                 ,
                 LogFolder = strLogFolder
+                ,
+                RobotOnBehind= Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind")
+                ,
+                RobotHostUrl= Configuration.GetSection("App")["RobotHostUrl"]
                 ,
                 AppRootFolder = System.IO.Directory.GetCurrentDirectory()
                 ,
@@ -138,6 +142,11 @@ namespace UI
 
             services.AddScoped<BO.RunningUser, BO.RunningUser>();
             services.AddScoped<BL.Factory, BL.Factory>();
+
+            if (Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind"))
+            {
+                services.AddHostedService<UI.TheRobotUI>();   //pohon pro robota na pozadí
+            }
 
         }
 
