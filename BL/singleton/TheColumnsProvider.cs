@@ -367,6 +367,12 @@ namespace BL
             AF("p95InvoiceRow", "p95Name_BillingLang4", "Název €4");
             AppendTimestamp("p95InvoiceRow");
 
+            AF("m62ExchangeRate", "m62Date", "Datum kurzu", gdc1, null, "date", false, true);
+            AF("m62ExchangeRate", "m62Rate", "Kurz",gdc1,null,"num3");
+            AF("m62ExchangeRate", "Veta", "", gdc2, "CONVERT(varchar(10),a.m62Units)+' '+(select j27Code from j27Currency where j27ID=a.j27ID_Slave)+' = '+CONVERT(varchar(10),a.m62Rate)+' '+(select j27Code FROM j27Currency where j27ID=a.j27ID_Master)");
+            AF("m62ExchangeRate", "m62RateType", "Typ kurzu",gdc2, "case when a.m62RateType=1 then 'Fakturační kurz' else 'Fixní kurz' end");
+            AppendTimestamp("m62ExchangeRate");
+
             AF("p35Unit", "p35Name", "Kusovníková jednotka", gdc1, null, "string", false, true);
             AF("p35Unit", "p35Code", "Kód");
             AppendTimestamp("p35Unit");
@@ -668,6 +674,10 @@ namespace BL
                     break;
                 case "o40":
                     ret.Add(InhaleColumn4Relation("o40_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
+                    break;
+                case "m62":
+                    ret.Add(InhaleColumn4Relation("m62_j27slave", "j27Currency", "j27Code", rels, bolComboColumns));
+                    
                     break;
 
             }

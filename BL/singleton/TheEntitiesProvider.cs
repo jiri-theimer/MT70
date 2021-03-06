@@ -120,6 +120,8 @@ namespace BL
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura rozpisu částky faktury", "p80InvoiceAmountStructure a", "a.p80Name");
             AE("p89ProformaType", "Typy záloh", "Typ zálohy", "p89ProformaType a", "a.p89Name");
 
+            AE("m62ExchangeRate", "Měnové kurzy", "Měnový kurz", "m62ExchangeRate a","a.m62ID DESC");
+
             AE("o40SmtpAccount", "Poštovní účty", "Poštovní účet", "o40SmtpAccount a", "a.o40ID DESC");
             AE("x29Entity", "Entity", "Entita", "x29Entity a","a.x29Name");
             ByPrefix("x29").IsWithoutValidity = true;
@@ -207,6 +209,10 @@ namespace BL
                     break;
                 case "p53":
                     lis.Add(getREL("j27Currency", "p53_j27", "Měna", "LEFT OUTER JOIN j27Currency p53_j27 ON a.j27ID=p53_j27.j27ID"));
+                    break;
+                case "m62":                    
+                    lis.Add(getREL("j27Currency", "m62_j27slave", "Cizí měna", "LEFT OUTER JOIN j27Currency m62_j27slave ON a.j27ID_Slave=m62_j27slave.j27ID"));
+                    lis.Add(getREL("j27Currency", "m62_j27master", "Domácí měna", "LEFT OUTER JOIN j27Currency m62_j27master ON a.j27ID_Master=m62_j27master.j27ID"));
                     break;
                 case "j18":
                     lis.Add(getREL("j17Country", "j18_j17", "Region", "LEFT OUTER JOIN j17Country j18_j17 ON a.j17ID=j18_j17.j17ID"));

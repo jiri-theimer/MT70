@@ -70,6 +70,7 @@ namespace BL
         private Ix38CodeLogicBL _x38;
         private Ix97TranslateBL _x97;
         private Io40SmtpAccountBL _o40;
+        private Im62ExchangeRateBL _m62;
 
         public Factory(BO.RunningUser ru,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
@@ -551,7 +552,14 @@ namespace BL
                 return _o40;
             }
         }
+        public Im62ExchangeRateBL m62ExchangeRateBL
+        {
+            get
+            {
+                if (_m62 == null) _m62 = new m62ExchangeRateBL(this);
+                return _m62;
+            }
+        }
 
-        
     }
 }

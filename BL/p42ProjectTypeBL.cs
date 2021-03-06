@@ -49,34 +49,36 @@ namespace BL
             {
                 return 0;
             }
-
-            var p = new DL.Params4Dapper();
-
-            p.AddInt("pid", rec.pid);
-            p.AddInt("b01ID", rec.b01ID,true);
-            p.AddInt("p07ID", rec.p07ID, true);
-            p.AddInt("x38ID", rec.x38ID, true);
-            p.AddEnumInt("p42ArchiveFlag", rec.p42ArchiveFlag);
-            p.AddEnumInt("p42ArchiveFlagP31", rec.p42ArchiveFlagP31);
-            p.AddString("p42Name", rec.p42Name);
-            p.AddString("p42Code", rec.p42Code);
-            p.AddInt("p42Ordinary", rec.p42Ordinary);
-
-
-            int intPID = _db.SaveRecord("p42ProjectType", p.getDynamicDapperPars(), rec);
-            if (intPID>0 && p34ids != null)
+            using (var sc = new System.Transactions.TransactionScope())
             {
-                if (rec.pid > 0)
-                {
-                    _db.RunSql("DELETE FROM p43ProjectType_Workload WHERE p42ID=@pid", new { pid = intPID });
-                }
-                if (p34ids.Count > 0)
-                {
-                    _db.RunSql("INSERT INTO p43ProjectType_Workload(p42ID,p34ID) SELECT @pid,p34ID FROM p34ActivityGroup WHERE p34ID IN (" + string.Join(",", p34ids) + ")", new { pid = intPID });
-                }
-            }
+                var p = new DL.Params4Dapper();
 
-            return intPID;
+                p.AddInt("pid", rec.pid);
+                p.AddInt("b01ID", rec.b01ID, true);
+                p.AddInt("p07ID", rec.p07ID, true);
+                p.AddInt("x38ID", rec.x38ID, true);
+                p.AddEnumInt("p42ArchiveFlag", rec.p42ArchiveFlag);
+                p.AddEnumInt("p42ArchiveFlagP31", rec.p42ArchiveFlagP31);
+                p.AddString("p42Name", rec.p42Name);
+                p.AddString("p42Code", rec.p42Code);
+                p.AddInt("p42Ordinary", rec.p42Ordinary);
+
+                int intPID = _db.SaveRecord("p42ProjectType", p.getDynamicDapperPars(), rec);
+                if (intPID > 0 && p34ids != null)
+                {
+                    if (rec.pid > 0)
+                    {
+                        _db.RunSql("DELETE FROM p43ProjectType_Workload WHERE p42ID=@pid", new { pid = intPID });
+                    }
+                    if (p34ids.Count > 0)
+                    {
+                        _db.RunSql("INSERT INTO p43ProjectType_Workload(p42ID,p34ID) SELECT @pid,p34ID FROM p34ActivityGroup WHERE p34ID IN (" + string.Join(",", p34ids) + ")", new { pid = intPID });
+                    }
+                }
+                sc.Complete();
+                return intPID;
+            }
+                
         }
 
 

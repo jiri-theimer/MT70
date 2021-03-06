@@ -48,7 +48,7 @@ namespace UI.Controllers
 
         }
 
-        public void RunRobotPingByHttpClient()  //spouští TheRobotUI, aby neusnula IIS website pro MARKTIME
+        public void RunRobotPingByHttpClient()  //spouští TheRobotUI, aby neusnula IIS website pro MARKTIME, musí být vyplněno v appsettings: RobotHostUrl
         {
             
             if (_app.RobotOnBehind && !string.IsNullOrEmpty(_app.RobotHostUrl)){
