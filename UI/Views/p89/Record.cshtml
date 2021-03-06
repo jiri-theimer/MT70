@@ -1,0 +1,98 @@
+﻿@model UI.Models.Record.p89Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Typ zálohy");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název pravidla"):</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.p89Name" />
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Číselná řada dokladu"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" filter-flag="1" myqueryinline="x29id|int|390"></mycombo>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vystavovatel zálohy"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="p93InvoiceHeader" asp-for="Rec.p93ID" selectedtext="@Model.ComboP93Name" filter-flag="1"></mycombo>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí tisková sestava"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="x31Report" asp-for="Rec.x31ID" selectedtext="@Model.ComboP93Name" filter-flag="1" myqueryinline="x29id|int|390"></mycombo>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Doklad o přijaté úhradě zálohy")
+        </div>
+        <div class="card-body">
+            <div class="row my-2">
+                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Číselná řada daňového dokladu úhrady"):</label>
+                <div class="col-sm-10 col-md-9">
+                    <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID_Payment" selectedtext="@Model.ComboX38Name_Payment" filter-flag="1" myqueryinline="x29id|int|382"></mycombo>
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Výchozí tisková sestava"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <mycombo entity="x31Report" asp-for="Rec.x31ID_Payment" selectedtext="@Model.ComboX38Name_Payment" filter-flag="1" myqueryinline="x29id|int|382"></mycombo>
+                </div>
+
+            </div>
+        </div>
+    </div>
+  
+    
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p89DefaultText1"></textarea>
+        <label for="Rec_p89DefaultText1">@_f.tra("Výchozí text zálohy")</label>
+    </div>
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p89DefaultText2"></textarea>
+        <label for="Rec_p89DefaultText2">@_f.tra("Výchozí technický text zálohy")</label>
+    </div>
+    
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+      
+
+
+    });
+
+
+
+
+    function postback() {
+        form1.action = _ep("p89/Record?oper=postback");
+        form1.submit();
+    }
+
+</script>
