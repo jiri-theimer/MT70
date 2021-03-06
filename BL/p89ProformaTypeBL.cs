@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public interface Ip89InvoiceTypeBL
+    public interface Ip89ProformaTypeBL
     {
         public BO.p89ProformaType Load(int pid);
         public IEnumerable<BO.p89ProformaType> GetList(BO.myQuery mq);
         public int Save(BO.p89ProformaType rec);
 
     }
-    class p89InvoiceTypeBL : BaseBL, Ip89InvoiceTypeBL
+    class p89ProformaTypeBL : BaseBL, Ip89ProformaTypeBL
     {
-        public p89InvoiceTypeBL(BL.Factory mother) : base(mother)
+        public p89ProformaTypeBL(BL.Factory mother) : base(mother)
         {
 
         }
@@ -66,7 +66,7 @@ namespace BL
             p.AddString("p89DefaultText2", rec.p89DefaultText2);
            
 
-            int intPID = _db.SaveRecord("p89InvoiceType", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("p89ProformaType", p.getDynamicDapperPars(), rec);
 
             return intPID;
 

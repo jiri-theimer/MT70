@@ -16,7 +16,7 @@ namespace UI.Controllers.Admin
             v.Rec = new BO.p89ProformaType();
             if (v.rec_pid > 0)
             {
-                v.Rec = Factory.p89InvoiceTypeBL.Load(v.rec_pid);
+                v.Rec = Factory.p89ProformaTypeBL.Load(v.rec_pid);
                 if (v.Rec == null)
                 {
                     return RecNotFound(v);
@@ -36,7 +36,7 @@ namespace UI.Controllers.Admin
                 }
                 if (v.Rec.x38ID_Payment > 0)
                 {
-                    v.ComboX38Name = Factory.x38CodeLogicBL.Load(v.Rec.x38ID_Payment).x38Name;
+                    v.ComboX38Name_Payment = Factory.x38CodeLogicBL.Load(v.Rec.x38ID_Payment).x38Name;
                 }
             }
             RefreshState(v);
@@ -66,7 +66,7 @@ namespace UI.Controllers.Admin
             if (ModelState.IsValid)
             {
                 BO.p89ProformaType c = new BO.p89ProformaType();
-                if (v.rec_pid > 0) c = Factory.p89InvoiceTypeBL.Load(v.rec_pid);
+                if (v.rec_pid > 0) c = Factory.p89ProformaTypeBL.Load(v.rec_pid);
                 c.p89Name = v.Rec.p89Name;
                 c.x38ID = v.Rec.x38ID;
                 c.x38ID_Payment = v.Rec.x38ID_Payment;
@@ -80,7 +80,7 @@ namespace UI.Controllers.Admin
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.p89InvoiceTypeBL.Save(c);
+                c.pid = Factory.p89ProformaTypeBL.Save(c);
                 if (c.pid > 0)
                 {
 
