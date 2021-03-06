@@ -313,6 +313,8 @@ namespace BL
             AppendTimestamp("p36LockPeriod");
 
             AF("p53VatRate", "p53Value", "Sazba DPH", gdc1, null, "num", false,true);
+            AF("p53VatRate", "p53ValidFrom", "Platí od", gdc1, null, "date");
+            AF("p53VatRate", "p53ValidUntil", "Platí do", gdc1, null, "date");
             AppendTimestamp("p53VatRate");
 
             AF("p61ActivityCluster", "p61Name", "Klast aktivit", gdc1, null, "string", false, true);            
@@ -658,6 +660,7 @@ namespace BL
                     break;
                 case "p53":
                     ret.Add(InhaleColumn4Relation("p53_j27", "j27Currency", "j27Code", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("p53_x15", "x15VatRateType", "x15Name", rels, bolComboColumns));
                     break;
                 case "p32":
                     ret.Add(InhaleColumn4Relation("p32_p34", "p34ActivityGroup", "p34Name", rels, bolComboColumns));

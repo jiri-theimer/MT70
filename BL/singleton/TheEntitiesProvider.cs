@@ -209,6 +209,7 @@ namespace BL
                     break;
                 case "p53":
                     lis.Add(getREL("j27Currency", "p53_j27", "Měna", "LEFT OUTER JOIN j27Currency p53_j27 ON a.j27ID=p53_j27.j27ID"));
+                    lis.Add(getREL("x15VatRateType", "p53_x15", "Hladina DPH", "LEFT OUTER JOIN x15VatRateType p53_x15 ON a.x15ID=p53_x15.x15ID"));
                     break;
                 case "m62":                    
                     lis.Add(getREL("j27Currency", "m62_j27slave", "Cizí měna", "LEFT OUTER JOIN j27Currency m62_j27slave ON a.j27ID_Slave=m62_j27slave.j27ID"));

@@ -50,6 +50,7 @@ namespace BL
         private Ip36LockPeriodBL _p36;
         private Ip38ActivityTagBL _p38;
         private Ip51PriceListBL _p51;
+        private Ip53VatRateBL _p53;
         private Ip61ActivityClusterBL _p61;
         private Ip63OverheadBL _p63;
         private Ip80InvoiceAmountStructureBL _p80;
@@ -405,6 +406,14 @@ namespace BL
             {
                 if (_p51 == null) _p51 = new p51PriceListBL(this);
                 return _p51;
+            }
+        }
+        public Ip53VatRateBL p53VatRateBL
+        {
+            get
+            {
+                if (_p53 == null) _p53 = new p53VatRateBL(this);
+                return _p53;
             }
         }
         public Ip61ActivityClusterBL p61ActivityClusterBL

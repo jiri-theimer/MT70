@@ -1,0 +1,67 @@
+﻿@model UI.Models.Record.p53Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Nastavení DPH sazby");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Hodnota sazby (%)"):</label>
+        <div class="col-sm-4 col-md-3">
+            <mynumber asp-for="Rec.p53Value" decimal-digits="2"></mynumber>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Platí od"):</label>
+        <div class="col-sm-4 col-md-3">
+            <mydate asp-for="@Model.d1"></mydate>
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Platí do"):</label>
+        <div class="col-sm-4 col-md-3">
+            <mydate asp-for="@Model.d2"></mydate>
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Hladina DPH"):</label>
+        <div class="col-sm-4 col-md-3">
+            <select asp-for="@Model.Rec.x15ID" class="form-select">
+                <option value="Nic"></option>
+                <option value="BezDPH">@_f.tra("0% (Bez DPH)")</option>
+                <option value="SnizenaSazba">@_f.tra("Snížená sazba DPH")</option>
+                <option value="ZakladniSazba">@_f.tra("Základní sazba DPH")</option>
+                <option value="SpecialniSazba">@_f.tra("Speciální sazba DPH")</option>
+            </select>
+
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Měna"):</label>
+        <div class="col-sm-4 col-md-3">
+            <mycombo entity="j27Currency" asp-for="Rec.j27ID" selectedtext="@Model.ComboJ27Code" view-flag="2"></mycombo>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Region"):</label>
+        <div class="col-sm-4 col-md-3">
+            <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name" view-flag="2"></mycombo>
+        </div>
+
+    </div>
+
+
+
+
+</div>
