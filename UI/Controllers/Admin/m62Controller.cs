@@ -20,14 +20,30 @@ namespace UI.Controllers.Admin
         public IActionResult Settings()
         {
             var v = new m62SettingsViewModel() { SelectedDate=DateTime.Today };
-
+            string s = Factory.x35GlobalParamBL.LoadParam("j27Codes_Import_CNB");
+            RefreshState(v);
+            if (!string.IsNullOrEmpty(s))
+            {
+                v.SelectedJ27IDs = new List<int>();
+                foreach(var strJ27Code in s.Split(","))
+                {
+                    v.SelectedJ27IDs.Add(Factory.FBL.LoadCurrencyByCode(strJ27Code).pid);
+                }
+                
+            }
             return View(v);
+        }
+
+        private void RefreshState(m62SettingsViewModel v)
+        {
+            v.lisAllJ27 = Factory.FBL.GetListCurrency().Where(p => p.j27ID != 2);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Settings(m62SettingsViewModel v, string oper)
         {
+            RefreshState(v);
             if (oper == "postback")
             {
                 return View(v);
@@ -43,16 +59,20 @@ namespace UI.Controllers.Admin
                 }
                 
             }
-
-            if (ModelState.IsValid)
+            if (oper == "settings")
             {
+                var codes = new List<string>();
+                foreach(var j27id in v.SelectedJ27IDs.Where(p=>p>0))
+                {
+                    codes.Add(Factory.FBL.LoadCurrencyByID(j27id).j27Code);
+                }
 
-                
+                Factory.x35GlobalParamBL.Save("j27Codes_Import_CNB", string.Join(",", codes));
+                v.SetJavascript_CallOnLoad(0);
                 return View(v);
-
             }
 
-
+            
             this.Notify_RecNotSaved();
             return View(v);
         }

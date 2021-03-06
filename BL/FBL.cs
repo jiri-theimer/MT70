@@ -13,6 +13,7 @@ namespace BL
         public IEnumerable<BO.p87BillingLanguage> GetListP87();
         public BO.j27Currency LoadCurrencyByCode(string j27code);
         public BO.j27Currency LoadCurrencyByID(int j27id);
+        public IEnumerable<BO.j27Currency> GetListCurrency();
         public int SaveP87(BO.p87BillingLanguage rec);
 
     }
@@ -47,6 +48,10 @@ namespace BL
         public BO.j27Currency LoadCurrencyByID(int j27id)
         {
             return _db.Load<BO.j27Currency>("select * FROM j27Currency WHERE j27ID = @j27id", new { j27id = j27id });
+        }
+        public IEnumerable<BO.j27Currency> GetListCurrency()
+        {
+            return _db.GetList<BO.j27Currency>("SELECT * FROM j27Currency a WHERE GETDATE() BETWEEN j27ValidFrom AND j27ValidUntil");
         }
 
         public IEnumerable<BO.SysDbObject> GetList_SysObjects()
