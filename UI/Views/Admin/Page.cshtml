@@ -62,6 +62,12 @@
     <div class="ml-2 col-auto">
         <button id="cmdCreate" type="button" class="btn btn-primary">@_f.tra("Nový záznam")</button>
     </div>
+    @if (Model.prefix == "m62")
+    {
+        <div class="ml-2 col-auto">
+            <button type="button" class="btn btn-outline-primary" onclick="_window_open('/m62/Settings',1)">@_f.tra("Import kurzů z ČNB")</button>
+        </div>
+    }
 
 </div>
 

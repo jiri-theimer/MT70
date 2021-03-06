@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
 using UI.Models;
 using UI.Models.Record;
 
@@ -11,6 +12,50 @@ namespace UI.Controllers.Admin
 {
     public class m62Controller : BaseController
     {
+        private readonly IHttpClientFactory _httpclientfactory;
+        public m62Controller(IHttpClientFactory hcf)
+        {
+            _httpclientfactory = hcf;
+        }
+        public IActionResult Settings()
+        {
+            var v = new m62SettingsViewModel() { SelectedDate=DateTime.Today };
+
+            return View(v);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Settings(m62SettingsViewModel v, string oper)
+        {
+            if (oper == "postback")
+            {
+                return View(v);
+            }
+            if (oper == "import")
+            {
+                var httpclient = _httpclientfactory.CreateClient();
+                int intPID = Factory.m62ExchangeRateBL.ImportOneRate(httpclient, v.SelectedDate, v.SelectedJ27ID);
+                if (intPID > 0)
+                {
+                    v.SetJavascript_CallOnLoad(intPID);
+                    return View(v);
+                }
+                
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                
+                return View(v);
+
+            }
+
+
+            this.Notify_RecNotSaved();
+            return View(v);
+        }
         public IActionResult Record(int pid, bool isclone)
         {
             var v = new m62Record() { rec_pid = pid, rec_entity = "m62" };
@@ -26,7 +71,7 @@ namespace UI.Controllers.Admin
                 v.ComboJ27Slave = v.Rec.j27Code_Slave;
 
             }
-            RefreshState(v);
+            RefreshStateRecord(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)
             {
@@ -36,7 +81,7 @@ namespace UI.Controllers.Admin
             return ViewTup(v, BO.x53PermValEnum.GR_Admin);
         }
 
-        private void RefreshState(m62Record v)
+        private void RefreshStateRecord(m62Record v)
         {
 
 
@@ -45,7 +90,7 @@ namespace UI.Controllers.Admin
         [ValidateAntiForgeryToken]
         public IActionResult Record(m62Record v)
         {
-            RefreshState(v);
+            RefreshStateRecord(v);
 
             if (ModelState.IsValid)
             {

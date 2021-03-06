@@ -1,0 +1,85 @@
+﻿@model UI.Models.m62SettingsViewModel
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Import měnových kurzů");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div>
+    <h4>@Model.PageTitle</h4>
+</div>
+<div class="bg-light" style="padding:10px;">
+    <button id="cmdSave" class="btn btn-success">@_f.tra("Uložit nastavení")</button>
+    <button id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<form id="form1" asp-controller="m62" asp-action="Settings" method="POST">
+    <div class="modal_record_container">
+
+
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Naimportovat kurz pro vybranou měnu a den")
+            </div>
+            <div class="card-body">
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Měna"):</label>
+                    <div class="col-sm-4 col-md-3">
+                        <mycombo entity="j27Currency" asp-for="@Model.SelectedJ27ID" selectedtext="@Model.SelectedJ27Code" view-flag="1"></mycombo>
+                    </div>
+
+                </div>
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum"):</label>
+                    <div class="col-sm-4 col-md-3">
+                        <mydate asp-for="@Model.SelectedDate" include-time="false"></mydate>
+                    </div>
+
+                </div>
+                <div class="my-2">
+                    <button type="button" id="cmdImport" class="btn btn-primary">@_f.tra("Spustit")</button>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdSave").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+
+
+        });
+
+        $("#cmdImport").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            postback("import");
+
+
+        });
+
+    })
+
+    function postback(oper) {
+        form1.action = _ep("m62/Settings?oper="+oper);
+        form1.submit();
+    }
+</script>
