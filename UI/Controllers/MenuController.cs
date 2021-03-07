@@ -171,7 +171,7 @@ namespace UI.Controllers
             AMI("Poštovní účty", aurl("users","o40"));
             AMI("Šablony poštovních zpráv", aurl("users", "j61"));
             AMI("OUTBOX", aurl("users","x40"));
-            AMI("MAIL fronta", "/mail/MailBatchFramework");
+            
                        
             handle_selected_item(prefix);
             

@@ -620,10 +620,13 @@ namespace UI
         {
 
             this.gridinput.query.explicit_columns = _colsProvider.ParseTheGridColumns(this.gridinput.query.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex);
-            if (string.IsNullOrEmpty(gridState.j75SortDataField) == false)
+            if (!string.IsNullOrEmpty(gridState.j75SortDataField))
             {
-
-                this.gridinput.query.explicit_orderby = _colsProvider.ByUniqueName(gridState.j75SortDataField).getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
+                if (this.gridinput.query.explicit_columns.Any(p => p.UniqueName == gridState.j75SortDataField))
+                {
+                    this.gridinput.query.explicit_orderby=this.gridinput.query.explicit_columns.Where(p => p.UniqueName == gridState.j75SortDataField).First().getFinalSqlSyntax_ORDERBY()+ " " + gridState.j75SortOrder;
+                }
+                //this.gridinput.query.explicit_orderby = _colsProvider.ByUniqueName(gridState.j75SortDataField).getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
             }
             if (String.IsNullOrEmpty(gridState.j75Filter) == false)
             {

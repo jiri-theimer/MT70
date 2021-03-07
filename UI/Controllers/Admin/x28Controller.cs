@@ -10,7 +10,7 @@ namespace UI.Controllers
 {
     public class x28Controller : BaseController
     {
-        public IActionResult Record(int pid, bool isclone)
+        public IActionResult Record(int pid, bool isclone,string prefix)
         {
             var v = new x28Record() { rec_pid = pid, rec_entity = "x28" };
             v.Rec = new BO.x28EntityField();
@@ -41,7 +41,15 @@ namespace UI.Controllers
             {
                 v.Rec.x28IsAllEntityTypes = true;
                 v.Rec.x28Flag = BO.x28FlagENUM.UserField;
-                v.Rec.x29ID = BO.x29IdEnum.p41Project;
+                if (prefix != null)
+                {
+                    v.Rec.x29ID = BO.BASX29.GetEnum(prefix);
+                }
+                else
+                {
+                    v.Rec.x29ID=BO.x29IdEnum.p41Project;
+                }
+                
                 v.Rec.x24ID = BO.x24IdENUM.tString;
             }
             RefreshState(v);

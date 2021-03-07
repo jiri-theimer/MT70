@@ -386,19 +386,18 @@ namespace BL
             AF("o40SmtpAccount", "o40Port", "Smtp Port", gdc2, null, "num0");
 
             //x40 = OUTBOX            
-            AF("x40MailQueue", "MessageTime", "Čas", gdc1, "case when a.x40DatetimeProcessed is not null then a.x40DatetimeProcessed else a.x40DateInsert end", "datetime",false,true);            
-            AF("x40MailQueue", "x40SenderName", "Odesílatel", 0);
+            AF("x40MailQueue", "MessageTime", "Čas", gdc1, "case when a.x40WhenProceeded is not null then a.x40WhenProceeded else a.x40DateInsert end", "datetime",false,true);            
+            AF("x40MailQueue", "x40SenderName", "Odesílatel",gdc1);
             AF("x40MailQueue", "x40SenderAddress", "Odesílatel (adresa)");
-            AF("x40MailQueue", "x40Recipient", "Komu", BO.TheGridDefColFlag.GridAndCombo);
+            AF("x40MailQueue", "x40Recipient", "Komu", gdc1);
             AF("x40MailQueue", "x40CC", "Cc");
             AF("x40MailQueue", "x40BCC", "Bcc");
-            AF("x40MailQueue", "x40Status", "Stav", BO.TheGridDefColFlag.GridAndCombo, "case a.x40Status when 1 then 'Čeká na odeslání' when 2 then 'Chyba' when 3 then 'Odesláno' when 4 then 'Zastaveno' when 5 then 'Čeká na schválení' end");
-            AF("x40MailQueue", "x40Subject", "Předmět zprávy", BO.TheGridDefColFlag.GridAndCombo);
-            AF("x40MailQueue", "x40Body", "Text zprávy", BO.TheGridDefColFlag.GridAndCombo, "convert(varchar(150),a.x40Body)+'...'");
-            AF("x40MailQueue", "x40Attachments", "Přílohy");
-            AF("x40MailQueue", "x40EmlFileSize_KB", "Velikost (kB)", 0, "a.x40EmlFileSize/1024", "num0", true);
-            AF("x40MailQueue", "x40EmlFileSize_MB", "Velikost (MB)", 0, "convert(float,a.x40EmlFileSize)/1048576", "num", true);
-            AF("x40MailQueue", "x40ErrorMessage", "Chyba", BO.TheGridDefColFlag.GridAndCombo);
+            AF("x40MailQueue", "x40State", "Stav", gdc1, "case a.x40State when 1 then 'Čeká na odeslání' when 2 then 'Chyba' when 3 then 'Odesláno' when 4 then 'Zastaveno' when 5 then 'Čeká na schválení' end");
+            AF("x40MailQueue", "x40Subject", "Předmět zprávy", gdc1);
+            //AF("x40MailQueue", "x40Body", "Text zprávy", BO.TheGridDefColFlag.GridAndCombo, "convert(varchar(150),a.x40Body)+'...'");
+            AF("x40MailQueue", "x40Attachments", "Přílohy",gdc1);
+           
+            AF("x40MailQueue", "x40ErrorMessage", "Chyba", gdc1);
 
 
 
