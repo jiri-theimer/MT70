@@ -222,7 +222,7 @@
 
         $("#PeriodValue").on("change", function () {
             $.post("/Common/SetUserParam", { key: "report-period-value",value:$(this).val()  }, function (data) {
-                form1.action = "/x31/ReportNoContext?oper=change_period";
+                form1.action = _ep("/x31/ReportNoContext?oper=change_period");
                 form1.submit();
 
             });

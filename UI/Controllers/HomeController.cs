@@ -13,8 +13,16 @@ namespace UI.Controllers
 {
     public class HomeController : BaseController
     {
-       
-
+        private BL.TheReportOnFly _reponlfy;
+        public HomeController(BL.TheReportOnFly reponfly)
+        {
+            _reponlfy = reponfly;
+        }
+        //private basUI.ReportOnflyConfiguration _reponlfy;
+        //public HomeController(basUI.ReportOnflyConfiguration reponfly)
+        //{
+        //    _reponlfy = reponfly;
+        //}
         public IActionResult Index()
         {
 
@@ -82,6 +90,31 @@ namespace UI.Controllers
 
         public IActionResult About()
         {
+            var uriReportSource = new Telerik.Reporting.UriReportSource();
+            //uriReportSource.Uri = Factory.x35GlobalParamBL.ReportFolder() + "\\report_j02_nastaveni.trdx";
+            uriReportSource.Uri = Factory.x35GlobalParamBL.ReportFolder() + "\\report_p31_wip_podleklientu_vc_honorare.trdx";
+
+            uriReportSource.Parameters.Add("j02id", Factory.CurrentUser.j02ID);
+            DateTime? d1 = Factory.CBL.LoadUserParamDate("report-period-d1").Value;
+            if (d1 == null) d1 = new DateTime(2000, 1, 1);
+            DateTime? d2 = Factory.CBL.LoadUserParamDate("report-period-d2").Value;
+            if (d2 == null) d2 = new DateTime(3000, 1, 1);
+
+            uriReportSource.Parameters.Add("datfrom", d1);
+            uriReportSource.Parameters.Add("datuntil", d2);
+
+            Telerik.Reporting.Processing.ReportProcessor processor = new Telerik.Reporting.Processing.ReportProcessor(_reponlfy.Configuration);
+
+            
+
+            var result = processor.RenderReport("PDF", uriReportSource, null);
+            //var result = processor.RenderReport("PDF", uriReportSource, null);
+
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            ms.Write(result.DocumentBytes, 0, result.DocumentBytes.Length);
+            ms.Seek(0, System.IO.SeekOrigin.Begin);
+            BO.BASFILE.SaveStream2File("c:\\temp\\marktime_report.pdf", ms);
+
             return View(new BaseViewModel());
         }
         public async Task<IActionResult> Logout()

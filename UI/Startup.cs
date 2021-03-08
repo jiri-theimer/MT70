@@ -130,7 +130,8 @@ namespace UI
             services.AddSingleton<BL.TheTranslator>();
             services.AddSingleton<BL.TheColumnsProvider>();
             services.AddSingleton<BL.ThePeriodProvider>();
-
+            services.AddSingleton<BL.TheReportOnFly>();
+           
             services.TryAddSingleton<IReportServiceConfiguration>(sp =>
             new ReportServiceConfiguration
             {

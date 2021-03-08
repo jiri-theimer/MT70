@@ -48,11 +48,13 @@ namespace UI.Controllers
         {
             _app = app;
             _f = f;
+            
         }
         public Telerik.Reporting.ReportSource Resolve(string reportId, OperationOrigin operationOrigin, IDictionary<string, object> currentParameterValues)
         {
-            //soubor sestavy###login uživatele###j72id
+            //soubor sestavy###login uživatele###j72id            
             
+
             List<string> lis = BO.BAS.ConvertString2List(reportId, "###");
             reportId = lis[0];
             string strLogin = lis[1];
@@ -63,10 +65,9 @@ namespace UI.Controllers
             }
 
             
-            
-            string reportXml = File.ReadAllText(_f.x35GlobalParamBL.ReportFolder() + "\\" + reportId);
-           
 
+            string reportXml = File.ReadAllText(_f.x35GlobalParamBL.ReportFolder() + "\\" + reportId);
+            
             if (reportXml.Contains("1=1"))
             {
                 var cu = new BO.RunningUser() { j03Login = strLogin };
@@ -78,7 +79,7 @@ namespace UI.Controllers
                     mq.lisJ73= f.j72TheGridTemplateBL.GetList_j73(intJ72ID, recJ72.j72Entity.Substring(0, 3));
                     
                     DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql("", mq, cu);
-                    //File.WriteAllText("c:\\temp\\hovado.txt", fq.SqlWhere);
+                    
                     string strFilterAlias = recJ72.j72Name;
                     if (recJ72.j72HashJ73Query)
                     {
@@ -90,7 +91,21 @@ namespace UI.Controllers
                 
             }
 
+            //if (operationOrigin.ToString() == "GenerateReportDocument")     //finální volání z report viewer - celkem se volá až 3x!
+            //{
+                
+            //    var uriReportSource = new Telerik.Reporting.UriReportSource();
+            //    uriReportSource.Uri = _f.x35GlobalParamBL.ReportFolder() + "\\" + reportId;
 
+            //    Telerik.Reporting.Processing.ReportProcessor processor = new Telerik.Reporting.Processing.ReportProcessor();
+               
+            //    var result = processor.RenderReport("PDF", uriReportSource, null);
+               
+            //    MemoryStream ms = new MemoryStream();
+            //    ms.Write(result.DocumentBytes, 0, result.DocumentBytes.Length);
+            //    ms.Seek(0, SeekOrigin.Begin);
+            //    BO.BASFILE.SaveStream2File("c:\\temp\\marktime_report.pdf", ms);
+            //}
             
 
             return new Telerik.Reporting.XmlReportSource { Xml = reportXml };
