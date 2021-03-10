@@ -12,6 +12,7 @@
     <PackageReference Include="Telerik.Reporting.OpenXmlRendering" Version="15.0.21.224" />
     <PackageReference Include="Telerik.Reporting.Services.AspNetCore" Version="15.0.21.224" />
     <PackageReference Include="UAParser" Version="3.1.44" />
+    <PackageReference Include="Winnovative.PdfMerge.NetCore" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
