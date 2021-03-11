@@ -1,31 +1,126 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-//using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace BL
 {
     public class RunningApp
     {
-        public string ConnectString { get; set; }
-        public string LogFolder { get; set; }
-        public bool RobotOnBehind { get; set; }
-        public string RobotHostUrl { get; set; }
-        public string AppRootFolder { get; set; }
-        public string WwwRootFolder { get; set; }
-        public string AppName { get; set; }
-        public string AppVersion { get; set; }
-        public string AppBuild { get; set; }
-        public string TranslatorMode { get; set; }
-        public int DefaultLangIndex { get; set; }
-        public string Implementation { get; set; }
-        public string CssCustomSkin { get; set; }
-        public bool PasswordRequireDigit { get; set; }
-        public bool PasswordRequireLowercase { get; set; }
-        public bool PasswordRequireUppercase { get; set; }
-        public bool PasswordRequireNonAlphanumeric { get; set; }
-        public int PasswordMinLength { get; set; }
-        public int PasswordMaxLength { get; set; }
+        public RunningApp()
+        {
+            _AppRootFolder = System.IO.Directory.GetCurrentDirectory();
+            var config = new ConfigurationBuilder().AddJsonFile(_AppRootFolder + "\\appsettings.json", true).Build();
+
+            this.Configuration = config;
+
+            _ConnectString = config.GetSection("ConnectionStrings")["AppConnection"];
+            _AppName = Configuration.GetSection("App")["Name"];
+            _TranslatorMode = Configuration.GetSection("App")["TranslatorMode"];
+            _LogFolder = Configuration.GetSection("Folders")["Log"];
+            if (string.IsNullOrEmpty(_LogFolder))
+            {
+                _LogFolder = System.IO.Directory.GetCurrentDirectory() + "\\Logs";
+            }
+        }
+        public IConfiguration Configuration { get; private set; }
+
+        private string _ConnectString { get; set; }
+        private string _AppName { get; set; }
+        private string _AppRootFolder { get; set; }
+        private string _TranslatorMode { get; set; }
+        private string _LogFolder { get; set; }
+
+        public string ConnectString {
+            get
+            {
+                return _ConnectString;
+            }
+        }
+        public string LogFolder { get {
+                return _LogFolder;
+            }
+        }
+        public bool RobotOnBehind { get {
+                return Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind");
+            } 
+        }
+        public string RobotHostUrl { get {
+                return Configuration.GetSection("App")["RobotHostUrl"];
+            }
+        }
+        public string AppRootFolder { get
+            {
+                return _AppRootFolder;
+            }
+        }
+        public string WwwRootFolder { get; set; }       //předává z venku Startup přes IWebHostEnvironment
+        public string AppName { get
+            {
+                return _AppName;
+            }
+        }
+        public string AppVersion {
+            get
+            {
+                return Configuration.GetSection("App")["Version"];
+            }
+        }
+        public string AppBuild
+        {
+            get
+            {
+                var execAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+                var versionTime = new System.IO.FileInfo(execAssembly.Location).LastWriteTime;
+
+                return "build: " + BO.BAS.ObjectDateTime2String(versionTime);
+            }
+        }
+        public string TranslatorMode {
+            get
+            {
+                return _TranslatorMode;
+            }
+        }
+        public int DefaultLangIndex { get {
+                return BO.BAS.InInt(Configuration.GetSection("App")["DefaultLangIndex"]);
+            }
+        }
+        public string Implementation { get {
+                return Configuration.GetSection("App")["Implementation"];
+            }
+        }
+        public string CssCustomSkin { get {
+                return Configuration.GetSection("App")["CssCustomSkin"];
+            }
+        }
+        public bool PasswordRequireDigit {
+            get
+            {
+                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireDigit"]);
+            }
+        }
+        public bool PasswordRequireLowercase { get
+            {
+                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireLowercase"]);
+            }
+        }
+        public bool PasswordRequireUppercase { get {
+                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireUppercase"]);
+            }
+        }
+        public bool PasswordRequireNonAlphanumeric { get {
+                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireNonAlphanumeric"]);
+            }
+        }
+        public int PasswordMinLength { get {
+                return Convert.ToInt32(Configuration.GetSection("PasswordChecker")["MinLength"]);
+            }
+        }
+        public int PasswordMaxLength { get {
+                return Convert.ToInt32(Configuration.GetSection("PasswordChecker")["MaxLength"]);
+            }
+        }
 
         public bool IsCloud
         {

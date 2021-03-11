@@ -1,0 +1,484 @@
+{
+  "InMemoryState": {
+    "(Path=[0], Name=report1)ResultSet": {
+      "_type": "ResultSet",
+      "content": {
+        "Axes": [
+          {
+            "Children": []
+          },
+          {
+            "Children": [
+              {
+                "Path": [
+                  {
+                    "HashCode": 0,
+                    "Values": [
+                      "0"
+                    ]
+                  }
+                ],
+                "Tag": null
+              }
+            ]
+          }
+        ],
+        "Tag": null,
+        "Path": [],
+        "Aggregates": [],
+        "Children": [
+          {
+            "Path": [
+              {
+                "HashCode": 0,
+                "Values": [
+                  "0"
+                ]
+              }
+            ],
+            "Tag": null
+          }
+        ],
+        "MemberSlots": [
+          {
+            "Path": []
+          }
+        ],
+        "Number": 0,
+        "ExtendedData": null
+      }
+    },
+    "(Path=[0], Name=report1)Query": {
+      "_type": "MultidimensionalQuery",
+      "content": {
+        "FilterExpression": null,
+        "RankFilterExpressions": [],
+        "OrderByExpressions": [],
+        "ConditionalOrderByExpressions": [],
+        "Axes": [
+          {
+            "Members": []
+          },
+          {
+            "Members": [
+              {
+                "Name": "Detail",
+                "Children": [],
+                "Expressions": [],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              }
+            ]
+          }
+        ],
+        "Measures": [],
+        "EnablePrevious": false,
+        "Name": "report1"
+      }
+    },
+    "(Path=[0], [report1], [0], Name=table1)ResultSet": {
+      "_type": "ResultSet",
+      "content": {
+        "Axes": [
+          {
+            "Children": [
+              {
+                "Path": [],
+                "Tag": null
+              },
+              {
+                "Path": [],
+                "Tag": null
+              },
+              {
+                "Path": [],
+                "Tag": null
+              },
+              {
+                "Path": [],
+                "Tag": null
+              },
+              {
+                "Path": [],
+                "Tag": null
+              },
+              {
+                "Path": [],
+                "Tag": null
+              },
+              {
+                "Path": [],
+                "Tag": null
+              },
+              {
+                "Path": [],
+                "Tag": null
+              }
+            ]
+          },
+          {
+            "Children": [
+              {
+                "Path": [
+                  {
+                    "HashCode": 1326456841,
+                    "Values": [
+                      "AUD"
+                    ]
+                  }
+                ],
+                "Tag": null
+              },
+              {
+                "Path": [
+                  {
+                    "HashCode": 510840903,
+                    "Values": [
+                      "CZK"
+                    ]
+                  }
+                ],
+                "Tag": null
+              },
+              {
+                "Path": [
+                  {
+                    "HashCode": 698622043,
+                    "Values": [
+                      "EUR"
+                    ]
+                  }
+                ],
+                "Tag": null
+              }
+            ]
+          }
+        ],
+        "Tag": null,
+        "Path": [],
+        "Aggregates": [],
+        "Children": [
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [],
+            "Tag": null
+          },
+          {
+            "Path": [
+              {
+                "HashCode": 1326456841,
+                "Values": [
+                  "AUD"
+                ]
+              }
+            ],
+            "Tag": null
+          },
+          {
+            "Path": [
+              {
+                "HashCode": 510840903,
+                "Values": [
+                  "CZK"
+                ]
+              }
+            ],
+            "Tag": null
+          },
+          {
+            "Path": [
+              {
+                "HashCode": 698622043,
+                "Values": [
+                  "EUR"
+                ]
+              }
+            ],
+            "Tag": null
+          }
+        ],
+        "MemberSlots": [
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          },
+          {
+            "Path": []
+          }
+        ],
+        "Number": 0,
+        "ExtendedData": null
+      }
+    },
+    "(Path=[0], [report1], [0], Name=table1)Query": {
+      "_type": "MultidimensionalQuery",
+      "content": {
+        "FilterExpression": null,
+        "RankFilterExpressions": [],
+        "OrderByExpressions": [],
+        "ConditionalOrderByExpressions": [],
+        "Axes": [
+          {
+            "Members": [
+              {
+                "Name": "group3",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              },
+              {
+                "Name": "group7",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              },
+              {
+                "Name": "group1",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              },
+              {
+                "Name": "group",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              },
+              {
+                "Name": "group10",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              },
+              {
+                "Name": "group4",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              },
+              {
+                "Name": "group8",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              },
+              {
+                "Name": "group9",
+                "Children": [],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              }
+            ]
+          },
+          {
+            "Members": [
+              {
+                "Name": "j27Code",
+                "Children": [
+                  {
+                    "Name": "group2",
+                    "Children": [
+                      {
+                        "Name": "group5",
+                        "Children": [],
+                        "Expressions": [
+                          {}
+                        ],
+                        "OrderByExpressions": [],
+                        "FilterExpression": null,
+                        "RankFilterExpressions": [],
+                        "MergeDataMembersByRank": null,
+                        "MergeDataMembersByFilter": null,
+                        "ConditionalOrderByExpressions": []
+                      }
+                    ],
+                    "Expressions": [
+                      {}
+                    ],
+                    "OrderByExpressions": [],
+                    "FilterExpression": null,
+                    "RankFilterExpressions": [],
+                    "MergeDataMembersByRank": null,
+                    "MergeDataMembersByFilter": null,
+                    "ConditionalOrderByExpressions": []
+                  },
+                  {
+                    "Name": "p51Name",
+                    "Children": [
+                      {
+                        "Name": "group6",
+                        "Children": [],
+                        "Expressions": [
+                          {}
+                        ],
+                        "OrderByExpressions": [],
+                        "FilterExpression": null,
+                        "RankFilterExpressions": [],
+                        "MergeDataMembersByRank": null,
+                        "MergeDataMembersByFilter": null,
+                        "ConditionalOrderByExpressions": []
+                      },
+                      {
+                        "Name": "detailTableGroup",
+                        "Children": [],
+                        "Expressions": [],
+                        "OrderByExpressions": [],
+                        "FilterExpression": null,
+                        "RankFilterExpressions": [],
+                        "MergeDataMembersByRank": null,
+                        "MergeDataMembersByFilter": null,
+                        "ConditionalOrderByExpressions": []
+                      }
+                    ],
+                    "Expressions": [
+                      {}
+                    ],
+                    "OrderByExpressions": [
+                      {}
+                    ],
+                    "FilterExpression": null,
+                    "RankFilterExpressions": [],
+                    "MergeDataMembersByRank": null,
+                    "MergeDataMembersByFilter": null,
+                    "ConditionalOrderByExpressions": []
+                  }
+                ],
+                "Expressions": [
+                  {}
+                ],
+                "OrderByExpressions": [
+                  {}
+                ],
+                "FilterExpression": null,
+                "RankFilterExpressions": [],
+                "MergeDataMembersByRank": null,
+                "MergeDataMembersByFilter": null,
+                "ConditionalOrderByExpressions": []
+              }
+            ]
+          }
+        ],
+        "Measures": [],
+        "EnablePrevious": false,
+        "Name": "table1"
+      }
+    }
+  },
+  "ExpandCollapseManager": {
+    "Orders": [],
+    "OrdersIndexAsList": [],
+    "TriggeredActions": []
+  },
+  "SortingActionManager": {
+    "Orders": [],
+    "OrdersIndexAsList": [],
+    "TriggeredActions": []
+  }
+}

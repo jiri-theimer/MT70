@@ -2,12 +2,12 @@
   "jobs": [
     {
       "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
-      "LastRun": "2021-02-11T16:37:29.1384339+01:00",
+      "LastRun": "2021-03-11T11:23:54.3037223+01:00",
       "RepeatMinuteInterval": 5,
       "ExpenseImportClassState": "approved",
       "ExpenseImportClosedOnly": true,
       "Name": "LocalHost",
-      "RobotUser": "lama@marktime50.net",
+      "RobotUser": "lamos",
       "DefaultP32ID": 2,
       "ExportProjects": true,
       "ImportExpenses": true
@@ -19,7 +19,7 @@
       "RepeatMinuteInterval": 5,
       "ExpenseImportClassState": "approved",
       "Name": "Z/C/H",
-      "RobotUser": "lama@marktime50.net",
+      "RobotUser": "lamos",
       "ExportProjects": true,
       "ImportExpenses": true
     }

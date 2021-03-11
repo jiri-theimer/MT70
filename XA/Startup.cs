@@ -27,36 +27,8 @@ namespace XA
             services.AddHttpClient();       //kvùli httpclient
             services.AddControllersWithViews();
 
-            var strLogFolder = Configuration.GetSection("Folders")["Log"];
-            if (string.IsNullOrEmpty(strLogFolder))
-            {
-                strLogFolder = System.IO.Directory.GetCurrentDirectory() + "\\Logs";
-            }
-
-            var execAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var versionTime = new System.IO.FileInfo(execAssembly.Location).LastWriteTime;
-
-            services.AddSingleton<BL.RunningApp>(x => new BL.RunningApp()
-            {
-                ConnectString = Configuration.GetSection("ConnectionStrings")["AppConnection"]
-                ,
-                AppName = Configuration.GetSection("App")["Name"]
-                ,
-                AppVersion = Configuration.GetSection("App")["Version"]
-                ,
-                AppBuild = "build: " + BO.BAS.ObjectDateTime2String(versionTime)
-                ,                
-                DefaultLangIndex = BO.BAS.InInt(Configuration.GetSection("App")["DefaultLangIndex"])
-                ,
-                LogFolder = strLogFolder                
-                ,
-                AppRootFolder = System.IO.Directory.GetCurrentDirectory()
-                ,
-                TranslatorMode = Configuration.GetSection("App")["TranslatorMode"]
-                ,
-                RobotOnBehind= Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind")
-
-            });
+           
+            services.AddSingleton<BL.RunningApp>(new BL.RunningApp());
 
             services.AddSingleton<BL.TheEntitiesProvider>();
             services.AddSingleton<BL.TheTranslator>();
@@ -65,14 +37,8 @@ namespace XA
             services.AddScoped<BO.RunningUser, BO.RunningUser>();
             services.AddScoped<BL.Factory, BL.Factory>();
 
-            if (Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind"))
-            {
-                services.AddHostedService<UI.TheRobot>();   //pohon pro robota na pozadí
+            services.AddHostedService<XA.TheRobot>();   //pohon pro robota na pozadí
 
-                                                            
-
-            }
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,16 +46,7 @@ namespace XA
         {
             app.UseDeveloperExceptionPage();
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
+           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

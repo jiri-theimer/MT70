@@ -76,67 +76,25 @@ namespace UI
             services.AddRazorPages().AddNewtonsoftJson();   //kvùli telerik reporting
 
 
-            var strLogFolder = Configuration.GetSection("Folders")["Log"];
-            if (string.IsNullOrEmpty(strLogFolder))
-            {
-                strLogFolder = System.IO.Directory.GetCurrentDirectory() + "\\Logs";
-            }
-
-            var execAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var versionTime = new System.IO.FileInfo(execAssembly.Location).LastWriteTime;
-
-            services.AddSingleton<BL.RunningApp>(x => new BL.RunningApp()
-            {
-                ConnectString = Configuration.GetSection("ConnectionStrings")["AppConnection"]
-                ,
-                AppName = Configuration.GetSection("App")["Name"]
-                ,
-                AppVersion = Configuration.GetSection("App")["Version"]
-                ,
-                AppBuild = "build: " + BO.BAS.ObjectDateTime2String(versionTime)                
-                ,
-                Implementation = Configuration.GetSection("App")["Implementation"]
-                ,
-                CssCustomSkin= Configuration.GetSection("App")["CssCustomSkin"]
-                ,
-                DefaultLangIndex = BO.BAS.InInt(Configuration.GetSection("App")["DefaultLangIndex"])                                         
-                ,
-                LogFolder = strLogFolder
-                ,
-                RobotOnBehind= Configuration.GetSection("App").GetValue<Boolean>("RobotOnBehind")
-                ,
-                RobotHostUrl= Configuration.GetSection("App")["RobotHostUrl"]
-                ,
-                AppRootFolder = System.IO.Directory.GetCurrentDirectory()
-                ,
-                WwwRootFolder=_wwwrootfolder
-                ,
-                TranslatorMode = Configuration.GetSection("App")["TranslatorMode"]                
-                ,
-                PasswordMinLength = Convert.ToInt32(Configuration.GetSection("PasswordChecker")["MinLength"])
-                ,
-                PasswordMaxLength = Convert.ToInt32(Configuration.GetSection("PasswordChecker")["MaxLength"])
-                ,
-                PasswordRequireDigit = Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireDigit"])
-                ,
-                PasswordRequireLowercase = Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireLowercase"])
-                ,
-                PasswordRequireUppercase = Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireUppercase"])
-                ,
-                PasswordRequireNonAlphanumeric = Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireNonAlphanumeric"])
+            services.AddSingleton<BL.RunningApp>(p => new BL.RunningApp()
+            {                              
+                WwwRootFolder = _wwwrootfolder               
             });
+
+            
 
             services.AddSingleton<BL.TheEntitiesProvider>();
             services.AddSingleton<BL.TheTranslator>();
             services.AddSingleton<BL.TheColumnsProvider>();
             services.AddSingleton<BL.ThePeriodProvider>();
-            services.AddSingleton<BL.TheReportOnFly>();
-           
+          
+
+            //Služba pro TELERIK REPORTING:
             services.TryAddSingleton<IReportServiceConfiguration>(sp =>
             new ReportServiceConfiguration
             {
                 ReportingEngineConfiguration = ConfigurationHelper.ResolveConfiguration(sp.GetService<IWebHostEnvironment>()),
-                HostAppId = "ReportingCore3App",
+                HostAppId = "ReportViewer" + Configuration.GetSection("App")["Name"],
                 Storage = new Telerik.Reporting.Cache.File.FileStorage()                
             });
 

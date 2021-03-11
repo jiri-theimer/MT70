@@ -11,7 +11,7 @@ using BL;
 using Microsoft.VisualBasic;
 using System.Net.Http;
 
-namespace UI
+namespace XA
 {
     public class TheRobot : IHostedService, IDisposable
     {
