@@ -20,12 +20,16 @@ namespace UI
 
         private readonly IHttpClientFactory _httpclientfactory;
         private readonly BL.RunningApp _app;
+        private readonly BL.TheEntitiesProvider _ep;        
+        private readonly BL.TheTranslator _tt;
 
 
-        public TheRobotUI(IHttpClientFactory hcf,BL.RunningApp app)
+        public TheRobotUI(IHttpClientFactory hcf,BL.RunningApp app, BL.TheEntitiesProvider ep, BL.TheTranslator tt)
         {          
             _app = app;
             _httpclientfactory = hcf;
+            _ep = ep;            
+            _tt = tt;
         }
 
 
@@ -60,7 +64,7 @@ namespace UI
 
             LogInfo("Timed Hosted Service TheRobotUI is working, count: "+ count.ToString());
 
-            var c = new UI.Controllers.RobotController(_httpclientfactory,_app);
+            var c = new UI.Controllers.RobotController(_httpclientfactory,_app,_ep,_tt);
             LogInfo("RobotController result: "+c.Run());
             c.RunRobotPingByHttpClient();
         }

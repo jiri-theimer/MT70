@@ -22,7 +22,8 @@ namespace BO
         ClearTemp = 11,
         AutoWorkflowSteps = 12,
         p67 = 13,
-        x46Notify = 14
+        x46Notify = 14,
+        PingTestOnly=20
     }
 
     public class j91RobotLog:BaseBO

@@ -11,13 +11,22 @@ namespace UI.Controllers
     public class RobotController : Controller
     {
         private readonly IHttpClientFactory _httpclientfactory;
+        //private readonly BL.TheEntitiesProvider _ep;
         private readonly BL.RunningApp _app;
-       
-        public RobotController(IHttpClientFactory hcf, BL.RunningApp app)
+        //private readonly BL.TheTranslator _tt;
+
+        private BL.Factory _f;
+
+        public RobotController(IHttpClientFactory hcf, BL.RunningApp app, BL.TheEntitiesProvider ep, BL.TheTranslator tt)
         {
             _httpclientfactory = hcf;
+            //_ep = ep;
             _app = app;
-            
+            //_tt = tt;
+
+            var ru = new BO.RunningUser() { j03Login = "lamos" };
+            _f = new BL.Factory(ru, _app, ep, tt);
+
         }
 
        
@@ -29,25 +38,44 @@ namespace UI.Controllers
 
             v.MessageToUser = "Current time: " + System.DateTime.Now.ToString();
 
-            
-            v.MessageToUser = Handle_Cnb().Result;
-
-
 
             return View(v);
         }
         public IActionResult Ping()
         {
-            LogInfo("Ping");
+            LogInfo("Ping",BO.j91RobotTaskFlag.PingTestOnly);
             return View();
         }
         public string Run()    //úvodní metoda pro spuštění robota
         {
 
+            
 
+            if (IsTime4Run(BO.j91RobotTaskFlag.CnbKurzy, 15, 19,60))
+            {
+                string ss=Handle_Cnb().Result;
+            }
 
-            return "Current time: " + System.DateTime.Now.ToString() + Handle_Cnb().Result;
+            return "Current time: " + System.DateTime.Now.ToString();
 
+        }
+
+        private bool IsTime4Run(BO.j91RobotTaskFlag flag,double hour_from,double hour_until, double dblPoKolikaMinutachPoustet)
+        {
+            if (!(DateTime.Today.AddHours(hour_from)<=DateTime.Now && DateTime.Today.AddHours(hour_until) >= DateTime.Now))
+            {
+                return false;
+            }
+            var c = _f.FBL.GetLastRobotRun(flag);
+            if (c == null)
+            {
+                return true;
+            }
+            if (c.j91Date.AddMinutes(dblPoKolikaMinutachPoustet) > DateTime.Now)
+            {
+                return false;
+            }
+            return true;
         }
 
         public void RunRobotPingByHttpClient()  //spouští TheRobotUI, aby neusnula IIS website pro MARKTIME, musí být vyplněno v appsettings: RobotHostUrl
@@ -72,7 +100,9 @@ namespace UI.Controllers
 
                 var strRet = await response.Content.ReadAsStringAsync();
 
-                LogInfo(strRet);
+                LogInfo("čnb",BO.j91RobotTaskFlag.CnbKurzy);
+
+               
 
                 return strRet;
 
@@ -82,8 +112,12 @@ namespace UI.Controllers
         }
 
 
-        private void LogInfo(string strMessage)
+        private void LogInfo(string strMessage,BO.j91RobotTaskFlag flag,string strError=null)
         {
+            var c = new BO.j91RobotLog() {j91InfoMessage=strMessage, j91Date = DateTime.Now,j91TaskFlag=flag,j91ErrorMessage=strError,j91Account=_f.CurrentUser.j03Login };
+
+            _f.FBL.AppendRobotLog(c);
+
             var strPath = string.Format("{0}\\RobotController-{1}.log", _app.LogFolder, DateTime.Now.ToString("yyyy.MM.dd"));
 
             System.IO.File.AppendAllLines(strPath, new List<string>() { "", DateTime.Now.ToString() + ": ", strMessage });
