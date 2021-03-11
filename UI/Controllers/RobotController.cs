@@ -41,8 +41,10 @@ namespace UI.Controllers
             LogInfo("Ping");
             return View();
         }
-        public string Run()
+        public string Run()    //úvodní metoda pro spuštění robota
         {
+
+
 
             return "Current time: " + System.DateTime.Now.ToString() + Handle_Cnb().Result;
 

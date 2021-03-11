@@ -16,6 +16,8 @@ namespace BL
         public IEnumerable<BO.j27Currency> GetListCurrency();
         public int SaveP87(BO.p87BillingLanguage rec);
 
+        public int AppendRobotLog(BO.j91RobotLog rec);  //uložení jetí robota na pozadí
+        public BO.j91RobotLog GetLastRobotRun(BO.j91RobotTaskFlag flag); //vrátí poslední jetí pro zadaný flag
     }
     class FBL : BaseBL, IFBL
     {
@@ -102,7 +104,24 @@ namespace BL
             }
         }
 
-       
 
+        public int AppendRobotLog(BO.j91RobotLog rec)
+        {
+            var p = new DL.Params4Dapper();
+            p.AddInt("pid", rec.pid);
+            p.AddDateTime("j91Date", DateTime.Now);
+            p.AddString("j91BatchGuid", rec.j91BatchGuid);
+            p.AddEnumInt("j91TaskFlag", rec.j91TaskFlag);
+            p.AddString("j91InfoMessage", rec.j91InfoMessage);
+            p.AddString("j91ErrorMessage", rec.j91ErrorMessage);
+            p.AddString("j91Account", rec.j91Account);
+
+            return _db.SaveRecord("j91RobotLog", p.getDynamicDapperPars(), rec,false,false);
+        }
+
+        public BO.j91RobotLog GetLastRobotRun(BO.j91RobotTaskFlag flag)
+        {
+            return _db.Load<BO.j91RobotLog>("select TOP 1 * FROM j91RobotLog WHERE j91TaskFlag=@flg ORDER BY j91ID DESC", new { flg = (int) flag });
+        }
     }
 }
