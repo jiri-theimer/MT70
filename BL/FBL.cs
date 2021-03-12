@@ -18,6 +18,7 @@ namespace BL
 
         public int AppendRobotLog(BO.j91RobotLog rec);  //uložení jetí robota na pozadí
         public BO.j91RobotLog GetLastRobotRun(BO.j91RobotTaskFlag flag); //vrátí poslední jetí pro zadaný flag
+        public IEnumerable<BO.j91RobotLog> GetListRobotLast20();
     }
     class FBL : BaseBL, IFBL
     {
@@ -122,6 +123,11 @@ namespace BL
         public BO.j91RobotLog GetLastRobotRun(BO.j91RobotTaskFlag flag)
         {
             return _db.Load<BO.j91RobotLog>("select TOP 1 * FROM j91RobotLog WHERE j91TaskFlag=@flg ORDER BY j91ID DESC", new { flg = (int) flag });
+        }
+
+        public IEnumerable<BO.j91RobotLog> GetListRobotLast20()
+        {
+            return _db.GetList<BO.j91RobotLog>("select TOP 20 * FROM j91RobotLog ORDER BY j91ID DESC");
         }
     }
 }

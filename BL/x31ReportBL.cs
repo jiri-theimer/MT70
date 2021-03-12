@@ -12,7 +12,7 @@ namespace BL
         public IEnumerable<BO.x31Report> GetList(BO.myQuery mq);
         public int Save(BO.x31Report rec);
         public BO.o27Attachment LoadReportDoc(int x31id);
-
+        public bool IsReportWaiting4Generate(DateTime dNow, BO.x31Report rec);
     }
     class x31ReportBL : BaseBL, Ix31ReportBL
     {
@@ -137,6 +137,36 @@ namespace BL
             }
 
             return null;
+        }
+
+        public bool IsReportWaiting4Generate(DateTime dNow,BO.x31Report rec)
+        {
+            if (!rec.x31IsScheduling) return false;
+            bool b = false;
+            if (rec.x31IsRunInDay1 && dNow.DayOfWeek == DayOfWeek.Monday) b = true;
+            if (rec.x31IsRunInDay2 && dNow.DayOfWeek == DayOfWeek.Tuesday) b = true;
+            if (rec.x31IsRunInDay3 && dNow.DayOfWeek == DayOfWeek.Wednesday) b = true;
+            if (rec.x31IsRunInDay4 && dNow.DayOfWeek == DayOfWeek.Thursday) b = true;
+            if (rec.x31IsRunInDay5 && dNow.DayOfWeek == DayOfWeek.Friday) b = true;
+            if (rec.x31IsRunInDay6 && dNow.DayOfWeek == DayOfWeek.Saturday) b = true;
+            if (rec.x31IsRunInDay7 && dNow.DayOfWeek == DayOfWeek.Sunday) b = true;
+            if (!b) return false;
+            var cT = new BO.CLS.TimeSupport();
+
+            int secsNow = dNow.Hour * 60 * 60 + dNow.Minute * 60 + dNow.Second;
+            if (secsNow >= cT.ConvertTimeToSeconds(rec.x31RunInTime)){
+                if (rec.x31LastScheduledRun == null)
+                {
+                    return true;//sestava ještě nikdy nebyla generována
+                }
+                if (Convert.ToDateTime(rec.x31LastScheduledRun).Day == dNow.Day && Convert.ToDateTime(rec.x31LastScheduledRun).Month == dNow.Month && Convert.ToDateTime(rec.x31LastScheduledRun).Year == dNow.Year)
+                {
+                    return false;   //dnes již byla generována
+                }
+                return true;
+            }
+            return false;
+
         }
 
     }

@@ -12,5 +12,7 @@ namespace UI.Models.Record
         public BO.o27Attachment RecO27 { get; set; }
         public string UploadGuid { get; set; }
         public string ComboJ25Name { get; set; }
+
+        public List<BO.ThePeriod> lisPeriodSource { get; set; }
     }
 }

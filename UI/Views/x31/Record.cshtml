@@ -113,6 +113,57 @@
         <label class="col-form-label" for="Rec_x31IsPeriodRequired">@_f.tra("Sestava podporuje filtrování podle období")</label>
     </div>
 
+    @if (Model.Rec.x29ID == BO.x29IdEnum._NotSpecified)
+    {
+        <div class="card">
+            <div class="card-header">
+                <input type="checkbox" asp-for="Rec.x31IsScheduling" onchange="postback()" />
+                <label class="col-form-label" for="Rec_x31IsScheduling">@_f.tra("Sestavu bude aplikace pravidelně odesílat mailem v PDF")</label>
+            </div>
+            @if (Model.Rec.x31IsScheduling)
+            {
+                <div class="card-body">
+                    <input type="checkbox" asp-for="Rec.x31IsRunInDay1" />
+                    <label class="col-form-label" for="Rec_x31IsRunInDay1">@_f.tra("Pondělí")</label>
+                    <input type="checkbox" asp-for="Rec.x31IsRunInDay2" />
+                    <label class="col-form-label" for="Rec_x31IsRunInDay2">@_f.tra("Úterý")</label>
+                    <input type="checkbox" asp-for="Rec.x31IsRunInDay3" />
+                    <label class="col-form-label" for="Rec_x31IsRunInDay3">@_f.tra("Středa")</label>
+                    <input type="checkbox" asp-for="Rec.x31IsRunInDay4" />
+                    <label class="col-form-label" for="Rec_x31IsRunInDay4">@_f.tra("Čtvrtek")</label>
+                    <input type="checkbox" asp-for="Rec.x31IsRunInDay5" />
+                    <label class="col-form-label" for="Rec_x31IsRunInDay5">@_f.tra("Pátek")</label>
+                    <input type="checkbox" asp-for="Rec.x31IsRunInDay6" />
+                    <label class="col-form-label" for="Rec_x31IsRunInDay6">@_f.tra("Sobota")</label>
+                    <input type="checkbox" asp-for="Rec.x31IsRunInDay7" />
+                    <label class="col-form-label" for="Rec_x31IsRunInDay7">@_f.tra("Neděle")</label>
+                    <hr />
+                    <table class="table table-sm">
+                        <tr>
+                            <td width="150px">@_f.tra("Čas generování"):</td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.Rec.x31RunInTime" placeholder="HH:MM" />
+                            </td>
+                            <td width="150px">@_f.tra("Příjemci mail zprávy"):</td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.Rec.x31SchedulingReceivers" placeholder="e-mail" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Časové období v sestavě"):
+                            </td>
+                            <td>
+                                <mydropdown asp-for="@Model.Rec.x21ID_Scheduling" datasource="@Model.lisPeriodSource" valuefield="pid" textfield="PeriodName" isfirstemptyrow="true" firstemptyrowvalue="0" firstemptyrowtext=""></mydropdown>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+
+        </div>
+    }
+
     @if (Model.Rec.x31FormatFlag == BO.x31FormatFlagENUM.DOCX)
     {
         <div class="card">
@@ -149,7 +200,7 @@
     });
 
 
-  
+
     function postback() {
         form1.action = "/x31/Record?oper=postback";
         form1.submit();

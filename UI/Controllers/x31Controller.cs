@@ -285,7 +285,9 @@ namespace UI.Controllers
                 c.x31IsRunInDay5 = v.Rec.x31IsRunInDay5;
                 c.x31IsRunInDay6 = v.Rec.x31IsRunInDay6;
                 c.x31IsRunInDay7 = v.Rec.x31IsRunInDay7;
-
+                c.x31RunInTime = v.Rec.x31RunInTime;
+                c.x31SchedulingReceivers = v.Rec.x31SchedulingReceivers;
+                c.x21ID_Scheduling = v.Rec.x21ID_Scheduling;
 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
@@ -313,7 +315,7 @@ namespace UI.Controllers
             {
                 v.RecO27 = Factory.x31ReportBL.LoadReportDoc(v.rec_pid);               
             }
-            
+            v.lisPeriodSource = new BL.ThePeriodProvider().getPallete().Where(p => p.pid > 1).ToList();
         }
 
 
@@ -504,6 +506,9 @@ namespace UI.Controllers
 
             }
         }
+
+
+        
 
     }
 }

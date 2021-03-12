@@ -10,3 +10,52 @@
 
 
 <h4>@Model.MessageToUser</h4>
+
+<div class="alet alert-info">
+    Start = 0<br />
+    p40 = 1<br />
+    MailQueue = 2<br />
+    ImapImport = 3<br />
+    ScheduledReports = 4<br />
+    SqlTasks = 5<br />
+    CnbKurzy = 6<br />
+    CentralPing = 7<br />
+    DbBackup = 8<br />
+    RecurrenceP41 = 9<br />
+    RecurrenceP56 = 10<br />
+    ClearTemp = 11<br />
+    AutoWorkflowSteps = 12<br />
+    p67 = 13<br />
+    x46Notify = 14<br />
+    PingTestOnly=20<br />
+</div>
+
+<table class="table table-sm table-hover">
+    <tr>
+        <th>Time</th>
+        <th>Flag</th>
+        <th>Info</th>
+        <th>Error</th>
+        <th>User</th>
+    </tr>
+    @foreach(var c in Model.lisLast20)
+    {
+        <tr>
+            <td>
+                @c.j91Date
+            </td>
+            <td>
+                @c.j91TaskFlag
+            </td>
+            <td>
+                @c.j91InfoMessage
+            </td>
+            <td>
+                @c.j91ErrorMessage
+            </td>
+            <td>
+                @c.j91Account
+            </td>
+        </tr>
+    }
+</table>

@@ -65,7 +65,8 @@ namespace UI
             LogInfo("Timed Hosted Service TheRobotUI is working, count: "+ count.ToString());
 
             var c = new UI.Controllers.RobotController(_httpclientfactory,_app,_ep,_tt);
-            LogInfo("RobotController result: "+c.Run());
+
+            c.Run(BO.j91RobotTaskFlag.Start);
             c.RunRobotPingByHttpClient();
         }
 

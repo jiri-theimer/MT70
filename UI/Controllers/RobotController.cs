@@ -11,50 +11,67 @@ namespace UI.Controllers
     public class RobotController : Controller
     {
         private readonly IHttpClientFactory _httpclientfactory;
-        //private readonly BL.TheEntitiesProvider _ep;
+        
         private readonly BL.RunningApp _app;
-        //private readonly BL.TheTranslator _tt;
+
+        private DateTime _d;
 
         private BL.Factory _f;
 
         public RobotController(IHttpClientFactory hcf, BL.RunningApp app, BL.TheEntitiesProvider ep, BL.TheTranslator tt)
         {
-            _httpclientfactory = hcf;
-            //_ep = ep;
+            _d = DateTime.Today;
+            _httpclientfactory = hcf;            
             _app = app;
-            //_tt = tt;
-
+         
             var ru = new BO.RunningUser() { j03Login = "lamos" };
             _f = new BL.Factory(ru, _app, ep, tt);
 
         }
 
-       
 
-        public IActionResult Index()
+        public IActionResult Ping()
         {
-
+            LogInfo("Ping", BO.j91RobotTaskFlag.PingTestOnly);
+            return View();
+        }
+        public IActionResult Index(int explicitflag,string explicitdate)    //spuštění robota ručně přes prohlížeč
+        {
+            if (!string.IsNullOrEmpty(explicitdate))
+            {
+                _d = BO.BAS.String2Date(explicitdate);
+            }
             var v = new RobotViewModel();
 
             v.MessageToUser = "Current time: " + System.DateTime.Now.ToString();
 
+            if (explicitflag == 0)
+            {
+                Run(BO.j91RobotTaskFlag.Start);
+            }
+            else
+            {
+                Run((BO.j91RobotTaskFlag) explicitflag);
+            }
 
+            v.lisLast20 = _f.FBL.GetListRobotLast20();
+            
             return View(v);
         }
-        public IActionResult Ping()
-        {
-            LogInfo("Ping",BO.j91RobotTaskFlag.PingTestOnly);
-            return View();
-        }
-        public string Run()    //úvodní metoda pro spuštění robota
+        
+        public string Run(BO.j91RobotTaskFlag explicitflag)    //úvodní metoda pro spuštění robota
         {
 
-            
-
-            if (IsTime4Run(BO.j91RobotTaskFlag.CnbKurzy, 15, 19,60))
+            if (explicitflag==BO.j91RobotTaskFlag.CnbKurzy || IsTime4Run(BO.j91RobotTaskFlag.CnbKurzy, 15, 19,60))
             {
-                string ss=Handle_Cnb().Result;
+                Handle_Cnb();
             }
+            if (explicitflag == BO.j91RobotTaskFlag.PingTestOnly)
+            {
+                Ping();
+            }
+
+            Handle_ScheduledReports();
 
             return "Current time: " + System.DateTime.Now.ToString();
 
@@ -88,29 +105,71 @@ namespace UI.Controllers
             
         }
 
-        private async Task<string> Handle_Cnb()
+        private void Handle_Cnb()
         {
             var httpclient = _httpclientfactory.CreateClient();
-            DateTime d0 = DateTime.Now;
-            string url = string.Format("http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date={0}", BO.BAS.ObjectDate2String(d0, "dd.MM.yyyy"));
-            using (var request = new HttpRequestMessage(new HttpMethod("GET"), url))
+            var errs = new List<string>();
+            var succs = new List<string>();
+            var strJ27Codes = _f.x35GlobalParamBL.LoadParam("j27Codes_Import_CNB");
+            if (string.IsNullOrEmpty(strJ27Codes)) return;
+            foreach(string strJ27Code in BO.BAS.ConvertString2List(strJ27Codes))
             {
+                var recJ27 = _f.FBL.LoadCurrencyByCode(strJ27Code);
+                if (_f.m62ExchangeRateBL.LoadByQuery(BO.m62RateTypeENUM.InvoiceRate, recJ27.j27ID, 2, _d, 0) == null)
+                {
+                    if (_f.m62ExchangeRateBL.ImportOneRate(httpclient, _d, recJ27.j27ID) == 0)
+                    {
+                        errs.Add("ERROR import: " + recJ27.j27Code);
+                    }
+                    else
+                    {
+                        succs.Add(strJ27Code);
+                    }
+                }
                 
-                var response = await httpclient.SendAsync(request);
-
-                var strRet = await response.Content.ReadAsStringAsync();
-
-                LogInfo("čnb",BO.j91RobotTaskFlag.CnbKurzy);
-
-               
-
-                return strRet;
-
             }
 
+            LogInfo(string.Join(", ",succs), BO.j91RobotTaskFlag.CnbKurzy,string.Join(", ",errs));
             
         }
 
+        private void Handle_ScheduledReports()
+        {
+            var lis = _f.x31ReportBL.GetList(new BO.myQuery("x31")).Where(p =>p.x31IsScheduling && p.x31SchedulingReceivers !=null && p.x29ID == BO.x29IdEnum._NotSpecified);
+            foreach(var recX31 in lis)
+            {                
+                if (_f.x31ReportBL.IsReportWaiting4Generate(_d.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute), recX31))
+                {
+                    string strFullPath = GeneratePdfReport(recX31);
+                }
+            }
+
+        }
+        
+        
+        private string GeneratePdfReport(BO.x31Report rec)
+        {
+            var uriReportSource = new Telerik.Reporting.UriReportSource();
+            uriReportSource.Uri = _f.x35GlobalParamBL.ReportFolder() + "\\" + _f.x31ReportBL.LoadReportDoc(rec.pid).o27ArchiveFileName;
+            DateTime d1 = new DateTime(2000, 1, 1);
+            DateTime d2 = new DateTime(3000, 1, 1);
+
+            uriReportSource.Parameters.Add("j02id", _f.CurrentUser.j02ID);                        
+            uriReportSource.Parameters.Add("datfrom", d1);
+            uriReportSource.Parameters.Add("datuntil", d2);
+            
+            Telerik.Reporting.Processing.ReportProcessor processor = new Telerik.Reporting.Processing.ReportProcessor(_f.App.Configuration);
+
+            var result = processor.RenderReport("PDF", uriReportSource, null);
+            
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            ms.Write(result.DocumentBytes, 0, result.DocumentBytes.Length);
+            ms.Seek(0, System.IO.SeekOrigin.Begin);
+
+            string strPdfFileName = BO.BAS.GetGuid() + ".pdf";
+            BO.BASFILE.SaveStream2File(_f.x35GlobalParamBL.TempFolder()+"\\" + strPdfFileName, ms);
+            return _f.x35GlobalParamBL.TempFolder()+"\\"+strPdfFileName;
+        }
 
         private void LogInfo(string strMessage,BO.j91RobotTaskFlag flag,string strError=null)
         {
