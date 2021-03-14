@@ -137,7 +137,7 @@ namespace BL
             p.AddString("x35Key", rec.x35Key);
             p.AddString("x35Value", rec.x35Value);
             
-            return _db.SaveRecord("x35GlobalParam", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("x35GlobalParam", p, rec);
         }
 
         public int Save(string x35key,string value)

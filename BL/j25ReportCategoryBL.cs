@@ -54,7 +54,7 @@ namespace BL
             p.AddString("j25Code", rec.j25Code);
             p.AddInt("j25Ordinary", rec.j25Ordinary);
 
-            return _db.SaveRecord("j25ReportCategory", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("j25ReportCategory", p, rec);
 
         }
         private bool ValidateBeforeSave(BO.j25ReportCategory rec)

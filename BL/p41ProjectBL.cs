@@ -129,7 +129,7 @@ namespace BL
 
                 p.AddBool("p41IsNoNotify", rec.p41IsNoNotify);
 
-                int intPID = _db.SaveRecord("p41Project", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p41Project", p, rec);
                 if (intPID > 0)
                 {
                     var pars = new Dapper.DynamicParameters();

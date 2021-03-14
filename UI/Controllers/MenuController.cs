@@ -43,7 +43,7 @@ namespace UI.Controllers
                 AMI("Můj profil", "/Home/MyProfile", "k-i-user");
             }
             
-            AMI("Odeslat zprávu", "javascript:_sendmail()", "k-i-email");
+            AMI("Odeslat zprávu", "javascript:_window_open('/Mail/SendMail',1)", "k-i-email");
 
             AMI("Změnit přístupové heslo", "/Home/ChangePassword", "k-i-password");
             

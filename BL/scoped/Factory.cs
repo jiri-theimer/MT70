@@ -72,7 +72,9 @@ namespace BL
         private Ix38CodeLogicBL _x38;
         private Ix97TranslateBL _x97;
         private Io40SmtpAccountBL _o40;
+        private IMailBL _mail;
         private Im62ExchangeRateBL _m62;
+        
 
         public Factory(BO.RunningUser ru,BL.RunningApp runningapp,BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
@@ -568,6 +570,14 @@ namespace BL
             {
                 if (_o40 == null) _o40 = new o40SmtpAccountBL(this);
                 return _o40;
+            }
+        }
+        public IMailBL MailBL
+        {
+            get
+            {
+                if (_mail == null) _mail = new MailBL(this);
+                return _mail;
             }
         }
         public Im62ExchangeRateBL m62ExchangeRateBL

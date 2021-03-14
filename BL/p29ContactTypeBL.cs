@@ -58,7 +58,7 @@ namespace BL
             p.AddInt("p29Ordinary", rec.p29Ordinary);
 
 
-            int intPID = _db.SaveRecord("p29ContactType", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("p29ContactType", p, rec);
             
 
             return intPID;

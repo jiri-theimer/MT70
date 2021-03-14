@@ -74,7 +74,7 @@ namespace BL
             p.AddString("o58Description", rec.o58Description);
             p.AddInt("o58Ordinary", rec.o58Ordinary);
             
-            int intPID = _db.SaveRecord("o58FieldBag", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("o58FieldBag", p, rec);
 
             return intPID;
         }
@@ -146,7 +146,7 @@ namespace BL
             }
             p.AddDouble("o59ValueNum", rec.o59ValueNum);
 
-            int intPID = _db.SaveRecord("o59FieldBagValue", p.getDynamicDapperPars(), rec,false,true);
+            int intPID = _db.SaveRecord("o59FieldBagValue", p, rec,false,true);
 
             return intPID;
         }

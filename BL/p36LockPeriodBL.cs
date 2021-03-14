@@ -73,7 +73,7 @@ namespace BL
                 p.AddDateTime("p36DateFrom", rec.p36DateFrom);
                 p.AddDateTime("p36DateUntil", rec.p36DateUntil);
 
-                int intPID = _db.SaveRecord("p36LockPeriod", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p36LockPeriod", p, rec);
 
                 if (p34ids != null)
                 {

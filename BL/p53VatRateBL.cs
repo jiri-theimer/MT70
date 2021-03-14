@@ -60,7 +60,7 @@ namespace BL
                 p.AddDateTime("p53ValidFrom", d1);
                 p.AddDateTime("p53ValidUntil", d2);
 
-                int intPID = _db.SaveRecord("p53VatRate", p.getDynamicDapperPars(), rec,false);
+                int intPID = _db.SaveRecord("p53VatRate", p, rec,false);
                 if (intPID > 0)
                 {
                     sc.Complete();                    

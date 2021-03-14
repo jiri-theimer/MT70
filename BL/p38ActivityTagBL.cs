@@ -56,7 +56,7 @@ namespace BL
             p.AddString("p38FreeText01", rec.p38FreeText01);
             p.AddString("p38FreeText02", rec.p38FreeText02);
          
-            return _db.SaveRecord("p38ActivityTag", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("p38ActivityTag", p, rec);
         }
         private bool ValidateBeforeSave(BO.p38ActivityTag rec)
         {

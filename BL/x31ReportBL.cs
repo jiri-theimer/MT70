@@ -92,7 +92,7 @@ namespace BL
 
                 p.AddInt("x31LangIndex", rec.x31LangIndex);
 
-                int intPID = _db.SaveRecord("x31Report", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("x31Report", p, rec);
 
 
                 sc.Complete();

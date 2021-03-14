@@ -54,7 +54,7 @@ namespace BL
             p.AddString("p35Code", rec.p35Code);
          
 
-            return _db.SaveRecord("p35Unit", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("p35Unit", p, rec);
         }
         private bool ValidateBeforeSave(BO.p35Unit rec)
         {

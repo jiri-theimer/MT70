@@ -68,7 +68,7 @@ namespace BL
                 p.AddDouble("m62Rate", rec.m62Rate);
                 p.AddInt("m62Units", rec.m62Units);
                
-                int intPID = _db.SaveRecord("m62ExchangeRate", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("m62ExchangeRate", p, rec);
                 if (intPID > 0)
                 {
                     _db.RunSql("exec dbo.m62_aftersave @m62id,@j03id_sys", new { m62id = intPID, j03id_sys = _mother.CurrentUser.pid });

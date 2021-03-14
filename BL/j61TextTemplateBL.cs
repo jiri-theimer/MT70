@@ -65,7 +65,7 @@ namespace BL
 
                 p.AddInt("j61Ordinary", rec.j61Ordinary);
 
-                int intPID = _db.SaveRecord("j61TextTemplate", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("j61TextTemplate", p, rec);
                 if (intPID > 0)
                 {
                     sc.Complete();

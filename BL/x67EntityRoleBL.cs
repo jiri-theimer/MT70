@@ -63,7 +63,7 @@ namespace BL
             p.AddInt("x67Ordinary", rec.x67Ordinary);
             p.AddString("x67RoleValue", strRoleValue);
 
-            int intPID = _db.SaveRecord("x67EntityRole", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("x67EntityRole", p, rec);
             if (intPID > 0)
             {
                 if (rec.pid > 0)

@@ -205,14 +205,17 @@ namespace DL
             }
         }
 
-        public int SaveRecord(string strTable, DynamicParameters pars, BO.BaseBO rec,bool isvalidity=true,bool istimestamp=true)
+        
+        public int SaveRecord(string strTable, Params4Dapper p, BO.BaseBO rec,bool isvalidity=true,bool istimestamp=true)
         {
+            
+            DynamicParameters pars = p.getDynamicDapperPars();
             string strPrefix = strTable.Substring(0, 3);
             var strPidField = strPrefix + "ID";
             var s = new System.Text.StringBuilder();
             bool bolInsert = true;
             if (rec.pid > 0) bolInsert = false;
-
+            
             if (bolInsert)
             {
                 s.Append(string.Format("INSERT INTO {0} (", strTable));
@@ -246,8 +249,7 @@ namespace DL
 
             foreach (var strP in pars.ParameterNames.Where(p => p != "pid"))
             {
-
-
+                                
                 if (bolInsert)
                 {
                     strF += "," + strP;
@@ -275,6 +277,17 @@ namespace DL
 
             using (SqlConnection con = new SqlConnection(_conString))
             {
+                foreach (var c in p.getCatalog().Where(p => p.ParamType == "string" && p.ParValue != null && p.ParValue.ToString().Length > 5))
+                {
+                    //kontrola velikosti obsahu string polí
+                    int intMaxSize= con.Query<BO.GetInteger>("select dbo.getfieldsize(@fld, @tbl) as Value",new { fld = c.ParName, tbl = strTable }).FirstOrDefault().Value;
+                    if (intMaxSize>0 && c.ParValue.ToString().Length > intMaxSize)
+                    {
+                        CurrentUser.AddMessage($"Délka pole ** {c.ParName} ** může být maximálně {intMaxSize} znaků. Vy posíláte {c.ParValue.ToString().Length} znaků.");
+                        return 0;
+                    }
+                }
+
                 try
                 {
                     if (bolInsert)

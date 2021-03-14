@@ -69,7 +69,7 @@ namespace BL
             p.AddDouble("c21Day7_Hours", rec.c21Day7_Hours);
 
 
-            int intPID = _db.SaveRecord("c21FondCalendar", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("c21FondCalendar", p, rec);
             if (intPID > 0)
             {
                 if (lisC28 != null)

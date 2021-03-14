@@ -58,7 +58,7 @@ namespace BL
             p.AddEnumInt("j05Disposition_p31", rec.j05Disposition_p31);
             p.AddBool("j05IsCreate_p31", rec.j05IsCreate_p31);
 
-            return _db.SaveRecord("j05MasterSlave", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("j05MasterSlave", p, rec);
 
         }
         private bool ValidateBeforeSave(BO.j05MasterSlave rec)

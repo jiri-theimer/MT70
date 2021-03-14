@@ -58,7 +58,7 @@ namespace BL
             p.AddBool("o13IsUniqueArchiveFileName", rec.o13IsUniqueArchiveFileName);
             p.AddBool("o13IsArchiveFolderWithPeriodSuffix", rec.o13IsArchiveFolderWithPeriodSuffix);
 
-            int intPID = _db.SaveRecord("o13AttachmentType", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("o13AttachmentType", p, rec);
             
             return intPID;
         }

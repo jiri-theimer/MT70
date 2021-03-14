@@ -79,7 +79,7 @@ namespace BL
                 p.AddInt("p51Ordinary", rec.p51Ordinary);
                 
 
-                int intPID = _db.SaveRecord("p51PriceList", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p51PriceList", p, rec);
                 if (intPID > 0)
                 {
                     if (lisP52 != null)
@@ -101,7 +101,7 @@ namespace BL
                             p.AddBool("p52IsMaster", c.p52IsMaster);
                             p.AddBool("p52IsPlusAllTimeSheets", c.p52IsPlusAllTimeSheets);
 
-                            _db.SaveRecord("p52PriceList_Item", p.getDynamicDapperPars(), c,false,true);
+                            _db.SaveRecord("p52PriceList_Item", p, c,false,true);
                         }
                     }
                     var pars = new Dapper.DynamicParameters();

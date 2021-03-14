@@ -63,7 +63,7 @@ namespace BL
                 p.AddString("p42Code", rec.p42Code);
                 p.AddInt("p42Ordinary", rec.p42Ordinary);
 
-                int intPID = _db.SaveRecord("p42ProjectType", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p42ProjectType", p, rec);
                 if (intPID > 0 && p34ids != null)
                 {
                     if (rec.pid > 0)

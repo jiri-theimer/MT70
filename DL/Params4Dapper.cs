@@ -86,6 +86,10 @@ namespace DL
             }
         }
 
+        public List<Param4DT> getCatalog()
+        {
+            return _lis;
+        }
         public Dapper.DynamicParameters getDynamicDapperPars()
         {
             var pars = new Dapper.DynamicParameters();
@@ -112,9 +116,9 @@ namespace DL
                         pars.Add(p.ParName, p.ParValue);
                         break;
                 }
-                
+               
             }
-
+           
             return pars;
         }
     }

@@ -54,7 +54,7 @@ namespace BL
             p.AddInt("j17ID", rec.j17ID,true);
             p.AddDateTime("c26Date", rec.c26Date);
             
-            int intPID = _db.SaveRecord("c26Holiday", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("c26Holiday", p, rec);
             if (intPID > 0)
             {
                 _db.RunSql("exec dbo.c26_aftersave @c26id,@j03id_sys", new { c26id = intPID, j03id_sys = _mother.CurrentUser.pid });

@@ -109,7 +109,7 @@ namespace BL
             p.AddBool("p32IsCP", rec.p32IsCP);
             p.AddBool("p32IsSupplier", rec.p32IsSupplier);
 
-            int intPID = _db.SaveRecord("p32Activity", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("p32Activity", p, rec);
 
             return intPID;
         }

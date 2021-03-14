@@ -55,7 +55,7 @@ namespace BL
             p.AddBool("p80IsFeeSeparate", rec.p80IsFeeSeparate);
             p.AddBool("p80IsTimeSeparate", rec.p80IsTimeSeparate);
 
-            return _db.SaveRecord("p80InvoiceAmountStructure", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("p80InvoiceAmountStructure", p, rec);
 
         }
         private bool ValidateBeforeSave(BO.p80InvoiceAmountStructure rec)

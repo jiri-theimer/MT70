@@ -87,7 +87,7 @@ namespace BL
                 p.AddString("p34Name_BillingLang3", rec.p34Name_BillingLang3);
                 p.AddString("p34Name_BillingLang4", rec.p34Name_BillingLang4);
 
-                int intPID = _db.SaveRecord("p34ActivityGroup", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p34ActivityGroup", p, rec);
 
                 if (intPID > 0)
                 {

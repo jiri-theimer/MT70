@@ -59,7 +59,7 @@ namespace BL
             p.AddString("p86IBAN", rec.p86IBAN);
             p.AddString("p86BankAddress", rec.p86BankAddress);
 
-            return _db.SaveRecord("p86BankAccount", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("p86BankAccount", p, rec);
 
 
         }

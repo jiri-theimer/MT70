@@ -75,7 +75,7 @@ namespace BL
             p.AddBool("j04IsMenu_Task", rec.j04IsMenu_Task);
             p.AddBool("j04IsMenu_MyProfile", rec.j04IsMenu_MyProfile);
 
-            int intPID= _db.SaveRecord("j04UserRole", p.getDynamicDapperPars(), rec);
+            int intPID= _db.SaveRecord("j04UserRole", p, rec);
                                    
 
             if (intPID > 0)    //vyčistit uživatelskou cache pro účty s vazbou na tuto roli

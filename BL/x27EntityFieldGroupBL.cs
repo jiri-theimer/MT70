@@ -53,7 +53,7 @@ namespace BL
             p.AddString("x27Name", rec.x27Name);
             p.AddInt("x27Ordinary", rec.x27Ordinary);
            
-            return _db.SaveRecord("x27EntityFieldGroup", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("x27EntityFieldGroup", p, rec);
          
         }
         private bool ValidateBeforeSave(BO.x27EntityFieldGroup rec)

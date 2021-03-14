@@ -9,7 +9,7 @@ namespace BL
     public interface Io40SmtpAccountBL
     {
         public BO.o40SmtpAccount Load(int pid);
-        
+        public BO.o40SmtpAccount LoadGlobalDefault();
         public IEnumerable<BO.o40SmtpAccount> GetList(BO.myQuery mq);
         public int Save(BO.o40SmtpAccount rec);
 
@@ -34,7 +34,10 @@ namespace BL
         {
             return _db.Load<BO.o40SmtpAccount>(GetSQL1(" WHERE a.o40ID=@pid"), new { pid = pid });
         }
-        
+        public BO.o40SmtpAccount LoadGlobalDefault()
+        {
+            return _db.Load<BO.o40SmtpAccount>(GetSQL1(" WHERE a.o40IsGlobalDefault=1 AND GETDATE() BETWEEN a.o40ValidFrom AND a.o40ValidUntil"));
+        }
 
         public IEnumerable<BO.o40SmtpAccount> GetList(BO.myQuery mq)
         {
@@ -53,7 +56,7 @@ namespace BL
             var p = new DL.Params4Dapper();
             p.AddInt("pid", rec.pid);
             p.AddInt("j02ID_Owner", rec.j02ID_Owner, true);
-
+            p.AddBool("o40IsGlobalDefault", rec.o40IsGlobalDefault);
             p.AddString("o40Name", rec.o40Name);
             p.AddString("o40EmailAddress", rec.o40EmailAddress);
             p.AddString("o40Server", rec.o40Server);
@@ -61,11 +64,11 @@ namespace BL
             p.AddString("o40Password", rec.o40Password);
             p.AddBool("o40IsVerify", rec.o40IsVerify);
             p.AddInt("o40Port", rec.o40Port);
-            p.AddInt("o40SslModeFlag", rec.o40SslModeFlag);
+            p.AddEnumInt("o40SslModeFlag", rec.o40SslModeFlag);
+            p.AddBool("o40IsUsePersonalReply", rec.o40IsUsePersonalReply);
+            
 
-           
-
-            return _db.SaveRecord("o40SmtpAccount", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("o40SmtpAccount", p, rec);
 
 
         }

@@ -66,7 +66,7 @@ namespace BL
             p.AddInt("j17Ordinary", rec.j17Ordinary);
             p.AddString("j17Code", rec.j17Code);
 
-            return _db.SaveRecord("j17Country", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("j17Country", p, rec);
 
 
         }

@@ -56,7 +56,7 @@ namespace BL
             p.AddString("j07FreeText01", rec.j07FreeText01);
             p.AddString("j07FreeText02", rec.j07FreeText02);
 
-            return _db.SaveRecord("j07PersonPosition", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("j07PersonPosition", p, rec);
         }
         private bool ValidateBeforeSave(BO.j07PersonPosition rec)
         {

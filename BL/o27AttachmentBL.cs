@@ -98,7 +98,7 @@ namespace BL
             }
           
 
-            int intPID = _db.SaveRecord("o27Attachment", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("o27Attachment", p, rec);
 
 
 

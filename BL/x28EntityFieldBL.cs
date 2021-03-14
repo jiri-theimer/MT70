@@ -95,7 +95,7 @@ namespace BL
             p.AddString("x28HelpText", rec.x28HelpText);
             p.AddBool("x28IsAllEntityTypes", rec.x28IsAllEntityTypes);
 
-            int intPID = _db.SaveRecord("x28EntityField", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("x28EntityField", p, rec);
             if (lisX26 != null)
             {
                 rec.x28IsAllEntityTypes = true;

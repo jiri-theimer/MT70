@@ -54,7 +54,7 @@ namespace BL
                 p.AddInt("pid", rec.pid);
                 p.AddString("p61Name", rec.p61Name);
 
-                int intPID = _db.SaveRecord("p61ActivityCluster", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p61ActivityCluster", p, rec);
                 if (p32ids != null)
                 {
                     if (rec.pid > 0)

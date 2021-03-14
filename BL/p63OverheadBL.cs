@@ -57,7 +57,7 @@ namespace BL
             p.AddBool("p63IsIncludeFees", rec.p63IsIncludeFees);
             p.AddBool("p63IsIncludeTime", rec.p63IsIncludeTime);
 
-            return _db.SaveRecord("p63Overhead", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("p63Overhead", p, rec);
 
         }
         private bool ValidateBeforeSave(BO.p63Overhead rec)

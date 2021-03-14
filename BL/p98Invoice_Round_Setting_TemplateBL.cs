@@ -63,7 +63,7 @@ namespace BL
                 p.AddBool("p98IsDefault", rec.p98IsDefault);
                 p.AddBool("p98IsIncludeInVat", rec.p98IsIncludeInVat);
 
-                int intPID = _db.SaveRecord("p98Invoice_Round_Setting_Template", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p98Invoice_Round_Setting_Template", p, rec);
                 if (intPID > 0)
                 {
                     if (rec.pid > 0)
@@ -78,7 +78,7 @@ namespace BL
                         p.AddEnumInt("p97AmountFlag", c.p97AmountFlag);
                         p.AddInt("p97Scale", c.p97Scale);
                        
-                        _db.SaveRecord("p97Invoice_Round_Setting", p.getDynamicDapperPars(), c, true, true);
+                        _db.SaveRecord("p97Invoice_Round_Setting", p, c, true, true);
                     }
                     if (rec.p98IsDefault)
                     {

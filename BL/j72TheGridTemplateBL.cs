@@ -93,7 +93,7 @@ namespace BL
             p.AddString("j75Filter", rec.j75Filter);
             p.AddInt("j75HeightPanel1", rec.j75HeightPanel1);
 
-            int intJ75ID = _db.SaveRecord("j75TheGridState", p.getDynamicDapperPars(), rec,false,true);
+            int intJ75ID = _db.SaveRecord("j75TheGridState", p, rec,false,true);
 
             return intJ75ID;
         }
@@ -126,7 +126,7 @@ namespace BL
                 p.AddBool("j72HashJ73Query", false);
             }
 
-            int intJ72ID = _db.SaveRecord("j72TheGridTemplate", p.getDynamicDapperPars(), rec);
+            int intJ72ID = _db.SaveRecord("j72TheGridTemplate", p, rec);
 
             if (j04ids != null && j11ids != null)
             {
@@ -178,7 +178,7 @@ namespace BL
                         p.AddString("j73Op", c.j73Op);
                         p.AddString("j73BracketLeft", c.j73BracketLeft);
                         p.AddString("j73BracketRight", c.j73BracketRight);
-                        _db.SaveRecord("j73TheGridQuery", p.getDynamicDapperPars(), c, false, true);
+                        _db.SaveRecord("j73TheGridQuery", p, c, false, true);
                     }
 
                 }

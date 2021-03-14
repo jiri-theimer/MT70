@@ -103,7 +103,7 @@ namespace BL
                 p.AddInt("j02WorksheetAccessFlag", rec.j02WorksheetAccessFlag);
                 p.AddInt("j02NotifySubscriberFlag", rec.j02NotifySubscriberFlag);
 
-                int intPID = _db.SaveRecord("j02Person", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("j02Person", p, rec);
                 if (intPID > 0)
                 {
                     _db.RunSql("exec dbo.j02_aftersave @j02id,@j03id_sys", new { j02id = intPID, j03id_sys = _mother.CurrentUser.pid });

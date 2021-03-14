@@ -69,7 +69,7 @@ namespace BL
                 p.AddInt("j18Ordinary", rec.j18Ordinary);
                 p.AddString("j18Code", rec.j18Code);
 
-                int intPID = _db.SaveRecord("j18Region", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("j18Region", p, rec);
                 if (intPID > 0)
                 {
                     var pars = new Dapper.DynamicParameters();

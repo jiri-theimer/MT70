@@ -63,7 +63,7 @@ namespace UI.Controllers
                 c.o40Server = v.Rec.o40Server;
                 c.o40Port = v.Rec.o40Port;                
                 c.o40EmailAddress = v.Rec.o40EmailAddress;
-                
+                c.o40IsUsePersonalReply = v.Rec.o40IsUsePersonalReply;
                 c.o40Login = v.Rec.o40Login;
                 if (String.IsNullOrEmpty(v.Rec.o40Password) == false)
                 {
@@ -73,11 +73,11 @@ namespace UI.Controllers
                 c.o40IsVerify = v.Rec.o40IsVerify;
                 if (v.IsUseSSL)
                 {
-                    c.o40SslModeFlag = 2;
+                    c.o40SslModeFlag = BO.SslModeENUM.Explicit;
                 }
                 else
                 {
-                    c.o40SslModeFlag = 0;
+                    c.o40SslModeFlag = BO.SslModeENUM._NoSSL;
                 }
                 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);

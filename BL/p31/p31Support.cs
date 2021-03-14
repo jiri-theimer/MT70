@@ -96,7 +96,7 @@ namespace BL.bas
                 p.AddDouble("p31Value_Off", rec.Value_OffBilling);
 
 
-                intSavedP31ID = _db.SaveRecord("p31Worksheet", p.getDynamicDapperPars(), rec, true, true);
+                intSavedP31ID = _db.SaveRecord("p31Worksheet", p, rec, true, true);
 
                 if (intSavedP31ID > 0)
                 {

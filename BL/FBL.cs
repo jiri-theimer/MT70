@@ -42,7 +42,7 @@ namespace BL
             p.AddString("p87Name", rec.p87Name);
             p.AddString("p87Icon", rec.p87Icon);
 
-            return _db.SaveRecord("p87BillingLanguage", p.getDynamicDapperPars(),rec);
+            return _db.SaveRecord("p87BillingLanguage", p,rec);
         }
         public BO.j27Currency LoadCurrencyByCode(string j27code)
         {
@@ -117,7 +117,7 @@ namespace BL
             p.AddString("j91ErrorMessage", rec.j91ErrorMessage);
             p.AddString("j91Account", rec.j91Account);
 
-            return _db.SaveRecord("j91RobotLog", p.getDynamicDapperPars(), rec,false,false);
+            return _db.SaveRecord("j91RobotLog", p, rec,false,false);
         }
 
         public BO.j91RobotLog GetLastRobotRun(BO.j91RobotTaskFlag flag)

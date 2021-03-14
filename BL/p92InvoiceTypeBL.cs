@@ -81,7 +81,7 @@ namespace BL
             p.AddString("p92ClassificationVATIDS", rec.p92ClassificationVATIDS);
 
             
-            int intPID = _db.SaveRecord("p92InvoiceType", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("p92InvoiceType", p, rec);
 
             return intPID;
 

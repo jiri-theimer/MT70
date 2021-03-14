@@ -60,7 +60,7 @@ namespace BL
             p.AddString("p95AccountingIDS", rec.p95AccountingIDS);
             
 
-            return _db.SaveRecord("p95InvoiceRow", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("p95InvoiceRow", p, rec);
         }
         private bool ValidateBeforeSave(BO.p95InvoiceRow rec)
         {

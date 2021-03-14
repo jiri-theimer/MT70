@@ -83,7 +83,7 @@ namespace BL
                 p.AddString("p93ICDPH_SK", rec.p93ICDPH_SK);
 
 
-                int intPID = _db.SaveRecord("p93InvoiceHeader", p.getDynamicDapperPars(), rec);
+                int intPID = _db.SaveRecord("p93InvoiceHeader", p, rec);
                 if (intPID > 0 && lisP88 !=null)
                 {
                     if (rec.pid > 0)

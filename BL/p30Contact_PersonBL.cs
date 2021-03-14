@@ -58,7 +58,7 @@ namespace BL
             p.AddInt("p28ID", rec.p28ID, true);
             p.AddInt("p41ID", rec.p41ID, true);
 
-            return _db.SaveRecord("p30Contact_Person", p.getDynamicDapperPars(), rec);
+            return _db.SaveRecord("p30Contact_Person", p, rec);
 
 
         }

@@ -56,7 +56,7 @@ namespace BL
             p.AddString("p07NameInflection", rec.p07NameInflection);
 
 
-            int intPID = _db.SaveRecord("p07ProjectLevel", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("p07ProjectLevel", p, rec);
 
 
           

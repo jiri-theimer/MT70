@@ -141,6 +141,7 @@ namespace UI.Controllers
                 if (_f.x31ReportBL.IsReportWaiting4Generate(_d.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute), recX31))
                 {
                     string strFullPath = GeneratePdfReport(recX31);
+
                 }
             }
 

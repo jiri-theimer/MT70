@@ -68,7 +68,7 @@ namespace BL
             p.AddBool("x38IsUseDbPID", rec.x38IsUseDbPID);
         
 
-            int intPID = _db.SaveRecord("x38CodeLogic", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("x38CodeLogic", p, rec);
           
 
             return intPID;

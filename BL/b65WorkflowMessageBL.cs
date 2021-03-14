@@ -60,7 +60,7 @@ namespace BL
             p.AddString("b65MessageSubject", rec.b65MessageSubject);           
             p.AddString("b65MessageBody", rec.b65MessageBody);
             
-            int intPID = _db.SaveRecord("b65WorkflowMessage", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("b65WorkflowMessage", p, rec);
            
             return intPID;
         }

@@ -66,7 +66,7 @@ namespace BL
             p.AddString("p89DefaultText2", rec.p89DefaultText2);
            
 
-            int intPID = _db.SaveRecord("p89ProformaType", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("p89ProformaType", p, rec);
 
             return intPID;
 

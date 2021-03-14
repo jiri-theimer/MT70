@@ -1,0 +1,134 @@
+﻿@model SendMailViewModel
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Odeslat poštovní zprávu");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+
+
+}
+
+@addTagHelper *, UI
+
+<h4>@Model.PageTitle</h4>
+<div class="bg-light" style="padding:10px;">
+    <button id="cmdSave" type="submit" class="btn btn-success">@_f.tra("Odeslat")</button>
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+    <button type="button" onclick="_helppage()" class="btn btn-light"><b>? </b>@_f.tra("Nápověda")</button>
+
+</div>
+
+<form id="form1" asp-controller="Mail" asp-action="SendMail" method="POST">
+
+    <input type="hidden" asp-for="@Model.UploadGuid" />
+    <input type="hidden" asp-for="Rec.x40MessageID" />
+    <input type="hidden" asp-for="Rec.x29ID" />
+    <input type="hidden" asp-for="Rec.x40RecordPID" />
+    <input type="hidden" asp-for="@Model.ActiveTabIndex" />
+
+
+
+
+    <div class="modal_record_container">
+
+        <div>
+            <input type="checkbox" id="chkIsTest" asp-for="@Model.IsTest" />
+            <label for="chkIsTest">@_f.tra("Testovací zpráva")</label>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Odesílatel"):</label>
+            <div class="col-sm-11 col-md-10">
+                <mycombo entity="o40SmtpAccount" asp-for="Rec.o40ID" selectedtext="@Model.SelectedO40Name" filter-flag="1" myqueryinline="MyRecordsDisponible|bool@1"></mycombo>
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Komu (To)"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input class="form-control" asp-for="Rec.x40Recipient" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("V kopii (Cc)"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input class="form-control" asp-for="Rec.x40CC" />
+
+            </div>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Ve skryté kopii (Bcc)"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input class="form-control" asp-for="Rec.x40BCC" />
+
+            </div>
+
+        </div>
+
+        <div class="my-2">
+            <input class="form-control" asp-for="Rec.x40Subject" id="txtSubject" placeholder="@_f.tra("Předmět zprávy")" />
+        </div>
+
+
+        <div class="my-2">
+            <textarea asp-for="Rec.x40Body" class="form-control" placeholder="@_f.tra("Text zprávy")"></textarea>
+
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Šablona zprávy"):</label>
+            <div class="col-sm-9 col-md-8">
+                <mycombo entity="j61TextTemplate" asp-for="@Model.SelectedJ61ID" selectedtext="@Model.SelectedJ61Name" filter-flag="1" myqueryinline="MyRecordsDisponible|bool@1"></mycombo>
+
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <button type="button" class="btn btn-light" onclick="remember_p65id()">@_f.tra("Zapamatovat si šablonu")</button>
+            </div>
+        </div>
+        <iframe id="fraUpload" src="/FileUpload/Index?prefix=j02&guid=@Model.UploadGuid" frameborder="0" height="220" scrolling="no"></iframe>
+
+
+    </div>
+
+
+</form>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdSave").click(function () {
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+        });
+
+
+
+        _resize_textareas();
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+

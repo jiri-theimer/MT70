@@ -51,7 +51,7 @@ namespace BL
             p.AddString("j11Name", rec.j11Name);            
             p.AddBool("j11IsAllPersons", rec.j11IsAllPersons);
 
-            int intPID = _db.SaveRecord("j11Team", p.getDynamicDapperPars(), rec);
+            int intPID = _db.SaveRecord("j11Team", p, rec);
             if (rec.pid > 0)
             {
                 _db.RunSql("DELETE FROM j12Team_Person WHERE j11ID=@pid", new { pid = intPID });
