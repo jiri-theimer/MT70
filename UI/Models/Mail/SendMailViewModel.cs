@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace UI.Models
-{
+{   
     public class SendMailViewModel:BaseViewModel
     {
         public BO.x40MailQueue Rec { get; set; }
+
+        public string Recipient { get; set; }
         public string SelectedO40Name { get; set; }
         public int SelectedJ61ID { get; set; }
         public string SelectedJ61Name { get; set; }
@@ -18,5 +20,10 @@ namespace UI.Models
 
        
         public bool IsTest { get; set; }
+
+        public int SelectedJ07ID { get; set; }
+        public string SelectedJ07Name { get; set; }
+        public int SelectedJ11ID { get; set; }
+        public string SelectedJ11Name { get; set; }
     }
 }

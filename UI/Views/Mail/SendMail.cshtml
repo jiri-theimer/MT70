@@ -9,6 +9,17 @@
 }
 
 @addTagHelper *, UI
+@section header_content{
+    <link href="/kendo/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="/kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
+}
+
+<script src="/kendo/js/kendo.core.min.js"></script>
+<script src="/kendo/js/kendo.data.min.js"></script>
+<script src="/kendo/js/kendo.list.min.js"></script>
+<script src="/kendo/js/kendo.popup.min.js"></script>
+<script src="/kendo/js/kendo.autocomplete.min.js"></script>
+
 
 <h4>@Model.PageTitle</h4>
 <div class="bg-light" style="padding:10px;">
@@ -31,41 +42,59 @@
 
     <div class="modal_record_container">
 
-        <div>
-            <input type="checkbox" id="chkIsTest" asp-for="@Model.IsTest" />
-            <label for="chkIsTest">@_f.tra("Testovací zpráva")</label>
-        </div>
-        <div class="row my-2">
+
+        <div class="row">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Odesílatel"):</label>
             <div class="col-sm-11 col-md-10">
-                <mycombo entity="o40SmtpAccount" asp-for="Rec.o40ID" selectedtext="@Model.SelectedO40Name" filter-flag="1" myqueryinline="MyRecordsDisponible|bool@1"></mycombo>
+                <mycombo entity="o40SmtpAccount" asp-for="Rec.o40ID" selectedtext="@Model.SelectedO40Name" view-flag="2" myqueryinline="MyRecordsDisponible|bool@1"></mycombo>
             </div>
         </div>
 
         <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Komu (To)"):</label>
+            <div class="col-sm-1 col-md-2">
+                <label>@_f.tra("Komu (To)"):</label>
+                <a id="cmdMore" class="btn btn-light dropdown-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false">@_f.tra("Více")</a>
+            </div>
+            
             <div class="col-sm-11 col-md-10">
-                <input class="form-control" asp-for="Rec.x40Recipient" />
+                <input class="form-control" style="width:100%;" asp-for="@Model.Recipient" value="@Model.Recipient" />
 
             </div>
-
-        </div>
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("V kopii (Cc)"):</label>
-            <div class="col-sm-11 col-md-10">
-                <input class="form-control" asp-for="Rec.x40CC" />
+            <div class="col-sm-1 col-md-1">
 
             </div>
-
         </div>
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Ve skryté kopii (Bcc)"):</label>
-            <div class="col-sm-11 col-md-10">
-                <input class="form-control" asp-for="Rec.x40BCC" />
+        <div id="divMore" style="display:none;background-color:aliceblue;">
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("V kopii (Cc)"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.x40CC" />
+
+                </div>
 
             </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Ve skryté kopii (Bcc)"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.x40BCC" />
 
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vložit příjemce podle pozice"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <mycombo entity="j07PersonPosition" asp-for="@Model.SelectedJ07ID" selectedtext="@Model.SelectedJ07Name" view-flag="2" event_after_changevalue="j07id_onchange"></mycombo>
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vložit příjemce podle týmu"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <mycombo entity="j11Team" asp-for="@Model.SelectedJ11ID" selectedtext="@Model.SelectedJ11Name" view-flag="2" event_after_changevalue="j11id_onchange"></mycombo>
+                </div>
+            </div>
         </div>
+
 
         <div class="my-2">
             <input class="form-control" asp-for="Rec.x40Subject" id="txtSubject" placeholder="@_f.tra("Předmět zprávy")" />
@@ -79,7 +108,7 @@
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Šablona zprávy"):</label>
             <div class="col-sm-9 col-md-8">
-                <mycombo entity="j61TextTemplate" asp-for="@Model.SelectedJ61ID" selectedtext="@Model.SelectedJ61Name" filter-flag="1" myqueryinline="MyRecordsDisponible|bool@1"></mycombo>
+                <mycombo entity="j61TextTemplate" asp-for="@Model.SelectedJ61ID" selectedtext="@Model.SelectedJ61Name" view-flag="2" myqueryinline="MyRecordsDisponible|bool@1" event_after_changevalue="j61id_onchange"></mycombo>
 
             </div>
             <div class="col-sm-2 col-md-2">
@@ -88,6 +117,11 @@
         </div>
         <iframe id="fraUpload" src="/FileUpload/Index?prefix=j02&guid=@Model.UploadGuid" frameborder="0" height="220" scrolling="no"></iframe>
 
+
+        <div class="my-2">
+            <input type="checkbox" id="chkIsTest" asp-for="@Model.IsTest" />
+            <label for="chkIsTest">@_f.tra("Testovací zpráva")</label>
+        </div>
 
     </div>
 
@@ -101,6 +135,28 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "/Mail/AutoCompleteSource",
+                    dataType: "json"
+                }
+            }
+        });
+
+        $("#Recipient").kendoAutoComplete({
+            dataSource: dataSource,
+            filter: "contains",
+            placeholder: "@_f.tra("Email adresy")...",
+            dataTextField: "address",
+            separator: ", "
+        });
+
+      
+
+        $("#cmdMore").click(function () {
+            $("#divMore").toggle();
+        });
 
         $("#cmdSave").click(function () {
             $(this).text("Processing...");
@@ -116,6 +172,19 @@
 
 
 
+    function j11id_onchange(j11id) {
+        postback("j11id");
+    }
+    function j07id_onchange(j07id) {
+        postback("j07id");
+    }
+    function j61id_onchange(j61id) {
+        postback("j61id");
+    }
+    function postback(oper) {
+        form1.action = "/Mail/SendMail?oper=" + oper;
+        form1.submit();
+    }
 
 
 

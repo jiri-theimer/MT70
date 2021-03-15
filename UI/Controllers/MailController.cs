@@ -30,7 +30,7 @@ namespace UI.Controllers
             v.Rec.x40RecordPID = x40datapid;
             if (j02id > 0)
             {
-                v.Rec.x40Recipient = Factory.j02PersonBL.Load(j02id).j02Email;
+                v.Recipient = Factory.j02PersonBL.Load(j02id).j02Email;
             }
 
 
@@ -46,7 +46,7 @@ namespace UI.Controllers
             if (x40id > 0)
             {   //kopírování zprávy do nové podle vzoru x40id
                 v.Rec = Factory.MailBL.LoadMessageByPid(x40id);
-                v.Rec.x40Recipient = v.Rec.x40Recipient;
+                v.Recipient = v.Recipient;
                 v.Rec.x40CC = v.Rec.x40CC;
                 v.Rec.x40BCC = v.Rec.x40BCC;
                 v.Rec.x40Subject = v.Rec.x40Subject;
@@ -63,8 +63,22 @@ namespace UI.Controllers
         }
         [HttpPost]
         public IActionResult SendMail(Models.SendMailViewModel v,string oper)
-        {
-            
+        {                        
+            if (oper == "j11id" && v.SelectedJ11ID>0)
+            {               
+                Handle_Receiver_From_List(v, Factory.j02PersonBL.GetList(new BO.myQueryJ02() { j11id = v.SelectedJ11ID }));
+                return View(v);
+            }
+            if (oper == "j07id" && v.SelectedJ07ID > 0)
+            {
+                Handle_Receiver_From_List(v, Factory.j02PersonBL.GetList(new BO.myQueryJ02() { j07id = v.SelectedJ07ID }));
+                return View(v);
+            }
+
+            if (oper=="postback")
+            {
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
                 foreach (BO.o27Attachment c in Factory.o27AttachmentBL.GetTempFiles(v.UploadGuid))
@@ -95,6 +109,50 @@ namespace UI.Controllers
             return View(v);
         }
 
+        private void Handle_Receiver_From_List(Models.SendMailViewModel v,IEnumerable<BO.j02Person> lisJ02)
+        {
+            if (!string.IsNullOrEmpty(v.Recipient))
+            {
+                v.Recipient = v.Recipient.Replace(";", ",");
+            }
+            
+            var lis = BO.BAS.ConvertString2List(v.Recipient,",");
+            foreach(var c in lisJ02.Where(p=>p.j02Email != null).OrderBy(p=>p.FullNameDesc))
+            {                
+                if (lis.Where(p=>p.ToLower()==c.j02Email.ToLower()).Count()==0)
+                {
+                    lis.Add(c.j02Email);
+                }
+            }
+            v.Recipient = string.Join(", ", lis.Where(p=>p.Trim().Length>2));
+
+        }
+
+        public IEnumerable<MailItemAutoComplete> AutoCompleteSource()
+        {
+            var ret = new List<MailItemAutoComplete>();
+
+            var lis0 = Factory.MailBL.GetRecipientsHistory();
+            foreach (string email in lis0)
+            {
+                ret.Add(new MailItemAutoComplete() { address = email.ToLower() });
+            }
+
+            var mqJ02 = new BO.myQueryJ02();
+            new BO.myQueryJ02().explicit_orderby = "a.j02LastName";
+            var lis1 = Factory.j02PersonBL.GetList(mq).Where(p=>p.j02Email !=null);
+            foreach(var c in lis1)
+            {
+                if (!ret.Any(p=>p.address==c.j02Email.ToLower()))
+                {
+                    ret.Insert(0,new MailItemAutoComplete() { address = c.j02Email, text = c.FullNameDesc });
+                }
+                
+            }
+
+            
+            return ret;
+        }
     
         public IActionResult Record(int pid)
         {

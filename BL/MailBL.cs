@@ -23,7 +23,9 @@ namespace BL
         public int SaveX40(MailMessage m, BO.x40MailQueue rec);
         public void StopPendingMessagesInBatch(string batchguid);
         public void RestartMessagesInBatch(string batchguid);
-        
+        public List<string> GetRecipientsHistory();
+
+
 
     }
     class MailBL : BaseBL, IMailBL
@@ -403,7 +405,14 @@ namespace BL
             return _db.GetList<BO.x40MailQueue>(fq.FinalSql, fq.Parameters);
         }
 
-     
+
+        public List<string> GetRecipientsHistory()
+        {
+            
+            return _db.GetList<BO.GetString>("select distinct x43Email as Value FROM x43MailQueue_Recipient").Select(p => p.Value).ToList();
+
+          
+        }
 
     }
 }
