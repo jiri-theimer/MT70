@@ -87,7 +87,8 @@ namespace UI.Controllers
                 }
 
                 //System.IO.File.AppendAllText("c:\\temp\\hovado.txt", "Try SendMessage: " + DateTime.Now.ToString()+", message: "+ v.Rec.x40Subject);
-                
+
+                v.Rec.x40Recipient = v.Recipient;
                 var ret = Factory.MailBL.SendMessage(v.Rec, v.IsTest);
 
 
@@ -132,7 +133,7 @@ namespace UI.Controllers
         {
             var ret = new List<MailItemAutoComplete>();
 
-            var lis0 = Factory.MailBL.GetRecipientsHistory();
+            var lis0 = Factory.MailBL.GetAllx43Emails();
             foreach (string email in lis0)
             {
                 ret.Add(new MailItemAutoComplete() { address = email.ToLower() });
@@ -140,7 +141,7 @@ namespace UI.Controllers
 
             var mqJ02 = new BO.myQueryJ02();
             new BO.myQueryJ02().explicit_orderby = "a.j02LastName";
-            var lis1 = Factory.j02PersonBL.GetList(mq).Where(p=>p.j02Email !=null);
+            var lis1 = Factory.j02PersonBL.GetList(mqJ02).Where(p=>p.j02Email !=null);
             foreach(var c in lis1)
             {
                 if (!ret.Any(p=>p.address==c.j02Email.ToLower()))

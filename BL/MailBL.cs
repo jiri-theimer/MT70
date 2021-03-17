@@ -23,7 +23,7 @@ namespace BL
         public int SaveX40(MailMessage m, BO.x40MailQueue rec);
         public void StopPendingMessagesInBatch(string batchguid);
         public void RestartMessagesInBatch(string batchguid);
-        public List<string> GetRecipientsHistory();
+        public List<string> GetAllx43Emails();
 
 
 
@@ -116,7 +116,7 @@ namespace BL
             if (String.IsNullOrEmpty(rec.x40Recipient) == false)
             {
                 lis = BO.BAS.ConvertString2List(rec.x40Recipient.Replace(";", ","), ",");
-                foreach (string s in lis)
+                foreach (string s in lis.Where(p=>string.IsNullOrEmpty(p.Trim())==false))
                 {
                     m.To.Add(new MailAddress(s.Trim()));
                 }
@@ -183,7 +183,8 @@ namespace BL
            
             if (_account.o40IsUsePersonalReply)
             {
-                m.ReplyToList.Add(new MailAddress(_mother.CurrentUser.j02Email, _mother.CurrentUser.PersonAsc));
+                var recJ02 = _mother.j02PersonBL.Load(_mother.CurrentUser.j02ID);
+                m.ReplyToList.Add(new MailAddress(recJ02.j02Email, recJ02.FullNameAsc));
             }
 
             BO.Result ret = new BO.Result(false);
@@ -406,7 +407,7 @@ namespace BL
         }
 
 
-        public List<string> GetRecipientsHistory()
+        public List<string> GetAllx43Emails()
         {
             
             return _db.GetList<BO.GetString>("select distinct x43Email as Value FROM x43MailQueue_Recipient").Select(p => p.Value).ToList();

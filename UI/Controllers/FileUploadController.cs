@@ -96,8 +96,18 @@ namespace UI.Controllers
             {
                 return this.StopPageSubform("x29id or guid is missing");
             }
-            var v = new FileUploadViewModel() { Guid = guid, x29ID = x29id, o13ID = o13id, RecPid = recpid };
             
+            var v = new FileUploadViewModel() { Guid = guid, x29ID = x29id, o13ID = o13id, RecPid = recpid };
+            if (v.o13ID == 0)
+            {
+                var lisO13 = Factory.o13AttachmentTypeBL.GetList(new BO.myQuery("o13")).Where(p => p.x29ID == x29id);
+                if (lisO13.Count() == 0)
+                {
+                    return this.StopPageSubform("cannt find o13id");
+                }
+                v.o13ID = lisO13.First().pid;
+
+            }
 
             RefreshStateDoUpload(v);
             
@@ -149,8 +159,7 @@ namespace UI.Controllers
         private void RefreshStateDoUpload(FileUploadViewModel v)
         {
             
-            v.lisO13 = Factory.o13AttachmentTypeBL.GetList(new BO.myQuery("o13AttachmentType"));
-            
+           
          
             v.lisTempFiles = Factory.o27AttachmentBL.GetTempFiles(v.Guid);
             if (v.RecPid > 0)

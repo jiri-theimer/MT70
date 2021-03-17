@@ -14,8 +14,8 @@ namespace UI.Models
 
         public IEnumerable<BO.o27Attachment> lisO27 { get; set; }   //již uložené přílohy
         
-        public IEnumerable<BO.o13AttachmentType> lisO13 { get; set; }   //combo zdroj
-        public int o13ID { get; set; }
+        
+        public int o13ID { get; set; }  //typ přílohy
 
         public List<BO.o27Attachment> lisTempFiles { get; set; } 
 

@@ -29,6 +29,7 @@ namespace UI.Controllers
                 if (v.Rec.j02ID_Owner > 0)
                 {
                     v.UsageFlag = 1;
+                    v.ComboPerson = Factory.j02PersonBL.Load(v.Rec.j02ID_Owner).FullNameDesc;
                 }
                 else
                 {
@@ -53,10 +54,12 @@ namespace UI.Controllers
                 if (v.UsageFlag==2)
                 {
                     c.j02ID_Owner = 0;  //globální účet
+                    c.o40IsGlobalDefault = true;
                 }
                 else
                 {
                     c.j02ID_Owner = v.Rec.j02ID_Owner;
+                    c.o40IsGlobalDefault = false;
                 }
                 
                 c.o40Name = v.Rec.o40Name;
