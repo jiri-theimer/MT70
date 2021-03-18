@@ -15,7 +15,10 @@ namespace BL
         private List<BO.TheGridColumn> _lis;        
         private string _lastEntity;
         private string _curEntityAlias;
-        
+        private BO.TheGridDefColFlag gdc1 = BO.TheGridDefColFlag.GridAndCombo;
+        private BO.TheGridDefColFlag gdc0 = BO.TheGridDefColFlag._none;
+        private BO.TheGridDefColFlag gdc2 = BO.TheGridDefColFlag.GridOnly;
+
         public TheColumnsProvider(BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
             //_app = runningapp;
@@ -65,7 +68,11 @@ namespace BL
         {
             return AF(strEntity, strField, strHeader, dcf, null, "num0",false,false,strGroup);
         }
-        
+        private BO.TheGridColumn AFDATE(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf = BO.TheGridDefColFlag._none, string strGroup = null)
+        {
+            return AF(strEntity, strField, strHeader, dcf, null, "date");
+        }
+
         private BO.TheGridColumn AF(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf=BO.TheGridDefColFlag._none, string strSqlSyntax = null, string strFieldType = "string", bool bolIsShowTotals = false,bool bolNotShowRelInHeader=false,string strGroup=null)
         {
             if (strEntity != _lastEntity)
@@ -133,13 +140,12 @@ namespace BL
         private void SetupPallete()
         {
             BO.TheGridColumn onecol;
-            BO.TheGridDefColFlag gdc1 = BO.TheGridDefColFlag.GridAndCombo;
-            BO.TheGridDefColFlag gdc0 = BO.TheGridDefColFlag._none;
-            BO.TheGridDefColFlag gdc2 = BO.TheGridDefColFlag.GridOnly;
+            
 
             SetupJ02();
             SetupP28();
             SetupP91();
+            SetupP31();
             
             //j03 = uživatelé
             AF("j03User", "j03Login", "Login", gdc1, null,"string",false,true);
@@ -181,7 +187,7 @@ namespace BL
             AFNUM0("c21FondCalendar", "c21Ordinary", "#", gdc2);
             AppendTimestamp("c21FondCalendar");
 
-            AF("c26Holiday", "c26Date", "Datum", gdc1, null, "date");
+            AFDATE("c26Holiday", "c26Date", "Datum", gdc1);
             AF("c26Holiday", "c26Name", "Název svátku", gdc1, null, "string", false, true);            
             AppendTimestamp("c26Holiday");
 
@@ -279,6 +285,8 @@ namespace BL
             AFNUM0("p29ContactType", "p29Ordinary", "#");
             AppendTimestamp("p29ContactType");
 
+            
+
             AF("p42ProjectType", "p42Name", "Typ", gdc1, null, "string", false, true);
             AF("p42ProjectType", "p42Code", "Kód");
             AFNUM0("p42ProjectType", "p42Ordinary", "#");
@@ -315,15 +323,15 @@ namespace BL
             AFNUM0("p38ActivityTag", "p38Ordinary", "#", gdc2);
             AppendTimestamp("p38ActivityTag");
 
-            AF("p36LockPeriod", "p36DateFrom", "Od", gdc1, null, "date");
-            AF("p36LockPeriod", "p36DateUntil", "Do", gdc1, null, "date");
+            AFDATE("p36LockPeriod", "p36DateFrom", "Od", gdc1);
+            AFDATE("p36LockPeriod", "p36DateUntil", "Do", gdc1);
             AFBOOL("p36LockPeriod", "p36IsAllSheets", "Všechny sešity", gdc2);
             AFBOOL("p36LockPeriod", "p36IsAllPersons", "Všechny osoby", gdc2);            
             AppendTimestamp("p36LockPeriod");
 
             AF("p53VatRate", "p53Value", "Sazba DPH", gdc1, null, "num", false,true);
-            AF("p53VatRate", "p53ValidFrom", "Platí od", gdc1, null, "date");
-            AF("p53VatRate", "p53ValidUntil", "Platí do", gdc1, null, "date");
+            AFDATE("p53VatRate", "p53ValidFrom", "Platí od", gdc1);
+            AFDATE("p53VatRate", "p53ValidUntil", "Platí do", gdc1);
             AppendTimestamp("p53VatRate");
 
             AF("p61ActivityCluster", "p61Name", "Klast aktivit", gdc1, null, "string", false, true);            
@@ -378,7 +386,7 @@ namespace BL
             AF("p95InvoiceRow", "p95Name_BillingLang4", "Název €4");
             AppendTimestamp("p95InvoiceRow");
 
-            AF("m62ExchangeRate", "m62Date", "Datum kurzu", gdc1, null, "date", false, true);
+            AFDATE("m62ExchangeRate", "m62Date", "Datum kurzu", gdc1);
             AF("m62ExchangeRate", "m62Rate", "Kurz",gdc1,null,"num3");
             AF("m62ExchangeRate", "Veta", "", gdc2, "CONVERT(varchar(10),a.m62Units)+' '+(select j27Code from j27Currency where j27ID=a.j27ID_Slave)+' = '+CONVERT(varchar(10),a.m62Rate)+' '+(select j27Code FROM j27Currency where j27ID=a.j27ID_Master)");
             AF("m62ExchangeRate", "m62RateType", "Typ kurzu",gdc2, "case when a.m62RateType=1 then 'Fakturační kurz' else 'Fixní kurz' end");
@@ -481,13 +489,40 @@ namespace BL
             
         }
 
+        private void SetupP31(string stb = "p31Worksheet")
+        {
+            var strG = "Datum a čas úkonu";
+            AFDATE(stb, "p31Date", "Datum", gdc1, strG);
+            AF(stb, "UkonYear", "Rok", gdc0, "convert(varchar(4),a.p31Date)", "string",false,false,strG);
+            AF(stb, "UkonMesic", "Měsíc", gdc0, "convert(varchar(7),a.p31Date,126)","string",false,false,strG);
+            AF(stb, "UkonTyden", "Týden", gdc0, "convert(varchar(4),year(a.p31Date))+'-'+convert(varchar(10),DATEPART(week,a.p31Date))","string",false,false,strG);
+            AF(stb, "p31DateTimeFrom_Orig", "Čas od", gdc0,null, "time", false, false, strG);
+            AF(stb, "p31DateTimeUntil_Orig", "Čas do", gdc0, null, "time", false, false, strG);
+
+            AF(stb, "p31Text", "Text", gdc1);
+            AF(stb, "p31Code", "Kód dokladu");
+
+            strG = "Vykázáno";
+            AF(stb, "p31Value_Orig", "Vykázaná hodnota", gdc0, null, "num", false, false, strG);
+            AF(stb, "p31Hours_Orig", "Vykázané hodiny", gdc1, null, "num", true, false, strG);
+            AF(stb, "p31HHMM_Orig", "Hodiny HH:MM", gdc0,null,"string",false,false,strG);
+
+            strG = "Expense marže";
+            AF(stb, "p31MarginHidden", "Skrytá marže", gdc0, null, "num", false, false, strG);
+            AF(stb, "p31MarginTransparent", "Přiznaná marže%", gdc0, null, "num", false, false, strG);
+            AF(stb, "ExpenseAfterMarginHidden", "Výdaj po skryté marži", gdc0, "a.p31Amount_WithoutVat_Orig+(a.p31Amount_WithoutVat_Orig*a.p31MarginHidden/100)", "num",true, false, strG);
+            AF(stb, "ExpenseAfterAllMargins", "Výdaj po obou maržích", gdc0, "dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent)", "num", true, false, strG);
+            AF(stb, "Odmena_Minus_Vydaj_Minus_HonorarR", "Odměna - Výdaj s marží - Režijní honorář", gdc0, "(case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=2 then a.p31Amount_WithoutVat_Orig else 0 end) - (case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=1 then dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent) else 0 end) - (case when p34.p33ID IN (1,3) then a.p31Hours_Orig*a.p31Rate_Overhead else 0 end)", "num", true, false, strG);
+
+            AppendTimestamp(stb);
+        }
 
         private void SetupJ02(string stb="j02Person")
         {
             AF(stb, "fullname_desc", "Příjmení+Jméno", BO.TheGridDefColFlag.GridAndCombo, "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string", false, true);
             AF(stb, "fullname_asc", "Jméno+Příjmení", BO.TheGridDefColFlag._none, "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string", false, true);
 
-            AF(stb, "j02Email", "E-mail", BO.TheGridDefColFlag.GridAndCombo);
+            AF(stb, "j02Email", "E-mail", gdc1);
             AF(stb, "j02FirstName", "Jméno");
             AF(stb, "j02LastName", "Příjmení");
             AF(stb, "j02TitleBeforeName", "Titul před");
@@ -509,8 +544,8 @@ namespace BL
             AF(stb, "p28Code", "Kód");
             AF(stb, "p28CompanyShortName", "Zkrácený název");
             
-            AF(stb, "p28RegID", "IČ", BO.TheGridDefColFlag.GridOnly);
-            AF(stb, "p28VatID", "DIČ", BO.TheGridDefColFlag.GridAndCombo);
+            AF(stb, "p28RegID", "IČ", gdc2);
+            AF(stb, "p28VatID", "DIČ", gdc1);
             AF(stb, "p28BillingMemo", "Fakturační poznámka");
 
             AFNUM0(stb, "p28Round2Minutes", "Zaokrouhlování času");
@@ -537,12 +572,12 @@ namespace BL
             AFBOOL(stb, "p91IsDraft", "Draft");
 
             var strG = "Datum";
-            AF(stb, "p91Date", "Vystaveno", BO.TheGridDefColFlag.GridOnly, null,"date",false,false,strG);
-            AF(stb, "p91DateSupply", "Datum plnění", BO.TheGridDefColFlag.GridAndCombo, null, "date", false, false, strG);
-            AF(stb, "p91DateMaturity", "Splatnost", BO.TheGridDefColFlag.GridOnly, null, "date", false, false, strG);
+            AFDATE(stb, "p91Date", "Vystaveno", BO.TheGridDefColFlag.GridOnly,strG);
+            AFDATE(stb, "p91DateSupply", "Datum plnění", BO.TheGridDefColFlag.GridAndCombo,strG);
+            AFDATE(stb, "p91DateMaturity", "Splatnost", BO.TheGridDefColFlag.GridOnly,strG);
             AF(stb, "DnuPoSplatnosti", "Dnů do splatnosti", 0, "case When a.p91Amount_Debt=0 Then null Else datediff(day, p91DateMaturity, dbo.get_today()) End", "num0", false, false, strG);
-            AF(stb, "p91DateBilled", "Datum úhrady", 0, null, "date", false, false, strG);
-            AF(stb, "p91DateExchange", "Datum měn.kurzu", 0, null, "date", false, false, strG);
+            AFDATE(stb, "p91DateBilled", "Datum úhrady",0, strG);
+            AFDATE(stb, "p91DateExchange", "Datum měn.kurzu", 0, strG);
 
             strG = "Částka";
             AF(stb, "p91Amount_WithoutVat", "Bez dph", BO.TheGridDefColFlag.GridAndCombo, null,"num",true,false,strG);

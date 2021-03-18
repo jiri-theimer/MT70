@@ -200,6 +200,12 @@ namespace BL
                 case "p28":
                     lis.Add(getREL("view_PrimaryAddress", "p28_address_primary", "Fakturační adresa", "LEFT OUTER JOIN view_PrimaryAddress p28_address_primary ON a.p28ID=p28_address_primary.p28ID"));
                     break;
+                case "p31":
+                    lis.Add(getREL("j02Person", "p31_j02", "Osoba úkonu", "LEFT OUTER JOIN j02Person p31_j02 ON a.j02ID=p31_j02.j02ID"));
+                    lis.Add(getREL("p32Activity", "p31_p32", "Aktivita", "INNER JOIN p32Activity p31_p32 ON a.p32ID=p31_p32.p32ID"));
+                    lis.Add(getREL("p34ActivityGroup", "p32_p34", "Sešit", "INNER JOIN p32Activity aktivita1 ON a.p32ID=aktivita1.p32ID INNER JOIN p34ActivityGroup p32_p34 ON aktivita1.p34ID=p32_p34.p34ID"));
+                    lis.Add(getREL("p41Project", "p31_p41", "Projekt", "LEFT OUTER JOIN p41Project p31_p41 ON a.p41ID=p31_p41.p41ID"));
+                    break;
                 case "p36":
                     lis.Add(getREL("j02Person", "p36_j02", "Osoba", "LEFT OUTER JOIN j02Person p36_j02 ON a.j02ID=p36_j02.j02ID"));
                     lis.Add(getREL("j11Team", "p36_j11", "Tým", "LEFT OUTER JOIN j11Team p36_j11 ON a.j11ID=p36_j11.j11ID"));
