@@ -10,7 +10,7 @@ namespace BL
     {
         public BO.o40SmtpAccount Load(int pid);
         public BO.o40SmtpAccount LoadGlobalDefault();
-        public IEnumerable<BO.o40SmtpAccount> GetList(BO.myQuery mq);
+        public IEnumerable<BO.o40SmtpAccount> GetList(BO.myQueryO40 mq);
         public int Save(BO.o40SmtpAccount rec);
 
     }
@@ -39,7 +39,7 @@ namespace BL
             return _db.Load<BO.o40SmtpAccount>(GetSQL1(" WHERE a.o40IsGlobalDefault=1 AND GETDATE() BETWEEN a.o40ValidFrom AND a.o40ValidUntil"));
         }
 
-        public IEnumerable<BO.o40SmtpAccount> GetList(BO.myQuery mq)
+        public IEnumerable<BO.o40SmtpAccount> GetList(BO.myQueryO40 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.o40SmtpAccount>(fq.FinalSql, fq.Parameters);
@@ -55,6 +55,7 @@ namespace BL
             }
             var p = new DL.Params4Dapper();
             p.AddInt("pid", rec.pid);
+            if (rec.j02ID_Owner == 0) rec.j02ID_Owner = _mother.CurrentUser.j02ID;
             p.AddInt("j02ID_Owner", rec.j02ID_Owner, true);
             p.AddBool("o40IsGlobalDefault", rec.o40IsGlobalDefault);
             p.AddString("o40Name", rec.o40Name);

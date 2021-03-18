@@ -228,13 +228,28 @@ namespace UI.Controllers
                 mq.SetPids(Factory.CurrentUser.j11IDs);
                 v.Teams = string.Join(", ", Factory.j11TeamBL.GetList(mq).Select(p => p.j11Name));
             }
-            
+
+            RefreshState_MyProfile(v);
+
+
             return View(v);
+        }
+        private void RefreshState_MyProfile(Models.MyProfileViewModel v)
+        {
+            string strMyQuery = "j02id|int|"+Factory.CurrentUser.j02ID.ToString();
+          
+            v.gridinputO40 = new TheGridInput() { entity = "o40SmtpAccount", myqueryinline = strMyQuery };
+            v.gridinputO40.query = new BO.InitMyQuery().Load("o40", null, 0, strMyQuery);
+
+            var c = new basUI.TheMenuSupport(Factory);
+            v.lisMenuLinks = c.getUserMenuLinks();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult MyProfile(Models.MyProfileViewModel v)
         {
+            RefreshState_MyProfile(v);
+
             if (ModelState.IsValid)
             {
                 if (string.IsNullOrEmpty(v.EmailAddres) == true)

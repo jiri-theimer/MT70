@@ -13,15 +13,11 @@
 
 
 <div class="modal_record_container">
-    <div class="row">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Využití poštovního účtu"):</label>
-        <div class="col-sm-11 col-md-10">
-            <select asp-for="@Model.UsageFlag" class="form-select">
-                <option value="1">@_f.tra("Privátní SMTP účet")</option>
-                <option value="2">@_f.tra("Globální SMTP účet")</option>
-            </select>
-        </div>
+    <div class="my-2">
+        <input asp-for="Rec.o40IsGlobalDefault" />
+        <label for="Rec_o40IsGlobalDefault">@_f.tra("Globální SMTP účet využitelný pro všechny uživatele")</label>
     </div>
+    
     <div id="divOwner" class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník účtu"):</label>
         <div class="col-sm-11 col-md-10">
@@ -107,9 +103,7 @@
         $("#Rec_o40IsVerify").on("click", function () {
             handle_ucet_state();
         });
-        $("#UsageFlag").on("change", function () {
-            handle_ucet_state();
-        });
+        
     });
 
     
@@ -124,11 +118,7 @@
             $("#credentials").css("display", "none");
         }
 
-        if ($("#UsageFlag").val() == "1") {
-            $("#divOwner").css("visibility", "visible");
-        } else {
-            $("#divOwner").css("visibility", "hidden");
-        }
+        
     }
 
 </script>

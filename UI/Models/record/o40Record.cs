@@ -9,7 +9,7 @@ namespace UI.Models.Record
     {
         public BO.o40SmtpAccount Rec { get; set; }
         public string ComboPerson { get; set; }
-        public int UsageFlag { get; set; }
+        
         public bool IsUseSSL { get; set; }
     }
 }

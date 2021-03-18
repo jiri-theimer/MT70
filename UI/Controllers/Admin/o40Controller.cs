@@ -26,22 +26,23 @@ namespace UI.Controllers
                 {
                     v.IsUseSSL = true;
                 }
-                if (v.Rec.j02ID_Owner > 0)
-                {
-                    v.UsageFlag = 1;
-                    v.ComboPerson = Factory.j02PersonBL.Load(v.Rec.j02ID_Owner).FullNameDesc;
-                }
-                else
-                {
-                    v.UsageFlag = 2;
-                }
+
+
+            }
+            else
+            {
+                v.Rec.j02ID_Owner = Factory.CurrentUser.j02ID;
+            }
+            if (v.Rec.j02ID_Owner > 0)
+            {
+                v.ComboPerson = Factory.j02PersonBL.Load(v.Rec.j02ID_Owner).FullNameDesc;
             }
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)
             {
                 v.MakeClone();
             }
-            return ViewTup(v, BO.x53PermValEnum.GR_Admin);
+            return View(v);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,17 +52,8 @@ namespace UI.Controllers
             {
                 BO.o40SmtpAccount c = new BO.o40SmtpAccount();
                 if (v.rec_pid > 0) c = Factory.o40SmtpAccountBL.Load(v.rec_pid);
-                if (v.UsageFlag==2)
-                {
-                    c.j02ID_Owner = 0;  //globální účet
-                    c.o40IsGlobalDefault = true;
-                }
-                else
-                {
-                    c.j02ID_Owner = v.Rec.j02ID_Owner;
-                    c.o40IsGlobalDefault = false;
-                }
-                
+                c.j02ID_Owner = v.Rec.j02ID_Owner;
+                c.o40IsGlobalDefault = v.Rec.o40IsGlobalDefault;
                 c.o40Name = v.Rec.o40Name;
                 c.o40Server = v.Rec.o40Server;
                 c.o40Port = v.Rec.o40Port;                

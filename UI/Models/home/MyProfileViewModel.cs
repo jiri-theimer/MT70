@@ -26,5 +26,9 @@ namespace UI.Models
         public string j02EmailSignature { get; set; }
 
         public int j03ModalWindowsFlag { get; set; }
+
+        public TheGridInput gridinputO40 { get; set; }
+
+        public List<MenuItem> lisMenuLinks { get; set; }
     }
 }
