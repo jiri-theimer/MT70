@@ -45,6 +45,89 @@
                     <a class="btn btn-outline-info dropdown-toggle" data-bs-toggle="collapse" href="#kdojsem" role="button" aria-expanded="false" aria-controls="kdojsem">@_f.tra("Kdo jsem")</a>
                 </div>
 
+                <div class="collapse multi-collapse" id="kdojsem">
+                    @if (Model.CurrentUser != null)
+                    {
+
+                        <div class="row">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Uživatel"):</label>
+                            <div class="col-sm-11 col-md-10">
+                                <myval value="@Model.CurrentUser.j03Login"></myval>
+
+                            </div>
+
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Aplikační role"):</label>
+                            <div class="col-sm-11 col-md-10">
+
+                                <myval value="@Model.RecJ03.j04Name"></myval>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+                    @if (Model.RecJ02 != null)
+                    {
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("E-mail"):</label>
+                            <div class="col-sm-11 col-md-10">
+                                <myval value="@Model.RecJ02.j02Email"></myval>
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
+                            <div class="col-sm-11 col-md-10">
+
+                                <myval value="@Model.RecJ02.FullNameAsc"></myval>
+                            </div>
+
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Osobní kód"):</label>
+                            <div class="col-sm-11 col-md-10">
+                                <myval value="@Model.RecJ02.j02Code"></myval>
+
+                            </div>
+
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pozice"):</label>
+                            <div class="col-sm-11 col-md-10">
+
+                                <myval value="@Model.RecJ02.j07Name"></myval>
+                            </div>
+
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Fond hodin"):</label>
+                            <div class="col-sm-11 col-md-10">
+
+                                <myval value="@Model.RecJ02.c21Name"></myval>
+                            </div>
+
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Člen týmů"):</label>
+                            <div class="col-sm-11 col-md-10">
+
+                                <myval value="@Model.Teams"></myval>
+                            </div>
+
+                        </div>
+
+
+
+
+                    }
+                </div>
+
                 <div class="row">
                     <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("E-mail"):</label>
                     <div class="col-sm-11 col-md-10">
@@ -122,88 +205,7 @@
 
 
 
-            <div class="collapse multi-collapse" id="kdojsem">
-                @if (Model.CurrentUser != null)
-                {
-
-                    <div class="row">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Uživatel"):</label>
-                        <div class="col-sm-11 col-md-10">
-                            <myval value="@Model.CurrentUser.j03Login"></myval>
-
-                        </div>
-
-                    </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Aplikační role"):</label>
-                        <div class="col-sm-11 col-md-10">
-
-                            <myval value="@Model.RecJ03.j04Name"></myval>
-
-                        </div>
-
-                    </div>
-
-                }
-
-                @if (Model.RecJ02 != null)
-                {
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("E-mail"):</label>
-                        <div class="col-sm-11 col-md-10">
-                            <myval value="@Model.RecJ02.j02Email"></myval>
-
-
-
-                        </div>
-
-                    </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
-                        <div class="col-sm-11 col-md-10">
-
-                            <myval value="@Model.RecJ02.FullNameAsc"></myval>
-                        </div>
-
-                    </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Osobní kód"):</label>
-                        <div class="col-sm-11 col-md-10">
-                            <myval value="@Model.RecJ02.j02Code"></myval>
-
-                        </div>
-
-                    </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Pozice"):</label>
-                        <div class="col-sm-11 col-md-10">
-
-                            <myval value="@Model.RecJ02.j07Name"></myval>
-                        </div>
-
-                    </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Fond hodin"):</label>
-                        <div class="col-sm-11 col-md-10">
-
-                            <myval value="@Model.RecJ02.c21Name"></myval>
-                        </div>
-
-                    </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Člen týmů"):</label>
-                        <div class="col-sm-11 col-md-10">
-
-                            <myval value="@Model.Teams"></myval>
-                        </div>
-
-                    </div>
-
-
-
-
-                }
-            </div>
+            
         </div>
 
         <div class="tab-pane" id="tab2" role="tabpanel">
@@ -301,6 +303,7 @@
         $('a[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
             
             tg_adjust_for_screen();
+            
         })
 
         $("#cmdAddO40").click(function () {
@@ -308,7 +311,7 @@
             _window_open(_ep("/o40/Record?pid=0"),1);
         });
 
-
+        
         _resize_textareas();
     });
 

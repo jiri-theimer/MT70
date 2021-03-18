@@ -95,7 +95,7 @@ namespace UI.Controllers
 
                 if (v.Rec.o40ID > 0)
                 {
-                    Factory.CBL.SetUserParam("SendMail_j40ID", v.Rec.o40ID.ToString());                    
+                    Factory.CBL.SetUserParam("SendMail_o40ID", v.Rec.o40ID.ToString());                    
                 }
 
                 if (ret.Flag == BO.ResultEnum.Success)  //případná chybová hláška je již naplněná v BL vrstvě

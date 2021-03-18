@@ -46,7 +46,7 @@
         <div class="row">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Odesílatel"):</label>
             <div class="col-sm-11 col-md-10">
-                <mycombo entity="o40SmtpAccount" asp-for="Rec.o40ID" selectedtext="@Model.SelectedO40Name" view-flag="2" myqueryinline="MyRecordsDisponible|bool@1"></mycombo>
+                <mycombo entity="o40SmtpAccount" asp-for="Rec.o40ID" selectedtext="@Model.SelectedO40Name" view-flag="2" myqueryinline="is4sendmail|bool|1"></mycombo>
             </div>
         </div>
 
