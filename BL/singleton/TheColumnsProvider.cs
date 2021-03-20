@@ -553,6 +553,26 @@ namespace BL
             onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny_Odpis", "Schválené hodiny ODPIS - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny_Odpis", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
             onecol = AF(stb, "Nevyfakturovano_Schvaleno_BezDph", "Schváleno bez DPH - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvaleno_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
 
+
+            _curFieldGroup = "Vyúčtováno";//-----------Vyúčtováno---------------------
+            onecol = AF(stb, "p31Hours_Invoiced", "Vyúčtované hodiny", gdc0, null, "num", true);
+            onecol = AF(stb, "p31HHMM_Invoiced", "Vyúčtováno HH:mm", gdc0, null, "num");
+            onecol = AF(stb, "p31Rate_Billing_Invoiced", "Vyúčtovaná hodinová sazba", gdc0, null, "num"); onecol.IHRC = true;
+            onecol = AF(stb, "p70Name", "Fakturační status", gdc0, "p70.p70Name"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
+            onecol = AF(stb, "p70Name_BillingLang1", "Fakturační status L1", gdc0, "p70.p70Name_BillingLang1"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
+            onecol = AF(stb, "p70Name_BillingLang2", "Fakturační status L2", gdc0, "p70.p70Name_BillingLang2"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_WithoutVat_Invoiced", "Vyúčtováno bez DPH", gdc0, null, "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_WithVat_Invoiced", "Vyúčtováno vč. DPH", gdc0, null, "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "p31VatRate_Invoiced", "Vyúčtovaná DPH sazba", gdc0, null, "num"); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_WithoutVat_Invoiced_Domestic", "Vyúčtováno bez DPH x Kurz", gdc0, null, "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "j27Code_Billing_Invoice", "Měna vyúčtování", gdc0, "j27billing_invoice.j27Code", "string"); onecol.IHRC = true;onecol.RelSql = "LEFT OUTER JOIN j27Currency j27billing_invoice ON a.j27ID_Billing_Invoiced=j27billing_invoice.j27ID";
+            onecol = AF(stb, "Vyfakturovano_Hodiny_Fakturovat", "Vyúčt.hodiny [Fakturovat]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Fakturovat", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vyfakturovano_Hodiny_Pausal", "Vyúčt.hodiny [Paušál]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Pausal", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vyfakturovano_Hodiny_Odpis", "Vyúčt.hodiny [Odpis]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Odpis", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vyfakturovano_Honorar", "Vyúčtovaný honorář", gdc0, "p31_ocas.Vyfakturovano_Honorar", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+
             _curFieldGroup = "Nákladová cena";//-----------Nákladová cena---------------------
             onecol = AF(stb, "p31Rate_Internal_Orig", "Nákladová sazba", gdc0, null, "num"); onecol.IHRC = true;
             onecol = AF(stb, "p31Amount_Internal", "Nákladový honorář", gdc0, null, "num", true); onecol.IHRC = true;
@@ -566,6 +586,25 @@ namespace BL
             onecol = AF(stb, "p31Amount_WithoutVat_FixedCurrency", "Vykázáno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*a.p31Amount_WithoutVat_Orig", "num", true); onecol.IHRC = true;
             onecol = AF(stb, "WIP_BezDph_FK", "Rozpracováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.WIP_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
             onecol = AF(stb, "Nevyfakturovano_BezDph_FK", "Nevyúčtováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.Nevyfakturovano_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vykazano_Naklad_FK", "Vykázaný náklad FK", gdc0, "p31_ocas.Vykazano_Naklad_FK", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vykazano_Vynos_FK", "Vykázaný výnos FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.Vykazano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vykazano_Zisk_FK", "Vykázaný zisk FK", gdc0, "p31_ocas.Vykazano_Zisk_FK", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+            _curFieldGroup = "Výsledovka z vykázaných hodnot";//-----------Výsledovka z vykázaných hodnot---------------------
+            onecol = AF(stb, "Vykazano_Naklad", "Vykázaný náklad", gdc0, "p31_ocas.Vykazano_Naklad", "num",true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vykazano_Vynos", "Vykázaný výnos", gdc0, "p31_ocas.Vykazano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vykazano_Zisk", "Vykázaný zisk", gdc0, "p31_ocas.Vykazano_Zisk", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vykazano_Naklad_Rezije", "Vykázaný režijní náklad", gdc0, "p31_ocas.Vykazano_Naklad_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vykazano_Zisk_Rezije", "Vykázaný režijní zisk", gdc0, "p31_ocas.Vykazano_Zisk_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+            _curFieldGroup = "Výsledovka z vyúčtovaných hodnot";//-----------Výsledovka z vyúčtovaných hodnot---------------------
+            onecol = AF(stb, "Vyfakturovano_Puvodni_Naklad_Domestic", "Vykázaný náklad x Kurz", gdc0, "p31_ocas.Vyfakturovano_Puvodni_Naklad_Domestic", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vyfakturovano_Vynos", "Vyúčtovaný výnos", gdc0, "p31_ocas.Vyfakturovano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vyfakturovano_Vynos_Domestic", "Vyúčtovaný výnos x Kurz", gdc0, "p31_ocas.Vyfakturovano_Vynos_Domestic", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vyfakturovano_Zisk", "Zisk po vyúčtování", gdc0, "p31_ocas.Vyfakturovano_Zisk", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Vyfakturovano_Zisk_Rezije", "Režijní zisk po vyúčtování", gdc0, "p31_ocas.Vyfakturovano_Zisk_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
 
 
             _curFieldGroup = "Expense marže";
