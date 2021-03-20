@@ -12,7 +12,7 @@ namespace BL
         //private readonly BL.RunningApp _app;
         private readonly BL.TheEntitiesProvider _ep;
         private readonly BL.TheTranslator _tt;
-        private List<BO.TheGridColumn> _lis;        
+        private List<BO.TheGridColumn> _lis;
         private string _lastEntity;
         private string _curEntityAlias;
         private string _curFieldGroup;
