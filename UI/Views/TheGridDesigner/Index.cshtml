@@ -454,7 +454,12 @@
     function refresh_state() {
         _sels = [];
         $("#list1 .list-group-item").each(function () {
-            _sels.push($(this).attr("data-field"));
+            if (typeof $(this).attr("data-field") != "undefined") {
+                _sels.push($(this).attr("data-field"));
+            } else {
+                alert("Error: " + $(this).html());
+            }
+            
         });
         $("#Rec_j72Columns").val(_sels.join(","));
 

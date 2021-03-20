@@ -114,8 +114,18 @@ namespace BL
                 }
 
             }
-            
-            
+            foreach (BO.TheGridColumn col in mq.explicit_columns.Where(x => x.RelSql != null && x.RelName ==null))  //sloupce, které mají na míru RelSql definovanou v TheColumnsProvider
+            {               
+                if (relSqls.Exists(p => p == col.RelSql) == false)
+                {
+                    relSqls.Add(col.RelSql);
+                    sb.Append(" ");
+                    sb.Append(col.RelSql);
+                }
+
+            }
+
+
             //vždy musí být nějaké výchozí třídění v ce.SqlOrderBy!!
             if (bolGetTotalsRow == false && String.IsNullOrEmpty(mq.explicit_orderby)) mq.explicit_orderby = ce.SqlOrderBy;
 

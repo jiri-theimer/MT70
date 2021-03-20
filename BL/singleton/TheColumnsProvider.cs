@@ -15,10 +15,11 @@ namespace BL
         private List<BO.TheGridColumn> _lis;        
         private string _lastEntity;
         private string _curEntityAlias;
+        private string _curFieldGroup;
         private BO.TheGridDefColFlag gdc1 = BO.TheGridDefColFlag.GridAndCombo;
         private BO.TheGridDefColFlag gdc0 = BO.TheGridDefColFlag._none;
         private BO.TheGridDefColFlag gdc2 = BO.TheGridDefColFlag.GridOnly;
-
+        private BO.TheGridColumn onecol;
         public TheColumnsProvider(BL.TheEntitiesProvider ep,BL.TheTranslator tt)
         {
             //_app = runningapp;
@@ -64,23 +65,23 @@ namespace BL
         {
             return AF(strEntity, strField, strHeader, dcf, null, "bool");
         }
-        private BO.TheGridColumn AFNUM0(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf = BO.TheGridDefColFlag._none, string strGroup = null)
+        private BO.TheGridColumn AFNUM0(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf = BO.TheGridDefColFlag._none)
         {
-            return AF(strEntity, strField, strHeader, dcf, null, "num0",false,false,strGroup);
+            return AF(strEntity, strField, strHeader, dcf, null, "num0",false,false);
         }
-        private BO.TheGridColumn AFDATE(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf = BO.TheGridDefColFlag._none, string strGroup = null)
+        private BO.TheGridColumn AFDATE(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf = BO.TheGridDefColFlag._none)
         {
             return AF(strEntity, strField, strHeader, dcf, null, "date");
         }
 
-        private BO.TheGridColumn AF(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf=BO.TheGridDefColFlag._none, string strSqlSyntax = null, string strFieldType = "string", bool bolIsShowTotals = false,bool bolNotShowRelInHeader=false,string strGroup=null)
+        private BO.TheGridColumn AF(string strEntity, string strField, string strHeader, BO.TheGridDefColFlag dcf=BO.TheGridDefColFlag._none, string strSqlSyntax = null, string strFieldType = "string", bool bolIsShowTotals = false,bool bolNotShowRelInHeader=false)
         {
             if (strEntity != _lastEntity)
             {
                 _curEntityAlias = _ep.ByTable(strEntity).AliasSingular;
             }
            
-            _lis.Add(new BO.TheGridColumn() { Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, DefaultColumnFlag = dcf, SqlSyntax = strSqlSyntax, FieldType = strFieldType, IsShowTotals = bolIsShowTotals,NotShowRelInHeader= bolNotShowRelInHeader,FixedWidth= SetDefaultColWidth(strFieldType),TranslateLang1=strHeader,TranslateLang2=strHeader,TranslateLang3=strHeader,DesignerGroup=strGroup });
+            _lis.Add(new BO.TheGridColumn() { Field = strField, Entity = strEntity, EntityAlias = _curEntityAlias, Header = strHeader, DefaultColumnFlag = dcf, SqlSyntax = strSqlSyntax, FieldType = strFieldType, IsShowTotals = bolIsShowTotals,NotShowRelInHeader= bolNotShowRelInHeader,FixedWidth= SetDefaultColWidth(strFieldType),TranslateLang1=strHeader,TranslateLang2=strHeader,TranslateLang3=strHeader,DesignerGroup= _curFieldGroup });
             _lastEntity = strEntity;
             return _lis[_lis.Count - 1];
         }
@@ -100,6 +101,7 @@ namespace BL
 
         private void AppendTimestamp(string strEntity,bool include_validity =true)
         {
+            _curFieldGroup = null;
             string prefix = strEntity.Substring(0, 3);
             AF_TIMESTAMP(strEntity, "DateInsert_" + strEntity, "Založeno", "a."+ prefix+"DateInsert", "datetime");
             AF_TIMESTAMP(strEntity, "UserInsert_" + strEntity, "Založil", "a."+ prefix+"UserInsert", "string");
@@ -139,7 +141,7 @@ namespace BL
         }
         private void SetupPallete()
         {
-            BO.TheGridColumn onecol;
+            
             
 
             SetupJ02();
@@ -491,30 +493,90 @@ namespace BL
 
         private void SetupP31(string stb = "p31Worksheet")
         {
-            var strG = "Datum a čas úkonu";
-            AFDATE(stb, "p31Date", "Datum", gdc1, strG);
-            AF(stb, "UkonYear", "Rok", gdc0, "convert(varchar(4),a.p31Date)", "string",false,false,strG);
-            AF(stb, "UkonMesic", "Měsíc", gdc0, "convert(varchar(7),a.p31Date,126)","string",false,false,strG);
-            AF(stb, "UkonTyden", "Týden", gdc0, "convert(varchar(4),year(a.p31Date))+'-'+convert(varchar(10),DATEPART(week,a.p31Date))","string",false,false,strG);
-            AF(stb, "p31DateTimeFrom_Orig", "Čas od", gdc0,null, "time", false, false, strG);
-            AF(stb, "p31DateTimeUntil_Orig", "Čas do", gdc0, null, "time", false, false, strG);
-
+            _curFieldGroup = "Root";
             AF(stb, "p31Text", "Text", gdc1);
             AF(stb, "p31Code", "Kód dokladu");
+            AF(stb, "TagsHtml", "Štítky",gdc0, "dbo.tag_values_inline_html(331,a.p31ID)");
+            AF(stb, "TagsText", "Štítky (text)", gdc0, "dbo.tag_values_inline(331,a.p31ID)");
+            AF(stb, "p31RecordSourceFlag_Alias", "Zdrojová aplikace",gdc0, "case a.p31RecordSourceFlag when 1 then 'Mobil' else 'MT' end");
+            AF(stb, "p31DateTimeUntil_Orig", "Čas zapnutí stopek", gdc0, null, "datetime");
 
-            strG = "Vykázáno";
-            AF(stb, "p31Value_Orig", "Vykázaná hodnota", gdc0, null, "num", false, false, strG);
-            AF(stb, "p31Hours_Orig", "Vykázané hodiny", gdc1, null, "num", true, false, strG);
-            AF(stb, "p31HHMM_Orig", "Hodiny HH:MM", gdc0,null,"string",false,false,strG);
+            _curFieldGroup = "Datum a čas úkonu";
+            AFDATE(stb, "p31Date", "Datum", gdc1);
+            AF(stb, "UkonYear", "Rok", gdc0, "convert(varchar(4),a.p31Date)", "string");
+            AF(stb, "UkonMesic", "Měsíc", gdc0, "convert(varchar(7),a.p31Date,126)","string");
+            AF(stb, "UkonTyden", "Týden", gdc0, "convert(varchar(4),year(a.p31Date))+'-'+convert(varchar(10),DATEPART(week,a.p31Date))","string");
+            AF(stb, "p31DateTimeFrom_Orig", "Čas od", gdc0,null, "time");
+            AF(stb, "p31DateTimeUntil_Orig", "Čas do", gdc0, null, "time");
 
-            strG = "Expense marže";
-            AF(stb, "p31MarginHidden", "Skrytá marže", gdc0, null, "num", false, false, strG);
-            AF(stb, "p31MarginTransparent", "Přiznaná marže%", gdc0, null, "num", false, false, strG);
-            AF(stb, "ExpenseAfterMarginHidden", "Výdaj po skryté marži", gdc0, "a.p31Amount_WithoutVat_Orig+(a.p31Amount_WithoutVat_Orig*a.p31MarginHidden/100)", "num",true, false, strG);
-            AF(stb, "ExpenseAfterAllMargins", "Výdaj po obou maržích", gdc0, "dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent)", "num", true, false, strG);
-            AF(stb, "Odmena_Minus_Vydaj_Minus_HonorarR", "Odměna - Výdaj s marží - Režijní honorář", gdc0, "(case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=2 then a.p31Amount_WithoutVat_Orig else 0 end) - (case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=1 then dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent) else 0 end) - (case when p34.p33ID IN (1,3) then a.p31Hours_Orig*a.p31Rate_Overhead else 0 end)", "num", true, false, strG);
+
+            var strSQL_Ocas = "LEFT OUTER JOIN dbo.view_p31_ocas p31_ocas ON a.p31ID=p31_ocas.p31ID";
+            _curFieldGroup = "Vykázáno";//-----------Vykázáno---------------------
+            AF(stb, "p31Value_Orig", "Vykázaná hodnota", gdc0, null, "num");
+            AF(stb, "p31Hours_Orig", "Vykázané hodiny", gdc1, null, "num",true);
+            onecol=AF(stb, "Vykazano_Hodiny_Fa", "Vykázané hodiny Fa", gdc0, "p31_ocas.Vykazano_Hodiny_Fa", "num", true);
+            onecol = AF(stb, "Vykazano_Hodiny_NeFa", "Vykázané hodiny NeFa", gdc0, "p31_ocas.Vykazano_Hodiny_NeFa", "num", true);onecol.RelSql = strSQL_Ocas;
+
+            AF(stb, "p31HHMM_Orig", "Hodiny HH:MM", gdc0,null,"string");
+            onecol=AF(stb, "p31Rate_Billing_Orig", "Výchozí hodinová sazba", gdc0, null, "num");onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_WithoutVat_Orig", "Vykázáno bez DPH", gdc0,null, "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_WithVat_Orig", "Vykázáno vč. DPH", gdc0, null, "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_Vat_Orig", "Vykázáno DPH", gdc0, null, "num", true); onecol.IHRC = true;
+
+            
+            onecol =AF(stb, "trimm_p72Name", "Status korekce", gdc0, "p72trimm.p72Name");            
+            onecol.RelSql = "LEFT OUTER JOIN p72PreBillingStatus p72trimm On a.p72ID_AfterTrimming=p72trimm.p72ID";
+
+            onecol=AF(stb, "VykazanoHodinyFaPoKorekci", "Hodiny Fa po korekci", gdc0, "case when a.p72ID_AfterTrimming is null then p31_ocas.Vykazano_Hodiny_Fa else a.p31Hours_Trimmed end", "num", true);
+            onecol.RelSql = strSQL_Ocas;
+
+            onecol = AF(stb, "Fakturacni_Honorar_Po_Korekci", "Fakturační honorář po korekci", gdc0, "case when a.p72ID_AfterTrimming is not null then a.p31Hours_Trimmed*a.p31Rate_Billing_Orig else a.p31Hours_Orig*a.p31Rate_Billing_Orig end", "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_WithoutVat_AfterTrimming", "Bez DPH po korekci", gdc0, "a.p31Amount_WithoutVat_AfterTrimming", "num", true); onecol.IHRC = true;           
+
+            _curFieldGroup = "Rozpracováno";//-----------Rozpracováno---------------------
+            onecol =AF(stb, "WIP_Hodiny", "Rozpr.hodiny", gdc0, "p31_ocas.WIP_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas;
+            onecol = AF(stb, "WIP_Vydaje", "Rozpr.výdaj", gdc0, "p31_ocas.WIP_Vydaje", "num", true); onecol.RelSql = strSQL_Ocas;
+            onecol = AF(stb, "WIP_BezDph", "Rozpr.bez DPH", gdc0, "p31_ocas.WIP_BezDph", "num", true); onecol.RelSql = strSQL_Ocas;onecol.IHRC = true;
+            onecol = AF(stb, "WIP_BezDph_EUR", "Rozpr.bez DPH EUR", gdc0, "p31_ocas.WIP_BezDph_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "WIP_Honorar", "Rozpr.Honorář", gdc0, "p31_ocas.WIP_Honorar", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "WIP_Vydaje_EUR", "Rozpr.výdaje EUR", gdc0, "p31_ocas.WIP_Vydaje_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "WIP_Pausaly", "Rozpr.pevná odměna", gdc0, "p31_ocas.WIP_Pausaly", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "WIP_Pausaly_EUR", "Rozpr.pevná odměna EUR", gdc0, "p31_ocas.WIP_Pausaly_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+            _curFieldGroup = "Nevyúčtováno";//-----------Nevyúčtováno---------------------
+            onecol = AF(stb, "Nevyfakturovano_BezDph", "Nevyúčtováno bez DPH", gdc0, "p31_ocas.Nevyfakturovano_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_Hodiny", "Nevyúčtováné hodiny", gdc0, "p31_ocas.Nevyfakturovano_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_Vydaje", "Nevyúčtováný výdaj", gdc0, "p31_ocas.Nevyfakturovano_Vydaje", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_Pausaly", "Nevyúčtováná pevná odměna", gdc0, "p31_ocas.Nevyfakturovano_Pausaly", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny", "Schválené hodiny - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny_Pausal", "Schválené hodiny PAU - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny_Pausal", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny_Odpis", "Schválené hodiny ODPIS - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny_Odpis", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_Schvaleno_BezDph", "Schváleno bez DPH - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvaleno_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+            _curFieldGroup = "Nákladová cena";//-----------Nákladová cena---------------------
+            onecol = AF(stb, "p31Rate_Internal_Orig", "Nákladová sazba", gdc0, null, "num"); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_Internal", "Nákladový honorář", gdc0, null, "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "p31Rate_Overhead", "Režijní sazba", gdc0, null, "num"); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_Overhead", "Režijní honorář", gdc0, null, "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "p31Value_Off", "Off billing hodnota", gdc0, null, "num", true); onecol.IHRC = true;
+
+
+            _curFieldGroup = "Přepočet podle fixního kurzu";//-----------Přepočet podle fixního kurzu---------------------
+            onecol = AF(stb, "p31ExchangeRate_Fixed", "Fixní kurz", gdc0, null, "num"); onecol.IHRC = true;
+            onecol = AF(stb, "p31Amount_WithoutVat_FixedCurrency", "Vykázáno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*a.p31Amount_WithoutVat_Orig", "num", true); onecol.IHRC = true;
+            onecol = AF(stb, "WIP_BezDph_FK", "Rozpracováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.WIP_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+            onecol = AF(stb, "Nevyfakturovano_BezDph_FK", "Nevyúčtováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.Nevyfakturovano_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+            _curFieldGroup = "Expense marže";
+            AF(stb, "p31MarginHidden", "Skrytá marže", gdc0, null, "num");
+            AF(stb, "p31MarginTransparent", "Přiznaná marže%", gdc0, null, "num");
+            AF(stb, "ExpenseAfterMarginHidden", "Výdaj po skryté marži", gdc0, "a.p31Amount_WithoutVat_Orig+(a.p31Amount_WithoutVat_Orig*a.p31MarginHidden/100)", "num",true);
+            AF(stb, "ExpenseAfterAllMargins", "Výdaj po obou maržích", gdc0, "dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent)", "num", true);
+            AF(stb, "Odmena_Minus_Vydaj_Minus_HonorarR", "Odměna - Výdaj s marží - Režijní honorář", gdc0, "(case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=2 then a.p31Amount_WithoutVat_Orig else 0 end) - (case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=1 then dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent) else 0 end) - (case when p34.p33ID IN (1,3) then a.p31Hours_Orig*a.p31Rate_Overhead else 0 end)", "num", true);
 
             AppendTimestamp(stb);
+            
         }
 
         private void SetupJ02(string stb="j02Person")
@@ -565,68 +627,61 @@ namespace BL
         private void SetupP91(string stb= "p91Invoice")
         {
             BO.TheGridColumn oc;
-
+            _curFieldGroup = "Root";
             AF(stb, "p91Code", "Číslo", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
             AF(stb, "p91Client", "Klient vyúčtování", BO.TheGridDefColFlag.GridAndCombo);
+            AF(stb, "p91Text1", "Text faktury");
+            AF(stb, "p91Text2", "Technický text");
+            AF(stb, "ZapojeneOsoby", "Zapojené osoby", 0, "dbo.j02_invoiced_persons_inline(a.p91ID)");
 
             AFBOOL(stb, "p91IsDraft", "Draft");
 
-            var strG = "Datum";
-            AFDATE(stb, "p91Date", "Vystaveno", BO.TheGridDefColFlag.GridOnly,strG);
-            AFDATE(stb, "p91DateSupply", "Datum plnění", BO.TheGridDefColFlag.GridAndCombo,strG);
-            AFDATE(stb, "p91DateMaturity", "Splatnost", BO.TheGridDefColFlag.GridOnly,strG);
-            AF(stb, "DnuPoSplatnosti", "Dnů do splatnosti", 0, "case When a.p91Amount_Debt=0 Then null Else datediff(day, p91DateMaturity, dbo.get_today()) End", "num0", false, false, strG);
-            AFDATE(stb, "p91DateBilled", "Datum úhrady",0, strG);
-            AFDATE(stb, "p91DateExchange", "Datum měn.kurzu", 0, strG);
+            _curFieldGroup = "Datum";
+            AFDATE(stb, "p91Date", "Vystaveno", BO.TheGridDefColFlag.GridOnly);
+            AFDATE(stb, "p91DateSupply", "Datum plnění", BO.TheGridDefColFlag.GridAndCombo);
+            AFDATE(stb, "p91DateMaturity", "Splatnost", BO.TheGridDefColFlag.GridOnly);
+            AF(stb, "DnuPoSplatnosti", "Dnů do splatnosti", 0, "case When a.p91Amount_Debt=0 Then null Else datediff(day, p91DateMaturity, dbo.get_today()) End", "num0");
+            AFDATE(stb, "p91DateBilled", "Datum úhrady");
+            AFDATE(stb, "p91DateExchange", "Datum měn.kurzu");
 
-            strG = "Částka";
-            AF(stb, "p91Amount_WithoutVat", "Bez dph", BO.TheGridDefColFlag.GridAndCombo, null,"num",true,false,strG);
-            AF(stb, "BezDphKratKurz", "Bez dph x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_WithoutVat Else p91Amount_WithoutVat*p91ExchangeRate End", "num",true,false,strG);
-            AF(stb, "p91Amount_Debt", "Dluh", 0, null, "num",true,false,strG);
-            AF(stb, "DluhKratKurz", "Dluh x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_Debt Else p91Amount_Debt*p91ExchangeRate End", "num",true,false,strG);
-            AF(stb, "p91Amount_TotalDue", "Celkem", BO.TheGridDefColFlag.GridAndCombo, null, "num",true,false,strG);
-            AF(stb, "CelkemKratKurz", "Celkem x Kurz", 0, "case When a.j27ID = a.j27ID_Domestic Then p91Amount_TotalDue Else p91Amount_TotalDue*p91ExchangeRate End", "num",true,false,strG);
-            AF(stb, "p91Amount_Vat", "Celkem dph", 0, null, "num",true,false,strG);
-            AF(stb, "p91Amount_WithVat", "Vč.dph", 0, null, "num",true,false,strG);
-            AF(stb, "p91RoundFitAmount", "Haléřové zaokrouhlení", 0, null, "num", true, false, strG);
-            AF(stb, "p91Amount_WithoutVat_None", "Základ v nulové DPH", 0, null, "num", true, false, strG);
-            AF(stb, "p91Amount_WithoutVat_Standard", "Základ ve standardní sazbě", 0, null, "num", true, false, strG);
-            AF(stb, "p91Amount_WithoutVat_Low", "Základ ve snížené sazbě", 0, null, "num", true, false, strG);
-            AF(stb, "p91Amount_WithoutVat_Special", "Základ ve speciální sazbě", 0, null, "num", true, false, strG);
-            AF(stb, "p91Amount_Vat_Standard", "DPH ve standardní sazbě", 0, null, "num", true, false, strG);
-            AF(stb, "p91Amount_Vat_Low", "DPH ve snížené sazbě", 0, null, "num", true, false, strG);
-            AF(stb, "p91Amount_Vat_Special", "DPH ve speciální sazbě", 0, null, "num", true, false, strG);
-            AF(stb, "p91VatRate_Standard", "DPH sazba standardní", 0, null, "num", true, false, strG);
-            AF(stb, "p91VatRate_Low", "DPH sazba snížená", 0, null, "num", true, false, strG);
-            AF(stb, "p91VatRate_Special", "DPH sazba speciální", 0, null, "num", true, false, strG);
+            _curFieldGroup = "Částka";
+            AF(stb, "p91Amount_WithoutVat", "Bez dph", BO.TheGridDefColFlag.GridAndCombo, null,"num",true);
+            AF(stb, "BezDphKratKurz", "Bez dph x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_WithoutVat Else p91Amount_WithoutVat*p91ExchangeRate End", "num",true);
+            AF(stb, "p91Amount_Debt", "Dluh", 0, null, "num",true);
+            AF(stb, "DluhKratKurz", "Dluh x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_Debt Else p91Amount_Debt*p91ExchangeRate End", "num",true);
+            AF(stb, "p91Amount_TotalDue", "Celkem", BO.TheGridDefColFlag.GridAndCombo, null, "num",true);
+            AF(stb, "CelkemKratKurz", "Celkem x Kurz", 0, "case When a.j27ID = a.j27ID_Domestic Then p91Amount_TotalDue Else p91Amount_TotalDue*p91ExchangeRate End", "num",true);
+            AF(stb, "p91Amount_Vat", "Celkem dph", 0, null, "num",true);
+            AF(stb, "p91Amount_WithVat", "Vč.dph", 0, null, "num",true);
+            AF(stb, "p91RoundFitAmount", "Haléřové zaokrouhlení", 0, null, "num", true);
+            AF(stb, "p91Amount_WithoutVat_None", "Základ v nulové DPH", 0, null, "num", true);
+            AF(stb, "p91Amount_WithoutVat_Standard", "Základ ve standardní sazbě", 0, null, "num", true);
+            AF(stb, "p91Amount_WithoutVat_Low", "Základ ve snížené sazbě", 0, null, "num", true);
+            AF(stb, "p91Amount_WithoutVat_Special", "Základ ve speciální sazbě", 0, null, "num", true);
+            AF(stb, "p91Amount_Vat_Standard", "DPH ve standardní sazbě", 0, null, "num", true);
+            AF(stb, "p91Amount_Vat_Low", "DPH ve snížené sazbě", 0, null, "num", true);
+            AF(stb, "p91Amount_Vat_Special", "DPH ve speciální sazbě", 0, null, "num", true);
+            AF(stb, "p91VatRate_Standard", "DPH sazba standardní", 0, null, "num", true);
+            AF(stb, "p91VatRate_Low", "DPH sazba snížená", 0, null, "num", true);
+            AF(stb, "p91VatRate_Special", "DPH sazba speciální", 0, null, "num", true);
 
             AF(stb, "p91ProformaBilledAmount", "Uhrazené zálohy", 0, null, "num");
             AF(stb, "p91ExchangeRate", "Měnový kurz", 0, null, "num");
 
 
-            AF(stb, "p91Text1", "Text faktury");
-            AF(stb, "p91Text2", "Technický text");
+            
 
-            strG = "Klient ve faktuře";
-            oc=AF(stb, "p91Client_RegID", "IČ klienta");
-            oc.DesignerGroup = strG;
+            _curFieldGroup = "Klient ve faktuře";
+            AF(stb, "p91Client_RegID", "IČ klienta");            
+            AF(stb, "p91Client_VatID", "DIČ klienta", BO.TheGridDefColFlag.GridOnly);
+            AF(stb, "p91Client_ICDPH_SK", "IČ DPH (SK)");            
+            AF(stb, "p91ClientAddress1_Street", "Ulice klienta");
+            AF(stb, "p91ClientAddress1_City", "Město klienta");
+            AF(stb, "p91ClientAddress1_ZIP", "PSČ klienta");            
+            AF(stb, "p91ClientAddress1_Country", "Stát klienta");
+           
 
-            oc =AF(stb, "p91Client_VatID", "DIČ klienta", BO.TheGridDefColFlag.GridOnly);
-            oc.DesignerGroup = strG;
-            oc =AF(stb, "p91Client_ICDPH_SK", "IČ DPH (SK)");
-            oc.DesignerGroup = strG;
-
-            oc=AF(stb, "p91ClientAddress1_Street", "Ulice klienta");
-            oc.DesignerGroup = strG;
-            oc=AF(stb, "p91ClientAddress1_City", "Město klienta");
-            oc.DesignerGroup = strG;
-            oc=AF(stb, "p91ClientAddress1_ZIP", "PSČ klienta");
-            oc.DesignerGroup = strG;
-            oc=AF(stb, "p91ClientAddress1_Country", "Stát klienta");
-            oc.DesignerGroup = strG;
-
-
-            AF(stb, "ZapojeneOsoby", "Zapojené osoby",0, "dbo.j02_invoiced_persons_inline(a.p91ID)");
+            
 
             AppendTimestamp(stb);
         }
@@ -805,7 +860,11 @@ namespace BL
             for (var i = 0; i < sels.Count; i++)
             {
                 arr = sels[i].Split("__");
-
+                if (arr.Length < 2)
+                {
+                    //chyba
+                    BO.BASFILE.AppendText2File("c:\\temp\\chyba.txt", sels[i]);
+                }
                 if (_lis.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
                 {
                     //var c0 = _lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First();
