@@ -71,7 +71,7 @@ namespace BL
             AppendTimestamp();
 
             this.EntityName = "j27Currency";
-            AA("j27Code", "Měna", gdc1, null, "string", false, true);
+            oc = AA("j27Code", "Měna", gdc1, null, "string", false, true);oc.FixedWidth = 70;
             AA("j27Name", "Název měny");
 
             this.EntityName = "j61TextTemplate";
@@ -206,6 +206,12 @@ namespace BL
 
             this.EntityName = "p92InvoiceType";
             AA("p92Name", "Typ faktury", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
+            AA("p92ReportConstantPreText1", "Preambule hlavního textu faktury");
+            AA("p92InvoiceDefaultText1", "Výchozí hlavní text faktury");
+            AA("p92ReportConstantText", "Preambule technického textu");
+            AA("p92InvoiceDefaultText2", "Výchozí technický text");
+            AA("p92AccountingIDS", "Předkontace v účetním IS");
+            AA("p92ClassificationVATIDS", "Klasifikace DPH v účetním IS");
             AFNUM0("p92Ordinary", "#").DefaultColumnFlag = gdc2;
             AppendTimestamp();
 
@@ -289,7 +295,7 @@ namespace BL
             this.EntityName = "x31Report";
             AA("x31Name", "Tisková sestava", gdc1, null, "string", false, true);
             AA("RepFormat", "Formát", gdc1, "case a.x31FormatFlag when 1 then 'REPORT' when 2 then 'DOCX' when 3 then 'PLUGIN' when 4 then 'XLS' end");
-            AF("x31Code", "Kód sestavy");
+            AA("x31Code", "Kód sestavy");
             AFBOOL("x31IsPeriodRequired", "Filtr čaového období");
 
             AA("x31FileName", "Soubor šablony", gdc1);
@@ -344,6 +350,22 @@ namespace BL
             AA("x67Name", "Název role", gdc1, null, "string", false, true);
             AFNUM0("x67Ordinary", "#").DefaultColumnFlag = gdc2;
             AppendTimestamp();
+
+            //x29 = entita
+            this.EntityName = "x29Entity";
+            AA("x29Name", "Entita", gdc1, null, "string", false, true);
+
+            //x97 = překlad
+            this.EntityName = "x97Translate";
+            AA("x97Code", "Originál", gdc1, null, "string", false, true);
+            AA("x97Lang1", "English", gdc1);
+            AA("x97Lang2", "Deutsch", gdc1);
+            AA("x97Lang4", "Slovenčina", gdc1);
+            AA("x97OrigSource", "Zdroj");
+            AppendTimestamp(false);
+
+            this.EntityName = "x15VatRateType";
+            AA("x15Name", "Druh DPH", gdc1, null, "string", false, true);
         }
 
 

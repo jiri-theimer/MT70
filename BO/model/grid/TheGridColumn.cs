@@ -39,6 +39,7 @@ namespace BO
         public string RelName { get; set; } //název relace ve from klauzuly - naplní se v getSelectedPallete
         public string RelSql { get; set; }  //sql relace from klauzule - naplní se v getSelectedPallete
         public string RelSqlDependOn { get; set; } //sql relace na které je závislá RelSql
+        public string RelSqlInCol { get; set; } //sql relace definované přímo ve sloupci
         
         public bool IHRC { get; set; }    //pokud uživatel nemá přístup k sazbám a honorářům
         public string VisibleWithinEntityOnly { get; set; } //aplikovatelné pouze pro kategorie

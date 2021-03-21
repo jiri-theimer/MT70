@@ -199,6 +199,8 @@ namespace BL
                     break;
                 case "p28":
                     lis.Add(getREL("view_PrimaryAddress", "p28_address_primary", "Fakturační adresa", "LEFT OUTER JOIN view_PrimaryAddress p28_address_primary ON a.p28ID=p28_address_primary.p28ID"));
+                    lis.Add(getREL("p92InvoiceType", "p28_p92", "Typ faktury", "LEFT OUTER JOIN p92InvoiceType p28_p92 ON a.p92ID=p28_p92.p92ID"));
+                    lis.Add(getREL("p29ContactType", "p28_p29", "Typ klienta", "LEFT OUTER JOIN p29ContactType p28_p29 ON a.p29ID=p28_p29.p29ID"));
                     break;
                 case "p31":
                     lis.Add(getREL("j02Person", "p31_j02", "Osoba úkonu", "LEFT OUTER JOIN j02Person p31_j02 ON a.j02ID=p31_j02.j02ID"));
@@ -230,8 +232,14 @@ namespace BL
                 case "p42":
                     lis.Add(getREL("p07ProjectLevel", "p42_p07", "Úroveň", "INNER JOIN p07ProjectLevel p42_p07 ON a.p07ID=p42_p07.p07ID"));
                     break;
+                case "p90":
+                    lis.Add(getREL("j27Currency", "p90_j27", "Měna", "LEFT OUTER JOIN j27Currency p90_j27 ON a.j27ID=p90_j27.j27ID"));
+                    lis.Add(getREL("p28Contact", "p90_p28", "Klient zálohy", "LEFT OUTER JOIN p28Contact p90_p28 ON a.p28ID=p90_p28.p28ID"));
+                    lis.Add(getREL("p89ProformaType", "p90_p89", "Typ zálohy", "LEFT OUTER JOIN p89ProformaType p90_p89 ON a.p89ID=p90_p89.p89ID"));
+                    break;
                 case "p91":
                     lis.Add(getREL("j27Currency", "p91_j27", "Měna", "LEFT OUTER JOIN j27Currency p91_j27 ON a.j27ID=p91_j27.j27ID"));
+                    lis.Add(getREL("p28Contact", "p91_p28", "Klient", "LEFT OUTER JOIN p28Contact p91_p28 ON a.p28ID=p91_p28.p28ID"));
                     lis.Add(getREL("p92InvoiceType", "p91_p92", "Typ faktury", "LEFT OUTER JOIN p92InvoiceType p91_p92 ON a.p92ID=p91_p92.p92ID"));
                     lis.Add(getREL("p93InvoiceHeader", "p91_p93", "Vystavovatel faktury", "LEFT OUTER JOIN p93InvoiceHeader p91_p93 ON p91_p92.p93ID=p91_p93.p93ID", "p91_p92"));
                     lis.Add(getREL("b02WorkflowStatus", "p91_b02", "Workflow stav", "LEFT OUTER JOIN b02WorkflowStatus p91_b02 ON a.b02ID=p91_b02.b02ID"));

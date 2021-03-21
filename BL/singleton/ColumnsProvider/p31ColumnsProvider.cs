@@ -44,7 +44,7 @@ namespace BL
             oc = AF("p31Amount_WithVat_Orig", "Vykázáno vč. DPH", null, "num", true); oc.IHRC = true;
             oc = AF("p31Amount_Vat_Orig", "Vykázáno DPH", null, "num", true); oc.IHRC = true;
 
-            oc = AF("trimm_p72Name", "Status korekce", "p72trimm.p72Name");oc.RelSql = "LEFT OUTER JOIN p72PreBillingStatus p72trimm On a.p72ID_AfterTrimming=p72trimm.p72ID";
+            oc = AF("trimm_p72Name", "Status korekce", "p72trimm.p72Name");oc.RelSqlInCol = "LEFT OUTER JOIN p72PreBillingStatus p72trimm On a.p72ID_AfterTrimming=p72trimm.p72ID";
 
             oc = AFNUM_OCAS("VykazanoHodinyFaPoKorekci", "Hodiny Fa po korekci", "case when a.p72ID_AfterTrimming is null then p31_ocas.Vykazano_Hodiny_Fa else a.p31Hours_Trimmed end", true);
             oc = AF("Fakturacni_Honorar_Po_Korekci", "Fakturační honorář po korekci", "case when a.p72ID_AfterTrimming is not null then a.p31Hours_Trimmed*a.p31Rate_Billing_Orig else a.p31Hours_Orig*a.p31Rate_Billing_Orig end", "num", true); oc.IHRC = true;
@@ -75,14 +75,14 @@ namespace BL
             oc = AF("p31Hours_Invoiced", "Vyúčtované hodiny", null, "num", true);
             oc = AF( "p31HHMM_Invoiced", "Vyúčtováno HH:mm", null, "num");
             oc = AF( "p31Rate_Billing_Invoiced", "Vyúčtovaná hodinová sazba", null, "num"); oc.IHRC = true;
-            oc = AF( "p70Name", "Fakturační status", "p70.p70Name"); oc.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; oc.IHRC = true;
-            oc = AF( "p70Name_BillingLang1", "Fakturační status L1", "p70.p70Name_BillingLang1"); oc.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; oc.IHRC = true;
-            oc = AF( "p70Name_BillingLang2", "Fakturační status L2", "p70.p70Name_BillingLang2"); oc.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; oc.IHRC = true;
+            oc = AF( "p70Name", "Fakturační status", "p70.p70Name"); oc.RelSqlInCol = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; oc.IHRC = true;
+            oc = AF( "p70Name_BillingLang1", "Fakturační status L1", "p70.p70Name_BillingLang1"); oc.RelSqlInCol = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; oc.IHRC = true;
+            oc = AF( "p70Name_BillingLang2", "Fakturační status L2", "p70.p70Name_BillingLang2"); oc.RelSqlInCol = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; oc.IHRC = true;
             oc = AF( "p31Amount_WithoutVat_Invoiced", "Vyúčtováno bez DPH", null, "num", true); oc.IHRC = true;
             oc = AF( "p31Amount_WithVat_Invoiced", "Vyúčtováno vč. DPH", null, "num", true); oc.IHRC = true;
             oc = AF( "p31VatRate_Invoiced", "Vyúčtovaná DPH sazba", null, "num"); oc.IHRC = true;
             oc = AF( "p31Amount_WithoutVat_Invoiced_Domestic", "Vyúčtováno bez DPH x Kurz", null, "num", true); oc.IHRC = true;
-            oc = AF( "j27Code_Billing_Invoice", "Měna vyúčtování", "j27billing_invoice.j27Code", "string"); oc.IHRC = true; oc.RelSql = "LEFT OUTER JOIN j27Currency j27billing_invoice ON a.j27ID_Billing_Invoiced=j27billing_invoice.j27ID";
+            oc = AF( "j27Code_Billing_Invoice", "Měna vyúčtování", "j27billing_invoice.j27Code", "string"); oc.IHRC = true; oc.RelSqlInCol = "LEFT OUTER JOIN j27Currency j27billing_invoice ON a.j27ID_Billing_Invoiced=j27billing_invoice.j27ID";
             oc = AFNUM_OCAS( "Vyfakturovano_Hodiny_Fakturovat", "Vyúčt.hodiny [Fakturovat]", "p31_ocas.Vyfakturovano_Hodiny_Fakturovat",  true); oc.IHRC = true;
             oc = AFNUM_OCAS( "Vyfakturovano_Hodiny_Pausal", "Vyúčt.hodiny [Paušál]", "p31_ocas.Vyfakturovano_Hodiny_Pausal", true); oc.IHRC = true;
             oc = AFNUM_OCAS( "Vyfakturovano_Hodiny_Odpis", "Vyúčt.hodiny [Odpis]", "p31_ocas.Vyfakturovano_Hodiny_Odpis", true); oc.IHRC = true;

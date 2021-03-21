@@ -114,13 +114,23 @@ namespace BL
                 }
 
             }
-            foreach (BO.TheGridColumn col in mq.explicit_columns.Where(x => x.RelSql != null && x.RelName ==null))  //sloupce, které mají na míru RelSql definovanou v TheColumnsProvider
+            foreach (BO.TheGridColumn col in mq.explicit_columns.Where(x => x.RelSqlInCol != null))  //sloupce, které mají na míru RelSqlInCol definovanou přímo ve sloupci
             {               
-                if (relSqls.Exists(p => p == col.RelSql) == false)
+                if (relSqls.Exists(p => p == col.RelSqlInCol) == false)
                 {
-                    relSqls.Add(col.RelSql);
-                    sb.Append(" ");
-                    sb.Append(col.RelSql);
+                    if (col.RelName == null)
+                    {
+                        relSqls.Add(col.RelSqlInCol);
+                        sb.Append(" ");
+                        sb.Append(col.RelSqlInCol);
+                    }
+                    else
+                    {   //sloupec z jiné relace
+                        relSqls.Add(col.RelSqlInCol.Replace("a.",col.RelName+"."));
+                        sb.Append(" ");
+                        sb.Append(col.RelSqlInCol.Replace("a.", col.RelName + "."));
+                    }
+                    
                 }
 
             }

@@ -61,7 +61,7 @@ namespace BL
 
 
             this.CurrentFieldGroup = "Klient ve vyúčtování";
-            oc = AF("p91Client", "Klient"); oc.DefaultColumnFlag = gdc1;
+            oc = AF("p91Client", "Název klienta"); oc.DefaultColumnFlag = gdc1;
             oc =AF( "p91Client_RegID", "IČ klienta"); oc.FixedWidth = 100;
             oc =AF("p91Client_VatID", "DIČ klienta");oc.FixedWidth = 100;
             oc=AF("p91Client_ICDPH_SK", "IČ DPH (SK)"); oc.FixedWidth = 100;
@@ -71,13 +71,13 @@ namespace BL
             AF("p91ClientAddress1_Country", "Stát klienta");
 
             this.CurrentFieldGroup = "Elektronicky odesláno";
-            oc=AF("VomKdyOdeslano", "Čas odeslání", "vom.Kdy_Odeslano","datetime");oc.RelSql = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
-            oc = AF("VomStav", "Stav odeslání", "vom.AktualniStav"); oc.RelSql = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
-            oc = AF("VomKomu", "Komu odesláno", "vom.Komu"); oc.RelSql = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
-            oc = AF("VomDateInsert", "Vloženo do fronty", "vom.Kdy_Zahajeno", "datetime"); oc.RelSql = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
+            oc=AF("VomKdyOdeslano", "Čas odeslání", "vom.Kdy_Odeslano","datetime");oc.RelSqlInCol = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
+            oc = AF("VomStav", "Stav odeslání", "vom.AktualniStav"); oc.RelSqlInCol = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
+            oc = AF("VomKomu", "Komu odesláno", "vom.Komu"); oc.RelSqlInCol = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
+            oc = AF("VomDateInsert", "Vloženo do fronty", "vom.Kdy_Zahajeno", "datetime"); oc.RelSqlInCol = "LEFT OUTER JOIN view_p91_sendbyemail vom On a.p91ID = vom.p91ID";
 
-            oc =AF("BindClient", "Klient (vazba)", "p28client.p28Name");oc.RelSql = "LEFT OUTER JOIN p28Contact p28client ON a.p28ID=p28client.p28ID";
-            oc = AF("ProjectClient", "Klient projektu", "projectclient.p28Name"); oc.RelSql = "LEFT OUTER JOIN p28Contact projectclient ON p41.p28ID_Client=projectclient.p28ID";
+            oc =AF("BindClient", "Klient (vazba)", "p28client.p28Name");oc.RelSqlInCol = "LEFT OUTER JOIN p28Contact p28client ON a.p28ID=p28client.p28ID";
+            oc = AF("ProjectClient", "Klient projektu", "projectclient.p28Name"); oc.RelSqlInCol = "LEFT OUTER JOIN p28Contact projectclient ON p41.p28ID_Client=projectclient.p28ID";
 
 
             AppendTimestamp();

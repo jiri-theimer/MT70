@@ -24,12 +24,22 @@ namespace BL
             AF("j02Phone", "TEL");
             AF("j02Mobile", "Mobil");
             AF("j02Code", "Kód");
-            AF("j02JobTitle", "Pozice na vizitce");
-            AF("j02Office", "Adresa");
+            
+            
             AFBOOL("j02IsIntraPerson", "Interní osoba");
             AF("j02InvoiceSignatureFile", "Grafický podpis");
             AF("j02Salutation", "Oslovení");
-            AF("j02EmailSignature", "E-mail podpis");
+            AF("j02EmailSignature", "E-mail podpis");            
+
+            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(102,a.j02ID)");
+            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(102,a.j02ID)");
+
+
+            this.CurrentFieldGroup = "Kontaktní osoba klienta/projektu";
+            AF("j02JobTitle", "Pozice na vizitce");
+            AF("j02Office", "Adresa/Kancelář");
+            AF("VazbaKlient", "Vazba na klienta", "dbo.j02_clients_inline(a.j02ID)");
+
             AppendTimestamp();
         }
     }
