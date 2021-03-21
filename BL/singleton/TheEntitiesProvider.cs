@@ -215,6 +215,11 @@ namespace BL
                     lis.Add(getREL("j02Person", "p36_j02", "Osoba", "LEFT OUTER JOIN j02Person p36_j02 ON a.j02ID=p36_j02.j02ID"));
                     lis.Add(getREL("j11Team", "p36_j11", "Tým", "LEFT OUTER JOIN j11Team p36_j11 ON a.j11ID=p36_j11.j11ID"));
                     break;
+                case "p41":
+                    lis.Add(getREL("p28Contact", "p41_p28client", "Klient", "LEFT OUTER JOIN p28Contact p41_p28client ON a.p28ID_Client=p41_p28client.p28ID"));
+                    lis.Add(getREL("p28Contact", "p41_p28billing", "Odběratel faktury", "LEFT OUTER JOIN p28Contact p41_p28billing ON a.p28ID_Billing=p41_p28billing.p28ID"));
+                    lis.Add(getREL("p42ProjectType", "p41_p42", "Typ projektu", "LEFT OUTER JOIN p42ProjectType p41_p42 ON a.p42ID=p41_p42.p42ID"));
+                    break;
                 case "p51":
                     lis.Add(getREL("j27Currency", "p51_j27", "Měna", "LEFT OUTER JOIN j27Currency p51_j27 ON a.j27ID=p51_j27.j27ID"));
                     break;

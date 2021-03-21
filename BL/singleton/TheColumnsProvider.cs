@@ -62,6 +62,7 @@ namespace BL
             _lis.InsertRange(0, new defColumnsProvider().getColumns());
             _lis.InsertRange(0, new j02ColumnsProvider().getColumns());          
             _lis.InsertRange(0, new p28ColumnsProvider().getColumns());
+            _lis.InsertRange(0, new p41ColumnsProvider().getColumns());
             _lis.InsertRange(0, new p90ColumnsProvider().getColumns());
             _lis.InsertRange(0, new p91ColumnsProvider().getColumns());
             _lis.InsertRange(0, new p31ColumnsProvider().getColumns());

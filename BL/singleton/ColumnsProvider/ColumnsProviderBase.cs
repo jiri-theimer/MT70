@@ -83,6 +83,8 @@ namespace BL
                     return 100;
                 case "num0":
                     return 75;
+                case "int":
+                    return 65;
                 case "bool":
                     return 75;
                 default:

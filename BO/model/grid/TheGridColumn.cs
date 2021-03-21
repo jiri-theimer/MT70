@@ -123,7 +123,7 @@ namespace BO
         {
             get
             {
-                if (FieldType == "num0" || FieldType == "num" || FieldType=="num3" || FieldType=="num4" || FieldType=="num5" || FieldType=="num1") return "num";
+                if (FieldType == "num0" || FieldType == "num" || FieldType=="num3" || FieldType=="num4" || FieldType=="num5" || FieldType=="num1" || FieldType=="int") return "num";
                 if (FieldType == "date" || FieldType == "datetime" || FieldType== "datetimesec") return "date";
                 return this.FieldType;
             }
@@ -239,7 +239,9 @@ namespace BO
             {
                 case "num":
                     return "0.0";
-                case "num0":
+                case "num0":                    
+                    return "000";
+                case "int":
                     return "000";
                 case "date":
                     return "&#128197;";
@@ -259,6 +261,8 @@ namespace BO
                 case "num":
                     return "type_number.png";
                 case "num0":
+                    return "type_number.png";
+                case "int":
                     return "type_number.png";
                 case "date":
                     return "type_date.png";

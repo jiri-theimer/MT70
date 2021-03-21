@@ -11,13 +11,14 @@ namespace BL
         public p28ColumnsProvider()
         {
             this.EntityName = "p28Contact";
+            
             this.CurrentFieldGroup = "Root";
             oc = AF("p28Name", "Klient",null, "string");oc.NotShowRelInHeader = true;oc.DefaultColumnFlag = gdc1;
-            AF("p28Code", "Kód");
+            oc=AF("p28Code", "Kód");oc.FixedWidth = 100;
             AF("p28CompanyShortName", "Zkrácený název");
             AF("p28RegID", "IČ").DefaultColumnFlag = gdc2;
             AF("p28VatID", "DIČ").DefaultColumnFlag = gdc1;
-            AF("ClientPid", "PID", "convert(varchar(10),a.p28ID)");
+            AF("ClientPid", "PID", "a.p28ID","int");
             AF("p28ICDPH_SK", "IČ DPH (SK)");
             AF("p28SupplierID", "Kód dodavatele");
             AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(328,a.p28ID)");
