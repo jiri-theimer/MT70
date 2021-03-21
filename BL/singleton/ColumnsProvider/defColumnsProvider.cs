@@ -95,6 +95,255 @@ namespace BL
             AFBOOL("b02IsDefaultStatus", "Výchozí stav").DefaultColumnFlag = gdc2;
             AFNUM0("b02Order", "#").DefaultColumnFlag = gdc2;
             AppendTimestamp();
+
+            this.EntityName = "j90LoginAccessLog";
+            AA("j90Date", "Čas", gdc1, null, "datetime");
+            AA("j90BrowserFamily", "Prohlížeč", gdc1);
+            AA("j90Platform", "OS", gdc1);
+            AA("j90BrowserDeviceType", "Device");
+            AA("j90ScreenPixelsWidth", "Šířka (px)", gdc1);
+            AA("j90ScreenPixelsHeight", "Výška (px)", gdc1);
+            AA("j90UserHostAddress", "Host", gdc1);
+            AA("j90LoginMessage", "Chyba", gdc1);
+            oc=AFNUM0("j90CookieExpiresInHours", "Expirace přihlášení");oc.DefaultColumnFlag = gdc1;
+            AA("j90LoginName", "Login", gdc1);
+
+            //j92 = ping log uživatelů
+            this.EntityName = "j92PingLog";
+            AA("j92Date", "Čas", gdc1, null, "datetime");
+            AA("j92BrowserFamily", "Prohlížeč", gdc1);
+            AA("j92BrowserOS", "OS", gdc1);
+            AA("j92BrowserDeviceType", "Device", gdc1);
+            AA("j92BrowserAvailWidth", "Šířka (px)", gdc1);
+            AA("j92BrowserAvailHeight", "Výška (px)", gdc1);
+            AA("j92RequestURL", "Url", gdc1);
+
+            this.EntityName = "o15AutoComplete";
+            AA("o15Value", "Hodnota", gdc1);
+            AA("o15Flag", "Typ dat", gdc1, "case a.o15Flag when 1 then 'Titul před' when 2 then 'Titul za' when 3 then 'Pracovní funkce' when 328 then 'Stát' when 427 then 'URL adresa' end");
+            oc=AFNUM0("o15Ordinary", "#");oc.DefaultColumnFlag = gdc2;
+
+            this.EntityName = "p07ProjectLevel";
+            AA("p07NameSingular", "Úroveň", gdc1, null, "string", false, true);
+            oc=AFNUM0("p07Level", "Index úrovně");oc.DefaultColumnFlag = gdc1;
+            AA("p07NamePlural", "Množné číslo", gdc2);
+            AA("p07NameInflection", "Koho čeho");
+            AppendTimestamp();
+
+            this.EntityName = "p29ContactType";
+            AA("p29Name", "Typ klienta", gdc1, null, "string", false, true);
+            AFNUM0("p29Ordinary", "#");
+            AppendTimestamp();
+
+            this.EntityName = "p42ProjectType";
+            AA( "p42Name", "Typ", gdc1, null, "string", false, true);
+            AA("p42Code", "Kód");
+            AFNUM0("p42Ordinary", "#");
+            AppendTimestamp();
+
+            this.EntityName = "p51PriceList";
+            AA("p51TypeFlag", "Typ ceníku", gdc2, "case a.p51TypeFlag when 1 then 'Fakturační sazby' when 2 then 'Nákladové sazby' when 3 then 'Režijní sazby' when 5 then 'Kořenový (ROOT) ceník' when 4 then 'Efektivní sazby' end", "string", false, true);
+            AA("p51Name", "Pojmenovaný ceník", gdc1, null, "string", false, true);
+            AA("p51DefaultRateT", "Výchozí hod.sazba", gdc0, null, "num");
+            AFNUM0("p51Ordinary", "#");
+            oc=AFBOOL("p51IsCustomTailor", "Sazby na míru");oc.DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            this.EntityName = "p34ActivityGroup";
+            AA("p34Name", "Sešit", gdc1, null, "string", false, true);
+            AA("p34Code", "Kód", gdc2);
+            AA("p33ID", "Vstupí data", gdc2, "case a.p33ID when 1 then 'Čas' when 2 then 'Peníze bez DPH' when 3 then 'Kusovník' when 5 then 'Peníze+DPH' end");
+            AppendTimestamp();
+
+            this.EntityName = "p32Activity";
+            AA("p32Name", "Aktivita", gdc1, null, "string", false, true);
+            AA("p32Code", "Kód", gdc2);
+            oc=AFBOOL("p32IsBillable", "Fakturovatelný úkon");oc.DefaultColumnFlag = gdc2;
+           oc= AFNUM0("p32Ordinary", "#");oc.DefaultColumnFlag = gdc2;
+            oc=AFBOOL("p32IsTextRequired", "Povinný text úkonu");oc.DefaultColumnFlag = gdc2;
+            AA("p32Value_Default", "Výchozí hodnota úkonu", gdc0, null, "num");
+            AA("p32Value_Minimum", "MIN", gdc0, null, "num");
+            AA("p32Value_Maximum", "MAX", gdc0, null, "num");
+            AA("p32DefaultWorksheetText", "Výchozí text úkonu");
+            AA("p32Name_BillingLang1", "Aktivita €1");
+            AA("p32Name_BillingLang2", "Aktivita €2");
+            AA("p32Name_BillingLang3", "Aktivita €3");
+            AA("p32Name_BillingLang4", "Aktivita €4");
+            AppendTimestamp();
+
+            this.EntityName = "p38ActivityTag";
+            AA("p38Name", "Odvětví aktivity", gdc1, null, "string", false, true);
+            AFNUM0("p38Ordinary", "#").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            this.EntityName = "p36LockPeriod";
+            AFDATE("p36DateFrom", "Od").DefaultColumnFlag = gdc1;
+            AFDATE("p36DateUntil", "Do").DefaultColumnFlag = gdc1;
+            AFBOOL("p36IsAllSheets", "Všechny sešity").DefaultColumnFlag = gdc2;
+            AFBOOL("p36IsAllPersons", "Všechny osoby").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            this.EntityName = "p53VatRate";
+            AA("p53Value", "Sazba DPH", gdc1, null, "num", false, true);
+            AFDATE("p53ValidFrom", "Platí od").DefaultColumnFlag = gdc1;
+            AFDATE("p53ValidUntil", "Platí do").DefaultColumnFlag = gdc1;
+            AppendTimestamp();
+
+            this.EntityName = "p61ActivityCluster";
+            AA("p61Name", "Klast aktivit", gdc1, null, "string", false, true);
+            AppendTimestamp();
+
+            this.EntityName = "p63Overhead";
+            AA("p63Name", "Režijní přirážka", gdc1, null, "string", false, true);
+            AppendTimestamp();
+
+            this.EntityName = "p80InvoiceAmountStructure";
+            AA("p80Name", "Název rozpisu", gdc1, null, "string", false, true);
+            AFBOOL("p80IsTimeSeparate", "Čas 1:1").DefaultColumnFlag = gdc2;
+            AFBOOL("p80IsExpenseSeparate", "Výdaje 1:1").DefaultColumnFlag = gdc2;
+            AFBOOL("p80IsFeeSeparate", "Pevné odměny 1:1").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            this.EntityName = "p92InvoiceType";
+            AA("p92Name", "Typ faktury", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
+            AFNUM0("p92Ordinary", "#").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            this.EntityName = "p98Invoice_Round_Setting_Template";
+            AA("p98Name", "Zaokrouhlovací pravidlo", gdc1, null, "string", false, true);
+            AFBOOL("p98IsDefault", "Výchozí pravidlo").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            this.EntityName = "p89ProformaType";
+            AA("p89Name", "Typ zálohy", gdc1, null, "string", false, true);
+            AppendTimestamp();
+
+            this.EntityName = "p93InvoiceHeader";
+            AA("p93Name", "Vystavovatel faktury", gdc1, null, "string", false, true);
+            AA("p93Company", "Firma", gdc2);
+            AA("p93RegID", "IČ", gdc2);
+            AA("p93VatID", "DIČ", gdc2);
+            AA("p93City", "Město");
+            AA("p93Street", "Ulice");
+            AA("p93Zip", "PSČ");
+            AppendTimestamp();
+
+            this.EntityName = "p86BankAccount";
+            AA( "p86Name", "Bankovní účet", gdc2, null, "string", false, true);
+            AA("p86BankAccount", "Číslo účtu", gdc1);
+            AA("p86BankCode", "Kód banky", gdc1);
+            AA("p93Names", "Vazba na vystavovatele faktur", gdc2, "dbo.p86_get_p93names(a.p86ID)");
+            AA("p86BankName", "Banka");
+            AA("p86SWIFT", "SWIFT");
+            AA("p86IBAN", "IBAN");
+            AA("p86BankAddress", "Adresa banky");
+            AppendTimestamp();
+
+            this.EntityName = "p95InvoiceRow";
+            AA("p95Name", "Fakturační oddíl", gdc1, null, "string", false, true);
+            AA("p95Code", "Kód");
+            AFNUM0("p95Ordinary", "#").DefaultColumnFlag = gdc2;
+            AA("p95Name_BillingLang1", "Název €1");
+            AA("p95Name_BillingLang2", "Název €2");
+            AA("p95Name_BillingLang3", "Název €3");
+            AA("p95Name_BillingLang4", "Název €4");
+            AppendTimestamp();
+
+            this.EntityName = "m62ExchangeRate";
+            AFDATE("m62Date", "Datum kurzu").DefaultColumnFlag= gdc1;
+            AA("m62Rate", "Kurz", gdc1, null, "num3");
+            AA("Veta", "", gdc2, "CONVERT(varchar(10),a.m62Units)+' '+(select j27Code from j27Currency where j27ID=a.j27ID_Slave)+' = '+CONVERT(varchar(10),a.m62Rate)+' '+(select j27Code FROM j27Currency where j27ID=a.j27ID_Master)");
+            AA("m62RateType", "Typ kurzu", gdc2, "case when a.m62RateType=1 then 'Fakturační kurz' else 'Fixní kurz' end");
+            AppendTimestamp();
+
+            this.EntityName = "p35Unit";
+            AA("p35Name", "Kusovníková jednotka", gdc1, null, "string", false, true);
+            AA("p35Code", "Kód");
+            AppendTimestamp();
+
+            //o40 = smtp poštovní účty   
+            this.EntityName = "o40SmtpAccount";
+            AA("o40Name", "Jméno odesílatele", gdc1, null, "string", false, true);
+            AA("o40Server", "Smtp server", gdc2);
+            AA("o40EmailAddress", "Adresa odesílatele", gdc1);
+            AFNUM0("o40Port", "Smtp Port");
+            AFBOOL("o40IsGlobalDefault", "Globální účet").DefaultColumnFlag = gdc1;
+
+            //x40 = OUTBOX     
+            this.EntityName = "x40MailQueue";
+            AA("MessageTime", "Čas", gdc1, "case when a.x40WhenProceeded is not null then a.x40WhenProceeded else a.x40DateInsert end", "datetime", false, true);
+            AA("x40SenderName", "Odesílatel", gdc1);
+            AA("x40SenderAddress", "Odesílatel (adresa)");
+            AA("x40Recipient", "Komu", gdc1);
+            AA("x40CC", "Cc");
+            AA("x40BCC", "Bcc");
+            AA("x40State", "Stav", gdc1, "case a.x40State when 1 then 'Čeká na odeslání' when 2 then 'Chyba' when 3 then 'Odesláno' when 4 then 'Zastaveno' when 5 then 'Čeká na schválení' end");
+            AA("x40Subject", "Předmět zprávy", gdc1);
+            //AF("x40MailQueue", "x40Body", "Text zprávy", BO.TheGridDefColFlag.GridAndCombo, "convert(varchar(150),a.x40Body)+'...'");
+            AA("x40Attachments", "Přílohy", gdc1);
+            AA("x40ErrorMessage", "Chyba", gdc1);
+
+
+
+            //x31 = tisková sestava      
+            this.EntityName = "x31Report";
+            AA("x31Name", "Tisková sestava", gdc1, null, "string", false, true);
+            AA("RepFormat", "Formát", gdc1, "case a.x31FormatFlag when 1 then 'REPORT' when 2 then 'DOCX' when 3 then 'PLUGIN' when 4 then 'XLS' end");
+            AF("x31Code", "Kód sestavy");
+            AFBOOL("x31IsPeriodRequired", "Filtr čaového období");
+
+            AA("x31FileName", "Soubor šablony", gdc1);
+            AFNUM0("x31Ordinary", "#").DefaultColumnFlag = gdc1;
+
+            AA("x31ExportFileNameMask", "Maska export souboru");
+            AA("x31IsScheduling", "Pravidelné odesílání");
+            AA("x31Description", "Poznámka");
+            AppendTimestamp();
+
+            //uživatelská pole
+            this.EntityName = "x28EntityField";
+            AA("x28Name", "Uživatelské pole", gdc1, null, "string", false, true);
+            AA("x28Field", "Fyzický název", gdc2);
+            AFBOOL("x28IsRequired", "Povinné").DefaultColumnFlag = gdc1;
+            AFNUM0("x28Ordinary", "#").DefaultColumnFlag = gdc1;
+            AppendTimestamp();
+
+            //skupina uživatelských polí
+            this.EntityName = "x27EntityFieldGroup";
+            AA("x27Name", "Skupina polí", gdc1, null, "string", false, true);
+            AFNUM0("x27Ordinary", "#").DefaultColumnFlag = gdc2;
+
+            //číselné řady
+            this.EntityName = "x38CodeLogic";
+            AA("x38Name", "Číselná řada", gdc1, null, "string", false, true);
+            AA("x38ConstantBeforeValue", "Konstanta před", gdc2);
+            AA("x38ConstantAfterValue", "Konstanta za", gdc2);
+            AFNUM0("x38Scale", "Rozsah nul").DefaultColumnFlag = gdc2;
+            AA("Maska", "Min-Max", 0, "case when a.x38MaskSyntax IS NULL then ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('000000001',a.x38Scale)+' - '+ISNULL(a.x38ConstantBeforeValue,'')+RIGHT('99999999999',a.x38Scale) else a.x38MaskSyntax end");
+            AppendTimestamp();
+
+            //x51 = nápověda
+            this.EntityName = "x51HelpCore";
+            AA("x51Name", "Nápověda", gdc1, null, "string", false, true);
+            AA("x51ViewUrl", "View Url", gdc2);
+            AA("x51NearUrls", "Související Urls", gdc2);
+            AA("x51ExternalUrl", "Externí Url");
+            AppendTimestamp();
+
+            //x55 = dashboard widget
+            this.EntityName = "x55Widget";
+            AA("x55Name", "Widget", gdc1, null, "string", false, true);
+            AA("x55Code", "Kód widgetu", gdc2, null, "string", false, true);
+            AA("x55Description", "Poznámka", gdc2);
+            AA("x55Skin", "Cílový dashboard");
+            AA("x55DataTablesLimit", "Minimum záznamů pro [DataTables]", gdc2);
+            AFNUM0("x55Ordinal", "#").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            this.EntityName = "x67EntityRole";
+            AA("x67Name", "Název role", gdc1, null, "string", false, true);
+            AFNUM0("x67Ordinary", "#").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
         }
 
 
