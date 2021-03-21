@@ -64,7 +64,7 @@ namespace BL
         public BO.TheGridColumn AFNUM_OCAS(string strField, string strHeader, string strSqlSyntax = null, bool bolIsShowTotals = false)
         {
             BO.TheGridColumn c = AF(strField, strHeader, strSqlSyntax, "num",bolIsShowTotals);
-            c.RelSql = "LEFT OUTER JOIN dbo.view_p31_ocas p31_ocas ON a.p31ID=p31_ocas.p31ID";
+            c.RelSqlInCol = "LEFT OUTER JOIN dbo.view_p31_ocas p31_ocas ON a.p31ID=p31_ocas.p31ID";
             return c;
         }
 

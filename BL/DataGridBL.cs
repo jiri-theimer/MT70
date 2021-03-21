@@ -119,13 +119,13 @@ namespace BL
                 if (relSqls.Exists(p => p == col.RelSqlInCol) == false)
                 {
                     if (col.RelName == null)
-                    {
+                    { 
                         relSqls.Add(col.RelSqlInCol);
                         sb.Append(" ");
                         sb.Append(col.RelSqlInCol);
                     }
                     else
-                    {   //sloupec z jiné relace
+                    {   //sloupec s explicitním sql relací a zároveň z jiné relace
                         relSqls.Add(col.RelSqlInCol.Replace("a.",col.RelName+"."));
                         sb.Append(" ");
                         sb.Append(col.RelSqlInCol.Replace("a.", col.RelName + "."));
