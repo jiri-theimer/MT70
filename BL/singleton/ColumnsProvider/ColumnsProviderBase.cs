@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public abstract class ColumnsProviderSupport
+    public abstract class ColumnsProviderBase
     {
         private List<BO.TheGridColumn> _lis;
         
@@ -17,7 +17,7 @@ namespace BL
         public BO.TheGridDefColFlag gdc2 = BO.TheGridDefColFlag.GridOnly;
         public string EntityName { get; set; }
 
-        public ColumnsProviderSupport()
+        public ColumnsProviderBase()
         {
             _lis = new List<BO.TheGridColumn>();
         }
@@ -40,12 +40,22 @@ namespace BL
                 NotShowRelInHeader = false,
                 FixedWidth = SetDefaultColWidth(strFieldType),
                 TranslateLang1 = strHeader, TranslateLang2 = strHeader,
-                TranslateLang3 = strHeader
+                TranslateLang3 = strHeader,
+                DesignerGroup=this.CurrentFieldGroup
             });
             
             return _lis[_lis.Count - 1];
         }
 
+        public BO.TheGridColumn AFBOOL(string strField, string strHeader)
+        {
+            return AF(strField, strHeader, null, "bool");
+        }
+        public BO.TheGridColumn AFNUM0(string strField, string strHeader)
+        {
+            return AF(strField, strHeader, null, "num0", false);
+        }
+       
         public BO.TheGridColumn AFDATE(string strField, string strHeader, string strSqlSyntax = null)
         {
             return AF(strField, strHeader, strSqlSyntax, "date");
@@ -79,6 +89,35 @@ namespace BL
                     return 0;
             }
 
+        }
+
+
+        private BO.TheGridColumn AF_TIMESTAMP(string strField, string strHeader, string strSqlSyntax, string strFieldType)
+        {
+            BO.TheGridColumn c = AF(strField, strHeader, strSqlSyntax, strFieldType, false);
+            c.IsTimestamp = true;
+            return c;
+            
+
+        }
+
+        public void AppendTimestamp(bool include_validity = true)
+        {
+            this.CurrentFieldGroup = "Časové razítko záznamu";
+            string prefix = this.EntityName.Substring(0, 3);
+            AF_TIMESTAMP("DateInsert_" + this.EntityName, "Založeno", "a." + prefix + "DateInsert", "datetime");
+            AF_TIMESTAMP("UserInsert_" + this.EntityName, "Založil", "a." + prefix + "UserInsert", "string");
+            AF_TIMESTAMP("DateUpdate_" + this.EntityName, "Aktualizace", "a." + prefix + "DateUpdate", "datetime");
+            AF_TIMESTAMP("UserUpdate_" + this.EntityName, "Aktualizoval", "a." + prefix + "UserUpdate", "string");
+            if (include_validity == true)
+            {
+                AF_TIMESTAMP("ValidFrom_" + this.EntityName, "Platné od", "a." + prefix + "ValidFrom", "datetime");
+                AF_TIMESTAMP("ValidUntil_" + this.EntityName, "Platné do", "a." + prefix + "ValidUntil", "datetime");
+
+                AF_TIMESTAMP("IsValid_" + this.EntityName, "Časově platné", string.Format("convert(bit,case when GETDATE() between a.{0}ValidFrom AND a.{0}ValidUntil then 1 else 0 end)", prefix), "bool");
+            }
+
+            this.CurrentFieldGroup = null;
         }
     }
 }

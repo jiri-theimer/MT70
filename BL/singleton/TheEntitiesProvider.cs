@@ -230,6 +230,16 @@ namespace BL
                 case "p42":
                     lis.Add(getREL("p07ProjectLevel", "p42_p07", "Úroveň", "INNER JOIN p07ProjectLevel p42_p07 ON a.p07ID=p42_p07.p07ID"));
                     break;
+                case "p91":
+                    lis.Add(getREL("j27Currency", "p91_j27", "Měna", "LEFT OUTER JOIN j27Currency p91_j27 ON a.j27ID=p91_j27.j27ID"));
+                    lis.Add(getREL("p92InvoiceType", "p91_p92", "Typ faktury", "LEFT OUTER JOIN p92InvoiceType p91_p92 ON a.p92ID=p91_p92.p92ID"));
+                    lis.Add(getREL("p93InvoiceHeader", "p91_p93", "Vystavovatel faktury", "LEFT OUTER JOIN p93InvoiceHeader p91_p93 ON p91_p92.p93ID=p91_p93.p93ID", "p91_p92"));
+                    lis.Add(getREL("b02WorkflowStatus", "p91_b02", "Workflow stav", "LEFT OUTER JOIN b02WorkflowStatus p91_b02 ON a.b02ID=p91_b02.b02ID"));
+                    lis.Add(getREL("p98Invoice_Round_Setting_Template", "p91_p98", "Zaokrouhlovací pravidlo", "LEFT OUTER JOIN p98Invoice_Round_Setting_Template p91_p98 ON a.p98ID=p91_p98.p98ID"));
+                    lis.Add(getREL("p80InvoiceAmountStructure", "p91_p80", "Struktura cenového rozpisu", "LEFT OUTER JOIN p80InvoiceAmountStructure p91_p80 ON a.p80ID=p91_p80.p80ID"));
+                    lis.Add(getREL("p63Overhead", "p91_p63", "Režijní přirážka", "LEFT OUTER JOIN p63Overhead p91_p63 ON a.p63ID=p91_p63.p63ID"));
+                    lis.Add(getREL("j17Country", "p91_j17", "DPH region", "LEFT OUTER JOIN j17Country p91_j17 ON a.j17ID=p91_j17.j17ID"));
+                    break;
                 case "p92":
                     lis.Add(getREL("j27Currency", "p92_j27", "Cílová měna", "LEFT OUTER JOIN j27Currency p92_j27 ON a.j27ID=p92_j27.j27ID"));
                     lis.Add(getREL("p93InvoiceHeader", "p92_p93", "Vystavovatel faktury", "LEFT OUTER JOIN p93InvoiceHeader p92_p93 ON a.p93ID=p92_p93.p93ID"));

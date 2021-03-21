@@ -141,90 +141,72 @@ namespace BL
         }
         private void SetupPallete()
         {
+            _lis.InsertRange(0, new defColumnsProvider().getColumns());
+            _lis.InsertRange(0, new j02ColumnsProvider().getColumns());          
+            _lis.InsertRange(0, new p28ColumnsProvider().getColumns());
+            _lis.InsertRange(0, new p91ColumnsProvider().getColumns());
+            _lis.InsertRange(0, new p31ColumnsProvider().getColumns());
+
+
+           
+            ////j03 = uživatelé
+            //AF("j03User", "j03Login", "Login", gdc1, null,"string",false,true);
+            //AF("j03User", "j04Name", "Role", gdc1, "j03_j04.j04Name","string",false,true);
+            //AF("j03User", "Lang", "Jazyk", gdc1, "case isnull(a.j03LangIndex,0) when 0 then 'Česky' when 1 then 'English' when 4 then 'Slovenčina' end");
+            //AF("j03User", "j03Ping_TimeStamp", "Last ping", gdc0, "a.j03PingTimestamp", "datetime");
+            //AFBOOL("j03User", "j03IsDebugLog", "Debug log");
+            //AppendTimestamp("j03User");
             
+            //AF("j04UserRole", "j04Name", "Aplikační role", gdc1, null,"string",false,true);
+            //AppendTimestamp("j04UserRole");
+
+            //AF("j05MasterSlave", "MasterPerson", "Nadřízený", gdc1, "j02master.j02LastName+' '+j02master.j02FirstName+isnull(' '+j02master.j02TitleBeforeName,'')", "string", false, true);
+            //AF("j05MasterSlave", "SlavePerson", "Podřízený (jednotlivec)", gdc1, "j02slave.j02LastName+' '+j02slave.j02FirstName+isnull(' '+j02slave.j02TitleBeforeName,'')", "string");
+            //AF("j05MasterSlave", "SlaveTeam", "Podřízený tým", gdc1, "j11slave.j11Name", "string");
+            //AppendTimestamp("j05MasterSlave");
+
             
 
-            SetupJ02();
-            SetupP28();
-            SetupP91();
-            SetupP31();
-            
-            //j03 = uživatelé
-            AF("j03User", "j03Login", "Login", gdc1, null,"string",false,true);
-            AF("j03User", "j04Name", "Role", gdc1, "j03_j04.j04Name","string",false,true);
-            AF("j03User", "Lang", "Jazyk", gdc1, "case isnull(a.j03LangIndex,0) when 0 then 'Česky' when 1 then 'English' when 4 then 'Slovenčina' end");
-            AF("j03User", "j03Ping_TimeStamp", "Last ping", gdc0, "a.j03PingTimestamp", "datetime");
-            AFBOOL("j03User", "j03IsDebugLog", "Debug log");
-            AppendTimestamp("j03User");
-            
-            AF("j04UserRole", "j04Name", "Aplikační role", gdc1, null,"string",false,true);
-            AppendTimestamp("j04UserRole");
+            //AF("c21FondCalendar", "c21Name", "Název fondu", gdc1, null, "string", false, true);
+            //AFNUM0("c21FondCalendar", "c21Ordinary", "#", gdc2);
+            //AppendTimestamp("c21FondCalendar");
 
-            AF("j05MasterSlave", "MasterPerson", "Nadřízený", gdc1, "j02master.j02LastName+' '+j02master.j02FirstName+isnull(' '+j02master.j02TitleBeforeName,'')", "string", false, true);
-            AF("j05MasterSlave", "SlavePerson", "Podřízený (jednotlivec)", gdc1, "j02slave.j02LastName+' '+j02slave.j02FirstName+isnull(' '+j02slave.j02TitleBeforeName,'')", "string");
-            AF("j05MasterSlave", "SlaveTeam", "Podřízený tým", gdc1, "j11slave.j11Name", "string");
-            AppendTimestamp("j05MasterSlave");
+            //AFDATE("c26Holiday", "c26Date", "Datum", gdc1);
+            //AF("c26Holiday", "c26Name", "Název svátku", gdc1, null, "string", false, true);            
+            //AppendTimestamp("c26Holiday");
 
-            AF("j07PersonPosition", "j07Name", "Pozice", gdc1, null, "string", false, true);
-            AFNUM0("j07PersonPosition", "j07Ordinary", "#", gdc2);
-            AF("j07PersonPosition", "j07Name_BillingLang1", "Fakturační jazyk #1");
-            AF("j07PersonPosition", "j07Name_BillingLang2", "Fakturační jazyk #2");
-            AF("j07PersonPosition", "j07Name_BillingLang3", "Fakturační jazyk #3");
-            AF("j07PersonPosition", "j07Name_BillingLang4", "Fakturační jazyk #4");
-            AF("j07PersonPosition", "j07FreeText01", "Volné pole #1");
-            AF("j07PersonPosition", "j07FreeText02", "Volné pole #2");
-            AppendTimestamp("j07PersonPosition");
+            //AF("j11Team", "j11Name", "Tým osob", gdc1, null, "string", false, true);
+            //AppendTimestamp("j11Team");
 
-            AF("j18Region", "j18Name", "Středisko", gdc1, null, "string", false, true);
-            AFNUM0("j18Region", "j18Ordinary", "#", gdc2);
-            AF("j18Region", "j18Code", "Kód");
-            AppendTimestamp("j18Region");
+            //AF("j25ReportCategory", "j25Name", "Kategorie sestav", gdc1, null, "string", false, true);
+            //AFNUM0("j25ReportCategory", "j25Ordinary", "#", gdc2);
+            //AppendTimestamp("j25ReportCategory");
 
-            AF("j17Country", "j17Name", "Region", gdc1, null, "string", false, true);
-            AFNUM0("j17Country", "j17Ordinary", "#");
-            AF("j17Country", "j17Code", "Kód");
-            AppendTimestamp("j17Country");
+            //AF("j27Currency", "j27Code", "Měna", gdc1, null, "string", false, true);
+            //AF("j27Currency", "j27Name", "Název měny");
 
-            AF("c21FondCalendar", "c21Name", "Název fondu", gdc1, null, "string", false, true);
-            AFNUM0("c21FondCalendar", "c21Ordinary", "#", gdc2);
-            AppendTimestamp("c21FondCalendar");
+            //AF("j61TextTemplate", "j61Name", "Šablona zprávy", gdc1, null, "string", false, true);
+            //AF("j61TextTemplate", "j61MailSubject", "Předmět zprávy", gdc2);
+            //AF("j61TextTemplate", "j61MailTO", "TO");
+            //AF("j61TextTemplate", "j61MailCC", "CC");
+            //AF("j61TextTemplate", "j61MailBCC", "BCC");
+            //AppendTimestamp("j61TextTemplate");
 
-            AFDATE("c26Holiday", "c26Date", "Datum", gdc1);
-            AF("c26Holiday", "c26Name", "Název svátku", gdc1, null, "string", false, true);            
-            AppendTimestamp("c26Holiday");
+            ////b01 = workflow šablona            
+            //AF("b01WorkflowTemplate", "b01Name", "Workflow šablona", gdc1, null, "string", false, true);
+            //onecol=AF("b01WorkflowTemplate", "b01Code", "Kód", gdc2);
+            //onecol.FixedWidth = 70;
+            //AppendTimestamp("b01WorkflowTemplate");
 
-            AF("j11Team", "j11Name", "Tým osob", gdc1, null, "string", false, true);
-            AppendTimestamp("j11Team");
+            ////b02 = workflow stav            
+            ////AF("b02WorkflowStatus", "b02Name", "Stav", 1, null, "string", false, true);
+            //AF("b02WorkflowStatus", "b02Name", "Stav", gdc1);
+            //onecol =AF("b02WorkflowStatus", "b02Ident", "Kód stavu", gdc1);
+            //onecol.FixedWidth = 70;
+            //AFBOOL("b02WorkflowStatus", "b02IsDefaultStatus", "Výchozí stav", gdc2);
 
-            AF("j25ReportCategory", "j25Name", "Kategorie sestav", gdc1, null, "string", false, true);
-            AFNUM0("j25ReportCategory", "j25Ordinary", "#", gdc2);
-            AppendTimestamp("j25ReportCategory");
-
-            AF("j27Currency", "j27Code", "Měna", gdc1, null, "string", false, true);
-            AF("j27Currency", "j27Name", "Název měny");
-
-            AF("j61TextTemplate", "j61Name", "Šablona zprávy", gdc1, null, "string", false, true);
-            AF("j61TextTemplate", "j61MailSubject", "Předmět zprávy", gdc2);
-            AF("j61TextTemplate", "j61MailTO", "TO");
-            AF("j61TextTemplate", "j61MailCC", "CC");
-            AF("j61TextTemplate", "j61MailBCC", "BCC");
-            AppendTimestamp("j61TextTemplate");
-
-            //b01 = workflow šablona            
-            AF("b01WorkflowTemplate", "b01Name", "Workflow šablona", gdc1, null, "string", false, true);
-            onecol=AF("b01WorkflowTemplate", "b01Code", "Kód", gdc2);
-            onecol.FixedWidth = 70;
-            AppendTimestamp("b01WorkflowTemplate");
-
-            //b02 = workflow stav            
-            //AF("b02WorkflowStatus", "b02Name", "Stav", 1, null, "string", false, true);
-            AF("b02WorkflowStatus", "b02Name", "Stav", gdc1);
-            onecol =AF("b02WorkflowStatus", "b02Ident", "Kód stavu", gdc1);
-            onecol.FixedWidth = 70;
-            AFBOOL("b02WorkflowStatus", "b02IsDefaultStatus", "Výchozí stav", gdc2);
-
-            AFNUM0("b02WorkflowStatus", "b02Order", "#", gdc2);           
-            AppendTimestamp("b02WorkflowStatus");
+            //AFNUM0("b02WorkflowStatus", "b02Order", "#", gdc2);           
+            //AppendTimestamp("b02WorkflowStatus");
 
 
 
@@ -491,239 +473,245 @@ namespace BL
             
         }
 
-        private void SetupP31(string stb = "p31Worksheet")
-        {
-            _curFieldGroup = "Root";
-            AF(stb, "p31Text", "Text", gdc1);
-            AF(stb, "p31Code", "Kód dokladu");
-            AF(stb, "TagsHtml", "Štítky",gdc0, "dbo.tag_values_inline_html(331,a.p31ID)");
-            AF(stb, "TagsText", "Štítky (text)", gdc0, "dbo.tag_values_inline(331,a.p31ID)");
-            AF(stb, "p31RecordSourceFlag_Alias", "Zdrojová aplikace",gdc0, "case a.p31RecordSourceFlag when 1 then 'Mobil' else 'MT' end");
-            AF(stb, "p31DateTimeUntil_Orig", "Čas zapnutí stopek", gdc0, null, "datetime");
+        //private void SetupP31(string stb = "p31Worksheet")
+        //{
+        //    var xx = new p31ColumnsProvider();
+        //    _lis.InsertRange(0, xx.getColumns());
+        //    return;
 
-            _curFieldGroup = "Datum a čas úkonu";
-            AFDATE(stb, "p31Date", "Datum", gdc1);
-            AF(stb, "UkonYear", "Rok", gdc0, "convert(varchar(4),a.p31Date)", "string");
-            AF(stb, "UkonMesic", "Měsíc", gdc0, "convert(varchar(7),a.p31Date,126)","string");
-            AF(stb, "UkonTyden", "Týden", gdc0, "convert(varchar(4),year(a.p31Date))+'-'+convert(varchar(10),DATEPART(week,a.p31Date))","string");
-            AF(stb, "p31DateTimeFrom_Orig", "Čas od", gdc0,null, "time");
-            AF(stb, "p31DateTimeUntil_Orig", "Čas do", gdc0, null, "time");
+        //    _curFieldGroup = "Root";
+        //    AF(stb, "p31Text", "Text", gdc1);
+        //    AF(stb, "p31Code", "Kód dokladu");
+        //    AF(stb, "TagsHtml", "Štítky",gdc0, "dbo.tag_values_inline_html(331,a.p31ID)");
+        //    AF(stb, "TagsText", "Štítky (text)", gdc0, "dbo.tag_values_inline(331,a.p31ID)");
+        //    AF(stb, "p31RecordSourceFlag_Alias", "Zdrojová aplikace",gdc0, "case a.p31RecordSourceFlag when 1 then 'Mobil' else 'MT' end");
+        //    AF(stb, "p31DateTimeUntil_Orig", "Čas zapnutí stopek", gdc0, null, "datetime");
 
-
-            var strSQL_Ocas = "LEFT OUTER JOIN dbo.view_p31_ocas p31_ocas ON a.p31ID=p31_ocas.p31ID";
-            _curFieldGroup = "Vykázáno";//-----------Vykázáno---------------------
-            AF(stb, "p31Value_Orig", "Vykázaná hodnota", gdc0, null, "num");
-            AF(stb, "p31Hours_Orig", "Vykázané hodiny", gdc1, null, "num",true);
-            onecol=AF(stb, "Vykazano_Hodiny_Fa", "Vykázané hodiny Fa", gdc0, "p31_ocas.Vykazano_Hodiny_Fa", "num", true);
-            onecol = AF(stb, "Vykazano_Hodiny_NeFa", "Vykázané hodiny NeFa", gdc0, "p31_ocas.Vykazano_Hodiny_NeFa", "num", true);onecol.RelSql = strSQL_Ocas;
-
-            AF(stb, "p31HHMM_Orig", "Hodiny HH:MM", gdc0,null,"string");
-            onecol=AF(stb, "p31Rate_Billing_Orig", "Výchozí hodinová sazba", gdc0, null, "num");onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_WithoutVat_Orig", "Vykázáno bez DPH", gdc0,null, "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_WithVat_Orig", "Vykázáno vč. DPH", gdc0, null, "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_Vat_Orig", "Vykázáno DPH", gdc0, null, "num", true); onecol.IHRC = true;
-
-            
-            onecol =AF(stb, "trimm_p72Name", "Status korekce", gdc0, "p72trimm.p72Name");            
-            onecol.RelSql = "LEFT OUTER JOIN p72PreBillingStatus p72trimm On a.p72ID_AfterTrimming=p72trimm.p72ID";
-
-            onecol=AF(stb, "VykazanoHodinyFaPoKorekci", "Hodiny Fa po korekci", gdc0, "case when a.p72ID_AfterTrimming is null then p31_ocas.Vykazano_Hodiny_Fa else a.p31Hours_Trimmed end", "num", true);
-            onecol.RelSql = strSQL_Ocas;
-
-            onecol = AF(stb, "Fakturacni_Honorar_Po_Korekci", "Fakturační honorář po korekci", gdc0, "case when a.p72ID_AfterTrimming is not null then a.p31Hours_Trimmed*a.p31Rate_Billing_Orig else a.p31Hours_Orig*a.p31Rate_Billing_Orig end", "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_WithoutVat_AfterTrimming", "Bez DPH po korekci", gdc0, "a.p31Amount_WithoutVat_AfterTrimming", "num", true); onecol.IHRC = true;           
-
-            _curFieldGroup = "Rozpracováno";//-----------Rozpracováno---------------------
-            onecol =AF(stb, "WIP_Hodiny", "Rozpr.hodiny", gdc0, "p31_ocas.WIP_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas;
-            onecol = AF(stb, "WIP_Vydaje", "Rozpr.výdaj", gdc0, "p31_ocas.WIP_Vydaje", "num", true); onecol.RelSql = strSQL_Ocas;
-            onecol = AF(stb, "WIP_BezDph", "Rozpr.bez DPH", gdc0, "p31_ocas.WIP_BezDph", "num", true); onecol.RelSql = strSQL_Ocas;onecol.IHRC = true;
-            onecol = AF(stb, "WIP_BezDph_EUR", "Rozpr.bez DPH EUR", gdc0, "p31_ocas.WIP_BezDph_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "WIP_Honorar", "Rozpr.Honorář", gdc0, "p31_ocas.WIP_Honorar", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "WIP_Vydaje_EUR", "Rozpr.výdaje EUR", gdc0, "p31_ocas.WIP_Vydaje_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "WIP_Pausaly", "Rozpr.pevná odměna", gdc0, "p31_ocas.WIP_Pausaly", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "WIP_Pausaly_EUR", "Rozpr.pevná odměna EUR", gdc0, "p31_ocas.WIP_Pausaly_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-
-            _curFieldGroup = "Nevyúčtováno";//-----------Nevyúčtováno---------------------
-            onecol = AF(stb, "Nevyfakturovano_BezDph", "Nevyúčtováno bez DPH", gdc0, "p31_ocas.Nevyfakturovano_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_Hodiny", "Nevyúčtováné hodiny", gdc0, "p31_ocas.Nevyfakturovano_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_Vydaje", "Nevyúčtováný výdaj", gdc0, "p31_ocas.Nevyfakturovano_Vydaje", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_Pausaly", "Nevyúčtováná pevná odměna", gdc0, "p31_ocas.Nevyfakturovano_Pausaly", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny", "Schválené hodiny - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny_Pausal", "Schválené hodiny PAU - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny_Pausal", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny_Odpis", "Schválené hodiny ODPIS - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny_Odpis", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_Schvaleno_BezDph", "Schváleno bez DPH - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvaleno_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    _curFieldGroup = "Datum a čas úkonu";
+        //    AFDATE(stb, "p31Date", "Datum", gdc1);
+        //    AF(stb, "UkonYear", "Rok", gdc0, "convert(varchar(4),a.p31Date)", "string");
+        //    AF(stb, "UkonMesic", "Měsíc", gdc0, "convert(varchar(7),a.p31Date,126)","string");
+        //    AF(stb, "UkonTyden", "Týden", gdc0, "convert(varchar(4),year(a.p31Date))+'-'+convert(varchar(10),DATEPART(week,a.p31Date))","string");
+        //    AF(stb, "p31DateTimeFrom_Orig", "Čas od", gdc0,null, "time");
+        //    AF(stb, "p31DateTimeUntil_Orig", "Čas do", gdc0, null, "time");
 
 
-            _curFieldGroup = "Vyúčtováno";//-----------Vyúčtováno---------------------
-            onecol = AF(stb, "p31Hours_Invoiced", "Vyúčtované hodiny", gdc0, null, "num", true);
-            onecol = AF(stb, "p31HHMM_Invoiced", "Vyúčtováno HH:mm", gdc0, null, "num");
-            onecol = AF(stb, "p31Rate_Billing_Invoiced", "Vyúčtovaná hodinová sazba", gdc0, null, "num"); onecol.IHRC = true;
-            onecol = AF(stb, "p70Name", "Fakturační status", gdc0, "p70.p70Name"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
-            onecol = AF(stb, "p70Name_BillingLang1", "Fakturační status L1", gdc0, "p70.p70Name_BillingLang1"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
-            onecol = AF(stb, "p70Name_BillingLang2", "Fakturační status L2", gdc0, "p70.p70Name_BillingLang2"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_WithoutVat_Invoiced", "Vyúčtováno bez DPH", gdc0, null, "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_WithVat_Invoiced", "Vyúčtováno vč. DPH", gdc0, null, "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "p31VatRate_Invoiced", "Vyúčtovaná DPH sazba", gdc0, null, "num"); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_WithoutVat_Invoiced_Domestic", "Vyúčtováno bez DPH x Kurz", gdc0, null, "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "j27Code_Billing_Invoice", "Měna vyúčtování", gdc0, "j27billing_invoice.j27Code", "string"); onecol.IHRC = true;onecol.RelSql = "LEFT OUTER JOIN j27Currency j27billing_invoice ON a.j27ID_Billing_Invoiced=j27billing_invoice.j27ID";
-            onecol = AF(stb, "Vyfakturovano_Hodiny_Fakturovat", "Vyúčt.hodiny [Fakturovat]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Fakturovat", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vyfakturovano_Hodiny_Pausal", "Vyúčt.hodiny [Paušál]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Pausal", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vyfakturovano_Hodiny_Odpis", "Vyúčt.hodiny [Odpis]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Odpis", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vyfakturovano_Honorar", "Vyúčtovaný honorář", gdc0, "p31_ocas.Vyfakturovano_Honorar", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    var strSQL_Ocas = "LEFT OUTER JOIN dbo.view_p31_ocas p31_ocas ON a.p31ID=p31_ocas.p31ID";
+        //    _curFieldGroup = "Vykázáno";//-----------Vykázáno---------------------
+        //    AF(stb, "p31Value_Orig", "Vykázaná hodnota", gdc0, null, "num");
+        //    AF(stb, "p31Hours_Orig", "Vykázané hodiny", gdc1, null, "num",true);
+        //    onecol=AF(stb, "Vykazano_Hodiny_Fa", "Vykázané hodiny Fa", gdc0, "p31_ocas.Vykazano_Hodiny_Fa", "num", true);
+        //    onecol = AF(stb, "Vykazano_Hodiny_NeFa", "Vykázané hodiny NeFa", gdc0, "p31_ocas.Vykazano_Hodiny_NeFa", "num", true);onecol.RelSql = strSQL_Ocas;
 
-
-
-            _curFieldGroup = "Nákladová cena";//-----------Nákladová cena---------------------
-            onecol = AF(stb, "p31Rate_Internal_Orig", "Nákladová sazba", gdc0, null, "num"); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_Internal", "Nákladový honorář", gdc0, null, "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "p31Rate_Overhead", "Režijní sazba", gdc0, null, "num"); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_Overhead", "Režijní honorář", gdc0, null, "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "p31Value_Off", "Off billing hodnota", gdc0, null, "num", true); onecol.IHRC = true;
-
-
-            _curFieldGroup = "Přepočet podle fixního kurzu";//-----------Přepočet podle fixního kurzu---------------------
-            onecol = AF(stb, "p31ExchangeRate_Fixed", "Fixní kurz", gdc0, null, "num"); onecol.IHRC = true;
-            onecol = AF(stb, "p31Amount_WithoutVat_FixedCurrency", "Vykázáno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*a.p31Amount_WithoutVat_Orig", "num", true); onecol.IHRC = true;
-            onecol = AF(stb, "WIP_BezDph_FK", "Rozpracováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.WIP_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Nevyfakturovano_BezDph_FK", "Nevyúčtováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.Nevyfakturovano_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vykazano_Naklad_FK", "Vykázaný náklad FK", gdc0, "p31_ocas.Vykazano_Naklad_FK", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vykazano_Vynos_FK", "Vykázaný výnos FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.Vykazano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vykazano_Zisk_FK", "Vykázaný zisk FK", gdc0, "p31_ocas.Vykazano_Zisk_FK", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-
-
-            _curFieldGroup = "Výsledovka z vykázaných hodnot";//-----------Výsledovka z vykázaných hodnot---------------------
-            onecol = AF(stb, "Vykazano_Naklad", "Vykázaný náklad", gdc0, "p31_ocas.Vykazano_Naklad", "num",true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vykazano_Vynos", "Vykázaný výnos", gdc0, "p31_ocas.Vykazano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vykazano_Zisk", "Vykázaný zisk", gdc0, "p31_ocas.Vykazano_Zisk", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vykazano_Naklad_Rezije", "Vykázaný režijní náklad", gdc0, "p31_ocas.Vykazano_Naklad_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vykazano_Zisk_Rezije", "Vykázaný režijní zisk", gdc0, "p31_ocas.Vykazano_Zisk_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-
-
-            _curFieldGroup = "Výsledovka z vyúčtovaných hodnot";//-----------Výsledovka z vyúčtovaných hodnot---------------------
-            onecol = AF(stb, "Vyfakturovano_Puvodni_Naklad_Domestic", "Vykázaný náklad x Kurz", gdc0, "p31_ocas.Vyfakturovano_Puvodni_Naklad_Domestic", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vyfakturovano_Vynos", "Vyúčtovaný výnos", gdc0, "p31_ocas.Vyfakturovano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vyfakturovano_Vynos_Domestic", "Vyúčtovaný výnos x Kurz", gdc0, "p31_ocas.Vyfakturovano_Vynos_Domestic", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vyfakturovano_Zisk", "Zisk po vyúčtování", gdc0, "p31_ocas.Vyfakturovano_Zisk", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-            onecol = AF(stb, "Vyfakturovano_Zisk_Rezije", "Režijní zisk po vyúčtování", gdc0, "p31_ocas.Vyfakturovano_Zisk_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
-
-
-            _curFieldGroup = "Expense marže";
-            AF(stb, "p31MarginHidden", "Skrytá marže", gdc0, null, "num");
-            AF(stb, "p31MarginTransparent", "Přiznaná marže%", gdc0, null, "num");
-            AF(stb, "ExpenseAfterMarginHidden", "Výdaj po skryté marži", gdc0, "a.p31Amount_WithoutVat_Orig+(a.p31Amount_WithoutVat_Orig*a.p31MarginHidden/100)", "num",true);
-            AF(stb, "ExpenseAfterAllMargins", "Výdaj po obou maržích", gdc0, "dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent)", "num", true);
-            AF(stb, "Odmena_Minus_Vydaj_Minus_HonorarR", "Odměna - Výdaj s marží - Režijní honorář", gdc0, "(case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=2 then a.p31Amount_WithoutVat_Orig else 0 end) - (case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=1 then dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent) else 0 end) - (case when p34.p33ID IN (1,3) then a.p31Hours_Orig*a.p31Rate_Overhead else 0 end)", "num", true);
-
-            AppendTimestamp(stb);
-            
-        }
-
-        private void SetupJ02(string stb="j02Person")
-        {
-            AF(stb, "fullname_desc", "Příjmení+Jméno", BO.TheGridDefColFlag.GridAndCombo, "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string", false, true);
-            AF(stb, "fullname_asc", "Jméno+Příjmení", BO.TheGridDefColFlag._none, "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string", false, true);
-
-            AF(stb, "j02Email", "E-mail", gdc1);
-            AF(stb, "j02FirstName", "Jméno");
-            AF(stb, "j02LastName", "Příjmení");
-            AF(stb, "j02TitleBeforeName", "Titul před");
-            AF(stb, "j02TitleAfterName", "Titul za");
-            AF(stb, "j02Phone", "TEL");
-            AF(stb, "j02Mobile", "Mobil");
-            AF(stb, "j02Code", "Kód");
-            AF(stb, "j02JobTitle", "Pozice na vizitce");
-            AF(stb, "j02Office", "Adresa");
-            AFBOOL(stb, "j02IsIntraPerson", "Interní osoba");
-            AF(stb, "j02InvoiceSignatureFile", "Grafický podpis");
-            AF(stb, "j02Salutation", "Oslovení");
-            AF(stb, "j02EmailSignature", "E-mail podpis");
-            AppendTimestamp(stb);
-        }
-        private void SetupP28(string stb="p28Contact")
-        {
-            AF(stb, "p28Name", "Klient", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
-            AF(stb, "p28Code", "Kód");
-            AF(stb, "p28CompanyShortName", "Zkrácený název");
-            
-            AF(stb, "p28RegID", "IČ", gdc2);
-            AF(stb, "p28VatID", "DIČ", gdc1);
-            AF(stb, "p28BillingMemo", "Fakturační poznámka");
-
-            AFNUM0(stb, "p28Round2Minutes", "Zaokrouhlování času");
-            
-            AF(stb, "p28ICDPH_SK", "IČ DPH (SK)");
-            AF(stb, "p28SupplierID", "Kód dodavatele");
-            AppendTimestamp(stb);
-
-            AF("view_PrimaryAddress","FullAddress", "Fakturační adresa", BO.TheGridDefColFlag.GridOnly, "isnull(a.o38City+', ','')+isnull('<code>'+a.o38Street+'</code>','')+isnull(', '+a.o38ZIP,'')+isnull(' <var>'+a.o38Country+'</var>','')","string",false,true);
-            AF("view_PrimaryAddress", "o38Street", "Ulice", BO.TheGridDefColFlag.GridOnly);
-            AF("view_PrimaryAddress", "o38City", "Město", BO.TheGridDefColFlag.GridAndCombo);
-            AF("view_PrimaryAddress", "o38ZIP", "PSČ");
-            AF("view_PrimaryAddress", "o38Country", "Stát");
-            AF("view_PrimaryAddress", "o38Name", "Název");
-            
-        }
-        private void SetupP91(string stb= "p91Invoice")
-        {
-            BO.TheGridColumn oc;
-            _curFieldGroup = "Root";
-            AF(stb, "p91Code", "Číslo", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
-            AF(stb, "p91Client", "Klient vyúčtování", BO.TheGridDefColFlag.GridAndCombo);
-            AF(stb, "p91Text1", "Text faktury");
-            AF(stb, "p91Text2", "Technický text");
-            AF(stb, "ZapojeneOsoby", "Zapojené osoby", 0, "dbo.j02_invoiced_persons_inline(a.p91ID)");
-
-            AFBOOL(stb, "p91IsDraft", "Draft");
-
-            _curFieldGroup = "Datum";
-            AFDATE(stb, "p91Date", "Vystaveno", BO.TheGridDefColFlag.GridOnly);
-            AFDATE(stb, "p91DateSupply", "Datum plnění", BO.TheGridDefColFlag.GridAndCombo);
-            AFDATE(stb, "p91DateMaturity", "Splatnost", BO.TheGridDefColFlag.GridOnly);
-            AF(stb, "DnuPoSplatnosti", "Dnů do splatnosti", 0, "case When a.p91Amount_Debt=0 Then null Else datediff(day, p91DateMaturity, dbo.get_today()) End", "num0");
-            AFDATE(stb, "p91DateBilled", "Datum úhrady");
-            AFDATE(stb, "p91DateExchange", "Datum měn.kurzu");
-
-            _curFieldGroup = "Částka";
-            AF(stb, "p91Amount_WithoutVat", "Bez dph", BO.TheGridDefColFlag.GridAndCombo, null,"num",true);
-            AF(stb, "BezDphKratKurz", "Bez dph x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_WithoutVat Else p91Amount_WithoutVat*p91ExchangeRate End", "num",true);
-            AF(stb, "p91Amount_Debt", "Dluh", 0, null, "num",true);
-            AF(stb, "DluhKratKurz", "Dluh x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_Debt Else p91Amount_Debt*p91ExchangeRate End", "num",true);
-            AF(stb, "p91Amount_TotalDue", "Celkem", BO.TheGridDefColFlag.GridAndCombo, null, "num",true);
-            AF(stb, "CelkemKratKurz", "Celkem x Kurz", 0, "case When a.j27ID = a.j27ID_Domestic Then p91Amount_TotalDue Else p91Amount_TotalDue*p91ExchangeRate End", "num",true);
-            AF(stb, "p91Amount_Vat", "Celkem dph", 0, null, "num",true);
-            AF(stb, "p91Amount_WithVat", "Vč.dph", 0, null, "num",true);
-            AF(stb, "p91RoundFitAmount", "Haléřové zaokrouhlení", 0, null, "num", true);
-            AF(stb, "p91Amount_WithoutVat_None", "Základ v nulové DPH", 0, null, "num", true);
-            AF(stb, "p91Amount_WithoutVat_Standard", "Základ ve standardní sazbě", 0, null, "num", true);
-            AF(stb, "p91Amount_WithoutVat_Low", "Základ ve snížené sazbě", 0, null, "num", true);
-            AF(stb, "p91Amount_WithoutVat_Special", "Základ ve speciální sazbě", 0, null, "num", true);
-            AF(stb, "p91Amount_Vat_Standard", "DPH ve standardní sazbě", 0, null, "num", true);
-            AF(stb, "p91Amount_Vat_Low", "DPH ve snížené sazbě", 0, null, "num", true);
-            AF(stb, "p91Amount_Vat_Special", "DPH ve speciální sazbě", 0, null, "num", true);
-            AF(stb, "p91VatRate_Standard", "DPH sazba standardní", 0, null, "num", true);
-            AF(stb, "p91VatRate_Low", "DPH sazba snížená", 0, null, "num", true);
-            AF(stb, "p91VatRate_Special", "DPH sazba speciální", 0, null, "num", true);
-
-            AF(stb, "p91ProformaBilledAmount", "Uhrazené zálohy", 0, null, "num");
-            AF(stb, "p91ExchangeRate", "Měnový kurz", 0, null, "num");
-
+        //    AF(stb, "p31HHMM_Orig", "Hodiny HH:MM", gdc0,null,"string");
+        //    onecol=AF(stb, "p31Rate_Billing_Orig", "Výchozí hodinová sazba", gdc0, null, "num");onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_WithoutVat_Orig", "Vykázáno bez DPH", gdc0,null, "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_WithVat_Orig", "Vykázáno vč. DPH", gdc0, null, "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_Vat_Orig", "Vykázáno DPH", gdc0, null, "num", true); onecol.IHRC = true;
 
             
+        //    onecol =AF(stb, "trimm_p72Name", "Status korekce", gdc0, "p72trimm.p72Name");            
+        //    onecol.RelSql = "LEFT OUTER JOIN p72PreBillingStatus p72trimm On a.p72ID_AfterTrimming=p72trimm.p72ID";
 
-            _curFieldGroup = "Klient ve faktuře";
-            AF(stb, "p91Client_RegID", "IČ klienta");            
-            AF(stb, "p91Client_VatID", "DIČ klienta", BO.TheGridDefColFlag.GridOnly);
-            AF(stb, "p91Client_ICDPH_SK", "IČ DPH (SK)");            
-            AF(stb, "p91ClientAddress1_Street", "Ulice klienta");
-            AF(stb, "p91ClientAddress1_City", "Město klienta");
-            AF(stb, "p91ClientAddress1_ZIP", "PSČ klienta");            
-            AF(stb, "p91ClientAddress1_Country", "Stát klienta");
+        //    onecol=AF(stb, "VykazanoHodinyFaPoKorekci", "Hodiny Fa po korekci", gdc0, "case when a.p72ID_AfterTrimming is null then p31_ocas.Vykazano_Hodiny_Fa else a.p31Hours_Trimmed end", "num", true);
+        //    onecol.RelSql = strSQL_Ocas;
+
+        //    onecol = AF(stb, "Fakturacni_Honorar_Po_Korekci", "Fakturační honorář po korekci", gdc0, "case when a.p72ID_AfterTrimming is not null then a.p31Hours_Trimmed*a.p31Rate_Billing_Orig else a.p31Hours_Orig*a.p31Rate_Billing_Orig end", "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_WithoutVat_AfterTrimming", "Bez DPH po korekci", gdc0, "a.p31Amount_WithoutVat_AfterTrimming", "num", true); onecol.IHRC = true;           
+
+        //    _curFieldGroup = "Rozpracováno";//-----------Rozpracováno---------------------
+        //    onecol =AF(stb, "WIP_Hodiny", "Rozpr.hodiny", gdc0, "p31_ocas.WIP_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas;
+        //    onecol = AF(stb, "WIP_Vydaje", "Rozpr.výdaj", gdc0, "p31_ocas.WIP_Vydaje", "num", true); onecol.RelSql = strSQL_Ocas;
+        //    onecol = AF(stb, "WIP_BezDph", "Rozpr.bez DPH", gdc0, "p31_ocas.WIP_BezDph", "num", true); onecol.RelSql = strSQL_Ocas;onecol.IHRC = true;
+        //    onecol = AF(stb, "WIP_BezDph_EUR", "Rozpr.bez DPH EUR", gdc0, "p31_ocas.WIP_BezDph_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "WIP_Honorar", "Rozpr.Honorář", gdc0, "p31_ocas.WIP_Honorar", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "WIP_Vydaje_EUR", "Rozpr.výdaje EUR", gdc0, "p31_ocas.WIP_Vydaje_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "WIP_Pausaly", "Rozpr.pevná odměna", gdc0, "p31_ocas.WIP_Pausaly", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "WIP_Pausaly_EUR", "Rozpr.pevná odměna EUR", gdc0, "p31_ocas.WIP_Pausaly_EUR", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+        //    _curFieldGroup = "Nevyúčtováno";//-----------Nevyúčtováno---------------------
+        //    onecol = AF(stb, "Nevyfakturovano_BezDph", "Nevyúčtováno bez DPH", gdc0, "p31_ocas.Nevyfakturovano_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_Hodiny", "Nevyúčtováné hodiny", gdc0, "p31_ocas.Nevyfakturovano_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_Vydaje", "Nevyúčtováný výdaj", gdc0, "p31_ocas.Nevyfakturovano_Vydaje", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_Pausaly", "Nevyúčtováná pevná odměna", gdc0, "p31_ocas.Nevyfakturovano_Pausaly", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny", "Schválené hodiny - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny_Pausal", "Schválené hodiny PAU - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny_Pausal", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_Schvalene_Hodiny_Odpis", "Schválené hodiny ODPIS - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvalene_Hodiny_Odpis", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_Schvaleno_BezDph", "Schváleno bez DPH - čeká na vyúčtování", gdc0, "p31_ocas.Nevyfakturovano_Schvaleno_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+        //    _curFieldGroup = "Vyúčtováno";//-----------Vyúčtováno---------------------
+        //    onecol = AF(stb, "p31Hours_Invoiced", "Vyúčtované hodiny", gdc0, null, "num", true);
+        //    onecol = AF(stb, "p31HHMM_Invoiced", "Vyúčtováno HH:mm", gdc0, null, "num");
+        //    onecol = AF(stb, "p31Rate_Billing_Invoiced", "Vyúčtovaná hodinová sazba", gdc0, null, "num"); onecol.IHRC = true;
+        //    onecol = AF(stb, "p70Name", "Fakturační status", gdc0, "p70.p70Name"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
+        //    onecol = AF(stb, "p70Name_BillingLang1", "Fakturační status L1", gdc0, "p70.p70Name_BillingLang1"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
+        //    onecol = AF(stb, "p70Name_BillingLang2", "Fakturační status L2", gdc0, "p70.p70Name_BillingLang2"); onecol.RelSql = "LEFT OUTER JOIN p70BillingStatus p70 On a.p70ID=p70.p70ID"; onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_WithoutVat_Invoiced", "Vyúčtováno bez DPH", gdc0, null, "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_WithVat_Invoiced", "Vyúčtováno vč. DPH", gdc0, null, "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31VatRate_Invoiced", "Vyúčtovaná DPH sazba", gdc0, null, "num"); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_WithoutVat_Invoiced_Domestic", "Vyúčtováno bez DPH x Kurz", gdc0, null, "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "j27Code_Billing_Invoice", "Měna vyúčtování", gdc0, "j27billing_invoice.j27Code", "string"); onecol.IHRC = true;onecol.RelSql = "LEFT OUTER JOIN j27Currency j27billing_invoice ON a.j27ID_Billing_Invoiced=j27billing_invoice.j27ID";
+        //    onecol = AF(stb, "Vyfakturovano_Hodiny_Fakturovat", "Vyúčt.hodiny [Fakturovat]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Fakturovat", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vyfakturovano_Hodiny_Pausal", "Vyúčt.hodiny [Paušál]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Pausal", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vyfakturovano_Hodiny_Odpis", "Vyúčt.hodiny [Odpis]", gdc0, "p31_ocas.Vyfakturovano_Hodiny_Odpis", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vyfakturovano_Honorar", "Vyúčtovaný honorář", gdc0, "p31_ocas.Vyfakturovano_Honorar", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+
+        //    _curFieldGroup = "Nákladová cena";//-----------Nákladová cena---------------------
+        //    onecol = AF(stb, "p31Rate_Internal_Orig", "Nákladová sazba", gdc0, null, "num"); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_Internal", "Nákladový honorář", gdc0, null, "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Rate_Overhead", "Režijní sazba", gdc0, null, "num"); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_Overhead", "Režijní honorář", gdc0, null, "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Value_Off", "Off billing hodnota", gdc0, null, "num", true); onecol.IHRC = true;
+
+
+        //    _curFieldGroup = "Přepočet podle fixního kurzu";//-----------Přepočet podle fixního kurzu---------------------
+        //    onecol = AF(stb, "p31ExchangeRate_Fixed", "Fixní kurz", gdc0, null, "num"); onecol.IHRC = true;
+        //    onecol = AF(stb, "p31Amount_WithoutVat_FixedCurrency", "Vykázáno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*a.p31Amount_WithoutVat_Orig", "num", true); onecol.IHRC = true;
+        //    onecol = AF(stb, "WIP_BezDph_FK", "Rozpracováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.WIP_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Nevyfakturovano_BezDph_FK", "Nevyúčtováno bez DPH FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.Nevyfakturovano_BezDph", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vykazano_Naklad_FK", "Vykázaný náklad FK", gdc0, "p31_ocas.Vykazano_Naklad_FK", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vykazano_Vynos_FK", "Vykázaný výnos FK", gdc0, "a.p31ExchangeRate_Fixed*p31_ocas.Vykazano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vykazano_Zisk_FK", "Vykázaný zisk FK", gdc0, "p31_ocas.Vykazano_Zisk_FK", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+        //    _curFieldGroup = "Výsledovka z vykázaných hodnot";//-----------Výsledovka z vykázaných hodnot---------------------
+        //    onecol = AF(stb, "Vykazano_Naklad", "Vykázaný náklad", gdc0, "p31_ocas.Vykazano_Naklad", "num",true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vykazano_Vynos", "Vykázaný výnos", gdc0, "p31_ocas.Vykazano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vykazano_Zisk", "Vykázaný zisk", gdc0, "p31_ocas.Vykazano_Zisk", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vykazano_Naklad_Rezije", "Vykázaný režijní náklad", gdc0, "p31_ocas.Vykazano_Naklad_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vykazano_Zisk_Rezije", "Vykázaný režijní zisk", gdc0, "p31_ocas.Vykazano_Zisk_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+        //    _curFieldGroup = "Výsledovka z vyúčtovaných hodnot";//-----------Výsledovka z vyúčtovaných hodnot---------------------
+        //    onecol = AF(stb, "Vyfakturovano_Puvodni_Naklad_Domestic", "Vykázaný náklad x Kurz", gdc0, "p31_ocas.Vyfakturovano_Puvodni_Naklad_Domestic", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vyfakturovano_Vynos", "Vyúčtovaný výnos", gdc0, "p31_ocas.Vyfakturovano_Vynos", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vyfakturovano_Vynos_Domestic", "Vyúčtovaný výnos x Kurz", gdc0, "p31_ocas.Vyfakturovano_Vynos_Domestic", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vyfakturovano_Zisk", "Zisk po vyúčtování", gdc0, "p31_ocas.Vyfakturovano_Zisk", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+        //    onecol = AF(stb, "Vyfakturovano_Zisk_Rezije", "Režijní zisk po vyúčtování", gdc0, "p31_ocas.Vyfakturovano_Zisk_Rezije", "num", true); onecol.RelSql = strSQL_Ocas; onecol.IHRC = true;
+
+
+        //    _curFieldGroup = "Expense marže";
+        //    AF(stb, "p31MarginHidden", "Skrytá marže", gdc0, null, "num");
+        //    AF(stb, "p31MarginTransparent", "Přiznaná marže%", gdc0, null, "num");
+        //    AF(stb, "ExpenseAfterMarginHidden", "Výdaj po skryté marži", gdc0, "a.p31Amount_WithoutVat_Orig+(a.p31Amount_WithoutVat_Orig*a.p31MarginHidden/100)", "num",true);
+        //    AF(stb, "ExpenseAfterAllMargins", "Výdaj po obou maržích", gdc0, "dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent)", "num", true);
+        //    AF(stb, "Odmena_Minus_Vydaj_Minus_HonorarR", "Odměna - Výdaj s marží - Režijní honorář", gdc0, "(case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=2 then a.p31Amount_WithoutVat_Orig else 0 end) - (case when p34.p33ID IN (2,5) and p34.p34IncomeStatementFlag=1 then dbo.p31_get_expense_with_margins(a.p31Amount_WithoutVat_Orig,a.p31MarginHidden,a.p31MarginTransparent) else 0 end) - (case when p34.p33ID IN (1,3) then a.p31Hours_Orig*a.p31Rate_Overhead else 0 end)", "num", true);
+
+        //    AppendTimestamp(stb);
+            
+        //}
+
+        //private void SetupJ02(string stb="j02Person")
+        //{
+            
+            
+        //    //AF(stb, "fullname_desc", "Příjmení+Jméno", BO.TheGridDefColFlag.GridAndCombo, "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string", false, true);
+        //    //AF(stb, "fullname_asc", "Jméno+Příjmení", BO.TheGridDefColFlag._none, "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string", false, true);
+
+        //    //AF(stb, "j02Email", "E-mail", gdc1);
+        //    //AF(stb, "j02FirstName", "Jméno");
+        //    //AF(stb, "j02LastName", "Příjmení");
+        //    //AF(stb, "j02TitleBeforeName", "Titul před");
+        //    //AF(stb, "j02TitleAfterName", "Titul za");
+        //    //AF(stb, "j02Phone", "TEL");
+        //    //AF(stb, "j02Mobile", "Mobil");
+        //    //AF(stb, "j02Code", "Kód");
+        //    //AF(stb, "j02JobTitle", "Pozice na vizitce");
+        //    //AF(stb, "j02Office", "Adresa");
+        //    //AFBOOL(stb, "j02IsIntraPerson", "Interní osoba");
+        //    //AF(stb, "j02InvoiceSignatureFile", "Grafický podpis");
+        //    //AF(stb, "j02Salutation", "Oslovení");
+        //    //AF(stb, "j02EmailSignature", "E-mail podpis");
+        //    //AppendTimestamp(stb);
+        //}
+        //private void SetupP28(string stb="p28Contact")
+        //{
+        //    AF(stb, "p28Name", "Klient", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
+        //    AF(stb, "p28Code", "Kód");
+        //    AF(stb, "p28CompanyShortName", "Zkrácený název");
+            
+        //    AF(stb, "p28RegID", "IČ", gdc2);
+        //    AF(stb, "p28VatID", "DIČ", gdc1);
+        //    AF(stb, "p28BillingMemo", "Fakturační poznámka");
+
+        //    AFNUM0(stb, "p28Round2Minutes", "Zaokrouhlování času");
+            
+        //    AF(stb, "p28ICDPH_SK", "IČ DPH (SK)");
+        //    AF(stb, "p28SupplierID", "Kód dodavatele");
+        //    AppendTimestamp(stb);
+
+        //    AF("view_PrimaryAddress","FullAddress", "Fakturační adresa", BO.TheGridDefColFlag.GridOnly, "isnull(a.o38City+', ','')+isnull('<code>'+a.o38Street+'</code>','')+isnull(', '+a.o38ZIP,'')+isnull(' <var>'+a.o38Country+'</var>','')","string",false,true);
+        //    AF("view_PrimaryAddress", "o38Street", "Ulice", BO.TheGridDefColFlag.GridOnly);
+        //    AF("view_PrimaryAddress", "o38City", "Město", BO.TheGridDefColFlag.GridAndCombo);
+        //    AF("view_PrimaryAddress", "o38ZIP", "PSČ");
+        //    AF("view_PrimaryAddress", "o38Country", "Stát");
+        //    AF("view_PrimaryAddress", "o38Name", "Název");
+            
+        //}
+        //private void SetupP91(string stb= "p91Invoice")
+        //{
+        //    BO.TheGridColumn oc;
+        //    _curFieldGroup = "Root";
+        //    AF(stb, "p91Code", "Číslo", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
+        //    AF(stb, "p91Client", "Klient vyúčtování", BO.TheGridDefColFlag.GridAndCombo);
+        //    AF(stb, "p91Text1", "Text faktury");
+        //    AF(stb, "p91Text2", "Technický text");
+        //    AF(stb, "ZapojeneOsoby", "Zapojené osoby", 0, "dbo.j02_invoiced_persons_inline(a.p91ID)");
+
+        //    AFBOOL(stb, "p91IsDraft", "Draft");
+
+        //    _curFieldGroup = "Datum";
+        //    AFDATE(stb, "p91Date", "Vystaveno", BO.TheGridDefColFlag.GridOnly);
+        //    AFDATE(stb, "p91DateSupply", "Datum plnění", BO.TheGridDefColFlag.GridAndCombo);
+        //    AFDATE(stb, "p91DateMaturity", "Splatnost", BO.TheGridDefColFlag.GridOnly);
+        //    AF(stb, "DnuPoSplatnosti", "Dnů do splatnosti", 0, "case When a.p91Amount_Debt=0 Then null Else datediff(day, p91DateMaturity, dbo.get_today()) End", "num0");
+        //    AFDATE(stb, "p91DateBilled", "Datum úhrady");
+        //    AFDATE(stb, "p91DateExchange", "Datum měn.kurzu");
+
+        //    _curFieldGroup = "Částka";
+        //    AF(stb, "p91Amount_WithoutVat", "Bez dph", BO.TheGridDefColFlag.GridAndCombo, null,"num",true);
+        //    AF(stb, "BezDphKratKurz", "Bez dph x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_WithoutVat Else p91Amount_WithoutVat*p91ExchangeRate End", "num",true);
+        //    AF(stb, "p91Amount_Debt", "Dluh", 0, null, "num",true);
+        //    AF(stb, "DluhKratKurz", "Dluh x Kurz", 0, "case When a.j27ID=a.j27ID_Domestic Then p91Amount_Debt Else p91Amount_Debt*p91ExchangeRate End", "num",true);
+        //    AF(stb, "p91Amount_TotalDue", "Celkem", BO.TheGridDefColFlag.GridAndCombo, null, "num",true);
+        //    AF(stb, "CelkemKratKurz", "Celkem x Kurz", 0, "case When a.j27ID = a.j27ID_Domestic Then p91Amount_TotalDue Else p91Amount_TotalDue*p91ExchangeRate End", "num",true);
+        //    AF(stb, "p91Amount_Vat", "Celkem dph", 0, null, "num",true);
+        //    AF(stb, "p91Amount_WithVat", "Vč.dph", 0, null, "num",true);
+        //    AF(stb, "p91RoundFitAmount", "Haléřové zaokrouhlení", 0, null, "num", true);
+        //    AF(stb, "p91Amount_WithoutVat_None", "Základ v nulové DPH", 0, null, "num", true);
+        //    AF(stb, "p91Amount_WithoutVat_Standard", "Základ ve standardní sazbě", 0, null, "num", true);
+        //    AF(stb, "p91Amount_WithoutVat_Low", "Základ ve snížené sazbě", 0, null, "num", true);
+        //    AF(stb, "p91Amount_WithoutVat_Special", "Základ ve speciální sazbě", 0, null, "num", true);
+        //    AF(stb, "p91Amount_Vat_Standard", "DPH ve standardní sazbě", 0, null, "num", true);
+        //    AF(stb, "p91Amount_Vat_Low", "DPH ve snížené sazbě", 0, null, "num", true);
+        //    AF(stb, "p91Amount_Vat_Special", "DPH ve speciální sazbě", 0, null, "num", true);
+        //    AF(stb, "p91VatRate_Standard", "DPH sazba standardní", 0, null, "num", true);
+        //    AF(stb, "p91VatRate_Low", "DPH sazba snížená", 0, null, "num", true);
+        //    AF(stb, "p91VatRate_Special", "DPH sazba speciální", 0, null, "num", true);
+
+        //    AF(stb, "p91ProformaBilledAmount", "Uhrazené zálohy", 0, null, "num");
+        //    AF(stb, "p91ExchangeRate", "Měnový kurz", 0, null, "num");
+
+
+            
+
+        //    _curFieldGroup = "Klient ve faktuře";
+        //    AF(stb, "p91Client_RegID", "IČ klienta");            
+        //    AF(stb, "p91Client_VatID", "DIČ klienta", BO.TheGridDefColFlag.GridOnly);
+        //    AF(stb, "p91Client_ICDPH_SK", "IČ DPH (SK)");            
+        //    AF(stb, "p91ClientAddress1_Street", "Ulice klienta");
+        //    AF(stb, "p91ClientAddress1_City", "Město klienta");
+        //    AF(stb, "p91ClientAddress1_ZIP", "PSČ klienta");            
+        //    AF(stb, "p91ClientAddress1_Country", "Stát klienta");
            
 
             
 
-            AppendTimestamp(stb);
-        }
+        //    AppendTimestamp(stb);
+        //}
 
         public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
         {
