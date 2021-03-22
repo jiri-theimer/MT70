@@ -65,7 +65,7 @@ namespace BO
         public string x18AllowedFileExtensions { get; set; }
         public bool x18IsAllowEncryption { get; set; }
         
-        public int x31ID_Plugin { get; set; }              
+        
 
         public bool Is_p41 { get; }        
         public bool Is_p28 { get; }       
