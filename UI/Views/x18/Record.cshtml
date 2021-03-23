@@ -49,42 +49,62 @@
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    <select asp-for="@Model.SelectedX29ID" class="form-control">
-                        <option value="_NotSpecified">--@_f.tra("Vyberte entitu")--</option>
-                        <option value="p41Project">@_f.tra("Projekt")</option>
-                        <option value="p28Contact">@_f.tra("Klient")</option>
-                        <option value="j02Person">@_f.tra("Osoba")</option>
-                        <option value="p56Task">@_f.tra("Úkol")</option>
-                        <option value="p91Invoice">@_f.tra("Vyúčtování")</option>
-                        <option value="p90Proforma">@_f.tra("Záloha")</option>
-                        <option value="p31Worksheet">@_f.tra("Úkon")</option>
-
-                    </select>
-                    <button type="button" class="btn btn-outline-primary" onclick="x20_add_row()">@_f.tra("Vložit vybranou entitu")</button>
+                <div class="card-header row">
+                    <div class="col-10">
+                        <select asp-for="@Model.SelectedX29ID" class="form-select">
+                            <option value="_NotSpecified">--@_f.tra("Vyberte entitu")--</option>
+                            <option value="p41Project">@_f.tra("Projekt")</option>
+                            <option value="p28Contact">@_f.tra("Klient")</option>
+                            <option value="j02Person">@_f.tra("Osoba")</option>
+                            <option value="p56Task">@_f.tra("Úkol")</option>
+                            <option value="p91Invoice">@_f.tra("Vyúčtování")</option>
+                            <option value="p90Proforma">@_f.tra("Záloha")</option>
+                            <option value="p31Worksheet">@_f.tra("Úkon")</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-outline-primary" onclick="x20_add_row()">@_f.tra("Vložit vybranou entitu")</button>
+                    </div>
+                    
                 </div>
                 <div class="card-body">
                     <table class="table table-hover">
                         @for (int i = 0; i < Model.lisX20.Count; i++)
                         {
-                            <tr style="@(Model.lisX16[i].CssTempDisplay)">
-                                <td>
-                                    <input type="hidden" asp-for="lisX20[i].IsTempDeleted" value="@Model.lisX20[i].IsTempDeleted" />
-                                    <input type="hidden" asp-for="lisX20[i].TempGuid" value="@Model.lisX20[i].TempGuid" />
-                                    <input type="text" class="form-control" asp-for="lisX20[i].x20Name" placeholder="@_f.tra("Název vazby")" />
-                                    <div>
-                                        <input type="checkbox" asp-for="lisX20[i].x20IsEntryRequired" />
-                                        <label class="col-form-label" for="lisX20_@(i)__x20IsEntryRequired">@_f.tra("Povinná vazba k přiřazení")</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" asp-for="lisX20[i].x20IsClosed" />
-                                        <label class="col-form-label" for="lisX20_@(i)__x20IsClosed">@_f.tra("Vazba uzavřena pro přiřazování")</label>
-                                    </div>
-                                </td>
-                                <td>
+                        <tr style="@(Model.lisX20[i].CssTempDisplay)">
+                            <td>
+                                <input type="hidden" asp-for="lisX20[i].IsTempDeleted" value="@Model.lisX20[i].IsTempDeleted" />
+                                <input type="hidden" asp-for="lisX20[i].TempGuid" value="@Model.lisX20[i].TempGuid" />
 
-                                </td>
-                            </tr>
+                                
+                                
+                                <select asp-for="lisX20[i].x29ID" class="form-select" disabled>                                    
+                                    <option value="141">@_f.tra("Projekt")</option>
+                                    <option value="328">@_f.tra("Klient")</option>
+                                    <option value="102">@_f.tra("Osoba")</option>
+                                    <option value="356">@_f.tra("Úkol")</option>
+                                    <option value="391">@_f.tra("Vyúčtování")</option>
+                                    <option value="390">@_f.tra("Záloha")</option>
+                                    <option value="331">@_f.tra("Úkon")</option>
+                                </select>
+
+                                <div>
+                                    <input type="text" asp-for="lisX20[i].x20Name" placeholder="@_f.tra("Název vazby")" />
+
+                                    <input type="checkbox" asp-for="lisX20[i].x20IsEntryRequired" />
+                                    <label class="col-form-label" for="lisX20_@(i)__x20IsEntryRequired">@_f.tra("Povinná vazba k přiřazení")</label>
+
+                                    <input type="checkbox" asp-for="lisX20[i].x20IsClosed" />
+                                    <label class="col-form-label" for="lisX20_@(i)__x20IsClosed">@_f.tra("Vazba uzavřena pro přiřazování")</label>
+                                </div>
+                            </td>
+                            <td>
+                                #<input type="text" asp-for="lisX20[i].x20Ordinary" title="Index pořadí" style="width:30px;" />
+                            </td>
+                            <td width="60px">
+                                <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="x20_delete_row('@(Model.lisX20[i].TempGuid)')">x</button>
+                            </td>
+                        </tr>
                         }
                     </table>
 
@@ -289,7 +309,11 @@
         form1.action = _ep("/x18/Record?oper=x20_add_row");
         form1.submit();
     }
+    function x20_delete_row(guid) {
+        form1.action = _ep("/x18/Record?oper=x20_delete_row&guid=" + guid);
+        form1.submit();
 
+    }
 
     function x16_delete_row(guid) {
         form1.action = _ep("/x18/Record?oper=x16_delete_row&guid=" + guid);

@@ -91,6 +91,9 @@ namespace UI.Controllers
                     var cX20 = new x20Repeater() {x29ID=(int)v.SelectedX29ID, TempGuid = BO.BAS.GetGuid() };
                     v.lisX20.Add(cX20);
                     return View(v);
+                case "x20_delete_row":
+                    v.lisX20.First(p => p.TempGuid == guid).IsTempDeleted = true;
+                    return View(v);
                 case "x16_add_row":
                     var cX16 = new x16Repeater() { TempGuid = BO.BAS.GetGuid() };
                     v.lisX16.Add(cX16);
