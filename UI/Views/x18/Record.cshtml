@@ -53,72 +53,76 @@
         <div class="tab-pane" id="tab2" role="tabpanel">
             <!-- Tab2 -->
             <button type="button" class="btn btn-outline-primary btn-sm" onclick="x16_add_row()">@_f.tra("Přidat řádek")</button>
-            <table class="table table-hover" style="table-layout: fixed;min-width:800px;">
-                @for (int i = 0; i < Model.lisX16.Count; i++)
-                {
-                <tr style="@(Model.lisX16[i].CssTempDisplay)">
-                    <td>
-                        <select asp-for="lisX16[i].x16Field" onchange="postback()">
-                            <option value="">--@_f.tra("Obsazené pole")--</option>
-                            <option value="o23FreeText01">Text 1</option>
-                            <option value="o23FreeText02">Text 2</option>
-                            <option value="o23FreeText03">Text 3</option>
-                            <option value="o23FreeText04">Text 4</option>
-                            <option value="o23FreeText05">Text 5</option>
-                            <option value="o23FreeText06">Text 6</option>
-                            <option value="o23FreeText07">Text 7</option>
-                            <option value="o23FreeText08">Text 8</option>
-                            <option value="o23FreeText09">Text 9</option>
-                            <option value="o23FreeText10">Text 10</option>
-                            <option value="o23FreeText11">Text 11</option>
-                            <option value="o23FreeText12">Text 12</option>
-                            <option value="o23FreeText13">Text 13</option>
-                            <option value="o23FreeText14">Text 14</option>
-                            <option value="o23FreeText15">Text 15</option>
-                            <option value="o23BigText">@_f.tra("Velký text (1000)")</option>
-                            <option value="o23HtmlContent">Html editor</option>
-                            <option value="o23FreeNumber01">Číslo 1</option>
-                            <option value="o23FreeNumber02">Číslo 2</option>
-                            <option value="o23FreeNumber03">Číslo 3</option>
-                            <option value="o23FreeNumber04">Číslo 4</option>
-                            <option value="o23FreeNumber05">Číslo 5</option>
-                            <option value="o23FreeDate01">Datum 1</option>
-                            <option value="o23FreeDate02">Datum 2</option>
-                            <option value="o23FreeDate03">Datum 3</option>
-                            <option value="o23FreeDate04">Datum 4</option>
-                            <option value="o23FreeDate05">Datum 5</option>
-                            <option value="o23FreeBoolean01">ANO/NE 1</option>
-                            <option value="o23FreeBoolean02">ANO/NE 2</option>
-                            <option value="o23FreeBoolean03">ANO/NE 3</option>
-                            <option value="o23FreeBoolean04">ANO/NE 4</option>
-                            <option value="o23FreeBoolean05">ANO/NE 5</option>
+            <div style="overflow:auto;max-height:500px;">
+                <table class="table table-hover" style="table-layout: fixed;min-width:800px;">
+                    @for (int i = 0; i < Model.lisX16.Count; i++)
+                    {
+                        <tr style="@(Model.lisX16[i].CssTempDisplay)">
+                            <td>
+                                <select asp-for="lisX16[i].x16Field" onchange="postback()">
+                                    <option value="">--@_f.tra("Obsazené pole")--</option>
+                                    <option value="o23FreeText01">Text 1</option>
+                                    <option value="o23FreeText02">Text 2</option>
+                                    <option value="o23FreeText03">Text 3</option>
+                                    <option value="o23FreeText04">Text 4</option>
+                                    <option value="o23FreeText05">Text 5</option>
+                                    <option value="o23FreeText06">Text 6</option>
+                                    <option value="o23FreeText07">Text 7</option>
+                                    <option value="o23FreeText08">Text 8</option>
+                                    <option value="o23FreeText09">Text 9</option>
+                                    <option value="o23FreeText10">Text 10</option>
+                                    <option value="o23FreeText11">Text 11</option>
+                                    <option value="o23FreeText12">Text 12</option>
+                                    <option value="o23FreeText13">Text 13</option>
+                                    <option value="o23FreeText14">Text 14</option>
+                                    <option value="o23FreeText15">Text 15</option>
+                                    <option value="o23BigText">@_f.tra("Velký text (1000)")</option>
+                                    <option value="o23HtmlContent">Html editor</option>
+                                    <option value="o23FreeNumber01">Číslo 1</option>
+                                    <option value="o23FreeNumber02">Číslo 2</option>
+                                    <option value="o23FreeNumber03">Číslo 3</option>
+                                    <option value="o23FreeNumber04">Číslo 4</option>
+                                    <option value="o23FreeNumber05">Číslo 5</option>
+                                    <option value="o23FreeDate01">Datum 1</option>
+                                    <option value="o23FreeDate02">Datum 2</option>
+                                    <option value="o23FreeDate03">Datum 3</option>
+                                    <option value="o23FreeDate04">Datum 4</option>
+                                    <option value="o23FreeDate05">Datum 5</option>
+                                    <option value="o23FreeBoolean01">ANO/NE 1</option>
+                                    <option value="o23FreeBoolean02">ANO/NE 2</option>
+                                    <option value="o23FreeBoolean03">ANO/NE 3</option>
+                                    <option value="o23FreeBoolean04">ANO/NE 4</option>
+                                    <option value="o23FreeBoolean05">ANO/NE 5</option>
 
-                        </select>
-                    </td>
-                    <td>
-                        <input type="hidden" asp-for="lisX16[i].IsTempDeleted" value="@Model.lisX16[i].IsTempDeleted" />
-                        <input type="hidden" asp-for="lisX16[i].TempGuid" value="@Model.lisX16[i].TempGuid" />
+                                </select>
+                            </td>
+                            <td>
+                                <input type="hidden" asp-for="lisX16[i].IsTempDeleted" value="@Model.lisX16[i].IsTempDeleted" />
+                                <input type="hidden" asp-for="lisX16[i].TempGuid" value="@Model.lisX16[i].TempGuid" />
 
-                        <label>@_f.tra("Název"):</label>
-                        <input type="text" asp-for="lisX16[i].x16Name" />
-                        
-                        <label>@_f.tra("Název sloupce"):</label>
-                        <input type="text" asp-for="lisX16[i].x16NameGrid" />
-                        <div>
-                            <input type="checkbox" asp-for="lisX16[i].x16IsEntryRequired" />
-                            <label class="col-form-label" for="x16IsEntryRequired">@_f.tra("Povinné k vyplnění")</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" asp-for="lisX16[i].x16IsGridField" />
-                            <label class="col-form-label" for="x16IsGridField">@_f.tra("GRID sloupec")</label>
-                        </div>
-                    </td>
-                    <td width="60px">
-                        <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="x16_delete_row('@(Model.lisX16[i].TempGuid)')">x</button>
-                    </td>
-                </tr>
-                }
-            </table>
+                                <label>@_f.tra("Název"):</label>
+                                <input type="text" asp-for="lisX16[i].x16Name" />
+
+                                <label>@_f.tra("Název sloupce"):</label>
+                                <input type="text" asp-for="lisX16[i].x16NameGrid" />
+                                <div>
+                                    <input type="checkbox" asp-for="lisX16[i].x16IsEntryRequired" />
+                                    <label class="col-form-label" for="x16IsEntryRequired">@_f.tra("Povinné k vyplnění")</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" asp-for="lisX16[i].x16IsGridField" />
+                                    <label class="col-form-label" for="x16IsGridField">@_f.tra("GRID sloupec")</label>
+                                    #<input type="text" asp-for="lisX16[i].x16Ordinary" title="Index pořadí mezi poli" style="width:50px;" />
+                                </div>
+                            </td>
+                            <td width="60px">
+                                <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="x16_delete_row('@(Model.lisX16[i].TempGuid)')">x</button>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+           
         </div>
 
         <div class="tab-pane" id="tab3" role="tabpanel">
