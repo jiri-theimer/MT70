@@ -11,6 +11,7 @@ namespace BL
         public BO.x18EntityCategory Load(int pid);
         public IEnumerable<BO.x18EntityCategory> GetList(BO.myQuery mq);
         public IEnumerable<BO.x20EntiyToCategory> GetList_x20(List<int> x18ids);
+        public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id);
         public int Save(BO.x18EntityCategory rec, List<BO.x20EntiyToCategory> lisX20, List<BO.x16EntityCategory_FieldSetting> lisX16);
 
     }
@@ -53,7 +54,10 @@ namespace BL
             
             return _db.GetList<BO.x20EntiyToCategory>("SELECT * FROM x20EntiyToCategory WHERE x18ID IN (" + String.Join(",", x18ids) + ") ORDER BY x20Ordinary");
         }
-
+        public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id)
+        {
+            return _db.GetList<BO.x16EntityCategory_FieldSetting>("SELECT * FROM x16EntityCategory_FieldSetting WHERE x18ID=@pid ORDER BY x16Ordinary", new { pid = x18id });
+        }
         public int Save(BO.x18EntityCategory rec,List<BO.x20EntiyToCategory> lisX20,List<BO.x16EntityCategory_FieldSetting> lisX16)
         {
             if (!ValidateBeforeSave(rec,lisX16))

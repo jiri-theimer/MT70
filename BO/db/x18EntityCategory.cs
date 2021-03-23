@@ -11,7 +11,7 @@ namespace BO
     {
         Manual = 1,  // 1-vyplňovat ručně kód
         NotUsed = 2, // 2-nepoužívat kód
-        AutoX18 = 3, // 3-automaticky generovat v rámci štítku
+        AutoX18 = 3, // 3-automaticky generovat v rámci dokumentu
         AutoP41 = 4, // 4-automaticky generovat v rámci projektu
         X38ID = 5     // podle číselné řady
     }

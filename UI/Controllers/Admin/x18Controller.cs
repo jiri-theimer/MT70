@@ -21,6 +21,25 @@ namespace UI.Controllers
                 {
                     return RecNotFound(v);
                 }
+                var lis = Factory.x18EntityCategoryBL.GetList_x16(v.rec_pid);
+                v.lisX16 = new List<x16Repeater>();
+                foreach (var c in lis)
+                {
+                    var cc = new x16Repeater()
+                    {
+                        TempGuid = BO.BAS.GetGuid(),
+                        x16IsEntryRequired = c.x16IsEntryRequired,
+                        x16Name = c.x16Name,
+                        x16Field = c.x16Field,
+                        x16Ordinary = c.x16Ordinary,
+                        x16DataSource = c.x16DataSource,
+                        x16IsFixedDataSource = c.x16IsFixedDataSource,
+                        x16IsGridField = c.x16IsGridField,
+                        x16TextboxHeight = c.x16TextboxHeight,
+                        x16Format = c.x16Format
+                    };
+                    v.lisX16.Add(cc);
+                }
 
             }
             v.Toolbar = new MyToolbarViewModel(v.Rec);
@@ -30,11 +49,30 @@ namespace UI.Controllers
             }
             return ViewTup(v, BO.x53PermValEnum.GR_Admin);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Record(Models.Record.x18Record v)
+        private void RefreshState(x18Record v)
         {
-
+            if (v.lisX16 == null)
+            {
+                v.lisX16 = new List<x16Repeater>();
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]        
+        public IActionResult Record(x18Record v,string oper, string guid)
+        {
+            switch (oper)
+            {
+                case "postback":
+                    return View(v);
+                case "x16_add_row":
+                    var c = new x16Repeater() { TempGuid = BO.BAS.GetGuid() };                                       
+                    v.lisX16.Add(c);
+                    return View(v);
+                case "x16_delete_row":
+                    v.lisX16.First(p => p.TempGuid == guid).IsTempDeleted = true;
+                    return View(v);
+            }
+           
             if (ModelState.IsValid)
             {
                 BO.x18EntityCategory c = new BO.x18EntityCategory();

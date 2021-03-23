@@ -52,11 +52,61 @@
 
         <div class="tab-pane" id="tab2" role="tabpanel">
             <!-- Tab2 -->
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="x16_add_row()">@_f.tra("Přidat řádek")</button>
+            <table class="table table-hover" style="table-layout: fixed;min-width:800px;">
+                @for (int i = 0; i < Model.lisX16.Count; i++)
+                {
+                <tr style="@(Model.lisX16[i].CssTempDisplay)">
+                    <td>
+                        <input type="hidden" asp-for="lisX16[i].IsTempDeleted" value="@Model.lisX16[i].IsTempDeleted" />
+                        <input type="hidden" asp-for="lisX16[i].TempGuid" value="@Model.lisX16[i].TempGuid" />
 
+                        <label>@_f.tra("Název"):</label>
+                        <input type="text" asp-for="lisX16[i].x16Name" />
+                        <br />
+                        <label>@_f.tra("Název sloupce"):</label>
+                        <input type="text" asp-for="lisX16[i].x16NameGrid" />
+                    </td>
+                    <td width="60px">
+                        <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="x16_delete_row('@(Model.lisX16[i].TempGuid)')">x</button>
+                    </td>
+                </tr>
+                }
+            </table>
         </div>
 
         <div class="tab-pane" id="tab3" role="tabpanel">
             <!-- Tab3 -->
+            <div class="card">
+                <div class="card-header">
+                    @_f.tra("Limity pro nahrávání souborových příloh")
+                </div>
+                <div class="card-body">
+                    <input type="radio" id="x18UploadFlag0" asp-for="@Model.Rec.x18UploadFlag" value="NotUsed" onchange="postback('postback')">
+                    <label for="x18UploadFlag0">@_f.tra("Bez omezení")</label>
+                    <br />
+                    <input type="radio" id="x18UploadFlag1" asp-for="@Model.Rec.x18UploadFlag" value="FileSystemUpload" onchange="postback('postback')">
+                    <label for="x18UploadFlag1">@_f.tra("Omezení velikosti a přípony souboru")</label>
+                    <br />
+                    @if (Model.Rec.x18UploadFlag == BO.x18UploadENUM.FileSystemUpload)
+                    {
+                        <label>@_f.tra("Maximální velikost jedné souborové přílohy"):</label>
+                        <select asp-for="@Model.Rec.x18UploadFlag">
+                            <option value="1048576">1MB</option>
+                            <option value="2097152">2MB</option>
+                            <option value="3145728">3MB</option>
+                            <option value="4194304">4MB</option>
+                            <option value="5242880">5MB</option>
+                            <option value="6291456">6MB</option>
+                            <option value="7340032">7MB</option>
+                            <option value="10485760">10MB</option>
+                        </select>
+                        <br />
+
+                        <input type="text" class="form-control" asp-for="@Model.Rec.x18AllowedFileExtensions" placeholder="@_f.tra("Povolené přípony nahrávaných souborů")" />
+                    }
+                </div>
+            </div>
             <div class="row">
                 <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Zkrácený (preferovaný) název"):</label>
                 <div class="col-sm-6 col-md-5">
@@ -64,13 +114,45 @@
                 </div>
 
             </div>
-            <div class="col-sm-2 col-md-2">
+
+            <div class="my-2">
                 <input type="checkbox" asp-for="@Model.Rec.x18IsColors" />
-                <label class="col-form-label" for="Rec_p32IsBillable">@_f.tra("Možnost rozlišovat dokumenty barvou")</label>
+                <label class="col-form-label" for="Rec_x18IsColors">@_f.tra("Možnost rozlišovat dokumenty barvou")</label>
             </div>
-            <div class="col-sm-5 col-md-5">
+            <div class="my-2">
                 <input type="checkbox" asp-for="@Model.Rec.x18IsAllowEncryption" />
-                <label class="col-form-label" for="Rec_p32IsTextRequired">@_f.tra("Nabízet možnost zašifrovat poznámku")</label>
+                <label class="col-form-label" for="Rec_x18IsAllowEncryption">@_f.tra("Nabízet možnost zašifrovat poznámku")</label>
+            </div>
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vyplňování názvu položky"):</label>
+                <div class="col-sm-6 col-md-5">
+                    <select class="form-select" asp-for="@Model.Rec.x18EntryNameFlag">
+                        <option value="Manual">@_f.tra("Ručně")</option>
+                        <option value="NotUsed">@_f.tra("Nevyplňovat")</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vyplňování kódu položky"):</label>
+                <div class="col-sm-6 col-md-5">
+                    <select class="form-select" asp-for="@Model.Rec.x18EntryNameFlag">
+                        <option value="Manual">@_f.tra("Ručně")</option>
+                        <option value="NotUsed">@_f.tra("Nevyplňovat")</option>
+                        <option value="AutoX18">@_f.tra("Automaticky v rámci dokumentu")</option>
+                        <option value="AutoP41">@_f.tra("Automaticky v rámci projektu")</option>
+                        <option value="X38ID">@_f.tra("Podle zvolené číselné řady")</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Okruh šablon tiskových sestav"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <input class="form-control" asp-for="Rec.x18ReportCodes" />
+                </div>
+
             </div>
         </div>
 
@@ -85,7 +167,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        
+
 
 
 
@@ -93,9 +175,19 @@
 
     function postback(oper) {
 
-        form1.action = _ep("f18/Record?oper=" + oper);
+        form1.action = _ep("/x18/Record?oper=" + oper);
         form1.submit();
     }
 
+
+    function x16_delete_row(guid) {
+        form1.action = _ep("/x18/Record?oper=x16_delete_row&guid=" + guid);
+        form1.submit();
+
+    }
+    function x16_add_row() {
+        form1.action = _ep("/x18/Record?oper=x16_add_row");
+        form1.submit();
+    }
 
 </script>
