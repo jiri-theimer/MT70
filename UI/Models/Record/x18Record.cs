@@ -8,9 +8,11 @@ namespace UI.Models.Record
     public class x18Record: BaseRecordViewModel
     {
         public BO.x18EntityCategory Rec { get; set; }
+        public BO.x29IdEnum SelectedX29ID { get; set; }
+        
 
         public List<x16Repeater> lisX16 { get; set; }
-        public List<BO.x20EntiyToCategory> lisX20 { get; set; }
+        public List<x20Repeater> lisX20 { get; set; }
     }
 
 
@@ -34,4 +36,25 @@ namespace UI.Models.Record
             }
         }
     }
+
+    public class x20Repeater : BO.x20EntiyToCategory
+    {
+        public bool IsTempDeleted { get; set; }
+        public string TempGuid { get; set; }
+        public string CssTempDisplay
+        {
+            get
+            {
+                if (this.IsTempDeleted == true)
+                {
+                    return "display:none;";
+                }
+                else
+                {
+                    return "display:table-row;";
+                }
+            }
+        }
+    }
+
 }

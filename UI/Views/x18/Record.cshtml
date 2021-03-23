@@ -48,6 +48,49 @@
                 </div>
             </div>
 
+            <div class="card">
+                <div class="card-header">
+                    <select asp-for="@Model.SelectedX29ID" class="form-control">
+                        <option value="_NotSpecified">--@_f.tra("Vyberte entitu")--</option>
+                        <option value="p41Project">@_f.tra("Projekt")</option>
+                        <option value="p28Contact">@_f.tra("Klient")</option>
+                        <option value="j02Person">@_f.tra("Osoba")</option>
+                        <option value="p56Task">@_f.tra("Úkol")</option>
+                        <option value="p91Invoice">@_f.tra("Vyúčtování")</option>
+                        <option value="p90Proforma">@_f.tra("Záloha")</option>
+                        <option value="p31Worksheet">@_f.tra("Úkon")</option>
+
+                    </select>
+                    <button type="button" class="btn btn-outline-primary" onclick="x20_add_row()">@_f.tra("Vložit vybranou entitu")</button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        @for (int i = 0; i < Model.lisX20.Count; i++)
+                        {
+                            <tr style="@(Model.lisX16[i].CssTempDisplay)">
+                                <td>
+                                    <input type="hidden" asp-for="lisX20[i].IsTempDeleted" value="@Model.lisX20[i].IsTempDeleted" />
+                                    <input type="hidden" asp-for="lisX20[i].TempGuid" value="@Model.lisX20[i].TempGuid" />
+                                    <input type="text" class="form-control" asp-for="lisX20[i].x20Name" placeholder="@_f.tra("Název vazby")" />
+                                    <div>
+                                        <input type="checkbox" asp-for="lisX20[i].x20IsEntryRequired" />
+                                        <label class="col-form-label" for="lisX20_@(i)__x20IsEntryRequired">@_f.tra("Povinná vazba k přiřazení")</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" asp-for="lisX20[i].x20IsClosed" />
+                                        <label class="col-form-label" for="lisX20_@(i)__x20IsClosed">@_f.tra("Vazba uzavřena pro přiřazování")</label>
+                                    </div>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        }
+                    </table>
+
+                </div>
+            </div>
+
         </div>
 
         <div class="tab-pane" id="tab2" role="tabpanel">
@@ -58,7 +101,7 @@
                     @for (int i = 0; i < Model.lisX16.Count; i++)
                     {
                         <tr style="@(Model.lisX16[i].CssTempDisplay)">
-                            <td>
+                            <td style="width:200px;">
                                 <select asp-for="lisX16[i].x16Field" onchange="postback()">
                                     <option value="">--@_f.tra("Obsazené pole")--</option>
                                     <option value="o23FreeText01">Text 1</option>
@@ -96,23 +139,36 @@
 
                                 </select>
                             </td>
-                            <td>
+                            <td style="width:350px;">
                                 <input type="hidden" asp-for="lisX16[i].IsTempDeleted" value="@Model.lisX16[i].IsTempDeleted" />
                                 <input type="hidden" asp-for="lisX16[i].TempGuid" value="@Model.lisX16[i].TempGuid" />
 
                                 <label>@_f.tra("Název"):</label>
                                 <input type="text" asp-for="lisX16[i].x16Name" />
-
+                                <br />
                                 <label>@_f.tra("Název sloupce"):</label>
                                 <input type="text" asp-for="lisX16[i].x16NameGrid" />
                                 <div>
                                     <input type="checkbox" asp-for="lisX16[i].x16IsEntryRequired" />
-                                    <label class="col-form-label" for="x16IsEntryRequired">@_f.tra("Povinné k vyplnění")</label>
+                                    <label class="col-form-label" for="lisX16_@(i)__x16IsEntryRequired">@_f.tra("Povinné k vyplnění")</label>
                                 </div>
                                 <div>
                                     <input type="checkbox" asp-for="lisX16[i].x16IsGridField" />
-                                    <label class="col-form-label" for="x16IsGridField">@_f.tra("GRID sloupec")</label>
-                                    #<input type="text" asp-for="lisX16[i].x16Ordinary" title="Index pořadí mezi poli" style="width:50px;" />
+                                    <label class="col-form-label" for="lisX16_@(i)__x16IsGridField">@_f.tra("GRID sloupec")</label>
+                                    #<input type="text" asp-for="lisX16[i].x16Ordinary" title="Index pořadí mezi poli" style="width:30px;" />
+                                </div>
+                            </td>
+                            <td>
+                                <textarea asp-for="lisX16[i].x16DataSource" class="form-control" placeholder="@_f.tra("Možné hodnoty pole (oddělovač: středník)")"></textarea>
+                                <div>
+                                    <input type="checkbox" asp-for="lisX16[i].x16IsFixedDataSource" />
+                                    <label class="col-form-label" for="lisX16_@(i)__x16IsFixedDataSource">@_f.tra("Okruh hodnot je zafixován")</label>
+                                </div>
+                                <div>
+                                    <label>@_f.tra("Výška pole"):</label>
+                                    <input type="text" asp-for="lisX16[i].x16TextboxHeight" style="width:30px;" />
+                                    <label>@_f.tra("Formát"):</label>
+                                    <input type="text" asp-for="lisX16[i].x16Format" />
                                 </div>
                             </td>
                             <td width="60px">
@@ -122,7 +178,7 @@
                     }
                 </table>
             </div>
-           
+
         </div>
 
         <div class="tab-pane" id="tab3" role="tabpanel">
@@ -226,6 +282,11 @@
     function postback() {
 
         form1.action = _ep("/x18/Record?oper=postback");
+        form1.submit();
+    }
+
+    function x20_add_row() {
+        form1.action = _ep("/x18/Record?oper=x20_add_row");
         form1.submit();
     }
 
