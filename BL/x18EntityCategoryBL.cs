@@ -110,16 +110,18 @@ namespace BL
                     foreach(var c in lisX20)
                     {
                         p = new DL.Params4Dapper();
-                        if (lisX20Saved.Any(p => p.x20ID == c.x20ID))
-                        {
-                            p.AddInt("pid", c.x20ID);
-                        }
-                        else
-                        {
-                            p.AddInt("pid", 0);
-                        }                        
+                        //if (lisX20Saved.Any(p => p.x20ID == c.x20ID))
+                        //{
+                            
+                        //}
+                        //else
+                        //{
+                        //    p.AddInt("pid", 0);
+                        //}
+                        p.AddInt("pid", c.x20ID);
                         p.AddInt("x18ID", intX18ID,true);
                         p.AddInt("x29ID", c.x29ID,true);
+                        p.AddString("x20Name", c.x20Name);
                         p.AddEnumInt("x20EntryModeFlag", c.x20EntryModeFlag);                        
                         p.AddEnumInt("x20GridColumnFlag", c.x20GridColumnFlag);
                         p.AddEnumInt("x20EntityPageFlag", c.x20EntityPageFlag);

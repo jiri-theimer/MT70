@@ -46,6 +46,7 @@ namespace UI.Controllers
                 {
                     var cc = new x20Repeater()
                     {
+                        x20ID=c.x20ID,
                         TempGuid = BO.BAS.GetGuid(),
                         x20Name=c.x20Name,
                         x20Ordinary=c.x20Ordinary,
@@ -136,7 +137,7 @@ namespace UI.Controllers
                 var lisX20 = new List<BO.x20EntiyToCategory>();
                 foreach(var row in v.lisX20.Where(p => p.IsTempDeleted == false))
                 {
-                    var cc = new BO.x20EntiyToCategory() { x20Name = row.x20Name, x20Ordinary = row.x20Ordinary, x29ID = row.x29ID, x29ID_EntityType = row.x29ID_EntityType, x20IsEntryRequired = row.x20IsEntryRequired, x20IsClosed = row.x20IsClosed };
+                    var cc = new BO.x20EntiyToCategory() {pid=row.x20ID, x20ID=row.x20ID, x20Name = row.x20Name, x20Ordinary = row.x20Ordinary, x29ID = row.x29ID, x29ID_EntityType = row.x29ID_EntityType, x20IsEntryRequired = row.x20IsEntryRequired, x20IsClosed = row.x20IsClosed };
                     lisX20.Add(cc);
                 }
                 
