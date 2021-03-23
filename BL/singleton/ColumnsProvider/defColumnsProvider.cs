@@ -275,6 +275,12 @@ namespace BL
             AFNUM0("o40Port", "Smtp Port");
             AFBOOL("o40IsGlobalDefault", "Globální účet").DefaultColumnFlag = gdc1;
 
+            //x18 = typy dokumentů
+            this.EntityName = "x18EntityCategory";
+            AA("x18Name", "Název", gdc1, null, "string", false, true);
+            AFNUM0("x18Ordinary", "#").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
             //x40 = OUTBOX     
             this.EntityName = "x40MailQueue";
             AA("MessageTime", "Čas", gdc1, "case when a.x40WhenProceeded is not null then a.x40WhenProceeded else a.x40DateInsert end", "datetime", false, true);

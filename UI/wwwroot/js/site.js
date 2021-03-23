@@ -565,3 +565,14 @@ function _helppage_layout() {
     var viewurl = window.location.pathname.split('?')[0] + window.location.search;
     _window_open("/x51/Index?viewurl=" + viewurl, 1, "Help");    
 }
+
+
+function _resize_iframe_onpage(iframe_id) {
+    var offset = $("#" + iframe_id).offset();
+    var remain_height = _device.innerHeight - offset.top;
+    remain_height = parseInt(remain_height) - 20;
+    if (_device.type === "Phone") {
+        h_vertical = 400;
+    }
+    $("#" + iframe_id).css("height", remain_height + "px");
+}

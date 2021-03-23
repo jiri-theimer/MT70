@@ -1,0 +1,101 @@
+﻿@model UI.Models.Record.x18Record
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    if (Model.Rec == null) return;
+    Model.PageTitle = _f.tra("Typ dokumentu");
+
+}
+@addTagHelper *, UI
+
+
+<div class="tabs_container_record">
+    <!-- Tab panes -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab1" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab1">@_f.tra("Vlastnosti")</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Uživatelská pole dokumentu")</a>
+        </li>
+
+        <li class="nav-item onetab" role="presentation" data-intra="1">
+            <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Ostatní")</a>
+        </li>
+
+        <li class="nav-item onetab" role="presentation" data-intra="1">
+            <a id="link_tab4" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab4">@_f.tra("Oprávnění k dokumentům")</a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="modal_record_container">
+    <div class="tab-content">
+        <div class="tab-pane" id="tab1" role="tabpanel">
+            <!-- Tab1 -->
+
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+                <div class="col-sm-6 col-md-5">
+                    <input class="form-control" asp-for="Rec.x18Name" />
+                </div>
+                <label class="col-sm-2 col-md-2 col-form-label">#@_f.tra("Index pořadí"):</label>
+                <div class="col-sm-1 col-md-1">
+                    <mynumber asp-for="Rec.x18Ordinary" decimal-digits="0"></mynumber>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <!-- Tab2 -->
+
+        </div>
+
+        <div class="tab-pane" id="tab3" role="tabpanel">
+            <!-- Tab3 -->
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Zkrácený (preferovaný) název"):</label>
+                <div class="col-sm-6 col-md-5">
+                    <input class="form-control" asp-for="Rec.x18NameShort" />
+                </div>
+
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <input type="checkbox" asp-for="@Model.Rec.x18IsColors" />
+                <label class="col-form-label" for="Rec_p32IsBillable">@_f.tra("Možnost rozlišovat dokumenty barvou")</label>
+            </div>
+            <div class="col-sm-5 col-md-5">
+                <input type="checkbox" asp-for="@Model.Rec.x18IsAllowEncryption" />
+                <label class="col-form-label" for="Rec_p32IsTextRequired">@_f.tra("Nabízet možnost zašifrovat poznámku")</label>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="tab4" role="tabpanel">
+            <!-- Tab4 -->
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        
+
+
+
+    });
+
+    function postback(oper) {
+
+        form1.action = _ep("f18/Record?oper=" + oper);
+        form1.submit();
+    }
+
+
+</script>

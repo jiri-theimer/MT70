@@ -24,8 +24,15 @@ namespace BL
 
         private string GetSQL1(string strAppend = null)
         {
-            sb("SELECT a.*,");
-            sb(_db.GetSQL1_Ocas("x18"));
+            sb("SELECT a.*");
+            sb(",convert(bit,case when a.x18ID IN (SELECT x18ID FROM x20EntiyToCategory WHERE x29ID=102) then 1 else 0 end) as Is_j02");
+            sb(",convert(bit,case when a.x18ID IN (SELECT x18ID FROM x20EntiyToCategory WHERE x29ID=141) then 1 else 0 end) as Is_p41");
+            sb(",convert(bit,case when a.x18ID IN (SELECT x18ID FROM x20EntiyToCategory WHERE x29ID=328) then 1 else 0 end) as Is_p28");
+            sb(",convert(bit,case when a.x18ID IN (SELECT x18ID FROM x20EntiyToCategory WHERE x29ID=331) then 1 else 0 end) as Is_p31");
+            sb(",convert(bit,case when a.x18ID IN (SELECT x18ID FROM x20EntiyToCategory WHERE x29ID=356) then 1 else 0 end) as Is_p56");
+            sb(",convert(bit,case when a.x18ID IN (SELECT x18ID FROM x20EntiyToCategory WHERE x29ID=223) then 1 else 0 end) as Is_o23");
+            sb(",convert(bit,case when a.x18ID IN (SELECT x18ID FROM x20EntiyToCategory WHERE x29ID=222) then 1 else 0 end) as Is_o22");
+            sb(","+_db.GetSQL1_Ocas("x18"));
             sb(" FROM x18EntityCategory a");
             sb(strAppend);
             return sbret();
@@ -152,6 +159,7 @@ namespace BL
                         }
                         _db.RunSql("DELETE FROM x16EntityCategory_FieldSetting WHERE x16FieldGroup IS NULL AND x18ID=@pid", new { pid = intX18ID });
                     }
+                    sc.Complete();  //potvrzení transakce
                 }
 
 

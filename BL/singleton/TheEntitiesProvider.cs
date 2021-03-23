@@ -128,7 +128,7 @@ namespace BL
             AE("x15VatRateType", "Entity", "Entita", "x15VatRateType a", "a.x15Ordinary");
             ByPrefix("x15").IsWithoutValidity = true;
 
-
+            AE("x18EntityCategory", "Typ dokumentů", "Typ dokumentu", "x18EntityCategory a", "a.x18Ordinary");
 
             AE_TINY("x28EntityField", "Uživatelská pole", "Uživatelské pole");
             AE_TINY("x27EntityFieldGroup", "Skupiny uživatelských polí", "Skupina uživatelských polí");

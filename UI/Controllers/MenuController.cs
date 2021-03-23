@@ -268,7 +268,10 @@ namespace UI.Controllers
             AMI("Report šablony", aurl("misc","x31"));
             AMI("Report kategorie", aurl("misc","j25"));
 
+            
+
             DIV_TRANS("Ostatní");
+            AMI("Typy dokumentů", aurl("misc", "x18"));
             AMI("Číselné řady", aurl("misc","x38"));
             AMI("Střediska", aurl("misc","j18"));            
             AMI("Dashboard Widgety", aurl("misc", "x55"));
