@@ -200,12 +200,22 @@
 
             </form>
 
-          
 
 
 
+            <div class="card">
+                <div class="card-header">
+                    Server cache
+                </div>
+                <div class="card-body">
+                    <button type="button" id="cmdClearParams" class="btn btn-sm btn-outline-danger">@_f.tra("Vyčistit server cache")</button>
+                    <i>
+                        @_f.tra("Aplikace má snahu si pamatovat časté operace uživatele. Např. naposledy navštívenou stránku projektu/klienta/vyúčtování/tiskovou sestavu/rozložení panelů apod.")
+                    </i>
+                </div>
+            </div>
 
-            
+
         </div>
 
         <div class="tab-pane" id="tab2" role="tabpanel">
@@ -221,6 +231,7 @@
                 }
             </ul>
             
+
         </div>
         <div class="tab-pane" id="tab3" role="tabpanel">
             <button type="button" id="cmdAddO40" class="btn btn-primary">@_f.tra("Přidat poštovní účet")</button>
@@ -301,9 +312,9 @@
 
 
         $('a[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
-            
+
             tg_adjust_for_screen();
-            
+
         })
 
         $("#cmdAddO40").click(function () {
@@ -312,6 +323,16 @@
         });
 
         _mainmenu_highlight_current("cmdMyProfile");
+
+        $("#cmdClearParams").click(function () {
+            if (confirm("@_f.tra("Opravdu vyčištit servech cache?")")) {
+                $(this).text("Processing...");
+                $(this).attr("disabled", true);
+                form1.action = "/Home/MyProfile?oper=clearparams";
+                form1.submit();
+            }
+
+        });
 
         _resize_textareas();
     });

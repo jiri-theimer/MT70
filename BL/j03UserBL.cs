@@ -14,6 +14,7 @@ namespace BL
         public int SaveWithNewPersonalProfile(BO.j03User rec, BO.j02Person recJ02);
         public void UpdateCurrentUserPing(BO.j92PingLog c);
         public void RecoveryUserCache(int j03id,int j02id);
+        public void TruncateUserParams(int j03id);
 
     }
     class j03UserBL : BaseBL, Ij03UserBL
@@ -199,6 +200,12 @@ namespace BL
 
         }
 
-        
+        public void TruncateUserParams(int j03id)
+        {
+            if (j03id <= 0) j03id = _mother.CurrentUser.pid;
+            _db.RunSql("DELETE FROM x36UserParam WHERE j03ID=@j03id", new { j03id = j03id });
+        }
+
+
     }
 }

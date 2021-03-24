@@ -66,6 +66,7 @@ namespace UI.Controllers
         public IActionResult MyMainMenuLinks(MyMainMenuLinks v)
         {
             RefreshState_MyMainMenuLinks(v);
+            
             if (string.IsNullOrEmpty(v.SelectedItems))
             {
                 this.AddMessage("Musíte vybrat minimálně jeden menu odkaz.");
@@ -246,10 +247,15 @@ namespace UI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult MyProfile(Models.MyProfileViewModel v)
+        public IActionResult MyProfile(Models.MyProfileViewModel v, string oper)
         {
             RefreshState_MyProfile(v);
-
+            if (oper == "clearparams")
+            {
+                Factory.j03UserBL.TruncateUserParams(0);
+                this.AddMessage("Server cache vyčištěna.", "info");
+                return MyProfile();
+            }
             if (ModelState.IsValid)
             {
                 if (string.IsNullOrEmpty(v.EmailAddres) == true)

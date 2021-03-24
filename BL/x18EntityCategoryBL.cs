@@ -137,6 +137,11 @@ namespace BL
                     {
                         if (!lisX20.Any(p => p.x20ID == c.x20ID && p.x20ID>0))
                         {
+                            var intX19ID = _db.GetIntegerFromSql("select x19ID FROM x19EntityCategory_Binding WHERE x20ID="+c.x20ID.ToString());
+                            if (intX19ID > 0)
+                            {
+                                this.AddMessage("Vazbu nelze odstranit, protože pro ní již existují záznamy dokumentů.");return 0;                                
+                            }
                             _db.RunSql("DELETE FROM x20EntiyToCategory WHERE x20ID=@pid", new { pid = c.x20ID });
                         }
                     }
@@ -175,6 +180,10 @@ namespace BL
         }
         private bool ValidateBeforeSave(BO.x18EntityCategory rec, List<BO.x16EntityCategory_FieldSetting> lisX16)
         {
+            if (rec.x18AllowedFileExtensions != null)
+            {
+                rec.x18AllowedFileExtensions = rec.x18AllowedFileExtensions.Replace(",", "|").Replace(";", "|");
+            }
             if (string.IsNullOrEmpty(rec.x18Name))
             {
                 this.AddMessage("Chybí vyplnit [Název]."); return false;

@@ -19,6 +19,7 @@ namespace UI.Models.Record
 
     public class x16Repeater : BO.x16EntityCategory_FieldSetting
     {        
+       
         public bool IsTempDeleted { get; set; }
         public string TempGuid { get; set; }
         public string CssTempDisplay
@@ -39,6 +40,8 @@ namespace UI.Models.Record
 
     public class x20Repeater : BO.x20EntiyToCategory
     {
+        public string ComboEntity { get; set; }
+        public string ComboSelectedText { get; set; }
         public bool IsTempDeleted { get; set; }
         public string TempGuid { get; set; }
         public string CssTempDisplay

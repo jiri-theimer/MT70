@@ -76,6 +76,8 @@
                                 <input type="hidden" asp-for="lisX20[i].IsTempDeleted" value="@Model.lisX20[i].IsTempDeleted" />
                                 <input type="hidden" asp-for="lisX20[i].TempGuid" value="@Model.lisX20[i].TempGuid" />
                                 <input type="hidden" asp-for="lisX20[i].x20ID" value="@Model.lisX20[i].x20ID" />
+                                <input type="hidden" asp-for="lisX20[i].ComboEntity" value="@Model.lisX20[i].ComboEntity" />
+                                
                                 <div>
                                     <select asp-for="lisX20[i].x29ID" disabled="disabled">
                                         <option value="0">??</option>
@@ -96,6 +98,11 @@
 
                                     <input type="checkbox" asp-for="lisX20[i].x20IsClosed" />
                                     <label class="col-form-label" for="lisX20_@(i)__x20IsClosed">@_f.tra("Vazba uzavřena pro přiřazování")</label>
+
+                                    <div style="width:90%;">
+                                        <mycombo entity="@Model.lisX20[i].ComboEntity" asp-for="lisX20[i].x20EntityTypePID" selectedtext="@Model.lisX20[i].ComboSelectedText" filter-flag="1" placeholder="@_f.tra("Omezit na typ...")"></mycombo>
+                                    </div>
+                                    
                                 </div>
                             </td>
                             <td>
@@ -217,7 +224,7 @@
                     @if (Model.Rec.x18UploadFlag == BO.x18UploadENUM.FileSystemUpload)
                     {
                         <label>@_f.tra("Maximální velikost jedné souborové přílohy"):</label>
-                        <select asp-for="@Model.Rec.x18UploadFlag">
+                        <select asp-for="@Model.Rec.x18MaxOneFileSize">
                             <option value="1048576">1MB</option>
                             <option value="2097152">2MB</option>
                             <option value="3145728">3MB</option>
