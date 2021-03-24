@@ -268,6 +268,13 @@ namespace BL
                 case "x31":
                     lis.Add(getREL("x29Entity", "x31_x29", "Kontext", "LEFT OUTER JOIN x29Entity x31_x29 ON a.x29ID=x31_x29.x29ID"));
                     break;
+                case "o23":
+                    lis.Add(getREL("b02WorkflowStatus", "o23_b02", "Workflow stav", "LEFT OUTER JOIN b02WorkflowStatus o23_b02 ON a.b02ID=o23_b02.b02ID"));
+                    lis.Add(getREL("p28Contact", "o23_p28", "Vazba s klientem", "LEFT OUTER JOIN p28Contact o23_p28 ON a.p28ID_First=o23_p28.p28ID"));
+                    lis.Add(getREL("p41Project", "o23_p41", "Vazba s projektem", "LEFT OUTER JOIN p41Project o23_p41 ON a.p41ID_First=o23_p41.p41ID"));
+                    lis.Add(getREL("j02Person", "o23_j02", "Vazba s osobou", "LEFT OUTER JOIN j02Person o23_j02 ON a.j02ID_First=o23_j02.j02ID"));
+                    lis.Add(getREL("p91Invoice", "o23_p91", "Vazba s vyúčtováním", "LEFT OUTER JOIN p91Invoice o23_p91 ON a.p91ID_First=o23_p91.p91ID"));
+                    break;
                 case "o40":
                     lis.Add(getREL("j02Person", "o40_j02", "Osoba", "LEFT OUTER JOIN j02Person o40_j02 ON a.j02ID_Owner=o40_j02.j02ID"));
                     break;
