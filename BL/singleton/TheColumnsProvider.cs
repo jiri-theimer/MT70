@@ -197,7 +197,7 @@ namespace BL
 
 
         }
-        public IEnumerable<BO.TheGridColumn> AllColumns()
+        public List<BO.TheGridColumn> AllColumns()
         {
 
             return _lis;

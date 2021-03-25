@@ -97,11 +97,13 @@ namespace BL
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura cenového rozpisu faktury", "p80InvoiceAmountStructure a", "a.p80Name");
 
             AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");
+            AE("p41Project_FreeField", "Uživatelská pole projektu", "Uživatelské pole projektu", "p41Project_FreeField a", null);
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
             AE("view_PrimaryAddress", "Adresy", "Adresa", "view_PrimaryAddress a",null);
             
             AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a", "a.p31ID DESC");            
             AE("o23Doc", "Dokumenty", "Dokument", "o23Doc a", "a.o23ID DESC");
+            
             AE("p91Invoice", "Vyúčtování", "Vyúčtování", "p91Invoice a", "a.p91ID DESC");
             AE("p90Proforma", "Zálohy", "Záloha", "p90Proforma a", "a.p90ID DESC");
 
@@ -219,6 +221,8 @@ namespace BL
                     lis.Add(getREL("p28Contact", "p41_p28client", "Klient", "LEFT OUTER JOIN p28Contact p41_p28client ON a.p28ID_Client=p41_p28client.p28ID"));
                     lis.Add(getREL("p28Contact", "p41_p28billing", "Odběratel faktury", "LEFT OUTER JOIN p28Contact p41_p28billing ON a.p28ID_Billing=p41_p28billing.p28ID"));
                     lis.Add(getREL("p42ProjectType", "p41_p42", "Typ projektu", "LEFT OUTER JOIN p42ProjectType p41_p42 ON a.p42ID=p41_p42.p42ID"));
+                    lis.Add(getREL("p41Project_FreeField", "p41_p41free", "Uživatelská pole projektu", "LEFT OUTER JOIN p41Project_FreeField p41_p41free ON a.p41ID=p41_p41free.p41ID"));
+                    
                     break;
                 case "p51":
                     lis.Add(getREL("j27Currency", "p51_j27", "Měna", "LEFT OUTER JOIN j27Currency p51_j27 ON a.j27ID=p51_j27.j27ID"));
