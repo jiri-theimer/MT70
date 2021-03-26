@@ -6,16 +6,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BL
 {
-    
+
     public class TheColumnsProvider
     {
         //private readonly BL.RunningApp _app;
         private readonly BL.TheEntitiesProvider _ep;
         private readonly BL.TheTranslator _tt;
         private List<BO.TheGridColumn> _lis;
-      
-      
-        public TheColumnsProvider(BL.TheEntitiesProvider ep,BL.TheTranslator tt)
+
+
+        public TheColumnsProvider(BL.TheEntitiesProvider ep, BL.TheTranslator tt)
         {
             //_app = runningapp;
             _ep = ep;
@@ -33,12 +33,12 @@ namespace BL
             Handle_Translate();
         }
 
-       
+
 
         private void Handle_Translate()
         {
             //Překlad do ostatních jazyků
-            foreach (var col in _lis.Where(p=>p.Header.Length>2))
+            foreach (var col in _lis.Where(p => p.Header.Length > 2))
             {
                 bool b = true;
                 if (col.Header.Length > 3 && col.Header.Substring(0, 3) == "Col")
@@ -47,20 +47,20 @@ namespace BL
                 }
                 if (b)
                 {
-                    col.TranslateLang1 = _tt.DoTranslate(col.Header, 1,"TheColumnsProvider");
+                    col.TranslateLang1 = _tt.DoTranslate(col.Header, 1, "TheColumnsProvider");
                     col.TranslateLang2 = _tt.DoTranslate(col.Header, 2, "TheColumnsProvider");
                 }
 
             }
 
-            
-            
-            
+
+
+
         }
         private void SetupPallete()
         {
             _lis.InsertRange(0, new defColumnsProvider().getColumns());
-            _lis.InsertRange(0, new j02ColumnsProvider().getColumns());          
+            _lis.InsertRange(0, new j02ColumnsProvider().getColumns());
             _lis.InsertRange(0, new p28ColumnsProvider().getColumns());
             _lis.InsertRange(0, new p41ColumnsProvider().getColumns());
             _lis.InsertRange(0, new p90ColumnsProvider().getColumns());
@@ -71,7 +71,7 @@ namespace BL
 
             string strLastEntity = "";
             string strLastEntityAlias = "";
-            foreach(var c in _lis)
+            foreach (var c in _lis)
             {
                 if (c.Entity == strLastEntity)
                 {
@@ -80,26 +80,26 @@ namespace BL
                 else
                 {
                     c.EntityAlias = _ep.ByTable(c.Entity).AliasSingular;
-                }              
+                }
                 strLastEntity = c.Entity;
                 strLastEntityAlias = c.EntityAlias;
             }
 
-            
-           
-            
+
+
+
         }
 
-        
+
         public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
         {
-            
+
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
             IEnumerable<BO.TheGridColumn> qry = null;
             if (bolComboColumns)
             {
-                qry = _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag==BO.TheGridDefColFlag.ComboOnly));
-                
+                qry = _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag == BO.TheGridDefColFlag.ComboOnly));
+
             }
             else
             {
@@ -120,16 +120,16 @@ namespace BL
                     {
                         ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j03Login", rels, bolComboColumns));
                         ret.Add(InhaleColumn4Relation("j02_j03", "j03User", "j04Name", rels, bolComboColumns));
-                    }                                       
+                    }
                     ret.Add(InhaleColumn4Relation("j02_j07", "j07PersonPosition", "j07Name", rels, bolComboColumns));
 
 
                     break;
-                
-               
+
+
                 //case "b02":
                 //    ret.Add(InhaleColumn4Relation("b02_b01", "b01WorkflowTemplate", "b01Name", rels, bolComboColumns));
-                   
+
                 //    break;
                 //case "b05":
                 //    ret.Add(InhaleColumn4Relation("b05_j03", "j03User", "j03Login", rels, bolComboColumns));
@@ -138,7 +138,7 @@ namespace BL
                 case "j61":
                     ret.Add(InhaleColumn4Relation("j61_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("j61_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
-                    
+
                     break;
                 case "p28":
                     if (bolComboColumns)
@@ -149,10 +149,10 @@ namespace BL
                     {
                         ret.Add(InhaleColumn4Relation("p28_address_primary", "view_PrimaryAddress", "FullAddress", rels, bolComboColumns));
                     }
-                    
+
                     break;
                 case "p36":
-                    ret.Add(InhaleColumn4Relation("p36_j02","j02Person", "fullname_desc", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("p36_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p36_j11", "j11Team", "j11Name", rels, bolComboColumns));
                     break;
                 case "p42":
@@ -188,7 +188,7 @@ namespace BL
                     break;
                 case "m62":
                     ret.Add(InhaleColumn4Relation("m62_j27slave", "j27Currency", "j27Code", rels, bolComboColumns));
-                    
+
                     break;
 
             }
@@ -208,7 +208,7 @@ namespace BL
         {
             BO.TheGridColumn c0 = ByUniqueName("a__" + strFieldEntity + "__" + strFieldName);
             BO.TheGridColumn c = Clone2NewInstance(c0);
-            
+
             BO.EntityRelation rel = applicable_rels.Where(p => p.RelName == strRelName).First();
             c.RelName = strRelName;
             c.RelSql = rel.SqlFrom;
@@ -248,81 +248,93 @@ namespace BL
         }
         private BO.TheGridColumn Clone2NewInstance(BO.TheGridColumn c)
         {
-            return new BO.TheGridColumn() { Entity = c.Entity,
-                EntityAlias = c.EntityAlias, Field = c.Field,
-                FieldType = c.FieldType, FixedWidth = c.FixedWidth, Header = c.Header,
-                SqlSyntax = c.SqlSyntax, IsFilterable = c.IsFilterable, IsShowTotals = c.IsShowTotals,
+            return new BO.TheGridColumn()
+            {
+                Entity = c.Entity,
+                EntityAlias = c.EntityAlias,
+                Field = c.Field,
+                FieldType = c.FieldType,
+                FixedWidth = c.FixedWidth,
+                Header = c.Header,
+                SqlSyntax = c.SqlSyntax,
+                IsFilterable = c.IsFilterable,
+                IsShowTotals = c.IsShowTotals,
                 IsTimestamp = c.IsTimestamp,
-                RelName = c.RelName, RelSql = c.RelSql, RelSqlDependOn = c.RelSqlDependOn,RelSqlInCol=c.RelSqlInCol,
-                NotShowRelInHeader=c.NotShowRelInHeader,
-                TranslateLang1= c.TranslateLang1, TranslateLang2=c.TranslateLang2,
-                TranslateLang3= c.TranslateLang3 };
+                RelName = c.RelName,
+                RelSql = c.RelSql,
+                RelSqlDependOn = c.RelSqlDependOn,
+                RelSqlInCol = c.RelSqlInCol,
+                NotShowRelInHeader = c.NotShowRelInHeader,
+                TranslateLang1 = c.TranslateLang1,
+                TranslateLang2 = c.TranslateLang2,
+                TranslateLang3 = c.TranslateLang3
+            };
 
         }
 
 
 
-        public List<BO.TheGridColumn> ParseTheGridColumns(string strPrimaryPrefix, string strJ72Columns,int intLangIndex)
+        public List<BO.TheGridColumn> ParseTheGridColumns(string strPrimaryPrefix, string strJ72Columns, int intLangIndex)
         {
             //v strJ72Columns je čárkou oddělený seznam sloupců z pole j72Columns: název relace+__+entita+__+field
-
-
             List<BO.EntityRelation> applicable_rels = _ep.getApplicableRelations(strPrimaryPrefix);
             List<string> sels = BO.BAS.ConvertString2List(strJ72Columns, ",");
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
 
             string[] arr;
-            BO.EntityRelation rel;
-
+           
             for (var i = 0; i < sels.Count; i++)
             {
                 arr = sels[i].Split("__");
-                if (arr.Length < 2)
-                {
-                    //chyba
-                    BO.BASFILE.AppendText2File("c:\\temp\\chyba.txt", sels[i]);
-                }
                 if (_lis.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
+                {                    
+                    BO.TheGridColumn c = CreateNewInstanceColumn(_lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First(), arr, intLangIndex, applicable_rels);
+
+                    if ((i == sels.Count - 1) && (c.FieldType == "num" || c.FieldType == "num0" || c.FieldType == "num3"))
+                    {
+                        c.CssClass = "tdn_lastcol";
+                    }
+                    ret.Add(c);
+
+                }
+                  
+            }
+
+            return ret;
+
+        }
+
+        public List<BO.TheGridColumn> ParseTheGridColumns(string strPrimaryPrefix, string strJ72Columns, int intLangIndex, List<BO.TheGridColumn> lisFFs)
+        {
+            //v strJ72Columns je čárkou oddělený seznam sloupců z pole j72Columns: název relace+__+entita+__+field
+            //v lisFFs se předávají další sloupce
+            List<BO.EntityRelation> applicable_rels = _ep.getApplicableRelations(strPrimaryPrefix);
+            List<string> sels = BO.BAS.ConvertString2List(strJ72Columns, ",");
+            List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
+            
+            string[] arr;            
+            for (var i = 0; i < sels.Count(); i++)
+            {
+                arr = sels[i].Split("__");
+                BO.TheGridColumn colSource = null;
+                if (sels[i].ToLower().Contains("freefield"))
                 {
-                    //var c0 = _lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First();
-                    BO.TheGridColumn c = Clone2NewInstance(_lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First());
-                    switch (intLangIndex)
+                    if (lisFFs.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
                     {
-                        case 1:
-                            c.Header = c.TranslateLang1;
-                            break;
-                        case 2:
-                            c.Header = c.TranslateLang2;
-                            break;
-                        case 3:
-                            c.Header = c.TranslateLang3;
-                            break;
-                        default:
-                            c.Header = c.Header;
-                            break;
+                        colSource = lisFFs.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First();
                     }
-                    if (arr[0] == "a")
+                }
+                else
+                {
+                    if (_lis.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
                     {
-                        c.RelName = null;
+                        colSource = _lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First();
                     }
-                    else
-                    {
-                        c.RelName = arr[0]; //název relace v sql dotazu
-                        rel = applicable_rels.Where(p => p.RelName == c.RelName).First();
-                        c.RelSql = rel.SqlFrom;    //sql klauzule relace    
-                        if (c.NotShowRelInHeader == false)
-                        {
-                            c.Header = c.Header + " [" + rel.AliasSingular + "]";   //zobrazovat název entity v záhlaví sloupce                           
-                        }
-                        
+                }
 
-                        if (rel.RelNameDependOn != null)
-                        {
-                            c.RelSqlDependOn = applicable_rels.Where(p => p.RelName == rel.RelNameDependOn).First().SqlFrom;    //relace závisí na jiné relaci
-                        }
-                    }
-
-
+                if (colSource !=null)
+                {
+                    BO.TheGridColumn c = CreateNewInstanceColumn(colSource,arr, intLangIndex, applicable_rels);
 
                     if ((i == sels.Count - 1) && (c.FieldType == "num" || c.FieldType == "num0" || c.FieldType == "num3"))
                     {
@@ -330,13 +342,55 @@ namespace BL
                     }
                     ret.Add(c);
                 }
-
-
+                
             }
-
+                        
             return ret;
 
+        }
 
+        private BO.TheGridColumn CreateNewInstanceColumn(BO.TheGridColumn colSource, string[] arr, int intLangIndex, List<BO.EntityRelation> applicable_rels)
+        {            
+            BO.TheGridColumn c = Clone2NewInstance(colSource);
+            switch (intLangIndex)
+            {
+                case 1:
+                    c.Header = c.TranslateLang1;
+                    break;
+                case 2:
+                    c.Header = c.TranslateLang2;
+                    break;
+                case 3:
+                    c.Header = c.TranslateLang3;
+                    break;
+                default:
+                    c.Header = c.Header;
+                    break;
+            }
+            if (arr[0] == "a")
+            {
+                c.RelName = null;
+            }
+            else
+            {
+                c.RelName = arr[0]; //název relace v sql dotazu
+                BO.EntityRelation rel = applicable_rels.Where(p => p.RelName == c.RelName).First();
+                c.RelSql = rel.SqlFrom;    //sql klauzule relace    
+                if (c.NotShowRelInHeader == false)
+                {
+                    c.Header = c.Header + " [" + rel.AliasSingular + "]";   //zobrazovat název entity v záhlaví sloupce                           
+                }
+
+
+                if (rel.RelNameDependOn != null)
+                {
+                    c.RelSqlDependOn = applicable_rels.Where(p => p.RelName == rel.RelNameDependOn).First().SqlFrom;    //relace závisí na jiné relaci
+                }
+            }
+
+
+
+            return c;
         }
 
         public List<BO.TheGridColumnFilter> ParseAdhocFilterFromString(string strJ72Filter, IEnumerable<BO.TheGridColumn> explicit_cols)

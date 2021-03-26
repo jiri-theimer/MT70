@@ -67,7 +67,16 @@ namespace UI.Views.Shared.Components.TheGrid
 
             
             ret.GridState = gridState;
-            ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex);
+            if (gridState.j72Columns.ToLower().Contains("freefield"))
+            {
+                var lisFF = new BL.ffColumnsProvider(_f);
+                ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex,lisFF.getColumns());
+            }
+            else
+            {
+                ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex);
+            }
+            
             ret.AdhocFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, ret.Columns);
            
 

@@ -12,7 +12,7 @@ namespace BL
         {
             var lis = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).OrderBy(p=>p.x29TableName);
             string strLastTable = "";   string strField = "";
-            foreach(var rec in lis.Where(p=>p.x28Flag==BO.x28FlagENUM.UserField))
+            foreach(var rec in lis)
             {
                 if (rec.x28Flag == BO.x28FlagENUM.UserField)
                 {
@@ -21,6 +21,7 @@ namespace BL
                 else
                 {
                     strField = "gridfield_" + rec.pid.ToString();
+                    rec.x28Name += "+";
                 }
                 
 
@@ -52,6 +53,7 @@ namespace BL
                         break;
                 }
 
+                oc.NotShowRelInHeader = true;
                 if (rec.x28Flag == BO.x28FlagENUM.GridField)        //čistě grid uživatelské pole na míru
                 {
                     oc.SqlSyntax = rec.x28Grid_SqlSyntax;

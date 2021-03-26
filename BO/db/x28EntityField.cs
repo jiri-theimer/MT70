@@ -108,7 +108,8 @@ namespace BO
                         {
                             return "p31WorkSheet_FreeField";
                         }
-
+                    case x29IdEnum.o23Doc:
+                        return "o23Doc";
                     default:
                         {
                             return "";

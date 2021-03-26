@@ -75,7 +75,17 @@ namespace UI.Controllers
             }
             else
             {
-                mq.explicit_columns = _colsProvider.ParseTheGridColumns(mq.Prefix, grid.j72Columns,Factory.CurrentUser.j03LangIndex);
+                if (grid.j72Columns.ToLower().Contains("freefield"))
+                {
+                    var lisFF = new BL.ffColumnsProvider(Factory);
+                    mq.explicit_columns = _colsProvider.ParseTheGridColumns(mq.Prefix, grid.j72Columns, Factory.CurrentUser.j03LangIndex, lisFF.getColumns());                    
+                }
+                else
+                {
+                    mq.explicit_columns = _colsProvider.ParseTheGridColumns(mq.Prefix, grid.j72Columns, Factory.CurrentUser.j03LangIndex);
+                }
+
+                
                 mq.explicit_orderby = grid.j75SortDataField;
                 if (grid.j75SortDataField !=null && grid.j75SortOrder != null)
                 {
