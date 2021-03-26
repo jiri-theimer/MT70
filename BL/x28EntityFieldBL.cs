@@ -24,7 +24,7 @@ namespace BL
 
         private string GetSQL1(string strAppend = null)
         {
-            sb("select a.*,x29.x29name,x27.x27Name,lower(x24.x24Name) as TypeName,x23.x23Name,x23.x23DataSource,");
+            sb("select a.*,x29.x29name,x27.x27Name,lower(x24.x24Name) as TypeName,x23.x23Name,x23.x23DataSource,x29.x29TableName,");
             sb(_db.GetSQL1_Ocas("x28"));
             sb(" FROM x28EntityField a inner join x29Entity x29 on a.x29id=x29.x29id inner join x24DataType x24 on a.x24id=x24.x24id");
             sb(" LEFT OUTER JOIN x27EntityFieldGroup x27 on a.x27ID=x27.x27ID LEFT OUTER JOIN x23EntityField_Combo x23 ON a.x23ID=x23.x23ID");

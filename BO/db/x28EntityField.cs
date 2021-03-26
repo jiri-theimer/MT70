@@ -64,7 +64,7 @@ namespace BO
      
         public string x27Name { get; }
         
-       
+       public string x29TableName { get; }
         public string TypeName { get; }
         
         protected string x23Name { get; }
