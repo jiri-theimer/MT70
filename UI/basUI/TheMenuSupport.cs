@@ -86,6 +86,7 @@ namespace UI.basUI
             {
                 ret.Add(new MenuItem() { Name = _f.tra("Tiskové sestavy"), Url = "/x31/ReportNoContextFramework",ID="cmdReports" });
             }
+            ret.Add(GRD("b07"));
 
             return ret;
         }
@@ -112,8 +113,8 @@ namespace UI.basUI
                     c.Url = "/TheGrid/FlatView?prefix=" + prefix;
                     break;
                 case "p41":
-                case "p28":                
-                case "p91":
+                case "p28":
+                case "p91":                
                     c.Url = "/TheGrid/FlatView?prefix=" + prefix;
                     break;
                 default:

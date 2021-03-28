@@ -103,7 +103,8 @@ namespace BL
             
             AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a", "a.p31ID DESC");            
             AE("o23Doc", "Dokumenty", "Dokument", "o23Doc a", "a.o23ID DESC");
-            
+            AE("b07Comment", "Poznámky", "Poznámka", "b07Comment a", "a.b07ID DESC");
+
             AE("p91Invoice", "Vyúčtování", "Vyúčtování", "p91Invoice a", "a.p91ID DESC");
             AE("p90Proforma", "Zálohy", "Záloha", "p90Proforma a", "a.p90ID DESC");
 
@@ -277,6 +278,12 @@ namespace BL
                     lis.Add(getREL("p41Project", "o23_p41", "Vazba s projektem", "LEFT OUTER JOIN p41Project o23_p41 ON a.p41ID_First=o23_p41.p41ID"));
                     lis.Add(getREL("j02Person", "o23_j02", "Vazba s osobou", "LEFT OUTER JOIN j02Person o23_j02 ON a.j02ID_First=o23_j02.j02ID"));
                     lis.Add(getREL("p91Invoice", "o23_p91", "Vazba s vyúčtováním", "LEFT OUTER JOIN p91Invoice o23_p91 ON a.p91ID_First=o23_p91.p91ID"));
+                    break;
+                case "b07":
+                    lis.Add(getREL("p28Contact", "b07_p28", "Vazba s klientem", "LEFT OUTER JOIN p28Contact b07_p28 ON a.x29ID=328 AND a.b07RecordPID=b07_p28.p28ID"));
+                    lis.Add(getREL("p41Project", "b07_p41", "Vazba s projektem", "LEFT OUTER JOIN p41Project b07_p41 ON a.x29ID=141 AND a.b07RecordPID=b07_p41.p41ID"));
+                    lis.Add(getREL("j02Person", "b07_j02", "Vazba s osobou", "LEFT OUTER JOIN j02Person b07_j02 ON a.x29ID=102 AND a.b07RecordPID=b07_j02.j02ID"));
+                    lis.Add(getREL("p91Invoice", "b07_p91", "Vazba s vyúčtováním", "LEFT OUTER JOIN p91Invoice b07_p91 ON a.x29ID=391 AND a.b07RecordPID=b07_p91.p91ID"));
                     break;
                 case "o40":
                     lis.Add(getREL("j02Person", "o40_j02", "Osoba", "LEFT OUTER JOIN j02Person o40_j02 ON a.j02ID_Owner=o40_j02.j02ID"));

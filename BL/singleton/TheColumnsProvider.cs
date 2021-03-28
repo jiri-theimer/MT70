@@ -67,6 +67,7 @@ namespace BL
             _lis.InsertRange(0, new p91ColumnsProvider().getColumns());
             _lis.InsertRange(0, new p31ColumnsProvider().getColumns());
             _lis.InsertRange(0, new o23ColumnsProvider().getColumns());
+            _lis.InsertRange(0, new b07ColumnsProvider().getColumns());
 
 
             string strLastEntity = "";
@@ -170,6 +171,10 @@ namespace BL
                     ret.Add(InhaleColumn4Relation("p32_p34", "p34ActivityGroup", "p34Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p32_p95", "p95InvoiceRow", "p95Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p32_p38", "p38ActivityTag", "p38Name", rels, bolComboColumns));
+                    break;
+                case "b07":
+                    ret.Add(InhaleColumn4Relation("b07_p28", "p28Contact", "p28Name", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("b07_p41", "p41Project", "p41Name", rels, bolComboColumns));
                     break;
                 case "p90":
                     ret.Add(InhaleColumn4Relation("p90_j27", "j27Currency", "j27Code", rels, bolComboColumns));
