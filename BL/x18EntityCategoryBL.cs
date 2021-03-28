@@ -12,6 +12,7 @@ namespace BL
         public IEnumerable<BO.x18EntityCategory> GetList(BO.myQuery mq);
         public IEnumerable<BO.x20EntiyToCategory> GetList_x20(List<int> x18ids);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id);
+        public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16();
         public int Save(BO.x18EntityCategory rec, List<BO.x20EntiyToCategory> lisX20, List<BO.x16EntityCategory_FieldSetting> lisX16);
 
     }
@@ -57,6 +58,10 @@ namespace BL
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id)
         {
             return _db.GetList<BO.x16EntityCategory_FieldSetting>("SELECT * FROM x16EntityCategory_FieldSetting WHERE x18ID=@pid ORDER BY x16Ordinary", new { pid = x18id });
+        }
+        public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16()
+        {
+            return _db.GetList<BO.x16EntityCategory_FieldSetting>("SELECT * FROM x16EntityCategory_FieldSetting ORDER BY x16Ordinary");
         }
         public int Save(BO.x18EntityCategory rec,List<BO.x20EntiyToCategory> lisX20,List<BO.x16EntityCategory_FieldSetting> lisX16)
         {

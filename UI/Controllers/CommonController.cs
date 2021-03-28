@@ -77,7 +77,7 @@ namespace UI.Controllers
             {
                 if (grid.j72Columns.Contains("Free"))
                 {
-                    var lisFF = new BL.ffColumnsProvider(Factory);
+                    var lisFF = new BL.ffColumnsProvider(Factory,mq.Prefix);
                     mq.explicit_columns = _colsProvider.ParseTheGridColumns(mq.Prefix, grid.j72Columns, Factory.CurrentUser.j03LangIndex, lisFF.getColumns());                    
                 }
                 else

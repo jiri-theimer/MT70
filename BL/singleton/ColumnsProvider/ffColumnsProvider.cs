@@ -8,8 +8,13 @@ namespace BL
 {
     public class ffColumnsProvider:ColumnsProviderBase
     {
-        public ffColumnsProvider(BL.Factory f)
+        public ffColumnsProvider(BL.Factory f,string prefix)
         {
+            if (prefix == "o23" || prefix==null)
+            {
+                Handle_o23UserFields(f);    //dokumenty přes x16EntityCategory_FieldSetting
+            }
+
             var lis = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).OrderBy(p=>p.x29TableName);
             string strLastTable = "";   string strField = "";string strPrefix = "";
             foreach(var rec in lis)
@@ -75,6 +80,56 @@ namespace BL
 
             
 
+
+        }
+
+        private void Handle_o23UserFields(BL.Factory f)
+        {
+            this.EntityName = "o23Doc";
+            var lisX18 = f.x18EntityCategoryBL.GetList(new BO.myQuery("x18"));
+            var lisX16 = f.x18EntityCategoryBL.GetList_x16();
+            foreach (var recX18 in lisX18)
+            {
+                this.CurrentFieldGroup = recX18.x18Name;
+                var qry = lisX16.Where(p => p.x18ID == recX18.pid && p.x16IsGridField==true).OrderBy(p => p.x16Ordinary);
+                foreach(var c in qry)
+                {
+                    string strSQL = null;string strType = "string";
+                    switch (c.FieldType)
+                    {
+                        case BO.x24IdENUM.tDate:
+                            strSQL = "dbo.my_iif2_date(x18.x18ID," + c.x18ID.ToString() + "," + c.x16Field + ",null)";
+                            strType = "date";
+                            break;
+                        case BO.x24IdENUM.tDateTime:
+                            strSQL = "dbo.my_iif2_date(x18.x18ID," + c.x18ID.ToString() + "," + c.x16Field + ",null)";
+                            strType = "datetime";                            
+                            break;
+                        case BO.x24IdENUM.tDecimal:
+                            strSQL = "dbo.my_iif2_number(x18.x18ID," + c.x18ID.ToString() + "," + c.x16Field + ",null)";
+                            strType = "num";
+                            break;
+                        case BO.x24IdENUM.tInteger:
+                            strSQL = "dbo.my_iif2_number(x18.x18ID," + c.x18ID.ToString() + "," + c.x16Field + ",null)";
+                            strType = "num0";
+                            break;
+                        case BO.x24IdENUM.tBoolean:
+                            strSQL = "dbo.my_iif2_bit(x18.x18ID," + c.x18ID.ToString() + "," + c.x16Field + ",null)";
+                            strType = "bool";
+                            break;
+                        default:                            
+                            strSQL = "dbo.my_iif2_string(x18.x18ID," + c.x18ID.ToString() + "," + c.x16Field + ",null)";
+                            strType = "string";
+                            break;
+                    }
+                    
+                    oc = AF("x16_Freefield" + c.x16ID.ToString(), c.x16Name, strSQL, strType);
+                    if (c.x16NameGrid != null)
+                    {
+                        oc.Header = c.x16NameGrid;
+                    }
+                }
+            }
 
         }
 
