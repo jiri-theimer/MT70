@@ -26,7 +26,21 @@ namespace UI.Controllers
             return View();
         }
 
-        
+        public string ContextMenu(string entity, int pid,string flag)
+        {
+            string prefix = entity.Substring(0, 3);
+            var lis = new List<MenuItem>();
+            switch (prefix)
+            {
+                case "j02":
+                    lis = new UI.basUI.j02ContextMenu(Factory,pid).GetItems();
+                    break;
+                default:
+                    break;
+            }
+
+            return basMenu.FlushResult_UL(lis, true, true);
+        }
         public string CurrentUserMyProfile()
         {                
             AMI("Aktuální stránku uložit jako domovskou", "javascript:_save_as_home_page()", "k-i-heart-outline");
@@ -55,7 +69,7 @@ namespace UI.Controllers
 
 
 
-            return basCMSupport.FlushResult_UL(_lis,true,false);
+            return basMenu.FlushResult_UL(_lis,true,false);
         }
         public string CurrentUserLangIndex()
         {
@@ -72,7 +86,7 @@ namespace UI.Controllers
                 }
                 
             }
-            return basCMSupport.FlushResult_UL(_lis,true,false);            
+            return basMenu.FlushResult_UL(_lis,true,false);            
         }
         public string CurrentUserFontSize()
         {            
@@ -88,7 +102,7 @@ namespace UI.Controllers
 
             }
           
-            return basCMSupport.FlushResult_UL(_lis,true,false);
+            return basMenu.FlushResult_UL(_lis,true,false);
         }
         
         private string tmclass(string area,string curarea)
@@ -139,7 +153,7 @@ namespace UI.Controllers
             }
             
             
-            return basCMSupport.FlushResult_UL(_lis,true,true);
+            return basMenu.FlushResult_UL(_lis,true,true);
         }
        
         private void Handle_AdminUsers(string prefix)
@@ -297,7 +311,7 @@ namespace UI.Controllers
             
             
             var s = "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
-            s += basCMSupport.FlushResult_UL(_lis,true, false);
+            s += basMenu.FlushResult_UL(_lis,true, false);
             s += "</ul>";
             s += "<hr>";
             s += "<div><button type='button' class='btn btn-sm btn-light' style='width:100%;' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='k-icon k-i-gear'></span>" + Factory.tra("Nastavit odkazy pro mé hlavní menu") + "</button></div>";
@@ -316,7 +330,7 @@ namespace UI.Controllers
             DIV();
             AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
             AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)");
-            return basCMSupport.FlushResult_UL(_lis,true, false);
+            return basMenu.FlushResult_UL(_lis,true, false);
         }
 
         public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
@@ -335,7 +349,7 @@ namespace UI.Controllers
 
             }
 
-            return basCMSupport.FlushResult_UL(_lis,true, false);
+            return basMenu.FlushResult_UL(_lis,true, false);
         }
         
        

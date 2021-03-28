@@ -200,8 +200,7 @@ function _cm(e, entity, pid, flag) {
 
     }
 
-
-
+    
     $(ctl).contextMenu({
         menuSelector: "#" + menuid,
         menuClicker: ctl,

@@ -5,8 +5,16 @@
 
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
     if (Model.Rec == null) return;
-    Model.PageTitle = _f.tra("Osobní profil");
-    
+    if (Model.Rec.j02IsIntraPerson)
+    {
+        Model.PageTitle = _f.tra("Osobní profil");
+    }
+    else
+    {
+        Model.PageTitle = _f.tra("Kontaktní osoba");
+    }
+
+
 }
 @addTagHelper *, UI
 

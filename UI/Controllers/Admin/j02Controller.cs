@@ -166,11 +166,11 @@ namespace UI.Controllers
             }
             if (ModelState.IsValid)
             {
-                if (v.RadioIsIntraPerson==0 && v.SelectedP28ID == 0)
-                {
-                    this.AddMessage("U kontaktní osoby musíte vybrat klienta.");
-                    return View(v);
-                }
+                //if (v.RadioIsIntraPerson==0 && v.SelectedP28ID == 0)
+                //{
+                //    this.AddMessage("U kontaktní osoby musíte vybrat klienta.");
+                //    return View(v);
+                //}
                 BO.j02Person c = new BO.j02Person();
                 if (v.rec_pid > 0)
                 {

@@ -6,9 +6,11 @@ using UI.Models;
 
 namespace UI
 {
-    public static class basCMSupport
+    public static class basMenu
     {
         //vrátí HTML post menu
+
+
         public static string FlushResult_UL(List<MenuItem> menuitems, bool bolSupportIcons, bool bolRenderUlContainer)
         {
             var sb = new System.Text.StringBuilder();
@@ -51,7 +53,7 @@ namespace UI
                             strImg = "<span class='k-icon' style='width:30px;'></span>";
                             if (c.Icon != null)
                             {
-                                strImg = string.Format("<span class='k-icon {0}' style='width:30px;'></span>", c.Icon);
+                                strImg = string.Format("<span class='k-icon {0}' style='width:30px;color:#2D89EF;'></span>", c.Icon);
                             }
                         }
 
@@ -63,13 +65,21 @@ namespace UI
                         if (c.ID != null && menuitems.Where(p => p.ParentID == c.ID).Count() > 0)
                         {
                             bolHasChilds = true;
-                            c.Name += "<span style='float:right;'> ▶</span>";
+                            c.Name += "<span class='k-icon k-i-arrow-60-right' style='float:right;'></span>";
                         }
 
 
                         if (c.Url == null)
                         {
-                            sb.Append(string.Format("<li{0}><a>{1}</a>", strStyle, c.Name));
+                            if (bolHasChilds)
+                            {
+                                sb.Append(string.Format("<li{0}><a><span class='k-icon' style='width:20px;'></span>{1}</a>", strStyle, c.Name));
+                            }
+                            else
+                            {
+                                sb.Append(string.Format("<li{0}><a>{1}</a>", strStyle, c.Name));
+                            }
+                            
                         }
                         else
                         {
@@ -105,7 +115,10 @@ namespace UI
 
             }
 
-
+            if (bolRenderUlContainer)
+            {
+                sb.Append("</ul>");
+            }
             return sb.ToString();
         }
     }
