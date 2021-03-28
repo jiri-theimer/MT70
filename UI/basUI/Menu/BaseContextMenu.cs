@@ -32,7 +32,7 @@ namespace UI.basUI
 
         public MenuItem AMI_RecPage(string strName, string prefix,int pid)
         {
-            return AMI(strName, $"javascript:_location_replace_top('/{prefix}/RecPage?pid={pid}')", "k-i-layout-stacked");
+            return AMI(strName, $"javascript:_location_replace_top('/{prefix}/RecPage?pid={pid}')", "k-i-layout");
         }
         public MenuItem AMI_Clone(string prefix, int pid)
         {
