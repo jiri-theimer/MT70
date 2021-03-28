@@ -128,10 +128,14 @@ namespace BL
                     {   //sloupec s explicitním sql relací a zároveň z jiné relace
                         string upraveno = col.RelSqlInCol.Replace("a.", col.RelName + ".");
                         upraveno = upraveno.Replace("_relname_", col.RelName);
-                        relSqls.Add(upraveno);
+                        if (!relSqls.Exists(p=>p==upraveno))
+                        {
+                            relSqls.Add(upraveno);
+
+                            sb.Append(" ");
+                            sb.Append(upraveno);
+                        }
                         
-                        sb.Append(" ");
-                        sb.Append(upraveno);
                         
                     }
                     
