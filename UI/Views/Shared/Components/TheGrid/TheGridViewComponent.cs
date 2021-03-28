@@ -67,7 +67,7 @@ namespace UI.Views.Shared.Components.TheGrid
 
             
             ret.GridState = gridState;
-            if (gridState.j72Columns.ToLower().Contains("freefield"))
+            if (gridState.j72Columns.Contains("Free"))
             {
                 var lisFF = new BL.ffColumnsProvider(_f);
                 ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex,lisFF.getColumns());

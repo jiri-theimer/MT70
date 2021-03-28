@@ -267,7 +267,7 @@ namespace UI.Controllers
 
             //v.AllColumns = _colsProvider.AllColumns();   //.ToList();
 
-            v.AllColumns.InsertRange(0, new BL.ffColumnsProvider(Factory).getColumns());    //katalog uživatelských polí
+            v.AllColumns.InsertRange(v.AllColumns.Count-1, new BL.ffColumnsProvider(Factory).getColumns());    //katalog uživatelských polí
 
             //v.AllColumns.RemoveAll(p => p.VisibleWithinEntityOnly != null && p.VisibleWithinEntityOnly.Contains(v.Rec.j72Entity.Substring(0, 3)) == false);    //nepatřičné kategorie/štítky
 

@@ -152,15 +152,17 @@ namespace BO
                 }               
             }
             else
-            {
+            {                
                 if (this.RelName == null)
                 {
                     return this.SqlSyntax + " AS " + this.UniqueName;
-                }else
+                }
+                else
                 {
+                    this.SqlSyntax = this.SqlSyntax.Replace("_relname_", this.RelName);
                     if (this.SqlSyntax.Contains("a.") || this.SqlSyntax.Contains("relname."))
                     {
-                        return this.SqlSyntax.Replace("a.", this.RelName + ".").Replace("relname.", this.RelName) + " AS " + this.UniqueName;
+                        return this.SqlSyntax.Replace("a.", this.RelName + ".").Replace("relname.", this.RelName+".") + " AS " + this.UniqueName;
                     }
                     else
                     {
@@ -186,14 +188,14 @@ namespace BO
                 }                    
             }
             else
-            {
+            {                
                 if (this.RelName == null)
                 {
                     return this.SqlSyntax;
                 }
                 else
-                {
-                    return this.SqlSyntax.Replace("a.", this.RelName + ".").Replace("relname.", this.RelName);
+                {                    
+                    return this.SqlSyntax.Replace("a.", this.RelName + ".").Replace("relname.", this.RelName).Replace("_relname_", this.RelName);
                 }                                    
             }
 
@@ -219,14 +221,14 @@ namespace BO
                 }
             }
             else
-            {
+            {                
                 if (this.RelName == null)
                 {
                     return "SUM(" + this.SqlSyntax + ") AS " + this.UniqueName;
                 }
                 else
                 {
-                    return "SUM(" + this.SqlSyntax.Replace("a.",this.RelName+".").Replace("relname.", this.RelName) + ") AS " +this.UniqueName;
+                    return "SUM(" + this.SqlSyntax.Replace("a.",this.RelName+".").Replace("relname.", this.RelName).Replace("_relname_", this.RelName) + ") AS " +this.UniqueName;
                 }
                     
             }

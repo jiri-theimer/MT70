@@ -116,7 +116,7 @@ namespace BL
             }
             foreach (BO.TheGridColumn col in mq.explicit_columns.Where(x => x.RelSqlInCol != null))  //sloupce, které mají na míru RelSqlInCol definovanou přímo ve sloupci
             {               
-                if (relSqls.Exists(p => p == col.RelSqlInCol) == false)
+                if (!relSqls.Exists(p => p == col.RelSqlInCol))
                 {
                     if (col.RelName == null)
                     { 
@@ -126,9 +126,13 @@ namespace BL
                     }
                     else
                     {   //sloupec s explicitním sql relací a zároveň z jiné relace
-                        relSqls.Add(col.RelSqlInCol.Replace("a.",col.RelName+"."));
+                        string upraveno = col.RelSqlInCol.Replace("a.", col.RelName + ".");
+                        upraveno = upraveno.Replace("_relname_", col.RelName);
+                        relSqls.Add(upraveno);
+                        
                         sb.Append(" ");
-                        sb.Append(col.RelSqlInCol.Replace("a.", col.RelName + "."));
+                        sb.Append(upraveno);
+                        
                     }
                     
                 }
@@ -137,7 +141,10 @@ namespace BL
 
 
             //vždy musí být nějaké výchozí třídění v ce.SqlOrderBy!!
-            if (bolGetTotalsRow == false && String.IsNullOrEmpty(mq.explicit_orderby)) mq.explicit_orderby = ce.SqlOrderBy;
+            if (bolGetTotalsRow == false && String.IsNullOrEmpty(mq.explicit_orderby))
+            {
+                mq.explicit_orderby = ce.SqlOrderBy;
+            }
 
 
 

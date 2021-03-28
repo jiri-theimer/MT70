@@ -317,7 +317,7 @@ namespace BL
             {
                 arr = sels[i].Split("__");
                 BO.TheGridColumn colSource = null;
-                if (sels[i].ToLower().Contains("freefield"))
+                if (sels[i].Contains("Free"))
                 {
                     if (lisFFs.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
                     {

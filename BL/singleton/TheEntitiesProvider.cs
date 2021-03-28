@@ -96,10 +96,9 @@ namespace BL
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura cenového rozpisu faktury", "p80InvoiceAmountStructure a", "a.p80Name");
 
-            AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");
-            AE("p41Project_FreeField", "Uživatelská pole projektu", "Uživatelské pole projektu", "p41Project_FreeField a", null);
+            AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");            
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
-            AE("p28Contact_FreeField", "Uživatelská pole klienta", "Uživatelské pole klienta", "p28Contact_FreeField a", null);
+            
             AE("view_PrimaryAddress", "Adresy", "Adresa", "view_PrimaryAddress a",null);
             
             AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a", "a.p31ID DESC");            
@@ -203,8 +202,7 @@ namespace BL
                 case "p28":
                     lis.Add(getREL("view_PrimaryAddress", "p28_address_primary", "Fakturační adresa", "LEFT OUTER JOIN view_PrimaryAddress p28_address_primary ON a.p28ID=p28_address_primary.p28ID"));
                     lis.Add(getREL("p92InvoiceType", "p28_p92", "Typ faktury", "LEFT OUTER JOIN p92InvoiceType p28_p92 ON a.p92ID=p28_p92.p92ID"));
-                    lis.Add(getREL("p29ContactType", "p28_p29", "Typ klienta", "LEFT OUTER JOIN p29ContactType p28_p29 ON a.p29ID=p28_p29.p29ID"));
-                    lis.Add(getREL("p28Contact_FreeField", "p28_p28free", "Uživatelská pole klienta", "LEFT OUTER JOIN p28Contact_FreeField p28_p28free ON a.p28ID=p28_p28free.p28ID"));
+                    lis.Add(getREL("p29ContactType", "p28_p29", "Typ klienta", "LEFT OUTER JOIN p29ContactType p28_p29 ON a.p29ID=p28_p29.p29ID"));                    
                     break;
                 case "p31":
                     lis.Add(getREL("j02Person", "p31_j02", "Osoba úkonu", "LEFT OUTER JOIN j02Person p31_j02 ON a.j02ID=p31_j02.j02ID"));
@@ -223,8 +221,7 @@ namespace BL
                     lis.Add(getREL("p28Contact", "p41_p28client", "Klient", "LEFT OUTER JOIN p28Contact p41_p28client ON a.p28ID_Client=p41_p28client.p28ID"));
                     lis.Add(getREL("p28Contact", "p41_p28billing", "Odběratel faktury", "LEFT OUTER JOIN p28Contact p41_p28billing ON a.p28ID_Billing=p41_p28billing.p28ID"));
                     lis.Add(getREL("p42ProjectType", "p41_p42", "Typ projektu", "LEFT OUTER JOIN p42ProjectType p41_p42 ON a.p42ID=p41_p42.p42ID"));
-                    lis.Add(getREL("p41Project_FreeField", "p41_p41free", "Uživatelská pole projektu", "LEFT OUTER JOIN p41Project_FreeField p41_p41free ON a.p41ID=p41_p41free.p41ID"));
-                    
+                   
                     break;
                 case "p51":
                     lis.Add(getREL("j27Currency", "p51_j27", "Měna", "LEFT OUTER JOIN j27Currency p51_j27 ON a.j27ID=p51_j27.j27ID"));
