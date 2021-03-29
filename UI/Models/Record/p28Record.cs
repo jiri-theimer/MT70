@@ -8,6 +8,7 @@ namespace UI.Models.Record
     public class p28Record:BaseRecordViewModel
     {
         public int IsCompany { get; set; }  //0,1
+        public int p51Flag { get; set; }    //1 - nemá ceník, 2 - přiřazený ceník, 3 - ceník na míru
         public BO.p28Contact Rec { get; set; }
 
         public int o38ID_First { get; set; }
@@ -18,5 +19,6 @@ namespace UI.Models.Record
         public string SelectedComboJ61Name { get; set; }
         public string SelectedComboP63Name { get; set; }
         public string SelectedComboOwner { get; set; }
+        public string SelectedComboP51Name { get; set; }
     }
 }

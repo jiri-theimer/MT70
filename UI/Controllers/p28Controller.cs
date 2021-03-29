@@ -13,7 +13,7 @@ namespace UI.Controllers
     {
         public IActionResult Record(int pid, bool isclone)
         {
-            var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1 };
+            var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1,p51Flag=1 };
             v.Rec = new BO.p28Contact();
             if (v.rec_pid > 0)
             {
@@ -42,6 +42,20 @@ namespace UI.Controllers
                 if (v.RecFirstAddress != null)
                 {
                     v.o38ID_First = v.RecFirstAddress.pid;
+                }
+                if (v.Rec.p51ID_Billing > 0)
+                {
+                    v.SelectedComboP51Name = v.Rec.p51Name_Billing;
+                    var recP51 = Factory.p51PriceListBL.Load(v.Rec.p51ID_Billing);
+                    if (recP51.p51IsCustomTailor)
+                    {
+                        v.p51Flag = 3;
+                    }
+                    else
+                    {
+                        v.p51Flag = 2;
+                    }
+                    
                 }
 
             }
