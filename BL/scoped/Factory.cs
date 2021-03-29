@@ -36,9 +36,11 @@ namespace BL
         private Io15AutoCompleteBL _o15;
         private Io13AttachmentTypeBL _o13;
         private Io27AttachmentBL _o27;
+        private Io38AddressBL _o38;
         private Io58FieldBagBL _o58;
         private Ib65WorkflowMessageBL _b65;
         private Ip07ProjectLevelBL _p07;
+        private Ip28ContactBL _p28;
         private Ip30Contact_PersonBL _p30;
         private Ip31WorksheetBL _p31;
         private Ip32ActivityBL _p32;
@@ -265,6 +267,14 @@ namespace BL
                 return _o15;
             }
         }
+        public Io38AddressBL o38AddressBL
+        {
+            get
+            {
+                if (_o38 == null) _o38 = new o38AddressBL(this);
+                return _o38;
+            }
+        }
         public Io58FieldBagBL o58FieldBagBL
         {
             get
@@ -355,7 +365,14 @@ namespace BL
                 return _p34;
             }
         }
-
+        public Ip28ContactBL p28ContactBL
+        {
+            get
+            {
+                if (_p28 == null) _p28 = new p28ContactBL(this);
+                return _p28;
+            }
+        }
         public Ip41ProjectBL p41ProjectBL
         {
             get

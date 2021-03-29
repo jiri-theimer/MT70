@@ -9,8 +9,10 @@ namespace BL
     public interface Io38AddressBL
     {
         public BO.o38Address Load(int pid);
-        public IEnumerable<BO.o38Address> GetList(BO.myQuery mq);
-        public int Save(BO.o38Address rec);
+        public BO.o38Address LoadFirstP28Address(int p28id);
+        public IEnumerable<BO.o38Address> GetList(BO.myQueryO38 mq);
+        public int Save(BO.o38Address rec,int p28id,int o36id);
+        public bool ValidateBeforeSave(BO.o38Address rec);
 
     }
     class o38AddressBL : BaseBL, Io38AddressBL
@@ -33,8 +35,11 @@ namespace BL
         {
             return _db.Load<BO.o38Address>(GetSQL1(" WHERE a.o38ID=@pid"), new { pid = pid });
         }
-
-        public IEnumerable<BO.o38Address> GetList(BO.myQuery mq)
+        public BO.o38Address LoadFirstP28Address(int p28id)
+        {
+            return _db.Load<BO.o38Address>(GetSQL1(" WHERE a.o38ID IN (select o38ID FROM o37Contact_Address WHERE p28ID=@p28id AND o36ID=1)"), new { p28id = p28id });
+        }
+        public IEnumerable<BO.o38Address> GetList(BO.myQueryO38 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.o38Address>(fq.FinalSql, fq.Parameters);
@@ -42,7 +47,7 @@ namespace BL
 
 
 
-        public int Save(BO.o38Address rec)
+        public int Save(BO.o38Address rec, int p28id,int o36id)
         {
             if (!ValidateBeforeSave(rec))
             {
@@ -59,9 +64,23 @@ namespace BL
             p.AddString("o38AresID", rec.o38AresID);
             
 
-            return _db.SaveRecord("o38Address", p, rec);
+            int intPID = _db.SaveRecord("o38Address", p, rec);
+            if (intPID>0 && p28id > 0)
+            {
+                int intO37ID = _db.GetIntegerFromSql("select o37ID FROM o37Contact_Address WHERE o36ID="+o36id.ToString()+" AND o38ID="+intPID.ToString()+" AND p28ID="+p28id.ToString());
+                if (intO37ID == 0)
+                {
+                    _db.RunSql("INSERT INTO o37Contact_Address(p28ID,o38ID,o36ID) VALUES(@p28id,@o38id,@o36id)", new { p28id = p28id,o38id=intPID,o36id=o36id });
+                }
+                else
+                {
+                    _db.RunSql("UPDATE o37Contact_Address set o36ID=@o36id WHERE o37ID=@pid", new { pid = intO37ID });
+                }
+            }
+
+            return intPID;
         }
-        private bool ValidateBeforeSave(BO.o38Address rec)
+        public bool ValidateBeforeSave(BO.o38Address rec)
         {
             if (string.IsNullOrEmpty(rec.o38City) && string.IsNullOrEmpty(rec.o38Street))
             {

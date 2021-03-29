@@ -9,8 +9,9 @@ namespace BL
     public interface Ip28ContactBL
     {
         public BO.p28Contact Load(int pid);
-        public IEnumerable<BO.p28Contact> GetList(BO.myQuery mq);
-        public int Save(BO.p28Contact rec);
+        public IEnumerable<BO.p28Contact> GetList(BO.myQueryP28 mq);
+        public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id);
+        public int Save(BO.p28Contact rec, BO.o38Address recO38First, List<BO.o32Contact_Medium> lisO32);
 
 
     }
@@ -24,9 +25,19 @@ namespace BL
 
         private string GetSQL1(string strAppend = null)
         {
-            sb("SELECT a.*,b01.b01Name,x38.x38Name," + _db.GetSQL1_Ocas("p28") + " FROM p28Contact a");
-            sb(" LEFT OUTER JOIN b01WorkflowTemplate b01 ON a.b01ID=b01.b01ID");
-            sb(" LEFT OUTER JOIN x38CodeLogic x38 ON a.x38ID=x38.x38ID");
+            sb("SELECT a.p29ID,a.p92ID,a.j02ID_Owner,a.p87ID,a.p51ID_Billing,a.p51ID_Internal,a.b02ID,a.p63ID,a.p28IsCompany,a.p28IsDraft,a.p28Code,a.p28FirstName,a.p28LastName,a.p28TitleBeforeName,a.p28TitleAfterName,a.p28RegID,a.p28VatID,a.p28Person_BirthRegID,a.p28CompanyName,a.p28CompanyShortName,a.p28InvoiceDefaultText1,a.p28InvoiceDefaultText2,a.p28InvoiceMaturityDays,a.p28LimitHours_Notification,a.p28LimitFee_Notification");
+            sb(",a.p28Name,p29.p29Name,p92.p92Name,b02.b02Name,p87.p87Name,a.p28RobotAddress,a.p28SupplierID,a.p28SupplierFlag,a.p28ExternalPID,a.p28Round2Minutes,a.p28ICDPH_SK");
+            sb(",a.p28TreeLevel,a.p28TreeIndex,a.p28TreePrev,a.p28TreeNext,a.p28TreePath");
+            sb(",p51billing.p51Name as p51Name_Billing,j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,a.p28ParentID,a.p28BillingMemo,a.p28Pohoda_VatCode,a.j02ID_ContactPerson_DefaultInWorksheet,a.j02ID_ContactPerson_DefaultInInvoice,a.j61ID_Invoice");
+
+            sb(","+_db.GetSQL1_Ocas("p28") + " FROM p28Contact a");
+            sb(" LEFT OUTER JOIN p29ContactType p29 ON a.p29ID=p29.p29ID");
+            sb(" LEFT OUTER JOIN p87BillingLanguage p87 ON a.p87ID=p87.p87ID");
+            sb(" LEFT OUTER JOIN p92InvoiceType p92 ON a.p92ID=p92.p92ID");
+            sb(" LEFT OUTER JOIN b02WorkflowStatus b02 ON a.b02ID=b02.b02ID");
+            sb(" LEFT OUTER JOIN p51PriceList p51billing ON a.p51ID_Billing=p51billing.p51ID");
+            sb(" LEFT OUTER JOIN j02Person j02owner ON a.j02ID_Owner=j02owner.j02ID");
+            //sb(" LEFT OUTER JOIN p28Contact_FreeField p28free ON a.p28ID=p28free.p28ID");
             sb(strAppend);
             return sbret();
         }
@@ -35,16 +46,19 @@ namespace BL
         {
             return _db.Load<BO.p28Contact>(GetSQL1(" WHERE a.p28ID=@pid"), new { pid = pid });
         }
-        public IEnumerable<BO.p28Contact> GetList(BO.myQuery mq)
+        public IEnumerable<BO.p28Contact> GetList(BO.myQueryP28 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p28Contact>(fq.FinalSql, fq.Parameters);
         }
+        public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id)
+        {            
+            return _db.GetList<BO.o32Contact_Medium>("select a.*,o33.o33Name FROM o32Contact_Medium a INNER JOIN o33MediumType o33 ON a.o33ID=o33.o33ID WHERE a.p28ID=@p28id",new { p28id = p28id });
+        }
 
-
-        public int Save(BO.p28Contact rec,List<BO.o37Contact_Address> lisO37,List<BO.o32Contact_Medium> lisO32,List<BO.p30Contact_Person> lisP30)
+        public int Save(BO.p28Contact rec,BO.o38Address recO38First,List<BO.o32Contact_Medium> lisO32)
         {
-            if (!ValidateBeforeSave(rec))
+            if (!ValidateBeforeSave(rec, recO38First))
             {
                 return 0;
             }
@@ -103,19 +117,14 @@ namespace BL
 
                 if (intPID > 0)
                 {
-                    if (lisO37 != null)
+                    if (recO38First != null)
                     {
-                        if (rec.pid > 0)
-                        {
-                            _db.RunSql("DELETE FROM o37Contact_Address WHERE p28ID=@pid", new { pid = intPID });
-                        }
-                        foreach(var c in lisO37)
-                        {
-                            var recO38 = new BO.o38Address();
-                            _db.RunSql("INSERT INTO o37Contact_Address(p28ID,o38ID,o36ID) VALUES(@p28id,@o38id,@o36id)", new { p28id = intPID });
-                        }
+                       int intO38ID = _mother.o38AddressBL.Save(recO38First,intPID,1);
+                       
                     }
                 }
+
+                sc.Complete();
 
                 return intPID;
             }
@@ -123,14 +132,20 @@ namespace BL
         }
 
 
-        private bool ValidateBeforeSave(BO.p28Contact rec)
+        private bool ValidateBeforeSave(BO.p28Contact rec, BO.o38Address recO38First)
         {
 
-            if (string.IsNullOrEmpty(rec.p28Name))
+            if (string.IsNullOrEmpty(rec.p28CompanyName) && string.IsNullOrEmpty(rec.p28LastName))
             {
-                this.AddMessage("Chybí název."); return false;
+                this.AddMessage("Chybí název nebo příjmení."); return false;
             }
-
+            if (recO38First != null)
+            {
+                if (!_mother.o38AddressBL.ValidateBeforeSave(recO38First))
+                {
+                    return false;
+                }
+            }
 
             return true;
         }

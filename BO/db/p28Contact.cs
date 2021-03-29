@@ -70,8 +70,7 @@ namespace BO
        
         public string p51Name_Billing { get; }
        
-        public string p51Name_Internal { get; }
-       
+        
         public string p87Name { get; }
         
         public string Owner { get; }
