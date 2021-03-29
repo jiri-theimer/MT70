@@ -9,9 +9,9 @@ namespace BO
     public class myQueryP28:baseQuery
     {
         public int j02id { get; set; }
-        public List<int> p29ids { get; set; }
-        public List<int> b02ids { get; set; }
-        public List<int> p51ids { get; set; }        
+        public int p29id { get; set; }
+        public int b02id { get; set; }
+        public int p51id { get; set; }        
         public int p28parentid { get; set; }
         public bool? canbe_supplier { get; set; }
         public bool? canbe_client { get; set; }
@@ -31,18 +31,30 @@ namespace BO
             {
                 AQ("a.p28ID IN (SELECT p28ID FROM p30Contact_Person WHERE j02ID=@j02id)", "j02id", this.j02id);
             }
-            if (this.p29ids !=null)
+            if (this.p29id > 0)
             {
-                AQ("a.p29ID IN (" + string.Join(",", this.p29ids) + ")", null, null);
+                AQ("a.p29ID=@p29id", "p29id", this.p29id);
             }
-            if (this.b02ids != null)
+            if (this.b02id > 0)
             {
-                AQ("a.b02ID IN (" + string.Join(",", this.b02ids) + ")", null, null);
+                AQ("a.b02ID=@b02id", "b02id", this.b02id);
             }
-            if (this.p51ids != null)
+            if (this.p51id > 0)
             {
-                AQ("a.p51ID_Billing IN (" + string.Join(",", this.p51ids) + ")", null, null);
+                AQ("a.p51ID_Billing=@p51id", "p51id", this.p51id);
             }
+            //if (this.p29ids !=null)
+            //{
+            //    AQ("a.p29ID IN (" + string.Join(",", this.p29ids) + ")", null, null);
+            //}
+            //if (this.b02ids != null)
+            //{
+            //    AQ("a.b02ID IN (" + string.Join(",", this.b02ids) + ")", null, null);
+            //}
+            //if (this.p51ids != null)
+            //{
+            //    AQ("a.p51ID_Billing IN (" + string.Join(",", this.p51ids) + ")", null, null);
+            //}
             if (this.p28parentid > 0)
             {
                 AQ("a.p28ParentID=@parentpid", "parentpid", this.p28parentid);
