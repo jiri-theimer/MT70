@@ -7,6 +7,8 @@ namespace BO
     public class myQueryJ02:baseQuery
     {
         public bool? j02isintraperson { get; set; }
+        public bool? isvirtualperson { get; set; }
+        public bool? isintranonvirtualperson { get; set; }
         public int j04id { get; set; }
         public int j11id { get; set; }
         public int j07id { get; set; }
@@ -26,6 +28,21 @@ namespace BO
             if (this.j02isintraperson != null)
             {
                 AQ("a.j02IsIntraPerson=@isintra", "isintra", this.j02isintraperson);
+            }
+            if (this.isintranonvirtualperson != null && this.isintranonvirtualperson==true)
+            {
+                AQ("a.j02IsIntraPerson=1 AND a.j02VirtualParentID IS NULL", null, null);
+            }
+            if (this.isvirtualperson != null)
+            {
+                if (this.isvirtualperson == true)
+                {
+                    AQ("a.j02VirtualParentID IS NOT NULL", null, null);
+                }
+                else
+                {
+                    AQ("a.j02VirtualParentID IS NULL", null, null);
+                }               
             }
             if (this.j04id > 0)
             {

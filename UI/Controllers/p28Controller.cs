@@ -71,6 +71,12 @@ namespace UI.Controllers
 
         private void RefreshState(p28Record v)
         {
+            if (v.ff == null)
+            {
+                v.ff = new FreeFieldsViewModel();
+                v.ff.lisFF = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag==BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.p28Contact);
+            }
+            
             if (v.RecFirstAddress == null)
             {
                 v.RecFirstAddress = new BO.o38Address();

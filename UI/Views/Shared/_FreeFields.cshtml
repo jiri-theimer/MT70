@@ -1,0 +1,24 @@
+﻿@model UI.Models.FreeFieldsViewModel
+@inject BL.Factory _f
+@{
+    if (Model == null)
+    {
+        return;
+    }
+
+}
+
+@addTagHelper *, UI
+
+@foreach (var c in Model.lisFF)
+{
+    switch (c.TypeName)
+    {
+        case "integer":
+            
+            break;
+        default:
+            <input type="text" class="form-control" />
+            break;
+    }
+}
