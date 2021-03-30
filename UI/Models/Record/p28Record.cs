@@ -22,6 +22,6 @@ namespace UI.Models.Record
         public string SelectedComboP51Name { get; set; }
         public string SelectedComboParentP28Name { get; set; }
 
-        public FreeFieldsViewModel ff { get; set; }
+        public List<FreeFieldInput> ffinputs { get; set; }
     }
 }

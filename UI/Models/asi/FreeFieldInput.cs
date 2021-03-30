@@ -7,10 +7,16 @@ namespace UI.Models
 {
     public class FreeFieldInput
     {
-        public BO.x28EntityField Field { get; set; }
+        
         public double NumInput { get; set; }
         public string StringInput { get; set; }
         public DateTime? DateInput { get; set; }
+        public bool CheckInput { get; set; }
+
+        public string x28Field { get; set; }
+        public string x28Name { get; set; }
+        public string TypeName { get; set; }
+        
 
     }
 }

@@ -71,19 +71,19 @@ namespace UI.Controllers
 
         private void RefreshState(p28Record v)
         {
-            if (v.ff == null)
+            if (v.ffinputs == null)
             {
-                v.ff = new FreeFieldsViewModel();
-                v.ff.lisFF = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag==BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.p28Contact);                
-            }
-            if (v.ff.inputs == null)
-            {
-                v.ff.inputs = new List<FreeFieldInput>();
-                for(int i = 0; i < v.ff.lisFF.Count(); i++)
+                v.ffinputs = new List<FreeFieldInput>();
+                var lisX28 = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.p28Contact).OrderBy(p => p.x28Ordinary);
+                foreach (var recX28 in lisX28)
                 {
-                    v.ff.inputs.Add(new FreeFieldInput() { Field = v.ff.lisFF[i] });
+                    var c = new FreeFieldInput() { x28Field = recX28.x28Field, TypeName = recX28.TypeName, x28Name = recX28.x28Name };
+                    v.ffinputs.Add(c);
                 }
+
+                
             }
+            
             
             if (v.RecFirstAddress == null)
             {

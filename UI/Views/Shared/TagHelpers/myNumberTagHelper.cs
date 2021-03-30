@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UI.Views.Shared.TagHelpers
@@ -13,6 +14,7 @@ namespace UI.Views.Shared.TagHelpers
     [HtmlTargetElement("mynumber")]
     public class myNumberTagHelper : TagHelper
     {
+        
         private const string ForAttributeName = "asp-for";
 
         [HtmlAttributeName(ForAttributeName)]
@@ -24,7 +26,11 @@ namespace UI.Views.Shared.TagHelpers
         public int DecimalDigits { get; set; } = 2;
 
         private string _StringValue { get; set; } //tvar hodnoty čísla pro jeho uložení na hostitelské view
-        
+
+        [HtmlAttributeName("elementid-prefix")]
+        public string elementidprefix { get; set; } //použitelné v situaci taghelperu v listu, který je umístěn v partial view komponentě
+
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -82,9 +88,18 @@ namespace UI.Views.Shared.TagHelpers
                 
             }
             string strControlID = this.For.Name.Replace(".", "_").Replace("[", "_").Replace("]", "_");
+            string strControlName = this.For.Name;
+            if (this.elementidprefix != null)
+            {
+                strControlID = this.elementidprefix + strControlID;
+                strControlName = this.elementidprefix + this.For.Name;
+            }
+            
+          
+
 
             sb.Append(string.Format("<input type='text' for-id='{0}' class='form-control' step='{1}' placeholder='{2}' onfocus='mynumber_focus(this)' onblur='mynumber_blur(this,{3})' value='{4}'/>", strControlID, strStep,strPlaceHolder,DecimalDigits, strFormatted));
-            sb.Append(string.Format("<input type='hidden' value ='{0}' id ='{1}' name ='{2}'/>", _StringValue, strControlID, this.For.Name));
+            sb.Append(string.Format("<input type='hidden' value ='{0}' id ='{1}' name ='{2}'/>", _StringValue, strControlID, strControlName));
 
             //output.Content.AppendHtml(sb.ToString());
             output.Content.SetHtmlContent(sb.ToString());

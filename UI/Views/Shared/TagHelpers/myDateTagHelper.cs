@@ -24,6 +24,8 @@ namespace UI.Views.Shared.TagHelpers
         private string _StringValue { get; set; } //tvar hodnoty čísla pro jeho uložení na hostitelské view
         private string _TimeValue { get; set; }
 
+        [HtmlAttributeName("elementid-prefix")]
+        public string elementidprefix { get; set; } //použitelné v situaci taghelperu v listu, který je umístěn v partial view komponentě
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -45,6 +47,13 @@ namespace UI.Views.Shared.TagHelpers
             
             var sb = new System.Text.StringBuilder();
             var strControlID = this.For.Name.Replace(".", "_").Replace("[", "_").Replace("]", "_");
+            var strControlName = this.For.Name;
+            if (this.elementidprefix != null)
+            {
+                strControlID = this.elementidprefix + strControlID;
+                strControlName = this.elementidprefix + this.For.Name;
+            }
+
             sb.AppendLine("<div class='input-group' style='width:100%;'>");
             sb.Append(string.Format("<input type='text' id='{0}' for-id='{1}' class='form-control' placeholder='dd.mm.yyyy' autocomplete='off' value='{2}' onchange='datepicker_change(this)'/>", strControlID+"helper", strControlID, _StringValue));
 
@@ -58,11 +67,11 @@ namespace UI.Views.Shared.TagHelpers
             sb.AppendLine("</div>");
             if (includetime == true)
             {
-                sb.AppendLine(string.Format("<input type='hidden' value ='{0}' id='{1}' name='{2}'/>", _StringValue+" "+_TimeValue, strControlID, this.For.Name));
+                sb.AppendLine(string.Format("<input type='hidden' value ='{0}' id='{1}' name='{2}'/>", _StringValue+" "+_TimeValue, strControlID, strControlName));
             }
             else
             {
-                sb.AppendLine(string.Format("<input type='hidden' value ='{0}' id='{1}' name='{2}'/>", _StringValue, strControlID, this.For.Name));
+                sb.AppendLine(string.Format("<input type='hidden' value ='{0}' id='{1}' name='{2}'/>", _StringValue, strControlID, strControlName));
             }
             
 
