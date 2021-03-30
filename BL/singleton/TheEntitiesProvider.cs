@@ -93,6 +93,7 @@ namespace BL
             AE("p53VatRate", "DPH sazby", "DPH sazba", "p53VatRate a", "a.p53ID DESC");
             AE("p61ActivityCluster", "Klastry aktivit", "Klastr aktivit", "p61ActivityCluster a", "a.p61Name");
             AE("p63Overhead", "Režijní přirážka k fakturaci", "Režijní přirážka", "p63Overhead a","a.p63Name");
+            AE("p87BillingLanguage", "Fakturační jazyk", "Fakturační jazyk", "p87BillingLanguage a", "a.p87LangIndex");
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura cenového rozpisu faktury", "p80InvoiceAmountStructure a", "a.p80Name");
 

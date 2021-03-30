@@ -204,6 +204,10 @@ namespace BL
             AFBOOL("p80IsFeeSeparate", "Pevné odměny 1:1").DefaultColumnFlag = gdc2;
             AppendTimestamp();
 
+            this.EntityName = "p87BillingLanguage";
+            AA("p87Name", "Fakturační jazyk", gdc1, null, "string", false, true);
+            AFNUM0("p87LangIndex", "#").DefaultColumnFlag = gdc2;
+
             this.EntityName = "p92InvoiceType";
             AA("p92Name", "Typ faktury", BO.TheGridDefColFlag.GridAndCombo, null, "string", false, true);
             AA("p92ReportConstantPreText1", "Preambule hlavního textu faktury");
