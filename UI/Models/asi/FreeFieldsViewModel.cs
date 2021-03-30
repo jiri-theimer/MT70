@@ -8,6 +8,8 @@ namespace UI.Models
     public class FreeFieldsViewModel
     {
         public IEnumerable<BO.x28EntityField> lisFF { get; set; }
+        
+        public List<FreeFieldInput> inputs { get; set; }
         public string pokus { get; set; }
     }
 }

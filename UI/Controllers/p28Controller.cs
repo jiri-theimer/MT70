@@ -74,7 +74,15 @@ namespace UI.Controllers
             if (v.ff == null)
             {
                 v.ff = new FreeFieldsViewModel();
-                v.ff.lisFF = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag==BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.p28Contact);
+                v.ff.lisFF = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag==BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.p28Contact);                
+            }
+            if (v.ff.inputs == null)
+            {
+                v.ff.inputs = new List<FreeFieldInput>();
+                for(int i = 0; i < v.ff.lisFF.Count(); i++)
+                {
+                    v.ff.inputs.Add(new FreeFieldInput() { Field = v.ff.lisFF[i] });
+                }
             }
             
             if (v.RecFirstAddress == null)
