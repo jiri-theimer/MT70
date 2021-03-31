@@ -148,6 +148,7 @@ namespace UI.Controllers
             {
                 v.RadioIsIntraPerson = Convert.ToInt32(BO.BAS.GB(isintraperson));
             }
+            RefreshState(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)
             {
@@ -156,10 +157,23 @@ namespace UI.Controllers
             return ViewTup(v, BO.x53PermValEnum.GR_Admin);
             
         }
+
+        private void RefreshState(j02Record v)
+        {
+            if (v.ff1 == null)
+            {
+                v.ff1 = new FreeFieldsViewModel();
+                var lisX28 = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.j02Person).OrderBy(p => p.x28Ordinary);
+                v.ff1.SetupInputs(lisX28, Factory.x28EntityFieldBL.GetFieldsValues(v.rec_pid, lisX28));
+
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Record(Models.Record.j02Record v,string oper)
         {
+            RefreshState(v);
             if (oper == "postback")
             {
                 return View(v);
@@ -217,7 +231,7 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.j02PersonBL.Save(c);
+                c.pid = Factory.j02PersonBL.Save(c,v.ff1.inputs);
                 if (c.pid > 0)
                 {
                     if (v.RadioIsIntraPerson == 0)

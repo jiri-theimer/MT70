@@ -75,7 +75,7 @@ namespace UI.Controllers
             {
                 v.ff1 = new FreeFieldsViewModel();                
                 var lisX28 = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.p28Contact).OrderBy(p => p.x28Ordinary);
-                v.ff1.SetupInputs(lisX28);
+                v.ff1.SetupInputs(lisX28, Factory.x28EntityFieldBL.GetFieldsValues(v.rec_pid, lisX28));
                 
             }
             
@@ -148,7 +148,7 @@ namespace UI.Controllers
 
                 v.RecFirstAddress.pid = v.o38ID_First;
 
-                c.pid = Factory.p28ContactBL.Save(c,v.RecFirstAddress,null);
+                c.pid = Factory.p28ContactBL.Save(c,v.RecFirstAddress,null,v.ff1.inputs);
                 if (c.pid > 0)
                 {
 

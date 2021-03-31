@@ -12,6 +12,7 @@ namespace BL
         public IEnumerable<BO.x28EntityField> GetList(BO.myQuery mq);
         public int Save(BO.x28EntityField rec,List<BO.x26EntityField_Binding> lisX26);
         public IEnumerable<BO.x26EntityField_Binding> GetList_x26(int x28id);
+        public System.Data.DataTable GetFieldsValues(int pid, IEnumerable<BO.x28EntityField> fields);   //vrací hodnoty polí v odpovídající tabulce entity
 
     }
     class x28EntityFieldBL : BaseBL, Ix28EntityFieldBL
@@ -46,7 +47,16 @@ namespace BL
             return _db.GetList<BO.x26EntityField_Binding>("select *,convert(bit,1) as IsChecked from x26EntityField_Binding where x28ID=@pid", new { pid = x28id });
         }
 
+        public System.Data.DataTable GetFieldsValues(int pid, IEnumerable<BO.x28EntityField> fields)
+        {
+            if (fields.Count() == 0)
+            {
+                return null;
+            }
+            string strSQL = "SELECT "+pid.ToString()+" AS pid," + string.Join(",", fields.Select(p => p.x28Field)) + " FROM " + fields.First().SourceTableName + " WHERE " + fields.First().x29TableName.Substring(0, 3) + "ID = "+pid.ToString();
 
+            return _db.GetDataTable(strSQL);
+        }
 
         public int Save(BO.x28EntityField rec, List<BO.x26EntityField_Binding> lisX26)
         {

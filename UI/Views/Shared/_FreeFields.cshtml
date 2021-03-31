@@ -38,26 +38,30 @@
         <mydate asp-for="@Model.inputs[i].DateInput" elementid-prefix="@Model.elementidprefix"></mydate>
         break;
 
-        @case "datetime":
-        <mydate asp-for="@Model.inputs[i].DateInput" include-time="true" elementid-prefix="@Model.elementidprefix"></mydate>
-        break;
-
-    @case "boolean":
-    <input type="checkbox" asp-for="@Model.inputs[i].CheckInput" />
-    <label for="ff1_inputs_@(i)__CheckInput">@Model.inputs[i].x28Name</label>
+    @case "datetime":
+    <mydate asp-for="@Model.inputs[i].DateInput" include-time="true" elementid-prefix="@Model.elementidprefix"></mydate>
     break;
 
-    @default:
-    <input type="text" class="form-control" asp-for="@Model.inputs[i].StringInput" />
-    break;
+@case "boolean":
+<input type="checkbox" asp-for="@Model.inputs[i].CheckInput" />
+<label for="ff1_inputs_@(i)__CheckInput">@Model.inputs[i].x28Name</label>
+break;
+
+@default:
+<input type="text" class="form-control" asp-for="@Model.inputs[i].StringInput" />
+break;
 }
 
         </div>
 
     </div>
 
-
+    <input type="hidden" asp-for="@Model.inputs[i].x28DataSource" />
+    <input type="hidden" asp-for="@Model.inputs[i].x28IsFixedDataSource" />
+    <input type="hidden" asp-for="@Model.inputs[i].x28IsRequired" />
     <input type="hidden" asp-for="@Model.inputs[i].x28Field" />
     <input type="hidden" asp-for="@Model.inputs[i].x28Name" />
     <input type="hidden" asp-for="@Model.inputs[i].TypeName" />
+    <input type="hidden" asp-for="@Model.inputs[i].x29ID" />
+    <input type="hidden" asp-for="@Model.inputs[i].x24ID" />
 }

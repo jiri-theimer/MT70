@@ -9,7 +9,7 @@ namespace BL
         public BO.j02Person LoadByEmail(string strEmail, int pid_exclude);
         public BO.j02Person LoadByCode(string strCode, int pid_exclude);
         public IEnumerable<BO.j02Person> GetList(BO.myQueryJ02 mq);
-        public int Save(BO.j02Person rec);
+        public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI);
         public bool ValidateBeforeSave(BO.j02Person rec);
         public BO.j02PersonSum LoadSumRow(int pid);
 
@@ -60,7 +60,7 @@ namespace BL
        
 
 
-        public int Save(BO.j02Person rec)
+        public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI)
         {
             if (ValidateBeforeSave(rec) == false)
             {
@@ -107,6 +107,9 @@ namespace BL
                 if (intPID > 0)
                 {
                     _db.RunSql("exec dbo.j02_aftersave @j02id,@j03id_sys", new { j02id = intPID, j03id_sys = _mother.CurrentUser.pid });
+                    
+                    DL.BAS.SaveFreeFields(_db, intPID, lisFFI);
+
                     sc.Complete();
                     return intPID;
                 }

@@ -270,7 +270,7 @@ namespace UI.Controllers
                 c.j02Office = v.Office;
                 c.j02NotifySubscriberFlag = v.j02NotifySubscriberFlag;
                 c.j02EmailSignature = v.j02EmailSignature;
-                if (Factory.j02PersonBL.Save(c) > 0)
+                if (Factory.j02PersonBL.Save(c,null) > 0)
                 {
                     BO.j03User cUser = Factory.j03UserBL.Load(Factory.CurrentUser.pid);
                     if (v.IsGridClipboard == true)
