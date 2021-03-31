@@ -7,8 +7,9 @@ using System.Data;
 
 namespace UI
 {
-    public static class bas
+    public static class basUI
     {
+       
         public static string render_select_option(string strValue,string strText,string strSelectedValue)
         {
             if (strValue == strSelectedValue)

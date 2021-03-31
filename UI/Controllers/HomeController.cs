@@ -49,7 +49,7 @@ namespace UI.Controllers
 
         private void RefreshState_MyMainMenuLinks(MyMainMenuLinks v)
         {
-            var c = new basUI.TheMenuSupport(Factory);
+            var c = new UI.Menu.TheMenuSupport(Factory);
             v.lisCil = c.getUserMenuLinks();
             v.lisZdroj = c.getAllMainMenuLinks();
             foreach (var rec in v.lisCil)
@@ -242,7 +242,7 @@ namespace UI.Controllers
             v.gridinputO40 = new TheGridInput() { entity = "o40SmtpAccount", myqueryinline = strMyQuery };
             v.gridinputO40.query = new BO.InitMyQuery().Load("o40", null, 0, strMyQuery);
 
-            var c = new basUI.TheMenuSupport(Factory);
+            var c = new UI.Menu.TheMenuSupport(Factory);
             v.lisMenuLinks = c.getUserMenuLinks();
         }
         [HttpPost]

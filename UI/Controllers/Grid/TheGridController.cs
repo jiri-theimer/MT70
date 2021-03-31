@@ -233,7 +233,7 @@ namespace UI.Controllers
                 
                 v.period = new PeriodViewModel();
                 v.period.IsShowButtonRefresh = true;
-                var per = bas.InhalePeriodDates(_pp,Factory,v.prefix,masterentity);
+                var per = basUI.InhalePeriodDates(_pp,Factory,v.prefix,masterentity);
                 v.period.PeriodValue = per.pid;
                 v.period.d1 = per.d1;
                 v.period.d2 = per.d2;

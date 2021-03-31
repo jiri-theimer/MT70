@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
 
-namespace UI
+namespace UI.Menu
 {
     public static class basMenu
     {

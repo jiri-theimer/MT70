@@ -10,7 +10,14 @@ namespace UI.Models
         public string elementidprefix { get; set; } = "ff1.";
         public List<BO.FreeFieldInput> inputs { get; set; }
        
-        public void SetupInputs(IEnumerable<BO.x28EntityField> lisX28, System.Data.DataTable vals)
+        public void InhaleFreeFieldsView(BL.Factory f, int rec_pid, string prefix)
+        {
+           
+            var lisX28 = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.BASX29.GetEnum(prefix)).OrderBy(p => p.x28Ordinary);
+
+            SetupInputs(lisX28, f.x28EntityFieldBL.GetFieldsValues(rec_pid, lisX28));
+        }
+        private void SetupInputs(IEnumerable<BO.x28EntityField> lisX28, System.Data.DataTable vals)
         {
             this.inputs = new List<BO.FreeFieldInput>();
 

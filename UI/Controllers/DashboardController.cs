@@ -142,7 +142,7 @@ namespace UI.Controllers
                     }
                     var cGen = new BO.CLS.Datatable2Html(new BO.CLS.Datatable2HtmlDef() { ColHeaders = rec.x55TableColHeaders, ColTypes = rec.x55TableColTypes, ClientID = rec.x55Code, IsUseDatatables = rec.IsUseDatatables });
                     rec.x55Content = cGen.CreateHtmlTable(dt, 1000);
-
+                    
                 }
                 else
                 {
@@ -150,10 +150,10 @@ namespace UI.Controllers
                     {
                         case "pandulak":
                             var strPandulakDir = Factory.App.AppRootFolder + "\\wwwroot\\images\\pandulak";
-                            rec.x55Content = string.Format("<img src='/images/pandulak/{0}'/>", UI.bas.getPandulakImage(strPandulakDir));
+                            rec.x55Content = string.Format("<img src='/images/pandulak/{0}'/>",basUI.getPandulakImage(strPandulakDir));
                             if (v.ColumnsPerPage <= 2)
                             {
-                                rec.x55Content += string.Format("<img src='/images/pandulak/{0}'/>", UI.bas.getPandulakImage(strPandulakDir));
+                                rec.x55Content += string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir));
                             }
                             break;
                     }

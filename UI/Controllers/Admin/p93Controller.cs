@@ -149,7 +149,7 @@ namespace UI.Controllers
                         {
                             strDestFileName = BO.BAS.ParseDbNameFromCloudLogin(Factory.CurrentUser.j03Login) + "_" + strDestFileName;
                         }
-                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 250, 100);
+                        basUI.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 250, 100);
 
                         c = Factory.p93InvoiceHeaderBL.Load(c.pid);
                         c.p93LogoFile = strDestFileName;
@@ -167,7 +167,7 @@ namespace UI.Controllers
                         {
                             strDestFileName = BO.BAS.ParseDbNameFromCloudLogin(Factory.CurrentUser.j03Login) + "_" + strDestFileName;
                         }
-                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 300, 130);
+                        basUI.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 300, 130);
 
                         c = Factory.p93InvoiceHeaderBL.Load(c.pid);
                         c.p93SignatureFile = strDestFileName;

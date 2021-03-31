@@ -6,6 +6,7 @@ using BO;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
+using UI.Menu;
 
 namespace UI.Controllers
 {
@@ -33,7 +34,7 @@ namespace UI.Controllers
             switch (prefix)
             {
                 case "j02":
-                    lis = new UI.basUI.j02ContextMenu(Factory,pid).GetItems();
+                    lis = new j02ContextMenu(Factory,pid).GetItems();
                     break;
                 default:
                     break;

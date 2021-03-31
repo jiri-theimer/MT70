@@ -163,9 +163,7 @@ namespace UI.Controllers
             if (v.ff1 == null)
             {
                 v.ff1 = new FreeFieldsViewModel();
-                var lisX28 = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.j02Person).OrderBy(p => p.x28Ordinary);
-                v.ff1.SetupInputs(lisX28, Factory.x28EntityFieldBL.GetFieldsValues(v.rec_pid, lisX28));
-
+                v.ff1.InhaleFreeFieldsView(Factory, v.rec_pid, "j02");                
             }
         }
 

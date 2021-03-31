@@ -195,14 +195,14 @@ namespace UI.Controllers
 
                     if (v.IsMakeResize)
                     {
-                        bas.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 250, 100);
+                        basUI.ResizeImage(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, 250, 100);
                     }
                     else
                     {
                         System.IO.File.Copy(tempfile.FullPath, Factory.App.WwwRootFolder + "\\Plugins\\" + strDestFileName, true);
                     }
                     
-
+                    
                     
 
                     v.SetJavascript_CallOnLoad(1);
