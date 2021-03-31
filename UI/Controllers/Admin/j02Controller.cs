@@ -165,6 +165,7 @@ namespace UI.Controllers
                 v.ff1 = new FreeFieldsViewModel();
                 v.ff1.InhaleFreeFieldsView(Factory, v.rec_pid, "j02");                
             }
+            v.ff1.RefreshInputsVisibility(Factory, v.rec_pid, "j02", v.Rec.j07ID);
         }
 
         [HttpPost]
@@ -188,21 +189,18 @@ namespace UI.Controllers
                 {
                     c = Factory.j02PersonBL.Load(v.rec_pid);
                 }
+                if (v.RadioIsIntraPerson == 1)
+                {
+                    c.j02IsIntraPerson = true;
+                    c.j07ID = v.Rec.j07ID;
+                    c.c21ID = v.Rec.c21ID;
+                    c.j18ID = v.Rec.j18ID;
+                }
                 else
                 {
-                    if (v.RadioIsIntraPerson == 1)
-                    {
-                        c.j02IsIntraPerson = true;
-                        c.j07ID = v.Rec.j07ID;
-                        c.c21ID = v.Rec.c21ID;
-                        c.j18ID = v.Rec.j18ID;
-                    }
-                    else
-                    {
-                        c.j02IsIntraPerson = false;
-                    }
+                    c.j02IsIntraPerson = false;
                 }
-                
+
                 c.j02TitleBeforeName = v.Rec.j02TitleBeforeName;
                 c.j02FirstName = v.Rec.j02FirstName;
                 c.j02LastName = v.Rec.j02LastName;

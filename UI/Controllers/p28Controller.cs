@@ -74,13 +74,10 @@ namespace UI.Controllers
             if (v.ff1 == null)
             {
                 v.ff1 = new FreeFieldsViewModel();
-                v.ff1.InhaleFreeFieldsView(Factory, v.rec_pid, "p28");
-                //var lisX28 = Factory.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.x29IdEnum.p28Contact).OrderBy(p => p.x28Ordinary);
-                //v.ff1.SetupInputs(lisX28, Factory.x28EntityFieldBL.GetFieldsValues(v.rec_pid, lisX28));
-
+                v.ff1.InhaleFreeFieldsView(Factory, v.rec_pid, "p28");                
             }
-            
-            
+            v.ff1.RefreshInputsVisibility(Factory, v.rec_pid, "p28", v.Rec.p29ID);
+
             if (v.RecFirstAddress == null)
             {
                 v.RecFirstAddress = new BO.o38Address();

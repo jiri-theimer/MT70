@@ -108,7 +108,10 @@ namespace BL
                 {
                     _db.RunSql("exec dbo.j02_aftersave @j02id,@j03id_sys", new { j02id = intPID, j03id_sys = _mother.CurrentUser.pid });
                     
-                    DL.BAS.SaveFreeFields(_db, intPID, lisFFI);
+                    if (!DL.BAS.SaveFreeFields(_db, intPID, lisFFI))
+                    {
+                        return 0;
+                    }
 
                     sc.Complete();
                     return intPID;

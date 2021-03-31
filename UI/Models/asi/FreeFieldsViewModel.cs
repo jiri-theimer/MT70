@@ -9,13 +9,30 @@ namespace UI.Models
     {
         public string elementidprefix { get; set; } = "ff1.";
         public List<BO.FreeFieldInput> inputs { get; set; }
+
+        public List<BO.FreeFieldInput> getVisibleInputs()
+        {
+            return this.inputs.Where(p => p.IsVisible == true).ToList();
+        }
        
         public void InhaleFreeFieldsView(BL.Factory f, int rec_pid, string prefix)
         {
-           
-            var lisX28 = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.BASX29.GetEnum(prefix)).OrderBy(p => p.x28Ordinary);
 
+            var lisX28 = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.BASX29.GetEnum(prefix)).OrderBy(p => p.x28Ordinary);
+            
             SetupInputs(lisX28, f.x28EntityFieldBL.GetFieldsValues(rec_pid, lisX28));
+        }
+        public void RefreshInputsVisibility(BL.Factory f, int rec_pid, string prefix, int intEntityTypeID)
+        {   //podle typu záznamu (intEntityTypeID) určit, jaké pole je viditelné
+            var lisX28 = f.x28EntityFieldBL.GetList_ApplicableInForm(prefix, intEntityTypeID, false);
+            foreach(var c in this.inputs)
+            {
+                c.IsVisible = false;
+            }
+            foreach(var c in lisX28)
+            {
+                this.inputs.Where(p => p.x28Field == c.x28Field).First().IsVisible = true;
+            }
         }
         private void SetupInputs(IEnumerable<BO.x28EntityField> lisX28, System.Data.DataTable vals)
         {

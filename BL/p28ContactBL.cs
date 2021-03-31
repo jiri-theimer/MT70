@@ -117,7 +117,10 @@ namespace BL
 
                 if (intPID > 0)
                 {
-                    DL.BAS.SaveFreeFields(_db, intPID, lisFFI);
+                    if (!DL.BAS.SaveFreeFields(_db, intPID, lisFFI))
+                    {
+                        return 0;
+                    }                    
 
                     if (recO38First != null)
                     {

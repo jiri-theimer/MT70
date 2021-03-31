@@ -10,6 +10,7 @@ namespace BL
     {
         public BO.x28EntityField Load(int pid);
         public IEnumerable<BO.x28EntityField> GetList(BO.myQuery mq);
+        public IEnumerable<BO.x28EntityField> GetList_ApplicableInForm(string prefix, int intEntityTypeID, bool bolTestUserAccess);
         public int Save(BO.x28EntityField rec,List<BO.x26EntityField_Binding> lisX26);
         public IEnumerable<BO.x26EntityField_Binding> GetList_x26(int x28id);
         public System.Data.DataTable GetFieldsValues(int pid, IEnumerable<BO.x28EntityField> fields);   //vrací hodnoty polí v odpovídající tabulce entity
@@ -41,6 +42,47 @@ namespace BL
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.x28EntityField>(fq.FinalSql, fq.Parameters);
+        }
+        public IEnumerable<BO.x28EntityField> GetList_ApplicableInForm(string prefix, int intEntityTypeID,bool bolTestUserAccess)   //vrátí seznam polí aplikovatelných pro záznam entity prefix
+        {
+            int x29id = (int)BO.BASX29.GetEnum(prefix);
+            string s = GetSQL1(" WHERE a.x28Flag=1 AND GETDATE() BETWEEN a.x28ValidFrom AND a.x28ValidUntil AND a.x29ID="+x29id.ToString());
+
+            x29id = 0;
+            switch (prefix)
+            {
+                case "p41":
+                    x29id = 342;break;
+                case "p28":
+                    x29id = 329; break;
+                case "j02":
+                    x29id = 107; break;
+                case "p31":
+                    x29id = 334; break;
+                case "p91":
+                    x29id = 392; break;
+                case "p90":
+                    x29id = 389; break;
+            }
+            if (intEntityTypeID == 0)
+            {
+                s += " AND a.x28IsAllEntityTypes=1";
+            }
+            else
+            {
+                s += " AND (a.x28IsAllEntityTypes=1 OR a.x28ID IN (select x28ID FROM x26EntityField_Binding WHERE x26EntityTypePID=" + intEntityTypeID.ToString();
+                s += " AND x29ID_EntityType=" + x29id.ToString() + "))";
+            }
+            if (bolTestUserAccess)
+            {
+                s += " AND (a.x28IsPublic=1 OR ','+a.x28NotPublic_j04IDs+',' LIKE '%," + _mother.CurrentUser.j04ID.ToString() + ",%'";
+                if (_mother.CurrentUser.j07ID > 0)
+                {
+                    s += " OR ','+a.x28NotPublic_j07IDs+',' LIKE '%," + _mother.CurrentUser.j07ID.ToString() + ",%'";
+                }
+                s += ")";
+            }
+            return _db.GetList<BO.x28EntityField>(s);
         }
         public IEnumerable<BO.x26EntityField_Binding> GetList_x26(int x28id)
         {

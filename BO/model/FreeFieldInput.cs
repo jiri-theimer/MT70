@@ -14,48 +14,21 @@ namespace BO
         public bool CheckInput { get; set; }
 
         public bool IsExternalDataSource { get; set; }
-        
-        private string _TypeName;
-        public void SetTypeFromName(string strTypeName)
+
+
+        public bool IsVisible { get; set; } = true;  
+        public string CssDisplay
         {
-            _TypeName = strTypeName;
-            switch (_TypeName.ToLower())
+            get
             {
-                case "boolean":
-                    {
-                        this.x24ID = x24IdENUM.tBoolean;
-                        break;
-                    }
-
-                case "date":
-                    {
-                        this.x24ID = x24IdENUM.tDate;
-                        break;
-                    }
-
-                case "datetime":
-                    {
-                        this.x24ID = x24IdENUM.tDateTime;
-                        break;
-                    }
-
-                case "decimal":
-                    {
-                        this.x24ID = x24IdENUM.tDecimal;
-                        break;
-                    }
-
-                case "integer":
-                    {
-                        this.x24ID = x24IdENUM.tInteger;
-                        break;
-                    }
-
-                default:
-                    {
-                        this.x24ID = x24IdENUM.tString;
-                        break;
-                    }
+                if (this.IsVisible)
+                {
+                    return "inline-flex;";                    
+                }
+                else
+                {
+                    return "display:none;";
+                }
             }
         }
     }

@@ -109,7 +109,7 @@
             <div class="row my-2">
                 <label class="col-sm-1 col-md-2 col-form-label" data-intra="1">@_f.tra("Pozice"):</label>
                 <div class="col-sm-5 col-md-4" data-intra="1">
-                    <mycombo entity="j07PersonPosition" asp-for="Rec.j07ID" selectedtext="@Model.ComboJ07Name" view-flag="2"></mycombo>
+                    <mycombo entity="j07PersonPosition" asp-for="Rec.j07ID" selectedtext="@Model.ComboJ07Name" view-flag="2" event_after_changevalue="j07id_change"></mycombo>
                 </div>
                 <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontakty"):</label>
                 <div class="col-sm-5 col-md-4">
@@ -273,5 +273,7 @@
         form1.submit();
     }
 
-
+    function j07id_change(j07id) {
+        postback("postback");
+    }
 </script>

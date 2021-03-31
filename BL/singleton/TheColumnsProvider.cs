@@ -185,6 +185,9 @@ namespace BL
                     ret.Add(InhaleColumn4Relation("p92_p93", "p93InvoiceHeader", "p93Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p92_x15", "x15VatRateType", "x15Name", rels, bolComboColumns));
                     break;
+                case "x28":
+                    ret.Add(InhaleColumn4Relation("x28_x29", "x29Entity", "x29Name", rels, bolComboColumns));
+                    break;
                 case "x31":
                     ret.Add(InhaleColumn4Relation("x31_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     break;

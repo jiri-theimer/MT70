@@ -315,7 +315,7 @@ namespace UI.Controllers
             s += basMenu.FlushResult_UL(_lis,true, false);
             s += "</ul>";
             s += "<hr>";
-            s += "<div><button type='button' class='btn btn-sm btn-light' style='width:100%;' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='k-icon k-i-gear'></span>" + Factory.tra("Nastavit odkazy pro mé hlavní menu") + "</button></div>";
+            s += "<div><button type='button' class='btn btn-sm btn-outline-primary' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='k-icon k-i-gear'></span>MENU</button></div>";
            
 
             return s;

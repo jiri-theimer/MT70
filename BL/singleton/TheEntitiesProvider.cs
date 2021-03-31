@@ -289,6 +289,9 @@ namespace BL
                 case "o40":
                     lis.Add(getREL("j02Person", "o40_j02", "Osoba", "LEFT OUTER JOIN j02Person o40_j02 ON a.j02ID_Owner=o40_j02.j02ID"));
                     break;
+                case "x28":
+                    lis.Add(getREL("x29Entity", "x28_x29", "Entita", "LEFT OUTER JOIN x29Entity x28_x29 ON a.x29ID=x28_x29.x29ID"));
+                    break;
                 default:
                     break;
             }
