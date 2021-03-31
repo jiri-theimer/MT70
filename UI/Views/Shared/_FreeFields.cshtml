@@ -1,4 +1,4 @@
-﻿@model List<FreeFieldInput>
+﻿@model FreeFieldsViewModel
 
 @{
     if (Model == null)
@@ -10,45 +10,45 @@
 
 @addTagHelper *, UI
 
-@for (int i = 0; i <= Model.Count() - 1; i++)
+@for (int i = 0; i <= Model.inputs.Count() - 1; i++)
 {
     <div class="row my-2">
 
         <label class="col-sm-1 col-md-2 col-form-label">
 
-            @if (Model[i].TypeName != "boolean")
+            @if (Model.inputs[i].TypeName != "boolean")
             {
-                @Model[i].x28Name
+                @Model.inputs[i].x28Name
             }
         </label>
 
         <div class="col-sm-11 col-md-10">
 
-            @switch (Model[i].TypeName)
+            @switch (Model.inputs[i].TypeName)
             {
                 @case "integer":
-                <mynumber decimal-digits="0" asp-for="@Model[i].NumInput" elementid-prefix="ffinputs"></mynumber>
+                <mynumber decimal-digits="0" asp-for="@Model.inputs[i].NumInput" elementid-prefix="@Model.elementidprefix"></mynumber>
                 break;
 
             @case "decimal":
-            <mynumber decimal-digits="2" asp-for="@Model[i].NumInput" elementid-prefix="ffinputs"></mynumber>
+            <mynumber decimal-digits="2" asp-for="@Model.inputs[i].NumInput" elementid-prefix="@Model.elementidprefix"></mynumber>
             break;
 
         @case "date":
-        <mydate asp-for="@Model[i].DateInput" elementid-prefix="ffinputs"></mydate>
+        <mydate asp-for="@Model.inputs[i].DateInput" elementid-prefix="@Model.elementidprefix"></mydate>
         break;
 
         @case "datetime":
-        <mydate asp-for="@Model[i].DateInput" include-time="true" elementid-prefix="ffinputs"></mydate>
+        <mydate asp-for="@Model.inputs[i].DateInput" include-time="true" elementid-prefix="@Model.elementidprefix"></mydate>
         break;
 
     @case "boolean":
-    <input type="checkbox" asp-for="@Model[i].CheckInput" />
-    <label for="ff_inputs_@(i)__CheckInput">@Model[i].x28Name</label>
+    <input type="checkbox" asp-for="@Model.inputs[i].CheckInput" />
+    <label for="ff1_inputs_@(i)__CheckInput">@Model.inputs[i].x28Name</label>
     break;
 
     @default:
-    <input type="text" class="form-control" asp-for="@Model[i].StringInput" />
+    <input type="text" class="form-control" asp-for="@Model.inputs[i].StringInput" />
     break;
 }
 
@@ -57,7 +57,7 @@
     </div>
 
 
-    <input type="hidden" asp-for="@Model[i].x28Field" />
-    <input type="hidden" asp-for="@Model[i].x28Name" />
-    <input type="hidden" asp-for="@Model[i].TypeName" />
+    <input type="hidden" asp-for="@Model.inputs[i].x28Field" />
+    <input type="hidden" asp-for="@Model.inputs[i].x28Name" />
+    <input type="hidden" asp-for="@Model.inputs[i].TypeName" />
 }

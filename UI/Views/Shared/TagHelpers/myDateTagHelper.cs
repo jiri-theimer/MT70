@@ -46,13 +46,16 @@ namespace UI.Views.Shared.TagHelpers
 
             
             var sb = new System.Text.StringBuilder();
-            var strControlID = this.For.Name.Replace(".", "_").Replace("[", "_").Replace("]", "_");
-            var strControlName = this.For.Name;
+            string strControlID = this.For.Name;
+            string strControlName = this.For.Name;
             if (this.elementidprefix != null)
             {
                 strControlID = this.elementidprefix + strControlID;
                 strControlName = this.elementidprefix + this.For.Name;
             }
+            strControlID = strControlID.Replace(".", "_").Replace("[", "_").Replace("]", "_");
+
+            
 
             sb.AppendLine("<div class='input-group' style='width:100%;'>");
             sb.Append(string.Format("<input type='text' id='{0}' for-id='{1}' class='form-control' placeholder='dd.mm.yyyy' autocomplete='off' value='{2}' onchange='datepicker_change(this)'/>", strControlID+"helper", strControlID, _StringValue));

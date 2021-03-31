@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    public class FreeField : x28EntityField
+    public class FreeFieldInput : x28EntityField
     {
-        public object DBValue { get; set; }
-        public string ComboText { get; set; }
+        public string StringInput { get; set; }
+        public double NumInput { get; set; }
+        public DateTime? DateInput { get; set; }
+        public bool CheckInput { get; set; }
+
         public bool IsExternalDataSource { get; set; }
+        
         private string _TypeName;
         public void SetTypeFromName(string strTypeName)
         {

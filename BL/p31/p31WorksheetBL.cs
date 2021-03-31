@@ -10,7 +10,7 @@ namespace BL
         public BO.p31Worksheet LoadByExternalPID(string externalpid);
         public BO.p31Worksheet LoadTempRecord(int pid, string guidTempData);
 
-        public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF);
+        public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF);
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQuery mq);
         public void UpdateExternalPID(int pid, string strExternalPID);
@@ -114,7 +114,7 @@ namespace BL
         {
             BL.bas.p31Support.UpdateExternalPID(_mother, _db,pid,strExternalPID);
         }
-        public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF)
+        public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF)
         {
             if (rec.p41ID==0 && rec.p56ID > 0)  //dohledat projekt podle úkolu
             {

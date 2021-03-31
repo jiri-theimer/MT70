@@ -12,7 +12,7 @@ namespace BL.bas
         {
             _db.RunSql("UPDATE p31Worksheet set p31ExternalPID=@ep WHERE p31ID=@pid", new { ep = strExternalPID, pid = pid });
         }
-        public static int SaveOrigRecord(BL.Factory _f, DL.DbHandler _db,BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeField> lisFF)
+        public static int SaveOrigRecord(BL.Factory _f, DL.DbHandler _db,BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF)
         {
             int intSavedP31ID = 0;
 
