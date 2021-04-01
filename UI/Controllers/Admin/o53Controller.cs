@@ -55,7 +55,7 @@ namespace UI.Controllers
 
                 
                 c.o53Name = v.Rec.o53Name;               
-                c.x29IDs = String.Join(",", v.SelectedEntities);
+                c.x29IDs = String.Join(",", v.SelectedEntities.Where(p=>p>0));
                 c.o53IsMultiSelect = v.Rec.o53IsMultiSelect;
                 c.o53Ordinary = v.Rec.o53Ordinary;
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);

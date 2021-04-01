@@ -42,11 +42,11 @@ namespace BL
 
         public int Save(BO.o53TagGroup rec)
         {
-            if (String.IsNullOrEmpty(rec.x29IDs))
+            if (!ValidateBeforeSave(rec))
             {
-                _mother.CurrentUser.AddMessage("Chybí vazba na entity.");
                 return 0;
             }
+            
             var p = new DL.Params4Dapper();
 
             if (rec.o53Field == null)//najít volné pole pro grid
@@ -75,6 +75,22 @@ namespace BL
             return _db.SaveRecord("o53TagGroup", p, rec);
 
             
+        }
+
+        private bool ValidateBeforeSave(BO.o53TagGroup rec)
+        {
+
+            if (string.IsNullOrEmpty(rec.o53Name))
+            {
+                this.AddMessage("Chybí název."); return false;
+            }
+            if (String.IsNullOrEmpty(rec.x29IDs))
+            {
+                _mother.CurrentUser.AddMessage("Chybí vazba na entity.");return false;
+            }
+
+
+            return true;
         }
     }
 }
