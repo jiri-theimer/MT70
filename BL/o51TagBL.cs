@@ -7,7 +7,7 @@ namespace BL
     public interface Io51TagBL
     {
         public BO.o51Tag Load(int pid);
-        public IEnumerable<BO.o51Tag> GetList(BO.myQuery mq);
+        public IEnumerable<BO.o51Tag> GetList(BO.myQueryO51 mq);
         public IEnumerable<BO.o51Tag> GetList(string record_entity, int record_pid);
         public BO.TaggingHelper GetTagging(string record_entity, int record_pid);
         public BO.TaggingHelper GetTagging(List<int> o51ids);
@@ -24,7 +24,7 @@ namespace BL
 
         private string GetSQL1(string strAppend = null)
         {
-            sb("SELECT a.*,o51_o53.o53Name,o51_o53.o53Entities,o51_o53.o53IsMultiSelect,o51_o53.o53Ordinary,");
+            sb("SELECT a.*,o51_o53.o53Name,o51_o53.x29IDs,o51_o53.o53IsMultiSelect,o51_o53.o53Ordinary,");
             sb(_db.GetSQL1_Ocas("o51"));
             sb(" FROM o51Tag a LEFT OUTER JOIN o53TagGroup o51_o53 ON a.o53ID=o51_o53.o53ID");
             sb(strAppend);
@@ -34,7 +34,7 @@ namespace BL
         {
             return _db.Load<BO.o51Tag>(GetSQL1(" WHERE a.o51ID=@pid"), new { pid = pid });
         }
-        public IEnumerable<BO.o51Tag> GetList(BO.myQuery mq)
+        public IEnumerable<BO.o51Tag> GetList(BO.myQueryO51 mq)
         {
             mq.explicit_orderby = "o51_o53.o53Ordinary,o51_o53.o53Name,a.o51Ordinary,a.o51Name";
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
@@ -57,8 +57,7 @@ namespace BL
         }
         public BO.TaggingHelper GetTagging(List<int> o51ids)
         {
-            var mq = new BO.myQuery("o51Tag");
-            mq.pids = o51ids;
+            var mq = new BO.myQueryO51() { pids = o51ids };            
             return handle_tagging(GetList(mq));
         }
         private BO.TaggingHelper handle_tagging(IEnumerable<BO.o51Tag> lis)
@@ -168,7 +167,7 @@ namespace BL
             p.AddInt("j02ID_Owner", rec.j02ID_Owner, true);
             p.AddInt("o53ID", rec.o53ID, true);
             p.AddString("o51Name", rec.o51Name);
-            p.AddString("o51Code", rec.o51Code);
+            
             p.AddInt("o51Ordinary", rec.o51Ordinary);
             
             p.AddBool("o51IsColor", rec.o51IsColor);
@@ -209,7 +208,7 @@ namespace BL
                 return false;
             }
 
-            if (GetList(new BO.myQuery("o51Tag")).Where(p => p.pid != rec.pid && p.o51Name.ToLower() == rec.o51Name.Trim().ToLower()).Count() > 0)
+            if (GetList(new BO.myQueryO51()).Where(p => p.pid != rec.pid && p.o51Name.ToLower() == rec.o51Name.Trim().ToLower()).Count() > 0)
             {
                 this.AddMessage("Položka štítku s tímto názvem již existuje.");
                 return false;

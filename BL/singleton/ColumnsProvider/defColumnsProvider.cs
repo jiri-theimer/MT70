@@ -287,11 +287,11 @@ namespace BL
 
             //o51 = Položky štítku
             this.EntityName = "o51Tag";
-            AA("o51Name", "Položka štítku", gdc1, null, "string", false, true);
-            AFNUM0("o51Ordinary", "#").DefaultColumnFlag = gdc2;
+            AA("o51Name", "Položka štítku", gdc1, null, "string", false, true);            
             AFBOOL("o51IsColor", "Je barva?");
-            AA("o51BackColor", "Barva pozadí", gdc1);
-            AA("o51ForeColor", "Barva písma", gdc1);
+            AA("o51BackColor", "Barva pozadí", gdc1, "'<div style=\"background-color:'+a.o51BackColor+';\">...</div>'").FixedWidth = 110;
+            AA("o51ForeColor", "Barva písma", gdc1, "'<div style=\"background-color:'+a.o51ForeColor+';\">...</div>'").FixedWidth = 110;
+            AFNUM0("o51Ordinary", "#").DefaultColumnFlag = gdc2;
             AppendTimestamp();
 
             //x18 = typy dokumentů
