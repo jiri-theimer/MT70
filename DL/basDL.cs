@@ -38,7 +38,7 @@ namespace DL
             
             if (lisFFI.Where(p => p.IsVisible == false).Count() > 0)
             {
-                lisFFI = lisFFI.Where(p => p.IsVisible == true).ToList();
+                lisFFI = lisFFI.Where(p => p.IsVisible == true).ToList();   //ukládat pouze viditelná pole na formuláři
             }
             var p = new Params4Dapper();
             p.AddInt("pid", intSourcePID);

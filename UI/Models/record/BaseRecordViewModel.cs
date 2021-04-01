@@ -13,6 +13,7 @@ namespace UI.Models
         public string form_action { get; set; } = "Record";
         
         public string PageTitle { get; set; }
+        public string PageSymbol { get; set; }
         public int ActiveTabIndex { get; set; } = 1;
         public string Javascript_CallOnLoad { get; set; }
 

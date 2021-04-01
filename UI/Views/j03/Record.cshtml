@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
     if (Model.Rec == null) return;
     Model.PageTitle = _f.tra("Uživatelský účet");
+    Model.PageSymbol = BO.Symbol.j03();
 }
 @addTagHelper *, UI
 

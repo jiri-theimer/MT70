@@ -12,7 +12,8 @@ namespace UI.Menu
         {
 
             var rec = f.j02PersonBL.Load(pid);
-
+            HEADER(rec.FullNameAsc);
+            
             AMI_RecPage("Stránka osoby", "j02", pid);        
             DIV();
 

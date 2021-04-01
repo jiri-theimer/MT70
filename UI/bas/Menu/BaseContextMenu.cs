@@ -54,7 +54,7 @@ namespace UI.Menu
         }
         public void HEADER(string strName)
         {
-            _lis.Add(new MenuItem() { IsHeader = true, Name = BO.BAS.OM2(strName, 100) + ":" });
+            _lis.Add(new MenuItem() { IsHeader = true, Name = BO.BAS.OM2(strName, 100) });
         }
     }
 }

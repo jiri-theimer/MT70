@@ -56,7 +56,13 @@
 
 
     <div>
-        <h4>@Model.PageTitle</h4>
+        <h4>
+            @if (Model.PageSymbol != null)
+            {
+                @Html.Raw(Model.PageSymbol)
+            }
+            @Model.PageTitle
+        </h4>
 
         <form id="form1" asp-controller="@Model.rec_entity" asp-action="@Model.form_action" method="POST">
             <input type="hidden" asp-for="@Model.rec_pid" />
