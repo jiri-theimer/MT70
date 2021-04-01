@@ -274,8 +274,12 @@ namespace UI.Controllers
 
         }
         private void Handle_AdminMisc(string prefix)
-        {            
-            
+        {
+            DIV_TRANS("Štítky");
+            AMI("Štítky (skupiny)", aurl("misc", "o53"));
+            AMI("Položky štítků", aurl("misc", "o51"));
+
+            DIV_TRANS("Uživatelská pole");
             AMI("Katalog uživatelských polí", aurl("misc","x28"));
             AMI("Skupiny uživatelských polí", aurl("misc","x27"));
 

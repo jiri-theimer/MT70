@@ -196,7 +196,9 @@ namespace BL
                     break;
                 case "m62":
                     ret.Add(InhaleColumn4Relation("m62_j27slave", "j27Currency", "j27Code", rels, bolComboColumns));
-
+                    break;
+                case "o51":
+                    ret.Add(InhaleColumn4Relation("o51_o53", "o53TagGroup", "o53Name", rels, bolComboColumns));
                     break;
 
             }

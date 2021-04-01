@@ -279,6 +279,21 @@ namespace BL
             AFNUM0("o40Port", "Smtp Port");
             AFBOOL("o40IsGlobalDefault", "Globální účet").DefaultColumnFlag = gdc1;
 
+            //o53 = štítky
+            this.EntityName = "o53TagGroup";
+            AA("o53Name", "Název štítku", gdc1, null, "string", false, true);
+            AFNUM0("o53Ordinary", "#").DefaultColumnFlag = gdc2;
+            AppendTimestamp();
+
+            //o51 = Položky štítku
+            this.EntityName = "o51Tag";
+            AA("o51Name", "Položka štítku", gdc1, null, "string", false, true);
+            AFNUM0("o51Ordinary", "#").DefaultColumnFlag = gdc2;
+            AFBOOL("o51IsColor", "Je barva?");
+            AA("o51BackColor", "Barva pozadí", gdc1);
+            AA("o51ForeColor", "Barva písma", gdc1);
+            AppendTimestamp();
+
             //x18 = typy dokumentů
             this.EntityName = "x18EntityCategory";
             AA("x18Name", "Název", gdc1, null, "string", false, true);

@@ -20,6 +20,10 @@ namespace BO
             return Enum.GetName(x29id.GetType(), x29id);
 
         }
+        public static int GetInt(string prefix)
+        {
+            return (int)GetEnum(prefix);
+        }
         public static BO.x29IdEnum GetEnum(string prefix)
         {
             switch (prefix.Substring(0, 3))

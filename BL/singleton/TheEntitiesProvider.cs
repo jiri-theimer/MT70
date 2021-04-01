@@ -286,6 +286,9 @@ namespace BL
                     lis.Add(getREL("j02Person", "b07_j02", "Vazba s osobou", "LEFT OUTER JOIN j02Person b07_j02 ON a.x29ID=102 AND a.b07RecordPID=b07_j02.j02ID"));
                     lis.Add(getREL("p91Invoice", "b07_p91", "Vazba s vyúčtováním", "LEFT OUTER JOIN p91Invoice b07_p91 ON a.x29ID=391 AND a.b07RecordPID=b07_p91.p91ID"));
                     break;
+                case "o51":
+                    lis.Add(getREL("o53TagGroup", "o51_o53", "Štítek", "LEFT OUTER JOIN o53TagGroup o51_o53 ON a.o53ID=o51_o53.o53ID"));
+                    break;
                 case "o40":
                     lis.Add(getREL("j02Person", "o40_j02", "Osoba", "LEFT OUTER JOIN j02Person o40_j02 ON a.j02ID_Owner=o40_j02.j02ID"));
                     break;

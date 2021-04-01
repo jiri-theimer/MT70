@@ -37,6 +37,8 @@ namespace BL
         private Io13AttachmentTypeBL _o13;
         private Io27AttachmentBL _o27;
         private Io38AddressBL _o38;
+        private Io51TagBL _o51;
+        private Io53TagGroupBL _o53;
         private Io58FieldBagBL _o58;
         private Ib65WorkflowMessageBL _b65;
         private Ip07ProjectLevelBL _p07;
@@ -325,6 +327,22 @@ namespace BL
             }
         }
 
+        public Io51TagBL o51TagBL
+        {
+            get
+            {
+                if (_o51 == null) _o51 = new o51TagBL(this);
+                return _o51;
+            }
+        }
+        public Io53TagGroupBL o53TagGroupBL
+        {
+            get
+            {
+                if (_o53 == null) _o53 = new o53TagGroupBL(this);
+                return _o53;
+            }
+        }
         public Ip07ProjectLevelBL p07ProjectLevelBL
         {
             get
