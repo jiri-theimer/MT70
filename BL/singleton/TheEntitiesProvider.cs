@@ -127,6 +127,7 @@ namespace BL
             AE("m62ExchangeRate", "Měnové kurzy", "Měnový kurz", "m62ExchangeRate a","a.m62ID DESC");
 
             AE("o53TagGroup", "Štítky", "Štítek", "o53TagGroup a", "a.o53Ordinary");
+            AE_TINY("o54TagBindingInline", "Štítky", "Štítky");
             AE("o51Tag", "Položky štítků", "Položka štítku", "o51Tag a", "a.o51ID DESC");
             AE("o40SmtpAccount", "Poštovní účty", "Poštovní účet", "o40SmtpAccount a", "a.o40ID DESC");
             AE("x29Entity", "Entity", "Entita", "x29Entity a","a.x29Name");

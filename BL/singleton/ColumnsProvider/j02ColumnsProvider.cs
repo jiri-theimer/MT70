@@ -24,15 +24,15 @@ namespace BL
             AF("j02Phone", "TEL");
             AF("j02Mobile", "Mobil");
             AF("j02Code", "Kód");
-            
-            
-            AFBOOL("j02IsIntraPerson", "Interní osoba");
+
+
+            AFBOOL("j02IsIntraPerson", "Interní osoba").DefaultColumnFlag = gdc2;
             AF("j02InvoiceSignatureFile", "Grafický podpis");
             AF("j02Salutation", "Oslovení");
             AF("j02EmailSignature", "E-mail podpis");            
 
-            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(102,a.j02ID)");
-            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(102,a.j02ID)");
+            //AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(102,a.j02ID)");
+            //AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(102,a.j02ID)");
 
 
             this.CurrentFieldGroup = "Kontaktní osoba klienta/projektu";

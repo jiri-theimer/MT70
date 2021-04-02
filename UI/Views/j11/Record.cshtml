@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
     if (Model.Rec == null) return;
     Model.PageTitle = _f.tra("Tým osob");
+    Model.PageSymbol = BO.Symbol.j11();
 }
 @addTagHelper *, UI
 
@@ -19,9 +20,7 @@
         </div>
     </div>
 
-
-
-
+    
 
 
     <div class="card">

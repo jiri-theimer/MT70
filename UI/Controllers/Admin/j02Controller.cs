@@ -60,6 +60,7 @@ namespace UI.Controllers
                 }
                 else
                 {
+                    
                     v.MenuCode = v.Rec.FullNameAsc;
                    
                     if (pid > 0)
@@ -133,10 +134,12 @@ namespace UI.Controllers
                 {
                     return RecNotFound(v);
                 }
+
+                v.SetTagging(Factory.o51TagBL.GetTagging("j02", v.rec_pid));
+               
                 v.ComboC21Name = v.Rec.c21Name;
                 v.ComboJ07Name = v.Rec.j07Name;
-                v.ComboJ18Name = v.Rec.j18Name;
-                
+                v.ComboJ18Name = v.Rec.j18Name;                
                 
                 if (v.Rec.j02TimesheetEntryDaysBackLimit_p34IDs != null)
                 {
@@ -235,6 +238,7 @@ namespace UI.Controllers
                         var recP30 = new BO.p30Contact_Person() { j02ID = c.pid, p28ID = v.SelectedP28ID };
                         Factory.p30Contact_PersonBL.Save(recP30);
                     }
+                    Factory.o51TagBL.SaveTagging("j02", c.pid, v.TagPids);
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);
                 }

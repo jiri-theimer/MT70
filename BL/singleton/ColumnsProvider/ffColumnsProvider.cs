@@ -16,7 +16,7 @@ namespace BL
             }
 
             var lis = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).OrderBy(p=>p.x29TableName);
-            string strLastTable = "";   string strField = "";string strPrefix = "";
+            string strField = "";string strPrefix = "";
             foreach(var rec in lis)
             {
                 strPrefix = rec.x29TableName.Substring(0, 3);
@@ -31,12 +31,6 @@ namespace BL
                     rec.x28Name += "+";
                 }
                 
-
-                //if (strLastTable != rec.x29TableName)
-                //{
-                //    this.EntityName = rec.SourceTableName;                                        
-                //}
-
                 this.EntityName = rec.x29TableName;
                 this.CurrentFieldGroup = "Uživatelská pole";
                 
@@ -75,7 +69,7 @@ namespace BL
                     oc.RelSqlInCol = "LEFT OUTER JOIN " + rec.SourceTableName + " ff_relname_" + strPrefix + " ON a." + strPrefix + "ID = ff_relname_" + strPrefix + "." + strPrefix + "ID";
                 }
                
-                strLastTable = rec.x29TableName;
+                
             }
 
             

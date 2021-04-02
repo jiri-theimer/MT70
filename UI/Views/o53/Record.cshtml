@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
     if (Model.Rec == null) return;
     Model.PageTitle = _f.tra("Štítek");
+    Model.PageSymbol = BO.Symbol.o53();
 }
 
 @addTagHelper *, UI
@@ -29,9 +30,8 @@
         <input asp-for="@Model.Rec.o53IsMultiSelect" />
         <label for="Rec_o53IsMultiSelect">@_f.tra("U štítkování možnost zaškrtnout více položek (checkbox-list)")</label>
     </div>
-   
 
-
+    
     <div class="card">
         <div class="card-header">
             @_f.tra("Vazba štítku na entity")

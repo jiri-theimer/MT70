@@ -20,10 +20,22 @@ namespace BO
         {
             return "<span style='font-size:170%;'>☺</span>";
         }
-      
+        public static string o51()
+        {
+            return "<span style='font-size:170%;'>♣</span>";
+        }
+        public static string o53()
+        {
+            return "<span style='font-size:170%;color:red;'>♣</span>";
+        }
+
         public static string j03()
         {
             return "<span style='font-size:170%;' class='k-icon k-i-user'></span>";
+        }
+        public static string j11()
+        {            
+                return "<span style='font-size:170%;' class='k-icon k-i-myspace'></span>";
         }
         public static string p91()
         {

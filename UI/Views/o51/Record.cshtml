@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
     if (Model.Rec == null) return;
     Model.PageTitle = _f.tra("Položka štítku");
+    Model.PageSymbol = BO.Symbol.o51();
 }
 
 @addTagHelper *, UI

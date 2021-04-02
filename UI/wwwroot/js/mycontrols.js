@@ -193,7 +193,7 @@ function myautocomplete_init(c) {
 
 function mystitky_multiselect(event, entity) {
     var o51ids = $("#TagPids").val();
-    _zoom(event, null, null, 250, "★Zatřídit do kategorií...", "/o51/MultiSelect?entity=" + entity + "&o51ids=" + o51ids);
+    _zoom(event, null, null, 250, "♣Oštítkovat...", "/o51/MultiSelect?entity=" + entity + "&o51ids=" + o51ids);
 
 }
 
@@ -209,7 +209,7 @@ function mycombochecklist_init(c) {
     if ($("#value_alias_" + c.controlid).val() !== "") {
 
         var deftext = $("#value_alias_" + c.controlid).val();
-        deftext = deftext.replace(/,/g, "★");       
+        deftext = deftext.replace(/,/g, "♣");       
         $("#cmdCombo" + c.controlid).text(deftext);
         $("#cmdCombo" + c.controlid).attr("title", deftext);
 

@@ -15,6 +15,18 @@ namespace UI.Models
         public string PageTitle { get; set; }
         public string PageSymbol { get; set; }
         public int ActiveTabIndex { get; set; } = 1;
+
+        public string TagPids { get; set; }
+        public string TagNames { get; set; }
+        public string TagHtml { get; set; }
+
+        public void SetTagging(BO.TaggingHelper tg)
+        {            
+            this.TagPids = tg.TagPids;
+            this.TagNames = tg.TagNames;
+            this.TagHtml = tg.TagHtml;
+        }
+
         public string Javascript_CallOnLoad { get; set; }
 
         public void SetJavascript_CallOnLoad(int intPID, string strFlag = null, string jsfunction = "_reload_layout_and_close")

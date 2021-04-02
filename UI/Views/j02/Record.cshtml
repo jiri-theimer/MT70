@@ -166,6 +166,8 @@
                 <label class="col-form-label" for="Rec_j02IsInvoiceEmail">@_f.tra("Nabízet e-mail pro zasílání faktur klientovi")</label>
             </div>
 
+            <mystitky entity="j02Person" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+
             <div class="form-floating my-2" data-intra="1">
                 <textarea class="form-control" asp-for="Rec.j02EmailSignature"></textarea>
                 <label for="Rec_j02EmailSignature">@_f.tra("Podpis pro e-mail zprávy")</label>
@@ -175,6 +177,8 @@
                 <textarea class="form-control" asp-for="Rec.j02Description"></textarea>
                 <label for="Rec_j02Description">@_f.tra("Personální poznámka")</label>
             </div>
+
+
         </div>
 
         <div class="tab-pane" id="tab2" role="tabpanel">
