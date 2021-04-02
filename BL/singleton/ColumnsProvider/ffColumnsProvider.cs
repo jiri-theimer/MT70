@@ -15,9 +15,9 @@ namespace BL
                 Handle_o23UserFields(f);    //dokumenty přes x16EntityCategory_FieldSetting
             }
 
-            var lis = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).OrderBy(p=>p.x29TableName);
+            var lisX28 = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).OrderBy(p=>p.x29TableName);
             string strField = "";string strPrefix = "";
-            foreach(var rec in lis)
+            foreach(var rec in lisX28)
             {
                 strPrefix = rec.x29TableName.Substring(0, 3);
                 if (rec.x28Flag == BO.x28FlagENUM.UserField)
@@ -56,8 +56,7 @@ namespace BL
                         oc=AF(strField, rec.x28Name);
                         break;
                 }
-
-                //oc.NotShowRelInHeader = true;
+                
                 if (rec.x28Flag == BO.x28FlagENUM.GridField)        //čistě grid uživatelské pole na míru
                 {
                     oc.SqlSyntax = rec.x28Grid_SqlSyntax;
@@ -72,9 +71,33 @@ namespace BL
                 
             }
 
-            
+
+            Handle_Stitky(f);
 
 
+        }
+
+        private void Handle_Stitky(BL.Factory f)
+        {
+            //štítky
+            this.CurrentFieldGroup = "Štítky";
+            var lisO53 = f.o53TagGroupBL.GetList(new BO.myQuery("o53")).Where(p => p.o53Field != null && p.x29IDs != null);
+            foreach (var c in lisO53)
+            {
+                var x29ids = BO.BAS.ConvertString2ListInt(c.x29IDs);
+                foreach (int x29id in x29ids)
+                {
+                    var cc = (BO.x29IdEnum)x29id;
+                    this.EntityName = BO.BASX29.GetEntity(cc);
+                    string strTagPrefix = this.EntityName.Substring(0, 3);
+
+                    oc = AF("FreeTag"+c.o53Field, c.o53Name, strTagPrefix+"_o54."+c.o53Field);  //důležité je, aby obsahoval výraz "Free"
+                    oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {strTagPrefix}_o54 ON a.{strTagPrefix}ID = {strTagPrefix}_o54.o54RecordPid AND {strTagPrefix}_o54.x29ID={x29id}";
+                }
+
+
+
+            }
         }
 
         private void Handle_o23UserFields(BL.Factory f)
