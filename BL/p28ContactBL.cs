@@ -11,7 +11,7 @@ namespace BL
         public BO.p28Contact Load(int pid);
         public IEnumerable<BO.p28Contact> GetList(BO.myQueryP28 mq);
         public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id);
-        public int Save(BO.p28Contact rec, BO.o38Address recO38First, List<BO.o32Contact_Medium> lisO32,List<BO.FreeFieldInput> lisFFI);
+        public int Save(BO.p28Contact rec, BO.o38Address recO38First, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, string tempguid);
 
 
     }
@@ -56,7 +56,7 @@ namespace BL
             return _db.GetList<BO.o32Contact_Medium>("select a.*,o33.o33Name FROM o32Contact_Medium a INNER JOIN o33MediumType o33 ON a.o33ID=o33.o33ID WHERE a.p28ID=@p28id",new { p28id = p28id });
         }
 
-        public int Save(BO.p28Contact rec,BO.o38Address recO38First,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI)
+        public int Save(BO.p28Contact rec,BO.o38Address recO38First,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,string tempguid)
         {
             if (!ValidateBeforeSave(rec, recO38First))
             {
@@ -124,7 +124,7 @@ namespace BL
 
                     if (recO38First != null)
                     {
-                       int intO38ID = _mother.o38AddressBL.Save(recO38First,intPID,1);
+                       int intO38ID = _mother.o38AddressBL.Save(recO38First,intPID,1,null);
                        
                     }
                 }
@@ -146,7 +146,7 @@ namespace BL
             }
             if (recO38First != null)
             {
-                if (!_mother.o38AddressBL.ValidateBeforeSave(recO38First))
+                if (!_mother.o38AddressBL.ValidateBeforeSave(recO38First,rec.pid,1))
                 {
                     return false;
                 }

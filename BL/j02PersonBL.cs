@@ -9,7 +9,7 @@ namespace BL
         public BO.j02Person LoadByEmail(string strEmail, int pid_exclude);
         public BO.j02Person LoadByCode(string strCode, int pid_exclude);
         public IEnumerable<BO.j02Person> GetList(BO.myQueryJ02 mq);
-        public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI);
+        public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI,string tempguid);
         public bool ValidateBeforeSave(BO.j02Person rec);
         public BO.j02PersonSum LoadSumRow(int pid);
 
@@ -60,7 +60,7 @@ namespace BL
        
 
 
-        public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI)
+        public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI,string tempguid)
         {
             if (ValidateBeforeSave(rec) == false)
             {
@@ -96,7 +96,6 @@ namespace BL
                 p.AddInt("j02TimesheetEntryDaysBackLimit", rec.j02TimesheetEntryDaysBackLimit);
                 p.AddString("j02TimesheetEntryDaysBackLimit_p34IDs", rec.j02TimesheetEntryDaysBackLimit_p34IDs);
 
-
                 p.AddBool("j02IsInvoiceEmail", rec.j02IsInvoiceEmail);
                 p.AddString("j02Salutation", rec.j02Salutation);
                 p.AddString("j02InvoiceSignatureFile", rec.j02InvoiceSignatureFile);
@@ -106,12 +105,21 @@ namespace BL
                 int intPID = _db.SaveRecord("j02Person", p, rec);
                 if (intPID > 0)
                 {
+                    if (!string.IsNullOrEmpty(tempguid))
+                    {
+                        
+                        _db.RunSql("INSERT INTO p85TempBox(p85GUID,p85Prefix,p85DataPID) VALUES(@guid,'j02',@pid)", new { guid = tempguid, pid = intPID });
+                    }
+
                     _db.RunSql("exec dbo.j02_aftersave @j02id,@j03id_sys", new { j02id = intPID, j03id_sys = _mother.CurrentUser.pid });
                     
                     if (!DL.BAS.SaveFreeFields(_db, intPID, lisFFI))
                     {
                         return 0;
                     }
+
+                    
+                   
 
                     sc.Complete();
                     return intPID;

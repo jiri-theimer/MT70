@@ -21,8 +21,7 @@ namespace BL
             AF("ClientPid", "PID", "a.p28ID","int");
             AF("p28ICDPH_SK", "IČ DPH (SK)");
             AF("p28SupplierID", "Kód dodavatele");
-            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(328,a.p28ID)");
-            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(328,a.p28ID)");
+            
             oc = AF("PocetProjektu", "Počet otevřených projektů", "op.PocetOtevrenychProjektu", "num0", true);oc.RelSqlInCol = "LEFT OUTER JOIN view_p28_projects op ON a.p28ID=op.p28ID";
             AF("p28ExternalPID", "Externí kód");
             AF("p28Person_BirthRegID", "RČ");

@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
     if (Model.Rec == null) return;
     Model.PageTitle = _f.tra("Karta klienta");
-
+    Model.PageSymbol = BO.Symbol.p28();
 
 }
 @addTagHelper *, UI
@@ -22,7 +22,7 @@
             <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Fakturační nastavení")</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Uživatelská pole a štítky")</a>
+            <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Uživatelská pole") (@Model.ff1.VisibleInputsCount)</a>
         </li>
 
         <li class="nav-item onetab" role="presentation">
@@ -97,21 +97,21 @@
                         <div class="col-sm-11 col-md-10">
                             <div class="input-group">
                                 <input class="form-control" asp-for="Rec.p28RegID" />
-                                <button type="button" class="btn btn-sm btn-outline-secondary">ARES import</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" tabindex="-1">ARES import</button>
                             </div>
-                            
+
                         </div>
-                        
+
                     </div>
                     <div class="row my-2">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("DIČ"):</label>
                         <div class="col-sm-11 col-md-10">
                             <div class="input-group">
                                 <input class="form-control" asp-for="Rec.p28VatID" />
-                                <button type="button" class="btn btn-sm btn-outline-secondary">VIES import</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" tabindex="-1">VIES import</button>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
@@ -130,14 +130,96 @@
                             <mycombo entity="p29ContactType" asp-for="Rec.p29ID" selectedtext="@Model.SelectedComboP29Name" view-flag="2"></mycombo>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
 
-            
-
 
             <div class="card">
+                <div class="card-header">
+                    @Html.Raw(BO.Symbol.o38())
+                    @_f.tra("Adresy")
+                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="add_address()">@_f.tra("Přidat další adresu")</button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                            <label>@_f.tra("První (fakturační adresa)"):</label>
+                            <br />
+                            <input asp-for="@Model.RecFirstAddress.o38Name" placeholder="@_f.tra("Nadpis adresy")" />
+                        </div>
+                        <div class="col-sm-3 col-md-3 p-0">
+                            <textarea asp-for="@Model.RecFirstAddress.o38Street" class="form-control" placeholder="@_f.tra("Ulice")"></textarea>
+                        </div>
+                        <div class="col-sm-3 col-md-3 p-0">
+                            <textarea asp-for="@Model.RecFirstAddress.o38City" class="form-control" placeholder="@_f.tra("Město")"></textarea>
+                        </div>
+
+                        <div class="col-sm-1 col-md-1 p-0">
+                            <input class="form-control" asp-for="@Model.RecFirstAddress.o38ZIP" placeholder="@_f.tra("PSČ")" />
+                        </div>
+                        <div class="col-sm-3 col-md-3">
+                            <input class="form-control" asp-for="@Model.RecFirstAddress.o38Country" placeholder="@_f.tra("Stát")" />
+                        </div>
+                    </div>
+                    @if (Model.lisO38.Count() > 0)
+                    {                        
+                        <label>@_f.tra("Další adresy"):</label>
+                        <table class="table table-sm table-hover">
+                            @foreach (var c in Model.lisO38)
+                            {
+                                <tr>
+                                    <td>
+                                        @(_f.tra(c.o36Name) +":")
+                                    </td>
+                                    <td>
+                                        @c.o38Name
+                                    </td>
+                                    <td>
+                                        @c.o38City
+                                    </td>
+                                    <td>
+                                        @c.o38Street
+                                    </td>
+                                    <td>
+                                        @c.o38ZIP
+                                    </td>
+                                    <td>
+                                        @c.o38Country
+                                    </td>
+                                    <td width="80px">
+                                        <button type="button" class="btn btn-sm btn-light" onclick="o38_edit(@(c.pid),@(c.o36ID))">@_f.tra("Upravit/Odstranit")</button>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    }
+
+
+                </div>
+            </div>
+
+            <div class="card my-2">
+                <div class="card-header">
+                    @Html.Raw(BO.Symbol.j02())
+                    @_f.tra("Kontaktní osoby")
+                    <div class="dropdown float-end">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            @_f.tra("Přidat")
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="javascript:create_person()">@_f.tra("Založit novou osobu")</a></li>
+                            <li><a class="dropdown-item" href="#">@_f.tra("Vazba na již založenou osobu")</a></li>                            
+                        </ul>
+                    </div>
+                    
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+
+            <div class="card my-2">
                 <div class="card-header">@_f.tra("WIP limit k upozornění")</div>
                 <div class="card-body">
                     <div class="row">
@@ -157,7 +239,7 @@
 
 
 
-
+            <mystitky entity="p28Contact" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
 
 
         </div>
@@ -265,6 +347,8 @@
     </div>
 </div>
 
+<input type="hidden" asp-for="@Model.RecFirstAddress.pid" />
+<input type="hidden" asp-for="@Model.TempGuid" />
 
 
 <script type="text/javascript">
@@ -282,4 +366,18 @@
     }
 
 
+    function add_address() {
+        _window_open(_ep("/o38/Record?o36id=2&pid=0&tempguid=@Model.TempGuid"));
+    }
+    function o38_edit(o38id,o36id) {
+        _window_open(_ep("/o38/Record?pid="+o38id+"&o36id="+o36id+"&tempguid=@Model.TempGuid"));
+    }
+    function create_person() {
+        _window_open(_ep("/j02/Record?isintraperson=false&pid=0&tempguid=@Model.TempGuid"));
+    }
+
+    function hardrefresh() {
+        alert("hardrefresh");
+        postback("postback");
+    }
 </script>

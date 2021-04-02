@@ -73,18 +73,19 @@ namespace BL
                 ret.TagNames = "";
                 var sb = new System.Text.StringBuilder();
                 int x = 0;
+                sb.Append("<div class='alert alert-primary py-0'><table class='table table-sm table-hover'>");
                 foreach (BO.o51Tag c in lis)
                 {
                     if (intLastGroup != c.o53ID)
                     {
                         if (x > 0)
                         {
-                            sb.Append("</div>");
-                            sb.Append("</div>");
+                            sb.Append("</td>");
+                            sb.Append("</tr>");
                         }
-                        sb.Append("<div class='row'>");
-                        sb.Append(string.Format("<label class='col-sm-1 col-md-2 col-form-label'><span style='color:red;'>♣</span>{0}:</label>", c.o53Name));
-                        sb.Append("<div class='col-sm-11 col-md-10'>");
+                        sb.Append("<tr>");
+                        sb.Append(string.Format("<td><span style='color:red;'>♣</span>{0}:</td>", c.o53Name));
+                        sb.Append("<td>");
                         if (ret.TagNames == "")
                         {
                             
@@ -93,7 +94,7 @@ namespace BL
                         else
                         {
                             
-                            ret.TagNames += " 🏷" + c.o53Name + ": ";
+                            ret.TagNames += " ♣" + c.o53Name + ": ";
                         }
                         ret.TagNames += c.o51Name;
                     }
@@ -109,9 +110,10 @@ namespace BL
                 }
                 if (x > 0)
                 {
-                    sb.Append("</div>");
-                    sb.Append("</div>");
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
                 }
+                sb.Append("</table></div>");
                 ret.TagHtml = sb.ToString();
             }
             

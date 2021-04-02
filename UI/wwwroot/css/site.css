@@ -806,6 +806,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     vertical-align: middle;
     border-radius: 4px;
     color: black;
+    background-color:white;
     margin-left: 2px;
 }
 

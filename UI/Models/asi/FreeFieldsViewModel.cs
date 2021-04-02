@@ -10,10 +10,12 @@ namespace UI.Models
         public string elementidprefix { get; set; } = "ff1.";
         public List<BO.FreeFieldInput> inputs { get; set; }
 
-        public List<BO.FreeFieldInput> getVisibleInputs()
-        {
-            return this.inputs.Where(p => p.IsVisible == true).ToList();
+        public int VisibleInputsCount { get
+            {
+                return this.inputs.Where(p => p.IsVisible == true).Count();
+            }
         }
+        
        
         public void InhaleFreeFieldsView(BL.Factory f, int rec_pid, string prefix)
         {

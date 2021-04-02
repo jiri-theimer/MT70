@@ -13,7 +13,7 @@ namespace UI.Controllers
     {
         public IActionResult Record(int pid, bool isclone)
         {
-            var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1,p51Flag=1 };
+            var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1,p51Flag=1,RecFirstAddress=new BO.o38Address(),TempGuid=BO.BAS.GetGuid() };
             v.Rec = new BO.p28Contact();
             if (v.rec_pid > 0)
             {
@@ -22,6 +22,8 @@ namespace UI.Controllers
                 {
                     return RecNotFound(v);
                 }
+                v.SetTagging(Factory.o51TagBL.GetTagging("p28", v.rec_pid));
+
                 if (!v.Rec.p28IsCompany)
                 {
                     v.IsCompany = 0;
@@ -39,10 +41,7 @@ namespace UI.Controllers
                 v.SelectedComboP87Name = v.Rec.p87Name;
                 v.SelectedComboOwner = v.Rec.Owner;
                 v.RecFirstAddress = Factory.o38AddressBL.LoadFirstP28Address(v.rec_pid);
-                if (v.RecFirstAddress != null)
-                {
-                    v.o38ID_First = v.RecFirstAddress.pid;
-                }
+               
                 if (v.Rec.p51ID_Billing > 0)
                 {
                     v.SelectedComboP51Name = v.Rec.p51Name_Billing;
@@ -87,6 +86,7 @@ namespace UI.Controllers
                 v.Rec.j02ID_Owner = Factory.CurrentUser.j02ID;
                 v.SelectedComboOwner = Factory.CurrentUser.PersonDesc;
             }
+            v.lisO38 = Factory.o38AddressBL.GetList_TempOrClientInForm(v.rec_pid, v.TempGuid);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -144,11 +144,16 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                v.RecFirstAddress.pid = v.o38ID_First;
-
-                c.pid = Factory.p28ContactBL.Save(c,v.RecFirstAddress,null,v.ff1.inputs);
+                
+                c.pid = Factory.p28ContactBL.Save(c,v.RecFirstAddress,null,v.ff1.inputs,v.TempGuid);
                 if (c.pid > 0)
                 {
+                    Factory.o51TagBL.SaveTagging("p28", c.pid, v.TagPids);
+
+                    foreach(var recO38 in v.lisO38)
+                    {
+                        Factory.o38AddressBL.Save(recO38, c.pid, recO38.o36ID,null);
+                    }
 
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);

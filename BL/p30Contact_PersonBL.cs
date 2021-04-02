@@ -9,7 +9,7 @@ namespace BL
     public interface Ip30Contact_PersonBL
     {
         public BO.p30Contact_Person Load(int pid);
-        
+        public BO.p30Contact_Person LoadByp28(int j02id, int p28id);
         public IEnumerable<BO.p30Contact_Person> GetList(BO.myQuery mq);
         public int Save(BO.p30Contact_Person rec);
 
@@ -36,7 +36,11 @@ namespace BL
         {
             return _db.Load<BO.p30Contact_Person>(GetSQL1(" WHERE a.p30ID=@pid"), new { pid = pid });
         }
-     
+
+        public BO.p30Contact_Person LoadByp28(int j02id,int p28id)
+        {
+            return _db.Load<BO.p30Contact_Person>(GetSQL1(" WHERE a.j02ID=@j02id AND a.p28ID=@p28id"), new { j02id = j02id,p28id=p28id });
+        }
 
         public IEnumerable<BO.p30Contact_Person> GetList(BO.myQuery mq)
         {

@@ -1,0 +1,64 @@
+﻿@model UI.Models.Record.o38Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Adresa");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    Model.PageSymbol = BO.Symbol.o38();
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Typ adresy"):</label>
+        <div class="col-sm-5 col-md-5">
+            <select asp-for="@Model.o36ID" class="form-select">
+                <option value="1">@_f.tra("Fakturační adresa")</option>
+                <option value="2">@_f.tra("Poštovní adresa")</option>
+                <option value="3">@_f.tra("Jiné")</option>
+            </select>
+        </div>
+        <div class="col-sm-5 col-md-5">
+            <input class="form-control" asp-for="Rec.o38Name" placeholder="@_f.tra("Nadpis adresy")" />
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Ulice"):</label>
+        <div class="col-sm-11 col-md-10">
+            <textarea class="form-control" asp-for="Rec.o38Street"></textarea>
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Město"):</label>
+        <div class="col-sm-11 col-md-10">
+            <textarea class="form-control" asp-for="Rec.o38City"></textarea>
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("PSČ"):</label>
+        <div class="col-sm-2 col-md-2">
+            <input class="form-control" asp-for="Rec.o38ZIP" />
+
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Stát"):</label>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.o38Country" />
+
+        </div>
+
+    </div>
+
+</div>
+
+<input type="hidden" asp-for="@Model.p28ID" />
+<input type="hidden" asp-for="@Model.TempGuid" />

@@ -11,7 +11,6 @@ namespace UI.Models.Record
         public int p51Flag { get; set; }    //1 - nemá ceník, 2 - přiřazený ceník, 3 - ceník na míru
         public BO.p28Contact Rec { get; set; }
 
-        public int o38ID_First { get; set; }
         public BO.o38Address RecFirstAddress { get; set; }
         public string SelectedComboP29Name { get; set; }
         public string SelectedComboP92Name { get; set; }
@@ -23,5 +22,9 @@ namespace UI.Models.Record
         public string SelectedComboParentP28Name { get; set; }
 
         public FreeFieldsViewModel ff1 { get; set; }
+
+        public string TempGuid { get; set; }
+
+        public IEnumerable<BO.o38Address> lisO38 { get; set; }
     }
 }

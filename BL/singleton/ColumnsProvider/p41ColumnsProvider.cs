@@ -20,8 +20,7 @@ namespace BL
             AF("ProjectPid", "PID", "a.p41ID", "int");
             AF("p41PlanFrom", "Plánované zahájení", "a.p41PlanFrom","datetime");
             AF("p41PlanUntil", "Plánované dokončení", "a.p41PlanUntil","datetime");
-            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(141,a.p41ID)");
-            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(141,a.p41ID)");
+           
             AF("p41ExternalPID", "Externí kód");
 
             this.CurrentFieldGroup = "Fakturační nastavení";

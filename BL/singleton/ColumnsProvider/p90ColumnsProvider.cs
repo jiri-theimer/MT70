@@ -21,9 +21,7 @@ namespace BL
             AF("p90Text2", "Technický text");
            
             AFBOOL("p90IsDraft", "Draft");
-            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(390,a.p90ID)");
-            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(390,a.p90ID)");
-
+            
             oc = AFDATE("p90Date", "Vystaveno"); oc.DefaultColumnFlag = gdc2;            
             oc = AFDATE("p90DateMaturity", "Splatnost"); oc.DefaultColumnFlag = gdc2;
 

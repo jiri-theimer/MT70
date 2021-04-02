@@ -26,7 +26,7 @@ namespace BO
 
         public string HtmlText { get
             {
-                if (this.o51IsColor == false)
+                if (!this.o51IsColor)
                 {
                     return string.Format("<div class='tagbox'>{0}</div>", this.o51Name);
                 }

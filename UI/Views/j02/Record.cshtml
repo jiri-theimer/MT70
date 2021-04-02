@@ -13,7 +13,6 @@
     {
         Model.PageTitle = _f.tra("Kontaktní osoba");
     }
-    Model.PageSymbol = "♕♙♗♖♔♘♜☺⚑😊😯😴😬😃⚐💰🕖🕚💵$€💳";
     Model.PageSymbol = BO.Symbol.j02();
 
 }
@@ -26,7 +25,7 @@
             <a id="link_tab1" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab1">@_f.tra("Vlastnosti")</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Uživatelská pole a štítky")</a>
+            <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Uživatelská pole") (@Model.ff1.VisibleInputsCount)</a>
         </li>
 
         <li class="nav-item onetab" role="presentation" data-intra="1">
@@ -55,7 +54,7 @@
                         <label for="RadioIsIntraPerson0">@_f.tra("Kontaktní osoba klienta")</label>
 
 
-                        @if (Model.RadioIsIntraPerson == 0)
+                        @if (Model.RadioIsIntraPerson == 0 && Model.TempGuid == null)
                         {
                             <mycombo entity="p28Contact" asp-for="@Model.SelectedP28ID" selectedtext="@Model.SelectedP28Name" view-flag="2" placeholder="@_f.tra("Vybrat klienta")"></mycombo>
                         }
@@ -69,7 +68,7 @@
             }
 
 
-            <div class="row">
+            <div class="row my-2">
                 <div class="col-sm-2 col-md-2">
                     <myautocomplete asp-for="Rec.j02TitleBeforeName" o15flag="1" placeholder="@_f.tra("Titul")"></myautocomplete>
 
@@ -98,12 +97,24 @@
                     <input class="form-control" type="email" asp-for="Rec.j02Email" />
 
                 </div>
+                @if (Model.RadioIsIntraPerson == 1)
+                {
+                    <label class="col-sm-1 col-md-2 col-form-label" data-intra="1">@_f.tra("Kód/Osobní číslo"):</label>
+                    <div class="col-sm-5 col-md-4" data-intra="1">
+                        <input class="form-control" asp-for="Rec.j02Code" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-6 col-md-6">
+                        <input type="checkbox" asp-for="Rec.j02IsInvoiceEmail" checked />
+                        <label class="col-form-label" for="Rec_j02IsInvoiceEmail">@_f.tra("Nabízet e-mail pro zasílání faktur klientovi")</label>
+                    </div>
+                }
 
-                <label class="col-sm-1 col-md-2 col-form-label" data-intra="1">@_f.tra("Kód/Osobní číslo"):</label>
-                <div class="col-sm-5 col-md-4" data-intra="1">
-                    <input class="form-control" asp-for="Rec.j02Code" />
 
-                </div>
+
+
             </div>
 
             <div class="row my-2">
@@ -161,10 +172,7 @@
 
             </div>
 
-            <div class="my-2" data-intra="0">
-                <input type="checkbox" asp-for="Rec.j02IsInvoiceEmail" checked />
-                <label class="col-form-label" for="Rec_j02IsInvoiceEmail">@_f.tra("Nabízet e-mail pro zasílání faktur klientovi")</label>
-            </div>
+
 
             <mystitky entity="j02Person" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
 
@@ -251,7 +259,7 @@
     </div>
 </div>
 
-
+<input type="hidden" asp-for="@Model.TempGuid" />
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -266,7 +274,7 @@
                 $(this).css("visibility", "hidden");
             }
         });
-        
+
 
 
     });

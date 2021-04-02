@@ -19,9 +19,7 @@ namespace BL
             AF("o23ReminderDate", "Připomenutí", null, "datetime");
             AF("ReceiversInLine", "Příjemci", "dbo.o23_getroles_inline(a.o23ID)");
 
-            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(223,a.o23ID)");
-            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(223,a.o23ID)");
-
+           
             AppendTimestamp();
         }
     }

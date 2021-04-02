@@ -123,9 +123,9 @@ namespace UI.Controllers
         }
 
 
-        public IActionResult Record(int pid, bool isclone,bool isintraperson)
+        public IActionResult Record(int pid, bool isclone,bool isintraperson,string tempguid)
         {
-            var v = new j02Record() { rec_pid = pid, rec_entity = "j02" };
+            var v = new j02Record() { rec_pid = pid, rec_entity = "j02",TempGuid=tempguid };
             v.Rec = new BO.j02Person();
             if (v.rec_pid > 0)
             {
@@ -169,6 +169,7 @@ namespace UI.Controllers
                 v.ff1.InhaleFreeFieldsView(Factory, v.rec_pid, "j02");                
             }
             v.ff1.RefreshInputsVisibility(Factory, v.rec_pid, "j02", v.Rec.j07ID);
+            
         }
 
         [HttpPost]
@@ -230,12 +231,16 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.j02PersonBL.Save(c,v.ff1.inputs);
+                c.pid = Factory.j02PersonBL.Save(c,v.ff1.inputs,v.TempGuid);
                 if (c.pid > 0)
                 {
-                    if (v.RadioIsIntraPerson == 0)
+                    if (v.RadioIsIntraPerson == 0 && v.SelectedP28ID>0 && string.IsNullOrEmpty(v.TempGuid))
                     {
-                        var recP30 = new BO.p30Contact_Person() { j02ID = c.pid, p28ID = v.SelectedP28ID };
+                        var recP30 = Factory.p30Contact_PersonBL.LoadByp28(c.pid, v.SelectedP28ID);
+                        if (recP30 == null)
+                        {
+                            recP30 = new BO.p30Contact_Person() { j02ID = c.pid, p28ID = v.SelectedP28ID };
+                        }                        
                         Factory.p30Contact_PersonBL.Save(recP30);
                     }
                     Factory.o51TagBL.SaveTagging("j02", c.pid, v.TagPids);

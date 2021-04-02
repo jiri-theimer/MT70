@@ -22,9 +22,7 @@ namespace BL
             AF( "ZapojeneOsoby", "Zapojené osoby","dbo.j02_invoiced_persons_inline(a.p91ID)");
 
             AFBOOL("p91IsDraft", "Draft");
-            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(391,a.p91ID)");
-            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(391,a.p91ID)");
-
+            
             this.CurrentFieldGroup = "Datum";
             oc=AFDATE("p91Date", "Vystaveno");oc.DefaultColumnFlag = gdc2;
             oc=AFDATE("p91DateSupply", "Datum plnění");oc.DefaultColumnFlag = gdc1;

@@ -15,8 +15,7 @@ namespace BL
             this.CurrentFieldGroup = "Root";//-----------Root---------------------
             oc =AF("p31Text", "Text");oc.DefaultColumnFlag = gdc1;
             AF("p31Code", "Kód dokladu");
-            AF("TagsHtml", "Štítky", "dbo.tag_values_inline_html(331,a.p31ID)");
-            AF("TagsText", "Štítky (text)", "dbo.tag_values_inline(331,a.p31ID)");
+         
             AF("p31RecordSourceFlag_Alias", "Zdrojová aplikace", "case a.p31RecordSourceFlag when 1 then 'Mobil' else 'MT' end");
             AF("p31DateTimeUntil_Orig", "Čas zapnutí stopek", null, "datetime");
 

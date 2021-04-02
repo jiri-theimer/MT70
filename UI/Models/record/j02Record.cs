@@ -22,5 +22,7 @@ namespace UI.Models.Record
         public string SelectedP28Name { get; set; }
 
         public FreeFieldsViewModel ff1 { get; set; }
+
+        public string TempGuid { get; set; }
     }
 }
