@@ -13,6 +13,7 @@ namespace BL
         public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id);
         public int Save(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, string tempguid);
         public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id);
+        public BO.p28RecDisposition InhaleRecDisposition(BO.p28Contact rec);
 
     }
     class p28ContactBL : BaseBL, Ip28ContactBL
@@ -29,7 +30,7 @@ namespace BL
             sb(",a.p28Name,p29.p29Name,p92.p92Name,b02.b02Name,p87.p87Name,a.p28RobotAddress,a.p28SupplierID,a.p28SupplierFlag,a.p28ExternalPID,a.p28Round2Minutes,a.p28ICDPH_SK");
             sb(",a.p28TreeLevel,a.p28TreeIndex,a.p28TreePrev,a.p28TreeNext,a.p28TreePath");
             sb(",p51billing.p51Name as p51Name_Billing,j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,a.p28ParentID,a.p28BillingMemo,a.p28Pohoda_VatCode,a.j02ID_ContactPerson_DefaultInWorksheet,a.j02ID_ContactPerson_DefaultInInvoice,a.j61ID_Invoice");
-
+            sb(",p29.x38ID");
             sb(","+_db.GetSQL1_Ocas("p28") + " FROM p28Contact a");
             sb(" LEFT OUTER JOIN p29ContactType p29 ON a.p29ID=p29.p29ID");
             sb(" LEFT OUTER JOIN p87BillingLanguage p87 ON a.p87ID=p87.p87ID");
@@ -194,6 +195,24 @@ namespace BL
             }
 
             return true;
+        }
+
+        public BO.p28RecDisposition InhaleRecDisposition(BO.p28Contact rec)
+        {
+            var c = new BO.p28RecDisposition();
+
+            if (rec.j02ID_Owner==_mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P28_Owner))
+            {
+                c.OwnerAccess = true;c.ReadAccess = true;
+                return c;
+            }
+            if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P28_Reader))
+            {
+                c.ReadAccess = true;
+                return c;
+            }
+
+            return c;
         }
     }
 }

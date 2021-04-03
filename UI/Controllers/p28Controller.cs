@@ -42,6 +42,11 @@ namespace UI.Controllers
                 v.SelectedComboP87Name = v.Rec.p87Name;
                 v.SelectedComboOwner = v.Rec.Owner;
 
+                if (!InhalePermissions(v))
+                {
+                    return this.StopPage(true, "Nemáte oprávnění k záznamu.");
+                }
+
                 var lisO37 = Factory.p28ContactBL.GetList_o37(v.rec_pid);
                 v.lisO37 = new List<o37Repeater>();
                 foreach(var c in lisO37)
@@ -201,6 +206,24 @@ namespace UI.Controllers
 
             this.Notify_RecNotSaved();
             return View(v);
+        }
+
+        private bool InhalePermissions(p28Record v)
+        {
+            var mydisp = Factory.p28ContactBL.InhaleRecDisposition(v.Rec);
+            if (!mydisp.ReadAccess)
+            {
+                return false;
+            }
+            if (v.Rec.x38ID > 0)
+            {
+                v.CanEditRecordCode = Factory.x38CodeLogicBL.CanEditRecordCode(v.Rec.x38ID, mydisp);
+            }
+            else
+            {
+                v.CanEditRecordCode = mydisp.OwnerAccess;
+            }
+            return true;
         }
 
         private void ViesImport(p28Record v)

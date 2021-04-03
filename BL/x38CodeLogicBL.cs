@@ -11,7 +11,7 @@ namespace BL
         public BO.x38CodeLogic Load(int pid);
         public IEnumerable<BO.x38CodeLogic> GetList(BO.myQuery mq);
         public int Save(BO.x38CodeLogic rec);
-        
+        public bool CanEditRecordCode(int x38id, BO.BaseRecDisposition disp);
 
     }
     class x38CodeLogicBL : BaseBL, Ix38CodeLogicBL
@@ -89,7 +89,20 @@ namespace BL
             return true;
         }
 
+        public bool CanEditRecordCode(int x38id,BO.BaseRecDisposition disp)
+        {
+            var rec =Load(x38id);
+            if (rec.x38EditModeFlag == BO.x38EditModeFlagENUM.AdminOnly && _mother.CurrentUser.IsAdmin)
+            {
+                return true;
+            }
+            if (rec.x38EditModeFlag == BO.x38EditModeFlagENUM.RecordOwnerOnly && disp.OwnerAccess)
+            {
+                return true;
+            }
 
+            return false;
+        }
 
     }
 }

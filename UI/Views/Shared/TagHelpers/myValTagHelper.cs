@@ -150,7 +150,15 @@ namespace UI.Views.Shared.TagHelpers
             }
             if (this.HoverUrl != null)
             {
-                output.Content.AppendHtml(string.Format("<a class='valhover_tooltip' target='_blank' href=\"{0}\">{1}</a>", this.HoverUrl,this.HoverSymbol));
+                if (this.HoverUrl.Contains("javascript"))
+                {
+                    output.Content.AppendHtml(string.Format("<a class='valhover_tooltip' href=\"{0}\">{1}</a>", this.HoverUrl, this.HoverSymbol));
+                }
+                else
+                {
+                    output.Content.AppendHtml(string.Format("<a target='_blank' class='valhover_tooltip' href=\"{0}\">{1}</a>",this.HoverUrl, this.HoverSymbol));
+                }
+                
             }
 
         }

@@ -26,6 +26,8 @@ namespace UI.Models.Record
         public string TempGuid { get; set; }
 
         public List<o37Repeater> lisO37 { get; set; }
+
+        public bool CanEditRecordCode { get; set; }
     }
 
     public class o37Repeater : BO.o37Contact_Address

@@ -53,12 +53,11 @@ namespace BO
         public int j02ID_ContactPerson_DefaultInWorksheet { get; set; }
         public int j02ID_ContactPerson_DefaultInInvoice { get; set; }
         
-        private string _Owner { get; set; }
         public string TagsInlineHtml { get; set; }
         public int p28Round2Minutes { get; set; }
         public string p28ICDPH_SK { get; set; }
 
-
+        public int x38ID { get; }
         public string p28name { get; }
 
         public string p29Name { get; }
