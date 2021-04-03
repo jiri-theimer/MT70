@@ -111,6 +111,11 @@ namespace UI.Controllers
                 AresImport(v);
                 return View(v);
             }
+            if (oper == "vies")
+            {
+                ViesImport(v);
+                return View(v);
+            }
             if (oper == "add_o37")
             {
                 var c = new o37Repeater() { TempGuid = BO.BAS.GetGuid(),o36ID=BO.o36IdEnum.InvoiceAddress };
@@ -198,6 +203,54 @@ namespace UI.Controllers
             return View(v);
         }
 
+        private void ViesImport(p28Record v)
+        {
+            if (string.IsNullOrEmpty(v.Rec.p28VatID))
+            {
+                this.AddMessage("Chybí vyplnit DIČ."); return;
+            }
+            v.Rec.p28VatID = v.Rec.p28VatID.ToUpper();
+            string strDic = BO.BAS.RightString(v.Rec.p28VatID, v.Rec.p28VatID.Length - 2);
+            string strCountryCode = v.Rec.p28VatID.Substring(0, 2);
+            var vatQuery =new TriggerMe.VAT.VATQuery();
+            var c = vatQuery.CheckVATNumberAsync(strCountryCode, strDic);
+            if (!c.Result.Valid)
+            {
+                this.AddMessageTranslated(v.Rec.p28VatID+": "+Factory.tra("Subjekt nelze ověřit.")); return;
+            }
+            v.Rec.p28CompanyName = c.Result.Name;
+            if (string.IsNullOrEmpty(c.Result.Address) || c.Result.Address.Length<10)
+            {
+                this.AddMessageTranslated(v.Rec.p28VatID + ": " + Factory.tra("Tento subjekt nemá uloženou adresu ve VIES rejstříku.")); return;
+            }
+            var arr = BO.BAS.ConvertString2List(c.Result.Address, "\n");
+            var adresa = new o37Repeater() { TempGuid = BO.BAS.GetGuid(), o36ID = BO.o36IdEnum.InvoiceAddress,o38Street=arr[0],o38City=arr[1] };
+            if (strCountryCode == "CZ")
+            {
+                adresa.o38Country = "Česká republika";
+                if (arr[2].Length >= 6)
+                {
+                    adresa.o38ZIP = arr[2].Substring(0, 6).Trim();
+                }
+            }
+            if (strCountryCode == "SK")
+            {
+                adresa.o38Country = "Slovenská republika";
+                adresa.o38ZIP = adresa.o38City.Substring(0, 6);   //psč u slováků brát z města
+                adresa.o38City = adresa.o38City.Replace(adresa.o38ZIP, "").Trim();
+            }
+            if (v.lisO37.Where(p => p.o36ID == BO.o36IdEnum.InvoiceAddress && p.IsTempDeleted == false).Count() > 0)
+            {
+                var adr = v.lisO37.First(p => p.o36ID == BO.o36IdEnum.InvoiceAddress && p.IsTempDeleted == false);
+                adresa.pid = adr.pid;
+                adresa.o38ID = adr.o38ID;
+                adr.IsTempDeleted = true;
+                adr.o38ID = 0;
+                adr.pid = 0;
+            }
+
+            v.lisO37.Add(adresa);
+        }
 
         private void AresImport(p28Record v)
         {

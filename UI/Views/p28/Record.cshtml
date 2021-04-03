@@ -97,7 +97,7 @@
                         <div class="col-sm-11 col-md-10">
                             <div class="input-group">
                                 <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
-                                <button type="button" id="cmdAresImport" class="btn btn-sm btn-outline-secondary" tabindex="-1">ARES import</button>
+                                <button type="button" id="cmdAresImport" class="btn btn-sm btn-outline-secondary" tabindex="-1">ARES Import</button>
                             </div>
 
                         </div>
@@ -108,7 +108,7 @@
                         <div class="col-sm-11 col-md-10">
                             <div class="input-group">
                                 <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
-                                <button type="button" class="btn btn-sm btn-outline-secondary" tabindex="-1">VIES import</button>
+                                <button type="button" id="cmdViesImport" class="btn btn-sm btn-outline-secondary" tabindex="-1">VIES Import</button>
                             </div>
                         </div>
 
@@ -375,6 +375,15 @@
         $(this).text("Processing...");
         $(this).attr("disabled", true);
         form1.action = _ep("/p28/Record?oper=ares");
+        form1.submit();
+
+
+    });
+
+    $("#cmdViesImport").click(function () {
+        $(this).text("Processing...");
+        $(this).attr("disabled", true);
+        form1.action = _ep("/p28/Record?oper=vies");
         form1.submit();
 
 
