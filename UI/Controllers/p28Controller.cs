@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
 using UI.Models.Record;
+using System.Net.Http;
 
 
 namespace UI.Controllers
@@ -13,7 +14,7 @@ namespace UI.Controllers
     {
         public IActionResult Record(int pid, bool isclone)
         {
-            var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1,p51Flag=1,RecFirstAddress=new BO.o38Address(),TempGuid=BO.BAS.GetGuid() };
+            var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1,p51Flag=1,TempGuid=BO.BAS.GetGuid() };
             v.Rec = new BO.p28Contact();
             if (v.rec_pid > 0)
             {
@@ -40,8 +41,15 @@ namespace UI.Controllers
                 v.SelectedComboP29Name = v.Rec.p29Name;
                 v.SelectedComboP87Name = v.Rec.p87Name;
                 v.SelectedComboOwner = v.Rec.Owner;
-                v.RecFirstAddress = Factory.o38AddressBL.LoadFirstP28Address(v.rec_pid);
-               
+
+                var lisO37 = Factory.p28ContactBL.GetList_o37(v.rec_pid);
+                v.lisO37 = new List<o37Repeater>();
+                foreach(var c in lisO37)
+                {                    
+                    v.lisO37.Add(new o37Repeater() {TempGuid = BO.BAS.GetGuid(), pid = c.pid, o38ID = c.o38ID, o36ID = c.o36ID
+                        , o38Name = c.o38Name, o38City = c.o38City, o38Street = c.o38Street, o38Country = c.o38Country, o38ZIP = c.o38ZIP});
+                }
+
                 if (v.Rec.p51ID_Billing > 0)
                 {
                     v.SelectedComboP51Name = v.Rec.p51Name_Billing;
@@ -77,16 +85,16 @@ namespace UI.Controllers
             }
             v.ff1.RefreshInputsVisibility(Factory, v.rec_pid, "p28", v.Rec.p29ID);
 
-            if (v.RecFirstAddress == null)
+            if (v.lisO37 == null)
             {
-                v.RecFirstAddress = new BO.o38Address();
+                v.lisO37 = new List<o37Repeater>();
             }
             if (v.Rec.j02ID_Owner == 0)
             {
                 v.Rec.j02ID_Owner = Factory.CurrentUser.j02ID;
                 v.SelectedComboOwner = Factory.CurrentUser.PersonDesc;
             }
-            v.lisO38 = Factory.o38AddressBL.GetList_TempOrClientInForm(v.rec_pid, v.TempGuid);
+            
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -96,6 +104,26 @@ namespace UI.Controllers
 
             if (oper == "postback")
             {
+                return View(v);
+            }
+            if (oper== "ares")
+            {                
+                AresImport(v);
+                return View(v);
+            }
+            if (oper == "add_o37")
+            {
+                var c = new o37Repeater() { TempGuid = BO.BAS.GetGuid(),o36ID=BO.o36IdEnum.InvoiceAddress };
+                if (v.lisO37.Where(p=>p.IsTempDeleted==false && p.o36ID == BO.o36IdEnum.InvoiceAddress).Count() > 0)
+                {
+                    c.o36ID = BO.o36IdEnum.PostalAddress;
+                }
+                v.lisO37.Add(c);
+                return View(v);
+            }
+            if (oper == "delete_o37")
+            {
+                v.lisO37.First(p => p.TempGuid == guid).IsTempDeleted = true;
                 return View(v);
             }
 
@@ -144,16 +172,20 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                
-                c.pid = Factory.p28ContactBL.Save(c,v.RecFirstAddress,null,v.ff1.inputs,v.TempGuid);
+                var lisO37 = new List<BO.o37Contact_Address>();
+                foreach(var cc in v.lisO37)
+                {
+                    lisO37.Add(new BO.o37Contact_Address()
+                    { IsSetAsDeleted = cc.IsTempDeleted, pid = cc.pid,o36ID=cc.o36ID
+                        , o38ID = cc.o38ID, o38City = cc.o38City,o38Street=cc.o38Street,o38ZIP=cc.o38ZIP,o38Country=cc.o38Country,o38Name=cc.o38Name
+                    });
+                }
+                c.pid = Factory.p28ContactBL.Save(c,lisO37,null,v.ff1.inputs,v.TempGuid);
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p28", c.pid, v.TagPids);
 
-                    foreach(var recO38 in v.lisO38)
-                    {
-                        Factory.o38AddressBL.Save(recO38, c.pid, recO38.o36ID,null);
-                    }
+                    
 
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);
@@ -164,6 +196,44 @@ namespace UI.Controllers
 
             this.Notify_RecNotSaved();
             return View(v);
+        }
+
+
+        private void AresImport(p28Record v)
+        {
+            if (string.IsNullOrEmpty(v.Rec.p28RegID))
+            {
+                this.AddMessage("Chybí vyplnit IČ.");return;
+            }
+            var c = new UI.Ares.clsAresImport().LoadByIco(v.Rec.p28RegID);
+            if (c.Error != null)
+            {
+                this.AddMessage(c.Error);
+                return;
+            }
+
+            v.Rec.p28CompanyName = c.Company;
+            if (!string.IsNullOrEmpty(c.DIC))
+            {
+                v.Rec.p28VatID = c.DIC;
+            }
+
+            var adresa = new o37Repeater() { TempGuid = BO.BAS.GetGuid(), o36ID = BO.o36IdEnum.InvoiceAddress };
+            if (v.lisO37.Where(p => p.o36ID == BO.o36IdEnum.InvoiceAddress && p.IsTempDeleted==false).Count() > 0)
+            {                
+                var adr = v.lisO37.First(p => p.o36ID == BO.o36IdEnum.InvoiceAddress && p.IsTempDeleted==false);
+                adresa.pid = adr.pid;
+                adresa.o38ID = adr.o38ID;                
+                adr.IsTempDeleted = true;
+                adr.o38ID = 0;
+                adr.pid = 0;                             
+            }
+            adresa.o38City = c.City;
+            adresa.o38Street = c.Street;
+            adresa.o38ZIP = c.PostCode;
+            adresa.o38Country = c.Country;            
+            v.lisO37.Add(adresa);
+
         }
     }
 }

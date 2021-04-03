@@ -56,7 +56,7 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.o38AddressBL.Save(c,v.p28ID,v.o36ID,v.TempGuid);
+                c.pid = Factory.o38AddressBL.Save(c,v.p28ID,v.o36ID);
                 if (c.pid > 0)
                 {
 

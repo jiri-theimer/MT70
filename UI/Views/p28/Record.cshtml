@@ -58,7 +58,7 @@
                         <div class="row my-2">
                             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Společnost"):</label>
                             <div class="col-sm-11 col-md-10">
-                                <input class="form-control" asp-for="Rec.p28CompanyName" />
+                                <input class="form-control" asp-for="Rec.p28CompanyName" value="@Model.Rec.p28CompanyName" />
                             </div>
                         </div>
                     }
@@ -96,8 +96,8 @@
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
                         <div class="col-sm-11 col-md-10">
                             <div class="input-group">
-                                <input class="form-control" asp-for="Rec.p28RegID" />
-                                <button type="button" class="btn btn-sm btn-outline-secondary" tabindex="-1">ARES import</button>
+                                <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
+                                <button type="button" id="cmdAresImport" class="btn btn-sm btn-outline-secondary" tabindex="-1">ARES import</button>
                             </div>
 
                         </div>
@@ -107,7 +107,7 @@
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("DIČ"):</label>
                         <div class="col-sm-11 col-md-10">
                             <div class="input-group">
-                                <input class="form-control" asp-for="Rec.p28VatID" />
+                                <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
                                 <button type="button" class="btn btn-sm btn-outline-secondary" tabindex="-1">VIES import</button>
                             </div>
                         </div>
@@ -139,62 +139,49 @@
                 <div class="card-header">
                     @Html.Raw(BO.Symbol.o38())
                     @_f.tra("Adresy")
-                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="add_address()">@_f.tra("Přidat další adresu")</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o37()">@_f.tra("Přidat adresu")</button>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-2 col-md-2">
-                            <label>@_f.tra("První (fakturační adresa)"):</label>
-                            <br />
-                            <input asp-for="@Model.RecFirstAddress.o38Name" placeholder="@_f.tra("Nadpis adresy")" />
-                        </div>
-                        <div class="col-sm-3 col-md-3 p-0">
-                            <textarea asp-for="@Model.RecFirstAddress.o38Street" class="form-control" placeholder="@_f.tra("Ulice")"></textarea>
-                        </div>
-                        <div class="col-sm-3 col-md-3 p-0">
-                            <textarea asp-for="@Model.RecFirstAddress.o38City" class="form-control" placeholder="@_f.tra("Město")"></textarea>
-                        </div>
+                    <table class="table table-hover" style="table-layout: fixed;">
+                        
+                        @for (int i = 0; i < Model.lisO37.Count; i++)
+                        {
+                            <tr style="@(Model.lisO37[i].CssTempDisplay)">
+                                <td>
+                                    <input type="hidden" asp-for="lisO37[i].IsTempDeleted" value="@Model.lisO37[i].IsTempDeleted" />
+                                    <input type="hidden" asp-for="lisO37[i].TempGuid" value="@Model.lisO37[i].TempGuid" />
+                                    <input type="hidden" asp-for="lisO37[i].pid" value="@Model.lisO37[i].pid" />
+                                    <input type="hidden" asp-for="lisO37[i].o38ID" value="@Model.lisO37[i].o38ID" />
+                                    <select asp-for="@Model.lisO37[i].o36ID">
+                                        <option value="InvoiceAddress">@_f.tra("Fakturační adresa")</option>
+                                        <option value="PostalAddress">@_f.tra("Poštovní adresa")</option>
+                                        <option value="Other">@_f.tra("Jiné")</option>
+                                    </select>
+                                    <br />
+                                    <input asp-for="@Model.lisO37[i].o38Name" placeholder="@_f.tra("Nadpis adresy")" />
+                                </td>
+                                <td>
+                                    <textarea asp-for="@Model.lisO37[i].o38Street" class="form-control" placeholder="@_f.tra("Ulice")"></textarea>
 
-                        <div class="col-sm-1 col-md-1 p-0">
-                            <input class="form-control" asp-for="@Model.RecFirstAddress.o38ZIP" placeholder="@_f.tra("PSČ")" />
-                        </div>
-                        <div class="col-sm-3 col-md-3">
-                            <input class="form-control" asp-for="@Model.RecFirstAddress.o38Country" placeholder="@_f.tra("Stát")" />
-                        </div>
-                    </div>
-                    @if (Model.lisO38.Count() > 0)
-                    {                        
-                        <label>@_f.tra("Další adresy"):</label>
-                        <table class="table table-sm table-hover">
-                            @foreach (var c in Model.lisO38)
-                            {
-                                <tr>
-                                    <td>
-                                        @(_f.tra(c.o36Name) +":")
-                                    </td>
-                                    <td>
-                                        @c.o38Name
-                                    </td>
-                                    <td>
-                                        @c.o38City
-                                    </td>
-                                    <td>
-                                        @c.o38Street
-                                    </td>
-                                    <td>
-                                        @c.o38ZIP
-                                    </td>
-                                    <td>
-                                        @c.o38Country
-                                    </td>
-                                    <td width="80px">
-                                        <button type="button" class="btn btn-sm btn-light" onclick="o38_edit(@(c.pid),@(c.o36ID))">@_f.tra("Upravit/Odstranit")</button>
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-                    }
+                                </td>
+                                <td>
+                                    <textarea asp-for="@Model.lisO37[i].o38City" class="form-control" placeholder="@_f.tra("Město")"></textarea>
+                                </td>
+                                <td style="width:80px;">
+                                    <input class="form-control" asp-for="@Model.lisO37[i].o38ZIP" style="width:70px;" placeholder="@_f.tra("PSČ")" />
+                                   
+                                    
+                                </td>
+                                <td>                                    
+                                    <myautocomplete asp-for="@Model.lisO37[i].o38Country" o15flag="328" placeholder="@_f.tra("Stát")"></myautocomplete>
+                                </td>
+                                <td style="width:70px;">
+                                    <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o37('@(Model.lisO37[i].TempGuid)')">x</button>
+                                </td>
 
+                            </tr>
+                        }
+                    </table>
 
                 </div>
             </div>
@@ -261,22 +248,20 @@
             </div>
             <div class="row my-2">
                 <div class="col-sm-2 col-md-3">@_f.tra("ISDOC kód státu"):</div>
-                <div class="col-sm-10 col-md-9">
+                <div class="col-sm-2 col-md-2">
                     <input class="form-control" asp-for="Rec.p28Pohoda_VatCode" />
                 </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-sm-2 col-md-3">@_f.tra("IČ DPH SK (Slovensko)"):</div>
-                <div class="col-sm-10 col-md-9">
+                <div class="col-auto">@_f.tra("IČ DPH SK (Slovensko)"):</div>
+                <div class="col-sm-2 col-md-2">
                     <input class="form-control" asp-for="Rec.p28ICDPH_SK" />
                 </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-sm-2 col-md-3">@_f.tra("Výchozí splatnost faktury (dny)"):</div>
-                <div class="col-sm-10 col-md-9">
+                <div class="col-auto">@_f.tra("Výchozí splatnost faktury (dny)"):</div>
+                <div class="col-sm-1 col-md-1">
                     <mynumber asp-for="Rec.p28InvoiceMaturityDays" decimal-digits="0"></mynumber>
                 </div>
             </div>
+           
+            
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Šablona zprávy pro elektronickou fakturaci"):</label>
                 <div class="col-sm-10 col-md-9">
@@ -347,7 +332,7 @@
     </div>
 </div>
 
-<input type="hidden" asp-for="@Model.RecFirstAddress.pid" />
+
 <input type="hidden" asp-for="@Model.TempGuid" />
 
 
@@ -365,13 +350,17 @@
         form1.submit();
     }
 
+    function handle_delete_o37(guid) {
+        form1.action = _ep("/p28/Record?oper=delete_o37&guid=" + guid);
+        form1.submit();
 
-    function add_address() {
-        _window_open(_ep("/o38/Record?o36id=2&pid=0&tempguid=@Model.TempGuid"));
     }
-    function o38_edit(o38id,o36id) {
-        _window_open(_ep("/o38/Record?pid="+o38id+"&o36id="+o36id+"&tempguid=@Model.TempGuid"));
+    function handle_add_o37() {
+        form1.action = _ep("/p28/Record?oper=add_o37");
+        form1.submit();
     }
+
+   
     function create_person() {
         _window_open(_ep("/j02/Record?isintraperson=false&pid=0&tempguid=@Model.TempGuid"));
     }
@@ -380,4 +369,14 @@
         alert("hardrefresh");
         postback("postback");
     }
+
+
+    $("#cmdAresImport").click(function () {
+        $(this).text("Processing...");
+        $(this).attr("disabled", true);
+        form1.action = _ep("/p28/Record?oper=ares");
+        form1.submit();
+
+
+    });
 </script>

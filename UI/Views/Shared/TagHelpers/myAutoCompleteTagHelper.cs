@@ -30,7 +30,7 @@ namespace UI.Views.Shared.TagHelpers
 
 
             _sb = new System.Text.StringBuilder();
-            var strControlID = this.For.Name.Replace(".", "_");
+            var strControlID = this.For.Name.Replace(".", "_").Replace("[", "_").Replace("]", "_");
             var strListID = strControlID + "_list";
 
             sb(string.Format("<input id='{0}' class='form-control' placeholder='{1}' autocomplete='on' value='{2}' name='{3}' list='{4}'/>", strControlID, this.PlaceHolder, this.For.Model, this.For.Name,strListID));

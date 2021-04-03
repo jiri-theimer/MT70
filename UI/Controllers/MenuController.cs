@@ -292,7 +292,8 @@ namespace UI.Controllers
             DIV_TRANS("Ostatní");
             AMI("Typy dokumentů", aurl("misc", "x18"));
             AMI("Číselné řady", aurl("misc","x38"));
-            AMI("Střediska", aurl("misc","j18"));            
+            AMI("Střediska", aurl("misc","j18"));
+            AMI("Autocomplete položky", aurl("misc", "o15"));
             AMI("Dashboard Widgety", aurl("misc", "x55"));
             AMI("Daňové regiony", aurl("misc","j17"));
             AMI("Notifikace událostí", aurl("misc","x46"));

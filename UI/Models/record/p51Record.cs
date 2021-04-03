@@ -22,12 +22,12 @@ namespace UI.Models.Record
         public string RowPrefixWho { get; set; }
         public string RowPrefixActivity { get; set; }
         public bool IsTempDeleted { get; set; }
-        public string TempGuid { get; set; }
+        public string TempGuid { get; set; }        
         public string CssTempDisplay
         {
             get
             {
-                if (this.IsTempDeleted == true)
+                if (this.IsTempDeleted)
                 {
                     return "display:none;";
                 }

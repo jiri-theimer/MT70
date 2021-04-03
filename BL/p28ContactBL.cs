@@ -11,8 +11,8 @@ namespace BL
         public BO.p28Contact Load(int pid);
         public IEnumerable<BO.p28Contact> GetList(BO.myQueryP28 mq);
         public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id);
-        public int Save(BO.p28Contact rec, BO.o38Address recO38First, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, string tempguid);
-
+        public int Save(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, string tempguid);
+        public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id);
 
     }
     class p28ContactBL : BaseBL, Ip28ContactBL
@@ -55,10 +55,18 @@ namespace BL
         {            
             return _db.GetList<BO.o32Contact_Medium>("select a.*,o33.o33Name FROM o32Contact_Medium a INNER JOIN o33MediumType o33 ON a.o33ID=o33.o33ID WHERE a.p28ID=@p28id",new { p28id = p28id });
         }
-
-        public int Save(BO.p28Contact rec,BO.o38Address recO38First,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,string tempguid)
+        public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id)
         {
-            if (!ValidateBeforeSave(rec, recO38First))
+            sb("SELECT a.o36ID,a.p28ID,o38.*,");
+            sb(_db.GetSQL1_Ocas("o37",false,false,false));
+            sb(" FROM o37Contact_Address a INNER JOIN o38Address o38 ON a.o38ID=o38.o38ID");
+            sb(" WHERE a.p28ID=@p28id");
+
+            return _db.GetList<BO.o37Contact_Address>(sbret(), new { p28id = p28id });
+        }
+        public int Save(BO.p28Contact rec,List<BO.o37Contact_Address> lisO37,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,string tempguid)
+        {
+            if (!ValidateBeforeSave(rec, lisO37))
             {
                 return 0;
             }
@@ -122,9 +130,34 @@ namespace BL
                         return 0;
                     }                    
 
-                    if (recO38First != null)
+                    if (lisO37 != null)
                     {
-                       int intO38ID = _mother.o38AddressBL.Save(recO38First,intPID,1,null);
+                        foreach(var adr in lisO37)
+                        {
+                            if (adr.IsSetAsDeleted)
+                            {
+                                if (adr.pid > 0)
+                                {
+                                    _db.RunSql("DELETE FROM o37Contact_Address WHERE o37ID=@pid", new { pid = adr.pid });
+                                    _db.RunSql("DELETE FROM o38Address WHERE o38ID=@pid", new { pid = adr.o38ID });
+                                }
+                            }
+                            else
+                            {
+                                var recO38 = new BO.o38Address();
+                                if (adr.pid > 0)
+                                {                                    
+                                    recO38 = _mother.o38AddressBL.Load(adr.o38ID);                                                                        
+                                }
+                                recO38.o38City = adr.o38City;recO38.o38Street = adr.o38Street;recO38.o38ZIP = adr.o38ZIP;recO38.o38Country = adr.o38Country;recO38.o38Name = adr.o38Name;
+                                int intO38ID=_mother.o38AddressBL.Save(recO38, intPID, (int)adr.o36ID);
+                                if (intO38ID == 0)
+                                {
+                                    return 0;
+                                }
+                            }
+                        }
+                       
                        
                     }
                 }
@@ -137,19 +170,27 @@ namespace BL
         }
 
 
-        private bool ValidateBeforeSave(BO.p28Contact rec, BO.o38Address recO38First)
+        private bool ValidateBeforeSave(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37)
         {
 
             if (string.IsNullOrEmpty(rec.p28CompanyName) && string.IsNullOrEmpty(rec.p28LastName))
             {
                 this.AddMessage("Chybí název nebo příjmení."); return false;
             }
-            if (recO38First != null)
+            if (lisO37 != null)
             {
-                if (!_mother.o38AddressBL.ValidateBeforeSave(recO38First,rec.pid,1))
+                if (lisO37.Where(p => p.IsSetAsDeleted==false && p.o36ID == BO.o36IdEnum.InvoiceAddress).Count() > 1)
                 {
-                    return false;
+                    this.AddMessage("Klient může mít pouze jednu fakturační adresu."); return false;
                 }
+                foreach(var c in lisO37.Where(p=>p.IsSetAsDeleted==false))
+                {
+                    if (string.IsNullOrEmpty(c.o38City) && string.IsNullOrEmpty(c.o38Street))
+                    {
+                        this.AddMessage("V adrese je třeba vyplnit město nebo ulici."); return false;
+                    }
+                }
+                
             }
 
             return true;

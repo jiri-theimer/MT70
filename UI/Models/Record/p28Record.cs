@@ -11,7 +11,7 @@ namespace UI.Models.Record
         public int p51Flag { get; set; }    //1 - nemá ceník, 2 - přiřazený ceník, 3 - ceník na míru
         public BO.p28Contact Rec { get; set; }
 
-        public BO.o38Address RecFirstAddress { get; set; }
+        
         public string SelectedComboP29Name { get; set; }
         public string SelectedComboP92Name { get; set; }
         public string SelectedComboP87Name { get; set; }
@@ -25,6 +25,26 @@ namespace UI.Models.Record
 
         public string TempGuid { get; set; }
 
-        public IEnumerable<BO.o38Address> lisO38 { get; set; }
+        public List<o37Repeater> lisO37 { get; set; }
+    }
+
+    public class o37Repeater : BO.o37Contact_Address
+    {       
+        public bool IsTempDeleted { get; set; }
+        public string TempGuid { get; set; }
+        public string CssTempDisplay
+        {
+            get
+            {
+                if (this.IsTempDeleted)
+                {
+                    return "display:none;";
+                }
+                else
+                {
+                    return "display:table-row;";
+                }
+            }
+        }
     }
 }

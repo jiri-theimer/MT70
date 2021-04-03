@@ -45,36 +45,36 @@ namespace BO
             }
         }
 
-        public int o36ID { get; }
-        public int p28ID { get; set; }
-        public string o36Name
-        {
-            get
-            {
-                if (this.o38Description == "1")
-                {
-                    return "Fakturační adresa";
-                }
-                if (this.o38Description == "2")
-                {
-                    return "Poštovní adresa";
-                }
-                if (this.o38Description == "3")
-                {
-                    return "Jiné";
-                }
-                if (this.o36ID==1)
-                {
-                    return "Fakturační adresa";
-                }
-                if (this.o36ID==2)
-                {
-                    return "Poštovní adresa";
-                }
+        //public int o36ID { get; }
+        //public int p28ID { get; set; }
+        //public string o36Name
+        //{
+        //    get
+        //    {
+        //        if (this.o38Description == "1")
+        //        {
+        //            return "Fakturační adresa";
+        //        }
+        //        if (this.o38Description == "2")
+        //        {
+        //            return "Poštovní adresa";
+        //        }
+        //        if (this.o38Description == "3")
+        //        {
+        //            return "Jiné";
+        //        }
+        //        if (this.o36ID==1)
+        //        {
+        //            return "Fakturační adresa";
+        //        }
+        //        if (this.o36ID==2)
+        //        {
+        //            return "Poštovní adresa";
+        //        }
                
-                return "Jiné";
+        //        return "Jiné";
                 
-            }
-        }
+        //    }
+        //}
     }
 }
