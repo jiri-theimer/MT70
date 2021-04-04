@@ -52,12 +52,11 @@
                             @_f.tra("Rejstříky")
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuRejstriky">
-                            <li><a class="dropdown-item" href="javascript:ares(this)">@_f.tra("ARES Import podle IČ")</a></li>
-                            <li><a class="dropdown-item" href="javascript:vies(this)">@_f.tra("VIES Import podle DIČ")</a></li>
                             <li><a class="dropdown-item" href="javascript:vatinfo()">@_f.tra("Ověření v DPH registrech")</a></li>
                             <li><a class="dropdown-item" href="javascript:justice()">JUSTICE.cz, Výpis z obchodního rejstříku podle IČ</a></li>
                             <li><a class="dropdown-item" href="javascript:aresinfo()">ARES Info podle IČ</a></li>
-
+                            <li><a class="dropdown-item" href="javascript:ares()">@_f.tra("ARES Import podle IČ")</a></li>
+                            <li><a class="dropdown-item" href="javascript:vies()">@_f.tra("VIES Import podle DIČ")</a></li>
                         </ul>
                     </div>
                 </div>
@@ -109,12 +108,18 @@
                     <div class="row my-2">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
                         <div class="col-sm-5 col-md-4">
-                            <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
+                            <div class="input-group">
+                                <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
+                                <button type="button" id="cmdAresImport" onclick="ares()" class="btn btn-outline-secondary">ARES</button>
+                            </div>
 
                         </div>
                         <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DIČ"):</label>
                         <div class="col-sm-5 col-md-5">
-                            <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
+                            <div class="input-group">
+                                <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
+                                <button type="button" id="cmdViesImport" onclick="vies()" class="btn btn-outline-secondary">VIES</button>
+                            </div>
                         </div>
                     </div>
                     <div class="row my-2">
@@ -309,6 +314,7 @@
                 <div class="col-sm-7 col-md-7">
                     <div class="card">
                         <div class="card-header">
+                            <span class="k-icon k-i-dollar"></span>
                             @_f.tra("Ceník fakturačních hodinových sazeb")
                         </div>
                         <div class="card-body">
@@ -535,15 +541,15 @@
 
 
 
-    function ares(ctl) {
-        $(ctl).text("Processing...");
-        $(ctl).attr("disabled", true);
+    function ares() {
+        $("#cmdAresImport").text("Processing...");
+        $("#cmdAresImport").attr("disabled", true);
         form1.action = _ep("/p28/Record?oper=ares");
         form1.submit();
     }
-    function vies(ctl) {
-        $(ctl).text("Processing...");
-        $(ctl).attr("disabled", true);
+    function vies() {
+        $("#cmdViesImport").text("Processing...");
+        $("#cmdViesImport").attr("disabled", true);
         form1.action = _ep("/p28/Record?oper=vies");
         form1.submit();
     }
