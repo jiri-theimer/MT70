@@ -305,22 +305,53 @@
 
         <div class="tab-pane" id="tab2" role="tabpanel">
             <!-- Tab2 -->
-            <div class="card">
-                <div class="card-header">@_f.tra("WIP limit k upozornění")</div>
-                <div class="card-body">
-                    <div class="row">
-                        <label class="col-sm-4 col-md-4 col-form-label">@_f.tra("Limit rozpracovaných hodin v projektech klienta"):</label>
-                        <div class="col-sm-2 col-md-2">
-                            <mynumber asp-for="Rec.p28LimitHours_Notification" decimal-digits="2"></mynumber>
+            <div class="row">
+                <div class="col-sm-6 col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            @_f.tra("Ceník fakturačních hodinových sazeb")
                         </div>
-                        <label class="col-sm-4 col-md-4 col-form-label">@_f.tra("Limitní honorář z rozpracovaných hodin projektů klienta"):</label>
-                        <div class="col-sm-2 col-md-2">
-                            <mynumber asp-for="Rec.p28LimitFee_Notification" decimal-digits="2"></mynumber>
+                        <div class="card-body">
+                            <input type="radio" id="Radiop51Flag1" asp-for="@Model.p51Flag" value="1" onchange="postback('postback')">
+                            <label for="Radiop51Flag1">@_f.tra("Klient nemá přímo přiřazený ceník fakturačních sazeb")</label>
+                            <br />
+                            <input type="radio" id="Radiop51Flag2" asp-for="@Model.p51Flag" value="2" onchange="postback('postback')">
+                            <label for="Radiop51Flag2">@_f.tra("Svázat klienta s jedním ze zavedených ceníků")</label>
+                            <br />
+                            <input type="radio" id="Radiop51Flag3" asp-for="@Model.p51Flag" value="3" onchange="postback('postback')">
+                            <label for="Radiop51Flag3">@_f.tra("Klient má individuální hodinové sazby na míru")</label>
                         </div>
                     </div>
-                   
+                </div>
+                <div class="col-sm-6 col-md-6">
+                    <div class="card my-2">
+                        <div class="card-header">@_f.tra("WIP limit k upozornění")</div>
+                        <div class="card-body">
+                            <table>
+                                <tr>
+                                    <td>
+                                        @_f.tra("Limit rozpracovaných hodin v projektech klienta"):
+                                    </td>
+                                    <td>
+                                        <mynumber asp-for="Rec.p28LimitHours_Notification" decimal-digits="2"></mynumber>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @_f.tra("Limitní honorář z rozpracovaných hodin projektů klienta"):
+                                    </td>
+                                    <td>
+                                        <mynumber asp-for="Rec.p28LimitFee_Notification" decimal-digits="2"></mynumber>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            
 
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Fakturační jazyk klienta"):</label>
@@ -336,7 +367,7 @@
             </div>
             <div class="row my-2">
                 <div class="col-sm-2 col-md-3">@_f.tra("ISDOC kód státu"):</div>
-                <div class="col-sm-2 col-md-2">
+                <div class="col-sm-1 col-md-1">
                     <input class="form-control" asp-for="Rec.p28Pohoda_VatCode" />
                 </div>
                 <div class="col-auto">@_f.tra("IČ DPH SK (Slovensko)"):</div>
@@ -352,17 +383,15 @@
 
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Šablona zprávy pro elektronickou fakturaci"):</label>
-                <div class="col-sm-10 col-md-9">
+                <div class="col-sm-5 col-md-4">
                     <mycombo entity="j61TextTemplate" asp-for="Rec.j61ID_Invoice" selectedtext="@Model.SelectedComboJ61Name" view-flag="2"></mycombo>
                 </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-sm-2 col-md-3">@_f.tra("Režijní přirážka k ceně faktury"):</div>
-                <div class="col-sm-10 col-md-9">
+                <div class="col-auto">@_f.tra("Režijní přirážka k ceně faktury"):</div>
+                <div class="col-sm-3 col-md-2">
                     <mycombo entity="p63Overhead" asp-for="Rec.p63ID" selectedtext="@Model.SelectedComboP63Name" view-flag="2"></mycombo>
                 </div>
             </div>
-
+           
             <div class="form-floating my-2">
                 <textarea class="form-control" style="background-color:#F0FFF0 !important;" asp-for="Rec.p28BillingMemo"></textarea>
                 <label for="Rec_p28BillingMemo">@_f.tra("Interní fakturační poznámka klienta")</label>
