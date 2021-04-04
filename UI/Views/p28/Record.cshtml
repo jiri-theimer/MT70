@@ -61,17 +61,15 @@
 
             <div class="row">
                 <div class="col-sm-6 col-md-6">
-                    @if (Model.IsCompany == 1)
-                    {
+                    <div id="divCompany1">
                         <div class="row my-2">
                             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Společnost"):</label>
                             <div class="col-sm-11 col-md-10">
                                 <input class="form-control" asp-for="Rec.p28CompanyName" value="@Model.Rec.p28CompanyName" />
                             </div>
                         </div>
-                    }
-                    @if (Model.IsCompany == 0)
-                    {
+                    </div>
+                    <div id="divCompany0">
                         <div class="row my-2">
                             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
                             <div class="col-sm-11 col-md-10">
@@ -97,23 +95,24 @@
                                 <myautocomplete asp-for="Rec.p28TitleAfterName" o15flag="2" placeholder="@_f.tra("Za jménem")"></myautocomplete>
                             </div>
                         </div>
-
-                    }
-
-                <div class="row my-2">
-                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
-                    <div class="col-sm-5 col-md-4">
-                        <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
-
                     </div>
-                    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DIČ"):</label>
-                    <div class="col-sm-5 col-md-5">
-                        <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
-                    </div>
-                </div>
+
+
+
                     <div class="row my-2">
-                        
-                        
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
+                        <div class="col-sm-5 col-md-4">
+                            <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
+
+                        </div>
+                        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DIČ"):</label>
+                        <div class="col-sm-5 col-md-5">
+                            <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
+                        </div>
+                    </div>
+                    <div class="row my-2">
+
+
 
                     </div>
                 </div>
@@ -123,7 +122,7 @@
                         <div class="col-sm-5 col-md-4">
                             @if (Model.CanEditRecordCode)
                             {
-                                <myval value="@Model.Rec.p28Code" hoversymol="@_f.tra("Upravit kód")" hoverurl="javascript:edit_code()"></myval>
+                                <myval value="@Model.Rec.p28Code" hoversymol="@_f.tra("Upravit kód")" hoverurl="javascript:_edit_code('p28',@Model.rec_pid)"></myval>
                             }
                             else
                             {
@@ -135,13 +134,13 @@
                             <input class="form-control" asp-for="Rec.p28CompanyShortName" placeholder="@_f.tra("Zkrácený (preferovaný) název klienta")" />
                         </div>
                     </div>
-                    <div class="row my-2">                        
+                    <div class="row my-2">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Typ klienta"):</label>
                         <div class="col-sm-11 col-md-10">
                             <mycombo entity="p29ContactType" asp-for="Rec.p29ID" selectedtext="@Model.SelectedComboP29Name" view-flag="2"></mycombo>
                         </div>
                     </div>
-                  
+
                 </div>
             </div>
 
@@ -154,7 +153,6 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-hover" style="table-layout: fixed;">
-                        
                         @for (int i = 0; i < Model.lisO37.Count; i++)
                         {
                             <tr style="@(Model.lisO37[i].CssTempDisplay)">
@@ -180,10 +178,10 @@
                                 </td>
                                 <td style="width:80px;">
                                     <input class="form-control" asp-for="@Model.lisO37[i].o38ZIP" style="width:70px;" placeholder="@_f.tra("PSČ")" />
-                                   
-                                    
+
+
                                 </td>
-                                <td>                                    
+                                <td>
                                     <myautocomplete asp-for="@Model.lisO37[i].o38Country" o15flag="328" placeholder="@_f.tra("Stát")"></myautocomplete>
                                 </td>
                                 <td style="width:70px;">
@@ -199,6 +197,56 @@
 
             <div class="card my-2">
                 <div class="card-header">
+                    <span class="k-icon k-i-email"></span>
+                    @_f.tra("Kontaktní média")
+                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o32()">@_f.tra("Přidat")</button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover" style="table-layout: fixed;">
+                        @for (int i = 0; i < Model.lisO32.Count; i++)
+                        {
+                        <tr style="@(Model.lisO32[i].CssTempDisplay)">
+                            <td style="width:130px;">
+                                <input type="hidden" asp-for="lisO32[i].IsTempDeleted" value="@Model.lisO32[i].IsTempDeleted"/>
+                                <input type="hidden" asp-for="lisO32[i].TempGuid" value="@Model.lisO32[i].TempGuid"/>
+                                <input type="hidden" asp-for="lisO32[i].pid" value="@Model.lisO32[i].pid"/>
+
+                                <select class="form-select" asp-for="@Model.lisO32[i].o33ID" onchange="postback('postback')">
+                                    <option value="Email">E-MAIL</option>
+                                    <option value="EmailCC">E-MAIL CC</option>
+                                    <option value="EmailBCC">E-MAIL BCC</option>
+                                    <option value="Tel">TEL</option>
+                                    <option value="URL">URL</option>
+                                    <option value="Other">@_f.tra("Jiné")</option>
+                                </select>
+
+                            </td>
+                            <td>
+                                <input class="form-control" asp-for="@Model.lisO32[i].o32Value" placeholder="@_f.tra("Číslo/Adresa")" />
+                            </td>
+                            <td>
+                                <input class="form-control" asp-for="@Model.lisO32[i].o32Description" placeholder="@_f.tra("Poznámka")" />
+                            </td>
+                            <td>
+                                @if (Model.lisO32[i].o33ID == BO.o33FlagEnum.Email || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailBCC || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailCC)
+                                {
+                                    <input type="checkbox" asp-for="@Model.lisO32[i].o32IsDefaultInInvoice" />
+                                    <label for="lisO32_@(i)__o32IsDefaultInInvoice">Fakturační e-mail</label>
+                                }
+
+                            </td>
+
+                            <td style="width:70px;">
+                                <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisO32[i].TempGuid)')">x</button>
+                            </td>
+                        </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <div class="card my-2">
+                <div class="card-header">
                     @Html.Raw(BO.Symbol.j02())
                     @_f.tra("Kontaktní osoby")
                     <div class="dropdown float-end">
@@ -207,10 +255,10 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="javascript:create_person()">@_f.tra("Založit novou osobu")</a></li>
-                            <li><a class="dropdown-item" href="#">@_f.tra("Vazba na již založenou osobu")</a></li>                            
+                            <li><a class="dropdown-item" href="#">@_f.tra("Vazba na již založenou osobu")</a></li>
                         </ul>
                     </div>
-                    
+
                 </div>
                 <div class="card-body">
 
@@ -271,8 +319,8 @@
                     <mynumber asp-for="Rec.p28InvoiceMaturityDays" decimal-digits="0"></mynumber>
                 </div>
             </div>
-           
-            
+
+
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Šablona zprávy pro elektronickou fakturaci"):</label>
                 <div class="col-sm-10 col-md-9">
@@ -345,10 +393,21 @@
 
 
 <input type="hidden" asp-for="@Model.TempGuid" />
+<input type="hidden" asp-for="@Model.Rec.p28Code" value="@Model.Rec.p28Code" />
 <input type="hidden" asp-for="@Model.CanEditRecordCode" />
 
 <script type="text/javascript">
     $(document).ready(function () {
+        @if (Model.IsCompany == 1)
+                    {
+            @:$("#divCompany1").css("display", "block");
+            @:$("#divCompany0").css("display", "none");
+        }
+        else
+        {
+            @:$("#divCompany1").css("display", "none");
+            @:$("#divCompany0").css("display", "block");
+        }
 
 
 
@@ -364,22 +423,32 @@
     function handle_delete_o37(guid) {
         form1.action = _ep("/p28/Record?oper=delete_o37&guid=" + guid);
         form1.submit();
-
     }
     function handle_add_o37() {
         form1.action = _ep("/p28/Record?oper=add_o37");
         form1.submit();
     }
 
+    function handle_add_o32() {
+        form1.action = _ep("/p28/Record?oper=add_o32");
+        form1.submit();
+    }
+    function handle_delete_o32(guid) {
+        form1.action = _ep("/p28/Record?oper=delete_o32&guid=" + guid);
+        form1.submit();
+    }
 
     function create_person() {
         _window_open(_ep("/j02/Record?isintraperson=false&pid=0&tempguid=@Model.TempGuid"));
     }
 
-    function hardrefresh() {
-        alert("hardrefresh");
+    function hardrefresh(pid,flag) {
+        if (flag.substring(0, 10) == "recordcode") {
+            $("#Rec_p28Code").val(flag.split("|")[1]);
+        }
         postback("postback");
     }
+
 
 
 
@@ -397,7 +466,5 @@
         form1.submit();
     }
 
-   function edit_code() {
-        _window_open(_ep("/j02/Record?isintraperson=false&pid=0&tempguid=@Model.TempGuid",1));
-    }
+
 </script>

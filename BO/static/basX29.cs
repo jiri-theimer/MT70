@@ -15,10 +15,13 @@ namespace BO
 
         }
         public static string GetEntity(BO.x29IdEnum x29id)
-        {
-            //return x29id.ToString().Substring(0, 3);
+        {            
             return Enum.GetName(x29id.GetType(), x29id);
-
+        }
+        public static string GetEntity(string prefix)
+        {
+            var x29id = GetEnum(prefix);
+            return Enum.GetName(x29id.GetType(), x29id);
         }
         public static int GetInt(string prefix)
         {

@@ -26,12 +26,33 @@ namespace UI.Models.Record
         public string TempGuid { get; set; }
 
         public List<o37Repeater> lisO37 { get; set; }
+        public List<o32Repeater> lisO32 { get; set; }
 
         public bool CanEditRecordCode { get; set; }
     }
 
     public class o37Repeater : BO.o37Contact_Address
     {       
+        public bool IsTempDeleted { get; set; }
+        public string TempGuid { get; set; }
+        public string CssTempDisplay
+        {
+            get
+            {
+                if (this.IsTempDeleted)
+                {
+                    return "display:none;";
+                }
+                else
+                {
+                    return "display:table-row;";
+                }
+            }
+        }
+    }
+
+    public class o32Repeater : BO.o32Contact_Medium
+    {
         public bool IsTempDeleted { get; set; }
         public string TempGuid { get; set; }
         public string CssTempDisplay

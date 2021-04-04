@@ -28,6 +28,41 @@ namespace UI.Controllers
             return gi;
         }
 
+        public IActionResult RecordCode(string prefix,int pid)
+        {
+            var v = new RecordCode() { pid = pid, prefix = prefix };
+            if (v.pid==0 || v.prefix == null)
+            {
+                return this.StopPage(true, "pid or prefix missing");
+            }
+            
+            v.CodeValue = Factory.CBL.GetCurrentRecordCode(v.prefix, v.pid);
+            v.dtLast10 = Factory.CBL.GetList_Last10RecordCode(v.prefix);
+            return View(v);
+        }
+        [HttpPost]
+        public IActionResult RecordCode(RecordCode v, string oper)
+        {
+            v.dtLast10 = Factory.CBL.GetList_Last10RecordCode(v.prefix);
+            if (oper == "postback")
+            {
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {
+                
+                if (Factory.CBL.SaveRecordCode(v.CodeValue,v.prefix,v.pid)>0)
+                {
+                    v.SetJavascript_CallOnLoad(v.pid,"recordcode|"+v.CodeValue);
+                }
+
+            }
+
+            return View(v);
+
+        }
+
         public IActionResult RecordValidity(string strD1,string strD2)
         {
             

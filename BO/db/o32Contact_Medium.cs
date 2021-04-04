@@ -28,5 +28,7 @@ namespace BO
 
         public string o33Name { get; }       
         public string p28Name { get; }
+
+        public bool IsSetAsDeleted { get; set; }
     }
 }

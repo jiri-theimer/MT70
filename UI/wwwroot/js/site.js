@@ -84,8 +84,12 @@ function _edit(controller, pid, header) {
 }
 
 function _clone(controller, pid, header) {
-    _window_open("/" + controller + "/record?isclone=true&pid=" + pid, 1, header);
+    _window_open(_ep("/" + controller + "/record?isclone=true&pid=" + pid), 1, header);
 
+}
+
+function _edit_code(prefix, pid) {
+    _window_open(_ep("/Record/RecordCode?prefix=" + prefix + "&pid=" + pid, 1));
 }
 
 function _get_request_param(name) {

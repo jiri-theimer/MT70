@@ -54,7 +54,7 @@ namespace BL
         }
         public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id)
         {            
-            return _db.GetList<BO.o32Contact_Medium>("select a.*,o33.o33Name FROM o32Contact_Medium a INNER JOIN o33MediumType o33 ON a.o33ID=o33.o33ID WHERE a.p28ID=@p28id",new { p28id = p28id });
+            return _db.GetList<BO.o32Contact_Medium>("select a.*,"+ _db.GetSQL1_Ocas("o32", false, false)+", o33.o33Name FROM o32Contact_Medium a INNER JOIN o33MediumType o33 ON a.o33ID=o33.o33ID WHERE a.p28ID=@p28id",new { p28id = p28id });
         }
         public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id)
         {
@@ -67,7 +67,7 @@ namespace BL
         }
         public int Save(BO.p28Contact rec,List<BO.o37Contact_Address> lisO37,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,string tempguid)
         {
-            if (!ValidateBeforeSave(rec, lisO37))
+            if (!ValidateBeforeSave(rec, lisO37,lisO32))
             {
                 return 0;
             }
@@ -157,9 +157,42 @@ namespace BL
                                     return 0;
                                 }
                             }
+                        }                                              
+                    }
+
+                    if (lisO32 != null)
+                    {
+                        foreach (var med in lisO32)
+                        {
+                            if (med.IsSetAsDeleted)
+                            {
+                                if (med.pid > 0)
+                                {
+                                    _db.RunSql("DELETE FROM o32Contact_Medium WHERE o32ID=@pid", new { pid = med.pid });                                    
+                                }
+                            }
+                            else
+                            {
+                                var recO32 = new BO.o32Contact_Medium();
+                                if (med.pid > 0)
+                                {
+                                    recO32 = _db.Load<BO.o32Contact_Medium>("select a.*,"+ _db.GetSQL1_Ocas("o32",false,false)+" from o32Contact_Medium a WHERE a.o32ID=@pid", new { pid = med.pid });
+                                }
+                                recO32.o32Value = med.o32Value; recO32.o32Description = med.o32Description; recO32.o32IsDefaultInInvoice = med.o32IsDefaultInInvoice;recO32.o33ID = med.o33ID;
+                                 p = new DL.Params4Dapper();
+                                p.AddInt("pid", recO32.pid);
+                                p.AddInt("p28ID", intPID, true);
+                                p.AddEnumInt("o33ID", recO32.o33ID, true);
+                                p.AddString("o32Value", recO32.o32Value);
+                                p.AddString("o32Description", recO32.o32Description);
+                                p.AddBool("o32IsDefaultInInvoice", recO32.o32IsDefaultInInvoice);
+                                int intO32ID = _db.SaveRecord("o32Contact_Medium", p, recO32, false, true);
+                                if (intO32ID == 0)
+                                {
+                                    return 0;
+                                }
+                            }
                         }
-                       
-                       
                     }
                 }
 
@@ -171,12 +204,16 @@ namespace BL
         }
 
 
-        private bool ValidateBeforeSave(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37)
+        private bool ValidateBeforeSave(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32)
         {
 
-            if (string.IsNullOrEmpty(rec.p28CompanyName) && string.IsNullOrEmpty(rec.p28LastName))
+            if (rec.p28IsCompany && string.IsNullOrEmpty(rec.p28CompanyName))
             {
-                this.AddMessage("Chybí název nebo příjmení."); return false;
+                this.AddMessage("Chybí název."); return false;
+            }
+            if (rec.p28IsCompany==false && string.IsNullOrEmpty(rec.p28LastName))
+            {
+                this.AddMessage("Chybí příjmení fyzické osoby."); return false;
             }
             if (lisO37 != null)
             {
@@ -192,6 +229,14 @@ namespace BL
                     }
                 }
                 
+            }
+
+            if (lisO32 != null)
+            {
+                if (lisO32.Where(p => p.IsSetAsDeleted == false && string.IsNullOrEmpty(p.o32Value)).Count() > 0)
+                {
+                    this.AddMessage("Kontaktní médium musí mít vyplněnou adresu/číslo."); return false;
+                }
             }
 
             return true;

@@ -54,6 +54,20 @@ namespace UI.Controllers
                     v.lisO37.Add(new o37Repeater() {TempGuid = BO.BAS.GetGuid(), pid = c.pid, o38ID = c.o38ID, o36ID = c.o36ID
                         , o38Name = c.o38Name, o38City = c.o38City, o38Street = c.o38Street, o38Country = c.o38Country, o38ZIP = c.o38ZIP});
                 }
+                var lisO32 = Factory.p28ContactBL.GetList_o32(v.rec_pid);
+                v.lisO32 = new List<o32Repeater>();
+                foreach (var c in lisO32)
+                {
+                    v.lisO32.Add(new o32Repeater()
+                    {
+                        TempGuid = BO.BAS.GetGuid(),
+                        pid = c.pid,
+                        o33ID = c.o33ID,
+                        o32Value = c.o32Value,
+                        o32Description = c.o32Description,
+                        o32IsDefaultInInvoice = c.o32IsDefaultInInvoice                        
+                    });
+                }
 
                 if (v.Rec.p51ID_Billing > 0)
                 {
@@ -93,6 +107,10 @@ namespace UI.Controllers
             if (v.lisO37 == null)
             {
                 v.lisO37 = new List<o37Repeater>();
+            }
+            if (v.lisO32 == null)
+            {
+                v.lisO32 = new List<o32Repeater>();
             }
             if (v.Rec.j02ID_Owner == 0)
             {
@@ -136,6 +154,17 @@ namespace UI.Controllers
                 v.lisO37.First(p => p.TempGuid == guid).IsTempDeleted = true;
                 return View(v);
             }
+            if (oper == "add_o32")
+            {
+                var c = new o32Repeater() { TempGuid = BO.BAS.GetGuid(),o33ID=BO.o33FlagEnum.Email };                
+                v.lisO32.Add(c);
+                return View(v);
+            }
+            if (oper == "delete_o32")
+            {
+                v.lisO32.First(p => p.TempGuid == guid).IsTempDeleted = true;
+                return View(v);
+            }
 
             if (ModelState.IsValid)
             {
@@ -144,10 +173,14 @@ namespace UI.Controllers
                                 
                 if (v.IsCompany == 1)
                 {
+                    c.p28IsCompany = true;
                     c.p28CompanyName = v.Rec.p28CompanyName;
+                    c.p28FirstName = null;c.p28LastName = null;c.p28TitleAfterName = null;c.p28TitleBeforeName = null;c.p28Person_BirthRegID = null;
                 }
                 else
                 {
+                    c.p28IsCompany = false;
+                    c.p28CompanyName = null;
                     c.p28FirstName = v.Rec.p28FirstName;
                     c.p28LastName = v.Rec.p28LastName;
                     c.p28TitleAfterName = v.Rec.p28TitleAfterName;
@@ -190,7 +223,21 @@ namespace UI.Controllers
                         , o38ID = cc.o38ID, o38City = cc.o38City,o38Street=cc.o38Street,o38ZIP=cc.o38ZIP,o38Country=cc.o38Country,o38Name=cc.o38Name
                     });
                 }
-                c.pid = Factory.p28ContactBL.Save(c,lisO37,null,v.ff1.inputs,v.TempGuid);
+                var lisO32 = new List<BO.o32Contact_Medium>();
+                foreach (var cc in v.lisO32)
+                {
+                    lisO32.Add(new BO.o32Contact_Medium()
+                    {
+                        IsSetAsDeleted = cc.IsTempDeleted,
+                        pid = cc.pid,
+                        o33ID = cc.o33ID,                        
+                        o32Value = cc.o32Value,
+                        o32Description = cc.o32Description,
+                        o32IsDefaultInInvoice = cc.o32IsDefaultInInvoice
+                    });
+                }
+
+                c.pid = Factory.p28ContactBL.Save(c,lisO37,lisO32,v.ff1.inputs,v.TempGuid);
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p28", c.pid, v.TagPids);

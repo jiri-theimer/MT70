@@ -360,17 +360,7 @@ namespace DL
                         return "a.a01ID as pid,dbo._core_a01_isclosed(a.a01IsClosed,a.a01ValidFrom,a.a01ValidUntil) as isclosed,'a01' as entity,a.a01DateInsert as DateInsert,a.a01UserInsert as UserInsert,a.a01DateUpdate as DateUpdate,a.a01UserUpdate as UserUpdate,a.a01ValidFrom as ValidFrom,a.a01ValidUntil as ValidUntil,a.a01ParentID as parentpid,a.a01ChildsCount as childscount,a.a01IsTemporary as issimulation";
                     }
 
-                case "a11":
-                    string s = "a.a11ID as pid,dbo._core_a11_isclosed(a.a11IsLocked,a.a11IsLockedByWorkflow,a11_f06.f06ValidFrom,a11_f06.f06ValidUntil,a11_f06.f06IsA01ClosedStrict,a11_f06.f06IsA01PeriodStrict,a11_a01.a01IsAllFormsClosed,a11_a01.a01IsClosed,a11_a01.a01ValidFrom,a11_a01.a01ValidUntil) as isclosed,case when a.a11IsInProcessing=1 then 'yellow' end as bgcolor";
-                    if (isthegrid == true)
-                    {
-                        return s;
-                    }
-                    else
-                    {
-                        return s + ",a.a11DateUpdate as DateUpdate,a.a11DateInsert as DateInsert,a.a11UserUpdate as UserUpdate,a.a11UserInsert as UserInsert";
-
-                    }
+                
                 case "a03":
                     if (isthegrid == true)
                     {
