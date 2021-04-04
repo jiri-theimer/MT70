@@ -212,41 +212,41 @@
                     <table class="table table-hover" style="table-layout: fixed;">
                         @for (int i = 0; i < Model.lisO32.Count; i++)
                         {
-                        <tr style="@(Model.lisO32[i].CssTempDisplay)">
-                            <td style="width:130px;">
-                                <input type="hidden" asp-for="lisO32[i].IsTempDeleted" value="@Model.lisO32[i].IsTempDeleted"/>
-                                <input type="hidden" asp-for="lisO32[i].TempGuid" value="@Model.lisO32[i].TempGuid"/>
-                                <input type="hidden" asp-for="lisO32[i].pid" value="@Model.lisO32[i].pid"/>
+                            <tr style="@(Model.lisO32[i].CssTempDisplay)">
+                                <td style="width:130px;">
+                                    <input type="hidden" asp-for="lisO32[i].IsTempDeleted" value="@Model.lisO32[i].IsTempDeleted" />
+                                    <input type="hidden" asp-for="lisO32[i].TempGuid" value="@Model.lisO32[i].TempGuid" />
+                                    <input type="hidden" asp-for="lisO32[i].pid" value="@Model.lisO32[i].pid" />
 
-                                <select class="form-select" asp-for="@Model.lisO32[i].o33ID" onchange="postback('postback')">
-                                    <option value="Email">E-MAIL</option>
-                                    <option value="EmailCC">E-MAIL CC</option>
-                                    <option value="EmailBCC">E-MAIL BCC</option>
-                                    <option value="Tel">TEL</option>
-                                    <option value="URL">URL</option>
-                                    <option value="Other">@_f.tra("Jiné")</option>
-                                </select>
+                                    <select class="form-select" asp-for="@Model.lisO32[i].o33ID" onchange="postback('postback')">
+                                        <option value="Email">E-MAIL</option>
+                                        <option value="EmailCC">E-MAIL CC</option>
+                                        <option value="EmailBCC">E-MAIL BCC</option>
+                                        <option value="Tel">TEL</option>
+                                        <option value="URL">URL</option>
+                                        <option value="Other">@_f.tra("Jiné")</option>
+                                    </select>
 
-                            </td>
-                            <td>
-                                <input class="form-control" asp-for="@Model.lisO32[i].o32Value" placeholder="@_f.tra("Číslo/Adresa")" />
-                            </td>
-                            <td>
-                                <input class="form-control" asp-for="@Model.lisO32[i].o32Description" placeholder="@_f.tra("Poznámka")" />
-                            </td>
-                            <td>
-                                @if (Model.lisO32[i].o33ID == BO.o33FlagEnum.Email || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailBCC || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailCC)
-                                {
-                                    <input type="checkbox" asp-for="@Model.lisO32[i].o32IsDefaultInInvoice" />
-                                    <label for="lisO32_@(i)__o32IsDefaultInInvoice">Fakturační e-mail</label>
-                                }
+                                </td>
+                                <td>
+                                    <input class="form-control" asp-for="@Model.lisO32[i].o32Value" placeholder="@_f.tra("Číslo/Adresa")" />
+                                </td>
+                                <td>
+                                    <input class="form-control" asp-for="@Model.lisO32[i].o32Description" placeholder="@_f.tra("Poznámka")" />
+                                </td>
+                                <td>
+                                    @if (Model.lisO32[i].o33ID == BO.o33FlagEnum.Email || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailBCC || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailCC)
+                                    {
+                                        <input type="checkbox" asp-for="@Model.lisO32[i].o32IsDefaultInInvoice" />
+                                        <label for="lisO32_@(i)__o32IsDefaultInInvoice">Fakturační e-mail</label>
+                                    }
 
-                            </td>
+                                </td>
 
-                            <td style="width:70px;">
-                                <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisO32[i].TempGuid)')">x</button>
-                            </td>
-                        </tr>
+                                <td style="width:70px;">
+                                    <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisO32[i].TempGuid)')">x</button>
+                                </td>
+                            </tr>
                         }
                     </table>
                 </div>
@@ -269,36 +269,36 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-sm table-hover" style="table-layout: fixed;">
-                        @foreach(var c in Model.lisJ02)
+                        @foreach (var c in Model.lisJ02)
                         {
-                        <tr>
-                            <td>
-                                <a href="javascript:j02_record(@(c.pid))">@c.FullNameAsc</a>
-                            </td>
-                            <td>
-                                @c.j02Email
-                            </td>
+                            <tr>
+                                <td>
+                                    <a href="javascript:j02_record(@(c.pid))">@c.FullNameAsc</a>
+                                </td>
+                                <td>
+                                    @c.j02Email
+                                </td>
 
-                            <td>
-                                @c.j02Mobile
-                            </td>
-                            <td>
-                                @c.j02JobTitle
-                            </td>
-                            <td style="width:70px;">
-                                <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_j02(@(c.pid))">x</button>
-                            </td>
-                        </tr>
+                                <td>
+                                    @c.j02Mobile
+                                </td>
+                                <td>
+                                    @c.j02JobTitle
+                                </td>
+                                <td style="width:70px;">
+                                    <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_j02(@(c.pid))">x</button>
+                                </td>
+                            </tr>
                         }
                     </table>
                 </div>
             </div>
 
-            
 
 
 
-            
+
+
 
 
         </div>
@@ -306,7 +306,7 @@
         <div class="tab-pane" id="tab2" role="tabpanel">
             <!-- Tab2 -->
             <div class="row">
-                <div class="col-sm-6 col-md-6">
+                <div class="col-sm-7 col-md-7">
                     <div class="card">
                         <div class="card-header">
                             @_f.tra("Ceník fakturačních hodinových sazeb")
@@ -321,9 +321,18 @@
                             <input type="radio" id="Radiop51Flag3" asp-for="@Model.p51Flag" value="3" onchange="postback('postback')">
                             <label for="Radiop51Flag3">@_f.tra("Klient má individuální hodinové sazby na míru")</label>
                         </div>
+                        @if (Model.p51Flag == 2)
+                        {
+                            <div>
+                                @_f.tra("Přiřazený ceník hodinových sazeb")
+                            </div>
+                            <mycombo entity="p51PriceList" asp-for="Rec.p51ID_Billing" selectedtext="@Model.SelectedComboP51Name" view-flag="2"></mycombo>
+
+                        }
                     </div>
+
                 </div>
-                <div class="col-sm-6 col-md-6">
+                <div class="col-sm-5 col-md-5">
                     <div class="card my-2">
                         <div class="card-header">@_f.tra("WIP limit k upozornění")</div>
                         <div class="card-body">
@@ -332,7 +341,7 @@
                                     <td>
                                         @_f.tra("Limit rozpracovaných hodin v projektech klienta"):
                                     </td>
-                                    <td>
+                                    <td width="80px">
                                         <mynumber asp-for="Rec.p28LimitHours_Notification" decimal-digits="2"></mynumber>
                                     </td>
                                 </tr>
@@ -340,18 +349,18 @@
                                     <td>
                                         @_f.tra("Limitní honorář z rozpracovaných hodin projektů klienta"):
                                     </td>
-                                    <td>
+                                    <td width="80px">
                                         <mynumber asp-for="Rec.p28LimitFee_Notification" decimal-digits="2"></mynumber>
                                     </td>
                                 </tr>
                             </table>
-                            
+
                         </div>
                     </div>
                 </div>
             </div>
-            
-            
+
+
 
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Fakturační jazyk klienta"):</label>
@@ -383,7 +392,7 @@
 
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Šablona zprávy pro elektronickou fakturaci"):</label>
-                <div class="col-sm-5 col-md-4">
+                <div class="col-sm-5 col-md-5">
                     <mycombo entity="j61TextTemplate" asp-for="Rec.j61ID_Invoice" selectedtext="@Model.SelectedComboJ61Name" view-flag="2"></mycombo>
                 </div>
                 <div class="col-auto">@_f.tra("Režijní přirážka k ceně faktury"):</div>
@@ -391,7 +400,7 @@
                     <mycombo entity="p63Overhead" asp-for="Rec.p63ID" selectedtext="@Model.SelectedComboP63Name" view-flag="2"></mycombo>
                 </div>
             </div>
-           
+
             <div class="form-floating my-2">
                 <textarea class="form-control" style="background-color:#F0FFF0 !important;" asp-for="Rec.p28BillingMemo"></textarea>
                 <label for="Rec_p28BillingMemo">@_f.tra("Interní fakturační poznámka klienta")</label>
@@ -513,12 +522,12 @@
             $("#Rec_p28Code").val(flag.split("|")[1]);
         }
         if (flag.includes("multiselect")) {
-            var j02ids = flag.split("|")[1];            
+            var j02ids = flag.split("|")[1];
             form1.action = _ep("/p28/Record?oper=append_j02ids&j02ids=" + j02ids);
             form1.submit();
             return;
         }
-        
+
         postback("postback");
     }
 
@@ -549,10 +558,16 @@
     }
     function justice() {
         var ic = $("#Rec_p28RegID").val();
+        if (ic == "") {
+            alert("Chybí vyplnit IČ.");
+        }
         window.open("https://or.justice.cz/ias/ui/rejstrik-$firma?ico="+ic, "_blank");
     }
     function aresinfo() {
         var ic = $("#Rec_p28RegID").val();
+        if (ic == "") {
+           alert("Chybí vyplnit IČ.");
+        }
         window.open("http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_res.cgi?ico="+ic+"&jazyk=cz&xml=1", "_blank");
     }
 </script>
