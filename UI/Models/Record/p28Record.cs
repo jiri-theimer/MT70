@@ -27,6 +27,7 @@ namespace UI.Models.Record
 
         public List<o37Repeater> lisO37 { get; set; }
         public List<o32Repeater> lisO32 { get; set; }
+        public IEnumerable<BO.j02Person> lisJ02 { get; set; }
 
         public bool CanEditRecordCode { get; set; }
     }
@@ -70,4 +71,6 @@ namespace UI.Models.Record
             }
         }
     }
+
+    
 }

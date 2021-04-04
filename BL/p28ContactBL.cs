@@ -11,7 +11,7 @@ namespace BL
         public BO.p28Contact Load(int pid);
         public IEnumerable<BO.p28Contact> GetList(BO.myQueryP28 mq);
         public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id);
-        public int Save(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, string tempguid);
+        public int Save(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,List<int> j02ids);
         public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id);
         public BO.p28RecDisposition InhaleRecDisposition(BO.p28Contact rec);
 
@@ -65,7 +65,7 @@ namespace BL
 
             return _db.GetList<BO.o37Contact_Address>(sbret(), new { p28id = p28id });
         }
-        public int Save(BO.p28Contact rec,List<BO.o37Contact_Address> lisO37,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,string tempguid)
+        public int Save(BO.p28Contact rec,List<BO.o37Contact_Address> lisO37,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, List<int> j02ids)
         {
             if (!ValidateBeforeSave(rec, lisO37,lisO32))
             {
@@ -191,6 +191,25 @@ namespace BL
                                 {
                                     return 0;
                                 }
+                            }
+                        }
+                    }
+
+                    if (j02ids != null)
+                    {
+                        var lisP30 = _mother.p30Contact_PersonBL.GetList(new BO.myQueryP30() { p28id = intPID });                        
+                        foreach(var c in lisP30)
+                        {
+                            if (!j02ids.Any(p => p == c.j02ID))
+                            {
+                                _db.RunSql("DELETE FROM p30Contact_Person where p28ID=@p28id AND j02ID=@j02id", new { p28id = intPID, j02id = c.j02ID });
+                            }
+                        }
+                        foreach(int j02id in j02ids)
+                        {
+                            if (!lisP30.Any(p => p.j02ID == j02id))
+                            {
+                                _mother.p30Contact_PersonBL.Save(new BO.p30Contact_Person() { p28ID = intPID, j02ID = j02id });
                             }
                         }
                     }

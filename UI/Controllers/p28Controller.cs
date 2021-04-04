@@ -68,6 +68,7 @@ namespace UI.Controllers
                         o32IsDefaultInInvoice = c.o32IsDefaultInInvoice                        
                     });
                 }
+                
 
                 if (v.Rec.p51ID_Billing > 0)
                 {
@@ -112,6 +113,8 @@ namespace UI.Controllers
             {
                 v.lisO32 = new List<o32Repeater>();
             }
+            v.lisJ02 = Factory.j02PersonBL.GetList_InP28Form(v.rec_pid, v.TempGuid);
+
             if (v.Rec.j02ID_Owner == 0)
             {
                 v.Rec.j02ID_Owner = Factory.CurrentUser.j02ID;
@@ -121,7 +124,7 @@ namespace UI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(p28Record v,string oper, string guid)
+        public IActionResult Record(p28Record v,string oper, string guid,int j02id)
         {
             RefreshState(v);
 
@@ -163,6 +166,19 @@ namespace UI.Controllers
             if (oper == "delete_o32")
             {
                 v.lisO32.First(p => p.TempGuid == guid).IsTempDeleted = true;
+                return View(v);
+            }
+            if (oper== "delete_j02")
+            {
+                var lis = Factory.p85TempboxBL.GetList(v.TempGuid, true, "p30");
+                var c = new BO.p85Tempbox() { p85GUID = v.TempGuid, p85Prefix = "p30", p85DataPID = j02id };
+                if (lis.Where(p=>p.p85DataPID == j02id && p.p85Prefix == "p30").Count() > 0)
+                {
+                    c = lis.Where(p => p.p85DataPID == j02id && p.p85Prefix == "p30").First();
+                }
+                c.p85IsDeleted = true;
+                Factory.p85TempboxBL.Save(c);
+                v.lisJ02 = Factory.j02PersonBL.GetList_InP28Form(v.rec_pid, v.TempGuid);
                 return View(v);
             }
 
@@ -237,7 +253,7 @@ namespace UI.Controllers
                     });
                 }
 
-                c.pid = Factory.p28ContactBL.Save(c,lisO37,lisO32,v.ff1.inputs,v.TempGuid);
+                c.pid = Factory.p28ContactBL.Save(c,lisO37,lisO32,v.ff1.inputs,v.lisJ02.Select(p=>p.pid).ToList());
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p28", c.pid, v.TagPids);

@@ -10,7 +10,7 @@ namespace BL
     {
         public BO.p30Contact_Person Load(int pid);
         public BO.p30Contact_Person LoadByp28(int j02id, int p28id);
-        public IEnumerable<BO.p30Contact_Person> GetList(BO.myQuery mq);
+        public IEnumerable<BO.p30Contact_Person> GetList(BO.myQueryP30 mq);
         public int Save(BO.p30Contact_Person rec);
 
     }
@@ -42,7 +42,7 @@ namespace BL
             return _db.Load<BO.p30Contact_Person>(GetSQL1(" WHERE a.j02ID=@j02id AND a.p28ID=@p28id"), new { j02id = j02id,p28id=p28id });
         }
 
-        public IEnumerable<BO.p30Contact_Person> GetList(BO.myQuery mq)
+        public IEnumerable<BO.p30Contact_Person> GetList(BO.myQueryP30 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p30Contact_Person>(fq.FinalSql, fq.Parameters);

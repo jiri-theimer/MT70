@@ -152,7 +152,7 @@
                 <div class="card-header">
                     @Html.Raw(BO.Symbol.o38())
                     @_f.tra("Adresy")
-                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o37()">@_f.tra("Přidat adresu")</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o37()">@_f.tra("Přidat")</button>
                 </div>
                 <div class="card-body">
                     <table class="table table-hover" style="table-layout: fixed;">
@@ -188,7 +188,7 @@
                                     <myautocomplete asp-for="@Model.lisO37[i].o38Country" o15flag="328" placeholder="@_f.tra("Stát")"></myautocomplete>
                                 </td>
                                 <td style="width:70px;">
-                                    <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o37('@(Model.lisO37[i].TempGuid)')">x</button>
+                                    <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o37('@(Model.lisO37[i].TempGuid)')">x</button>
                                 </td>
 
                             </tr>
@@ -240,7 +240,7 @@
                             </td>
 
                             <td style="width:70px;">
-                                <button type="button" class="btn btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisO32[i].TempGuid)')">x</button>
+                                <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisO32[i].TempGuid)')">x</button>
                             </td>
                         </tr>
                         }
@@ -257,14 +257,36 @@
                             @_f.tra("Přidat")
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="javascript:create_person()">@_f.tra("Založit novou osobu")</a></li>
+                            <li><a class="dropdown-item" href="javascript:j02_create()">@_f.tra("Založit novou osobu")</a></li>
                             <li><a class="dropdown-item" href="#">@_f.tra("Vazba na již založenou osobu")</a></li>
                         </ul>
                     </div>
 
                 </div>
                 <div class="card-body">
+                    <table class="table table-sm table-hover" style="table-layout: fixed;">
+                        @foreach(var c in Model.lisJ02)
+                        {
+                        <tr>
+                            <td>
+                                <a href="javascript:j02_record(@(c.pid))">@c.FullNameAsc</a>
+                            </td>
+                            <td>
+                                @c.j02Email
+                            </td>
 
+                            <td>
+                                @c.j02Mobile
+                            </td>
+                            <td>
+                                @c.j02JobTitle
+                            </td>
+                            <td style="width:70px;">
+                                <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_j02(@(c.pid))">x</button>
+                            </td>
+                        </tr>
+                        }
+                    </table>
                 </div>
             </div>
 
@@ -441,8 +463,15 @@
         form1.submit();
     }
 
-    function create_person() {
+    function j02_create() {
         _window_open(_ep("/j02/Record?isintraperson=false&pid=0&tempguid=@Model.TempGuid"));
+    }
+    function j02_record(j02id) {
+        _window_open(_ep("/j02/Record?pid="+j02id+"&tempguid=@Model.TempGuid"));
+    }
+    function handle_delete_j02(j02id) {
+        form1.action = _ep("/p28/Record?oper=delete_j02&j02id=" + j02id);
+        form1.submit();
     }
 
     function hardrefresh(pid,flag) {

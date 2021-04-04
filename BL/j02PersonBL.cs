@@ -9,6 +9,7 @@ namespace BL
         public BO.j02Person LoadByEmail(string strEmail, int pid_exclude);
         public BO.j02Person LoadByCode(string strCode, int pid_exclude);
         public IEnumerable<BO.j02Person> GetList(BO.myQueryJ02 mq);
+        public IEnumerable<BO.j02Person> GetList_InP28Form(int p28id, string tempclientguid);
         public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI,string tempguid);
         public bool ValidateBeforeSave(BO.j02Person rec);
         public BO.j02PersonSum LoadSumRow(int pid);
@@ -57,7 +58,13 @@ namespace BL
             return _db.GetList<BO.j02Person>(fq.FinalSql,fq.Parameters);
         }
 
-       
+        public IEnumerable<BO.j02Person> GetList_InP28Form(int p28id,string tempclientguid)
+        {
+            sb(GetSQL1());
+            sb(" WHERE a.j02ID IN (select p85DataPID FROM p85TempBox WHERE p85GUID=@guid AND p85Prefix='p30' and p85IsDeleted=0)");
+            sb(" OR (a.j02ID IN (select j02ID FROM p30Contact_Person WHERE p28ID=@p28id) AND a.j02ID NOT IN (select p85DataPID FROM p85TempBox WHERE p85IsDeleted=1 AND p85Prefix='p30' AND p85GUID=@guid))");
+            return _db.GetList<BO.j02Person>(sbret(), new { p28id = p28id, guid = tempclientguid });
+        }
 
 
         public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI,string tempguid)

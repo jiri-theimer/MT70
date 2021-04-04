@@ -243,6 +243,12 @@ namespace UI.Controllers
                         }                        
                         Factory.p30Contact_PersonBL.Save(recP30);
                     }
+                    if (v.RadioIsIntraPerson == 0 && string.IsNullOrEmpty(v.TempGuid)==false)
+                    {
+                        //založení osoby z formuláře klienta
+                        var cTemp = new BO.p85Tempbox() { p85GUID = v.TempGuid, p85Prefix = "p30", p85DataPID = c.pid };
+                        Factory.p85TempboxBL.Save(cTemp);
+                    }
                     Factory.o51TagBL.SaveTagging("j02", c.pid, v.TagPids);
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);
