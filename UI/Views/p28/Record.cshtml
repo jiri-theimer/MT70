@@ -258,7 +258,7 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="javascript:j02_create()">@_f.tra("Založit novou osobu")</a></li>
-                            <li><a class="dropdown-item" href="#">@_f.tra("Vazba na již založenou osobu")</a></li>
+                            <li><a class="dropdown-item" href="javascript:j02_append()">@_f.tra("Vazba na již založenou osobu")</a></li>
                         </ul>
                     </div>
 
@@ -418,6 +418,7 @@
 
 
 <input type="hidden" asp-for="@Model.TempGuid" />
+<input type="hidden" asp-for="@Model.MultiselectJ02IDs" value="@Model.MultiselectJ02IDs" />
 <input type="hidden" asp-for="@Model.Rec.p28Code" value="@Model.Rec.p28Code" />
 <input type="hidden" asp-for="@Model.CanEditRecordCode" />
 
@@ -478,6 +479,7 @@
         if (flag.substring(0, 10) == "recordcode") {
             $("#Rec_p28Code").val(flag.split("|")[1]);
         }
+        alert(flag);
         postback("postback");
     }
 
@@ -498,5 +500,8 @@
         form1.submit();
     }
 
+    function j02_append() {
+        _window_open("/Record/GridMultiSelect?prefix=j02", 2, "Přidat kontaktní osobu");
 
+    }
 </script>

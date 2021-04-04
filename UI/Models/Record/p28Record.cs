@@ -24,6 +24,7 @@ namespace UI.Models.Record
         public FreeFieldsViewModel ff1 { get; set; }
 
         public string TempGuid { get; set; }
+        public string MultiselectJ02IDs { get; set; }
 
         public List<o37Repeater> lisO37 { get; set; }
         public List<o32Repeater> lisO32 { get; set; }
