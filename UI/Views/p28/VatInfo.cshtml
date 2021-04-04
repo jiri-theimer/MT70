@@ -1,0 +1,131 @@
+﻿@model UI.Models.VatInfoViewModel
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("DPH Info");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+@addTagHelper *, UI
+
+<div>
+    <h4>@Model.PageTitle</h4>
+</div>
+<div class="bg-light" style="padding:10px;">
+
+    <button id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+</div>
+
+<div class="row">
+    <div class="col-auto">
+        <input type="text" id="txtVAT" class="form-control" value="@Model.DIC" placeholder="@_f.tra("Zadejte DIČ")" />
+    </div>
+    <div class="col-auto">
+        <button id="cmdVerify" type="button" class="btn btn-success">@_f.tra("Ověřit")</button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        VIES | VAT Information Exchange System
+        <a href="https://ec.europa.eu/taxation_customs/vies/vatRequest.html" target="_blank">LINK</a>
+    </div>
+    <div class="card-body">
+        @if (Model.DIC != null)
+        {
+        <table class="table table-hover">
+            <tr>
+                <td>
+                    VAT ID:
+                </td>
+                <td>
+                    @Model.DIC
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Is Valid:
+                </td>
+                <td>
+                    @Model.IsViesValid
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Name:
+                </td>
+                <td>
+                    @Model.CompanyName
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Address:
+                </td>
+                <td>
+                    @Model.CompanyAddress
+                </td>
+            </tr>
+        </table>
+        }
+
+
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Registr plátců DPH | Ministerstvo financí ČR
+        <a href="http://adisreg.mfcr.cz/cgi-bin/adis/idph/int_dp_prij.cgi?ZPRAC=FDPHI1" target="_blank">LINK</a>
+    </div>
+    <div class="card-body">
+        @if (Model.DIC != null)
+        {
+            <table class="table table-hover">
+                <tr>
+                    <td>
+                        DIČ:
+                    </td>
+                    <td>
+                        @Model.DIC
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Klasifikace plátce:
+                    </td>
+                    <td>
+                        @Model.ADIS_Veta
+                    </td>
+                </tr>
+                
+            </table>
+        }
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdVerify").click(function () {
+            var dic = $("#txtVAT").val();
+            if (dic != "") {
+                $(this).text("Processing...");
+                $(this).attr("disabled", true);
+                location.replace(_ep("/p28/VatInfo?dic=" + dic));
+            }
+            
+
+
+        });
+
+       
+
+    })
+
+    
+</script>

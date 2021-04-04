@@ -12,6 +12,62 @@ namespace UI.Controllers
 {
     public class p28Controller : BaseController
     {
+        public IActionResult VatInfo(string dic)
+        {
+            var v = new VatInfoViewModel() { DIC = dic };
+            if (string.IsNullOrEmpty(v.DIC))
+            {
+                return View(v);
+            }
+            string strDic = BO.BAS.RightString(v.DIC, v.DIC.Length - 2);
+            string strCountryCode = v.DIC.Substring(0, 2);            
+
+            var vatQuery = new TriggerMe.VAT.VATQuery();
+            try
+            {
+                var c = vatQuery.CheckVATNumberAsync(strCountryCode, strDic);
+                if (c.Result.Valid)
+                {
+                    v.IsViesValid = true;
+                    v.CompanyAddress = c.Result.Address;
+                    v.CompanyName = c.Result.Name;
+                }
+            }
+            catch(Exception e)
+            {
+                this.AddMessageTranslated(e.Message);
+            }
+
+            
+            //string[] vatnum = new string[1];
+            //ADIS.InformaceOPlatciType[] res = new ADIS.InformaceOPlatciType[1];
+            //vatnum[0] = strDic;
+
+            //var adisreg = new ADIS.rozhraniCRPDPHClient();
+            //adisreg.getStatusNespolehlivyPlatce(vatnum, out res);
+            //if (res.Count() == 0)
+            //{
+            //    this.AddMessage("Registr nedokázal ověřit DIČ.");
+            //}
+            //else
+            //{
+            //    switch (res[0].nespolehlivyPlatce)
+            //    {
+            //        case ADIS.NespolehlivyPlatceType.ANO:
+            //            v.ADIS_Veta = "<h3 style='color:red;'>NESPOLEHLIVÝ PLÁTCE</h3>";
+            //            break;
+            //        case ADIS.NespolehlivyPlatceType.NE:
+            //            v.ADIS_Veta = "<h3>SPOLEHLIVÝ</h3>";
+            //            break;
+            //        case ADIS.NespolehlivyPlatceType.NENALEZEN:
+            //            v.ADIS_Veta = "NENALEZEN";
+            //            break;
+            //    }
+            //}
+
+
+            return View(v);
+        }
         public IActionResult Record(int pid, bool isclone)
         {
             var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1,p51Flag=1,TempGuid=BO.BAS.GetGuid() };
@@ -124,7 +180,7 @@ namespace UI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(p28Record v,string oper, string guid,int j02id)
+        public IActionResult Record(p28Record v,string oper, string guid,int j02id,string j02ids)
         {
             RefreshState(v);
 
@@ -178,6 +234,16 @@ namespace UI.Controllers
                 }
                 c.p85IsDeleted = true;
                 Factory.p85TempboxBL.Save(c);
+                v.lisJ02 = Factory.j02PersonBL.GetList_InP28Form(v.rec_pid, v.TempGuid);
+                return View(v);
+            }
+            if (oper== "append_j02ids")
+            {
+                foreach (int intJ02ID in BO.BAS.ConvertString2ListInt(j02ids))
+                {
+                    var c = new BO.p85Tempbox() { p85GUID = v.TempGuid, p85Prefix = "p30", p85DataPID = intJ02ID };
+                    Factory.p85TempboxBL.Save(c);
+                }                
                 v.lisJ02 = Factory.j02PersonBL.GetList_InP28Form(v.rec_pid, v.TempGuid);
                 return View(v);
             }
