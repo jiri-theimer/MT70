@@ -860,7 +860,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
 }
 
 
-/*2 panely pro rozložení layout stránky, overflow-y:auto bylo nutné zaremovat kvůli RecPage*/
+/*2 panely pro rozložení layout stránky, overflow-y:auto bylo nutné zaremovat kvůli RecPage stránce*/
 #layout_sidebar {
     height: 100%;
     width: 200px;
