@@ -102,11 +102,13 @@ namespace UI.Controllers
             }
 
             v.NavTabs.Add(AddTab("Úkony", "p31", "/TheGrid/SlaveView?prefix=p31", false,strBadge));
-            
-            
-            v.NavTabs.Add(AddTab("PING Log", "j92PingLog", "/TheGrid/SlaveView?prefix=j92",true,strBadge));
-            v.NavTabs.Add(AddTab("PING", "werwe", "/Robot/Ping?pokus=1",false));
+            v.NavTabs.Add(AddTab("Hodiny", "p31", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time", false, strBadge));
+            v.NavTabs.Add(AddTab("Výdaje", "p31", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense", false, strBadge));
+            v.NavTabs.Add(AddTab("Odměny", "p31", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee", false, strBadge));
 
+
+            v.NavTabs.Add(AddTab("PING Log", "j92PingLog", "/TheGrid/SlaveView?prefix=j92",true,strBadge));
+            v.NavTabs.Add(AddTab("LOGIN Log", "j90LoginAccessLog", "/TheGrid/SlaveView?prefix=j90", true, strBadge));
 
             string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-j02");
             var deftab = v.NavTabs[0];

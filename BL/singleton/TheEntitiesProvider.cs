@@ -102,7 +102,7 @@ namespace BL
             
             AE("view_PrimaryAddress", "Adresy", "Adresa", "view_PrimaryAddress a",null);
             
-            AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a", "a.p31ID DESC");            
+            AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a INNER JOIN p32Activity p32x ON a.p32ID=p32x.p32ID INNER JOIN p34ActivityGroup p34x ON p32x.p34ID=p34x.p34ID", "a.p31ID DESC");            
             AE("o23Doc", "Dokumenty", "Dokument", "o23Doc a", "a.o23ID DESC");
             AE("b07Comment", "Poznámky", "Poznámka", "b07Comment a", "a.b07ID DESC");
 
@@ -211,7 +211,7 @@ namespace BL
                     break;
                 case "p31":
                     lis.Add(getREL("j02Person", "p31_j02", "Osoba úkonu", "LEFT OUTER JOIN j02Person p31_j02 ON a.j02ID=p31_j02.j02ID"));
-                    lis.Add(getREL("j02Person", "p31_j02contact", "Kontaktní osoba úkonu", "LEFT OUTER JOIN j02Person p31_j02contact ON a.j02ID_ContactPerson=p31_j02contact.j02ID"));
+                    lis.Add(getREL("j02Person", "p31_j02contact", "Kontaktní osoba úkonu", "LEFT OUTER JOIN j02Person p31_j02contact ON a.j02ID_ContactPerson=p31_j02contact.j02ID"));                    
                     lis.Add(getREL("p32Activity", "p31_p32", "Aktivita", "INNER JOIN p32Activity p31_p32 ON a.p32ID=p31_p32.p32ID"));
                     lis.Add(getREL("p34ActivityGroup", "p32_p34", "Sešit", "INNER JOIN p32Activity aktivita1 ON a.p32ID=aktivita1.p32ID INNER JOIN p34ActivityGroup p32_p34 ON aktivita1.p34ID=p32_p34.p34ID"));
                     lis.Add(getREL("p41Project", "p31_p41", "Projekt", "LEFT OUTER JOIN p41Project p31_p41 ON a.p41ID=p31_p41.p41ID"));

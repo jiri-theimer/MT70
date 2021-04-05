@@ -31,12 +31,18 @@ namespace BO
             {
                 case "j02":
                     return handle_myquery_reflexe(new BO.myQueryJ02());
+                case "j90":
+                    return handle_myquery_reflexe(new BO.myQueryJ90());
+                case "j92":
+                    return handle_myquery_reflexe(new BO.myQueryJ92());
                 case "o27":
                     return handle_myquery_reflexe(new BO.myQueryO27());
                 case "o38":
                     return handle_myquery_reflexe(new BO.myQueryO38());
                 case "p28":
                     return handle_myquery_reflexe(new BO.myQueryP28());
+                case "p31":
+                    return handle_myquery_reflexe(new BO.myQueryP31());
                 case "p32":
                     return handle_myquery_reflexe(new BO.myQueryP32());
                 case "p34":

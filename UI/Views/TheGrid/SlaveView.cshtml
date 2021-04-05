@@ -1,0 +1,103 @@
+﻿@model FsmViewModel
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutSubform.cshtml";
+
+    if (Model.entity == null || Model.master_pid == 0)
+    {
+        return;
+    }
+
+}
+
+@addTagHelper *,UI
+
+
+
+<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        if ($("#FilterMyInvolvement").val() != "") {
+            $("#FilterMyInvolvement").css("background-color", "red");
+        }
+
+        
+
+        @if(Model.period != null)
+        {
+        <text>
+        $("#PeriodValue").on("change", function () {
+            $.post("/Common/SetUserParam", { key: "grid-period-value-@(Model.prefix+"-"+Model.gridinput.master_entity)",value:$(this).val()  }, function (data) {
+                reload();
+
+            });
+        });
+
+        if ($("#PeriodValue").val() != "0" && $("#PeriodValue").val() != "") {
+            $("#PeriodValue").css("background-color", "red");
+        }
+
+        $("#cmdRefreshPeriod").on("click", function () {
+            var k = [];
+            var v = [];
+            k.push("grid-period-value-@(Model.prefix+"-"+Model.gridinput.master_entity)");
+            v.push($("#PeriodValue").val());
+            k.push("grid-period-d1-@(Model.prefix+"-"+Model.gridinput.master_entity)");
+            v.push($("#d1helper").val());
+            k.push("grid-period-d2-@(Model.prefix+"-"+Model.gridinput.master_entity)");
+            v.push($("#d2helper").val());
+
+            $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
+                reload();
+
+            });
+
+        });
+
+        </text>
+        }
+
+
+
+    });
+
+
+
+
+        function reload() {
+            _showloading();
+            var url = "/TheGrid/SlaveView?prefix=@Model.prefix&master_entity=@Model.gridinput.master_entity&master_pid=@Model.master_pid";
+            url += "&myqueryinline=@Model.myqueryinline";
+
+            location.replace(url);
+
+        }
+
+
+
+        function change_grid(j72id) {
+            var strKey = "slaveview-j72id-@(Model.prefix)-@(Model.gridinput.master_entity)";
+
+            $.post("/Common/SetUserParam", { key: strKey,value:j72id  }, function (data) {
+                reload();
+
+            });
+        }
+
+       
+
+        
+    </script>
+
+}
+
