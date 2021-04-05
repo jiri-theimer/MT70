@@ -10,10 +10,17 @@ namespace UI.Controllers
 {
     public class p51Controller : BaseController
     {
-        public IActionResult Record(int pid, bool isclone)
+        public IActionResult Record(int pid, bool isclone,bool iscustom,string tempguid)
         {
-            var v = new p51Record() { rec_pid = pid, rec_entity = "p51" };
+            var v = new p51Record() { rec_pid = pid, rec_entity = "p51",TempGuid=tempguid };
             v.Rec = new BO.p51PriceList();
+            if (v.TempGuid !=null && v.rec_pid == 0)
+            {
+                //zjistit, zda již neexistuje rozdělaný temp ceník
+                var c = Factory.p51PriceListBL.LoadByTempGuid(v.TempGuid);
+                if (c !=null) v.rec_pid = c.pid;
+
+            }
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.p51PriceListBL.Load(v.rec_pid);
@@ -56,6 +63,15 @@ namespace UI.Controllers
                     v.lisP52.Add(cc);                    
                 }
 
+            }
+            else
+            {
+                //nový záznam
+                if (iscustom)
+                {
+                    v.Rec.p51IsCustomTailor = true;
+                    
+                }
             }
             
            
@@ -116,6 +132,11 @@ namespace UI.Controllers
 
                 c.p51TypeFlag = v.Rec.p51TypeFlag;
                 c.p51Name = v.Rec.p51Name;
+                c.p51IsCustomTailor = v.Rec.p51IsCustomTailor;
+                if (c.p51IsCustomTailor && !string.IsNullOrEmpty(v.TempGuid))
+                {
+                    c.p51Name = v.TempGuid;
+                }
                 c.j27ID = v.Rec.j27ID;
                 c.p51DefaultRateT = v.Rec.p51DefaultRateT;
 

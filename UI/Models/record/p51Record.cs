@@ -10,6 +10,7 @@ namespace UI.Models.Record
         public BO.p51PriceList Rec { get; set; }
         public string ComboJ27Code { get; set; }
         public List<p52Repeater> lisP52 { get; set; }
+        public string TempGuid { get; set; }    //kvůli zakládání ceníku na míru
     }
 
     public class p52Repeater : BO.p52PriceList_Item

@@ -80,7 +80,7 @@ namespace UI.Controllers
                     return RecNotFound(v);
                 }
                 v.SetTagging(Factory.o51TagBL.GetTagging("p28", v.rec_pid));
-
+                
                 if (!v.Rec.p28IsCompany)
                 {
                     v.IsCompany = 0;
@@ -124,20 +124,22 @@ namespace UI.Controllers
                         o32IsDefaultInInvoice = c.o32IsDefaultInInvoice                        
                     });
                 }
-                
 
+                
                 if (v.Rec.p51ID_Billing > 0)
                 {
-                    v.SelectedComboP51Name = v.Rec.p51Name_Billing;
                     var recP51 = Factory.p51PriceListBL.Load(v.Rec.p51ID_Billing);
+                    v.SelectedComboP51Name = recP51.p51Name;
                     if (recP51.p51IsCustomTailor)
                     {
-                        v.p51Flag = 3;
+                        v.p51Flag = 3;  //ceník na míru
+                        v.SelectedP51ID_Flag3 = v.Rec.p51ID_Billing;
                     }
                     else
                     {
                         v.p51Flag = 2;
-                    }
+                        v.SelectedP51ID_Flag2 = v.Rec.p51ID_Billing;
+                    }                                        
                     
                 }
 
@@ -280,6 +282,31 @@ namespace UI.Controllers
                 c.p63ID = v.Rec.p63ID;
                 c.p87ID = v.Rec.p87ID;
                 c.j61ID_Invoice = v.Rec.j61ID_Invoice;
+                if (v.p51Flag == 2)
+                {
+                    c.p51ID_Billing = v.SelectedP51ID_Flag2;
+                    if (c.p51ID_Billing == 0)
+                    {
+                        this.AddMessage("Chybí vybrat ceník fakturačních hodinových sazeb.");return View(v);
+                    }
+                }
+                if (v.p51Flag == 3)
+                {
+                    if (v.SelectedP51ID_Flag3 == 0)
+                    {
+                        var recP51 = Factory.p51PriceListBL.LoadByTempGuid(v.TempGuid);
+                        if (recP51 == null)
+                        {
+                            this.AddMessage("Chybí ceník hodinových sazeb na míru."); return View(v);
+                        }
+                        c.p51ID_Billing = recP51.pid;
+                    }
+                    else
+                    {
+                        c.p51ID_Billing = v.SelectedP51ID_Flag3;
+                    }
+                }
+                
 
                 c.p28BillingMemo = v.Rec.p28BillingMemo;                
                 c.p28InvoiceDefaultText1 = v.Rec.p28InvoiceDefaultText1;

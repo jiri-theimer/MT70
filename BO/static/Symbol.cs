@@ -14,7 +14,11 @@ namespace BO
         }
         public static string p41()
         {
-            return "<span style='font-size:170%;'>♘</span>";
+            return "<span style='font-size:170%;'>♘</span>";            
+        }
+        public static string p51()
+        {
+            return "<span style='font-size:170%;'>₠</span>";
         }
         public static string j02()
         {

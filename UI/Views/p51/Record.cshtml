@@ -4,6 +4,11 @@
 @{
     Model.PageTitle = _f.tra("Ceník sazeb");
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    Model.PageSymbol = BO.Symbol.p51();
+    if (Model.Rec.pid > 0)
+    {
+        Model.PageTitle += ": " + Model.Rec.p51Name;
+    }
 }
 
 @addTagHelper *, UI
@@ -14,10 +19,14 @@
         <div class="col-sm-3 col-md-3">
             <select asp-for="Rec.p51TypeFlag" class="form-select">
                 <option value="BillingRates">@_f.tra("Fakturační hodinové sazby")</option>
-                <option value="RootBillingRates">@_f.tra("Kořenové (ROOT) fakturační sazby")</option>
-                <option value="CostRates">@_f.tra("Nákladové hodinové sazby")</option>
-                <option value="OverheadRates">@_f.tra("Režijní hodinové sazby")</option>
-                <option value="EfectiveRates">@_f.tra("Globální sazby k výpočtu efektivních sazeb z pevných odměn")</option>
+                @if (Model.TempGuid == null)
+                {
+                    <option value="RootBillingRates">@_f.tra("Kořenové (ROOT) fakturační sazby")</option>
+                    <option value="CostRates">@_f.tra("Nákladové hodinové sazby")</option>
+                    <option value="OverheadRates">@_f.tra("Režijní hodinové sazby")</option>
+                    <option value="EfectiveRates">@_f.tra("Globální sazby k výpočtu efektivních sazeb z pevných odměn")</option>
+                }
+
             </select>
         </div>
 
@@ -37,16 +46,20 @@
 
         </div>
     </div>
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název ceníku"):</label>
-        <div class="col-sm-9 col-md-8">
-            <input class="form-control" asp-for="Rec.p51Name" />
+    @if (Model.TempGuid == null)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název ceníku"):</label>
+            <div class="col-sm-9 col-md-8">
+                <input class="form-control" asp-for="Rec.p51Name" />
+            </div>
+
+
         </div>
+    }
 
 
-    </div>
 
-    
 
 
 
@@ -127,10 +140,12 @@
         </table>
     </div>
 </div>
-<div class="my-5">
+<div class="my-5" style="display:none;">
     <input type="checkbox" asp-for="Rec.p51IsCustomTailor" />
     <label class="col-form-label" for="Rec_p51IsCustomTailor">@_f.tra("Sazby na míru pouze pro jeden projekt/klient")</label>
 </div>
+
+<input type="hidden" asp-for="@Model.TempGuid" />
 
 
 <script type="text/javascript">

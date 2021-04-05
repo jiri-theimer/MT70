@@ -19,6 +19,8 @@ namespace UI.Models.Record
         public string SelectedComboP63Name { get; set; }
         public string SelectedComboOwner { get; set; }
         public string SelectedComboP51Name { get; set; }
+        public int SelectedP51ID_Flag3 { get; set; }
+        public int SelectedP51ID_Flag2 { get; set; }
         public string SelectedComboParentP28Name { get; set; }
 
         public FreeFieldsViewModel ff1 { get; set; }

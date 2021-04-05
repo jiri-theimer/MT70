@@ -215,7 +215,12 @@ namespace BL
                     }
                 }
 
-                sc.Complete();
+                if (_db.RunSql("exec dbo.p28_aftersave @p28id,@j03id_sys", new { p28id = intPID, j03id_sys = _mother.CurrentUser.pid }))
+                {
+                    sc.Complete();
+                }
+
+                
 
                 return intPID;
             }

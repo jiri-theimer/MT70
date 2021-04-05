@@ -9,8 +9,8 @@ namespace BL
     public interface Ip51PriceListBL
     {
         public BO.p51PriceList Load(int pid);
-        
-        public IEnumerable<BO.p51PriceList> GetList(BO.myQuery mq);
+        public BO.p51PriceList LoadByTempGuid(string tempguid);
+        public IEnumerable<BO.p51PriceList> GetList(BO.myQueryP51 mq);
         public int Save(BO.p51PriceList rec, List<BO.p52PriceList_Item> lisP52);
 
         public IEnumerable<BO.p52PriceList_Item> GetList_p52(int p51id);
@@ -37,9 +37,12 @@ namespace BL
         {
             return _db.Load<BO.p51PriceList>(GetSQL1(" WHERE a.p51ID=@pid"), new { pid = pid });
         }
-        
+        public BO.p51PriceList LoadByTempGuid(string tempguid)
+        {
+            return _db.Load<BO.p51PriceList>(GetSQL1(" WHERE a.p51Name LIKE @guid"), new { guid = tempguid });
+        }
 
-        public IEnumerable<BO.p51PriceList> GetList(BO.myQuery mq)
+        public IEnumerable<BO.p51PriceList> GetList(BO.myQueryP51 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p51PriceList>(fq.FinalSql, fq.Parameters);
@@ -137,7 +140,7 @@ namespace BL
             }
             if (rec.p51IsMasterPriceList && rec.pid>0)
             {
-                if (GetList(new BO.myQuery("p51")).Where(p=>p.p51ID_Master==rec.pid && p.j27ID != rec.j27ID).Count() > 0)
+                if (GetList(new BO.myQueryP51()).Where(p=>p.p51ID_Master==rec.pid && p.j27ID != rec.j27ID).Count() > 0)
                 {
                     this.AddMessage("Měna MASTER ceníku musí být shodná s měnou jeho podřízených ceníků!");return false;
                 }

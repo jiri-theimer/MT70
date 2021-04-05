@@ -49,7 +49,8 @@ namespace BO
                     return handle_myquery_reflexe(new BO.myQueryO51());
                 case "p30":
                     return handle_myquery_reflexe(new BO.myQueryP30());
-
+                case "p51":
+                    return handle_myquery_reflexe(new BO.myQueryP51());
                 default:
                     return handle_myquery_reflexe(new BO.myQuery(prefix.Substring(0, 3)));
             }
