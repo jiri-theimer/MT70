@@ -12,6 +12,7 @@ namespace BO
         public myQuery(string prefix)
         {
             this.Prefix = prefix.Substring(0,3);
+            
         }
 
        
@@ -26,5 +27,7 @@ namespace BO
             return this.InhaleRows();
 
         }
+
+        
     }
 }

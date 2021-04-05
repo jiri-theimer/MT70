@@ -65,7 +65,7 @@ namespace BO
         private T handle_myquery_reflexe<T>(T mq)
         {
             if (_mqi != null)
-            {   //na vstupu je explicitní myquery ve tvaru název@typ@hodnota
+            {   //na vstupu je explicitní myquery ve tvaru název|typ|hodnota
                 for (int i = 0; i < _mqi.Count; i += 3)
                 {
                     switch (_mqi[i + 1])
@@ -88,12 +88,11 @@ namespace BO
                     }
                 }
             }
-            else
-            {   //filtr podle master_prefix+master_pid
-                if (_master_pid > 0 && _master_prefix != null)
-                {
-                    BO.Reflexe.SetPropertyValue(mq, _master_prefix + "id", _master_pid);
-                }
+
+            //filtr podle master_prefix+master_pid
+            if (_master_pid > 0 && _master_prefix != null)
+            {
+                BO.Reflexe.SetPropertyValue(mq, _master_prefix + "id", _master_pid);
             }
 
             return mq;

@@ -191,6 +191,7 @@
         var _thegrid={
             entity: "@Model.GridInput.entity",
             master_entity: "@Model.GridInput.master_entity",
+            master_pid: "@Model.GridInput.master_pid",
             dataurl: "@Url.Action("GetHtml4TheGrid", Model.GridInput.controllername)",
             handlerurl: "@Url.Action("HandleTheGridOper", Model.GridInput.controllername)",
             filterurl: "@Url.Action("HandleTheGridFilter", Model.GridInput.controllername)",
@@ -205,7 +206,7 @@
 
 
         };
-
+        
         tg_init(_thegrid);
 
         tg_refresh_sorter("@Model.firstdata.sortfield", "@Model.firstdata.sortdir");

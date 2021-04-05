@@ -199,26 +199,20 @@ namespace UI.Controllers
             v.entity = c.TableName;
             v.entityTitle = c.AliasPlural;
 
-            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity };
+            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=myqueryinline };
             
 
             if (v.entity == "")
             {
                 AddMessage("Grid entita nebyla nalezena.");
             }
-                        
-            
 
-            
 
-            switch (v.prefix)
-            {
-               
-                default:
-                    v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, myqueryinline);
-                    v.gridinput.query.IsRecordValid = null;
-                    break;
-            }
+
+
+
+            v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, myqueryinline);
+            v.gridinput.query.IsRecordValid = null;
 
             if (!Factory.CurrentUser.IsAdmin)
             {

@@ -18,7 +18,7 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
-           
+            
             if (this.j02id > 0)
             {
                 AQ("a.j02ID=@j02id", "j02id", this.j02id);

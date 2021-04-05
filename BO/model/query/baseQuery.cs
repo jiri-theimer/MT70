@@ -117,6 +117,10 @@ namespace BO
             return InhaleRows();
 
         }
+        public void ClearQRows()
+        {
+            _lis = new List<QRow>();
+        }
         protected List<QRow> InhaleRows()
         {
            

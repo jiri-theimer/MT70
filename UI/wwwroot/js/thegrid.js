@@ -56,8 +56,7 @@ function tg_init(c) {
         var field = this.id.replace("th_", "");
         tg_post_handler("sorter", "sortfield", field);
     });
-
-
+    
     tg_setup_checkbox_handler();
 
     //$("#container_grid").css("visibility", "visible");
@@ -192,6 +191,7 @@ function tg_post_handler(strOper, strKey, strValue) {
     if (_tg_viewstate !== "") {
         params.viewstate = _tg_viewstate.split("|");
     }
+    
 
     $("#tabgrid1_tbody").html("<b>Loading...</b>");
     $.post(_tg_url_handler, { tgi: params, pathpars: get_all_path_values() }, function (data) {

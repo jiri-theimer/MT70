@@ -102,9 +102,9 @@ namespace UI.Controllers
             }
 
             v.NavTabs.Add(AddTab("Úkony", "p31", "/TheGrid/SlaveView?prefix=p31", false,strBadge));
-            v.NavTabs.Add(AddTab("Hodiny", "p31", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time", false, strBadge));
-            v.NavTabs.Add(AddTab("Výdaje", "p31", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense", false, strBadge));
-            v.NavTabs.Add(AddTab("Odměny", "p31", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee", false, strBadge));
+            v.NavTabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time", false, strBadge));
+            v.NavTabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense", false, strBadge));
+            v.NavTabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee", false, strBadge));
 
 
             v.NavTabs.Add(AddTab("PING Log", "j92PingLog", "/TheGrid/SlaveView?prefix=j92",true,strBadge));

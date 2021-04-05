@@ -193,10 +193,9 @@ namespace UI
                 var c = _grid.Columns.Where(p => p.UniqueName == gridState.j75SortDataField).First();
                 mq.explicit_orderby = c.getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
             }
-
+            //mq.ClearQRows();    //vyčistit qrows, které vznikli v rámci zpracování dtFooter
             var dt = _Factory.gridBL.GetList(mq);
-
-
+            
 
             if (_grid.GridState.j75CurrentRecordPid > 0 && intVirtualRowsCount > gridState.j75PageSize)
             {

@@ -14,6 +14,8 @@ namespace DL
                 mq.CurrentUser = ru;
             }
             var ret = new DL.FinalSqlCommand();
+            mq.ClearQRows();
+           
             var lis = mq.GetRows();
             if (lis !=null && lis.Count > 0)
             {
