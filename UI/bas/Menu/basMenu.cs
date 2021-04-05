@@ -11,7 +11,7 @@ namespace UI.Menu
         //vrátí HTML post menu
 
 
-        public static string FlushResult_UL(List<MenuItem> menuitems, bool bolSupportIcons, bool bolRenderUlContainer)
+        public static string FlushResult_UL(List<MenuItem> menuitems, bool bolSupportIcons, bool bolRenderUlContainer,string source=null)
         {
             var sb = new System.Text.StringBuilder();
 
@@ -19,7 +19,12 @@ namespace UI.Menu
             {
                 sb.AppendLine("<ul style='border:0px;'>");
             }
-            foreach (var c in menuitems.Where(p => p.ParentID == null))
+            var qry = menuitems.Where(p => p.ParentID == null);
+            if (source == "recpage")
+            {
+                qry = qry.Where(p => p.IsHeader == false);
+            }
+            foreach (var c in qry)
             {
                 if (c.IsDivider == true)
                 {

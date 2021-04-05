@@ -36,7 +36,7 @@ namespace UI.Menu
         }
         public MenuItem AMI_Clone(string prefix, int pid)
         {
-            return AMI("Kopírovat", $"javascript:_clone('{prefix}',{pid}", "k-i-copy");
+            return AMI("Kopírovat", $"javascript:_clone('{prefix}',{pid})", "k-i-copy");
             
         }
         public MenuItem AMI_Report(string prefix,int pid)

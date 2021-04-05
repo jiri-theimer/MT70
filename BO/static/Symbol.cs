@@ -64,5 +64,9 @@ namespace BO
         {
             return "<span style='font-size:130%;'>🕖</span>";
         }
+        public static string mail()
+        {
+            return "<span style='font-size:170%;' class='k-icon k-i-email'></span>";
+        }
     }
 }

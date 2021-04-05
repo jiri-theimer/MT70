@@ -20,6 +20,8 @@ namespace UI.Models
                 _pagetitle = value;
             }
         }
+        public string PageSymbol { get; set; }
+       
         public string Javascript_CallOnLoad { get; set; }
         
        

@@ -75,8 +75,13 @@ namespace BL
             using (var sc = new System.Transactions.TransactionScope())
             {
                 var p = new DL.Params4Dapper();
-
+                
                 p.AddInt("pid", rec.pid);
+                if (rec.p28Code == null)
+                {
+                    rec.p28Code = "TEMP" + BO.BAS.GetGuid();
+                    p.AddString("p28Code", rec.p28Code);
+                }
                 p.AddInt("p29ID", rec.p29ID, true);
                 p.AddInt("p92ID", rec.p92ID, true);
                 p.AddInt("p87ID", rec.p87ID, true);

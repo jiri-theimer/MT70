@@ -626,8 +626,9 @@ a.cm {
 
 .cm_submenu {
     background-color: #F8F9FA !important; /* #90EE90 */
-    
     padding: 6px;
+    position:absolute;
+    
 }
 /*SPLITTER*/
 /* splitter zleva doprava - horizontální*/
@@ -859,7 +860,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
 }
 
 
-/*2 panely pro rozložení layout stránky*/
+/*2 panely pro rozložení layout stránky, overflow-y:auto bylo nutné zaremovat kvůli RecPage*/
 #layout_sidebar {
     height: 100%;
     width: 200px;
@@ -869,7 +870,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     background-color: #F8F9FA;
     border-right: solid 1px #F5F5F5;
     overflow-x: visible;
-    overflow-y:auto;
+    /*overflow-y:auto;*/
     transition: 0.5s;
 }
 
@@ -888,6 +889,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     padding: 0px;
     margin-left: 200px;
     display: block;
+    
 }
 
 #layout_sidebar_contextmenu {

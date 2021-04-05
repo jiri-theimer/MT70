@@ -69,6 +69,17 @@
 
 
     <div>
+        @if (Model.PageTitle != null)
+        {
+            <h4>
+                @if (Model.PageSymbol != null)
+                {
+                    @Html.Raw(Model.PageSymbol)
+                }
+                @Model.PageTitle
+            </h4>
+        }
+
         @RenderBody()
     </div>
 

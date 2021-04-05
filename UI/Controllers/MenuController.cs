@@ -27,20 +27,21 @@ namespace UI.Controllers
             return View();
         }
 
-        public string ContextMenu(string entity, int pid,string flag)
+        public string ContextMenu(string entity, int pid,string source)
         {
             string prefix = entity.Substring(0, 3);
             var lis = new List<MenuItem>();
             switch (prefix)
             {
                 case "j02":
-                    lis = new j02ContextMenu(Factory,pid).GetItems();
-                    break;
+                    lis = new j02ContextMenu(Factory,pid).GetItems();break;
+                case "p28":
+                    lis = new p28ContextMenu(Factory, pid).GetItems(); break;
                 default:
                     break;
             }
 
-            return basMenu.FlushResult_UL(lis, true, true);
+            return basMenu.FlushResult_UL(lis, true, true, source);
         }
         public string CurrentUserMyProfile()
         {                

@@ -105,7 +105,8 @@ namespace UI.Controllers
             
             
             v.NavTabs.Add(AddTab("PING Log", "j92PingLog", "/TheGrid/SlaveView?prefix=j92",true,strBadge));
-           
+            v.NavTabs.Add(AddTab("PING", "werwe", "/Robot/Ping?pokus=1",false));
+
 
             string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-j02");
             var deftab = v.NavTabs[0];
@@ -123,7 +124,7 @@ namespace UI.Controllers
         }
 
 
-        public IActionResult Record(int pid, bool isclone,bool isintraperson,string tempguid)
+        public IActionResult Record(int pid, bool isclone,bool isintraperson,string tempguid,int p28id)
         {
             var v = new j02Record() { rec_pid = pid, rec_entity = "j02",TempGuid=tempguid };
             v.Rec = new BO.j02Person();
@@ -143,13 +144,18 @@ namespace UI.Controllers
                 
                 if (v.Rec.j02TimesheetEntryDaysBackLimit_p34IDs != null)
                 {
-                    
+                   
                 }
                 v.RadioIsIntraPerson = Convert.ToInt32(BO.BAS.GB(v.Rec.j02IsIntraPerson));
             }
             else
             {
                 v.RadioIsIntraPerson = Convert.ToInt32(BO.BAS.GB(isintraperson));
+                v.SelectedP28ID = p28id;
+                if (v.RadioIsIntraPerson==0 && v.SelectedP28ID > 0)
+                {
+                    v.SelectedP28Name = Factory.p28ContactBL.Load(v.SelectedP28ID).p28name;
+                }
             }
             RefreshState(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);

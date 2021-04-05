@@ -4,7 +4,7 @@
 @{
     Model.PageTitle = _f.tra("Odeslat poštovní zprávu");
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
-
+    Model.PageSymbol = BO.Symbol.mail();
 
 }
 
@@ -21,7 +21,7 @@
 <script src="/kendo/js/kendo.autocomplete.min.js"></script>
 
 
-<h4>@Model.PageTitle</h4>
+
 <div class="bg-light" style="padding:10px;">
     <button id="cmdSave" type="submit" class="btn btn-success">@_f.tra("Odeslat")</button>
     <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>

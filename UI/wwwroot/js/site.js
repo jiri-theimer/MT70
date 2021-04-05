@@ -84,7 +84,7 @@ function _edit(controller, pid, header) {
 }
 
 function _clone(controller, pid, header) {
-    _window_open(_ep("/" + controller + "/record?isclone=true&pid=" + pid), 1, header);
+    _window_open(_ep("/" + controller + "/Record?isclone=true&pid=" + pid), 1, header);
 
 }
 
@@ -578,4 +578,13 @@ function _resize_iframe_onpage(iframe_id) {
         h_vertical = 400;
     }
     $("#" + iframe_id).css("height", remain_height + "px");
+}
+
+function _location_replace_top(url) {
+    if (window !== top) {   //voláno uvnitř iframe
+        window.open(url, "_top");
+    } else {
+        location.replace(url);
+    }
+
 }
