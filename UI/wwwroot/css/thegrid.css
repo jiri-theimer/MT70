@@ -286,6 +286,7 @@ a.grid_context_menu:hover {
 
 #tr_header_headline th.sortcolumn {
     cursor: pointer;
+    font-weight:normal;
 }
 
 

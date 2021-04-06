@@ -196,7 +196,7 @@ a.cm {
     border: none;
     background-color: white; /*aliceblue*/
     border: 1px solid rgba(0,0,0,0.15); /* z bootstrapu */
-    z-index: 1;
+    z-index: 999;
 }
 
     .cm_left2right ul, .cm_left2right li {

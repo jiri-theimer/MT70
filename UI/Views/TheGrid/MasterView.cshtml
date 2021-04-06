@@ -15,21 +15,43 @@
 @addTagHelper *,UI
 
 
+<div class="input-group m-0" style="padding-top:1px;">
+    <div class="tabovergrid nonmobile" style="margin-left:1px;">
+        KLIENTI
+        <span id="TheGridRows" class="badge bg-primary"></span>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="TheGridIcon" class="k-icon k-i-table"></span>
+            <span id="TheGridName">Grid<strong> & </strong>@_f.tra("Sloupce")</span>
+        </button>
+        <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
+            Loading...
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridSelMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="k-icon k-i-checkbox-checked"></span>
+            @_f.tra("Zaškrtlé záznamy")
+        </button>
+        <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
+    </div>
+
+    @if (Model.prefix == "p91" || Model.prefix == "p41")
+    {
+        <div>
+            @Html.EditorFor(m => m.period, "~/Views/Shared/_Period.cshtml")
+        </div>
+
+    }
 
 
-@if (Model.prefix == "p41")
-{
-    <table>
-        <tr>
-            
-            <td>
-                @Html.EditorFor(m => m.period, "~/Views/Shared/_Period.cshtml")
-            </td>
+    <div style="margin-left:auto;margin-right:2px;" class="nonmobile">
+        <button type="button" class="btn btn-outline-secondary" onclick="switch_to_flatview()"><span class="k-icon k-i-cell-split-horizontally"></span>@_f.tra("Vypnout spodní panel")</button>
+    </div>
+</div>
 
-        </tr>
-    </table>
-
-}
 <div id="splitter_container" class="splitter-container-top2bottom">
 
     <div id="splitter_panel1" class="splitter-panel-top">
@@ -82,8 +104,8 @@
 
         tg_adjust_for_screen("splitter_panel1");
 
-        
         _mainmenu_highlight_current("cmd" + _pageprefix);
+        
 
 
         if ($("#FilterMyInvolvement").val() != "") {
@@ -211,7 +233,7 @@
         }
 
 
-        function switch_to_flat(prefix) {    //vypnout spodní panel
+        function switch_to_flatview() {    //vypnout spodní panel
             $.post("/Common/SetUserParam", { key: "grid-" + _pageprefix + "-show11", value: "0" }, function (data) {
                 location.replace("/TheGrid/FlatView?prefix=" + _pageprefix);
 

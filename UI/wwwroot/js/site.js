@@ -588,3 +588,86 @@ function _location_replace_top(url) {
     }
 
 }
+
+
+
+//--------------------- funkce pro volání ze splitter stránek --------------------------
+
+function _splitter_init(splitterLayout, prefix) {    //splitterLayout 1 - horní a spodní panel, 2 - levý a pravý panel
+    var cont = document.getElementById("splitter_container");
+    var offset = $(cont).offset();
+    var h = _device.innerHeight - offset.top;
+    $(cont).height(h);
+
+    if (splitterLayout === "2" && cont.className !== "splitter-container-left2right") {
+        $("#splitter_container").attr("class", "splitter-container-left2right");
+        $("#splitter_resizer").attr("class", "splitter-resizer-left2right");
+        $("#splitter_panel1").attr("class", "splitter-panel-left");
+        $("#splitter_panel2").attr("class", "splitter-panel-right");
+    }
+    if (splitterLayout === "1" && cont.className !== "splitter-container-top2bottom") {
+        $("#splitter_container").attr("class", "splitter-container-top2bottom");
+        $("#splitter_resizer").attr("class", "splitter-resizer-top2bottom");
+        $("#splitter_panel1").attr("class", "splitter-panel-top");
+        $("#splitter_panel2").attr("class", "splitter-panel-bottom");
+    }
+
+    if (splitterLayout === "2") {
+        document.getElementById("fra_subgrid").height = h - 1;
+    }
+
+
+    $("#splitter_panel1").resizable({
+        handleSelector: "#splitter_resizer",
+
+        onDragStart: function (e, $el, opt) {
+            //resizeHeight: false
+            //$("#splitter_panel2").html("<h6>Velikost panelu ukládám do vašeho profilu...</h6>");
+
+            return true;
+        },
+        onDragEnd: function (e, $el, opt) {     //splitterLayout 1 - horní a spodní panel, 2 - levý a pravý panel
+            var id = $el.attr("id");
+            var panel1_size = $el.height();
+            var key = prefix + "_panel1_size";
+
+            if (splitterLayout === "2") {
+                panel1_size = $el.width();
+            }
+
+
+            _notify_message("Velikost panelu ukládám do vašeho profilu.<hr>" + key + ": " + panel1_size + "px", "info");
+            localStorage.setItem(key, panel1_size);
+
+            if (document.getElementById("tabgrid1")) {
+                tg_adjust_for_screen("splitter_panel1");
+            }
+            if (document.getElementById("fra_subgrid")) {
+                document.getElementById("fra_subgrid").contentDocument.location.reload(true);
+            }
+
+            //run_postback(key, panel1_size);          //velikost panelu se uloží přes postback             
+
+        }
+    });
+}
+
+function _splitter_resize_after_init(splitterLayout, defaultPanel1Size) {   //splitterLayout 1 - horní a spodní panel, 2 - levý a pravý panel
+    var win_size = $("#splitter_container").height();
+    var splitter_size = $("#splitter_resizer").height();
+    var panel1_size = parseInt(defaultPanel1Size);
+
+    if (splitterLayout === "1") {
+        //výšku iframe přepočítávat pouze v režimu horní+spodní    
+        if (panel1_size === 0) panel1_size = 500;
+        $("#splitter_panel1").height(panel1_size);
+        //alert("panel1: " + $("#splitter_panel1").height() + ", panel2: " + $("#splitter_panel2").height());
+
+        document.getElementById("fra_subgrid").height = win_size - panel1_size - splitter_size;
+    } else {
+        document.getElementById("fra_subgrid").height = win_size - 1;
+        if (panel1_size === 0) panel1_size = 300;
+        $("#splitter_panel1").width(panel1_size);
+
+    }
+}

@@ -49,7 +49,7 @@
                             <a class="nav-link dropdown-toggle" id="cmdMainMenuNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
                             <ul id="ulNew" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdMainMenuNew"><li>Loading....</li></ul>
                         </li>
-                       
+
                         <li class="nav-item">
                             <a class="nav-link" href="/TheGrid/MasterView?prefix=j02">Master grid J02</a>
                         </li>
@@ -81,9 +81,10 @@
         </nav>
     </header>
     <script type="text/javascript">
-        var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři        
+        var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/splitter/jquery-resizable.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
     <script src="~/lib/datepicker/bootstrap-datepicker.cs.min.js"></script>
@@ -91,7 +92,7 @@
     <script src="~/js/thegrid.js" asp-append-version="true"></script>
     <script src="~/js/contextmenu.js" asp-append-version="true"></script>
 
-   
+
     <div>
         <main role="main" class="p-0 m-0">
             @RenderBody()
@@ -167,8 +168,8 @@
 
 
             @if (_f.CurrentUser.j03Ping_TimeStamp == null || _f.CurrentUser.j03Ping_TimeStamp.Value.AddSeconds(120) < DateTime.Now)
-            {               
-                @:_update_user_ping();     //aktualizace ping logu po 120 sekundách              
+            {
+                @:_update_user_ping();     //aktualizace ping logu po 120 sekundách
             }
 
 
