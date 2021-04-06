@@ -61,17 +61,17 @@
 
 <input type="hidden" id="cur_pid" asp-for="@Model.gridinput.go2pid" />
 
-@section Scripts{
 
-    <script type="text/javascript">
+<script type="text/javascript">
+    var _pageprefix = "@Model.prefix";
 
     $(document.body).css("overflow", "hidden");
 
     $(document).ready(function () {
 
 
-        _splitter_init("1", "@Model.prefix");
-        var key = "@Model.prefix" + "_panel1_size";
+        _splitter_init("1",_pageprefix);
+        var key = _pageprefix + "_panel1_size";
         var defHeight = localStorage.getItem(key);
         if (defHeight == null) {
             defHeight = Math.floor(_device.innerHeight/2);
@@ -82,9 +82,8 @@
 
         tg_adjust_for_screen("splitter_panel1");
 
-        var cmdMenuID = "cmd@(Model.prefix.ToUpper())";
-        if (cmdMenuID == "cmdA42") cmdMenuID = "cmdA01";
-        _mainmenu_highlight_current(cmdMenuID);
+        
+        _mainmenu_highlight_current("cmd" + _pageprefix);
 
 
         if ($("#FilterMyInvolvement").val() != "") {
@@ -99,7 +98,7 @@
         {
         <text>
         $("#PeriodValue").on("change", function () {
-            $.post("/Common/SetUserParam", { key: "grid-period-value-@Model.prefix",value:$(this).val()  }, function (data) {
+            $.post("/Common/SetUserParam", { key: "grid-period-value-"+_pageprefix,value:$(this).val()  }, function (data) {
                 reload();
 
             });
@@ -112,11 +111,11 @@
         $("#cmdRefreshPeriod").on("click", function () {
             var k = [];
             var v = [];
-            k.push("grid-period-value-@Model.prefix");
+            k.push("grid-period-value-" + _pageprefix);
             v.push($("#PeriodValue").val());
-            k.push("grid-period-d1-@Model.prefix");
+            k.push("grid-period-d1-" + _pageprefix);
             v.push($("#d1helper").val());
-            k.push("grid-period-d2-@Model.prefix");
+            k.push("grid-period-d2-" + _pageprefix);
             v.push($("#d2helper").val());
 
             $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
@@ -133,7 +132,7 @@
     });
 
 
-     
+
         function thegrid_handle_rowselect(pid) {
             $("#cur_pid").val(pid);
             var tabUrl = "";
@@ -174,7 +173,7 @@
         function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
             $("#navtabs .nav-link").removeClass("active");
             $(tab).addClass("active");
-            $.post("/Common/SetUserParam", { key: "masterview-tab-@(Model.prefix)",value:tab.id.replace("tab","")  }, function (data) {
+            $.post("/Common/SetUserParam", { key: "masterview-tab-" + _pageprefix,value:tab.id.replace("tab","")  }, function (data) {
 
 
             });
@@ -184,12 +183,12 @@
 
         function reload() {
             _showloading();
-            location.replace("/TheGrid/MasterView?prefix=@Model.prefix");
+            location.replace("/TheGrid/MasterView?prefix=" + _pageprefix);
         }
 
 
         function change_grid(j72id) {
-            $.post("/Common/SetUserParam", { key: "masterview-j72id-@(Model.prefix)",value:j72id  }, function (data) {
+            $.post("/Common/SetUserParam", { key: "masterview-j72id-" + _pageprefix,value:j72id  }, function (data) {
                 reload();
 
             });
@@ -206,21 +205,19 @@
             });
         }
         function myinvolvement_change(cbx) {
-            $.post("/Common/SetUserParam", { key: "grid-filter-myinvolvement-@Model.prefix", value: cbx.value }, function (data) {
+            $.post("/Common/SetUserParam", { key: "grid-filter-myinvolvement-" + _pageprefix, value: cbx.value }, function (data) {
                 reload();
             });
         }
 
 
         function switch_to_flat(prefix) {    //vypnout spodní panel
-            $.post("/Common/SetUserParam", { key: "grid-" + prefix + "-show11", value: "0" }, function (data) {
-                location.replace("/TheGrid/FlatView?prefix=" + prefix);
+            $.post("/Common/SetUserParam", { key: "grid-" + _pageprefix + "-show11", value: "0" }, function (data) {
+                location.replace("/TheGrid/FlatView?prefix=" + _pageprefix);
 
             });
 
         }
-    </script>
-
-}
+</script>
 
 
