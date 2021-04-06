@@ -48,11 +48,8 @@
     }
     
 
-    <div style="margin-left:auto;width:170px;">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="chkShowSubform" checked="checked">
-            <label class="form-check-label" for="chkShowSubform">@_f.tra("Spodní panel")</label>
-        </div>
+    <div style="margin-left:auto;margin-right:2px;" class="nonmobile">
+        <button type="button" class="btn btn-outline-secondary" onclick="switch_to_masterview()"><span class="k-icon k-i-cell-split-horizontally"></span>@_f.tra("Zapnou spodní panel")</button>        
     </div>
 </div>
 
@@ -64,17 +61,17 @@
 
 
 <script type="text/javascript">
+    var _pageprefix = "@Model.prefix";
     $(document.body).css("overflow", "hidden");
 
     $(document).ready(function () {
-
-
+        
 
         @if(Model.period != null)
         {
         <text>
         $("#PeriodValue").on("change", function () {
-            $.post(_ep("/Common/SetUserParam"), { key: "grid-period-value-@Model.prefix",value:$(this).val()  }, function (data) {
+            $.post(_ep("/Common/SetUserParam"), { key: "grid-period-value-" + _pageprefix,value:$(this).val()  }, function (data) {
                 reload();
 
             });
@@ -87,11 +84,11 @@
         $("#cmdRefreshPeriod").on("click", function () {
             var k = [];
             var v = [];
-            k.push("grid-period-value-@Model.prefix");
+            k.push("grid-period-value-" + _pageprefix);
             v.push($("#PeriodValue").val());
-            k.push("grid-period-d1-@Model.prefix");
+            k.push("grid-period-d1-" + _pageprefix);
             v.push($("#d1helper").val());
-            k.push("grid-period-d2-@Model.prefix");
+            k.push("grid-period-d2-" + _pageprefix);
             v.push($("#d2helper").val());
 
             $.post(_ep("/Common/SetUserParams"), { keys: k, values:v  }, function (data) {
@@ -105,21 +102,21 @@
         }
 
 
-        _mainmenu_highlight_current("cmd@(Model.prefix)");
+        _mainmenu_highlight_current("cmd" + _pageprefix);
 
 
     });
 
         function reload() {
             //_showloading();
-            location.replace("/TheGrid/FlatView?prefix=@Model.prefix");
+            location.replace("/TheGrid/FlatView?prefix=" + _pageprefix);
 
         }
 
 
 
         function change_grid(j72id) {
-            $.post(_ep("/Common/SetUserParam"), { key: "flatview-j72id-@(Model.prefix)",value:j72id  }, function (data) {
+            $.post(_ep("/Common/SetUserParam"), { key: "flatview-j72id-" + _pageprefix,value:j72id  }, function (data) {
                 reload();
 
             });
@@ -132,12 +129,12 @@
 
         function reload() {
             //_showloading();
-            location.replace(_ep("/TheGrid/FlatView?prefix=@Model.prefix"));
+            location.replace(_ep("/TheGrid/FlatView?prefix=" + _pageprefix));
         }
 
-        function switch_to_master(prefix) {    //zapnout spodní panel
-            $.post(_ep("/Common/SetUserParam"), { key: "grid-" + prefix + "-show11", value: "1" }, function (data) {
-                location.replace(_ep("/TheGrid/MasterView?prefix=" + prefix));
+        function switch_to_masterview() {    //zapnout spodní panel
+            $.post(_ep("/Common/SetUserParam"), { key: "grid-" + _pageprefix + "-show11", value: "1" }, function (data) {
+                location.replace(_ep("/TheGrid/MasterView?prefix=" + _pageprefix));
 
             });
 

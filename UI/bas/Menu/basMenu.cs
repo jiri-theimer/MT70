@@ -58,7 +58,15 @@ namespace UI.Menu
                             strImg = "<span class='k-icon' style='width:30px;'></span>";
                             if (c.Icon != null)
                             {
-                                strImg = string.Format("<span class='k-icon {0}' style='width:30px;color:#2D89EF;'></span>", c.Icon);
+                                if (c.Icon.Length == 1)
+                                {
+                                    strImg = "<span style='margin-left:10px;margin-right:5px;font-size:150%;color:royalblue;'>" + c.Icon + "</span>";     //1 unicode character
+                                }
+                                else
+                                {
+                                    strImg = string.Format("<span class='k-icon {0}' style='width:30px;color:#2D89EF;'></span>", c.Icon);
+                                }
+                                
                             }
                         }
 

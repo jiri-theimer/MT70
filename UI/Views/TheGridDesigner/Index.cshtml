@@ -4,7 +4,7 @@
 
 
 @{
-    Model.PageTitle = _f.tra("GRID: Návrhář");
+    
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
     string _header = _ep.ByTable(Model.Rec.j72Entity).AliasPlural;
     if (_f.CurrentUser.j03LangIndex == 1)
@@ -71,6 +71,7 @@
 
 
 <h4>
+    <span class="k-icon k-i-table-properties" style="font-size:170%;"></span>
     @_f.tra("GRID") [@_header]
     @_f.tra("Návrhář"):
     @if (Model.Rec.j72IsSystem == false)

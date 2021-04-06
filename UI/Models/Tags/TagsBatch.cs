@@ -19,5 +19,7 @@ namespace UI.Models
         public IEnumerable<int> SelectedO51IDs { get; set; }
         public int SelectedRadioO51ID { get; set; }
         public IEnumerable<BO.o51Tag> ApplicableTags { get; set; }
+
+        public TheGridInput gridinput { get; set; }
     }
 }

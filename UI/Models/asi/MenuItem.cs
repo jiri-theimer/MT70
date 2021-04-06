@@ -10,6 +10,7 @@ namespace UI.Models
         public bool IsDivider { get; set; }
         public bool IsHeader { get; set; }
         public bool IsActive { get; set; }
+        public bool IsCanBeGrid11 { get; set; } //true: lze přepínat mezi FlatView a MasterView
         public string ID { get; set; }
         public string ParentID { get; set; }
         public string Icon { get; set; }

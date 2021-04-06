@@ -77,6 +77,7 @@ namespace UI.Controllers
 
         public IActionResult MasterView(string prefix,int go2pid)    //grid horní + spodní panel, není zde filtrovací pruh s fixním filtrem
         {
+            
             if (!TestGridPermissions(prefix))
             {
                 return this.StopPage(false, "Nemáte oprávnění pro tento GRID přehled.");
@@ -183,10 +184,16 @@ namespace UI.Controllers
                     return Factory.CurrentUser.j04IsMenu_Project;
                 case "p28":
                     return Factory.CurrentUser.j04IsMenu_Contact;
+                case "p56":
+                    return Factory.CurrentUser.j04IsMenu_Task;
+                case "p90":
+                    return Factory.CurrentUser.j04IsMenu_Proforma;                
                 case "p91":
                     return Factory.CurrentUser.j04IsMenu_Invoice;
                 case "j02":
                     return Factory.CurrentUser.j04IsMenu_People;
+                case "o23":
+                    return Factory.CurrentUser.j04IsMenu_Notepad;
                 default:
                     return true;
             }

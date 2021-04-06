@@ -27,7 +27,7 @@ namespace UI.Menu
             DIV();
 
             var lisP30 = f.p30Contact_PersonBL.GetList(new BO.myQueryP30() { p28id = pid });
-            AMI(string.Format("Kontaktní osoby ({0})",lisP30.Count()), null, null, null, "contactpersons");
+            AMI(string.Format("Kontaktní osoby ({0})",lisP30.Count()), null, "☺", null, "contactpersons");
             AMI("Nová kontaktní osoba", $"javascript: _window_open('/j02/Record?pid=0&isintraperson=false&p28id={pid}')", null, "contactpersons");
             
             foreach(var c in lisP30)

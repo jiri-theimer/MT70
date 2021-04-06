@@ -129,7 +129,7 @@ namespace BL
             if (only_one_o53id == 0)
             {
                 _db.RunSql("DELETE FROM o52TagBinding WHERE o52RecordPid=@pid AND x29ID=@x29id", new { pid = record_pid, x29id = intX29ID });
-                if (String.IsNullOrEmpty(o51ids) == false)
+                if (!String.IsNullOrEmpty(o51ids))
                 {
                     _db.RunSql("INSERT INTO o52TagBinding(x29ID,o52RecordPid,o51ID) SELECT @x29id,@pid,o51ID FROM o51Tag WHERE o51ID IN (" + o51ids + ")", new { pid = record_pid, x29id = intX29ID });
                 }
@@ -137,9 +137,15 @@ namespace BL
             else
             {
                 _db.RunSql("DELETE FROM o52TagBinding WHERE o52RecordPid=@pid AND x29ID=@x29id AND o51ID IN (select o51ID FROM o51Tag WHERE o53ID=@o53id)", new { pid = record_pid, x29id = intX29ID, o53id = only_one_o53id });
-                if (String.IsNullOrEmpty(o51ids) == false)
+                if (!String.IsNullOrEmpty(o51ids))
                 {
                     _db.RunSql("INSERT INTO o52TagBinding(x29ID,o52RecordPid,o51ID) SELECT @x29id,@pid,o51ID FROM o51Tag WHERE o53ID=@o53id AND o51ID IN (" + o51ids + ")", new { pid = record_pid, x29id = intX29ID, o53id = only_one_o53id });
+                }
+                else
+                {
+                    //vyčistění záznamu od štítku only_one_o53id: toto nezajistí sqlproc _core_o51_tagging_after_save
+                    var recO53 = _mother.o53TagGroupBL.Load(only_one_o53id);
+                    _db.RunSql($"UPDATE o54TagBindingInline set {recO53.o53Field}=NULL WHERE o54RecordPid={record_pid} AND x29ID={intX29ID}");
                 }
             }
             

@@ -5,6 +5,7 @@
 @{
     Model.PageTitle = _f.tra("Nastavit odkazy pro mé hlavní menu");
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageSymbol = "<span class='k-icon k-i-menu' style='font-size:170%;'></span>";
 }
 
 @addTagHelper *, UI
@@ -23,9 +24,6 @@
 <script src="/kendo/js/kendo.listbox.min.js"></script>
 
 
-
-
-<h4>@Model.PageTitle</h4>
 
 <div class="bg-light" style="padding:10px;">
     <button type="button" id="cmdSave" class="btn btn-success">@_f.tra("Uložit změny")</button>
@@ -68,7 +66,7 @@
         $("#zdroj").kendoListBox({
             dataSource: jsonZdroj,
             dataTextField: "name",
-            dataValueField: "url",
+            dataValueField: "id",
             connectWith: "cil",
             toolbar: {
                 tools: ["transferTo", "transferFrom"]
@@ -78,7 +76,7 @@
         $("#cil").kendoListBox({
             dataSource: jsonCil,
             dataTextField: "name",
-            dataValueField: "url",
+            dataValueField: "id",
             connectWith: "cil",
             toolbar: {
                 tools: ["moveUp", "moveDown"]
@@ -91,12 +89,12 @@
         $("#cmdSave").click(function () {
             var listBox = $("#cil").data("kendoListBox");
             var selectedHtmlItems = listBox.wrapper.find(".k-item");
-            var urls = [];
+            var ids = [];
             $.each(selectedHtmlItems, function (idx, item) {
-                urls.push(listBox.dataItem(item).url);
+                ids.push(listBox.dataItem(item).id);
             });
 
-            $("#SelectedItems").val(urls.join(","));
+            $("#SelectedItems").val(ids.join(","));
 
             
             form1.submit();

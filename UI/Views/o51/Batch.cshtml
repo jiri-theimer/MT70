@@ -3,6 +3,7 @@
 
 @{
     Model.PageTitle = _f.tra("Oštítkovat hromadně");
+    Model.PageSymbol = BO.Symbol.o51();
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
 }
 
@@ -37,24 +38,25 @@
                 <myradiolist asp-for="@Model.SelectedO53ID" textfield="o53Name" valuefield="pid" datasource="@Model.lisO53" event_after_changevalue="o53_change"></myradiolist>
             </div>
         </div>
-        <div class="card" style="margin-left:10px;">
-            <div class="card-header">
-                @_f.tra("Položky vybraného štítku")
-            </div>
-            <div class="card-body">
-                @if (Model.RecO53 != null)
-                {
-                    if (Model.RecO53.o53IsMultiSelect)
+        @if (Model.RecO53 != null)
+        {
+            <div class="card" style="margin-left:10px;">
+                <div class="card-header">
+                    @_f.tra("Položky vybraného štítku")
+                </div>
+                <div class="card-body">
+                    @if (Model.RecO53.o53IsMultiSelect)
                     {
-                        <mycheckboxlist asp-for="@Model.SelectedO51IDs" textfield="HtmlText" valuefield="pid" datasource="@Model.ApplicableTags"></mycheckboxlist>
+                    <mycheckboxlist asp-for="@Model.SelectedO51IDs" textfield="HtmlText" valuefield="pid" datasource="@Model.ApplicableTags"></mycheckboxlist>
                     }
                     else
                     {
-                        <myradiolist asp-for="@Model.SelectedRadioO51ID" textfield="HtmlText" valuefield="pid" datasource="@Model.ApplicableTags"></myradiolist>
+                    <myradiolist asp-for="@Model.SelectedRadioO51ID" textfield="HtmlText" valuefield="pid" datasource="@Model.ApplicableTags"></myradiolist>
                     }
-                }
+                </div>
             </div>
-        </div>
+        }
+
     </div>
 
 
@@ -69,7 +71,9 @@
 
 </form>
 
-<kbd>Vybrané záznamy:</kbd>
+<code>Vybrané záznamy:</code>
+<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+
 <div id="divTableRecords"></div>
 
 

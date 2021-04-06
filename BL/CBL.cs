@@ -22,7 +22,7 @@ namespace BL
     }
     class CBL :BaseBL, ICBL
     {
-
+        private IEnumerable<BO.StringPair> _qry;
         public CBL(BL.Factory mother):base(mother)
         {
            
@@ -123,17 +123,26 @@ namespace BL
         {     
             if (_userparams == null)
             {
-                _userparams= _db.GetList<BO.StringPair>("SELECT x36Key as [Key],x36Value as [Value] FROM x36UserParam WHERE j03ID=@j03id", new { j03id = _db.CurrentUser.pid });
+                _userparams= _db.GetList<BO.StringPair>("SELECT x36Key as [Key],x36Value as [Value] FROM x36UserParam WHERE j03ID=@j03id", new { j03id = _db.CurrentUser.pid });                
             }
 
-            if (_userparams.Any(p => p.Key == strKey))
+            _qry = _userparams.Where(p => p.Key == strKey);
+            if (_qry.Count() > 0)
             {
-                return _userparams.Where(p => p.Key == strKey).First().Value;
+                return _qry.First().Value;
             }
             else
             {
                 return strDefault;
-            }            
+            }
+            //if (_userparams.Any(p => p.Key == strKey))
+            //{
+            //    return _userparams.Where(p => p.Key == strKey).First().Value;
+            //}
+            //else
+            //{
+            //    return strDefault;
+            //}            
         }
         public int LoadUserParamInt(string strKey, int intDefault)
         {

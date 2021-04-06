@@ -308,13 +308,14 @@ namespace UI.Controllers
 
         public string MainMenu(string prefix)
         {
+            var cMenu = new UI.Menu.TheMenuSupport(Factory);
+            var lis = cMenu.getAllMainMenuLinks();
+            cMenu.HandleUrlOfGridLinks(lis);
+            foreach (var c in lis)
+            {
+                AMI(c.Name, c.Url);
+            }
            
-            AMI("Přehled úkonů", "/TheGrid/FlatView?prefix=p31");
-            AMI("Kalendář", "/TheGrid/FlatView?prefix=p31");
-            AMI("Dayline", "/TheGrid/FlatView?prefix=p31");
-            AMI("Součty", "/TheGrid/FlatView?prefix=p31");
-            DIV();
-            AMI("Klienti", "/TheGrid/FlatView?prefix=p28");
             
             
             var s = "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
@@ -349,7 +350,7 @@ namespace UI.Controllers
             if ("p31,p41,p28,j02".Contains(tgi.prefix))
             {
                 DIV();
-                AMI("Hromadná kategorizace záznamů", "javascript:tg_tagging()", "k-i-categorize");
+                AMI("Hromadné oštítkování záznamů", "javascript:tg_tagging()", "♣");
 
 
 

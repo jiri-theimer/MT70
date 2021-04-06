@@ -183,8 +183,9 @@ namespace UI.Controllers
                                     foreach(int o51id in o51ids)
                                     {
                                         d.TagPids = BO.BAS.RemoveValueFromDelimitedString(d.TagPids, o51id.ToString());
-                                    }
+                                    }                                    
                                     Factory.o51TagBL.SaveTagging(v.Record_Entity, pid, d.TagPids,v.SelectedO53ID);
+                                   
                                 }
                                 break;
                         }
@@ -219,6 +220,10 @@ namespace UI.Controllers
             }
 
             
+            string strMyQuery = "pids|list_int|" + v.Record_Pids;            
+            v.gridinput = new TheGridInput() { entity = v.Record_Entity, master_entity = "inform", myqueryinline = strMyQuery, oncmclick = "", ondblclick = "" };
+            v.gridinput.query = new BO.InitMyQuery().Load(v.Record_Entity.Substring(0,3), null, 0, strMyQuery);
+
         }
 
        

@@ -17,6 +17,26 @@ namespace UI.Menu
             
         }
 
+        public void HandleUrlOfGridLinks(List<MenuItem> lis)
+        {            
+            for(int i = 0; i < lis.Count(); i++)
+            {            
+                if (lis[i].IsCanBeGrid11)
+                {
+                    Handle_GridUrl(lis[i]);
+                }                
+            }
+           
+        }
+
+        private void Handle_GridUrl(MenuItem item)
+        {
+            if (_f.CBL.LoadUserParamBool("grid-" + item.ID.Substring(3, 3) + "-show11", false))
+            {
+                item.Url = item.Url.Replace("FlatView", "MasterView");
+            }
+        }
+
         public List<MenuItem> getUserMenuLinks()
         {
             var ret = new List<MenuItem>();
@@ -26,19 +46,20 @@ namespace UI.Menu
             }
             var lis = getAllMainMenuLinks();
 
-            var urls = BO.BAS.ConvertString2List(_f.CurrentUser.j03SiteMenuMyLinksV7);
-
-            foreach(string strUrl in urls)
+            var ids = BO.BAS.ConvertString2List(_f.CurrentUser.j03SiteMenuMyLinksV7);
+            IEnumerable<MenuItem> qry = null;MenuItem item = null;
+            foreach(string strID in ids)
             {
-                if (lis.Where(p => p.Url == strUrl).Any())
+                qry = lis.Where(p => p.ID == strID);
+                if (qry.Count()>0)
                 {
-                    ret.Add(lis.Where(p => p.Url == strUrl).First());
+                    item = qry.First();
+                    if (item.IsCanBeGrid11) Handle_GridUrl(item);
+                    ret.Add(item);
                 }
             }
-            //ret = lis.Where(p => urls.Contains(p.Url)).ToList();
 
-            
-
+            HandleUrlOfGridLinks(ret);
             return ret;
 
         }
@@ -53,47 +74,48 @@ namespace UI.Menu
             }
             if (_f.CurrentUser.j04IsMenu_Worksheet)
             {
-                ret.Add(GRD("p31"));
+                ret.Add(GRD("p31",false));
                 ret.Add(new MenuItem() { Name = _f.tra("Kalendář"), Url = "/p31/Calendar",ID="cmdCalendar" });
                 ret.Add(new MenuItem() { Name = "Dayline",Url="/p31/Dayline",ID="cmdDayline"});
                 ret.Add(new MenuItem() { Name = _f.tra("Součty"), Url = "/p31/Totals",ID="cmdTotals" });
             }
             if (_f.CurrentUser.j04IsMenu_Project)
             {
-                ret.Add(GRD("p41"));
+                ret.Add(GRD("p41",true));
             }
             if (_f.CurrentUser.j04IsMenu_Contact)
             {
-                ret.Add(GRD("p28"));
+                ret.Add(GRD("p28",true));
             }
             if (_f.CurrentUser.j04IsMenu_Invoice)
             {
-                ret.Add(GRD("p91"));
+                ret.Add(GRD("p91",true));
             }
             if (_f.CurrentUser.j04IsMenu_Proforma)
             {
-                ret.Add(GRD("p90"));
+                ret.Add(GRD("p90",false));
             }
             if (_f.CurrentUser.j04IsMenu_People)
             {
-                ret.Add(GRD("j02"));
+                ret.Add(GRD("j02",true));
             }
             if (_f.CurrentUser.j04IsMenu_Notepad)
             {
-                ret.Add(GRD("o23"));
+                ret.Add(GRD("o23",false));
             }
             if (_f.CurrentUser.j04IsMenu_Report)
             {
                 ret.Add(new MenuItem() { Name = _f.tra("Tiskové sestavy"), Url = "/x31/ReportNoContextFramework",ID="cmdReports" });
             }
-            ret.Add(GRD("b07"));
+            ret.Add(GRD("b07",false));
 
+            
             return ret;
         }
 
-        private MenuItem GRD(string prefix)
+        private MenuItem GRD(string prefix,bool bolIsCanBeGrid11)
         {
-            var c = new MenuItem();
+            var c = new MenuItem() { ID = "cmd" + prefix,IsCanBeGrid11= bolIsCanBeGrid11 };
            
             switch (_f.CurrentUser.j03LangIndex)
             {
@@ -109,8 +131,8 @@ namespace UI.Menu
             switch (prefix)
             {
                 case "j02":
-                    c.Name = _f.tra("LIDÉ");
-                    c.Url = "/TheGrid/FlatView?prefix=" + prefix;
+                    c.Name = _f.tra("Lidé");
+                    c.Url = "/TheGrid/FlatView?prefix=" + prefix;                   
                     break;
                 case "p41":
                 case "p28":
@@ -122,8 +144,8 @@ namespace UI.Menu
                     break;
             }
 
-            c.ID = "cmd" + prefix;
-
+            
+            
             return c;
             
         }

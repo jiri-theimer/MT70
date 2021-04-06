@@ -26,7 +26,8 @@ namespace BL
             AF("j02Code", "Kód");
 
 
-            AFBOOL("j02IsIntraPerson", "Interní osoba").DefaultColumnFlag = gdc2;
+            AFBOOL("j02IsIntraPerson", "IO").DefaultColumnFlag = gdc2;
+            AFBOOL("ISKO", "KO").SqlSyntax = "convert(bit,case when a.j02IsIntraPerson=1 then 0 else 1 end)";
             AF("j02InvoiceSignatureFile", "Grafický podpis");
             AF("j02Salutation", "Oslovení");
             AF("j02EmailSignature", "E-mail podpis");            
