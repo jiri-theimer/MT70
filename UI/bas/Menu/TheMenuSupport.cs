@@ -109,7 +109,13 @@ namespace UI.Menu
             }
             ret.Add(GRD("b07",false));
 
+
+            ret.Add(new MenuItem() { Name = "Stránka projektu", Url = "/p41/RecPage", ID = "recpagep41" });
+            ret.Add(new MenuItem() { Name = "Stránka klienta", Url = "/p28/RecPage", ID = "recpagep28" });
+            ret.Add(new MenuItem() { Name = "Stránka vyúčtování", Url = "/p91/RecPage", ID = "recpagep91" });
+            ret.Add(new MenuItem() { Name = "Stránka osoby", Url = "/j02/RecPage", ID = "recpagej02" });
             
+
             return ret;
         }
 

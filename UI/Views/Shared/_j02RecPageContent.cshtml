@@ -1,0 +1,107 @@
+﻿@model UI.Models.Recpage.j02RecPage
+@inject BL.Factory _f
+
+@{
+    if (Model == null)
+    {
+        return;
+    }
+
+}
+
+@addTagHelper *, UI
+
+
+<div class="row">
+    <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("Jméno")):</label>
+    <div class="col-sm-4 col-md-3">
+        <myval value="@Model.Rec.FullNameAsc"></myval>
+
+    </div>
+    @if (Model.Rec.j02IsIntraPerson)
+    {
+        <div class="col-sm-2 col-md-2">
+            <myval value="@Model.Rec.j07Name" tooltip="@_f.tra("Pozice")"></myval>
+
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <myval value="@Model.Rec.c21Name" tooltip="@_f.tra("Pracovní fond")"></myval>
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-2 col-md-2">
+            <myval value="@Model.Rec.j02JobTitle"></myval>
+
+        </div>
+        
+    }
+
+</div>
+
+@if (Model.RecJ03 != null)
+{
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Uživatelský účet"):</label>
+        <div class="col-sm-4 col-md-3">
+            <myval value="@Model.RecJ03.j03Login"></myval>
+
+
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <myval value="@Model.RecJ03.j04Name" tooltip="@(_f.tra("Aplikační role"))" hoverprefix="j04" hoverpid="@Model.RecJ03.j04ID"></myval>
+        </div>
+    </div>
+}
+
+@if (Model.Rec.j18ID > 0)
+{
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Středisko"):</label>
+        <div class="col-sm-4 col-md-3">
+            <myval value="@Model.Rec.j18Name"></myval>
+        </div>
+        <div class="col-sm-4 col-md-4">
+            ???
+        </div>
+    </div>
+
+}
+
+<div class="row my-2">
+    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontakt"):</label>
+    <div class="col-sm-4 col-md-3">
+        <myval datatype="link" linkurl="mailto:@Model.Rec.j02Email" value="@Model.Rec.j02Email"></myval>
+
+
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+        <myval value="@Model.Rec.j02Phone" tooltip="@_f.tra("Pevný telefon")"></myval>
+
+    </div>
+    <div class="col-sm-2 col-md-2">
+        <myval value="@Model.Rec.j02Mobile" tooltip="@_f.tra("Mobilní telefon")"></myval>
+
+
+    </div>
+
+
+</div>
+
+<div class="row my-2">
+    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Čas záznamu"):</label>
+    <div class="col-sm-4 col-md-3" title="@_f.tra("Založení záznamu")">
+        <myval value="@(Model.Rec.UserInsert+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateInsert,"dd.MM.yyyy HH:mm ddd"))"></myval>
+    </div>
+    @if (Model.Rec.DateUpdate > Model.Rec.DateInsert)
+    {
+        <div class="col-sm-4 col-md-4" title="@_f.tra("Poslední aktualizace záznamu")">
+            <myval value="@(Model.Rec.UserUpdate+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateUpdate,"dd.MM.yyyy HH:mm ddd"))"></myval>
+        </div>
+    }
+
+</div>
+
+@Html.Raw(Model.TagHtml)
+

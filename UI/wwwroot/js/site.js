@@ -246,9 +246,13 @@ function _update_user_ping() {
 }
 
 
-function _mainmenu_highlight_current(linkID) {
+function _mainmenu_highlight_current(linkID,orlinkID) {
     if (document.getElementById(linkID)) {
         $("#" + linkID).addClass("active");  //označit odkaz v hlavním menu
+    } else {
+        if (orlinkID !== undefined && document.getElementById(orlinkID)) {
+            $("#" + orlinkID).addClass("active");  //označit odkaz v hlavním menu
+        }
     }
 }
 

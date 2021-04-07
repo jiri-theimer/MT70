@@ -15,21 +15,17 @@ namespace UI.Controllers
        
         public IActionResult Info(int pid)
         {
-            var v = new j02RecPage() {prefix="j02", pid = pid };
-            if (v.pid > 0)
+            var v = new j02RecPage() { Factory = this.Factory,prefix = "j02", pid = pid };
+            v.Rec = Factory.j02PersonBL.Load(v.pid);
+            if (v.Rec != null)
             {
-                v.Rec = Factory.j02PersonBL.Load(v.pid);
-                if (v.Rec != null)
+                if (v.Rec.j03ID > 0)
                 {
-                   
-                    
-                    if (v.Rec.j03ID > 0)
-                    {
-                        v.RecJ03 = Factory.j03UserBL.Load(v.Rec.j03ID);
-                    }
-                    
-                    
+                    v.RecJ03 = Factory.j03UserBL.Load(v.Rec.j03ID);
                 }
+
+                v.SetTagging();
+
             }
             return View(v);
         }
@@ -55,7 +51,7 @@ namespace UI.Controllers
             if (v.pid > 0)
             {
                 v.SetGridUrl();
-
+                
                 v.Rec = Factory.j02PersonBL.Load(v.pid);
                 if (v.Rec == null)
                 {
@@ -66,7 +62,7 @@ namespace UI.Controllers
                 {
                     
                     v.MenuCode = v.Rec.FullNameAsc;
-
+                    v.SetTagging();
                     v.SaveLastUsedPid();
                     
                  

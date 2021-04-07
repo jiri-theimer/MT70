@@ -989,7 +989,7 @@ div.tabs_container {
     padding-top: 2px;
     margin-bottom: 1px;
     /* background-image: linear-gradient(#E5E5E5, silver);*/
-    background-color: white;
+    background-color: #F0F8FF;
     /* background-image: linear-gradient(#E5E5E5, silver);*/
 }
 
@@ -1144,3 +1144,10 @@ table.table-thecombo {
         background-color: dodgerblue;
         color: white;
     }
+
+
+div.info_record_container {
+    padding-top:6px;
+    padding-left:6px;
+    width:98%;
+}

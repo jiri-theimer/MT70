@@ -1,0 +1,18 @@
+﻿@model UI.Models.Recpage.j02RecPage
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutSubform.cshtml";
+    if (Model.Rec == null) return;
+
+    
+}
+
+@addTagHelper *, UI
+
+<div class="info_record_container">
+
+    @Html.EditorFor(m => m, "~/Views/Shared/_j02RecPageContent.cshtml")
+
+</div>

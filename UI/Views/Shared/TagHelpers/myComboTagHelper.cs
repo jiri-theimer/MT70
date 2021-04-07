@@ -42,6 +42,9 @@ namespace UI.Views.Shared.TagHelpers
         [HtmlAttributeName("filter-flag")]
         public string FilterFlag { get; set; }
 
+        [HtmlAttributeName("search-result-width")]
+        public int SearchResultWidth { get; set; }
+
         private int _SelectedValue { get; set; }
         
 
@@ -86,8 +89,15 @@ namespace UI.Views.Shared.TagHelpers
                         
             sb("");
 
-
-            sb(string.Format("<div id='divData{0}' style='height:220px;overflow:auto;background-color:#E6F0FF;z-index:500;'>", strControlID));
+            if (this.SearchResultWidth==0)
+            {
+                sb(string.Format("<div id='divData{0}' style='height:220px;overflow:auto;background-color:#E6F0FF;z-index:500;'>", strControlID));
+            }
+            else
+            {
+                sb(string.Format("<div id='divData{0}' style='height:220px;overflow:auto;background-color:#E6F0FF;z-index:500;border:solid 1px silver;width:{1}px;'>", strControlID,this.SearchResultWidth.ToString()));
+            }
+            
             sb("</div>");
 
 

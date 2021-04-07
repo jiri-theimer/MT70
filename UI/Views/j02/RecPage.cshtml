@@ -19,15 +19,13 @@
         {
             <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.FullNameDesc" onclick="_cm(event, 'j02',@Model.Rec.pid);">☰@(Model.Rec.FullNameAsc) </a>
             <h4 id="layout_sidebar_contextmenu_onlytext">
-
-                @Model.Rec.FullNameAsc
             </h4>
         }
-
+        <mycombo entity="j02Person" asp-for="@Model.SearchedPid" search-result-width="600" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
     </div>
     @if (Model.pid > 0)
     {
-        <div class="col-auto nonmobile tabovergrid">
+        <div class="col-auto nonmobile tabovergrid">            
             @_f.tra("Stránka osoby")
         </div>
 
@@ -35,10 +33,10 @@
             <a class="btn btn-light" href="/j02/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
             <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
         </div>
-       
+
     }
 
-    <div class="col-auto">
+    <div class="col-auto p-2 nonmobile">
         <span>@Model.MenuCode</span>
 
     </div>
@@ -51,73 +49,7 @@
 
 <div id="layout_main">
     <div class="modal_record_container" style="max-height:230px;overflow-y:auto;overflow-x:hidden;">
-        <div class="row">
-            <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("Jméno")):</label>
-            <div class="col-sm-7 col-md-6">
-                <myval value="@Model.Rec.FullNameAsc"></myval>
-
-            </div>
-            <div class="col-sm-2 col-md-2">
-                info
-
-            </div>
-            <div class="col-sm-2 col-md-2">
-                <myval value="@Model.Rec.j07Name" tooltip="@_f.tra("Pozice")"></myval>
-            </div>
-        </div>
-        @if (Model.RecJ03 != null)
-        {
-            <div class="row my-2">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Uživatelský účet"):</label>
-                <div class="col-sm-7 col-md-6">
-                    <myval value="@Model.RecJ03.j03Login"></myval>
-
-
-                </div>
-                <div class="col-sm-4 col-md-4">
-                    <myval value="@Model.RecJ03.j04Name" tooltip="@(_f.tra("Aplikační role"))" hoverprefix="j04" hoverpid="@Model.RecJ03.j04ID"></myval>
-                </div>
-            </div>
-        }
-
-        @if (Model.Rec.j18ID>0)
-        {
-            <div class="row my-2">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Středisko"):</label>
-                <div class="col-sm-7 col-md-6">
-                    <myval value="@Model.Rec.j18Name"></myval>
-                </div>
-                <div class="col-sm-4 col-md-4">
-                    ???
-                </div>
-            </div>
-
-        }
-
-       
-
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontakt"):</label>
-            <div class="col-sm-6 col-md-6">
-                <myval datatype="link" linkurl="mailto:@Model.Rec.j02Email" value="@Model.Rec.j02Email"></myval>
-
-
-            </div>
-
-            <div class="col-sm-3 col-md-2">
-                <myval value="@Model.Rec.j02Phone" tooltip="@_f.tra("Pevný telefon")"></myval>
-
-            </div>
-            <div class="col-sm-2 col-md-2">
-                <myval value="@Model.Rec.j02Mobile" tooltip="@_f.tra("Mobilní telefon")"></myval>
-
-
-            </div>
-
-
-        </div>
-        
-        @Html.Raw(Model.TagHtml)
+        @Html.EditorFor(m => m, "~/Views/Shared/_j02RecPageContent.cshtml")
     </div>
 
     <div class="tabs_container">
@@ -176,7 +108,7 @@
 
         $("#divTabContent").css("height", h_vertical + "px");
 
-        _mainmenu_highlight_current("cmdj02");
+        _mainmenu_highlight_current("recpagej02","cmdj02");
 
 
 
@@ -193,6 +125,9 @@
         });
     }
 
+    function on_search(pid) {
+        location.replace(_ep("/j02/RecPage?pid=" + pid));
+    }
 
 </script>
 

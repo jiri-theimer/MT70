@@ -21,6 +21,10 @@ namespace UI.Models
         public string MenuCode { get; set; }
         public string Go2GridUrl { get; set; }
 
+        public int SearchedPid { get; set; }
+        public string SearchedText { get; set; }
+        
+
         public void SetGridUrl()
         {
             if (this.pid > 0)
@@ -46,6 +50,13 @@ namespace UI.Models
                 Factory.CBL.SetUserParam($"{prefix}-RecPage-pid", this.pid.ToString());
             }
             
+        }
+
+        public void SetTagging()
+        {
+            var tg = Factory.o51TagBL.GetTagging(this.prefix, this.pid);
+            
+            this.TagHtml = tg.TagHtml;
         }
     }
 }

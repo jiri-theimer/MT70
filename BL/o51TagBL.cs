@@ -73,7 +73,7 @@ namespace BL
                 ret.TagNames = "";
                 var sb = new System.Text.StringBuilder();
                 int x = 0;
-                sb.Append("<div class='alert alert-primary py-0'><table class='table table-sm table-hover'>");
+                sb.Append("<table>");
                 foreach (BO.o51Tag c in lis)
                 {
                     if (intLastGroup != c.o53ID)
@@ -85,7 +85,7 @@ namespace BL
                         }
                         sb.Append("<tr>");
                         sb.Append(string.Format("<td><span style='color:red;'>♣</span>{0}:</td>", c.o53Name));
-                        sb.Append("<td>");
+                        sb.Append("<td style='padding:4px;'>");
                         if (ret.TagNames == "")
                         {
                             
@@ -113,7 +113,7 @@ namespace BL
                     sb.Append("</td>");
                     sb.Append("</tr>");
                 }
-                sb.Append("</table></div>");
+                sb.Append("</table>");
                 ret.TagHtml = sb.ToString();
             }
             

@@ -40,18 +40,23 @@ namespace UI.Views.Shared.TagHelpers
             
             
             _sb.AppendLine(string.Format("<input type='hidden' id='TagPids' name='TagPids' value='{0}' />", strSelectedValues));
-           
-            _sb.AppendLine("<div class='form-group'>");
-            _sb.AppendLine(string.Format("<button id='cmdTagging' type='button' class='btn btn-outline-primary' onclick='mystitky_multiselect(event,\"{0}\")'>{1} ♣</button>", this.Entity,this.ButtonText));
-            _sb.AppendLine("</div>");
+            _sb.AppendLine(string.Format("<input type='hidden' id='TagHtml' name='TagHtml' value=\"{0}\" />", this.SelectedTagHtml));
 
-            _sb.AppendLine(string.Format("<input type='hidden' id='TagHtml' name='TagHtml' value=\"{0}\" />", this.SelectedTagHtml));           
+            _sb.AppendLine("<div class='row'>");
+            _sb.AppendLine("<div class='col-auto'>");
+            //_sb.AppendLine("<div class='form-group'>");
+            _sb.AppendLine(string.Format("<button id='cmdTagging' type='button' class='btn btn-outline-primary' onclick='mystitky_multiselect(event,\"{0}\")'>{1} ♣</button>", this.Entity,this.ButtonText));
+            //_sb.AppendLine("</div>");
+            _sb.AppendLine("</div><div class='col-auto'>");
+                      
 
             _sb.Append("<div id='divTagHtml'>");
             if (string.IsNullOrEmpty(this.SelectedTagHtml) == false)
             {
                 _sb.Append(this.SelectedTagHtml);     
             }
+            _sb.Append("</div>");
+
             _sb.Append("</div>");
 
             output.Content.AppendHtml(_sb.ToString());
