@@ -12,61 +12,129 @@
 @addTagHelper *, UI
 
 
-<div class="row">
-    <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("Jméno")):</label>
-    <div class="col-sm-4 col-md-3">
-        <myval value="@Model.Rec.FullNameAsc"></myval>
+    <div class="card recpagebox400">
+        <div class="card-body">
+            <h6 class="card-title">
+                Osobní profil
+            </h6>
+            <div class="row">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Jméno")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.FullNameAsc"></myval>
 
-    </div>
-    @if (Model.Rec.j02IsIntraPerson)
-    {
-        <div class="col-sm-2 col-md-2">
-            <myval value="@Model.Rec.j07Name" tooltip="@_f.tra("Pozice")"></myval>
+                </div>
+            </div>
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">E-mail:</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval datatype="link" linkurl="mailto:@Model.Rec.j02Email" value="@Model.Rec.j02Email"></myval>
 
+
+                </div>
+            </div>
+            @if (Model.Rec.j07ID > 0)
+            {
+                <div class="row">
+                    <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Pozice")):</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.Rec.j07Name"></myval>
+
+                    </div>
+                </div>
+            }
+
+            @if (Model.Rec.c21ID > 0)
+            {
+                <div class="row">
+                    <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Pracovní fond")):</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.Rec.c21Name"></myval>
+
+                    </div>
+                </div>
+            }
+            @if (Model.Rec.j18ID > 0)
+            {
+                <div class="row">
+                    <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Středisko")):</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.Rec.j18Name"></myval>
+
+                    </div>
+                </div>
+            }
         </div>
-        <div class="col-sm-2 col-md-2">
-            <myval value="@Model.Rec.c21Name" tooltip="@_f.tra("Pracovní fond")"></myval>
+    </div>
+
+    @if (Model.RecJ03 != null)
+    {
+        <div class="card recpagebox400">
+            <div class="card-body">
+                <h6 class="card-title">
+                    Uživatelský účet
+                </h6>
+                <div class="row">
+                    <label class="col-sm-2 col-md-3 col-form-label">Login:</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.RecJ03.j03Login"></myval>
+
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Aplikační role"):</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.RecJ03.j04Name" tooltip="@(_f.tra("Aplikační role"))" hoverprefix="j04" hoverpid="@Model.RecJ03.j04ID"></myval>
+                    </div>
+                </div>
+
+            </div>
         </div>
     }
-    else
-    {
-        <div class="col-sm-2 col-md-2">
-            <myval value="@Model.Rec.j02JobTitle"></myval>
 
-        </div>
-        
-    }
+    <div class="card recpagebox400">
+        <div class="card-body">
+            <p class="card-title">
+                Hovado
+            </p>
+            <p>Jsi hovado.</p>
 
-</div>
-
-@if (Model.RecJ03 != null)
-{
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Uživatelský účet"):</label>
-        <div class="col-sm-4 col-md-3">
-            <myval value="@Model.RecJ03.j03Login"></myval>
-
-
-        </div>
-        <div class="col-sm-4 col-md-4">
-            <myval value="@Model.RecJ03.j04Name" tooltip="@(_f.tra("Aplikační role"))" hoverprefix="j04" hoverpid="@Model.RecJ03.j04ID"></myval>
-        </div>
-    </div>
-}
-
-@if (Model.Rec.j18ID > 0)
-{
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Středisko"):</label>
-        <div class="col-sm-4 col-md-3">
-            <myval value="@Model.Rec.j18Name"></myval>
-        </div>
-        <div class="col-sm-4 col-md-4">
-            ???
         </div>
     </div>
 
-}
+    <div class="card recpagebox400">
+        <div class="card-body">
+            <h6 class="card-title">
+                Debil
+            </h6>
+            <p>Jsi debil.</p>
+
+        </div>
+    </div>
+
+    <div class="card recpagebox400" style="width:700px;">
+        <div class="card-body">
+            <h6 class="card-title">
+                Jdu spát 700px
+            </h6>
+            <p>Je třeba už jít.</p>
+
+        </div>
+    </div>
+    <div class="card recpagebox400">
+        <div class="card-body">
+            <h6 class="card-title">
+                Jdu spát
+            </h6>
+            <p>Je třeba už jít.</p>
+
+        </div>
+    </div>
+
+
+
+
+
+
 
 <div class="row my-2">
     <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontakt"):</label>

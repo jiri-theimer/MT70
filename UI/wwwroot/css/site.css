@@ -1151,3 +1151,12 @@ div.info_record_container {
     padding-left:6px;
     width:98%;
 }
+
+div.recpagebox400 {
+    float:left;
+    width: 450px;
+    min-height: 100px;
+    margin-left:4px;
+    margin-top:4px;
+    vertical-align: top;
+}
