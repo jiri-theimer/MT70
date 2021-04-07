@@ -274,7 +274,21 @@
 
 
 
+        if (document.getElementById("cmdGridDblclickSetting")) {
+            var cmdGridSelDropdown = document.getElementById("cmdGridDblclickSetting");
+            cmdGridSelDropdown.addEventListener("show.bs.dropdown", function () {
+                
+                $.post("/Menu/TheGridDblclickSetting", { tgi: get_all_tgi_params() }, function (data) {
+                    $("#ulGridDblclickSetting").css("margin-left", "-50px");
+                    $("#ulGridDblclickSetting").html(data);
 
+                    
+                });
+
+            });
+
+
+        }
 
 
 

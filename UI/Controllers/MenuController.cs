@@ -361,10 +361,25 @@ namespace UI.Controllers
         }
         
        
-        
-        
-        
-       
+        public string TheGridDblclickSetting(TheGridUIContext tgi)  //menu pro nastavení doubleclick grid záznamu
+        {
+            string strIconEdit = "k-i-radiobutton";string strIconPage = "k-i-radiobutton-checked";
+            if (Factory.CBL.LoadUserParam("grid-" + tgi.prefix + "-dblclick", "edit") == "edit")
+            {
+                strIconEdit = "k-i-radiobutton-checked";
+                strIconPage = "k-i-radiobutton";
+            }
+            HEADER("Nastavit si cíl dvojkliku myší na grid záznamu");
+            AMI("Upravit kartu záznamu", "javascript:tg_dblclick_save_setting('edit')", strIconEdit);
+            AMI("Otevřít stránku záznamu", "javascript:tg_dblclick_save_setting('recpage')", strIconPage);
+
+
+            return basMenu.FlushResult_UL(_lis, true, false);
+        }
+
+
+
+
         private void handle_selected_item(string prefix)
         {
             if (prefix != null)

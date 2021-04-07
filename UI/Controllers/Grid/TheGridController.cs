@@ -206,7 +206,7 @@ namespace UI.Controllers
             v.entity = c.TableName;
             v.entityTitle = c.AliasPlural;
 
-            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=myqueryinline };
+            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=myqueryinline,ondblclick= "grid_dblclick" };
             
 
             if (v.entity == "")
@@ -229,7 +229,7 @@ namespace UI.Controllers
            
 
 
-            if (v.prefix == "p31" || v.prefix == "p41")
+            if (v.prefix == "p31" || v.prefix == "p41" || v.prefix == "p91" || v.prefix == "p90")
             {
                 
                 v.period = new PeriodViewModel();
@@ -242,16 +242,18 @@ namespace UI.Controllers
                 v.gridinput.query.global_d2 = v.period.d2;
             }
 
-            if (v.prefix=="p41" || v.prefix=="p28" || v.prefix == "j02")
+            if (v.prefix=="p41" || v.prefix=="p28" || v.prefix == "j02" || v.prefix == "p91" || v.prefix=="o23" || v.prefix=="p56")
             {
-                if (pagename == "flatview")
-                {
-                    v.gridinput.extendpagerhtml= "<button type='button' class='btn btn-secondary btn-sm mx-4 nonmobile' onclick='switch_to_master(\"" + v.prefix+"\")'>Zapnout spodní panel</button>";
-                }
-                if (pagename == "masterview")
-                {
-                    v.gridinput.extendpagerhtml = "<button type='button' class='btn btn-secondary btn-sm mx-4' onclick='switch_to_flat(\"" + v.prefix + "\")'>" + Factory.tra("Vypnout spodní panel") + "</button>";
-                }
+                v.IsCanbeMasterView = true;
+                v.dblClickSetting = Factory.CBL.LoadUserParam("grid-" + v.prefix + "-dblclick", "edit");
+                //if (pagename == "flatview")
+                //{
+                //    v.gridinput.extendpagerhtml= "<button type='button' class='btn btn-secondary btn-sm mx-4 nonmobile' onclick='switch_to_master(\"" + v.prefix+"\")'>Zapnout spodní panel</button>";
+                //}
+                //if (pagename == "masterview")
+                //{
+                //    v.gridinput.extendpagerhtml = "<button type='button' class='btn btn-secondary btn-sm mx-4' onclick='switch_to_flat(\"" + v.prefix + "\")'>" + Factory.tra("Vypnout spodní panel") + "</button>";
+                //}
             }
 
             

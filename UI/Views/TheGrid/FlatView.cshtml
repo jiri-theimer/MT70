@@ -2,7 +2,7 @@
 @inject BL.Factory _f
 
 @{
-    
+
     if (Model.entity == null)
     {
         return;
@@ -10,18 +10,18 @@
 
     Model.PageTitle = Model.entityTitle;
 
-   
+
 
 }
 
 @addTagHelper *,UI
 
 <div class="input-group m-0" style="padding-top:1px;">
-    <div class="tabovergrid nonmobile" style="margin-left:1px;">        
+    <div class="tabovergrid nonmobile" style="margin-left:1px;">
         KLIENTI
         <span id="TheGridRows" class="badge bg-primary"></span>
     </div>
-    
+
     <div class="dropdown">
         <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
             <span id="TheGridIcon" class="k-icon k-i-table"></span>
@@ -46,11 +46,24 @@
         </div>
 
     }
-    
 
-    <div style="margin-left:auto;margin-right:2px;" class="nonmobile">
-        <button type="button" class="btn btn-outline-secondary" onclick="switch_to_masterview()"><span class="k-icon k-i-cell-split-horizontally"></span>@_f.tra("Zapnou spodní panel")</button>        
-    </div>
+    @if (Model.IsCanbeMasterView)
+    {
+        <div style="margin-left:auto;margin-right:2px;" class="nonmobile btn-group">
+            <button type="button" class="btn btn-light" onclick="switch_to_masterview()"><span class="k-icon k-i-table-row-insert-below"></span> @_f.tra("Zapnou spodní panel")</button>
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridDblclickSetting" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="k-icon k-i-gears"></span>
+                    @_f.tra("Dvojklik")
+                </button>
+                <ul id="ulGridDblclickSetting" class="dropdown-menu" aria-labelledby="cmdGridDblclickSetting">
+                    Loading...
+                </ul>
+                
+            </div>
+        </div>
+    }
+
 </div>
 
 
@@ -66,7 +79,7 @@
     $(document.body).css("overflow", "hidden");
 
     $(document).ready(function () {
-        
+
 
         @if(Model.period != null)
         {
@@ -139,6 +152,21 @@
 
             });
 
+    }
+    
+
+    
+
+    function grid_dblclick(row) {
+        var pid = row.id.replace("r", "");
+        var s = "@Model.dblClickSetting";
+
+        if (s == "recpage") {
+            location.replace(_ep("/" + _pageprefix + "/RecPage?pid=" + pid));
+        } else {
+            _edit(_pageprefix, pid);
         }
+    }
+
 </script>
 

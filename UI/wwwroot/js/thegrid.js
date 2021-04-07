@@ -1076,3 +1076,10 @@ function tg_select_all_toggle() {
         tg_clear_selection();   //odškrtnout vše
     }
 }
+
+function tg_dblclick_save_setting(val) {
+    var prefix = _tg_entity.substr(0, 3);
+    $.post(_ep("/Common/SetUserParam"), { key: "grid-" + prefix + "-dblclick", value: val }, function (data) {
+        location.reload(location.href);
+    });
+}

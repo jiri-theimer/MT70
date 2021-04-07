@@ -55,7 +55,7 @@ namespace UI.Views.Shared.Components.TheGrid
             }
             gridState.j75CurrentRecordPid = input.go2pid;
             gridState.j72MasterEntity = input.master_entity;
-
+            gridState.j75CurrentPagerIndex = 0; //na úvodní zobrazení vždy začínat grid na první stránce!
 
 
             
@@ -64,7 +64,6 @@ namespace UI.Views.Shared.Components.TheGrid
             var ret = new TheGridViewModel();
             ret.GridInput = input;
             ret.firstdata = cSup.GetFirstData(gridState);
-
             
             ret.GridState = gridState;
             if (gridState.j72Columns.Contains("Free"))

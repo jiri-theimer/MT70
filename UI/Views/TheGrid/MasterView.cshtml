@@ -47,15 +47,28 @@
     }
 
 
-    <div style="margin-left:auto;margin-right:2px;" class="nonmobile">
-        <button type="button" class="btn btn-outline-secondary" onclick="switch_to_flatview()"><span class="k-icon k-i-cell-split-horizontally"></span>@_f.tra("Vypnout spodní panel")</button>
-    </div>
+    @if (Model.IsCanbeMasterView)
+    {
+        <div style="margin-left:auto;margin-right:2px;" class="nonmobile btn-group">
+            <button type="button" class="btn btn-light" onclick="switch_to_flatview()"><span class="k-icon k-i-full-screen"></span> @_f.tra("Vypnout spodní panel")</button>
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridDblclickSetting" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="k-icon k-i-gears"></span>
+                    @_f.tra("Dvojklik")
+                </button>
+                <ul id="ulGridDblclickSetting" class="dropdown-menu" aria-labelledby="cmdGridDblclickSetting">
+                    Loading...
+                </ul>
+
+            </div>
+        </div>
+    }
 </div>
 
 <div id="splitter_container" class="splitter-container-top2bottom">
 
     <div id="splitter_panel1" class="splitter-panel-top">
-        
+
         <vc:the-grid input="@Model.gridinput"></vc:the-grid>
 
     </div>
@@ -105,7 +118,7 @@
         tg_adjust_for_screen("splitter_panel1");
 
         _mainmenu_highlight_current("cmd" + _pageprefix);
-        
+
 
 
         if ($("#FilterMyInvolvement").val() != "") {
@@ -204,8 +217,8 @@
         }
 
         function reload() {
-            _showloading();
-            location.replace("/TheGrid/MasterView?prefix=" + _pageprefix);
+
+            location.replace(_ep("/TheGrid/MasterView?prefix=" + _pageprefix));
         }
 
 
@@ -226,20 +239,30 @@
                 reload();
             });
         }
-        function myinvolvement_change(cbx) {
+    function myinvolvement_change(cbx) {
             $.post("/Common/SetUserParam", { key: "grid-filter-myinvolvement-" + _pageprefix, value: cbx.value }, function (data) {
                 reload();
             });
         }
 
 
-        function switch_to_flatview() {    //vypnout spodní panel
+    function switch_to_flatview() {    //vypnout spodní panel
             $.post("/Common/SetUserParam", { key: "grid-" + _pageprefix + "-show11", value: "0" }, function (data) {
-                location.replace("/TheGrid/FlatView?prefix=" + _pageprefix);
-
+                location.replace(_ep("/TheGrid/FlatView?prefix=" + _pageprefix));
             });
 
+    }
+
+    function grid_dblclick(row) {
+        var pid = row.id.replace("r", "");
+        var s = "@Model.dblClickSetting";
+
+        if (s == "recpage") {
+            location.replace(_ep("/" + _pageprefix + "/RecPage?pid=" + pid));
+        } else {
+            _edit(_pageprefix, pid);
         }
+    }
 </script>
 
 

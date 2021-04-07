@@ -205,6 +205,7 @@ namespace UI
                 {
                     var intIndex = dt.Rows.IndexOf(recs[0]);
                     _grid.GridState.j75CurrentPagerIndex = intIndex - (intIndex % _grid.GridState.j75PageSize);
+
                 }
             }
 
