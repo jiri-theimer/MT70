@@ -8,13 +8,20 @@ namespace UI.Menu
 {
     public class j02ContextMenu:BaseContextMenu
     {
-        public j02ContextMenu(BL.Factory f,int pid) : base(f,pid)
+        public j02ContextMenu(BL.Factory f,int pid, string source) : base(f,pid)
         {
 
             var rec = f.j02PersonBL.Load(pid);
             HEADER(rec.FullNameAsc);
+            if (source != "recpage")
+            {
+                AMI_RecPage("Stránka osoby", "j02", pid);
+            }
+            if (source != "grid")
+            {
+                AMI_RecGrid("Přejít do GRIDu", "j02", pid);
+            }
             
-            AMI_RecPage("Stránka osoby", "j02", pid);        
             DIV();
 
             if (f.CurrentUser.IsAdmin)

@@ -34,9 +34,9 @@ namespace UI.Controllers
             switch (prefix)
             {
                 case "j02":
-                    lis = new j02ContextMenu(Factory,pid).GetItems();break;
+                    lis = new j02ContextMenu(Factory,pid,source).GetItems();break;
                 case "p28":
-                    lis = new p28ContextMenu(Factory, pid).GetItems(); break;
+                    lis = new p28ContextMenu(Factory, pid,source).GetItems(); break;
                 default:
                     break;
             }

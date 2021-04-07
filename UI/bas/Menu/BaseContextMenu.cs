@@ -32,7 +32,17 @@ namespace UI.Menu
 
         public MenuItem AMI_RecPage(string strName, string prefix,int pid)
         {
-            return AMI(strName, $"javascript:_location_replace_top('/{prefix}/RecPage?pid={pid}')", "k-i-layout");
+            //return AMI(strName, $"javascript:_location_replace_top('/{prefix}/RecPage?pid={pid}')", "k-i-layout");
+            return AMI(strName, $"/{prefix}/RecPage?pid={pid}", "k-i-layout",null,null,"_top");
+        }
+        public MenuItem AMI_RecGrid(string strName, string prefix, int pid)
+        {
+            string s= "/TheGrid/MasterView?prefix="+prefix+"&go2pid=" + pid.ToString();
+            if (!_f.CBL.LoadUserParamBool("grid-"+prefix+"-show11", true))
+            {
+                s = "/TheGrid/FlatView?prefix="+prefix+"&go2pid=" + pid.ToString();
+            }
+            return AMI(strName, s, "k-i-table-row-groups",null,null,"_top");
         }
         public MenuItem AMI_Clone(string prefix, int pid)
         {

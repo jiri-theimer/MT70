@@ -15,7 +15,7 @@ namespace UI.Controllers
        
         public IActionResult Info(int pid)
         {
-            var v = new j02RecPage() { pid = pid };
+            var v = new j02RecPage() {prefix="j02", pid = pid };
             if (v.pid > 0)
             {
                 v.Rec = Factory.j02PersonBL.Load(v.pid);
@@ -27,31 +27,35 @@ namespace UI.Controllers
                     {
                         v.RecJ03 = Factory.j03UserBL.Load(v.Rec.j03ID);
                     }
-
+                    
                     
                 }
             }
             return View(v);
         }
         public IActionResult RecPage(int pid, string login)
-        {
-            var v = new j02RecPage();
+        {            
+            var v = new j02RecPage() {Factory=this.Factory, pid = pid, prefix = "j02" };
+           
+
             v.NavTabs = new List<NavTab>();
-            if (pid == 0 && String.IsNullOrEmpty(login) == false)
+            if (v.pid == 0 && String.IsNullOrEmpty(login) == false)
             {
                 var recJ03 = Factory.j03UserBL.LoadByLogin(login,0);
                 if (recJ03 != null && recJ03.j02ID > 0)
                 {
-                    pid = recJ03.j02ID;
+                    v.pid = recJ03.j02ID;
                 }
             }
-            v.pid = pid;
+                        
             if (v.pid == 0)
             {
-                v.pid = Factory.CBL.LoadUserParamInt("j02-RecPage-pid");
+                v.pid = v.LoadLastUsedPid();
             }
             if (v.pid > 0)
             {
+                v.SetGridUrl();
+
                 v.Rec = Factory.j02PersonBL.Load(v.pid);
                 if (v.Rec == null)
                 {
@@ -62,11 +66,9 @@ namespace UI.Controllers
                 {
                     
                     v.MenuCode = v.Rec.FullNameAsc;
-                   
-                    if (pid > 0)
-                    {
-                        Factory.CBL.SetUserParam("j02-RecPage-pid", pid.ToString());
-                    }
+
+                    v.SaveLastUsedPid();
+                    
                  
                     if (v.Rec.j03ID > 0)
                     {

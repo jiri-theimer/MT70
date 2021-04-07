@@ -10,13 +10,13 @@ namespace BL
     public interface IDataGridBL
     {
         public DataTable GetList(BO.baseQuery mq, bool bolGetTotalsRow = false);
+        public IEnumerable<BO.GetListOfPids> GetListOfFindPid(BO.baseQuery mq, int topscoperecs);
         public DataTable GetList4MailMerge(string prefix, int pid);
         public DataTable GetList4MailMerge(int pid, string individual_sql_source);
         public DataTable GetListFromPureSql(string sql);
     }
     class DataGridBL:BaseBL,IDataGridBL
-    {
-       
+    {        
         public DataGridBL(BL.Factory mother):base(mother)
         {
             
@@ -54,8 +54,42 @@ namespace BL
             sql = BO.BAS.OcistitSQL(sql);            
             return _db.GetDataTable(sql);
         }
+        public IEnumerable<BO.GetListOfPids> GetListOfFindPid(BO.baseQuery mq,int topscoperecs)
+        {
+            BO.TheEntity ce = _mother.EProvider.ByPrefix(mq.Prefix);
+            var sb = new System.Text.StringBuilder();
+            sb.Append("SELECT TOP "+ topscoperecs.ToString());
+            sb.Append(" a." + mq.Prefix + "ID as pid");
+            sb.Append(",ROW_NUMBER() OVER(ORDER BY " + mq.explicit_orderby + ") as rowindex");
+            sb.Append(" FROM ");
+            sb.Append(ce.SqlFromGrid);    //úvodní FROM klauzule s primární "a" tabulkou
+
+            List<string> relSqls = new List<string>();
+            foreach (BO.TheGridColumn col in mq.explicit_columns.Where(x => x.RelName != null && x.RelName != "a"))
+            {
+                if (col.RelSqlDependOn != null && relSqls.Exists(p => p == col.RelSqlDependOn) == false)
+                {
+                    relSqls.Add(col.RelSqlDependOn);
+                    sb.Append(" ");
+                    sb.Append(col.RelSqlDependOn);
+                }
+                if (relSqls.Exists(p => p == col.RelSql) == false)
+                {
+                    relSqls.Add(col.RelSql);
+                    sb.Append(" ");
+                    sb.Append(col.RelSql);
+                }
+            }
+
+
+            DL.FinalSqlCommand q = DL.basQuery.GetFinalSql(sb.ToString(), mq, _mother.CurrentUser, true);
+            BO.BASFILE.AppendText2File("c:\\temp\\hovado2.txt", q.FinalSql);
+            return _db.GetList<BO.GetListOfPids>(q.FinalSql, q.Parameters);
+          
+        }
         public DataTable GetList(BO.baseQuery mq,bool bolGetTotalsRow=false)
-        {            
+        {          
+           
             var sb = new System.Text.StringBuilder();
             sb.Append("SELECT ");
             if (mq.TopRecordsOnly > 0)
@@ -96,7 +130,7 @@ namespace BL
             sb.Append(" FROM ");
             
             sb.Append(ce.SqlFromGrid);    //úvodní FROM klauzule s primární "a" tabulkou            
-            
+          
             List<string> relSqls = new List<string>();
             foreach (BO.TheGridColumn col in mq.explicit_columns.Where(x => x.RelName != null && x.RelName != "a"))
             {

@@ -854,7 +854,7 @@ function tg_cm(e) {     //vyvolání kontextového menu k vybranému záznamu
     var link = e.target;
     var pid = link.parentNode.parentNode.id.replace("r", "");
     
-    _cm(e, _tg_entity, pid);
+    _cm(e, _tg_entity, pid,"grid");
 }
 
 

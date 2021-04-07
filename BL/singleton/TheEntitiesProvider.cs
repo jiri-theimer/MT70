@@ -215,6 +215,7 @@ namespace BL
                     lis.Add(getREL("p32Activity", "p31_p32", "Aktivita", "INNER JOIN p32Activity p31_p32 ON a.p32ID=p31_p32.p32ID"));
                     lis.Add(getREL("p34ActivityGroup", "p32_p34", "Sešit", "INNER JOIN p32Activity aktivita1 ON a.p32ID=aktivita1.p32ID INNER JOIN p34ActivityGroup p32_p34 ON aktivita1.p34ID=p32_p34.p34ID"));
                     lis.Add(getREL("p41Project", "p31_p41", "Projekt", "LEFT OUTER JOIN p41Project p31_p41 ON a.p41ID=p31_p41.p41ID"));
+                    lis.Add(getREL("p28Contact", "p31_p41_p28", "Klient projektu", "LEFT OUTER JOIN p28Contact p31_p41_p28 ON p31_p41.p28ID_Client=p31_p41_p28.p28ID", "p31_p41"));
                     lis.Add(getREL("p91Invoice", "p31_p91", "Vyúčtování", "LEFT OUTER JOIN p91Invoice p31_p91 ON a.p91ID=p31_p91.p91ID"));
 
                     break;

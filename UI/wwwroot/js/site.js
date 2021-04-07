@@ -159,7 +159,7 @@ function _notify_message(strMessage, strTemplate = "error", milisecs = "3000") {
 
 
 //vyvolání kontextového menu
-function _cm(e, entity, pid, flag) {
+function _cm(e, entity, pid, menu_source) {
 
     var ctl = e.target;
 
@@ -210,7 +210,7 @@ function _cm(e, entity, pid, flag) {
         menuClicker: ctl,
         menuEntity: entity,
         menuPid: pid,
-        menuFlag: flag,
+        menuSource: menu_source,
         menuLoadByServer: menuLoadByServer
 
     });

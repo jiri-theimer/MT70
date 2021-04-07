@@ -7,13 +7,21 @@ namespace UI.Menu
 {
     public class p28ContextMenu: BaseContextMenu
     {
-        public p28ContextMenu(BL.Factory f, int pid) : base(f, pid)
+        public p28ContextMenu(BL.Factory f, int pid, string source) : base(f, pid)
         {
             var rec = f.p28ContactBL.Load(pid);
             var disp = f.p28ContactBL.InhaleRecDisposition(rec);
-            HEADER(rec.p28name);
-
-            AMI_RecPage("Stránka klienta", "p28", pid);
+            
+            if (source != "recpage")
+            {
+                HEADER(rec.p28name);
+                AMI_RecPage("Stránka klienta", "p28", pid);
+            }
+            if (source != "grid")
+            {                
+                AMI_RecGrid("Přejít do GRIDu", "p28", pid);
+            }
+            
             DIV();
             if (disp.OwnerAccess)
             {

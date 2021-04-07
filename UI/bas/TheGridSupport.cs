@@ -19,20 +19,20 @@ namespace UI
 
         public TheGridInput gridinput { get; set; }
 
-        public TheGridSupport(TheGridInput input,BL.Factory f,BL.TheColumnsProvider cp)
+        public TheGridSupport(TheGridInput input, BL.Factory f, BL.TheColumnsProvider cp)
         {
-            _Factory = f;            
+            _Factory = f;
             _colsProvider = cp;
             this.gridinput = input;
         }
 
         public TheGridOutput GetFirstData(TheGridState gridState) //vrátí grid html pro úvodní načtení na stránku
-        {           
+        {
             if (gridState == null)
             {
                 return render_thegrid_error("gridState is null!");
             }
-           
+
             if (!string.IsNullOrEmpty(this.gridinput.fixedcolumns))
             {
                 gridState.j72Columns = this.gridinput.fixedcolumns;
@@ -41,13 +41,13 @@ namespace UI
             return render_thegrid_html(gridState, this.gridinput.query);
         }
 
-      
+
 
         public TheGridOutput Event_HandleTheGridOper(TheGridUIContext tgi)     //grid událost: třídění, změna stránky a pagesize
         {
-           
+
             var gridState = _Factory.j72TheGridTemplateBL.LoadState(tgi.j72id, _Factory.CurrentUser.pid);   //načtení naposledy uloženého grid stavu uživatele
-           
+
             if (!string.IsNullOrEmpty(this.gridinput.fixedcolumns))
             {
                 gridState.j72Columns = this.gridinput.fixedcolumns;
@@ -91,7 +91,7 @@ namespace UI
 
             if (_Factory.j72TheGridTemplateBL.SaveState(gridState, _Factory.CurrentUser.pid) > 0)   //uložení změny grid stavu
             {
-                return render_thegrid_html(gridState,gridinput.query);
+                return render_thegrid_html(gridState, gridinput.query);
             }
             else
             {
@@ -103,10 +103,10 @@ namespace UI
 
         public TheGridOutput Event_HandleTheGridFilter(TheGridUIContext tgi, List<BO.TheGridColumnFilter> filter)    //grid událost: Změna sloupcového filtru
         {
-           
-            var gridState = _Factory.j72TheGridTemplateBL.LoadState(tgi.j72id, _Factory.CurrentUser.pid);            
 
-            
+            var gridState = _Factory.j72TheGridTemplateBL.LoadState(tgi.j72id, _Factory.CurrentUser.pid);
+
+
             if (string.IsNullOrEmpty(this.gridinput.fixedcolumns) == false)
             {
                 gridState.j72Columns = this.gridinput.fixedcolumns;
@@ -124,7 +124,7 @@ namespace UI
 
             if (_Factory.j72TheGridTemplateBL.SaveState(gridState, _Factory.CurrentUser.pid) > 0)
             {
-                return render_thegrid_html(gridState,gridinput.query);
+                return render_thegrid_html(gridState, gridinput.query);
             }
             else
             {
@@ -138,14 +138,14 @@ namespace UI
             var ret = new TheGridOutput();
             _grid = new TheGridViewModel();
             _grid.GridState = gridState;
-            
+
 
             ret.sortfield = gridState.j75SortDataField;
             ret.sortdir = gridState.j75SortOrder;
 
             if (gridState.j72Columns.Contains("Free"))
             {
-                var lisFF = new BL.ffColumnsProvider(_Factory,mq.Prefix);                
+                var lisFF = new BL.ffColumnsProvider(_Factory, mq.Prefix);
                 _grid.Columns = _colsProvider.ParseTheGridColumns(mq.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex, lisFF.getColumns());
             }
             else
@@ -154,7 +154,7 @@ namespace UI
             }
 
 
-            
+
             mq.explicit_columns = _grid.Columns.ToList();
 
             if (!String.IsNullOrEmpty(gridState.j75Filter))
@@ -193,21 +193,50 @@ namespace UI
                 var c = _grid.Columns.Where(p => p.UniqueName == gridState.j75SortDataField).First();
                 mq.explicit_orderby = c.getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
             }
-            //mq.ClearQRows();    //vyčistit qrows, které vznikli v rámci zpracování dtFooter
+            
             var dt = _Factory.gridBL.GetList(mq);
             
-
-            if (_grid.GridState.j75CurrentRecordPid > 0 && intVirtualRowsCount > gridState.j75PageSize)
+            if (_grid.GridState.j75CurrentRecordPid > 0 && intVirtualRowsCount > gridState.j75PageSize) //má se skočit na konkrétní záznam a záznamů je více než na 1 stránku
             {
-                //aby se mohlo skočit na cílový záznam, je třeba najít stránku, na které se záznam nachází
                 System.Data.DataRow[] recs = dt.Select("pid=" + _grid.GridState.j75CurrentRecordPid.ToString());
                 if (recs.Count() > 0)
                 {
+                    //záznam existuje v dt: buď je na první stránce nebo v úvodních 500 záznamech, kde se nepoužívá OFFSET
                     var intIndex = dt.Rows.IndexOf(recs[0]);
                     _grid.GridState.j75CurrentPagerIndex = intIndex - (intIndex % _grid.GridState.j75PageSize);
-
                 }
+                else
+                {
+                    if (intVirtualRowsCount > dt.Rows.Count)
+                    {
+                        //záznam není v dt a celkový počet záznamů je větší než v dt (tedy více než 500). Je třeba najít odpovídající stránku a pro ní vygenerovat datatable
+                        var lisPIDs = _Factory.gridBL.GetListOfFindPid(mq, 5000);
+                        var qryPID = lisPIDs.Where(p => p.pid == _grid.GridState.j75CurrentRecordPid);
+                        if (qryPID.Count() > 0)
+                        {
+                            var intIndex = qryPID.First().rowindex;
+                            _grid.GridState.j75CurrentPagerIndex = intIndex - (intIndex % _grid.GridState.j75PageSize);
+                            mq.OFFSET_PageNum = gridState.j75CurrentPagerIndex / gridState.j75PageSize;
+                            dt = _Factory.gridBL.GetList(mq);
+                        }
+
+                    }
+                }
+                
             }
+
+
+            //if (_grid.GridState.j75CurrentRecordPid > 0 && intVirtualRowsCount > gridState.j75PageSize)
+            //{
+            //    //aby se mohlo skočit na cílový záznam, je třeba najít stránku, na které se záznam nachází
+            //    System.Data.DataRow[] recs = dt.Select("pid=" + _grid.GridState.j75CurrentRecordPid.ToString());
+            //    if (recs.Count() > 0)
+            //    {
+            //        var intIndex = dt.Rows.IndexOf(recs[0]);
+            //        _grid.GridState.j75CurrentPagerIndex = intIndex - (intIndex % _grid.GridState.j75PageSize);
+
+            //    }
+            //}
 
             _s = new System.Text.StringBuilder();
 
@@ -320,7 +349,7 @@ namespace UI
 
                 if (!string.IsNullOrEmpty(this.gridinput.oncmclick))
                 {
-                    _s.Append(string.Format("<td class='td2' style='width:20px;'><a class='cm' onclick='{0}'>&#9776;</a></td>",this.gridinput.oncmclick));      //hamburger menu
+                    _s.Append(string.Format("<td class='td2' style='width:20px;'><a class='cm' onclick='{0}'>&#9776;</a></td>", this.gridinput.oncmclick));      //hamburger menu
                 }
                 else
                 {
@@ -357,7 +386,7 @@ namespace UI
             }
             _s.Append("<tr id='tabgrid1_tr_totals'>");
             _s.Append(string.Format("<th class='th0' title='{0}' colspan=3 style='width:60px;'><span id='tabgrid1_rows' class='badge bg-primary'>{1}</span></th>", _Factory.tra("Celkový počet záznamů"), string.Format("{0:#,0}", dt.Rows[0]["RowsCount"])));
-           
+
             string strVal = "";
             foreach (var col in _grid.Columns)
             {
@@ -508,7 +537,7 @@ namespace UI
             }
             _s.Append(this.gridinput.extendpagerhtml);
 
-            
+
         }
 
 
@@ -546,7 +575,7 @@ namespace UI
                 {
                     sb.Append("<td style='width:20px;'><span class='k-icon k-i-table'></span></td>");
                 }
-                
+
 
                 if (c.j72IsSystem)
                 {
@@ -558,19 +587,19 @@ namespace UI
                 }
                 sb.Append(string.Format("<td><a class='nav-link py-0' href='javascript:change_grid({0})'>{1}</a></td>", c.pid, c.j72Name));
 
-                sb.AppendLine(string.Format("<td style='width:50px;'><a title='" + strGridNavrhar + "' class='btn btn-sm btn-outline-secondary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={0}\",2);'>{1}</a></td>", c.pid,_Factory.tra("Upravit")));
+                sb.AppendLine(string.Format("<td style='width:50px;'><a title='" + strGridNavrhar + "' class='btn btn-sm btn-outline-secondary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={0}\",2);'>{1}</a></td>", c.pid, _Factory.tra("Upravit")));
                 sb.AppendLine("</tr>");
             }
             sb.AppendLine("</table>");
             sb.Append("</div>");
-            
+
             sb.AppendLine("<ul style='border:0px;list-style-type: none;background-color:#E6F0FF;border-top:solid 1px silver;'>");
 
-            
+
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='k-icon k-i-file-excel' style='width:30px;'></span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='k-icon k-i-file-csv' style='width:30px;'></span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
-           
-            
+
+
             sb.AppendLine("<li><hr class='hr-mini' /></li>");
             sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(20)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 20)) + "</a></li>");
             sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(50)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 50)) + "</a></li>");
@@ -587,7 +616,7 @@ namespace UI
         public TheGridExportedFile Event_HandleTheGridExport(string format, int j72id, string pids)
         {
             var gridState = this._Factory.j72TheGridTemplateBL.LoadState(j72id, _Factory.CurrentUser.pid);
-                                          
+
             if (String.IsNullOrEmpty(pids) == false)
             {
                 this.gridinput.query.SetPids(pids);
@@ -597,7 +626,7 @@ namespace UI
             System.Data.DataTable dt = prepare_datatable_4export(gridState);
             string strTempFileName = BO.BAS.GetGuid();
             string filepath = _Factory.x35GlobalParamBL.TempFolder() + "\\" + strTempFileName + "." + format;
-            
+
             var cExport = new UI.dataExport();
             string strFileClientName = "gridexport_" + this.gridinput.query.Prefix + "." + format;
 
@@ -606,7 +635,7 @@ namespace UI
                 if (cExport.ToCSV(dt, filepath, this.gridinput.query))
                 {
                     //return File(System.IO.File.ReadAllBytes(filepath), "application/CSV", strFileClientName);
-                    return new TheGridExportedFile() { contenttype = "application/CSV", downloadfilename = strFileClientName, tempfilename= strTempFileName + "." + format };
+                    return new TheGridExportedFile() { contenttype = "application/CSV", downloadfilename = strFileClientName, tempfilename = strTempFileName + "." + format };
 
 
                 }
@@ -617,7 +646,7 @@ namespace UI
                 {
 
                     //return File(System.IO.File.ReadAllBytes(filepath), "application/vnd.ms-excel", strFileClientName);
-                    return new TheGridExportedFile() { contenttype = "application/vnd.ms-excel", downloadfilename = strFileClientName, tempfilename= strTempFileName + "." + format };
+                    return new TheGridExportedFile() { contenttype = "application/vnd.ms-excel", downloadfilename = strFileClientName, tempfilename = strTempFileName + "." + format };
                 }
             }
 
@@ -630,7 +659,7 @@ namespace UI
         {
             if (gridState.j72Columns.Contains("Free"))
             {
-                var lisFF = new BL.ffColumnsProvider(this._Factory, this.gridinput.query.Prefix);                
+                var lisFF = new BL.ffColumnsProvider(this._Factory, this.gridinput.query.Prefix);
                 this.gridinput.query.explicit_columns = _colsProvider.ParseTheGridColumns(this.gridinput.query.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex, lisFF.getColumns());
             }
             else
@@ -638,24 +667,24 @@ namespace UI
                 this.gridinput.query.explicit_columns = _colsProvider.ParseTheGridColumns(this.gridinput.query.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex);
             }
 
-            
+
             if (!string.IsNullOrEmpty(gridState.j75SortDataField))
             {
                 if (this.gridinput.query.explicit_columns.Any(p => p.UniqueName == gridState.j75SortDataField))
                 {
-                    this.gridinput.query.explicit_orderby=this.gridinput.query.explicit_columns.Where(p => p.UniqueName == gridState.j75SortDataField).First().getFinalSqlSyntax_ORDERBY()+ " " + gridState.j75SortOrder;
+                    this.gridinput.query.explicit_orderby = this.gridinput.query.explicit_columns.Where(p => p.UniqueName == gridState.j75SortDataField).First().getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
                 }
                 //this.gridinput.query.explicit_orderby = _colsProvider.ByUniqueName(gridState.j75SortDataField).getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
             }
             if (String.IsNullOrEmpty(gridState.j75Filter) == false)
             {
                 this.gridinput.query.TheGridFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, this.gridinput.query.explicit_columns);
-            }                                  
+            }
             if (gridState.j72HashJ73Query)
             {
                 this.gridinput.query.lisJ73 = _Factory.j72TheGridTemplateBL.GetList_j73(gridState.j72ID, gridState.j72Entity.Substring(0, 3));
             }
-            
+
             return _Factory.gridBL.GetList(this.gridinput.query);
         }
 

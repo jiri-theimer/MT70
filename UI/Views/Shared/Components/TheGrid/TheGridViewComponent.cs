@@ -58,7 +58,8 @@ namespace UI.Views.Shared.Components.TheGrid
             gridState.j75CurrentPagerIndex = 0; //na úvodní zobrazení vždy začínat grid na první stránce!
 
 
-            
+
+
             var cSup = new UI.TheGridSupport(input,_f, _colsProvider);
 
             var ret = new TheGridViewModel();

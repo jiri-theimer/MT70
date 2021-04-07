@@ -23,4 +23,10 @@ namespace BO
     {
         public bool Value { get; set; }
     }
+
+    public class GetListOfPids
+    {
+        public int pid { get; set; }
+        public int rowindex { get; set; }
+    }
 }

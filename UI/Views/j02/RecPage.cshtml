@@ -19,7 +19,7 @@
         {
             <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.FullNameDesc" onclick="_cm(event, 'j02',@Model.Rec.pid);">☰@(Model.Rec.FullNameAsc) </a>
             <h4 id="layout_sidebar_contextmenu_onlytext">
-              
+
                 @Model.Rec.FullNameAsc
             </h4>
         }
@@ -28,16 +28,18 @@
     @if (Model.pid > 0)
     {
         <div class="col-auto nonmobile tabovergrid">
-            @Model.MenuCode
+            @_f.tra("Stránka osoby")
         </div>
 
-        <div class="nonmobile col-auto">
+        <div class="col-auto">
             <a class="btn btn-light" href="/j02/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+            <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
         </div>
+       
     }
 
-    <div class="col-auto pl-0">
-        searchbox??
+    <div class="col-auto">
+        <span>@Model.MenuCode</span>
 
     </div>
 
