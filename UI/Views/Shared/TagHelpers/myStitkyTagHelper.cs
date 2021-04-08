@@ -47,10 +47,10 @@ namespace UI.Views.Shared.TagHelpers
             //_sb.AppendLine("<div class='form-group'>");
             _sb.AppendLine(string.Format("<button id='cmdTagging' type='button' class='btn btn-outline-primary' onclick='mystitky_multiselect(event,\"{0}\")'>{1} ♣</button>", this.Entity,this.ButtonText));
             //_sb.AppendLine("</div>");
-            _sb.AppendLine("</div><div class='col-auto'>");
+            _sb.AppendLine("</div><div id='divTagHtml' class='col-auto'>");
                       
 
-            _sb.Append("<div id='divTagHtml'>");
+            //_sb.Append("<div id='divTagHtml'>");
             if (string.IsNullOrEmpty(this.SelectedTagHtml) == false)
             {
                 _sb.Append(this.SelectedTagHtml);     

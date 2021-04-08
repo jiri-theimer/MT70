@@ -9,6 +9,8 @@ namespace BO
     public class myQueryP31:baseQuery
     {
         public int j02id { get; set; }
+        public int p28id { get; set; }
+        public int p41id { get; set; }
         public string tabquery { get; set; }
 
         public myQueryP31()
@@ -22,6 +24,14 @@ namespace BO
             if (this.j02id > 0)
             {
                 AQ("a.j02ID=@j02id", "j02id", this.j02id);
+            }
+            if (this.p41id > 0)
+            {
+                AQ("a.p41ID=@p41id", "p41id", this.p41id);
+            }
+            if (this.p28id > 0)
+            {
+                AQ("p41x.p28ID_Client=@p28id", "p28id", this.p28id);
             }
 
             if (this.tabquery != null)

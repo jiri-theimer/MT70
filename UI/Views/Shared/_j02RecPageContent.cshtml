@@ -16,7 +16,7 @@
 
 <div class="card recpagebox400">
     <div class="card-body">
-        <h6 class="card-title recpagetitle">
+        <h6 class="card-title recpagetitle bgj02">
             Osobní profil
         </h6>
         <div class="row">
@@ -99,7 +99,7 @@
 {
     <div class="card recpagebox400">
         <div class="card-body">
-            <div class="card-title recpagetitle">
+            <div class="card-title recpagetitle bgj02">
                 Uživatelský účet
             </div>
             <div class="row">
@@ -124,7 +124,7 @@
 {
     <div class="card recpagebox400">
         <div class="card-body">
-            <div class="card-title recpagetitle">
+            <div class="card-title recpagetitle bgj02">
                 @_f.tra("Kontakt")
             </div>
             <div class="row">
@@ -174,13 +174,75 @@
 }
 
 @if (Model.TagHtml != null)
-{    
+{
     <div class="card recpageboxauto">
         <div class="card-body">
-            <div class="card-title recpagetitle">
+            <div class="card-title recpagetitle bgj02">
                 @_f.tra("Štítky")
             </div>
             @Html.Raw(Model.TagHtml)
+
+        </div>
+    </div>
+}
+@if (Model.lisP30 != null && Model.lisP30.Count() > 0)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgj02">
+                @_f.tra("Kontaktní osoba")
+            </div>
+            @foreach (var c in Model.lisP30)
+            {
+                <div class="my-1">
+                    @if (c.p28ID > 0)
+                    {
+                        <myval value="@c.p28Name" hoverpid="@c.p28ID" hoverprefix="p28"></myval>
+                    }
+                    @if (c.p41ID > 0)
+                    {
+                        <myval value="@(c.p41Name+" ("+c.p41Code+")")" hoverpid="@c.p41ID" hoverprefix="p41"></myval>
+                    }
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+@if (Model.RecJ03 != null && Model.RecSum != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgj02">
+                @_f.tra("Protokol")
+            </div>
+            <table>
+                @if (Model.RecSum.Last_Access != null)
+                {
+                    <tr>
+                        <td>
+                            @_f.tra("Poslední PING v MT"):
+                        </td>
+                        <td>
+                            <strong>
+                                @BO.BAS.ObjectDateTime2String(Model.RecSum.Last_Access)
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Naposledy vykázaný úkon"):
+                        </td>
+                        <td>
+                            <strong>
+                                @Model.RecSum.Last_Worksheet
+                            </strong>
+                        </td>
+                    </tr>
+                }
+
+            </table>
 
         </div>
     </div>

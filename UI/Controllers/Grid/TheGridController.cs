@@ -102,8 +102,15 @@ namespace UI.Controllers
                     tabs.Add(AddTab("PING Log", "j92PingLog", "SlaveView?prefix=j92"));
                     tabs.Add(AddTab("LOGIN Log", "j90LoginAccessLog", "SlaveView?prefix=j90"));
                     break;
-                
-                
+
+                case "p28":
+                    tabs.Add(AddTab("Info", "viewInfo", "/p28/Info?pid=" + AppendPid2Url(v.gridinput.go2pid)));
+                    tabs.Add(AddTab("Úkony", "p31Worksheet", "SlaveView?prefix=p31"));
+                    tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
+                    tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
+                    tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
+
+                    break;
                 
             }
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);

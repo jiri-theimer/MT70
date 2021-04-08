@@ -14,7 +14,7 @@ namespace BL
         public int Save(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,List<int> j02ids);
         public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id);
         public BO.p28RecDisposition InhaleRecDisposition(BO.p28Contact rec);
-
+        public BO.p28ContactSum LoadSumRow(int pid);
     }
     class p28ContactBL : BaseBL, Ip28ContactBL
     {
@@ -287,6 +287,11 @@ namespace BL
             }
 
             return c;
+        }
+
+        public BO.p28ContactSum LoadSumRow(int pid)
+        {
+            return _db.Load<BO.p28ContactSum>("EXEC dbo.p28_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
         }
     }
 }

@@ -1147,23 +1147,22 @@ table.table-thecombo {
 
 
 div.info_record_container {
-    padding-top:6px;
-    padding-left:6px;
-    width:98%;
+    padding-top: 6px;
+    padding-left: 6px;
+    width: 98%;
 }
 
 div.recpagebox400 {
-    float:left;
+    float: left;
     width: 400px;
     min-height: 100px;
-    margin-left:4px;
-    margin-top:4px;
+    margin-left: 4px;
+    margin-top: 4px;
     vertical-align: top;
 }
 
 div.recpageboxauto {
     float: left;
-    
     margin-left: 4px;
     margin-top: 4px;
     vertical-align: top;
@@ -1172,7 +1171,20 @@ div.recpageboxauto {
 .recpagetitle {
     color: darkblue;
     font-weight: bold;
-    background-color:aliceblue;
-    padding:5px;
+    background-color: aliceblue;
+    padding: 5px;
     border-radius: 6px;
+}
+
+.bgp28 {
+    background-color: #eefdec;
+}
+.bgp41 {
+    background-color: aliceblue;
+}
+.bgj02 {
+    background-color: #FCFAE8;
+}
+.bgp91 {
+    background-color: #C3E6CB;
 }

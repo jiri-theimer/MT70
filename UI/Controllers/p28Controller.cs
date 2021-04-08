@@ -5,13 +5,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
 using UI.Models.Record;
-using System.Net.Http;
-
+using UI.Models.Recpage;
 
 namespace UI.Controllers
 {
     public class p28Controller : BaseController
     {
+        public IActionResult Info(int pid)
+        {
+            var v = new p28RecPage() { Factory = this.Factory, prefix = "p28", pid = pid };
+            v.Rec = Factory.p28ContactBL.Load(v.pid);
+            if (v.Rec != null)
+            {
+                v.RecSum = Factory.p28ContactBL.LoadSumRow(v.Rec.pid);
+
+                v.SetTagging();
+                v.lisO38 = Factory.o38AddressBL.GetList(new BO.myQueryO38() { p28id = v.pid });
+                v.lisJ02 = Factory.j02PersonBL.GetList(new BO.myQueryJ02() { p28id = v.pid });
+            }
+            return View(v);
+        }
         public IActionResult VatInfo(string dic)
         {
             var v = new VatInfoViewModel() { DIC = dic };

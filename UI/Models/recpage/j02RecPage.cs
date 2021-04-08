@@ -10,7 +10,10 @@ namespace UI.Models.Recpage
         
         public bool IsHover { get; set; }
         public BO.j02Person Rec { get; set; }
+        public BO.j02PersonSum RecSum { get; set; }
         public BO.j03User RecJ03 { get; set; }
+
+        public IEnumerable<BO.p30Contact_Person> lisP30 { get; set; }
 
         public string GetTeams()
         {

@@ -10,9 +10,7 @@ using UI.Models.Recpage;
 namespace UI.Controllers
 {
     public class j02Controller : BaseController
-    {
-        
-       
+    {               
         public IActionResult Info(int pid)
         {
             var v = new j02RecPage() { Factory = this.Factory,prefix = "j02", pid = pid };
@@ -22,6 +20,11 @@ namespace UI.Controllers
                 if (v.Rec.j03ID > 0)
                 {
                     v.RecJ03 = Factory.j03UserBL.Load(v.Rec.j03ID);
+                    v.RecSum = Factory.j02PersonBL.LoadSumRow(v.Rec.pid);
+                }
+                if (!v.Rec.j02IsIntraPerson)
+                {
+                    v.lisP30 = Factory.p30Contact_PersonBL.GetList(new BO.myQueryP30() { j02id = v.pid });
                 }
 
                 v.SetTagging();
@@ -69,9 +72,13 @@ namespace UI.Controllers
                     if (v.Rec.j03ID > 0)
                     {
                         v.RecJ03 = Factory.j03UserBL.Load(v.Rec.j03ID);
-                        
+                        v.RecSum = Factory.j02PersonBL.LoadSumRow(v.Rec.pid);
                     }
                    
+                    if (!v.Rec.j02IsIntraPerson)
+                    {
+                        v.lisP30 = Factory.p30Contact_PersonBL.GetList(new BO.myQueryP30() { j02id = v.pid });                        
+                    }
 
                     RefreshNavTabs(v);
                     
