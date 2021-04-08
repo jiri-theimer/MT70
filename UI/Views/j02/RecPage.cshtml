@@ -7,14 +7,15 @@
     if (Model.Rec == null) return;
 
     Model.PageTitle = Model.Rec.FullNameDesc;
+    
 }
 
 @addTagHelper *, UI
 
 
 
-<div class="row nowrap pt-1 bg-light m-0">
-    <div id="layout_sidebar_contextmenu" class="col-auto">
+<div class="input-group bg-light m-0" style="padding-top:1px; padding-left:1px;">
+    <div id="layout_sidebar_contextmenu">
         @if (Model.pid > 0)
         {
             <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.FullNameDesc" onclick="_cm(event, 'j02',@Model.Rec.pid);">☰@(Model.Rec.FullNameAsc) </a>
@@ -25,20 +26,33 @@
     </div>
     @if (Model.pid > 0)
     {
-        <div class="col-auto nonmobile tabovergrid">            
+        <div class="nonmobile tabovergrid" style="margin-left:2px;">            
             @_f.tra("Stránka osoby")
         </div>
 
-        <div class="col-auto">
+        <div>
             <a class="btn btn-light" href="/j02/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
             <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
         </div>
 
     }
 
-    <div class="col-auto p-2 nonmobile">
+    <div class="p-2 nonmobile">
         <span>@Model.MenuCode</span>
 
+    </div>
+
+    <div class="nonmobile" style="margin-left:auto;">        
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="cmdPageSetting" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="k-icon k-i-gears"></span>
+                @_f.tra("Nastavení")
+            </button>
+            <div id="divRecPageSetting" class="dropdown-menu" aria-labelledby="cmdPageSetting" style="width:350px;">
+                Loading...
+            </div>
+
+        </div>
     </div>
 
 </div>
@@ -48,9 +62,13 @@
 
 
 <div id="layout_main">
-    <div style="max-height:230px;overflow-y:auto;overflow-x:hidden;">
-        @Html.EditorFor(m => m, "~/Views/Shared/_j02RecPageContent.cshtml")
-    </div>
+    @if (Model.PanelHeight != "none")
+    {
+        <div style="max-height:@(Model.PanelHeight);overflow-y:auto;overflow-x:hidden;">
+            @Html.EditorFor(m => m, "~/Views/Shared/_j02RecPageContent.cshtml")
+        </div>
+    }
+
 
     <div class="tabs_container">
         <ul id="navtabs" class="nav nav-tabs">
@@ -78,6 +96,16 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        var cmd = document.getElementById("cmdPageSetting");
+        cmd.addEventListener("show.bs.dropdown", function () {
+
+            $.post("/Menu/RecPageSetting", { prefix: "j02" }, function (data) {                
+                $("#divRecPageSetting").html(data);
+            });
+
+        });
+
 
         @if(Model.pid>0)
         {
@@ -125,8 +153,18 @@
         });
     }
 
+    function reload() {
+        location.replace(_ep("/j02/RecPage?pid=@Model.pid"));
+    }
+
     function on_search(pid) {
         location.replace(_ep("/j02/RecPage?pid=" + pid));
+    }
+
+    function save_page_setting(key,val) {
+        $.post("/Common/SetUserParam", { key: key, value: val }, function (data) {
+            reload();
+        });
     }
 
 </script>

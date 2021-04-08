@@ -91,8 +91,11 @@ namespace UI.Controllers
         private void RefreshNavTabs(j02RecPage v)
         {
             var c = Factory.j02PersonBL.LoadSumRow(v.pid);
-
-            v.NavTabs.Add(AddTab(v.Rec.FullNameAsc, "info", "/j02/Info?pid="+v.pid.ToString(), false, null));
+            if (v.PanelHeight == "none")
+            {
+                v.NavTabs.Add(AddTab("Info", "info", "/j02/Info?pid=" + v.pid.ToString(), false, null));
+            }
+            
             string strBadge = null;
             if (c.p31_Wip_Time_Count > 0 || c.p31_Wip_Expense_Count>0 || c.p31_Wip_Fee_Count>0)
             {

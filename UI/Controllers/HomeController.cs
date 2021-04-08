@@ -225,9 +225,8 @@ namespace UI.Controllers
             v.j02EmailSignature = v.RecJ02.j02EmailSignature;
             if (!string.IsNullOrEmpty(Factory.CurrentUser.j11IDs))
             {
-                var mq = new BO.myQuery("j11");
-                mq.SetPids(Factory.CurrentUser.j11IDs);
-                v.Teams = string.Join(", ", Factory.j11TeamBL.GetList(mq).Select(p => p.j11Name));
+                var mq = new BO.myQueryJ11() { j02id = Factory.CurrentUser.j02ID };                
+                v.Teams = string.Join(", ", Factory.j11TeamBL.GetList(mq).Where(p=>p.j11IsAllPersons==false).Select(p => p.j11Name));
             }
 
             RefreshState_MyProfile(v);

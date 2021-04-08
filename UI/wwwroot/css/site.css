@@ -1009,7 +1009,7 @@ div.tabs_container {
     border-left: solid 1px silver;
     border-right: solid 1px silver;
     border-top-right-radius: 6px !important;
-    border-top-left-radius: 6px;
+    border-top-left-radius: 6px !important;
     margin-right: 4px;
     background-color: white;
     padding-top: 4px;
@@ -1154,9 +1154,25 @@ div.info_record_container {
 
 div.recpagebox400 {
     float:left;
-    width: 450px;
+    width: 400px;
     min-height: 100px;
     margin-left:4px;
     margin-top:4px;
     vertical-align: top;
+}
+
+div.recpageboxauto {
+    float: left;
+    
+    margin-left: 4px;
+    margin-top: 4px;
+    vertical-align: top;
+}
+
+.recpagetitle {
+    color: darkblue;
+    font-weight: bold;
+    background-color:aliceblue;
+    padding:5px;
+    border-radius: 6px;
 }

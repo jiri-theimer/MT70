@@ -24,6 +24,7 @@ namespace UI.Models
         public int SearchedPid { get; set; }
         public string SearchedText { get; set; }
         
+        private string _PanelHeight { get; set; }
 
         public void SetGridUrl()
         {
@@ -40,17 +41,30 @@ namespace UI.Models
         }
         public int LoadLastUsedPid()
         {
-            this.pid_loaded= Factory.CBL.LoadUserParamInt($"{this.prefix}-RecPage-pid");
+            this.pid_loaded= Factory.CBL.LoadUserParamInt($"recpage-{this.prefix}-pid");
             return this.pid_loaded;
         }
+
         public void SaveLastUsedPid()
         {
             if (this.pid > 0 && this.pid_loaded !=this.pid)
             {
-                Factory.CBL.SetUserParam($"{prefix}-RecPage-pid", this.pid.ToString());
+                Factory.CBL.SetUserParam($"recpage-{prefix}-pid", this.pid.ToString());
             }
             
         }
+
+        public string PanelHeight {
+            get
+            {
+                if (_PanelHeight == null)
+                {
+                    _PanelHeight = Factory.CBL.LoadUserParam($"recpage-{prefix}-panel-height", "200px");
+                }
+                return _PanelHeight;
+            }
+        }
+        
 
         public void SetTagging()
         {
@@ -58,5 +72,7 @@ namespace UI.Models
             
             this.TagHtml = tg.TagHtml;
         }
+
+        
     }
 }

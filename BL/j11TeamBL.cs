@@ -7,7 +7,7 @@ namespace BL
     public interface Ij11TeamBL
     {
         public BO.j11Team Load(int pid);
-        public IEnumerable<BO.j11Team> GetList(BO.myQuery mq);
+        public IEnumerable<BO.j11Team> GetList(BO.myQueryJ11 mq);
         public int Save(BO.j11Team rec, List<int> j02ids);
 
     }
@@ -32,7 +32,7 @@ namespace BL
             return _db.Load<BO.j11Team>(GetSQL1(" WHERE a.j11ID=@pid"), new { pid = pid });
         }
 
-        public IEnumerable<BO.j11Team> GetList(BO.myQuery mq)
+        public IEnumerable<BO.j11Team> GetList(BO.myQueryJ11 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.j11Team>(fq.FinalSql, fq.Parameters);
