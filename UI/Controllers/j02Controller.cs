@@ -14,6 +14,17 @@ namespace UI.Controllers
         public IActionResult Info(int pid)
         {
             var v = new j02RecPage() { Factory = this.Factory,prefix = "j02", pid = pid };
+            RefreshStateInfo(v);
+            return View(v);
+        }
+        public IActionResult Tab1(int pid)
+        {
+            var v = new j02RecPage() { Factory = this.Factory, prefix = "j02", pid = pid };
+            RefreshStateInfo(v);
+            return View(v);
+        }
+        private void RefreshStateInfo(j02RecPage v)
+        {
             v.Rec = Factory.j02PersonBL.Load(v.pid);
             if (v.Rec != null)
             {
@@ -30,7 +41,6 @@ namespace UI.Controllers
                 v.SetTagging();
 
             }
-            return View(v);
         }
         public IActionResult RecPage(int pid, string login)
         {            
@@ -100,7 +110,7 @@ namespace UI.Controllers
             var c = Factory.j02PersonBL.LoadSumRow(v.pid);
             if (v.PanelHeight == "none")
             {
-                v.NavTabs.Add(AddTab("Info", "info", "/j02/Info?pid=" + v.pid.ToString(), false, null));
+                v.NavTabs.Add(AddTab("Tab1", "tab1", "/j02/Tab1?pid=" + v.pid.ToString(), false, null));
             }
             
             string strBadge = null;

@@ -72,7 +72,7 @@
         <vc:the-grid input="@Model.gridinput"></vc:the-grid>
 
     </div>
-    <div class="tabs_container">
+    <div class="tabs_container bg@(Model.prefix)">
         <ul id="navtabs" class="nav nav-tabs">
             @foreach (var tab in Model.NavTabs)
             {
@@ -119,7 +119,9 @@
 
         _mainmenu_highlight_current("cmd" + _pageprefix);
 
-
+        if (_tg_go2pid !== null && _tg_go2pid !== 0) {  //masterview potřebuje odscrollovat vybraný záznam. FlatView to nepotřebuje
+            tg_go2pid(_tg_go2pid);
+        }
 
         if ($("#FilterMyInvolvement").val() != "") {
             $("#FilterMyInvolvement").addClass("filtered");
@@ -163,7 +165,7 @@
         </text>
         }
 
-
+        
     });
 
 

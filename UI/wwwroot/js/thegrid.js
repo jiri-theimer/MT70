@@ -399,7 +399,8 @@ function tg_go2pid(pid) {       //již musí být ze serveru odstránkováno!
         var row = document.getElementById("r" + pid);
         tg_select_one_row(row, pid);
 
-        row.scrollIntoView(true);
+        row.scrollIntoView({ block: "start", behavior: "smooth" });
+        
 
         //var rowpos = $(row).position();
         //$("#container_vScroll").scrollTop(rowpos.top);

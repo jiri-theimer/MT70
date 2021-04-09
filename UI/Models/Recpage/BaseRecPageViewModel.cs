@@ -30,11 +30,7 @@ namespace UI.Models
         {
             if (this.pid > 0)
             {
-                this.Go2GridUrl = $"/TheGrid/MasterView?prefix={this.prefix}&go2pid={this.pid}";
-                if (!Factory.CBL.LoadUserParamBool("grid-j02-show11", true))
-                {
-                    this.Go2GridUrl = $"/TheGrid/FlatView?prefix={this.prefix}&go2pid={this.pid}";
-                }
+                this.Go2GridUrl = basUI.GetGridUrl(Factory, this.prefix, this.pid);                
             }
 
 

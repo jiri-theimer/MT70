@@ -92,7 +92,7 @@ namespace UI.Controllers
             {
                 
                 case "j02":
-                    tabs.Add(AddTab("Info", "viewInfo", "/j02/Info?pid=" + AppendPid2Url(v.gridinput.go2pid)));
+                    tabs.Add(AddTab("Tab1", "tab1", "/j02/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
                     tabs.Add(AddTab("Časový plán", "gantt", "/a35/TabPersonalTimeline?pid=" + AppendPid2Url(v.gridinput.go2pid)));
 
                   
@@ -104,7 +104,14 @@ namespace UI.Controllers
                     break;
 
                 case "p28":
-                    tabs.Add(AddTab("Info", "viewInfo", "/p28/Info?pid=" + AppendPid2Url(v.gridinput.go2pid)));
+                    tabs.Add(AddTab("Tab1", "tab1", "/p28/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid),false));
+                    tabs.Add(AddTab("Úkony", "p31Worksheet", "SlaveView?prefix=p31"));
+                    tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
+                    tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
+                    tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
+                    break;
+                case "p41":
+                    tabs.Add(AddTab("Tab1", "tab1", "/p41/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid), false));
                     tabs.Add(AddTab("Úkony", "p31Worksheet", "SlaveView?prefix=p31"));
                     tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
                     tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));

@@ -152,6 +152,12 @@ namespace BL
                     }
 
                     break;
+                case "p31":                    
+                        ret.Add(InhaleColumn4Relation("p31_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("p31_p41_p28", "p28Contact", "p28Name", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("p31_p41", "p41Project", "p41Name", rels, bolComboColumns));
+                    ret.Add(InhaleColumn4Relation("p31_p32", "p32Activity", "p32Name", rels, bolComboColumns));
+                    break;
                 case "p36":
                     ret.Add(InhaleColumn4Relation("p36_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p36_j11", "j11Team", "j11Name", rels, bolComboColumns));

@@ -11,8 +11,110 @@
 
 @addTagHelper *, UI
 
+
 <div class="info_record_container">
 
-    @Html.EditorFor(m => m, "~/Views/Shared/_p28RecPageContent.cshtml")
+    <div class="row">
+        <div class="col-sm-1 col-md-2">
+            <a class="btn btn-sm btn-outline-secondary" href="/p28/RecPage?pid=@Model.pid" target="_top">@_f.tra("Stránka")</a>
+            @if (_f.CurrentUser.j04IsMenu_Contact)
+            {
+                <a class="btn btn-sm btn-outline-secondary" href="@(basUI.GetGridUrl(_f,"p28",Model.pid))" target="_top">@_f.tra("Grid")</a>
+            }
+
+        </div>
+        <div class="col-sm-6 col-md-5">
+            <myval value="@Model.Rec.p28name"></myval>
+
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <myval value="@Model.Rec.p28Code"></myval>
+
+        </div>
+        @if (Model.Rec.p51ID_Billing > 0 && _f.CurrentUser.IsRatesAccess)
+        {
+            <div class="col-sm-3 col-md-3" title="@_f.tra("Ceník fakturačních hodinových sazeb")">
+                <myval value="@Model.Rec.p51Name_Billing"></myval>
+
+            </div>
+        }
+    </div>
+
+    @if (Model.Rec.p28RegID != null)
+    {
+        <div class="row my-1">
+            <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("IČ/DIČ")):</label>
+            <div class="col-sm-6 col-md-5">
+                <div class="val-readonly rowvalhover my-1">
+                    <span>@Model.Rec.p28RegID</span>
+                    @if (Model.Rec.p28ICDPH_SK != null)
+                    {
+                        <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.ObchodnyRegister(Model.Rec.p28RegID)">obchodný register</a>
+                    }
+                    else
+                    {
+                        <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Justice(Model.Rec.p28RegID)">justice</a>
+                        <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Ares(Model.Rec.p28RegID)">ares</a>
+                        <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Insolvence(Model.Rec.p28RegID)">insolvence</a>
+                    }
+
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <myval value="@Model.Rec.p28VatID"></myval>
+
+            </div>
+        </div>
+    }
+
+    @if (Model.lisO38 != null)
+    {
+        @foreach (var c in Model.lisO38)
+        {
+            <div class="rowvalhover my-2">
+                <span>@Html.Raw(BO.BAS.Text2Html(c.FullAddress))</span>
+                <a class="valhover_tooltip" target='_blank' href="https://mapy.cz/zakladni?q=@(c.o38City+"+"+c.o38Street)">mapy</a>
+                <a class="valhover_tooltip" target='_blank' href="https://www.google.com/maps/place/@(c.o38City+"+"+c.o38Street)">google</a>
+            </div>
+        }
+    }
+
+    @if (Model.lisJ02 != null)
+    {
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Kontaktní osoby")
+            </div>
+            <div class="card-body">
+                @foreach (var c in Model.lisJ02)
+                {
+                <div class="rowvalhover" style="float:left;">
+                    <span>@c.FullNameAsc</span>
+                    <a class="valhover_tooltip" target='_top' href="/j02/RecPage?pid=@c.pid">@_f.tra("Stránka")</a>
+                    @if (_f.CurrentUser.j04IsMenu_People)
+                    {
+                        <a class="valhover_tooltip" target='_top' href="@basUI.GetGridUrl(_f,"j02",c.pid)">@_f.tra("Grid")</a>
+                    }
+
+
+                </div>
+                }
+            </div>
+        </div>
+
+    }
+
+    @Html.Raw(Model.TagHtml)
+
+    @if (Model.Rec.p28BillingMemo != null && _f.CurrentUser.IsRatesAccess)
+    {
+        <div style="background-color:#F0FFF0;padding:4px;border-radius:4px;">
+            @Html.Raw(@BO.BAS.Text2Html(Model.Rec.p28BillingMemo))
+        </div>
+    }
+
+
+
+
 
 </div>

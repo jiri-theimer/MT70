@@ -12,5 +12,6 @@ namespace UI.Models.Recpage
         public BO.p28ContactSum RecSum { get; set; }
         public IEnumerable<BO.o38Address> lisO38 { get; set; }
         public IEnumerable<BO.j02Person> lisJ02 { get; set; }
+        public IEnumerable<BO.o32Contact_Medium> lisO32 { get; set; }
     }
 }

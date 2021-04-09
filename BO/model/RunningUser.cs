@@ -32,8 +32,9 @@ namespace BO
         
         public string ExplicitConnectString { get; set; }   // pro předávání jiného db connect stringu - pro FILIP
         public string ExplicitLogsDir { get; set; }   // pro předávání jiného logovacího adresáře - pro FILIP
-        
 
+        private bool? _IsAdmin;
+        private bool? _IsRatesAccess;
         
 
         public bool IsApprovingPerson
@@ -95,15 +96,37 @@ namespace BO
         {
             get
             {
-            
+                if (_IsAdmin != null)
+                {
+                    return Convert.ToBoolean(_IsAdmin);
+                }
                 if (_RoleValue.Substring((int)BO.x53PermValEnum.GR_Admin - 1, 1) == "1")
-                    return true;
+                    _IsAdmin = true;
                 else
-                    return false;
+                    _IsAdmin = false;
+
+
+                return Convert.ToBoolean(_IsAdmin);
             }
         }
 
+        public bool IsRatesAccess
+        {
+            get
+            {
+                if (_IsRatesAccess != null)
+                {
+                    return Convert.ToBoolean(_IsRatesAccess);
+                }
+                if (_RoleValue.Substring((int)BO.x53PermValEnum.GR_P31_AllowRates - 1, 1) == "1")
+                    _IsRatesAccess = true;
+                else
+                    _IsRatesAccess = false;
 
+
+                return Convert.ToBoolean(_IsRatesAccess);
+            }
+        }
 
         public int MessagesCount
         {

@@ -99,6 +99,18 @@ namespace UI
             imgDest.Save(strDestFullPath, destFormat);
             return true;
         }
+
+        public static string GetGridUrl(BL.Factory f,string prefix,int pid)
+        {            
+            if (f.CBL.LoadUserParamBool($"grid-{prefix}-show11", true))
+            {
+                return $"/TheGrid/MasterView?prefix={prefix}&go2pid={pid}";
+            }
+            else
+            {
+                return $"/TheGrid/FlatView?prefix={prefix}&go2pid={pid}";
+            }
+        }
     }
 
     

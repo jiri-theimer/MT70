@@ -38,8 +38,8 @@ namespace BL
 
 
             AF("p31HHMM_Orig", "Hodiny HH:MM");
-            oc = AF("p31Rate_Billing_Orig", "Výchozí hodinová sazba", null, "num");oc.IHRC = true;
-            oc = AF("p31Amount_WithoutVat_Orig", "Vykázáno bez DPH", null, "num", true); oc.IHRC = true;
+            oc = AF("p31Rate_Billing_Orig", "Výchozí sazba", null, "num");oc.IHRC = true;oc.DefaultColumnFlag = gdc1;
+            oc = AF("p31Amount_WithoutVat_Orig", "Vykázáno bez DPH", null, "num", true); oc.IHRC = true;oc.DefaultColumnFlag = gdc1;
             oc = AF("p31Amount_WithVat_Orig", "Vykázáno vč. DPH", null, "num", true); oc.IHRC = true;
             oc = AF("p31Amount_Vat_Orig", "Vykázáno DPH", null, "num", true); oc.IHRC = true;
 
