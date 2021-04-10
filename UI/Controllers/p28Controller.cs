@@ -35,6 +35,8 @@ namespace UI.Controllers
                 v.lisO38 = Factory.o38AddressBL.GetList(new BO.myQueryO38() { p28id = v.pid });
                 v.lisJ02 = Factory.j02PersonBL.GetList(new BO.myQueryJ02() { p28id = v.pid });
                 v.lisO32 = Factory.p28ContactBL.GetList_o32(v.pid);
+
+                v.SetFreeFields(0);
             }
         }
         public IActionResult RecPage(int pid)

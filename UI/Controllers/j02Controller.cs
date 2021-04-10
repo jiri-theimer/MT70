@@ -40,6 +40,9 @@ namespace UI.Controllers
 
                 v.SetTagging();
 
+
+                v.SetFreeFields(0);
+
             }
         }
         public IActionResult RecPage(int pid, string login)

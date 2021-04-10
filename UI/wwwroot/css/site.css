@@ -1176,6 +1176,12 @@ div.recpageboxauto {
     border-radius: 6px;
 }
 
+label.recpagelabel {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .bgp28 {
     background-color: #eefdec;
 }

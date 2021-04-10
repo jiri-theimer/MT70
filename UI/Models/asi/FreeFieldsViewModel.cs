@@ -21,8 +21,11 @@ namespace UI.Models
         {
 
             var lisX28 = f.x28EntityFieldBL.GetList(new BO.myQuery("x28")).Where(p => p.x28Flag == BO.x28FlagENUM.UserField && p.x29ID == BO.BASX29.GetEnum(prefix)).OrderBy(p => p.x28Ordinary);
+            if (lisX28.Count() > 0)
+            {
+                SetupInputs(lisX28, f.x28EntityFieldBL.GetFieldsValues(rec_pid, lisX28));
+            }
             
-            SetupInputs(lisX28, f.x28EntityFieldBL.GetFieldsValues(rec_pid, lisX28));
         }
         public void RefreshInputsVisibility(BL.Factory f, int rec_pid, string prefix, int intEntityTypeID)
         {   //podle typu záznamu (intEntityTypeID) určit, jaké pole je viditelné
