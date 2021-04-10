@@ -35,6 +35,7 @@ namespace BL
         private Ij61TextTemplateBL _j61;
         private Io15AutoCompleteBL _o15;
         private Io13AttachmentTypeBL _o13;
+        private Io23DocBL _o23;
         private Io27AttachmentBL _o27;
         private Io38AddressBL _o38;
         private Io51TagBL _o51;
@@ -324,6 +325,15 @@ namespace BL
             {
                 if (_o27 == null) _o27 = new o27AttachmentBL(this);
                 return _o27;
+            }
+        }
+
+        public Io23DocBL o23DocBL
+        {
+            get
+            {
+                if (_o23 == null) _o23 = new o23DocBL(this);
+                return _o23;
             }
         }
 

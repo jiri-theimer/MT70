@@ -13,7 +13,7 @@ namespace UI.Models
 
         public int pid { get; set; }
 
-        public int pid_loaded { get; set; }
+        public int pid_loaded { get; set; }     //pid načtený z user parametrů
         public List<NavTab> NavTabs;
 
         public string DefaultNavTabUrl { get; set; }

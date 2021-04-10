@@ -30,7 +30,7 @@ namespace UI.Controllers
             if (v.Rec != null)
             {
                 v.RecSum = Factory.p28ContactBL.LoadSumRow(v.Rec.pid);
-
+                
                 v.SetTagging();
                 v.lisO38 = Factory.o38AddressBL.GetList(new BO.myQueryO38() { p28id = v.pid });
                 v.lisJ02 = Factory.j02PersonBL.GetList(new BO.myQueryJ02() { p28id = v.pid });

@@ -22,27 +22,17 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
-            switch (this.x29id)
-            {
-                case 931:
-                    this.x31id = this.recpid; break;
-                case 607:
-                    this.b07id = this.recpid; break;
-                case 940:
-                    this.x40id = this.recpid; break;
-            }
+            
 
             if (this.o13id > 0)
             {
                 AQ("a.o13ID=@o13id", "o13id", this.o13id);
             }
 
-            if (this.x29id > 0)
+            if (this.x29id > 0 && this.recpid>0)
             {
-                AQ("a.o13ID IN (select o13ID FROM o13AttachmentType WHERE x29ID=@x29id)", "x29id", this.x29id);
-
+                AQ("a.b07ID IN (select b07ID FROM b07Comment WHERE x29ID=@rec_x29id AND b07RecordPID=@rec_pid)","rec_x29id",this.x29id,"AND",null,null,"rec_pid",this.recpid);
             }
-           
           
             if (this.x40id > 0)
             {                

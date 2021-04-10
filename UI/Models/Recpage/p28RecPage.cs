@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 namespace UI.Models.Recpage
 {
     public class p28RecPage: BaseRecPageViewModel
-    {
-        public bool IsHover { get; set; }
+    {        
         public BO.p28Contact Rec { get; set; }
         public BO.p28ContactSum RecSum { get; set; }
         public IEnumerable<BO.o38Address> lisO38 { get; set; }

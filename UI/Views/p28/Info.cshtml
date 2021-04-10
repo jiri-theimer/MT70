@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_LayoutSubform.cshtml";
     if (Model.Rec == null) return;
 
-
+    var _disp = _f.p28ContactBL.InhaleRecDisposition(Model.Rec);
 }
 
 @addTagHelper *, UI
@@ -16,7 +16,11 @@
 
     <div class="row">
         <div class="col-sm-2 col-md-3">
+            @if (_disp.OwnerAccess)
+            {
             <a class="btn btn-sm btn-outline-secondary" href="javascript:_edit('p28',@Model.pid)">@_f.tra("Karta")</a>
+            }
+            
             <a class="btn btn-sm btn-outline-secondary" href="/p28/RecPage?pid=@Model.pid" target="_top">@_f.tra("Stránka")</a>
             @if (_f.CurrentUser.j04IsMenu_Contact)
             {

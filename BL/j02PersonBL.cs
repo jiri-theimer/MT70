@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BL
 {
@@ -13,8 +14,10 @@ namespace BL
         public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI,string tempguid);
         public bool ValidateBeforeSave(BO.j02Person rec);
         public BO.j02PersonSum LoadSumRow(int pid);
+        public IEnumerable<BO.j02Person> GetList_Slaves(int j02id, bool bolDispCreateP31, BO.j05Disposition_p31ENUM? dispslave = null);
+        public BO.j02RecDisposition InhaleRecDisposition(BO.j02Person rec);
 
-        
+
 
     }
     class j02PersonBL : BaseBL,Ij02PersonBL
@@ -66,6 +69,37 @@ namespace BL
             return _db.GetList<BO.j02Person>(sbret(), new { p28id = p28id, guid = tempclientguid });
         }
 
+        public IEnumerable<BO.j02Person> GetList_Slaves(int j02id, bool bolDispCreateP31,BO.j05Disposition_p31ENUM? dispslave=null)
+        {
+            sb(GetSQL1());
+            sb(" WHERE a.j02ID IN (SELECT j02ID_Slave FROM j05MasterSlave WHERE j02ID_Master=@j02id_me");
+            var arr = new List<string>();
+            if (dispslave != null)
+            {
+                arr.Add("j05Disposition_p31 = " + ((int)dispslave).ToString());
+            }
+            if (bolDispCreateP31)
+            {
+                arr.Add("j05IsCreate_p31=1");
+            }
+            if (arr.Count> 0)
+            {
+                sb(" AND (");
+                sb(string.Join(" OR ", arr));
+                sb(")");
+            }
+            sb(")");
+            sb(" OR a.j02ID IN (SELECT j12.j02ID FROM j12Team_Person j12 INNER JOIN j05MasterSlave xj05 ON j12.j11ID=xj05.j11ID_Slave WHERE xj05.j02ID_Master=@j02id_me");
+            if (arr.Count > 0)
+            {
+                sb(" AND (");
+                sb(string.Join(" OR ", arr));
+                sb(")");
+            }
+            sb(")");
+            sb(" ORDER BY a.j02LastName,a.j02FirstName");
+            return _db.GetList<BO.j02Person>(sbret(), new { j02id_me = j02id });
+        }
 
         public int Save(BO.j02Person rec, List<BO.FreeFieldInput> lisFFI,string tempguid)
         {
@@ -177,6 +211,34 @@ namespace BL
         public BO.j02PersonSum LoadSumRow(int pid)
         {
             return _db.Load<BO.j02PersonSum>("EXEC dbo.j02_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
+        }
+
+        public BO.j02RecDisposition InhaleRecDisposition(BO.j02Person rec)
+        {
+            var c = new BO.j02RecDisposition();
+
+            if (_mother.CurrentUser.IsAdmin)
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                return c;
+            }
+            if (rec.j02IsIntraPerson)
+            {   //interní osoba
+                var slaves = GetList_Slaves(rec.pid,false);
+                if (slaves.Any(p=>p.pid==rec.pid))
+                {
+                    c.ReadAccess = true;                    
+                }
+
+            }
+            else
+            {
+                //kontaktní osoba
+                c.ReadAccess = true;                
+            }
+            
+
+            return c;
         }
     }
 }
