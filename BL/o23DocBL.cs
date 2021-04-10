@@ -140,13 +140,14 @@ namespace BL
             var lisSaved = GetList_x19(o23id);
             foreach(var c in lisX19)
             {
-                var rec = new BO.x19EntityCategory_Binding() { o23ID = c.o23ID, x20ID = c.x20ID };
+                var rec = new BO.x19EntityCategory_Binding() { o23ID = o23id, x20ID = c.x20ID,x19RecordPID=c.x19RecordPID };
                 if (lisSaved.Any(p=>p.x20ID == c.x20ID && p.x19RecordPID==c.x19RecordPID))
                 {
                     rec = lisSaved.Where(p => p.x20ID == c.x20ID && p.x19RecordPID==c.x19RecordPID).First();
                 }
                 var p = new DL.Params4Dapper();
                 p.AddInt("pid", rec.pid);
+                p.AddInt("o23ID", o23id, true);
                 p.AddInt("x20ID", rec.x20ID, true);
                 p.AddInt("x19RecordPID", rec.x19RecordPID, true);
 
