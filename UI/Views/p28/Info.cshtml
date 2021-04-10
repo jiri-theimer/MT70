@@ -15,15 +15,16 @@
 <div class="info_record_container">
 
     <div class="row">
-        <div class="col-sm-1 col-md-2">
+        <div class="col-sm-2 col-md-3">
+            <a class="btn btn-sm btn-outline-secondary" href="javascript:_edit('p28',@Model.pid)">@_f.tra("Karta")</a>
             <a class="btn btn-sm btn-outline-secondary" href="/p28/RecPage?pid=@Model.pid" target="_top">@_f.tra("Stránka")</a>
             @if (_f.CurrentUser.j04IsMenu_Contact)
             {
-                <a class="btn btn-sm btn-outline-secondary" href="@(basUI.GetGridUrl(_f,"p28",Model.pid))" target="_top">@_f.tra("Grid")</a>
+                <a class="btn btn-sm btn-outline-secondary" href="@(basUI.GetGridUrl(_f,"p28",Model.pid))" target="_top">Grid</a>
             }
 
         </div>
-        <div class="col-sm-6 col-md-5">
+        <div class="col-sm-5 col-md-4">
             <myval value="@Model.Rec.p28name"></myval>
 
         </div>
@@ -43,8 +44,8 @@
     @if (Model.Rec.p28RegID != null)
     {
         <div class="row my-1">
-            <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("IČ/DIČ")):</label>
-            <div class="col-sm-6 col-md-5">
+            <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("IČ/DIČ")):</label>
+            <div class="col-sm-5 col-md-4">
                 <div class="val-readonly rowvalhover my-1">
                     <span>@Model.Rec.p28RegID</span>
                     @if (Model.Rec.p28ICDPH_SK != null)
@@ -67,6 +68,8 @@
         </div>
     }
 
+    @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFieldsRO.cshtml")
+
     @if (Model.lisO38 != null)
     {
         @foreach (var c in Model.lisO38)
@@ -88,16 +91,16 @@
             <div class="card-body">
                 @foreach (var c in Model.lisJ02)
                 {
-                <div class="rowvalhover" style="float:left;">
-                    <span>@c.FullNameAsc</span>
-                    <a class="valhover_tooltip" target='_top' href="/j02/RecPage?pid=@c.pid">@_f.tra("Stránka")</a>
-                    @if (_f.CurrentUser.j04IsMenu_People)
-                    {
-                        <a class="valhover_tooltip" target='_top' href="@basUI.GetGridUrl(_f,"j02",c.pid)">@_f.tra("Grid")</a>
-                    }
+                    <div class="rowvalhover" style="float:left;">
+                        <span>@c.FullNameAsc</span>
+                        <a class="valhover_tooltip" target='_top' href="/j02/RecPage?pid=@c.pid">@_f.tra("Stránka")</a>
+                        @if (_f.CurrentUser.j04IsMenu_People)
+                        {
+                            <a class="valhover_tooltip" target='_top' href="@basUI.GetGridUrl(_f,"j02",c.pid)">@_f.tra("Grid")</a>
+                        }
 
 
-                </div>
+                    </div>
                 }
             </div>
         </div>
