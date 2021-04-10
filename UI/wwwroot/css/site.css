@@ -1174,6 +1174,7 @@ div.recpageboxauto {
     background-color: aliceblue;
     padding: 5px;
     border-radius: 6px;
+    cursor:default;
 }
 
 label.recpagelabel {

@@ -212,7 +212,7 @@
     </div>
 }
 
-@if (Model.RecJ03 != null && Model.RecSum != null)
+@if (Model.RecSum != null && (Model.RecSum.Last_Worksheet !=null || Model.RecSum.Last_Access != null))
 {
     <div class="card recpageboxauto">
         <div class="card-body">
