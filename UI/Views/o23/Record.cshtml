@@ -1,0 +1,136 @@
+﻿@model UI.Models.Record.o23Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Dokument") + ": " + Model.RecX18.x18Name;
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    Model.PageSymbol = BO.Symbol.o23();
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+        <div class="col-sm-8 col-md-7">
+            <input class="form-control" asp-for="Rec.o23Name" />
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Kód"):</label>
+        <div class="col-sm-2 col-md-2">
+            <input class="form-control" asp-for="Rec.o23Code" />
+        </div>
+    </div>
+
+
+    @for (int i = 0; i < Model.lisFields.Count(); i++)
+    {
+        <div class="row my-2">
+            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tBoolean)
+            {
+                <div class="col-sm-1 col-md-2"></div>
+                <div class="col-sm-7 col-md-7">
+                    <input type="checkbox" asp-for="@Model.lisFields[i].CheckInput" />
+                    <label class="col-sm-1 col-md-2 col-form-label" for="lisFields_@(i)__CheckInput">@(Model.lisFields[i].x16Name)</label>
+                </div>
+            }
+            else
+            {
+                <label class="col-sm-1 col-md-2 col-form-label recpagelabel">@(Model.lisFields[i].x16Name):</label>
+            }
+
+
+            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDate)
+            {
+                <div class="col-sm-3 col-md-3">
+                    <mydate asp-for="@Model.lisFields[i].DateInput"></mydate>
+                </div>
+
+            }
+            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDateTime)
+            {
+                <div class="col-sm-3 col-md-3">
+                    <mydate asp-for="@Model.lisFields[i].DateInput" include-time="true"></mydate>
+                </div>
+            }
+            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDecimal)
+            {
+                <div class="col-sm-3 col-md-3">
+                    <mynumber asp-for="@Model.lisFields[i].NumInput" decimal-digits="2"></mynumber>
+                </div>
+            }
+            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tString)
+            {
+                <div class="col-sm-11 col-md-10">
+                    @if (Model.lisFields[i].x16DataSource == null)
+                    {
+                        <input class="form-control" asp-for="@Model.lisFields[i].StringInput" />
+                    }
+                    else
+                    {
+                        @if (Model.lisFields[i].x16IsFixedDataSource)
+                        {
+                            <select class="form-select" asp-for="@Model.lisFields[i].StringInput">
+                                <option value=""></option>
+                                @foreach (string ss in BO.BAS.ConvertString2List(Model.lisFields[i].x16DataSource, ";"))
+                                {
+                                    <option value="@ss">@ss</option>
+                                }
+
+                            </select>
+                        }
+                        else
+                        {
+                            <input list="list@(i)" class="form-control" asp-for="@Model.lisFields[i].StringInput" />
+                            <datalist id="list@(i)">
+                                @foreach (string ss in BO.BAS.ConvertString2List(Model.lisFields[i].x16DataSource, ";"))
+                                {
+                                <option value="@ss">@ss</option>
+                                }
+                            </datalist>
+
+                        }
+                    }
+                </div>
+            }
+
+        </div>
+        <input type="hidden" asp-for="@Model.lisFields[i].x16Field" />
+        <input type="hidden" asp-for="@Model.lisFields[i].x16Name" />
+        <input type="hidden" asp-for="@Model.lisFields[i].x16DataSource" />
+        <input type="hidden" asp-for="@Model.lisFields[i].x16IsFixedDataSource" />
+        <input type="hidden" asp-for="@Model.lisFields[i].x16IsEntryRequired" />
+
+
+    }
+
+
+
+</div>
+
+<input type="hidden" asp-for="@Model.x18ID" />
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+    function postback() {
+
+        form1.action = _ep("/o23/Record?oper=postback");
+        form1.submit();
+    }
+
+
+</script>

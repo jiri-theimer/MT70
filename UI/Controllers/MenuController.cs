@@ -332,7 +332,7 @@ namespace UI.Controllers
             DIV();
             AMI("Klient", "javascript:_edit('p28',0)");
             AMI("Projekt", "javascript:_edit('p41',0)");
-            AMI("Dokument", "javascript:_edit('o23',0)");
+            AMI("Dokument", "javascript:_window_open('/o23/SelectDocType')");
             DIV();
             AMI("Poznámka/Odkaz/Příloha", "javascript:_edit('b07',0)");
             DIV();

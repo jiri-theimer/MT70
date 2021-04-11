@@ -49,6 +49,7 @@ namespace UI.Models
         public string pathname { get; set; }   //volající url v prohlížeči
         public List<string> viewstate { get; set; }   //data ze serveru, aby se přenášela s gridem z klienta na server: oddělovač pipe
         public string myqueryinline { get; set; }
+        public int currentpid { get; set; }
 
     }
 }

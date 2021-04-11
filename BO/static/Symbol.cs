@@ -8,6 +8,10 @@ namespace BO
 {
     public static class Symbol
     {
+        public static string o23()
+        {
+            return "<span style='font-size:170%;' class='k-icon k-i-document-manager'></span>";
+        }
         public static string p28()
         {
             return "<span style='font-size:170%;'>♖</span>";

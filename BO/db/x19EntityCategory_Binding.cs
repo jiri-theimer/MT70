@@ -18,5 +18,7 @@ namespace BO
         public string o23Name { get; }
         public string x20Name { get; }
         public bool x20IsMultiselect { get; }
+
+        public bool IsSetAsDeleted { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace UI.Controllers
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
-
+            
             return c.Event_HandleTheGridOper(tgi);
 
         }

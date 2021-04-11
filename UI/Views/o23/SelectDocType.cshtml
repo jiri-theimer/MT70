@@ -1,0 +1,48 @@
+﻿@model UI.Models.SelectDocTypeViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Vyberte typ dokumentu");
+    Model.PageSymbol = BO.Symbol.o23();
+}
+
+@addTagHelper *, UI
+
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdOK" class="btn btn-success">@_f.tra("Pokračovat")</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<myradiolist asp-for="@Model.SelectedPid" datasource="@Model.lisX18" textfield="x18Name" valuefield="pid"></myradiolist>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdOK").click(function () {
+            var pid = $("#SelectedPid").val();
+            if (pid == "0" || pid == "") {
+                _notify_message("Musíte vybrat položku.");
+                return;
+            }
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            location.replace(_ep("/o23/Record?pid=0&x18id=" + pid));
+
+
+        });
+
+
+
+    })
+
+
+
+</script>

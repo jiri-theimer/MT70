@@ -53,8 +53,7 @@ namespace UI
                 gridState.j72Columns = this.gridinput.fixedcolumns;
             }
             switch (tgi.key)
-            {
-
+            {                
                 case "pagerindex":
                     gridState.j75CurrentPagerIndex = BO.BAS.InInt(tgi.value);
                     break;
@@ -62,6 +61,7 @@ namespace UI
                     gridState.j75PageSize = BO.BAS.InInt(tgi.value);
                     break;
                 case "sortfield":
+                    gridState.j75CurrentRecordPid = tgi.currentpid; //záznam, na které uživatel v gridu zrovna stojí
                     if (gridState.j75SortDataField != tgi.value)
                     {
                         gridState.j75SortOrder = "asc";

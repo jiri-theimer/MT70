@@ -145,21 +145,32 @@ namespace BL
                 {
                     rec = lisSaved.Where(p => p.x20ID == c.x20ID && p.x19RecordPID==c.x19RecordPID).First();
                 }
-                var p = new DL.Params4Dapper();
-                p.AddInt("pid", rec.pid);
-                p.AddInt("o23ID", o23id, true);
-                p.AddInt("x20ID", rec.x20ID, true);
-                p.AddInt("x19RecordPID", rec.x19RecordPID, true);
-
-                _db.SaveRecord("x19EntityCategory_Binding", p, rec);
-            }
-            foreach(var c in lisSaved)
-            {
-                if (lisX19.Where(p => p.x20ID == c.x20ID && p.x19RecordPID == c.x19RecordPID).Count()==0)
+                if (c.IsSetAsDeleted)
                 {
-                    _db.RunSql("DELETE FROM x19EntityCategory_Binding WHERE x20ID=@x20id AND x19RecordPID=@recpid AND o23ID=@o23id", new { x20id = c.x20ID, recpid = c.x19RecordPID, o23id = o23id });
+                    if (c.pid > 0)
+                    {
+                        _db.RunSql("DELETE FROM x19EntityCategory_Binding WHERE x19ID=@pid", new { pid = c.pid });
+                    }
                 }
+                else
+                {
+                    var p = new DL.Params4Dapper();
+                    p.AddInt("pid", rec.pid);
+                    p.AddInt("o23ID", o23id, true);
+                    p.AddInt("x20ID", rec.x20ID, true);
+                    p.AddInt("x19RecordPID", rec.x19RecordPID, true);
+
+                    _db.SaveRecord("x19EntityCategory_Binding", p, rec);
+                }
+                
             }
+            //foreach(var c in lisSaved)
+            //{
+            //    if (lisX19.Where(p => p.x20ID == c.x20ID && p.x19RecordPID == c.x19RecordPID).Count()==0)
+            //    {
+            //        _db.RunSql("DELETE FROM x19EntityCategory_Binding WHERE x20ID=@x20id AND x19RecordPID=@recpid AND o23ID=@o23id", new { x20id = c.x20ID, recpid = c.x19RecordPID, o23id = o23id });
+            //    }
+            //}
         }
         private bool ValidateBeforeSave(BO.o23Doc rec,BO.x18EntityCategory recX18, List<BO.x19EntityCategory_Binding> lisX19,IEnumerable<BO.x20EntiyToCategory> lisX20)
         {

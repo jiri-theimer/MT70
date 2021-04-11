@@ -25,7 +25,7 @@ var _tg_langindex = 0;
 var _tg_musite_vybrat_zaznam = "Musíte vybrat minimálně jeden záznam.";
 
 const event_thegridbound = new Event("thegrid_rebound");
-//const event_thegridrowselect = new CustomEvent("thegrid_rowselect", { detail: { pid: 0 } });
+
 
 function tg_init(c) {
     _tg_entity = c.entity;
@@ -164,10 +164,10 @@ function tg_refresh_sorter(sortfield, sortdir) {
     });
     var ths = $("#th_" + sortfield);
     if (sortdir === "asc") {
-        $(ths).html($(ths).html() + "&nbsp; &#128314;");
+        $(ths).html($(ths).html() + "<span class='k-icon k-i-sort-asc' style='color:blue;'></span>");
     }
     if (sortdir === "desc") {
-        $(ths).html($(ths).html() + "&nbsp; &#128315;");
+        $(ths).html($(ths).html() + "<span class='k-icon k-i-sort-desc' style='color:blue;'></span>");
     }
 }
 
@@ -186,7 +186,8 @@ function tg_post_handler(strOper, strKey, strValue) {
         ondblclick: _tg_ondblclick,
         fixedcolumns: _tg_fixedcolumns,
         viewstate: [],
-        pathname: location.pathname
+        pathname: location.pathname,
+        currentpid: _tg_current_pid
     }
     if (_tg_viewstate !== "") {
         params.viewstate = _tg_viewstate.split("|");
@@ -201,7 +202,7 @@ function tg_post_handler(strOper, strKey, strValue) {
 
         document.dispatchEvent(event_thegridbound);
 
-
+        
     })
         .fail(function (error) {
             $("#tabgrid1_tbody").html("<code>" + error.responseJSON + "</code>");
@@ -229,7 +230,10 @@ function refresh_environment_after_post(strOper, data) {
 
     _tg_tablerows = $("#tabgrid1_tbody").find("tr");
     tg_setup_selectable();
-
+    
+    if (strOper==="sorter" && _tg_current_pid > 0) {
+        tg_go2pid(_tg_current_pid);
+    }
 
 }
 
@@ -263,7 +267,7 @@ function tg_setup_selectable() {
             //thegrid_handle_event("rowselect", pid); //již se nepoužívá
         }
         if (e.ctrlKey) {
-
+            
             this.classList.add("selrow");
             $("#" + this.id + " input:checkbox").prop("checked", true);
             tg_save_selected_pids(null);
@@ -1044,7 +1048,8 @@ function get_all_tgi_params() {
         viewstate: [],
         master_pid: _tg_master_pid,
         myqueryinline: _tg_myqueryinline,
-        pathname: location.pathname
+        pathname: location.pathname,
+        currentpid: _tg_current_pid
     }
     if (_tg_viewstate !== "") {
         params.viewstate = _tg_viewstate.split("|");
