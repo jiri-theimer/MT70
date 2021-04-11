@@ -82,12 +82,24 @@ namespace UI.Controllers
                         case BO.x24IdENUM.tDate:
                         case BO.x24IdENUM.tDateTime:
                             BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.DateInput);
+                            if (cc.x16IsEntryRequired && cc.DateInput == null)
+                            {
+                                this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name)));return View(v);
+                            }
                             break;
                         case BO.x24IdENUM.tDecimal:
                             BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.NumInput);
+                            if (cc.x16IsEntryRequired && cc.NumInput == 0)
+                            {
+                                this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name))); return View(v);
+                            }
                             break;
                         default:
                             BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.StringInput);
+                            if (cc.x16IsEntryRequired && string.IsNullOrEmpty(cc.StringInput))
+                            {
+                                this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name))); return View(v);
+                            }
                             break;
                     }
                     
