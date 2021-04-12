@@ -45,7 +45,7 @@ namespace BL
         private string GetSQL1_X19(string strAppend = null)
         {
             sb("SELECT a.*,o23.o23Name,x20.x18ID,isnull(x18.x18NameShort,x18.x18Name) as x18Name,");
-            sb("o23.o23ForeColor,o23.o23BackColor,x20.x29ID,x20.x20Name,x20.x20IsMultiselect,x20.x20IsMultiselect ");
+            sb("o23.o23ForeColor,o23.o23BackColor,x20.x29ID,x20.x20Name,x20.x20IsMultiselect,x20.x20IsMultiselect,");
             sb(_db.GetSQL1_Ocas("x19"));            
             sb(" from x19EntityCategory_Binding a INNER JOIN x20EntiyToCategory x20 ON a.x20ID=x20.x20ID INNER JOIN o23Doc o23 ON a.o23ID=o23.o23ID INNER JOIN x18EntityCategory x18 ON x20.x18ID=x18.x18ID");
             sb(strAppend);

@@ -11,6 +11,7 @@ namespace BL
         public BO.x18EntityCategory Load(int pid);
         public IEnumerable<BO.x18EntityCategory> GetList(BO.myQuery mq);
         public IEnumerable<BO.x20EntiyToCategory> GetList_x20(int x18id);
+        public BO.x20EntiyToCategory LoadX20(int x20id);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16();
         public int Save(BO.x18EntityCategory rec, List<BO.x20EntiyToCategory> lisX20, List<BO.x16EntityCategory_FieldSetting> lisX16);
@@ -42,6 +43,10 @@ namespace BL
         public BO.x18EntityCategory Load(int pid)
         {
             return _db.Load<BO.x18EntityCategory>(GetSQL1(" WHERE a.x18ID=@pid"), new { pid = pid });
+        }
+        public BO.x20EntiyToCategory LoadX20(int x20id)
+        {
+            return _db.Load<BO.x20EntiyToCategory>("SELECT a.*,a.x20ID as pid FROM x20EntiyToCategory a WHERE a.x20ID=@pid", new { pid = x20id });
         }
 
         public IEnumerable<BO.x18EntityCategory> GetList(BO.myQuery mq)

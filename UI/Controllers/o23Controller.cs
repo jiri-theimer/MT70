@@ -57,9 +57,13 @@ namespace UI.Controllers
             {
                 v.lisX16 = Factory.x18EntityCategoryBL.GetList_x16(v.x18ID);
             }
+            if (v.lisX19 == null)
+            {
+                v.lisX19 = new List<x19Repeator>();
+            }
             if (v.lisX20 == null)
             {
-                v.lisX20 = Factory.x18EntityCategoryBL.GetList_x20(v.x18ID);
+                v.lisX20 = Factory.x18EntityCategoryBL.GetList_x20(v.x18ID).Where(p => p.x20EntryModeFlag == BO.x20EntryModeENUM.Combo);
             }
             if (v.SelectedX20ID==0 && v.lisX20.Count() > 0)
             {
@@ -69,28 +73,44 @@ namespace UI.Controllers
 
         }
 
-        private void Handle_ChangeX20ID(Models.Record.o23Record v,BO.x20EntiyToCategory recX20)
-        {
-            v.SelectedBindName = recX20.BindName;
-            v.SelectedBindEntity = BO.BASX29.GetEntity(recX20.BindPrefix);
-            v.SelectedBindPid = 0;
-            v.SelectedBindText = null;
-        }
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(Models.Record.o23Record v,string oper)
+        public IActionResult Record(Models.Record.o23Record v,string oper,string guid)
         {
             RefreshState(v);
 
             if (oper == "x20id")
             {
-                var cx20 = v.lisX20.Where(p => p.pid == v.SelectedX20ID).First();
+                var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
                 Handle_ChangeX20ID(v, cx20);
                 return View(v);
             }
             if (oper== "bindrec")
             {
+                if (v.lisX19.Any(p=>p.x20ID==v.SelectedX20ID && p.x19RecordPID == v.SelectedBindPid && !p.IsTempDeleted))
+                {
+                    this.AddMessage("Tato vazba již existuje.");return View(v);
+                }
+                var c = new x19Repeator() { x20ID = v.SelectedX20ID, TempGuid = BO.BAS.GetGuid(), x19RecordPID = v.SelectedBindPid, SelectedBindText = v.SelectedBindText, SelectedX20Name = v.SelectedBindName };
+                var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
+                if (!cx20.x20IsMultiSelect)
+                {
+                    //není povolen vícenásobný výběr entity
+                    if (v.lisX19.Any(p => p.x20ID == v.SelectedX20ID && !p.IsTempDeleted))
+                    {
+                        c = v.lisX19.First(p => p.x20ID == v.SelectedX20ID && !p.IsTempDeleted);
+                        c.x19RecordPID = v.SelectedBindPid;c.SelectedBindText = v.SelectedBindText;
+                        return View(v);
+                    }
+                }
+                v.lisX19.Add(c);
+                return View(v);
+            }
+            if (oper== "delete_x19")
+            {
+                v.lisX19.First(p => p.TempGuid == guid).IsTempDeleted = true;
                 return View(v);
             }
             if (oper == "postback")
@@ -141,7 +161,18 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.o23DocBL.Save(c,v.x18ID,v.lisX19);
+                var lisX19 = new List<BO.x19EntityCategory_Binding>();
+                foreach (var cc in v.lisX19)
+                {
+                    lisX19.Add(new BO.x19EntityCategory_Binding()
+                    {
+                        IsSetAsDeleted = cc.IsTempDeleted,
+                        pid = cc.pid,
+                        x20ID = cc.x20ID                        
+                    });
+                }
+
+                c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19);
                 if (c.pid > 0)
                 {
 
@@ -154,6 +185,14 @@ namespace UI.Controllers
 
             this.Notify_RecNotSaved();
             return View(v);
+        }
+
+        private void Handle_ChangeX20ID(Models.Record.o23Record v, BO.x20EntiyToCategory recX20)
+        {
+            v.SelectedBindName = recX20.BindName;
+            v.SelectedBindEntity = BO.BASX29.GetEntity(recX20.BindPrefix);
+            v.SelectedBindPid = 0;
+            v.SelectedBindText = null;
         }
     }
 }

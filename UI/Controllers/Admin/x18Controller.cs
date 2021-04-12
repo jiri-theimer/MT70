@@ -55,7 +55,9 @@ namespace UI.Controllers
                         x29ID_EntityType=c.x29ID_EntityType,
                         x20IsEntryRequired=c.x20IsEntryRequired,
                         x20IsClosed=c.x20IsClosed,
-                        ComboEntity= GetComboEntityTypeName((BO.x29IdEnum)c.x29ID)
+                        x20IsMultiSelect=c.x20IsMultiSelect,
+                        x20EntryModeFlag=c.x20EntryModeFlag,
+                        ComboEntity = GetComboEntityTypeName((BO.x29IdEnum)c.x29ID)
                     };
                     
                     if (c.x20EntityTypePID > 0)
@@ -150,7 +152,7 @@ namespace UI.Controllers
                 var lisX20 = new List<BO.x20EntiyToCategory>();
                 foreach(var row in v.lisX20.Where(p => p.IsTempDeleted == false))
                 {
-                    var cc = new BO.x20EntiyToCategory() {pid=row.x20ID, x20ID=row.x20ID, x20Name = row.x20Name, x20Ordinary = row.x20Ordinary, x29ID = row.x29ID,x20EntityTypePID=row.x20EntityTypePID, x20IsEntryRequired = row.x20IsEntryRequired, x20IsClosed = row.x20IsClosed };
+                    var cc = new BO.x20EntiyToCategory() {pid=row.x20ID, x20ID=row.x20ID, x20Name = row.x20Name, x20Ordinary = row.x20Ordinary, x29ID = row.x29ID,x20EntityTypePID=row.x20EntityTypePID, x20IsEntryRequired = row.x20IsEntryRequired, x20IsClosed = row.x20IsClosed,x20IsMultiSelect=row.x20IsMultiSelect, x20EntryModeFlag=row.x20EntryModeFlag };
                     if (row.x20EntityTypePID > 0)
                     {
                         cc.x29ID_EntityType =(int) BO.BASX29.GetEnum(row.ComboEntity.Substring(0, 3));

@@ -55,18 +55,23 @@
                 @for (int i = 0; i < Model.lisX19.Count; i++)
                 {
                     <tr style="@(Model.lisX19[i].CssTempDisplay)">
+                        <td style="width:150px;">
+                            @(Model.lisX19[i].SelectedX20Name+":")
+                        </td>
                         <td>
+                            <strong>@Model.lisX19[i].SelectedBindText</strong>
                             <input type="hidden" asp-for="lisX19[i].IsTempDeleted" value="@Model.lisX19[i].IsTempDeleted" />
                             <input type="hidden" asp-for="lisX19[i].TempGuid" value="@Model.lisX19[i].TempGuid" />
                             <input type="hidden" asp-for="lisX19[i].pid" value="@Model.lisX19[i].pid" />
-
-                            
+                            <input type="hidden" asp-for="lisX19[i].SelectedBindText" value="@Model.lisX19[i].SelectedBindText" />
+                            <input type="hidden" asp-for="lisX19[i].x19RecordPID" value="@Model.lisX19[i].x19RecordPID" />
+                            <input type="hidden" asp-for="lisX19[i].x20ID" value="@Model.lisX19[i].x20ID" />
+                            <input type="hidden" asp-for="lisX19[i].SelectedX20Name" value="@Model.lisX19[i].SelectedX20Name" />
 
                         </td>
                        
-
                         <td style="width:70px;">
-                            <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisX19[i].TempGuid)')">x</button>
+                            <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_x19('@(Model.lisX19[i].TempGuid)')">x</button>
                         </td>
                     </tr>
                 }
@@ -203,6 +208,11 @@
     }
     function bindrec_onchange(pid) {
         form1.action = _ep("/o23/Record?oper=bindrec");
+        form1.submit();
+    }
+
+    function handle_delete_x19(guid) {
+        form1.action = _ep("/o23/Record?oper=delete_x19&guid=" + guid);
         form1.submit();
     }
 

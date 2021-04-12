@@ -53,6 +53,8 @@ namespace UI.Models.Record
 
     public class x19Repeator : BO.x19EntityCategory_Binding
     {
+        public string SelectedBindText { get; set; }
+        public string SelectedX20Name { get; set; }
         public bool IsTempDeleted { get; set; }
         public string TempGuid { get; set; }
         public string CssTempDisplay

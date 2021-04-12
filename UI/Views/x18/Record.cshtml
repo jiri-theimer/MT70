@@ -94,15 +94,25 @@
                                     <input type="text" asp-for="lisX20[i].x20Name" placeholder="@_f.tra("Název vazby")" />
 
                                     <input type="checkbox" asp-for="lisX20[i].x20IsEntryRequired" />
-                                    <label class="col-form-label" for="lisX20_@(i)__x20IsEntryRequired">@_f.tra("Povinná vazba k přiřazení")</label>
+                                    <label class="col-form-label" for="lisX20_@(i)__x20IsEntryRequired">@_f.tra("Povinná vazba")</label>
 
-                                    <input type="checkbox" asp-for="lisX20[i].x20IsClosed" />
-                                    <label class="col-form-label" for="lisX20_@(i)__x20IsClosed">@_f.tra("Vazba uzavřena pro přiřazování")</label>
+                                    <input type="checkbox" asp-for="lisX20[i].x20IsMultiSelect" />
+                                    <label class="col-form-label" for="lisX20_@(i)__x20IsMultiSelect">@_f.tra("Povoleno více-násobné přiřazení")</label>
 
-                                    <div style="width:90%;">
-                                        <mycombo entity="@Model.lisX20[i].ComboEntity" asp-for="lisX20[i].x20EntityTypePID" selectedtext="@Model.lisX20[i].ComboSelectedText" filter-flag="1" placeholder="@_f.tra("Omezit na typ...")"></mycombo>
-                                    </div>
                                     
+                                    <select asp-for="lisX20[i].x20EntryModeFlag">
+                                        <option value="Combo">@_f.tra("Ručně uživatelem")</option>
+                                        <option value="InsertUpdateWithoutCombo">@_f.tra("Odkazem")</option>
+                                        <option value="ExternalByWorkflow">@_f.tra("Ze strany workflow")</option>
+                                    </select>
+                                    <div>
+                                        <mycombo entity="@Model.lisX20[i].ComboEntity" asp-for="lisX20[i].x20EntityTypePID" selectedtext="@Model.lisX20[i].ComboSelectedText" filter-flag="1" placeholder="@_f.tra("Omezit na typ...")"></mycombo>
+
+                                        <input type="checkbox" asp-for="lisX20[i].x20IsClosed" />
+                                        <label class="col-form-label" for="lisX20_@(i)__x20IsClosed">@_f.tra("Vazba uzavřena pro přiřazování")</label>
+
+                                    </div>
+
                                 </div>
                             </td>
                             <td>
