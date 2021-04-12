@@ -22,6 +22,8 @@ namespace UI.Models.Record
         public int SelectedBindPid { get; set; }
         public string SelectedBindText { get; set; }
         public string SelectedBindEntity { get; set; }
+
+        public bool IsAutoCollapseX20 { get; set; }
     }
 
 

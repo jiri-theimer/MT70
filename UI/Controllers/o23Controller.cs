@@ -19,32 +19,71 @@ namespace UI.Controllers
         public IActionResult Record(int pid, bool isclone,int x18id)
         {
             var v = new o23Record() { rec_pid = pid, rec_entity = "o23",x18ID=x18id };
-            if (v.x18ID == 0)
+            if (v.x18ID == 0 && v.rec_pid==0)
             {
                 return RedirectToAction("SelectDocType");
             }
             v.Rec = new BO.o23Doc();
             if (v.rec_pid > 0)
             {
-                v.Rec = Factory.o23DocBL.Load(v.rec_pid);
+                v.Rec = Factory.o23DocBL.Load(v.rec_pid);                
                 if (v.Rec == null)
                 {
                     return RecNotFound(v);
                 }
-
+                v.x18ID = v.Rec.x18ID;
             }
             v.Toolbar = new MyToolbarViewModel(v.Rec);
-            if (isclone)
-            {
-                v.MakeClone();
-            }
+            
             RefreshState(v);
 
             v.lisFields = new List<DocFieldInput>();
             foreach(var c in v.lisX16)
             {
                 var cc = new DocFieldInput() { x16Field = c.x16Field,x16Name=c.x16Name, x16DataSource=c.x16DataSource,x16IsEntryRequired=c.x16IsEntryRequired,x16IsFixedDataSource=c.x16IsFixedDataSource };
+                if (v.Rec != null)  //načtení uživtelských polí dokumentu
+                {
+                    if (BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field) != null)
+                    {
+                        switch (c.FieldType)
+                        {
+                            case BO.x24IdENUM.tBoolean:
+                                cc.CheckInput = Convert.ToBoolean(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                break;
+                            case BO.x24IdENUM.tDate:
+                            case BO.x24IdENUM.tDateTime:
+                                cc.DateInput = Convert.ToDateTime(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                break;
+                            case BO.x24IdENUM.tDecimal:
+                                cc.NumInput = Convert.ToDouble(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                break;
+                            default:
+                                cc.StringInput = Convert.ToString(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                break;
+                        }
+                    }
+                    
+                }
                 v.lisFields.Add(cc);
+            }
+
+            if (v.Rec != null)
+            {
+                var lisX19 = Factory.o23DocBL.GetList_x19(v.rec_pid);
+                v.lisX19 = new List<x19Repeator>();
+                foreach(var c in lisX19)
+                {
+                    var cc = new x19Repeator() {TempGuid=BO.BAS.GetGuid(), pid = c.pid, x20ID = c.x20ID, x19RecordPID = c.x19RecordPID, x29ID = c.x29ID,SelectedX20Name=c.x20Name };
+                    var cx20 = Factory.x18EntityCategoryBL.LoadX20(c.x20ID);
+                    cc.SelectedX20Name = cx20.BindName;
+                    cc.SelectedBindText = Factory.CBL.GetObjectAlias(cx20.BindPrefix, c.x19RecordPID);
+                    v.lisX19.Add(cc);
+                }
+            }
+
+            if (isclone)
+            {
+                v.MakeClone();
             }
 
             return ViewTup(v, BO.x53PermValEnum.GR_Admin);
@@ -85,10 +124,12 @@ namespace UI.Controllers
             {
                 var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
                 Handle_ChangeX20ID(v, cx20);
+                v.IsAutoCollapseX20 = true;
                 return View(v);
             }
             if (oper== "bindrec")
             {
+                v.IsAutoCollapseX20 = true;
                 if (v.lisX19.Any(p=>p.x20ID==v.SelectedX20ID && p.x19RecordPID == v.SelectedBindPid && !p.IsTempDeleted))
                 {
                     this.AddMessage("Tato vazba již existuje.");return View(v);
@@ -101,16 +142,18 @@ namespace UI.Controllers
                     if (v.lisX19.Any(p => p.x20ID == v.SelectedX20ID && !p.IsTempDeleted))
                     {
                         c = v.lisX19.First(p => p.x20ID == v.SelectedX20ID && !p.IsTempDeleted);
-                        c.x19RecordPID = v.SelectedBindPid;c.SelectedBindText = v.SelectedBindText;
+                        c.x19RecordPID = v.SelectedBindPid;
+                        c.SelectedBindText = v.SelectedBindText;
                         return View(v);
                     }
                 }
-                v.lisX19.Add(c);
+                v.lisX19.Add(c);                
                 return View(v);
             }
             if (oper== "delete_x19")
             {
                 v.lisX19.First(p => p.TempGuid == guid).IsTempDeleted = true;
+                v.IsAutoCollapseX20 = true;
                 return View(v);
             }
             if (oper == "postback")
@@ -168,10 +211,11 @@ namespace UI.Controllers
                     {
                         IsSetAsDeleted = cc.IsTempDeleted,
                         pid = cc.pid,
-                        x20ID = cc.x20ID                        
+                        x20ID = cc.x20ID,
+                        x19RecordPID=cc.x19RecordPID,                                                
                     });
                 }
-
+                
                 c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19);
                 if (c.pid > 0)
                 {

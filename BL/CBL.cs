@@ -19,6 +19,7 @@ namespace BL
         public int SaveRecordCode(string codevalue, string prefix, int pid);
         public string GetCurrentRecordCode(string prefix, int pid);
         public System.Data.DataTable GetList_Last10RecordCode(string prefix);
+        public string GetObjectAlias(string prefix, int pid);
     }
     class CBL :BaseBL, ICBL
     {
@@ -48,6 +49,12 @@ namespace BL
             }
             
             return "";
+        }
+        public string GetObjectAlias(string prefix, int pid)
+        {
+            
+            BO.GetString c = _db.Load<BO.GetString>("select dbo.GetObjectAlias(@prefix,@pid) as Value", new { prefix = prefix, pid = pid });
+            return c.Value;
         }
         public string EstimateRecordCode(string entity)
         {

@@ -12,6 +12,7 @@ namespace BL
         public IEnumerable<BO.o23Doc> GetList(BO.myQueryO23 mq);
         public int Save(BO.o23Doc rec, int intX18ID, List<BO.x19EntityCategory_Binding> lisX19);
         public IEnumerable<BO.x19EntityCategory_Binding> GetList_x19(int o23id);
+        public BO.o23RecDisposition InhaleRecDisposition(BO.o23Doc rec);
 
     }
     class o23DocBL : BaseBL, Io23DocBL
@@ -61,6 +62,7 @@ namespace BL
         {
             var recX18 = _mother.x18EntityCategoryBL.Load(intX18ID);
             var lisX20 = _mother.x18EntityCategoryBL.GetList_x20(intX18ID);
+            rec.x23ID = recX18.x23ID;
 
             if (!ValidateBeforeSave(rec, recX18, lisX19, lisX20))
             {
@@ -126,8 +128,13 @@ namespace BL
                 {
                     SaveX19Binding(intPID, lisX19, lisX20);
 
-                    sc.Complete();
-                    return intPID;
+                    if (_db.RunSql("exec dbo.o23_aftersave @o23id,@j03id_sys", new { o23id = intPID, j03id_sys = _mother.CurrentUser.pid }))
+                    {
+                        sc.Complete();
+                        return intPID;
+                    }
+
+                        
                 }
             }
 
@@ -139,12 +146,25 @@ namespace BL
         {
             var lisSaved = GetList_x19(o23id);
             foreach(var c in lisX19)
-            {
+            {                
                 var rec = new BO.x19EntityCategory_Binding() { o23ID = o23id, x20ID = c.x20ID,x19RecordPID=c.x19RecordPID };
-                if (lisSaved.Any(p=>p.x20ID == c.x20ID && p.x19RecordPID==c.x19RecordPID))
+                var cx20 = _mother.x18EntityCategoryBL.LoadX20(c.x20ID);
+                if (cx20.x20IsMultiSelect)
                 {
-                    rec = lisSaved.Where(p => p.x20ID == c.x20ID && p.x19RecordPID==c.x19RecordPID).First();
+                    if (lisSaved.Any(p => p.x20ID == c.x20ID && p.x19RecordPID == c.x19RecordPID))
+                    {
+                        rec = lisSaved.Where(p => p.x20ID == c.x20ID && p.x19RecordPID == c.x19RecordPID).First();
+                    }
                 }
+                else
+                {
+                    if (lisSaved.Any(p => p.x20ID == c.x20ID))
+                    {
+                        rec = lisSaved.Where(p => p.x20ID == c.x20ID).First();
+                        rec.x19RecordPID = c.x19RecordPID;
+                    }                    
+                }
+                
                 if (c.IsSetAsDeleted)
                 {
                     if (c.pid > 0)
@@ -200,6 +220,20 @@ namespace BL
          
             
             return true;
+        }
+
+        public BO.o23RecDisposition InhaleRecDisposition(BO.o23Doc rec)
+        {
+            var c = new BO.o23RecDisposition();
+
+            if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin)
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                return c;
+            }
+            
+
+            return c;
         }
 
     }
