@@ -45,5 +45,27 @@ namespace BO
         public bool x20IsClosed { get; set; }
         public int x20Ordinary { get; set; }
         public x20EntityPageENUM x20EntityPageFlag { get; set; } = x20EntityPageENUM.Label;
+
+        public string BindName {
+            get
+            {
+                if (this.x20Name == null)
+                {
+                    return BO.BASX29.GetAlias(this.x29ID);
+                }
+                else
+                {
+                    return this.x20Name;
+                }
+            }
+        }
+
+        public string BindPrefix
+        {
+            get
+            {
+                return BO.BASX29.GetPrefix((BO.x29IdEnum) this.x29ID);
+            }
+        }
     }
 }

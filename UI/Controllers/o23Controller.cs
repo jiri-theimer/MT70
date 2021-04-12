@@ -57,14 +57,47 @@ namespace UI.Controllers
             {
                 v.lisX16 = Factory.x18EntityCategoryBL.GetList_x16(v.x18ID);
             }
+            if (v.lisX20 == null)
+            {
+                v.lisX20 = Factory.x18EntityCategoryBL.GetList_x20(v.x18ID);
+            }
+            if (v.SelectedX20ID==0 && v.lisX20.Count() > 0)
+            {
+                v.SelectedX20ID = v.lisX20.First().pid;
+                Handle_ChangeX20ID(v, v.lisX20.First());                
+            }
 
+        }
+
+        private void Handle_ChangeX20ID(Models.Record.o23Record v,BO.x20EntiyToCategory recX20)
+        {
+            v.SelectedBindName = recX20.BindName;
+            v.SelectedBindEntity = BO.BASX29.GetEntity(recX20.BindPrefix);
+            v.SelectedBindPid = 0;
+            v.SelectedBindText = null;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(Models.Record.o23Record v)
+        public IActionResult Record(Models.Record.o23Record v,string oper)
         {
             RefreshState(v);
+
+            if (oper == "x20id")
+            {
+                var cx20 = v.lisX20.Where(p => p.pid == v.SelectedX20ID).First();
+                Handle_ChangeX20ID(v, cx20);
+                return View(v);
+            }
+            if (oper== "bindrec")
+            {
+                return View(v);
+            }
+            if (oper == "postback")
+            {
+                return View(v);
+            }
+
             if (ModelState.IsValid)
             {
                 BO.o23Doc c = new BO.o23Doc();

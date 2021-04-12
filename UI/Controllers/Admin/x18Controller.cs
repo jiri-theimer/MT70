@@ -41,7 +41,7 @@ namespace UI.Controllers
                     };
                     v.lisX16.Add(cc);
                 }
-                var lis2 = Factory.x18EntityCategoryBL.GetList_x20(new List<int>() { v.rec_pid });
+                var lis2 = Factory.x18EntityCategoryBL.GetList_x20(v.rec_pid);
                 v.lisX20 = new List<x20Repeater>();
                 foreach(var c in lis2)
                 {

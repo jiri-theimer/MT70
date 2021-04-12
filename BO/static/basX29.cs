@@ -76,5 +76,33 @@ namespace BO
                     return BO.x29IdEnum._NotSpecified;
             }
         }
+
+        public static string GetAlias(int x29id)
+        {
+            switch (x29id)
+            {
+                case 141:
+                    return "Projekt";
+                case 328:
+                    return "Klient";
+                case 391:
+                    return "Vyúčtování";
+                case 390:
+                    return "Záloha";                
+                case 331:
+                    return "Úkon";
+                case 102:
+                    return "Osoba";
+                case 103:
+                    return "Uživatel";
+                case 223:
+                    return "Dokument";
+                case 356:
+                    return "Úkol";
+                default:
+                    BO.x29IdEnum c = (BO.x29IdEnum)x29id;
+                    return GetEntity(c);
+            }
+        }
     }
 }

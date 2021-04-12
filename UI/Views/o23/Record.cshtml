@@ -9,101 +9,174 @@
 
 @addTagHelper *, UI
 
+<div class="tabs_container_record">
+    <!-- Tab panes -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item onetab" role="presentation">
+            <button class="nav-link" id="link_tab1" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab">@_f.tra("Vlastnosti")</button>
+        </li>
+
+        <li class="nav-item onetab" role="presentation">
+            <button class="nav-link" id="link_tab2" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab">@_f.tra("Přístup k dokumentu")</button>
+        </li>
+    </ul>
+</div>
+
 <div class="modal_record_container">
-
-    <div class="row">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
-        <div class="col-sm-8 col-md-7">
-            <input class="form-control" asp-for="Rec.o23Name" />
-        </div>
-        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Kód"):</label>
-        <div class="col-sm-2 col-md-2">
-            <input class="form-control" asp-for="Rec.o23Code" />
-        </div>
-    </div>
-
-
-
-    @for (int i = 0; i < Model.lisFields.Count(); i++)
-    {
-        <div class="row my-2">
-            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tBoolean)
-            {
-                <div class="col-sm-1 col-md-2"></div>
-                <div class="col-sm-7 col-md-7">
-                    <input type="checkbox" asp-for="@Model.lisFields[i].CheckInput" />
-                    <label class="col-sm-1 col-md-2 col-form-label" for="lisFields_@(i)__CheckInput">@(Model.lisFields[i].x16Name)</label>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="tab1" role="tabpanel">
+            <!-- Tab1 -->
+            <div class="card">
+                <div class="card-header">
+                    @_f.tra("Vazby dokumentu")
                 </div>
-            }
-            else
-            {
-                <label class="col-sm-1 col-md-2 col-form-label recpagelabel">@(Model.lisFields[i].x16Name):</label>
-            }
-
-
-            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDate)
-            {
-                <div class="col-sm-3 col-md-3">
-                    <mydate asp-for="@Model.lisFields[i].DateInput"></mydate>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3">
+                            <myradiolist asp-for="@Model.SelectedX20ID" datasource="@Model.lisX20" textfield="BindName" valuefield="pid" event_after_changevalue="x20id_onchange"></myradiolist>
+                        </div>
+                        <div class="col-sm-9 col-md-9">
+                            @if (Model.SelectedX20ID > 0)
+                            {
+                                <div>
+                                    <code>@(Model.SelectedBindName):</code>
+                                </div>
+                                <mycombo entity="@Model.SelectedBindEntity" asp-for="@Model.SelectedBindPid" selectedtext="@Model.SelectedBindText" view-flag="1" event_after_changevalue="bindrec_onchange"></mycombo>
+                            }
+                        </div>
+                    </div>
+                    
                 </div>
+                <input type="hidden" asp-for="@Model.SelectedBindEntity" value="@Model.SelectedBindEntity" />
+                <input type="hidden" asp-for="@Model.SelectedBindName" value="@Model.SelectedBindName" />
+            </div>
+            
+            <table class="table table-hover" style="table-layout: fixed;">
+                @for (int i = 0; i < Model.lisX19.Count; i++)
+                {
+                    <tr style="@(Model.lisX19[i].CssTempDisplay)">
+                        <td>
+                            <input type="hidden" asp-for="lisX19[i].IsTempDeleted" value="@Model.lisX19[i].IsTempDeleted" />
+                            <input type="hidden" asp-for="lisX19[i].TempGuid" value="@Model.lisX19[i].TempGuid" />
+                            <input type="hidden" asp-for="lisX19[i].pid" value="@Model.lisX19[i].pid" />
 
-            }
-            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDateTime)
-            {
-                <div class="col-sm-3 col-md-3">
-                    <mydate asp-for="@Model.lisFields[i].DateInput" include-time="true"></mydate>
+                            
+
+                        </td>
+                       
+
+                        <td style="width:70px;">
+                            <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisX19[i].TempGuid)')">x</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název"):</label>
+                <div class="col-sm-8 col-md-7">
+                    <input class="form-control" asp-for="Rec.o23Name" />
                 </div>
-            }
-            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDecimal)
-            {
-                <div class="col-sm-3 col-md-3">
-                    <mynumber asp-for="@Model.lisFields[i].NumInput" decimal-digits="2"></mynumber>
+                <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Kód"):</label>
+                <div class="col-sm-2 col-md-2">
+                    <input class="form-control" asp-for="Rec.o23Code" />
                 </div>
-            }
-            @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tString)
+            </div>
+
+            @for (int i = 0; i < Model.lisFields.Count(); i++)
             {
-                <div class="col-sm-11 col-md-10">
-                    @if (Model.lisFields[i].x16DataSource == null)
+                <div class="row my-2">
+                    @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tBoolean)
                     {
-                        <input class="form-control" asp-for="@Model.lisFields[i].StringInput" />
+                        <div class="col-sm-1 col-md-2"></div>
+                        <div class="col-sm-7 col-md-7">
+                            <input type="checkbox" asp-for="@Model.lisFields[i].CheckInput" />
+                            <label class="col-sm-1 col-md-2 col-form-label" for="lisFields_@(i)__CheckInput">@(Model.lisFields[i].x16Name)</label>
+                        </div>
                     }
                     else
                     {
-                        @if (Model.lisFields[i].x16IsFixedDataSource)
-                        {
-                            <select class="form-select" asp-for="@Model.lisFields[i].StringInput">
-                                <option value=""></option>
-                                @foreach (string ss in BO.BAS.ConvertString2List(Model.lisFields[i].x16DataSource, ";"))
-                                {
-                                    <option value="@ss">@ss</option>
-                                }
-
-                            </select>
-                        }
-                        else
-                        {
-                            <input list="list@(i)" class="form-control" asp-for="@Model.lisFields[i].StringInput" />
-                            <datalist id="list@(i)">
-                                @foreach (string ss in BO.BAS.ConvertString2List(Model.lisFields[i].x16DataSource, ";"))
-                                {
-                                <option value="@ss">@ss</option>
-                                }
-                            </datalist>
-
-                        }
+                        <label class="col-sm-1 col-md-2 col-form-label recpagelabel">@(Model.lisFields[i].x16Name):</label>
                     }
+
+
+                    @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDate)
+                    {
+                        <div class="col-sm-3 col-md-3">
+                            <mydate asp-for="@Model.lisFields[i].DateInput"></mydate>
+                        </div>
+
+                    }
+                    @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDateTime)
+                    {
+                        <div class="col-sm-3 col-md-3">
+                            <mydate asp-for="@Model.lisFields[i].DateInput" include-time="true"></mydate>
+                        </div>
+                    }
+                    @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tDecimal)
+                    {
+                        <div class="col-sm-3 col-md-3">
+                            <mynumber asp-for="@Model.lisFields[i].NumInput" decimal-digits="2"></mynumber>
+                        </div>
+                    }
+                    @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tString)
+                    {
+                        <div class="col-sm-11 col-md-10">
+                            @if (Model.lisFields[i].x16DataSource == null)
+                            {
+                                <input class="form-control" asp-for="@Model.lisFields[i].StringInput" />
+                            }
+                            else
+                            {
+                                @if (Model.lisFields[i].x16IsFixedDataSource)
+                                {
+                                    <select class="form-select" asp-for="@Model.lisFields[i].StringInput">
+                                        <option value=""></option>
+                                        @foreach (string ss in BO.BAS.ConvertString2List(Model.lisFields[i].x16DataSource, ";"))
+                                        {
+                                            <option value="@ss">@ss</option>
+                                        }
+
+                                    </select>
+                                }
+                                else
+                                {
+                                    <input list="list@(i)" class="form-control" asp-for="@Model.lisFields[i].StringInput" />
+                                    <datalist id="list@(i)">
+                                        @foreach (string ss in BO.BAS.ConvertString2List(Model.lisFields[i].x16DataSource, ";"))
+                                        {
+                                            <option value="@ss">@ss</option>
+                                        }
+                                    </datalist>
+
+                                }
+                            }
+                        </div>
+                    }
+
                 </div>
+                <input type="hidden" asp-for="@Model.lisFields[i].x16Field" />
+                <input type="hidden" asp-for="@Model.lisFields[i].x16Name" />
+                <input type="hidden" asp-for="@Model.lisFields[i].x16DataSource" />
+                <input type="hidden" asp-for="@Model.lisFields[i].x16IsFixedDataSource" />
+                <input type="hidden" asp-for="@Model.lisFields[i].x16IsEntryRequired" />
+
+
             }
 
         </div>
-        <input type="hidden" asp-for="@Model.lisFields[i].x16Field" />
-        <input type="hidden" asp-for="@Model.lisFields[i].x16Name" />
-        <input type="hidden" asp-for="@Model.lisFields[i].x16DataSource" />
-        <input type="hidden" asp-for="@Model.lisFields[i].x16IsFixedDataSource" />
-        <input type="hidden" asp-for="@Model.lisFields[i].x16IsEntryRequired" />
+
+        <div class="tab-pane show active" id="tab2" role="tabpanel">
+            <!-- Tab2 -->
+
+        </div>
+    </div>
+
+    
 
 
-    }
+
+    
 
 
 
@@ -124,8 +197,14 @@
     });
 
 
-
-
+    function x20id_onchange(x20id) {
+        form1.action = _ep("/o23/Record?oper=x20id");
+        form1.submit();
+    }
+    function bindrec_onchange(pid) {
+        form1.action = _ep("/o23/Record?oper=bindrec");
+        form1.submit();
+    }
 
     function postback() {
 

@@ -60,7 +60,7 @@ namespace BL
         public int Save(BO.o23Doc rec,int intX18ID,List<BO.x19EntityCategory_Binding> lisX19)
         {
             var recX18 = _mother.x18EntityCategoryBL.Load(intX18ID);
-            var lisX20 = _mother.x18EntityCategoryBL.GetList_x20(new List<int>() { intX18ID });
+            var lisX20 = _mother.x18EntityCategoryBL.GetList_x20(intX18ID);
 
             if (!ValidateBeforeSave(rec, recX18, lisX19, lisX20))
             {

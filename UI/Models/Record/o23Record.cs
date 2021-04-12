@@ -11,10 +11,17 @@ namespace UI.Models.Record
 
         public int x18ID { get; set; }
         public BO.x18EntityCategory RecX18 { get; set; }
-        public List<BO.x19EntityCategory_Binding> lisX19 { get; set; }
+        public List<x19Repeator> lisX19 { get; set; }
+        public IEnumerable<BO.x20EntiyToCategory> lisX20 { get; set; }
+        public int SelectedX20ID { get; set; }
+        public string SelectedBindName { get; set; }
         public IEnumerable<BO.x16EntityCategory_FieldSetting> lisX16 { get; set; }
 
         public List<DocFieldInput> lisFields { get; set; }
+
+        public int SelectedBindPid { get; set; }
+        public string SelectedBindText { get; set; }
+        public string SelectedBindEntity { get; set; }
     }
 
 
@@ -39,6 +46,26 @@ namespace UI.Models.Record
                 else
                 {
                     return "display:none;";
+                }
+            }
+        }
+    }
+
+    public class x19Repeator : BO.x19EntityCategory_Binding
+    {
+        public bool IsTempDeleted { get; set; }
+        public string TempGuid { get; set; }
+        public string CssTempDisplay
+        {
+            get
+            {
+                if (this.IsTempDeleted)
+                {
+                    return "display:none;";
+                }
+                else
+                {
+                    return "display:table-row;";
                 }
             }
         }

@@ -10,7 +10,7 @@ namespace BL
     {
         public BO.x18EntityCategory Load(int pid);
         public IEnumerable<BO.x18EntityCategory> GetList(BO.myQuery mq);
-        public IEnumerable<BO.x20EntiyToCategory> GetList_x20(List<int> x18ids);
+        public IEnumerable<BO.x20EntiyToCategory> GetList_x20(int x18id);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16();
         public int Save(BO.x18EntityCategory rec, List<BO.x20EntiyToCategory> lisX20, List<BO.x16EntityCategory_FieldSetting> lisX16);
@@ -50,10 +50,10 @@ namespace BL
             return _db.GetList<BO.x18EntityCategory>(fq.FinalSql, fq.Parameters);
         }
 
-        public IEnumerable<BO.x20EntiyToCategory> GetList_x20(List<int> x18ids)
+        public IEnumerable<BO.x20EntiyToCategory> GetList_x20(int x18id)
         {
             
-            return _db.GetList<BO.x20EntiyToCategory>("SELECT * FROM x20EntiyToCategory WHERE x18ID IN (" + String.Join(",", x18ids) + ") ORDER BY x20Ordinary");
+            return _db.GetList<BO.x20EntiyToCategory>("SELECT a.*,a.x20ID as pid FROM x20EntiyToCategory a WHERE a.x18ID=@x18id ORDER BY a.x20Ordinary",new { x18id = x18id });
         }
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id)
         {
@@ -111,7 +111,7 @@ namespace BL
                 if (intX18ID > 0)
                 {
                     var x18ids = new List<int>();
-                    var lisX20Saved = GetList_x20(new List<int>() { intX18ID });
+                    var lisX20Saved = GetList_x20(intX18ID);
                     foreach(var c in lisX20)
                     {
                         p = new DL.Params4Dapper();
