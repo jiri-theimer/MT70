@@ -4,6 +4,10 @@
 @{
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
     Model.PageTitle = _f.tra("Vyberte typ dokumentu");
+    if (Model.prefix !=null && Model.recpid > 0)
+    {
+        Model.PageTitle += ": " + _f.CBL.GetObjectAlias(Model.prefix, Model.recpid);
+    }
     Model.PageSymbol = BO.Symbol.o23();
 }
 
@@ -22,11 +26,14 @@
 <myradiolist asp-for="@Model.SelectedPid" datasource="@Model.lisX18" textfield="x18Name" valuefield="pid"></myradiolist>
 
 
+
 <script type="text/javascript">
     $(document).ready(function () {
 
 
         $("#cmdOK").click(function () {
+            var prefix = "@Model.prefix";
+            var recpid = "@Model.recpid";
             var pid = $("#SelectedPid").val();
             if (pid == "0" || pid == "") {
                 _notify_message("Musíte vybrat položku.");
@@ -34,7 +41,13 @@
             }
             $(this).text("Processing...");
             $(this).attr("disabled", true);
-            location.replace(_ep("/o23/Record?pid=0&x18id=" + pid));
+
+            var url = _ep("/o23/Record?pid=0&x18id=" + pid);
+            if (prefix != "") {
+                url = url + "&prefix=" + prefix + "&recpid=" + recpid;
+            }
+        
+            location.replace(url);
 
 
         });

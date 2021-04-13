@@ -23,7 +23,7 @@
 </div>
 
 <div class="modal_record_container">
-    
+    <input type="hidden" asp-for="@Model.UploadGuid" />
 
     <div class="tab-content">
         <div class="tab-pane show active" id="tab1" role="tabpanel">
@@ -37,7 +37,7 @@
                         <div class="col-sm-3 col-md-3">
                             <myradiolist asp-for="@Model.SelectedX20ID" datasource="@Model.lisX20" textfield="BindName" valuefield="pid" event_after_changevalue="x20id_onchange"></myradiolist>
                         </div>
-                        <div class="col-sm-9 col-md-9" style="background-color:white;border-radius:5px;">
+                        <div class="col-sm-9 col-md-9" style="background-color:white;border-radius:5px;padding:5px;">
                             @if (Model.SelectedX20ID > 0)
                             {
                                 <div>
@@ -180,14 +180,10 @@
     </div>
 
 
-
-
-
-
-
-
-
 </div>
+
+<iframe id="fraUpload" src="/FileUpload/DoUpload?recpid=@Model.rec_pid&x29id=940&guid=@Model.UploadGuid" frameborder="0" height="220" scrolling="yes"></iframe>
+
 
 <input type="hidden" asp-for="@Model.x18ID" />
 
@@ -201,13 +197,13 @@
         });
 
 
-    @if (Model.IsAutoCollapseX20)
-    {
-    @:$("#divCollapseX20").css("display", "block");
-    }
+        @if (Model.IsAutoCollapseX20)
+        {
+        @:$("#divCollapseX20").css("display", "block");
+        }
 
 
-
+        
 
     });
 

@@ -56,8 +56,8 @@ namespace UI.Menu
             AMI("Další", null, null,null, "more");
             
             AMI("Nová poznámka/odkaz/příloha", $"javascript: _window_open('/b07/Record?prefix=j02&pid=0&recordpid={pid}')", "k-i-comment", "more");
-            AMI("Nový dokument", $"javascript: _window_open('/o23/Record?prefix=j02&pid=0&recordpid={pid}')",null,"more");
-            
+            AMI_Doc("j02", pid);
+           
 
             AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?j02id={0}&x29id=102&x40datapid={pid}',2)",null,"more");
 

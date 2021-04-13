@@ -10,18 +10,18 @@ namespace UI.Controllers
 {
     public class o23Controller : BaseController
     {
-        public IActionResult SelectDocType()
+        public IActionResult SelectDocType(string prefix,int recpid)
         {
-            var v = new SelectDocTypeViewModel();
+            var v = new SelectDocTypeViewModel() { prefix = prefix, recpid = recpid };
             v.lisX18 = Factory.x18EntityCategoryBL.GetList(new BO.myQuery("x18")).OrderBy(p=>p.x18Ordinary);
             return View(v);
         }
-        public IActionResult Record(int pid, bool isclone,int x18id)
-        {
-            var v = new o23Record() { rec_pid = pid, rec_entity = "o23",x18ID=x18id };
+        public IActionResult Record(int pid, bool isclone,int x18id,string prefix,int recpid)
+        {            
+            var v = new o23Record() { rec_pid = pid, rec_entity = "o23",x18ID=x18id,UploadGuid=BO.BAS.GetGuid() };
             if (v.x18ID == 0 && v.rec_pid==0)
             {
-                return RedirectToAction("SelectDocType");
+                return RedirectToAction("SelectDocType",new { prefix = prefix, recpid = recpid });
             }
             v.Rec = new BO.o23Doc();
             if (v.rec_pid > 0)
@@ -67,26 +67,42 @@ namespace UI.Controllers
                 v.lisFields.Add(cc);
             }
 
-            if (v.Rec != null)
+            var lisX19 = Factory.o23DocBL.GetList_x19(v.rec_pid);
+            v.lisX19 = new List<x19Repeator>();
+            foreach (var c in lisX19)
             {
-                var lisX19 = Factory.o23DocBL.GetList_x19(v.rec_pid);
-                v.lisX19 = new List<x19Repeator>();
-                foreach(var c in lisX19)
-                {
-                    var cc = new x19Repeator() {TempGuid=BO.BAS.GetGuid(), pid = c.pid, x20ID = c.x20ID, x19RecordPID = c.x19RecordPID, x29ID = c.x29ID,SelectedX20Name=c.x20Name };
-                    var cx20 = Factory.x18EntityCategoryBL.LoadX20(c.x20ID);
-                    cc.SelectedX20Name = cx20.BindName;
-                    cc.SelectedBindText = Factory.CBL.GetObjectAlias(cx20.BindPrefix, c.x19RecordPID);
-                    v.lisX19.Add(cc);
-                }
+                var cc = new x19Repeator() { TempGuid = BO.BAS.GetGuid(), pid = c.pid, x20ID = c.x20ID, x19RecordPID = c.x19RecordPID, x29ID = c.x29ID, SelectedX20Name = c.x20Name };
+                var cx20 = Factory.x18EntityCategoryBL.LoadX20(c.x20ID);
+                cc.SelectedX20Name = cx20.BindName;
+                cc.SelectedBindText = Factory.CBL.GetObjectAlias(cx20.BindPrefix, c.x19RecordPID);
+                v.lisX19.Add(cc);
             }
 
-            if (isclone)
+            if (v.Rec.pid>0 && isclone)
             {
                 v.MakeClone();
             }
 
-            return ViewTup(v, BO.x53PermValEnum.GR_Admin);
+            if (v.Rec != null)
+            {
+                
+            }
+
+            if (v.Rec.pid==0 && prefix != null && recpid > 0)
+            {
+                //Založení nového dokumentu z konkrétního záznamu entity
+                if (v.lisX20.Where(p => p.BindPrefix == prefix).Count() > 0)
+                {
+                    v.SelectedX20ID = v.lisX20.First(p => p.BindPrefix == prefix).pid;
+                    var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
+                    var c = new x19Repeator() { x20ID = v.SelectedX20ID, TempGuid = BO.BAS.GetGuid(), x19RecordPID = recpid, SelectedBindText = Factory.CBL.GetObjectAlias(prefix, recpid), SelectedX20Name = cx20.BindName };
+                    v.lisX19.Add(c);
+                }
+
+
+            }
+
+            return View(v);
         }
 
         private void RefreshState(o23Record v)
@@ -133,7 +149,7 @@ namespace UI.Controllers
                 if (v.lisX19.Any(p=>p.x20ID==v.SelectedX20ID && p.x19RecordPID == v.SelectedBindPid && !p.IsTempDeleted))
                 {
                     this.AddMessage("Tato vazba již existuje.");return View(v);
-                }
+                }                
                 var c = new x19Repeator() { x20ID = v.SelectedX20ID, TempGuid = BO.BAS.GetGuid(), x19RecordPID = v.SelectedBindPid, SelectedBindText = v.SelectedBindText, SelectedX20Name = v.SelectedBindName };
                 var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
                 if (!cx20.x20IsMultiSelect)
@@ -238,5 +254,7 @@ namespace UI.Controllers
             v.SelectedBindPid = 0;
             v.SelectedBindText = null;
         }
+
+        
     }
 }

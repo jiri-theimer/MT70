@@ -53,7 +53,10 @@ namespace UI.Menu
         {
             return AMI("Tisková sestava", $"javascript: _window_open('/x31/ReportContext?pid={pid}&prefix={prefix}',2)", "k-i-print");
         }
-
+        public MenuItem AMI_Doc(string prefix, int pid,string parentmenuid="more")
+        {
+            return AMI("Nový dokument", $"javascript: _window_open('/o23/Record?prefix={prefix}&pid=0&recpid={pid}')", null, parentmenuid);            
+        }
         public void DIV(string strName = null, string strParentID = null)
         {
             _lis.Add(new MenuItem() { IsDivider = true, Name = BO.BAS.OM2(strName, 30), ParentID = strParentID });

@@ -46,7 +46,7 @@ namespace UI.Menu
             AMI("Další", null, null, null, "more");
 
             AMI("Nová poznámka ke klientovi", $"javascript: _window_open('/b07/Record?prefix=p28&pid=0&recordpid={pid}')", "k-i-comment", "more");
-            AMI("Nový dokument", $"javascript: _window_open('/o23/Record?prefix=p28&pid=0&recordpid={pid}')", null, "more");
+            AMI_Doc("p28", pid);
             AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id=328&x40datapid={pid}',2)", null, "more");
 
             if (rec.p28RegID != null)

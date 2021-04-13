@@ -8,7 +8,7 @@ namespace UI.Models.Record
     public class o23Record: BaseRecordViewModel
     {
         public BO.o23Doc Rec { get; set; }
-
+        public string UploadGuid { get; set; }
         public int x18ID { get; set; }
         public BO.x18EntityCategory RecX18 { get; set; }
         public List<x19Repeator> lisX19 { get; set; }
