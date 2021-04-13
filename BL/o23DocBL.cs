@@ -58,7 +58,7 @@ namespace BL
             return _db.GetList<BO.x19EntityCategory_Binding>(GetSQL1_X19(" WHERE a.o23ID=@o23id"),new { o23id = o23id });
         }
 
-        public int Save(BO.o23Doc rec,int intX18ID,List<BO.x19EntityCategory_Binding> lisX19)
+        public int Save(BO.o23Doc rec,int intX18ID,List<BO.x19EntityCategory_Binding> lisX19,string strUploadGuid)
         {
             var recX18 = _mother.x18EntityCategoryBL.Load(intX18ID);
             var lisX20 = _mother.x18EntityCategoryBL.GetList_x20(intX18ID);
@@ -127,6 +127,12 @@ namespace BL
                 if (intPID > 0)
                 {
                     SaveX19Binding(intPID, lisX19, lisX20);
+                    _mother.o27AttachmentBL.SaveChangesAndUpload(strUploadGuid, 940, 0);
+
+                    foreach (BO.o27Attachment c in _mother.o27AttachmentBL.GetTempFiles(strUploadGuid))
+                    {
+                        Factory.MailBL.AddAttachment(c.FullPath, c.o27OriginalFileName, c.o27ContentType);
+                    }
 
                     if (_db.RunSql("exec dbo.o23_aftersave @o23id,@j03id_sys", new { o23id = intPID, j03id_sys = _mother.CurrentUser.pid }))
                     {

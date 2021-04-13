@@ -29,6 +29,8 @@ namespace BO
             var ret = new BO.myQuery(prefix.Substring(0, 3));
             switch (prefix.Substring(0, 3))
             {
+                case "b07":
+                    return handle_myquery_reflexe(new BO.myQueryB07());
                 case "j02":
                     return handle_myquery_reflexe(new BO.myQueryJ02());
                 case "j04":

@@ -86,8 +86,7 @@ namespace UI.Controllers
                     Factory.MailBL.AddAttachment(c.FullPath, c.o27OriginalFileName, c.o27ContentType);
                 }
 
-                //System.IO.File.AppendAllText("c:\\temp\\hovado.txt", "Try SendMessage: " + DateTime.Now.ToString()+", message: "+ v.Rec.x40Subject);
-
+                
                 v.Rec.x40Recipient = v.Recipient;
                 var ret = Factory.MailBL.SendMessage(v.Rec, v.IsTest);
 
