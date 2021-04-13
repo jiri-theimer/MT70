@@ -20,6 +20,7 @@ namespace BL
         
         private ICBL _cbl;
         private IFBL _fbl;
+        private Ib07CommentBL _b07;
         private Ij72TheGridTemplateBL _j72;
         private IDataGridBL _grid;
         private Ix35GlobalParamBL _gp;        
@@ -155,6 +156,14 @@ namespace BL
             {
                 if (_fbl == null) _fbl = new FBL(this);
                 return _fbl;
+            }
+        }
+        public Ib07CommentBL b07CommentBL
+        {
+            get
+            {
+                if (_b07 == null) _b07 = new b07CommentBL(this);
+                return _b07;
             }
         }
         public Ij72TheGridTemplateBL j72TheGridTemplateBL

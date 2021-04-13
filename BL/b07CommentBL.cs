@@ -57,19 +57,46 @@ namespace BL
             p.AddInt("b07ID_Parent", rec.b07ID_Parent, true);
             p.AddDateTime("b07Date", rec.b07Date);
             p.AddString("b07Value", rec.b07Value);
+            p.AddString("b07WorkflowInfo", rec.b07WorkflowInfo);
+            p.AddString("b07LinkUrl", rec.b07LinkUrl);
+            p.AddString("b07LinkName", rec.b07LinkName);
+            p.AddString("b07ExternalPID", rec.b07ExternalPID);
+            p.AddDateTime("b07ReminderDate", rec.b07ReminderDate);
+
 
             return _db.SaveRecord("b07Comment", p, rec);
+
         }
         private bool ValidateBeforeSave(BO.b07Comment rec)
         {
-            if (string.IsNullOrEmpty(rec.b07Name))
+            if (rec.x29ID == BO.x29IdEnum._NotSpecified)
             {
-                this.AddMessage("Chybí vyplnit [Název]."); return false;
+                this.AddMessage("Chybí vyplnit [Entita]."); return false;
             }
-            if (string.IsNullOrEmpty(rec.b07Code))
+            if (rec.b07RecordPID==0)
             {
-                this.AddMessage("Chybí vyplnit [Kód]."); return false;
+                this.AddMessage("Chybí vyplnit [Záznam entity]."); return false;
             }
+            if (!string.IsNullOrEmpty(rec.b07LinkUrl))
+            {
+                rec.b07LinkUrl = rec.b07LinkUrl.Replace("http://http://", "http://");
+                rec.b07LinkUrl = rec.b07LinkUrl.Replace("http://https://", "https://");
+                if (!rec.b07LinkUrl.Contains("://"))
+                {
+                    rec.b07LinkUrl = "http://" + rec.b07LinkUrl;
+                }
+            }
+            if (string.IsNullOrEmpty(rec.b07LinkUrl) && !string.IsNullOrEmpty(rec.b07LinkName))
+            {
+                this.AddMessage("Chybí [Adresa odkazu]."); return false;
+            }
+            if (!string.IsNullOrEmpty(rec.b07LinkUrl) && string.IsNullOrEmpty(rec.b07LinkName))
+            {
+                this.AddMessage("Chybí [Název odkazu]."); return false;
+            }
+
+            if (rec.j02ID_Owner == 0) rec.j02ID_Owner = _mother.CurrentUser.j02ID;
+
             return true;
         }
 
