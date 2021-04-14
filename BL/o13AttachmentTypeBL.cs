@@ -7,6 +7,7 @@ namespace BL
     public interface Io13AttachmentTypeBL
     {
         public BO.o13AttachmentType Load(int pid);
+        public BO.o13AttachmentType LoadByX29ID(int x29id);
         public IEnumerable<BO.o13AttachmentType> GetList(BO.myQuery mq);
         public int Save(BO.o13AttachmentType rec);
         
@@ -34,6 +35,10 @@ namespace BL
         public BO.o13AttachmentType Load(int pid)
         {
             return _db.Load<BO.o13AttachmentType>(GetSQL1(" WHERE a.o13ID=@pid"), new { pid = pid });
+        }
+        public BO.o13AttachmentType LoadByX29ID(int x29id)
+        {
+            return _db.Load<BO.o13AttachmentType>(GetSQL1(" WHERE a.x29ID=@x29id"), new { x29id = x29id });
         }
 
         public IEnumerable<BO.o13AttachmentType> GetList(BO.myQuery mq)

@@ -22,6 +22,7 @@ namespace BL
         public List<BO.o27Attachment> CopyTempFiles2Upload(string strTempGUID);
         public string GetUploadFolder(int o13id);
         public bool CopyOneTempFile2Upload(string strTempFileName, string strDestFolderName, string strDestFileName);
+        public void Move2Deleted(BO.o27Attachment rec);
 
     }
     class o27AttachmentBL : BaseBL, Io27AttachmentBL
@@ -217,9 +218,10 @@ namespace BL
         public bool SaveChangesAndUpload(string guid,int x29id,int recpid)
         {
             var recs4upload = new List<BO.o27Attachment>();
-            if (GetTempFiles(guid).Count > 0)
+            var lisTempO27 = GetTempFiles(guid);
+            if (lisTempO27.Count > 0)
             {
-                foreach (var recO27 in GetTempFiles(guid))
+                foreach (var recO27 in lisTempO27)
                 {
                     switch (x29id)
                     {
@@ -229,6 +231,10 @@ namespace BL
                             recO27.b07ID = recpid; break;
                         case 940:
                             recO27.x40ID = recpid; break;
+                    }
+                    if (recO27.o13ID == 0)
+                    {
+                        recO27.o13ID = _mother.o13AttachmentTypeBL.LoadByX29ID(x29id).pid;
                     }
                     recO27.o27ArchiveFolder = GetUploadFolder(recO27.o13ID);
                     var intO27ID = Save(recO27);
@@ -339,6 +345,23 @@ namespace BL
             return lisO27;
         }
 
+        public void Move2Deleted(BO.o27Attachment rec)
+        {
+            string strDir = _mother.x35GlobalParamBL.UploadFolder() + "\\deleted\\" + DateTime.Now.Year.ToString() + "\\" + BO.BAS.RightString("0" + DateTime.Now.Month.ToString(), 2);
+
+            if (!System.IO.Directory.Exists(strDir))
+            {
+                System.IO.Directory.CreateDirectory(strDir);
+            }
+            if (System.IO.File.Exists(_mother.x35GlobalParamBL.UploadFolder() + "\\" + rec.o27ArchiveFolder + "\\" + rec.o27ArchiveFileName))
+            {
+                System.IO.File.Move(_mother.x35GlobalParamBL.UploadFolder() + "\\" + rec.o27ArchiveFolder + "\\" + rec.o27ArchiveFileName, strDir+"\\"+ rec.o27ArchiveFileName, true);
+
+            }
+
+
+        }
+
         public bool CopyOneTempFile2Upload(string strTempFileName,string strDestFolderName,string strDestFileName)
         {
             if (!System.IO.Directory.Exists(_mother.x35GlobalParamBL.UploadFolder() + "\\" + strDestFolderName))
@@ -383,10 +406,10 @@ namespace BL
         public string GetUploadFolder(int o13id)
         {
             var c = _mother.o13AttachmentTypeBL.Load(o13id);
-            if (c.SharpFolder != null)
+            
+            if (c.o13IsArchiveFolderWithPeriodSuffix)
             {
-                c.SharpFolder = c.SharpFolder.Replace("[YEAR]", DateTime.Now.Year.ToString(),StringComparison.OrdinalIgnoreCase);
-                c.SharpFolder = c.SharpFolder.Replace("[MONTH]", BO.BAS.RightString("0"+DateTime.Now.Month.ToString(),2), StringComparison.OrdinalIgnoreCase);
+                c.SharpFolder += "\\" + DateTime.Now.Year.ToString() + "\\" + BO.BAS.RightString("0" + DateTime.Now.Month.ToString(), 2);
                 
                 if (c.SharpFolder.Substring(0, 2) == "\\")
                 {

@@ -136,7 +136,7 @@ namespace BL
                             recB07 = _mother.b07CommentBL.LoadByRecord(223, intPID);
                         }
                         if (recB07==null) recB07 = new BO.b07Comment() { b07Value = "upload", x29ID = BO.x29IdEnum.o23Doc, b07RecordPID = intPID };
-                        _mother.b07CommentBL.Save(recB07, uploadguid);
+                        _mother.b07CommentBL.Save(recB07, uploadguid,null);
                     }
 
                     if (_db.RunSql("exec dbo.o23_aftersave @o23id,@j03id_sys", new { o23id = intPID, j03id_sys = _mother.CurrentUser.pid }))

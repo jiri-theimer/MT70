@@ -31,34 +31,59 @@
     <div class="my-2">
         <textarea asp-for="Rec.b07Value" class="form-control" placeholder="Poznámka/Komentář s neomezenou délkou"></textarea>
     </div>
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="cmdLink">
+        @_f.tra("URL adresa/odkaz")
+    </button>
+
+    <div id="divLink" style="display:none;width:98%;">
+        <div class="row">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název odkazu"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input type="text" asp-for="Rec.b07LinkName" class="form-control" />
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Adresa (URL)"):</label>
+            <div class="col-sm-11 col-md-10">
+                <input type="text" asp-for="Rec.b07LinkUrl" class="form-control" />
+            </div>
+
+        </div>
+    </div>
 
 
+    <table class="table table-sm table-hover" style="table-layout: fixed;">
+        @for (int i = 0; i < Model.lisO27.Count; i++)
+        {
+            <tr style="@(Model.lisO27[i].CssTempDisplay)">
+                <td>
+                    <input type="hidden" asp-for="lisO27[i].IsTempDeleted" value="@Model.lisO27[i].IsTempDeleted" />
+                    <input type="hidden" asp-for="lisO27[i].TempGuid" value="@Model.lisO27[i].TempGuid" />
+                    <input type="hidden" asp-for="lisO27[i].pid" value="@Model.lisO27[i].pid" />
 
+                    <a target="_blank" href="/FileUpload/FileDownloadInline?downloadguid=@Model.lisO27[i].o27GUID">@Model.lisO27[i].o27OriginalFileName</a>
+                    <input type="hidden" asp-for="lisO27[i].o27GUID" value="@Model.lisO27[i].o27GUID" />
+                    <input type="hidden" asp-for="lisO27[i].o27OriginalFileName" value="@Model.lisO27[i].o27OriginalFileName" />
+                </td>
+                <td>
+                    <span>@BO.BAS.FormatFileSize(Model.lisO27[i].o27FileSize)</span>
+                    <input type="hidden" asp-for="lisO27[i].o27FileSize" value="@Model.lisO27[i].o27FileSize" />
+                </td>
+                <td style="width:70px;">
+                    <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit")" onclick="handle_delete_o27('@(Model.lisO27[i].TempGuid)')">x</button>
+                </td>
+            </tr>
+        }
+    </table>
 
 </div>
 
 <iframe id="fraUpload" src="/FileUpload/Index?recpid=@Model.rec_pid&x29id=607&guid=@Model.UploadGuid" frameborder="0" scrolling="yes"></iframe>
 
 
-<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="cmdLink">
-    @_f.tra("URL adresa/odkaz")
-</button>
 
-<div id="divLink" style="display:none;width:98%;">
-    <div class="row">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název odkazu"):</label>
-        <div class="col-sm-11 col-md-10">
-            <input type="text" asp-for="Rec.b07LinkName" class="form-control" />
-        </div>
-    </div>
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Adresa (URL)"):</label>
-        <div class="col-sm-11 col-md-10">
-            <input type="text" asp-for="Rec.b07LinkUrl" class="form-control" />
-        </div>
 
-    </div>
-</div>
+
 
 
 <input type="hidden" asp-for="@Model.ObjectAlias" />
@@ -87,7 +112,10 @@
     });
 
 
-    
+    function handle_delete_o27(guid) {
+        form1.action = _ep("/b07/Record?oper=delete_o27&guid=" + guid);
+        form1.submit();
+    }
 
 
 </script>

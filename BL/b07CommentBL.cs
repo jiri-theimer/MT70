@@ -10,7 +10,7 @@ namespace BL
     {
         public BO.b07Comment Load(int pid);
         public BO.b07Comment LoadByRecord(int x29id, int recpid);
-        public int Save(BO.b07Comment rec, string uploadguid);
+        public int Save(BO.b07Comment rec, string uploadguid, List<int> o27ids_delete);
         public IEnumerable<BO.b07Comment> GetList(BO.myQueryB07 mq);
 
     }
@@ -49,7 +49,7 @@ namespace BL
 
 
 
-        public int Save(BO.b07Comment rec, string uploadguid)
+        public int Save(BO.b07Comment rec, string uploadguid,List<int> o27ids_delete)
         {
             if (!ValidateBeforeSave(rec))
             {
@@ -75,6 +75,15 @@ namespace BL
             if (intPID>0 && !string.IsNullOrEmpty(uploadguid))
             {
                 _mother.o27AttachmentBL.SaveChangesAndUpload(uploadguid, 607, intPID);
+                if (o27ids_delete != null)
+                {
+                    foreach(int intO27ID in o27ids_delete)
+                    {                        
+                        _mother.o27AttachmentBL.Move2Deleted(_mother.o27AttachmentBL.Load(intO27ID));
+                        _mother.CBL.DeleteRecord("o27Attachment", intO27ID);
+                        
+                    }
+                }
                 
             }
             return intPID;

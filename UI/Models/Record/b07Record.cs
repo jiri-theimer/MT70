@@ -12,5 +12,30 @@ namespace UI.Models.Record
         public int recpid { get; set; }
         public string  prefix { get; set; }
         public string ObjectAlias { get; set; }
+
+        public List<o27Repeator> lisO27 { get; set; }
+
+
+        
+    }
+
+    public class o27Repeator : BO.o27Attachment
+    {
+        public bool IsTempDeleted { get; set; }
+        public string TempGuid { get; set; }
+        public string CssTempDisplay
+        {
+            get
+            {
+                if (this.IsTempDeleted)
+                {
+                    return "display:none;";
+                }
+                else
+                {
+                    return "display:table-row;";
+                }
+            }
+        }
     }
 }

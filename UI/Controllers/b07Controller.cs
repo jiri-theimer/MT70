@@ -33,6 +33,21 @@ namespace UI.Controllers
                 }
                 v.prefix = BO.BASX29.GetPrefix(v.Rec.x29ID);
                 v.recpid = v.Rec.b07RecordPID;
+
+                var lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07id = v.rec_pid });
+                v.lisO27 = new List<o27Repeator>();
+                foreach (var c in lisO27)
+                {
+                    v.lisO27.Add(new o27Repeator()
+                    {
+                        TempGuid = BO.BAS.GetGuid(),
+                        pid = c.pid,
+                        o27OriginalFileName = c.o27OriginalFileName,
+                        o27FileSize=c.o27FileSize,
+                        o27GUID =c.o27GUID                        
+                    });
+                }
+
             }
             if (v.Rec.pid==0 && (string.IsNullOrEmpty(v.prefix) || v.recpid == 0))
             {
@@ -45,13 +60,27 @@ namespace UI.Controllers
             {
                 v.MakeClone();
             }
+            RefreshState(v);
             return ViewTup(v, BO.x53PermValEnum.GR_Admin);
+        }
+
+        private void RefreshState(b07Record v)
+        {
+            if (v.lisO27 == null)
+            {
+                v.lisO27 = new List<o27Repeator>();
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Record(Models.Record.b07Record v)
+        public IActionResult Record(Models.Record.b07Record v,string oper,string guid)
         {
-
+            RefreshState(v);
+            if (oper== "delete_o27")
+            {
+                v.lisO27.First(p => p.TempGuid == guid).IsTempDeleted = true;
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
                 BO.b07Comment c = new BO.b07Comment();
@@ -67,7 +96,8 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.b07CommentBL.Save(c,v.UploadGuid);
+               
+                c.pid = Factory.b07CommentBL.Save(c,v.UploadGuid, v.lisO27.Where(p => p.IsTempDeleted).Select(p => p.pid).ToList());
                 if (c.pid > 0)
                 {
 
