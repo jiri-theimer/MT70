@@ -10,6 +10,7 @@ namespace BO
         public int x40id { get; set; }
         public int x31id { get; set; }
         public int b07id { get; set; }
+        public List<int> b07ids { get; set; }
                 
         public int recpid { get; set; }
         public string tempguid { get; set; }
@@ -46,6 +47,10 @@ namespace BO
             if (this.b07id > 0)
             {
                 AQ("a.b07ID=@b07id", "b07id", this.b07id);
+            }
+            if (this.b07ids !=null && this.b07ids.Count > 0)
+            {
+                AQ("a.b07ID IN ("+string.Join(",",this.b07ids)+")",null,null);
             }
 
             if (this.tempguid != null)

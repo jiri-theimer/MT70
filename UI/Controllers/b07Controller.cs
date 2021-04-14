@@ -18,6 +18,8 @@ namespace UI.Controllers
             }
             var v = new b07list() { master_entity = master_entity, master_pid = master_pid };
             v.lisB07 = Factory.b07CommentBL.GetList(new BO.myQueryB07() { x29id =BO.BASX29.GetInt(v.master_entity.Substring(0,3)), recpid = v.master_pid });
+
+            v.lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07ids = v.lisB07.Select(p => p.pid).ToList() });
             return View(v);
         }
         public IActionResult Record(int pid, bool isclone,string prefix,int recpid)

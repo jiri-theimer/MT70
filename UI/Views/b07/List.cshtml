@@ -54,11 +54,23 @@
                     <a href="@c.b07LinkUrl" target="_blank">@c.b07LinkName</a>
                 </div>
             }
+
             @if (c.b07Value != null)
             {
                 @Html.Raw(BO.BAS.Text2Html(c.b07Value))
             }
 
+            @if (Model.lisO27.Any(p => p.b07ID == c.pid))
+            {
+                foreach (var cc in Model.lisO27.Where(p => p.b07ID == c.pid))
+                {
+                    <div>
+                        <span class="k-icon k-i-download"></span>
+                        <a target="_blank" href="/FileUpload/FileDownloadInline?downloadguid=@cc.o27GUID">@cc.o27OriginalFileName</a>
+                        <span>@(BO.BAS.FormatFileSize(cc.o27FileSize))</span>
+                    </div>
+                }
+            }
         </div>
     </div>
 }
