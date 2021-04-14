@@ -34,8 +34,7 @@ namespace UI.Menu
             DIV();
             
             AMI("Další", null, null, null, "more");
-
-            AMI("Nová poznámka k dokumentu", $"javascript: _window_open('/b07/Record?prefix=o23&pid=0&recordpid={pid}')", "k-i-comment", "more");            
+                  
             AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id=223&x40datapid={pid}',2)", null, "more");
             AMI_Report("o23", pid);
         }

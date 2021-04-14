@@ -216,50 +216,46 @@ namespace BL
 
         public bool SaveChangesAndUpload(string guid,int x29id,int recpid)
         {
-            using (var sc = new System.Transactions.TransactionScope()) //podléhá jedné transakci
+            var recs4upload = new List<BO.o27Attachment>();
+            if (GetTempFiles(guid).Count > 0)
             {
-                var recs4upload = new List<BO.o27Attachment>();
-                if (GetTempFiles(guid).Count > 0)
+                foreach (var recO27 in GetTempFiles(guid))
                 {
-                    foreach (var recO27 in GetTempFiles(guid))
+                    switch (x29id)
                     {
-                        switch (x29id)
-                        {
-                            case 931:
-                                recO27.x31ID = recpid; break;
-                            case 607:
-                                recO27.b07ID = recpid; break;
-                            case 940:
-                                recO27.x40ID = recpid; break;
-                        }
-                        recO27.o27ArchiveFolder = GetUploadFolder(recO27.o13ID);
-                        var intO27ID = Save(recO27);
-                        if (intO27ID > 0)
-                        {
-                            recs4upload.Add(recO27);
-                            //CopyOneTempFile2Upload(recO27.o27ArchiveFileName, recO27.o27ArchiveFolder, recO27.o27ArchiveFileName);
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        case 931:
+                            recO27.x31ID = recpid; break;
+                        case 607:
+                            recO27.b07ID = recpid; break;
+                        case 940:
+                            recO27.x40ID = recpid; break;
                     }
-                }
-                foreach (var recTemp in _mother.p85TempboxBL.GetList(guid))  //test na odstraněné záznamy příloh
-                {
-                    if (_mother.CBL.DeleteRecord("o27Attachment", recTemp.p85DataPID) != "1"){
-                        this.AddMessageTranslated("Error: DELETE.");
+                    recO27.o27ArchiveFolder = GetUploadFolder(recO27.o13ID);
+                    var intO27ID = Save(recO27);
+                    if (intO27ID > 0)
+                    {
+                        recs4upload.Add(recO27);                        
+                    }
+                    else
+                    {
                         return false;
                     }
                 }
-                sc.Complete();
-
-                foreach (var rec in recs4upload)
-                {
-                    CopyOneTempFile2Upload(rec.o27ArchiveFileName, rec.o27ArchiveFolder, rec.o27ArchiveFileName);
-                }                
             }
-            
+            foreach (var recTemp in _mother.p85TempboxBL.GetList(guid))  //test na odstraněné záznamy příloh
+            {
+                if (_mother.CBL.DeleteRecord("o27Attachment", recTemp.p85DataPID) != "1")
+                {
+                    this.AddMessageTranslated("Error: DELETE.");
+                    return false;
+                }
+            }
+           
+            foreach (var rec in recs4upload)
+            {
+                CopyOneTempFile2Upload(rec.o27ArchiveFileName, rec.o27ArchiveFolder, rec.o27ArchiveFileName);
+            }
+
 
             return true;
         }

@@ -10,7 +10,7 @@ namespace BL
     {
         public BO.o23Doc Load(int pid);
         public IEnumerable<BO.o23Doc> GetList(BO.myQueryO23 mq);
-        public int Save(BO.o23Doc rec, int intX18ID, List<BO.x19EntityCategory_Binding> lisX19);
+        public int Save(BO.o23Doc rec, int intX18ID, List<BO.x19EntityCategory_Binding> lisX19, string uploadguid);
         public IEnumerable<BO.x19EntityCategory_Binding> GetList_x19(int o23id);
         public BO.o23RecDisposition InhaleRecDisposition(BO.o23Doc rec);
 
@@ -58,7 +58,7 @@ namespace BL
             return _db.GetList<BO.x19EntityCategory_Binding>(GetSQL1_X19(" WHERE a.o23ID=@o23id"),new { o23id = o23id });
         }
 
-        public int Save(BO.o23Doc rec,int intX18ID,List<BO.x19EntityCategory_Binding> lisX19,string strUploadGuid)
+        public int Save(BO.o23Doc rec,int intX18ID,List<BO.x19EntityCategory_Binding> lisX19,string uploadguid)
         {
             var recX18 = _mother.x18EntityCategoryBL.Load(intX18ID);
             var lisX20 = _mother.x18EntityCategoryBL.GetList_x20(intX18ID);
@@ -127,11 +127,16 @@ namespace BL
                 if (intPID > 0)
                 {
                     SaveX19Binding(intPID, lisX19, lisX20);
-                    _mother.o27AttachmentBL.SaveChangesAndUpload(strUploadGuid, 940, 0);
-
-                    foreach (BO.o27Attachment c in _mother.o27AttachmentBL.GetTempFiles(strUploadGuid))
+                   
+                    if (!string.IsNullOrEmpty(uploadguid))
                     {
-                        Factory.MailBL.AddAttachment(c.FullPath, c.o27OriginalFileName, c.o27ContentType);
+                        BO.b07Comment recB07 = null;                        
+                        if (rec.pid > 0)
+                        {
+                            recB07 = _mother.b07CommentBL.LoadByRecord(223, intPID);
+                        }
+                        if (recB07==null) recB07 = new BO.b07Comment() { b07Value = "upload", x29ID = BO.x29IdEnum.o23Doc, b07RecordPID = intPID };
+                        _mother.b07CommentBL.Save(recB07, uploadguid);
                     }
 
                     if (_db.RunSql("exec dbo.o23_aftersave @o23id,@j03id_sys", new { o23id = intPID, j03id_sys = _mother.CurrentUser.pid }))

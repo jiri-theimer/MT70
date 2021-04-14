@@ -1,0 +1,62 @@
+﻿@model UI.Models.b07list
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutSubform.cshtml";
+    
+}
+
+@addTagHelper *, UI
+
+
+@foreach(var c in Model.lisB07)
+{
+<div class="card recpageboxauto">
+    <div class="card-title recpagetitle">
+        @if (c.j02ID_Owner == _f.CurrentUser.j02ID || _f.CurrentUser.IsAdmin)
+        {
+            <myval value="@(c.UserInsert+"/"+BO.BAS.ObjectDateTime2String(c.DateInsert))" hoversymol="Upravit" hoverurl="javascript:_edit('b07',@(c.pid))"></myval>
+        }
+        else
+        {
+            <myval value="@(c.UserInsert+"/"+BO.BAS.ObjectDateTime2String(c.DateInsert))"></myval>
+        }        
+    </div>
+    <div class="card-body">
+        @if (c.b07Date != null)
+        {
+            <div style="color:royalblue;">
+                <span class="k-icon k-i-calendar"></span>
+                <strong>
+                    @if (Convert.ToDateTime(c.b07Date).Hour > 0)
+                    {
+                        @(BO.BAS.ObjectDateTime2String(c.b07Date))
+                    }
+                    else
+                    {
+                        @(BO.BAS.ObjectDate2String(c.b07Date))
+                    }
+                </strong>
+            </div>
+        }
+        @if (c.b07ReminderDate != null && Convert.ToDateTime(c.b07ReminderDate)>DateTime.Now.AddMinutes(60))
+        {
+            <div style="color:red;">
+                <span class="k-icon k-i-clock"></span>
+                <strong>
+                    @(BO.BAS.ObjectDateTime2String(c.b07Date))
+                </strong>
+            </div>
+        }
+        @if (c.b07LinkUrl != null)
+        {
+            <a href="@c.b07LinkUrl" target="_blank">@c.b07LinkName</a>
+        }
+        @if (c.b07Value != null)
+        {
+            @Html.Raw(BO.BAS.Text2Html(c.b07Value))
+        }
+
+    </div>
+</div>
+}

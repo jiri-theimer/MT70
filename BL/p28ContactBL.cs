@@ -75,7 +75,7 @@ namespace BL
             using (var sc = new System.Transactions.TransactionScope())
             {
                 var p = new DL.Params4Dapper();
-                
+               
                 p.AddInt("pid", rec.pid);
                 if (rec.p28Code == null)
                 {

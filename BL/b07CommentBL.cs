@@ -9,8 +9,9 @@ namespace BL
     public interface Ib07CommentBL
     {
         public BO.b07Comment Load(int pid);
-        public IEnumerable<BO.b07Comment> GetList(BO.myQuery mq);
-        public int Save(BO.b07Comment rec);
+        public BO.b07Comment LoadByRecord(int x29id, int recpid);
+        public int Save(BO.b07Comment rec, string uploadguid);
+        public IEnumerable<BO.b07Comment> GetList(BO.myQueryB07 mq);
 
     }
     class b07CommentBL : BaseBL, Ib07CommentBL
@@ -34,21 +35,27 @@ namespace BL
         {
             return _db.Load<BO.b07Comment>(GetSQL1(" WHERE a.b07ID=@pid"), new { pid = pid });
         }
+        public BO.b07Comment LoadByRecord(int x29id,int recpid)
+        {
+            return _db.Load<BO.b07Comment>(GetSQL1(" WHERE a.x29ID=@x29id AND a.b07RecordPID=@recpid"), new { x29id = x29id,recpid=recpid });
+        }
 
         public IEnumerable<BO.b07Comment> GetList(BO.myQueryB07 mq)
         {
+            if (mq.explicit_orderby == null) mq.explicit_orderby = "a.b07ID DESC";
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.b07Comment>(fq.FinalSql, fq.Parameters);
         }
 
 
 
-        public int Save(BO.b07Comment rec)
+        public int Save(BO.b07Comment rec, string uploadguid)
         {
             if (!ValidateBeforeSave(rec))
             {
                 return 0;
             }
+            
             var p = new DL.Params4Dapper();
             p.AddInt("pid", rec.pid);
             p.AddEnumInt("x29ID", rec.x29ID,true);
@@ -64,8 +71,13 @@ namespace BL
             p.AddDateTime("b07ReminderDate", rec.b07ReminderDate);
 
 
-            return _db.SaveRecord("b07Comment", p, rec);
-
+            int intPID = _db.SaveRecord("b07Comment", p, rec);
+            if (intPID>0 && !string.IsNullOrEmpty(uploadguid))
+            {
+                _mother.o27AttachmentBL.SaveChangesAndUpload(uploadguid, 607, intPID);
+                
+            }
+            return intPID;
         }
         private bool ValidateBeforeSave(BO.b07Comment rec)
         {

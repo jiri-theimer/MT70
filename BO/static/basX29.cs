@@ -99,6 +99,8 @@ namespace BO
                     return "Dokument";
                 case 356:
                     return "Úkol";
+                case 607:
+                    return "Poznámka";
                 default:
                     BO.x29IdEnum c = (BO.x29IdEnum)x29id;
                     return GetEntity(c);

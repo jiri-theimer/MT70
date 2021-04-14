@@ -93,14 +93,12 @@ namespace UI.Controllers
                 
                 case "j02":
                     tabs.Add(AddTab("Tab1", "tab1", "/j02/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
-                    tabs.Add(AddTab("Časový plán", "gantt", "/a35/TabPersonalTimeline?pid=" + AppendPid2Url(v.gridinput.go2pid)));
 
-                  
-                    tabs.Add(AddTab("Instituce", "a03Institution", "SlaveView?prefix=a03"));
-                    tabs.Add(AddTab("Úkoly/Lhůty", "h04ToDo", "SlaveView?prefix=h04"));
+                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
                     tabs.Add(AddTab("Outbox", "x40MailQueue", "SlaveView?prefix=x40"));
                     tabs.Add(AddTab("PING Log", "j92PingLog", "SlaveView?prefix=j92"));
                     tabs.Add(AddTab("LOGIN Log", "j90LoginAccessLog", "SlaveView?prefix=j90"));
+                    
                     break;
 
                 case "p28":
@@ -109,6 +107,7 @@ namespace UI.Controllers
                     tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
                     tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
                     tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
+                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
                     break;
                 case "p41":
                     tabs.Add(AddTab("Tab1", "tab1", "/p41/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid), false));
@@ -116,7 +115,7 @@ namespace UI.Controllers
                     tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
                     tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
                     tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
-
+                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
                     break;
                 
             }

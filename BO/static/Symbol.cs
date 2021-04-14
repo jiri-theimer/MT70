@@ -12,6 +12,10 @@ namespace BO
         {
             return "<span style='font-size:170%;' class='k-icon k-i-document-manager'></span>";
         }
+        public static string b07()
+        {
+            return "<span style='font-size:170%;' class='k-icon k-i-comment'></span>";
+        }
         public static string p28()
         {
             return "<span style='font-size:170%;'>♖</span>";

@@ -232,7 +232,7 @@ namespace UI.Controllers
                     });
                 }
                 
-                c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19);
+                c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19,v.UploadGuid);
                 if (c.pid > 0)
                 {
 

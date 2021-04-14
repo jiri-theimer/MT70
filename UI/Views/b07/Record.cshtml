@@ -1,0 +1,93 @@
+﻿@model UI.Models.Record.b07Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Poznámka");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    Model.PageSymbol = BO.Symbol.b07();
+}
+
+@addTagHelper *, UI
+
+<div class="modal_record_container">
+    <div class="alert alert-primary">
+        <h5>@Model.ObjectAlias</h5>
+    </div>
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum"):</label>
+        <div class="col-sm-4 col-md-3">
+            <mydate asp-for="Rec.b07Date" include-time="true"></mydate>
+        </div>
+        <div class="col-sm-3 col-md-3">
+
+        </div>
+        <label class="col-auto col-form-label">@_f.tra("Připomenutí"):</label>
+        <div class="col-sm-4 col-md-3">
+            <mydate asp-for="Rec.b07ReminderDate" include-time="true"></mydate>
+        </div>
+    </div>
+
+    <div class="my-2">
+        <textarea asp-for="Rec.b07Value" class="form-control" placeholder="Poznámka/Komentář s neomezenou délkou"></textarea>
+    </div>
+
+
+
+
+</div>
+
+<iframe id="fraUpload" src="/FileUpload/DoUpload?recpid=@Model.rec_pid&x29id=607&guid=@Model.UploadGuid" frameborder="0" scrolling="yes"></iframe>
+
+
+<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="cmdLink">
+    @_f.tra("URL adresa/odkaz")
+</button>
+
+<div id="divLink" style="display:none;width:98%;">
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název odkazu"):</label>
+        <div class="col-sm-11 col-md-10">
+            <input type="text" asp-for="Rec.b07LinkName" class="form-control" />
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Adresa (URL)"):</label>
+        <div class="col-sm-11 col-md-10">
+            <input type="text" asp-for="Rec.b07LinkUrl" class="form-control" />
+        </div>
+
+    </div>
+</div>
+
+
+<input type="hidden" asp-for="@Model.ObjectAlias" />
+<input type="hidden" asp-for="@Model.prefix" />
+<input type="hidden" asp-for="@Model.recpid" />
+<input type="hidden" asp-for="@Model.UploadGuid" />
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdLink").click(function () {
+            $("#divLink").toggle();
+        });
+
+
+        @if (Model.Rec.b07LinkUrl !=null)
+        {
+        @:$("#divLink").css("display", "block");
+        }
+
+
+
+
+    });
+
+
+    
+
+
+</script>
