@@ -116,10 +116,10 @@
                 {
                     <tr>
                         <td>
-                            <myval value="@(_f.CBL.GetObjectAlias(BO.BASX29.GetPrefix((BO.x29IdEnum) c.x29ID),c.x19RecordPID))" linktarget="_top" hoversymol="Stránka" hoverurl="/@(BO.BASX29.GetPrefix((BO.x29IdEnum) c.x29ID)+"/RecPage?pid="+c.x19RecordPID.ToString())"></myval>
-                            
+                            <myval value="@(_f.CBL.GetObjectAlias(BO.BASX29.GetPrefix((BO.x29IdEnum) c.x29ID),c.x19RecordPID))" hoverpid="@c.x19RecordPID" hoverprefix="@(BO.BASX29.GetPrefix((BO.x29IdEnum) c.x29ID))"></myval>
 
                         </td>
+                        
                         
                     </tr>
                 }

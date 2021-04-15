@@ -134,7 +134,7 @@ namespace UI.Controllers
                 }
                 v.x18ID = v.Rec.x18ID;
                 var recB07 = Factory.b07CommentBL.LoadByRecord(223, v.rec_pid); //přílohy jsou v dokumentu uložey přes vazbu na b07comment
-                if (recB07 != null)
+                if (recB07 != null && !isclone)
                 {
                     v.b07ID = recB07.pid;
                     var lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07id = v.b07ID });
@@ -216,11 +216,7 @@ namespace UI.Controllers
                 v.MakeClone();
             }
 
-            if (v.Rec != null)
-            {
-                
-            }
-
+           
             if (v.Rec.pid==0 && prefix != null && recpid > 0)
             {
                 //Založení nového dokumentu z konkrétního záznamu entity

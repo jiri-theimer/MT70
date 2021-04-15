@@ -39,6 +39,8 @@ namespace UI.Controllers
                     lis = new p28ContextMenu(Factory, pid,source).GetItems(); break;
                 case "o23":
                     lis = new o23ContextMenu(Factory, pid, source).GetItems(); break;
+                case "b07":
+                    lis = new b07ContextMenu(Factory, pid, source).GetItems(); break;
                 default:
                     break;
             }
