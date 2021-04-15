@@ -83,7 +83,7 @@
     <div class="card recpageboxauto">
         <div class="card-body">
             <div class="card-title recpagetitle bgo23">
-                @_f.tra("Přílohy dokumentu")
+                @_f.tra("Přílohy")
             </div>
             <table>
                 @foreach (var c in Model.lisO27)
@@ -91,11 +91,36 @@
                     <tr>
                         <td>
                             <a target="_blank" href="/FileUpload/FileDownloadInline?downloadguid=@c.o27GUID">@c.o27OriginalFileName</a>
-                            
+
                         </td>
                         <td>
                             @(BO.BAS.FormatFileSize(c.o27FileSize))
                         </td>
+                    </tr>
+                }
+            </table>
+
+        </div>
+    </div>
+}
+
+@if (Model.lisX19.Count() > 0)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgo23">
+                @_f.tra("Vazby")
+            </div>
+            <table>
+                @foreach (var c in Model.lisX19)
+                {
+                    <tr>
+                        <td>
+                            <myval value="@(_f.CBL.GetObjectAlias(BO.BASX29.GetPrefix((BO.x29IdEnum) c.x29ID),c.x19RecordPID))" linktarget="_top" hoversymol="Stránka" hoverurl="/@(BO.BASX29.GetPrefix((BO.x29IdEnum) c.x29ID)+"/RecPage?pid="+c.x19RecordPID.ToString())"></myval>
+                            
+
+                        </td>
+                        
                     </tr>
                 }
             </table>

@@ -100,6 +100,7 @@ namespace UI.Controllers
                 v.SetTagging();
                 v.lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { x29id = 223,recpid=v.pid });
                 v.lisX16 = Factory.x18EntityCategoryBL.GetList_x16(v.Rec.x18ID).Where(p => p.x16Field != "o23HtmlContent");
+                v.lisX19 = Factory.o23DocBL.GetList_x19(v.pid);
                 
             }
         }
