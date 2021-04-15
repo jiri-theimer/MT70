@@ -5,15 +5,114 @@ using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
 using UI.Models.Record;
+using UI.Models.Recpage;
 
 namespace UI.Controllers
 {
     public class o23Controller : BaseController
     {
+        public IActionResult Info(int pid)
+        {
+            var v = new o23RecPage() { Factory = this.Factory, prefix = "o23", pid = pid };
+            v.SetGridUrl();
+            RefreshStateInfo(v);
+            return View(v);
+        }
+        public IActionResult Tab1(int pid)
+        {
+            var v = new o23RecPage() { Factory = this.Factory, prefix = "o23", pid = pid };
+            RefreshStateInfo(v);
+            return View(v);
+        }
+        public IActionResult RecPage(int pid)
+        {
+            var v = new o23RecPage() { Factory = this.Factory, pid = pid, prefix = "o23" };
+
+            v.NavTabs = new List<NavTab>();
+
+            if (v.pid == 0)
+            {
+                v.pid = v.LoadLastUsedPid();
+            }
+            if (v.pid > 0)
+            {
+                RefreshStateInfo(v);
+
+                if (v.Rec == null)
+                {
+                    this.Notify_RecNotFound();
+                    v.pid = 0;
+                }
+                else
+                {
+                    v.SetGridUrl();
+                    v.MenuCode = v.Rec.o23Name;
+                    v.SaveLastUsedPid();
+
+                    RefreshNavTabs(v);
+
+                }
+
+            }
+
+            if (v.pid == 0)
+            {
+                v.Rec = new BO.o23Doc();
+            }
+
+            return View(v);
+
+        }
+
+        private void RefreshNavTabs(o23RecPage v)
+        {
+            
+            if (v.PanelHeight == "none")
+            {
+                v.NavTabs.Add(AddTab("Tab1", "tab1", "/o23/Tab1?pid=" + v.pid.ToString(), false, null));
+            }
+
+            string strBadge = null;
+            
+            v.NavTabs.Add(AddTab("Poznámky", "b07", "/b07/List?source=recpage", true, strBadge));
+            
+            string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-o23");
+            var deftab = v.NavTabs[0];
+
+            foreach (var tab in v.NavTabs)
+            {
+                tab.Url += "&master_entity=o23Doc&master_pid=" + v.pid.ToString();
+                if (strDefTab != null && tab.Entity == strDefTab)
+                {
+                    deftab = tab;  //uživatelem naposledy vybraná záložka                    
+                }
+            }
+            deftab.CssClass += " active";
+            v.DefaultNavTabUrl = deftab.Url;
+        }
+
+        private void RefreshStateInfo(o23RecPage v)
+        {
+            v.Rec = Factory.o23DocBL.Load(v.pid);
+            if (v.Rec != null)
+            {
+                
+                v.SetTagging();
+                v.lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { x29id = 223,recpid=v.pid });
+                
+            }
+        }
+
         public IActionResult SelectDocType(string prefix,int recpid)
         {
             var v = new SelectDocTypeViewModel() { prefix = prefix, recpid = recpid };
-            v.lisX18 = Factory.x18EntityCategoryBL.GetList(new BO.myQuery("x18")).OrderBy(p=>p.x18Ordinary);
+            var mq = new BO.myQueryX18();
+            if (prefix != null)
+            {
+                mq.x29id = BO.BASX29.GetInt(prefix);
+            }
+            v.lisX18 = Factory.x18EntityCategoryBL.GetList(mq).OrderBy(p=>p.x18Ordinary);
+
             return View(v);
         }
         public IActionResult Record(int pid, bool isclone,int x18id,string prefix,int recpid)
@@ -32,12 +131,32 @@ namespace UI.Controllers
                     return RecNotFound(v);
                 }
                 v.x18ID = v.Rec.x18ID;
+                var recB07 = Factory.b07CommentBL.LoadByRecord(223, v.rec_pid); //přílohy jsou v dokumentu uložey přes vazbu na b07comment
+                if (recB07 != null)
+                {
+                    v.b07ID = recB07.pid;
+                    var lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07id = v.b07ID });
+                    v.lisO27 = new List<o27Repeator>();
+                    foreach (var c in lisO27)
+                    {
+                        v.lisO27.Add(new o27Repeator()
+                        {
+                            TempGuid = BO.BAS.GetGuid(),
+                            pid = c.pid,
+                            o27OriginalFileName = c.o27OriginalFileName,
+                            o27FileSize = c.o27FileSize,
+                            o27GUID = c.o27GUID
+                        });
+                    }
+                }
+
+                v.SetTagging(Factory.o51TagBL.GetTagging("o23", v.rec_pid));
             }
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             
             RefreshState(v);
 
-            v.lisFields = new List<DocFieldInput>();
+            
             foreach(var c in v.lisX16)
             {
                 var cc = new DocFieldInput() { x16Field = c.x16Field,x16Name=c.x16Name, x16DataSource=c.x16DataSource,x16IsEntryRequired=c.x16IsEntryRequired,x16IsFixedDataSource=c.x16IsFixedDataSource };
@@ -125,7 +244,14 @@ namespace UI.Controllers
                 v.SelectedX20ID = v.lisX20.First().pid;
                 Handle_ChangeX20ID(v, v.lisX20.First());                
             }
-
+            if (v.lisO27 == null)
+            {
+                v.lisO27 = new List<o27Repeator>();
+            }
+            if (v.lisFields == null)
+            {
+                v.lisFields = new List<DocFieldInput>();
+            }
         }
 
         
@@ -170,6 +296,11 @@ namespace UI.Controllers
             {
                 v.lisX19.First(p => p.TempGuid == guid).IsTempDeleted = true;
                 v.IsAutoCollapseX20 = true;
+                return View(v);
+            }
+            if (oper == "delete_o27")
+            {
+                v.lisO27.First(p => p.TempGuid == guid).IsTempDeleted = true;
                 return View(v);
             }
             if (oper == "postback")
@@ -232,9 +363,11 @@ namespace UI.Controllers
                     });
                 }
                 
-                c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19,v.UploadGuid);
+
+                c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19,v.UploadGuid, v.lisO27.Where(p => p.IsTempDeleted).Select(p => p.pid).ToList());
                 if (c.pid > 0)
                 {
+                    Factory.o51TagBL.SaveTagging("o23", c.pid, v.TagPids);
 
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);

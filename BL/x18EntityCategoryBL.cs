@@ -9,7 +9,7 @@ namespace BL
     public interface Ix18EntityCategoryBL
     {
         public BO.x18EntityCategory Load(int pid);
-        public IEnumerable<BO.x18EntityCategory> GetList(BO.myQuery mq);
+        public IEnumerable<BO.x18EntityCategory> GetList(BO.myQueryX18 mq);
         public IEnumerable<BO.x20EntiyToCategory> GetList_x20(int x18id);
         public BO.x20EntiyToCategory LoadX20(int x20id);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id);
@@ -49,7 +49,7 @@ namespace BL
             return _db.Load<BO.x20EntiyToCategory>("SELECT a.*,a.x20ID as pid FROM x20EntiyToCategory a WHERE a.x20ID=@pid", new { pid = x20id });
         }
 
-        public IEnumerable<BO.x18EntityCategory> GetList(BO.myQuery mq)
+        public IEnumerable<BO.x18EntityCategory> GetList(BO.myQueryX18 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.x18EntityCategory>(fq.FinalSql, fq.Parameters);

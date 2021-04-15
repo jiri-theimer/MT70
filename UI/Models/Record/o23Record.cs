@@ -24,6 +24,9 @@ namespace UI.Models.Record
         public string SelectedBindEntity { get; set; }
 
         public bool IsAutoCollapseX20 { get; set; }
+
+        public int b07ID { get; set; }
+        public List<o27Repeator> lisO27 { get; set; }
     }
 
 
@@ -74,4 +77,6 @@ namespace UI.Models.Record
             }
         }
     }
+
+
 }

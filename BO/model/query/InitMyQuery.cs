@@ -41,6 +41,8 @@ namespace BO
                     return handle_myquery_reflexe(new BO.myQueryJ90());
                 case "j92":
                     return handle_myquery_reflexe(new BO.myQueryJ92());
+                case "o23":
+                    return handle_myquery_reflexe(new BO.myQueryO23());
                 case "o27":
                     return handle_myquery_reflexe(new BO.myQueryO27());
                 case "o38":
@@ -63,6 +65,10 @@ namespace BO
                     return handle_myquery_reflexe(new BO.myQueryP30());
                 case "p51":
                     return handle_myquery_reflexe(new BO.myQueryP51());
+                case "x18":
+                    return handle_myquery_reflexe(new BO.myQueryX18());
+                case "x40":
+                    return handle_myquery_reflexe(new BO.myQueryX40());
                 default:
                     return handle_myquery_reflexe(new BO.myQuery(prefix.Substring(0, 3)));
             }

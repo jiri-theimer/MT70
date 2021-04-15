@@ -28,9 +28,19 @@
     <div class="tab-content">
         <div class="tab-pane show active" id="tab1" role="tabpanel">
             <!-- Tab1 -->
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="cmdCollapseX20">
-                @_f.tra("Přidat/Upravit vazby dokumentu")
-            </button>
+            <table>
+                <tr valign="top">
+                    <td>
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="cmdCollapseX20">
+                            @_f.tra("Přidat/Upravit vazby dokumentu")
+                        </button>
+                    </td>
+                    <td>
+                        <mystitky entity="o23Doc" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+                    </td>
+                </tr>
+            </table>
+            
             <div class="alert alert-primary" id="divCollapseX20" style="display:none;">
                 <div class="card-body">
                     <div class="row">
@@ -131,7 +141,16 @@
                         <div class="col-sm-11 col-md-10">
                             @if (Model.lisFields[i].x16DataSource == null)
                             {
-                                <input class="form-control" asp-for="@Model.lisFields[i].StringInput" />
+                                if (Model.lisFields[i].x16TextboxHeight > 0 || Model.lisFields[i].x16Field == "o23BigText")
+                                {
+                                    <textarea class="form-control" asp-for="@Model.lisFields[i].StringInput"></textarea>
+
+                                }
+                                else
+                                {
+                                    <input class="form-control" asp-for="@Model.lisFields[i].StringInput" />
+                                }
+
                             }
                             else
                             {
@@ -164,12 +183,41 @@
                 </div>
                 <input type="hidden" asp-for="@Model.lisFields[i].x16Field" />
                 <input type="hidden" asp-for="@Model.lisFields[i].x16Name" />
-                <input type="hidden" asp-for="@Model.lisFields[i].x16Name" />
                 <input type="hidden" asp-for="@Model.lisFields[i].x16DataSource" />
                 <input type="hidden" asp-for="@Model.lisFields[i].x16IsFixedDataSource" />
+                <input type="hidden" asp-for="@Model.lisFields[i].x16TextboxHeight" />
 
 
             }
+
+            <table class="table table-sm table-hover" style="table-layout: fixed;">
+                @for (int i = 0; i < Model.lisO27.Count; i++)
+                {
+                    <tr style="@(Model.lisO27[i].CssTempDisplay)">
+                        <td style="width:40px;">
+                            <span class="k-icon k-i-download"></span>
+                        </td>
+                        <td>
+                            <input type="hidden" asp-for="lisO27[i].IsTempDeleted" value="@Model.lisO27[i].IsTempDeleted" />
+                            <input type="hidden" asp-for="lisO27[i].TempGuid" value="@Model.lisO27[i].TempGuid" />
+                            <input type="hidden" asp-for="lisO27[i].pid" value="@Model.lisO27[i].pid" />
+
+                            <a target="_blank" href="/FileUpload/FileDownloadInline?downloadguid=@Model.lisO27[i].o27GUID">@Model.lisO27[i].o27OriginalFileName</a>
+                            <input type="hidden" asp-for="lisO27[i].o27GUID" value="@Model.lisO27[i].o27GUID" />
+                            <input type="hidden" asp-for="lisO27[i].o27OriginalFileName" value="@Model.lisO27[i].o27OriginalFileName" />
+                        </td>
+                        <td>
+                            <span>@BO.BAS.FormatFileSize(Model.lisO27[i].o27FileSize)</span>
+                            <input type="hidden" asp-for="lisO27[i].o27FileSize" value="@Model.lisO27[i].o27FileSize" />
+                        </td>
+                        <td style="width:70px;">
+                            <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit")" onclick="handle_delete_o27('@(Model.lisO27[i].TempGuid)')">x</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+           
 
         </div>
 
@@ -203,7 +251,7 @@
         }
 
 
-        
+
 
     });
 
@@ -228,5 +276,8 @@
         form1.submit();
     }
 
-
+    function handle_delete_o27(guid) {
+        form1.action = _ep("/o23/Record?oper=delete_o27&guid=" + guid);
+        form1.submit();
+    }
 </script>

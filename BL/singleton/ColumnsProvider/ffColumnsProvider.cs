@@ -103,7 +103,7 @@ namespace BL
         private void Handle_o23UserFields(BL.Factory f)
         {
             this.EntityName = "o23Doc";
-            var lisX18 = f.x18EntityCategoryBL.GetList(new BO.myQuery("x18"));
+            var lisX18 = f.x18EntityCategoryBL.GetList(new BO.myQueryX18());
             var lisX16 = f.x18EntityCategoryBL.GetList_x16();
             foreach (var recX18 in lisX18)
             {

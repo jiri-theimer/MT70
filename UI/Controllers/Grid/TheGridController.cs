@@ -95,6 +95,7 @@ namespace UI.Controllers
                     tabs.Add(AddTab("Tab1", "tab1", "/j02/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
 
                     tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
+                    tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23"));
                     tabs.Add(AddTab("Outbox", "x40MailQueue", "SlaveView?prefix=x40"));
                     tabs.Add(AddTab("PING Log", "j92PingLog", "SlaveView?prefix=j92"));
                     tabs.Add(AddTab("LOGIN Log", "j90LoginAccessLog", "SlaveView?prefix=j90"));
@@ -108,6 +109,7 @@ namespace UI.Controllers
                     tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
                     tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
                     tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
+                    tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23"));
                     break;
                 case "p41":
                     tabs.Add(AddTab("Tab1", "tab1", "/p41/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid), false));
@@ -116,8 +118,13 @@ namespace UI.Controllers
                     tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
                     tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
                     tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
+                    tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23"));
                     break;
-                
+                case "o23":
+                    tabs.Add(AddTab("Tab1", "tab1", "/o23/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
+                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
+                    break;
+
             }
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);
             var deftab = tabs[0];

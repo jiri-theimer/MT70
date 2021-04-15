@@ -1,4 +1,4 @@
-﻿@model UI.Models.Recpage.p28RecPage
+﻿@model UI.Models.Recpage.o23RecPage
 @inject BL.Factory _f
 
 @{
@@ -6,32 +6,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     if (Model.Rec == null) return;
 
-    Model.PageTitle = Model.Rec.p28name;
+    Model.PageTitle = Model.Rec.x18Name + ": " + Model.Rec.o23Name;
 
 }
 
 @addTagHelper *, UI
 
 
-
 <div class="input-group bg-light m-0" style="padding-top:1px; padding-left:1px;">
     <div id="layout_sidebar_contextmenu">
         @if (Model.pid > 0)
         {
-            <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.p28name" onclick="_cm(event, 'p28',@Model.Rec.pid);">☰@(Model.Rec.p28name) </a>
+            <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.o23Name" onclick="_cm(event, 'o23',@Model.Rec.pid);">☰@(Model.Rec.o23Name) </a>
             <h4 id="layout_sidebar_contextmenu_onlytext">
             </h4>
         }
-        <mycombo entity="p28Contact" asp-for="@Model.SearchedPid" search-result-width="600" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
+        
     </div>
     @if (Model.pid > 0)
     {
         <div class="nonmobile tabovergrid" style="margin-left:2px;">
-            @_f.tra("Stránka klienta")
+            @_f.tra("Stránka dokumentu")
         </div>
 
         <div>
-            <a class="btn btn-light" href="/p28/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+            <a class="btn btn-light" href="/o23/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
             @if (_f.CurrentUser.j04IsMenu_Contact)
             {
                 <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
@@ -69,7 +68,7 @@
     @if (Model.PanelHeight != "none")
     {
         <div style="max-height:@(Model.PanelHeight);overflow-y:auto;overflow-x:hidden;">
-            @Html.EditorFor(m => m, "~/Views/Shared/_p28RecPageContent.cshtml")
+            @Html.EditorFor(m => m, "~/Views/Shared/_o23RecPageContent.cshtml")
         </div>
     }
 
@@ -104,7 +103,7 @@
         var cmd = document.getElementById("cmdPageSetting");
         cmd.addEventListener("show.bs.dropdown", function () {
 
-            $.post("/Menu/RecPageSetting", { prefix: "p28" }, function (data) {
+            $.post("/Menu/RecPageSetting", { prefix: "o23" }, function (data) {
                 $("#divRecPageSetting").html(data);
             });
 
@@ -114,7 +113,7 @@
         @if(Model.pid>0)
         {
             <text>
-            $.post("/Menu/ContextMenu", {source: "recpage", entity: "p28Contact", pid: @Model.pid }, function(data) {
+            $.post("/Menu/ContextMenu", {source: "recpage", entity: "o23Doc", pid: @Model.pid }, function(data) {
 
             $("#layout_sidebar").html(data);
 
@@ -140,7 +139,7 @@
 
         $("#divTabContent").css("height", h_vertical + "px");
 
-        _mainmenu_highlight_current("recpagep28","cmdp28");
+        _mainmenu_highlight_current("recpageo23","cmdo23");
 
 
 
@@ -151,19 +150,17 @@
     function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
         $("#navtabs .nav-link").removeClass("active");
         $(tab).addClass("active");
-        $.post("/Common/SetUserParam", { key: "recpage-tab-p28", value: tab.id.replace("tab", "") }, function (data) {
+        $.post("/Common/SetUserParam", { key: "recpage-tab-o23", value: tab.id.replace("tab", "") }, function (data) {
 
 
         });
     }
 
     function reload() {
-        location.replace(_ep("/p28/RecPage?pid=@Model.pid"));
+        location.replace(_ep("/o23/RecPage?pid=@Model.pid"));
     }
 
-    function on_search(pid) {
-        location.replace(_ep("/p28/RecPage?pid=" + pid));
-    }
+  
 
     function save_page_setting(key,val) {
         $.post("/Common/SetUserParam", { key: key, value: val }, function (data) {
