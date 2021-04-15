@@ -101,7 +101,7 @@ namespace UI.Menu
             }
             if (_f.CurrentUser.j04IsMenu_Notepad)
             {
-                ret.Add(GRD("o23",false));
+                ret.Add(GRD("o23",true));
             }
             if (_f.CurrentUser.j04IsMenu_Report)
             {

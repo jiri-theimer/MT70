@@ -13,6 +13,8 @@ namespace BL
         public int Save(BO.o23Doc rec, int intX18ID, List<BO.x19EntityCategory_Binding> lisX19, string uploadguid,List<int>o27ids_delete);
         public IEnumerable<BO.x19EntityCategory_Binding> GetList_x19(int o23id);
         public BO.o23RecDisposition InhaleRecDisposition(BO.o23Doc rec);
+        public bool SaveHtmlEditor(int o23id, string s);
+        public string LoadHtmlEditor(int o23id);
 
     }
     class o23DocBL : BaseBL, Io23DocBL
@@ -254,6 +256,32 @@ namespace BL
             
 
             return c;
+        }
+
+        public bool SaveHtmlEditor(int o23id,string s)
+        {
+            var rec = _db.Load<BO.GetInteger>("select o23ID as Value FROM o23BigData WHERE o23ID=@pid",new { pid = o23id });
+            if (rec == null)
+            {
+                return _db.RunSql("INSERT INTO o23BigData(o23ID,o23HtmlContent) VALUES(@pid,@s)", new { pid = o23id, s = s });
+            }
+            else
+            {
+               return _db.RunSql("UPDATE o23BigData set o23HtmlContent=@s WHERE o23ID=@pid", new { pid = o23id, s = s });
+            }
+        }
+
+        public string LoadHtmlEditor(int o23id)
+        {
+            var rec = _db.Load<BO.GetString>("select o23HtmlContent as Value FROM o23BigData WHERE o23ID=@pid", new { pid = o23id });
+            if (rec == null)
+            {
+                return null;
+            }
+            else
+            {
+                return rec.Value;
+            }
         }
 
     }

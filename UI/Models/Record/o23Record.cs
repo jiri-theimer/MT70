@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace UI.Models.Record
 {
-    public class o23Record: BaseRecordViewModel
+    public class o23Record : BaseRecordViewModel
     {
         public BO.o23Doc Rec { get; set; }
         public string UploadGuid { get; set; }
@@ -27,6 +27,10 @@ namespace UI.Models.Record
 
         public int b07ID { get; set; }
         public List<o27Repeator> lisO27 { get; set; }
+
+        public bool IsHtmlEditor{get;set;}
+        public string HtmlName { get; set; }
+        public string HtmlContent { get; set; }
     }
 
 

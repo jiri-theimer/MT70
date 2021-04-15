@@ -162,25 +162,35 @@ namespace UI.Controllers
                 var cc = new DocFieldInput() { x16Field = c.x16Field,x16Name=c.x16Name, x16DataSource=c.x16DataSource,x16IsEntryRequired=c.x16IsEntryRequired,x16IsFixedDataSource=c.x16IsFixedDataSource };
                 if (v.Rec != null)  //načtení uživtelských polí dokumentu
                 {
-                    if (BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field) != null)
+                    if (c.x16Field == "o23HtmlContent")
+                    {                        
+                        if (v.rec_pid>0) v.HtmlContent = Factory.o23DocBL.LoadHtmlEditor(v.rec_pid);
+                        v.HtmlName = c.x16Name;
+                        v.IsHtmlEditor = true;
+                    }
+                    else
                     {
-                        switch (c.FieldType)
+                        if (BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field) != null)
                         {
-                            case BO.x24IdENUM.tBoolean:
-                                cc.CheckInput = Convert.ToBoolean(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
-                                break;
-                            case BO.x24IdENUM.tDate:
-                            case BO.x24IdENUM.tDateTime:
-                                cc.DateInput = Convert.ToDateTime(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
-                                break;
-                            case BO.x24IdENUM.tDecimal:
-                                cc.NumInput = Convert.ToDouble(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
-                                break;
-                            default:
-                                cc.StringInput = Convert.ToString(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
-                                break;
+                            switch (c.FieldType)
+                            {
+                                case BO.x24IdENUM.tBoolean:
+                                    cc.CheckInput = Convert.ToBoolean(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                    break;
+                                case BO.x24IdENUM.tDate:
+                                case BO.x24IdENUM.tDateTime:
+                                    cc.DateInput = Convert.ToDateTime(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                    break;
+                                case BO.x24IdENUM.tDecimal:
+                                    cc.NumInput = Convert.ToDouble(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                    break;
+                                default:
+                                    cc.StringInput = Convert.ToString(BO.Reflexe.GetPropertyValue(v.Rec, cc.x16Field));
+                                    break;
+                            }
                         }
                     }
+                    
                     
                 }
                 v.lisFields.Add(cc);
@@ -317,34 +327,42 @@ namespace UI.Controllers
 
                 foreach(var cc in v.lisFields)
                 {
-                    switch (cc.FieldType)
+                    if (cc.x16Field== "o23HtmlContent")
                     {
-                        case BO.x24IdENUM.tBoolean:
-                            BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.CheckInput);
-                            break;
-                        case BO.x24IdENUM.tDate:
-                        case BO.x24IdENUM.tDateTime:
-                            BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.DateInput);
-                            if (cc.x16IsEntryRequired && cc.DateInput == null)
-                            {
-                                this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name)));return View(v);
-                            }
-                            break;
-                        case BO.x24IdENUM.tDecimal:
-                            BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.NumInput);
-                            if (cc.x16IsEntryRequired && cc.NumInput == 0)
-                            {
-                                this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name))); return View(v);
-                            }
-                            break;
-                        default:
-                            BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.StringInput);
-                            if (cc.x16IsEntryRequired && string.IsNullOrEmpty(cc.StringInput))
-                            {
-                                this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name))); return View(v);
-                            }
-                            break;
+                        //ukládá se do jiné tabulky
                     }
+                    else
+                    {
+                        switch (cc.FieldType)
+                        {
+                            case BO.x24IdENUM.tBoolean:
+                                BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.CheckInput);
+                                break;
+                            case BO.x24IdENUM.tDate:
+                            case BO.x24IdENUM.tDateTime:
+                                BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.DateInput);
+                                if (cc.x16IsEntryRequired && cc.DateInput == null)
+                                {
+                                    this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name))); return View(v);
+                                }
+                                break;
+                            case BO.x24IdENUM.tDecimal:
+                                BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.NumInput);
+                                if (cc.x16IsEntryRequired && cc.NumInput == 0)
+                                {
+                                    this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name))); return View(v);
+                                }
+                                break;
+                            default:
+                                BO.Reflexe.SetPropertyValue(c, cc.x16Field, cc.StringInput);
+                                if (cc.x16IsEntryRequired && string.IsNullOrEmpty(cc.StringInput))
+                                {
+                                    this.AddMessageTranslated(Factory.tra(string.Format("Pole [{0}] je povinné k vyplnění.", cc.x16Name))); return View(v);
+                                }
+                                break;
+                        }
+                    }
+                    
                     
                 }
 
@@ -367,6 +385,10 @@ namespace UI.Controllers
                 c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19,v.UploadGuid, v.lisO27.Where(p => p.IsTempDeleted).Select(p => p.pid).ToList());
                 if (c.pid > 0)
                 {
+                    if (v.IsHtmlEditor)
+                    {
+                        Factory.o23DocBL.SaveHtmlEditor(c.pid,v.HtmlContent);
+                    }
                     Factory.o51TagBL.SaveTagging("o23", c.pid, v.TagPids);
 
                     v.SetJavascript_CallOnLoad(c.pid);
