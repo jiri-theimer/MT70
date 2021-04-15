@@ -124,6 +124,10 @@ namespace UI.Controllers
                     tabs.Add(AddTab("Tab1", "tab1", "/o23/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
                     tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
                     break;
+                case "p90":
+                    tabs.Add(AddTab("Tab1", "tab1", "/p90/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
+                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
+                    break;
 
             }
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);

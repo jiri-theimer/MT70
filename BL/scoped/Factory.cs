@@ -63,6 +63,7 @@ namespace BL
         private Ip85TempboxBL _p85;
         private Ip86BankAccountBL _p86;
         private Ip89ProformaTypeBL _p89;
+        private Ip90ProformaBL _p90;
         private Ip92InvoiceTypeBL _p92;
         private Ip93InvoiceHeaderBL _p93;
         private Ip95InvoiceRowBL _p95;
@@ -520,6 +521,14 @@ namespace BL
             {
                 if (_p89 == null) _p89 = new p89ProformaTypeBL(this);
                 return _p89;
+            }
+        }
+        public Ip90ProformaBL p90ProformaBL
+        {
+            get
+            {
+                if (_p90 == null) _p90 = new p90ProformaBL(this);
+                return _p90;
             }
         }
         public Ip92InvoiceTypeBL p92InvoiceTypeBL
