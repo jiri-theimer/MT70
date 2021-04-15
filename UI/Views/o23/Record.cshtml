@@ -225,8 +225,13 @@
                             <input type="hidden" asp-for="lisO27[i].o27OriginalFileName" value="@Model.lisO27[i].o27OriginalFileName" />
                         </td>
                         <td>
-                            <span>@BO.BAS.FormatFileSize(Model.lisO27[i].o27FileSize)</span>
+                            @BO.BAS.FormatFileSize(Model.lisO27[i].o27FileSize)
                             <input type="hidden" asp-for="lisO27[i].o27FileSize" value="@Model.lisO27[i].o27FileSize" />
+                        </td>
+                        <td>
+                            <small>@(Model.lisO27[i].UserInsert+"/"+Model.lisO27[i].DateInsert.ToString())</small>
+                            <input type="hidden" asp-for="lisO27[i].UserInsert" value="@Model.lisO27[i].UserInsert" />
+                            <input type="hidden" asp-for="lisO27[i].DateInsert" value="@Model.lisO27[i].DateInsert" />
                         </td>
                         <td style="width:70px;">
                             <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit")" onclick="handle_delete_o27('@(Model.lisO27[i].TempGuid)')">x</button>

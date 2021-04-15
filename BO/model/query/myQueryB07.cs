@@ -12,7 +12,7 @@ namespace BO
         public int j02id { get; set; }
         public int p28id { get; set; }
         public int p41id { get; set; }
-        
+        public int o23id { get; set; }
 
         public myQueryB07()
         {
@@ -33,10 +33,17 @@ namespace BO
             {
                 this.x29id = 141; this.recpid = this.p41id;
             }
-
+            if (this.o23id > 0)
+            {
+                this.x29id = 223; this.recpid = this.o23id;                
+            }
             if (this.x29id > 0)
             {
                 AQ("a.x29ID=@x29id", "x29id", this.x29id);
+                if (this.x29id == 223)
+                {
+                    AQ("(a.b07Value NOT LIKE 'upload' OR a.b07Value IS NULL)", null, null);   //vyloučit technický upload záznam dokumentu
+                }
             }
 
             if (this.recpid > 0)

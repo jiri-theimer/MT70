@@ -115,6 +115,10 @@ namespace BL
             {
                 this.AddMessage("Chybí [Název odkazu]."); return false;
             }
+            if (string.IsNullOrEmpty(rec.b07Value) && string.IsNullOrEmpty(rec.b07LinkUrl))
+            {
+                this.AddMessage("Chybí [Poznámka] nebo [URL odkaz]."); return false;
+            }
 
             if (rec.j02ID_Owner == 0) rec.j02ID_Owner = _mother.CurrentUser.j02ID;
 

@@ -46,7 +46,7 @@ namespace UI.Controllers
                 else
                 {
                     v.SetGridUrl();
-                    v.MenuCode = v.Rec.o23Name;
+                    v.MenuCode =v.Rec.o23Name;
                     v.SaveLastUsedPid();
 
                     RefreshNavTabs(v);
@@ -99,6 +99,7 @@ namespace UI.Controllers
                 
                 v.SetTagging();
                 v.lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { x29id = 223,recpid=v.pid });
+                v.lisX16 = Factory.x18EntityCategoryBL.GetList_x16(v.Rec.x18ID).Where(p => p.x16Field != "o23HtmlContent");
                 
             }
         }
@@ -145,7 +146,9 @@ namespace UI.Controllers
                             pid = c.pid,
                             o27OriginalFileName = c.o27OriginalFileName,
                             o27FileSize = c.o27FileSize,
-                            o27GUID = c.o27GUID
+                            DateInsert=c.DateInsert,
+                            UserInsert=c.UserInsert,
+                            o27GUID = c.o27GUID                          
                         });
                     }
                 }

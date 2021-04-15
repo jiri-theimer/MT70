@@ -11,8 +11,8 @@ namespace BO
 
         public bool isclosed;
         public string entity;
-        public string UserInsert;
-        public DateTime? DateInsert;
+        public string UserInsert { get; set; }
+        public DateTime? DateInsert { get; set; }
 
         public string UserUpdate;
         public DateTime? DateUpdate;
@@ -21,6 +21,6 @@ namespace BO
         public DateTime? ValidUntil { get; set; }
 
 
-
+        
     }
 }
