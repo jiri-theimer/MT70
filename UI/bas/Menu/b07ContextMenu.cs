@@ -22,10 +22,9 @@ namespace UI.Menu
 
             DIV();
 
-            
-            
-            AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id=607&x40datapid={pid}',2)");
 
+            AMI_SendMail("b07", pid, null);
+            
             
 
             if (rec.b07RecordPID>0 && rec.x29ID != BO.x29IdEnum._NotSpecified)

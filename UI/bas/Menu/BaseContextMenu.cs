@@ -49,9 +49,13 @@ namespace UI.Menu
             return AMI("Kopírovat", $"javascript:_clone('{prefix}',{pid})", "k-i-copy");
             
         }
-        public MenuItem AMI_Report(string prefix,int pid)
+        public MenuItem AMI_Report(string prefix,int pid, string parentmenuid = null)
         {
-            return AMI("Tisková sestava", $"javascript: _window_open('/x31/ReportContext?pid={pid}&prefix={prefix}',2)", "k-i-print");
+            return AMI("Tisková sestava", $"javascript: _window_open('/x31/ReportContext?pid={pid}&prefix={prefix}',2)", "k-i-print", parentmenuid);
+        }
+        public MenuItem AMI_SendMail(string prefix, int pid, string parentmenuid = "more")
+        {
+            return AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id={BO.BASX29.GetInt(prefix)}&x40datapid={pid}',2)", "k-i-email",parentmenuid);
         }
         public MenuItem AMI_Doc(string prefix, int pid,string parentmenuid="more")
         {

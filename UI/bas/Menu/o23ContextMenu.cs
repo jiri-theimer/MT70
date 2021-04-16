@@ -35,8 +35,8 @@ namespace UI.Menu
             
             AMI("Další", null, null, null, "more");
             AMI_Memo("o23", pid, "more");
-            AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id=223&x40datapid={pid}',2)", null, "more");
-            AMI_Report("o23", pid);
+            AMI_SendMail("o23", pid,"more");            
+            AMI_Report("o23", pid,"more");
         }
     }
 }

@@ -113,10 +113,7 @@ namespace UI.Views.Shared.TagHelpers
                     case "num":
                         
                         output.Content.AppendHtml(string.Format("<span class=\"numeric_reaodnly_110\">{0}</span>", BO.BAS.Number2String(Convert.ToDouble(this.Value))));
-                        if (this.ValueAfter != null)
-                        {
-                            output.Content.Append(this.ValueAfter);
-                        }
+                       
                         break;
                     case "html":
                         output.Content.AppendHtml(this.Value.ToString());
@@ -139,6 +136,11 @@ namespace UI.Views.Shared.TagHelpers
                         break;
                 }
                 
+            }
+
+            if (this.ValueAfter != null)
+            {
+                output.Content.Append(this.ValueAfter);
             }
 
 

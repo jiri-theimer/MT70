@@ -11,6 +11,7 @@ namespace BL
         public BO.p90Proforma Load(int pid);
         public IEnumerable<BO.p90Proforma> GetList(BO.myQuery mq);
         public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI);
+        public BO.p90RecDisposition InhaleRecDisposition(BO.p90Proforma rec);
 
     }
     class p90ProformaBL : BaseBL, Ip90ProformaBL
@@ -41,6 +42,24 @@ namespace BL
         public BO.p90Proforma Load(int pid)
         {
             return _db.Load<BO.p90Proforma>(GetSQL1(" WHERE a.p90ID=@pid"), new { pid = pid });
+        }
+
+        public BO.p90RecDisposition InhaleRecDisposition(BO.p90Proforma rec)
+        {
+            var c = new BO.p90RecDisposition();
+
+            if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P90_Owner))
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                return c;
+            }
+            if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P90_Reader))
+            {
+                c.ReadAccess = true;
+                return c;
+            }
+
+            return c;
         }
 
         public IEnumerable<BO.p90Proforma> GetList(BO.myQuery mq)
@@ -128,6 +147,8 @@ namespace BL
             }
             return true;
         }
+
+
 
     }
 }

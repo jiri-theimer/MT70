@@ -56,10 +56,9 @@ namespace UI.Menu
             AMI("Další", null, null,null, "more");
             AMI_Memo("j02", pid,"more");
             AMI_Doc("j02", pid,"more");
+
+            AMI_SendMail("j02", pid,"more");
             
-
-            AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?j02id={0}&x29id=102&x40datapid={pid}',2)",null,"more");
-
 
             
         }

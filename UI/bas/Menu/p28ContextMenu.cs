@@ -46,8 +46,9 @@ namespace UI.Menu
             AMI("Další", null, null, null, "more");
 
             AMI_Memo("p28", pid, "more");
-            AMI_Doc("p28", pid);
-            AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id=328&x40datapid={pid}',2)", null, "more");
+            AMI_Doc("p28", pid,"more");
+            AMI_SendMail("p28", pid,"more");
+            
 
             if (rec.p28RegID != null)
             {
