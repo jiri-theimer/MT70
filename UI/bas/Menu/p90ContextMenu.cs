@@ -36,7 +36,11 @@ namespace UI.Menu
 
             DIV();
             AMI_Report("p90", pid,null);
-            AMI_SendMail("p90", pid,null);
+
+            AMI("Další", null, null, null, "more");
+            AMI_Memo("p90", pid, "more");
+            AMI_Doc("p90", pid, "more");
+            AMI_SendMail("p90", pid,"more");
 
             
 
