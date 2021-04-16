@@ -19,6 +19,8 @@ namespace BL
         public int AppendRobotLog(BO.j91RobotLog rec);  //uložení jetí robota na pozadí
         public BO.j91RobotLog GetLastRobotRun(BO.j91RobotTaskFlag flag); //vrátí poslední jetí pro zadaný flag
         public IEnumerable<BO.j91RobotLog> GetListRobotLast20();
+        public IEnumerable<BO.j19PaymentType> GetListJ19();
+        public BO.j19PaymentType LoadJ19(int j19id);
     }
     class FBL : BaseBL, IFBL
     {
@@ -44,6 +46,14 @@ namespace BL
 
             return _db.SaveRecord("p87BillingLanguage", p,rec);
         }
+        public IEnumerable<BO.j19PaymentType> GetListJ19()
+        {
+            return _db.GetList<BO.j19PaymentType>("SELECT " + _db.GetSQL1_Ocas("j19") + ",a.* FROM j19PaymentType a");
+        }
+        public BO.j19PaymentType LoadJ19(int j19id)
+        {
+            return _db.Load<BO.j19PaymentType>("SELECT " + _db.GetSQL1_Ocas("j19") + ",a.* FROM j19PaymentType a WHERE a.j19ID=@pid", new { pid = j19id });
+        }
         public BO.j27Currency LoadCurrencyByCode(string j27code)
         {
             return _db.Load<BO.j27Currency>("select *,j27ID as pid FROM j27Currency WHERE j27Code LIKE @j27code", new { j27code = j27code });
@@ -56,6 +66,7 @@ namespace BL
         {
             return _db.GetList<BO.j27Currency>("SELECT * FROM j27Currency a WHERE GETDATE() BETWEEN j27ValidFrom AND j27ValidUntil");
         }
+        
 
         public IEnumerable<BO.SysDbObject> GetList_SysObjects()
         {

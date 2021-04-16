@@ -32,6 +32,8 @@ namespace UI.Models
         public void RefreshInputsVisibility(BL.Factory f, int rec_pid, string prefix, int intEntityTypeID)
         {   //podle typu záznamu (intEntityTypeID) určit, jaké pole je viditelné
             var lisX28 = f.x28EntityFieldBL.GetList_ApplicableInForm(prefix, intEntityTypeID, false);
+            if (this.inputs == null) return;
+
             foreach(var c in this.inputs)
             {
                 c.IsVisible = false;

@@ -25,7 +25,7 @@ namespace BO
         public string p90TextDPP { get; set; }
         public string TagsInlineHtml { get; set; }
                 
-       
+       public int x38ID { get; }
         public string j27Code { get; }
         
 
