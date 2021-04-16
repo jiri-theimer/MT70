@@ -132,13 +132,24 @@ namespace UI.Controllers
                 {                    
                     v.ComboJ19Name = Factory.FBL.LoadJ19(v.Rec.j19ID).j19Name;
                 }
-                
+
             }
+            else
+            {
+                v.Rec.p90Date = DateTime.Today;v.Rec.j02ID_Owner = Factory.CurrentUser.j02ID;v.ComboOwner = Factory.CurrentUser.PersonDesc;
+                var recLast = Factory.p90ProformaBL.LoadMyLastCreated();
+                if (recLast != null)
+                {
+                    v.Rec.j27ID = recLast.j27ID;v.ComboJ27Code = recLast.j27Code;v.Rec.p89ID = recLast.p89ID;v.ComboP89Name = recLast.p89Name;v.Rec.p90VatRate = recLast.p90VatRate;
+                }
+            }
+
             RefreshStateRecord(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)
             {
                 v.MakeClone();
+                v.Rec.p90Code = null;
             }
 
             return View(v);
@@ -164,6 +175,18 @@ namespace UI.Controllers
             {
                 return View(v);
             }
+            if (oper == "recalc1")  //dopočítat z částky bez DPH
+            {
+                v.Rec.p90Amount_Vat = v.Rec.p90Amount_WithoutVat * v.Rec.p90VatRate / 100;
+                v.Rec.p90Amount = v.Rec.p90Amount_WithoutVat + v.Rec.p90Amount_Vat;
+                return View(v);
+            }
+            if (oper == "recalc2")  //dopočítat z celkové částky
+            {
+                v.Rec.p90Amount_WithoutVat = v.Rec.p90Amount / (1 + v.Rec.p90VatRate / 100);
+                v.Rec.p90Amount_Vat = v.Rec.p90Amount - v.Rec.p90Amount_WithoutVat;
+                return View(v);
+            }
             if (ModelState.IsValid)
             {
                 BO.p90Proforma c = new BO.p90Proforma();
@@ -174,6 +197,11 @@ namespace UI.Controllers
                 c.p90Date = v.Rec.p90Date;
                 c.p90DateMaturity = v.Rec.p90DateMaturity;
                 c.j19ID = v.Rec.j19ID;
+
+                c.p90Amount = v.Rec.p90Amount;
+                c.p90Amount_WithoutVat = v.Rec.p90Amount_WithoutVat;
+                c.p90Amount_Vat = v.Rec.p90Amount_Vat;
+                c.p90VatRate = v.Rec.p90VatRate;
 
                 c.p90Text1 = v.Rec.p90Text1;
                 c.p90Text2 = v.Rec.p90Text2;

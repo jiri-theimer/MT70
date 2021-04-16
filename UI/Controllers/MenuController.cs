@@ -337,9 +337,10 @@ namespace UI.Controllers
         {
             DIV();
             AMI("Klient", "javascript:_edit('p28',0)");
-            AMI("Projekt", "javascript:_edit('p41',0)");
+            AMI("Projekt", "javascript:_edit('p41',0)");            
             AMI("Dokument", "javascript:_window_open('/o23/SelectDocType')");
-            //DIV();
+            DIV();
+            AMI("Záloha", "javascript:_edit('p90',0)");
             //AMI("Poznámka", "javascript:_edit('b07',0)");
             DIV();
             AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");

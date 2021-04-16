@@ -43,7 +43,7 @@
                 <div class="col-sm-7 col-md-6">
                     <mycombo entity="p28Contact" asp-for="Rec.p28ID" selectedtext="@Model.ComboP28Name" filter-flag="1" search-result-width="600"></mycombo>
                 </div>
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Částka celkem"):</label>
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Částka celkem"):<a style="float:right;" href="javascript:recalc2();">@_f.tra("Dopočítat")</a></label>
                 <div class="col-sm-3 col-md-2">
                     <mynumber asp-for="@Model.Rec.p90Amount" decimal-digits="2"></mynumber>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="col-sm-4 col-md-4">
 
                 </div>
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Částka bez DPH"):</label>
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Částka bez DPH"):<a style="float:right;" href="javascript:recalc1();">@_f.tra("Dopočítat")</a></label>
                 <div class="col-sm-3 col-md-2">
                     <mynumber asp-for="@Model.Rec.p90Amount_WithoutVat" decimal-digits="2"></mynumber>
                 </div>
@@ -161,7 +161,14 @@
         form1.submit();
     }
 
-
+    function recalc1() {
+        form1.action = _ep("p90/Record?oper=recalc1");
+        form1.submit();
+    }
+    function recalc2() {
+        form1.action = _ep("p90/Record?oper=recalc2");
+        form1.submit();
+    }
     function hardrefresh(pid, flag) {
         if (flag != undefined) {
             if (flag.includes("recordcode")) {

@@ -9,6 +9,7 @@ namespace BL
     public interface Ip90ProformaBL
     {
         public BO.p90Proforma Load(int pid);
+        public BO.p90Proforma LoadMyLastCreated();
         public IEnumerable<BO.p90Proforma> GetList(BO.myQuery mq);
         public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI);
         public BO.p90RecDisposition InhaleRecDisposition(BO.p90Proforma rec);
@@ -22,9 +23,16 @@ namespace BL
         }
 
 
-        private string GetSQL1(string strAppend = null)
+        private string GetSQL1(string strAppend = null,int toprec=0)
         {
-            sb("SELECT a.*");
+            if (toprec == 0)
+            {
+                sb("SELECT a.*");
+            }
+            else
+            {
+                sb($"SELECT TOP {toprec} a.*");
+            }            
             //sb(",p82.p82ID as p82ID_First,j27.j27Code,p89.p89Name,p28.p28Name");
             sb(",j27.j27Code,p89.p89Name,p28.p28Name");
             sb(",j02owner.j02LastName+' '+j02owner.j02FirstName as Owner");
@@ -42,6 +50,10 @@ namespace BL
         public BO.p90Proforma Load(int pid)
         {
             return _db.Load<BO.p90Proforma>(GetSQL1(" WHERE a.p90ID=@pid"), new { pid = pid });
+        }
+        public BO.p90Proforma LoadMyLastCreated()
+        {
+            return _db.Load<BO.p90Proforma>(GetSQL1(" WHERE a.j02ID_Owner=@j02id_owner ORDER BY a.p90ID DESC",1), new { j02id_owner = _mother.CurrentUser.j02ID });
         }
 
         public BO.p90RecDisposition InhaleRecDisposition(BO.p90Proforma rec)
@@ -132,6 +144,16 @@ namespace BL
                 {
                     this.AddMessage("Částka bez DPH + částka DPH musí souhlasit s celkovou částkou.");return false;
                 }
+            }
+            if (rec.p90Amount>0 && rec.p90VatRate>0 && rec.p90Amount_WithoutVat == 0 && rec.p90Amount_Vat==0)
+            {
+                rec.p90Amount_WithoutVat = rec.p90Amount / (1 + rec.p90VatRate / 100);
+                rec.p90Amount_Vat = rec.p90Amount - rec.p90Amount_WithoutVat;
+            }
+            if (rec.p90Amount == 0 && rec.p90VatRate > 0 && rec.p90Amount_WithoutVat > 0 && rec.p90Amount_Vat == 0)
+            {                
+                rec.p90Amount_Vat = rec.p90Amount_WithoutVat * rec.p90VatRate / 100;
+                rec.p90Amount = rec.p90Amount_WithoutVat + rec.p90Amount_Vat;
             }
             if (rec.j27ID==0)
             {
