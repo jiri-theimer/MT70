@@ -21,7 +21,7 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Číselná řada dokladu"):</label>
         <div class="col-sm-11 col-md-10">
-            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" filter-flag="1" myqueryinline="x29id|int|390"></mycombo>
+            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" myqueryinline="x29id|int|390"></mycombo>
         </div>
 
     </div>
@@ -29,7 +29,7 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vystavovatel zálohy"):</label>
         <div class="col-sm-11 col-md-10">
-            <mycombo entity="p93InvoiceHeader" asp-for="Rec.p93ID" selectedtext="@Model.ComboP93Name" filter-flag="1"></mycombo>
+            <mycombo entity="p93InvoiceHeader" asp-for="Rec.p93ID" selectedtext="@Model.ComboP93Name"></mycombo>
         </div>
 
     </div>
@@ -37,7 +37,7 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí tisková sestava"):</label>
         <div class="col-sm-11 col-md-10">
-            <mycombo entity="x31Report" asp-for="Rec.x31ID" selectedtext="@Model.ComboX31Name" filter-flag="1" myqueryinline="x29id|int|390"></mycombo>
+            <mycombo entity="x31Report" asp-for="Rec.x31ID" selectedtext="@Model.ComboX31Name" myqueryinline="x29id|int|390"></mycombo>
         </div>
 
     </div>
@@ -50,14 +50,14 @@
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Číselná řada daňového dokladu úhrady"):</label>
                 <div class="col-sm-10 col-md-9">
-                    <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID_Payment" selectedtext="@Model.ComboX38Name_Payment" filter-flag="1" myqueryinline="x29id|int|382"></mycombo>
+                    <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID_Payment" selectedtext="@Model.ComboX38Name_Payment" myqueryinline="x29id|int|382"></mycombo>
                 </div>
 
             </div>
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Výchozí tisková sestava"):</label>
                 <div class="col-sm-10 col-md-9">
-                    <mycombo entity="x31Report" asp-for="Rec.x31ID_Payment" selectedtext="@Model.ComboX31Name_Payment" filter-flag="1" myqueryinline="x29id|int|382"></mycombo>
+                    <mycombo entity="x31Report" asp-for="Rec.x31ID_Payment" selectedtext="@Model.ComboX31Name_Payment" myqueryinline="x29id|int|382"></mycombo>
                 </div>
 
             </div>

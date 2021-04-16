@@ -24,16 +24,17 @@ namespace BL
         private string GetSQL1(string strAppend = null)
         {
             sb("SELECT a.*");
-            sb(",p82.p82ID as p82ID_First,j27.j27Code,p89.p89Name,p28.p28Name");
+            //sb(",p82.p82ID as p82ID_First,j27.j27Code,p89.p89Name,p28.p28Name");
+            sb(",j27.j27Code,p89.p89Name,p28.p28Name");
             sb(",j02owner.j02LastName+' '+j02owner.j02FirstName as Owner");
             sb(",");
             sb(_db.GetSQL1_Ocas("p90"));
             sb(" FROM p90Proforma a");
-            sb(" FROM p90Proforma a INNER JOIN p89ProformaType p89 ON a.p89ID=p89.p89ID");
+            sb(" INNER JOIN p89ProformaType p89 ON a.p89ID=p89.p89ID");
             sb(" LEFT OUTER JOIN p28Contact p28 ON a.p28ID=p28.p28ID");
             sb(" LEFT OUTER JOIN j27Currency j27 ON a.j27ID=j27.j27ID");
             sb(" LEFT OUTER JOIN j02Person j02owner ON a.j02ID_Owner=j02owner.j02ID");
-            sb(" LEFT OUTER JOIN (select xa.p90ID,min(p82ID) as p82ID FROM p82Proforma_Payment xa GROUP BY xa.p90ID) p82 ON a.p90ID=p82.p90ID");
+            //sb(" LEFT OUTER JOIN (select xa.p90ID,min(p82ID) as p82ID FROM p82Proforma_Payment xa GROUP BY xa.p90ID) p82 ON a.p90ID=p82.p90ID");
             sb(strAppend);
             return sbret();
         }

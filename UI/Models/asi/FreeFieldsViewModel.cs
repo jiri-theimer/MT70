@@ -12,6 +12,8 @@ namespace UI.Models
 
         public int VisibleInputsCount { get
             {
+
+                if (this.inputs == null) return 0;
                 return this.inputs.Where(p => p.IsVisible == true).Count();
             }
         }

@@ -93,7 +93,7 @@ namespace UI.Menu
             }
             if (_f.CurrentUser.j04IsMenu_Proforma)
             {
-                ret.Add(GRD("p90",false));
+                ret.Add(GRD("p90",true));
             }
             if (_f.CurrentUser.j04IsMenu_People)
             {

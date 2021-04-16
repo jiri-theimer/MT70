@@ -88,6 +88,8 @@ namespace BO
                         {
                             return "p28Contact_FreeField";
                         }
+                    case x29IdEnum.p90Proforma:
+                        return "p90Proforma_FreeField";
 
                     case BO.x29IdEnum.p91Invoice:
                         {

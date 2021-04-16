@@ -1,0 +1,166 @@
+﻿@model UI.Models.Recpage.p90RecPage
+@inject BL.Factory _f
+
+@{
+    if (Model == null)
+    {
+        return;
+    }
+
+
+
+}
+
+@addTagHelper *, UI
+
+<div class="card recpagebox400">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp90">
+            @_f.tra("Záloha")
+        </h6>
+        <div class="row">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Číslo")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p90Code"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Typ zálohy")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p89Name"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Klient")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p28Name" hoverprefix="p28" hoverpid="@Model.Rec.p28ID"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Datum")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval datatype="date" value="@Model.Rec.p90Date"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Splatnost")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval datatype="date" value="@Model.Rec.p90DateMaturity"></myval>
+
+            </div>
+        </div>
+
+        @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFieldsRO.cshtml")
+
+        <div>
+            <small class="text-secondary" title="@_f.tra("Založení záznamu")">
+                @(Model.Rec.UserInsert+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateInsert,"dd.MM.yyyy HH:mm ddd"))
+            </small>
+            @if (Model.Rec.DateUpdate > Model.Rec.DateInsert)
+            {
+                <small class="text-success float-end" title="@_f.tra("Poslední aktualizace záznamu")">
+                    @(Model.Rec.UserUpdate+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateUpdate,"dd.MM.yyyy HH:mm ddd"))
+
+                </small>
+
+            }
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="card recpagebox400">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp90">
+            @_f.tra("Částka")
+        </h6>
+
+        <div class="row">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Celkem")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval datatype="num" value="@Model.Rec.p90Amount"></myval>
+
+            </div>
+        </div>
+        @if (Model.Rec.p90VatRate > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Sazba DPH")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval datatype="num" value="@Model.Rec.p90VatRate"></myval>
+
+                </div>
+            </div>
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Bez DPH")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval datatype="num" value="@Model.Rec.p90Amount_WithoutVat"></myval>
+
+                </div>
+            </div>
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Částka DPH")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval datatype="num" value="@Model.Rec.p90Amount_Vat"></myval>
+
+                </div>
+            </div>
+        }
+
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Zbývá uhradit")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval datatype="num" value="@Model.Rec.p90Amount_Debt"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Poslední úhrada")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval datatype="date" value="@Model.Rec.p90DateBilled"></myval>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+@if (Model.Rec.p90Text1 != null || Model.Rec.p90Text2 !=null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <i>
+                @Html.Raw(BO.BAS.Text2Html(Model.Rec.p90Text1))
+            </i>
+
+            @if (Model.Rec.p90Text2 != null)
+            {
+                <hr />
+                <i>
+                    @Html.Raw(BO.BAS.Text2Html(Model.Rec.p90Text2))
+                </i>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.TagHtml != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgo23">
+                @_f.tra("Štítky")
+            </div>
+            @Html.Raw(Model.TagHtml)
+
+        </div>
+    </div>
+}

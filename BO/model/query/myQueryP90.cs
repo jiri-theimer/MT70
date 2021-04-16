@@ -35,7 +35,7 @@ namespace BO
 
             if (_searchstring != null && _searchstring.Length > 2)
             {
-                AQ("(a.p90Code like '%'+@expr+'%' OR a.p90Text1 LIKE '%'+@expr+'%' OR p28.p28Name like '%'+@expr+'%')", "expr", _searchstring);
+                AQ("(a.p90Code like '%'+@expr+'%' OR a.p90Text1 LIKE '%'+@expr+'%' OR a.p28ID IN (select p28ID FROM p28Contact WHERE p28Name like '%'+@expr+'%'))", "expr", _searchstring);
 
             }
 

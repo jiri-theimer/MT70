@@ -9,5 +9,6 @@ namespace UI.Models.Recpage
     {
         public BO.p90Proforma Rec { get; set; }
         public IEnumerable<BO.p82Proforma_Payment> lisP82 { get; set; }
+        
     }
 }

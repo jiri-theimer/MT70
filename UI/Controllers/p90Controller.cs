@@ -32,7 +32,7 @@ namespace UI.Controllers
                 //v.RecSum = Factory.p28ContactBL.LoadSumRow(v.Rec.pid);
 
                 v.SetTagging();
-                //v.lisP82 = Factory.o38AddressBL.GetList(new BO.myQueryO38() { p28id = v.pid });
+                v.lisP82 = Factory.p82Proforma_PaymentBL.GetList(v.pid);
                 
                 v.SetFreeFields(0);
             }

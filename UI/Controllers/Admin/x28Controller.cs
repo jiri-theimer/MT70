@@ -109,7 +109,19 @@ namespace UI.Controllers
                             v.lisX26.Add(new BO.x26EntityField_Binding() { EntityTypeName = c.j07Name, x26EntityTypePID = c.pid, x29ID_EntityType = 107 });
                         }
                         break;
+                    case BO.x29IdEnum.p90Proforma:
+                        var lis5 = Factory.p89ProformaTypeBL.GetList(new BO.myQuery("p89"));
+                        foreach (var c in lis5)
+                        {
+                            v.lisX26.Add(new BO.x26EntityField_Binding() { EntityTypeName = c.p89Name + " (" + Factory.tra("Typ zálohy") + ")", x26EntityTypePID = c.pid, x29ID_EntityType = 389 });
+                        }
+                        break;
                     case BO.x29IdEnum.p91Invoice:
+                        var lis6 = Factory.p92InvoiceTypeBL.GetList(new BO.myQuery("p92"));
+                        foreach (var c in lis6)
+                        {
+                            v.lisX26.Add(new BO.x26EntityField_Binding() { EntityTypeName = c.p92Name + " (" + Factory.tra("Typ faktury") + ")", x26EntityTypePID = c.pid, x29ID_EntityType = 392 });
+                        }
                         break;
                     
                 }
