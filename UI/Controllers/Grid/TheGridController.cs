@@ -108,6 +108,8 @@ namespace UI.Controllers
                     tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
                     tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
                     tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
+                    tabs.Add(AddTab("Vyúčtování", "p91Invoice", "SlaveView?prefix=p91"));
+                    tabs.Add(AddTab("Zálohy", "p90Proforma", "SlaveView?prefix=p90"));
                     tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
                     tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23"));
                     break;

@@ -20,8 +20,12 @@ namespace UI.Views.Shared.TagHelpers
         [HtmlAttributeName("datatype")]
         public string DataType { get; set; } = "string";
 
+        [HtmlAttributeName("valueafter")]
+        public string ValueAfter { get; set; }
+
         [HtmlAttributeName("format")]
         public string Format { get; set; }
+
         [HtmlAttributeName("linkurl")]
         public string LinkUrl { get; set; }
         [HtmlAttributeName("linktarget")]
@@ -61,6 +65,7 @@ namespace UI.Views.Shared.TagHelpers
                 //this.HoverSymbol = "i";
                 //this.HoverSymbol = "<img src='/Images/info.png'/>";
             }
+            
             if (this.HoverPrefix !=null || this.HoverInfo != null || this.HoverUrl != null)
             {
                 output.Attributes.SetAttribute("class", "val-readonly-wrap rowvalhover");                
@@ -69,6 +74,7 @@ namespace UI.Views.Shared.TagHelpers
             {
                 output.Attributes.SetAttribute("class", "val-readonly");
             }
+            
             
             
             if (this.Tooltip != null)
@@ -105,7 +111,12 @@ namespace UI.Views.Shared.TagHelpers
                         }
                         break;
                     case "num":
-                        output.Content.Append(BO.BAS.Number2String(Convert.ToDouble(this.Value)));
+                        
+                        output.Content.AppendHtml(string.Format("<span class=\"numeric_reaodnly_110\">{0}</span>", BO.BAS.Number2String(Convert.ToDouble(this.Value))));
+                        if (this.ValueAfter != null)
+                        {
+                            output.Content.Append(this.ValueAfter);
+                        }
                         break;
                     case "html":
                         output.Content.AppendHtml(this.Value.ToString());

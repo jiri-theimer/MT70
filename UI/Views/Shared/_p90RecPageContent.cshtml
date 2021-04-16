@@ -84,7 +84,7 @@
         <div class="row">
             <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Celkem")):</label>
             <div class="col-sm-10 col-md-9">
-                <myval datatype="num" value="@Model.Rec.p90Amount"></myval>
+                <myval datatype="num" value="@Model.Rec.p90Amount" valueafter="@Model.Rec.j27Code"></myval>
 
             </div>
         </div>
@@ -93,21 +93,21 @@
             <div class="row my-1">
                 <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Sazba DPH")):</label>
                 <div class="col-sm-10 col-md-9">
-                    <myval datatype="num" value="@Model.Rec.p90VatRate"></myval>
+                    <myval datatype="num" value="@Model.Rec.p90VatRate" valueafter="%"></myval>
 
                 </div>
             </div>
             <div class="row my-1">
                 <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Bez DPH")):</label>
                 <div class="col-sm-10 col-md-9">
-                    <myval datatype="num" value="@Model.Rec.p90Amount_WithoutVat"></myval>
+                    <myval datatype="num" value="@Model.Rec.p90Amount_WithoutVat" valueafter="@Model.Rec.j27Code"></myval>
 
                 </div>
             </div>
             <div class="row my-1">
                 <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Částka DPH")):</label>
                 <div class="col-sm-10 col-md-9">
-                    <myval datatype="num" value="@Model.Rec.p90Amount_Vat"></myval>
+                    <myval datatype="num" value="@Model.Rec.p90Amount_Vat" valueafter="@Model.Rec.j27Code"></myval>
 
                 </div>
             </div>
@@ -116,7 +116,7 @@
         <div class="row my-1">
             <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Zbývá uhradit")):</label>
             <div class="col-sm-10 col-md-9">
-                <myval datatype="num" value="@Model.Rec.p90Amount_Debt"></myval>
+                <myval datatype="num" value="@Model.Rec.p90Amount_Debt" valueafter="@Model.Rec.j27Code"></myval>
 
             </div>
         </div>
@@ -133,7 +133,42 @@
 
 </div>
 
-@if (Model.Rec.p90Text1 != null || Model.Rec.p90Text2 !=null)
+@if (Model.lisP82.Count() > 0)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp90">
+                @_f.tra("Úhrady zálohy")
+            </div>
+            <table class="table table-sm table-hover">
+                @foreach (var c in Model.lisP82)
+                {
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td>
+                            @c.p82Code
+                        </td>
+                        <td>
+                            @BO.BAS.ObjectDate2String(c.p82Date)
+
+                        </td>
+                        <td style="text-align:right;">
+                            @BO.BAS.Number2String(c.p82Amount)
+                        </td>
+                        <td>
+                            <i>@(c.p82Text)</i>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+        </div>
+    </div>
+}
+
+@if (Model.Rec.p90Text1 != null || Model.Rec.p90Text2 != null)
 {
     <div class="card recpageboxauto">
         <div class="card-body">

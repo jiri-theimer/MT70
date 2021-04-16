@@ -852,6 +852,13 @@ hr.hr-mini { /*používá se v kontextovém menu*/
             text-decoration: underline;
         }
 
+.numeric_reaodnly_110 {
+    display: inline-block;
+    width: 110px;
+    text-align: right;
+    margin-right:4px;
+}
+
 
 #subform_div_commands { /*2 záhlaví stránky v rámci záložek */
     padding-top: 10px;
@@ -1198,3 +1205,4 @@ label.recpagelabel {
 .bgo23 {
     background-color:lightpink;
 }
+

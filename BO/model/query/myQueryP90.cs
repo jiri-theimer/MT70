@@ -26,7 +26,7 @@ namespace BO
             }
             if (this.p28id > 0)
             {
-                AQ("a.p28ID=@p28id)", "p28id", this.p28id);
+                AQ("a.p28ID=@p28id", "p28id", this.p28id);
             }
             if (this.j27id > 0)
             {
