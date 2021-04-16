@@ -135,9 +135,10 @@ namespace UI.Controllers
 
         private void Handle_ScheduledReports()
         {
-            var lis = _f.x31ReportBL.GetList(new BO.myQuery("x31")).Where(p =>p.x31IsScheduling && p.x31SchedulingReceivers !=null && p.x29ID == BO.x29IdEnum._NotSpecified);
-            foreach(var recX31 in lis)
-            {                
+
+            var lis = _f.x31ReportBL.GetList(new BO.myQuery("x31")).Where(p => p.x31IsScheduling && p.x31SchedulingReceivers != null && p.x29ID == BO.x29IdEnum._NotSpecified);
+            foreach (var recX31 in lis)
+            {
                 if (_f.x31ReportBL.IsReportWaiting4Generate(_d.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute), recX31))
                 {
                     string strFullPath = GeneratePdfReport(recX31);

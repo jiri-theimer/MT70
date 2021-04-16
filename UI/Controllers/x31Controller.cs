@@ -147,7 +147,9 @@ namespace UI.Controllers
                 }
                 else
                 {
-                    this.AddMessage("Na serveru nelze dohledat soubor šablony zvolené tiskové sestavy.");                    
+                    
+                    this.AddMessage("Na serveru nelze dohledat soubor šablony zvolené tiskové sestavy.");
+                    
                 }
             }
 

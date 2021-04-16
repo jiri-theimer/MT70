@@ -107,7 +107,7 @@ namespace BL
             AE("b07Comment", "Poznámky", "Poznámka", "b07Comment a INNER JOIN j02Person j02x ON a.j02ID_Owner=j02x.j02ID AND (a.b07Value IS NULL OR a.b07Value NOT LIKE 'upload')", "a.b07ID DESC");
 
             AE("p91Invoice", "Vyúčtování", "Vyúčtování", "p91Invoice a", "a.p91ID DESC");
-            AE("p90Proforma", "Zálohy", "Záloha", "p90Proforma a", "a.p90ID DESC");
+            AE("p90Proforma","Zálohy", "Záloha", "p90Proforma a", "a.p90ID DESC");
 
             AE("p07ProjectLevel", "Úrovně projektů", "Úroveň projektu", "p07ProjectLevel a", "a.p07Level");
             AE("p42ProjectType", "Typy projektů", "Typ projektu", "p42ProjectType a", "a.p42Ordinary");

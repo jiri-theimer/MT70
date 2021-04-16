@@ -114,7 +114,10 @@ namespace UI.Controllers
                 mq.x29id = BO.BASX29.GetInt(prefix);
             }
             v.lisX18 = Factory.x18EntityCategoryBL.GetList(mq).OrderBy(p=>p.x18Ordinary);
-
+            if (v.lisX18.Count() == 0)
+            {
+                this.AddMessage("Pro zvolenou entitu chybí v systému typ dokumentu.");
+            }
             return View(v);
         }
         public IActionResult Record(int pid, bool isclone,int x18id,string prefix,int recpid)

@@ -231,6 +231,7 @@ namespace UI.Controllers
             BO.TheEntity c = Factory.EProvider.ByPrefix(prefix);
             v.entity = c.TableName;
             v.entityTitle = c.AliasPlural;
+            
 
             v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=myqueryinline,ondblclick= "grid_dblclick" };
             

@@ -171,20 +171,19 @@ namespace UI.Controllers
         public IActionResult Record(p90Record v, string oper)
         {
             RefreshStateRecord(v);
-            if (oper == "postback")
-            {
-                return View(v);
-            }
-            if (oper == "recalc1")  //dopočítat z částky bez DPH
+            
+            if (oper == "recalc1" && v.Rec.p90VatRate>0)  //dopočítat z částky bez DPH
             {
                 v.Rec.p90Amount_Vat = v.Rec.p90Amount_WithoutVat * v.Rec.p90VatRate / 100;
-                v.Rec.p90Amount = v.Rec.p90Amount_WithoutVat + v.Rec.p90Amount_Vat;
-                return View(v);
+                v.Rec.p90Amount = v.Rec.p90Amount_WithoutVat + v.Rec.p90Amount_Vat;                
             }
-            if (oper == "recalc2")  //dopočítat z celkové částky
+            if (oper == "recalc2" && v.Rec.p90VatRate>0)  //dopočítat z celkové částky
             {
                 v.Rec.p90Amount_WithoutVat = v.Rec.p90Amount / (1 + v.Rec.p90VatRate / 100);
-                v.Rec.p90Amount_Vat = v.Rec.p90Amount - v.Rec.p90Amount_WithoutVat;
+                v.Rec.p90Amount_Vat = v.Rec.p90Amount - v.Rec.p90Amount_WithoutVat;                
+            }
+            if (oper != null)
+            {
                 return View(v);
             }
             if (ModelState.IsValid)
