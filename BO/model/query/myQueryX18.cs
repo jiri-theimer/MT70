@@ -8,7 +8,7 @@ namespace BO
 {
     public class myQueryX18:baseQuery
     {
-        
+        public int x29id { get; set; }
         public myQueryX18()
         {
             this.Prefix = "x18";

@@ -8,6 +8,7 @@ namespace BO
 {
     public class myQueryO23:baseQuery
     {
+        public int x29id { get; set; }
         public int recpid { get; set; }
         public int p28id { get; set; }
         public int j02id { get; set; }
