@@ -80,7 +80,30 @@ namespace BL
             return _db.GetList<BO.p90Proforma>(fq.FinalSql, fq.Parameters);
         }
 
+        public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id,int p91id,int p82id)
+        {
+            sb("SELECT a.*,p90.p90Code,p91.p91Code,p82.p82Code,p82.p90ID,");
+            sb(_db.GetSQL1_Ocas("p99",false,false,true));
+            sb(" FROM p99Invoice_Proforma a INNER JOIN p82Proforma_Payment p82 ON a.p82ID=p82.p82ID INNER JOIN p91Invoice p91 ON a.p91ID=p91.p91ID INNER JOIN p90Proforma p90 ON p82.p90ID=p90.p90ID");
+            object pars = null;
 
+            if (p90id > 0)
+            {
+                sb(" WHERE p82.p90ID=@p90id");
+                pars = new { p90id = p90id };
+            }
+            if (p91id > 0)
+            {
+                sb(" WHERE a.p91ID=@p91id");
+                pars = new { p91id = p91id };
+            }
+            if (p82id > 0)
+            {
+                sb(" WHERE a.p82ID=@p82id");
+                pars = new { p82id = p82id };
+            }
+            return _db.GetList<BO.p99Invoice_Proforma>(sbret(), pars);
+        }
 
         public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI)
         {
