@@ -140,10 +140,7 @@ namespace BO
                     AQ("GETDATE() NOT BETWEEN a." + _prefix + "ValidFrom AND a." + _prefix + "ValidUntil", "", null);
                 }
             }
-            //if (this.x29id > 0)
-            //{
-            //    AQ("a.x29ID=@x29id", "x29id", this.x29id);
-            //}
+            
             if (this.o51ids != null && this.o51ids.Count > 0)
             {
                 AQ("a." + _prefix + "ID IN (select o52RecordPid FROM o52TagBinding WHERE o51ID IN (" + string.Join(",", this.o51ids) + "))", null, null);

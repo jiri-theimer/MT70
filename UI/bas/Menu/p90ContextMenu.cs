@@ -33,8 +33,10 @@ namespace UI.Menu
                 AMI("Upravit kartu zálohy", $"javascript:_edit('p90',{pid})", "k-i-edit");
                 AMI_Clone("p90", pid);
             }
+            AMI("Zapsat úhradu zálohy", $"javascript: _window_open('/p82/Record?pid=0&p90id={pid}')");
 
             DIV();
+            
             AMI_Report("p90", pid,null);
 
             AMI("Další", null, null, null, "more");

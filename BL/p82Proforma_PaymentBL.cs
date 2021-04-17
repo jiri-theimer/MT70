@@ -74,7 +74,7 @@ namespace BL
                 p.AddDouble("p82Amount_Vat", rec.p82Amount_Vat);
                 p.AddString("p82Text", rec.p82Text);
 
-                int intPID = _db.SaveRecord("p82Proforma_Payment", p, rec);
+                int intPID = _db.SaveRecord("p82Proforma_Payment", p, rec,false,true);
                 if (intPID > 0)
                 {
                     if (_db.RunSql("exec dbo.p90_aftersave @p90id,@j03id_sys", new { p90id = rec.p90ID, j03id_sys = _mother.CurrentUser.pid }))
@@ -98,9 +98,13 @@ namespace BL
             {
                 this.AddMessage("Částka úhrady musí být větší než nula."); return false;
             }
+            if (rec.p82Date == null)
+            {
+                this.AddMessage("Chybí datum úhrady."); return false;
+            }
             
             var lisP82 = GetList(rec.p90ID).Where(p => p.pid != rec.pid);
-            if (lisP82.Sum(p=>p.p82Amount)>recP90.p90Amount)
+            if ((lisP82.Sum(p=>p.p82Amount)+ rec.p82Amount) > recP90.p90Amount)
             {
                 this.AddMessage("Celková částka úhrad zálohy je vyšší než částka zálohy.");return false;
             }

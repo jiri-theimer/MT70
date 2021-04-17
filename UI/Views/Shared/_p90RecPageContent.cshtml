@@ -143,9 +143,9 @@
             <table class="table table-sm table-hover">
                 @foreach (var c in Model.lisP82)
                 {
-                    <tr>
+                    <tr style="border-bottom-color:white;">
                         <td>
-
+                            <a href="javascript:_edit('p82',@c.pid)">@_f.tra("Upravit/Odstranit")</a>
                         </td>
                         <td>
                             @c.p82Code
@@ -154,13 +154,19 @@
                             @BO.BAS.ObjectDate2String(c.p82Date)
 
                         </td>
-                        <td style="text-align:right;">
+                        <td style="text-align:right;width:120px;">
                             @BO.BAS.Number2String(c.p82Amount)
+
+                            <span style="margin-left:2px;">@Model.Rec.j27Code</span>
                         </td>
-                        <td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="4">
                             <i>@(c.p82Text)</i>
                         </td>
                     </tr>
+                   
                 }
             </table>
 

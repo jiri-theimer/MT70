@@ -5,7 +5,7 @@ namespace BO
     public class p82Proforma_Payment:BaseBO
     {
         public int p90ID { get; set; }
-        public DateTime p82Date { get; set; }
+        public DateTime? p82Date { get; set; }
         public double p82Amount { get; set; }
         public double p82Amount_WithoutVat { get; set; }
         public double p82Amount_Vat { get; set; }
