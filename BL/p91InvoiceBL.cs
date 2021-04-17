@@ -13,6 +13,9 @@ namespace BL
         public IEnumerable<BO.p91Invoice> GetList(BO.myQueryP91 mq);
         public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI);
         public int Create(BO.p91Create rec);
+        public bool ChangeVat(int p91id, int x15id, double newvatrate);
+        public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id, int p91id, int p82id);
+        public int CreateCreditNote(int p91id, int p92id_creditnote, bool bolJistota);
 
     }
     class p91InvoiceBL : BaseBL, Ip91InvoiceBL
@@ -93,7 +96,7 @@ namespace BL
 
         public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI)
         {
-            if (!ValidateBeforeSave(rec))
+            if (!ValidateBeforeUpdate(rec))
             {
                 return 0;
             }
@@ -164,7 +167,7 @@ namespace BL
 
 
         }
-        private bool ValidateBeforeSave(BO.p91Invoice rec)
+        private bool ValidateBeforeUpdate(BO.p91Invoice rec)
         {
             if (string.IsNullOrEmpty(rec.p91Code))
             {
@@ -187,10 +190,95 @@ namespace BL
             return true;
         }
 
+        public bool ChangeVat(int p91id,int x15id,double newvatrate)
+        {
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                var pars = new Dapper.DynamicParameters();
+
+                pars.Add("p91id", p91id, DbType.Int32);
+                pars.Add("j03id_sys", _mother.CurrentUser.pid, DbType.Int32);
+                pars.Add("x15id",x15id, DbType.Int32);
+                pars.Add("newvatrate", newvatrate, DbType.Double);                
+                pars.Add("err_ret", null, DbType.String, ParameterDirection.Output, 1000);
+
+                if (_db.RunSp("p91_change_vat", ref pars) == "1")
+                {
+                    sc.Complete();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+
+            }
+        }
+
 
         private void Handle_RecalcAmount(int p91id)
         {
             _db.RunSql("exec dbo.p91_recalc_amount @p91id", new { p91id = p91id });
+        }
+
+
+        public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id, int p91id, int p82id)
+        {
+            sb("SELECT a.*,p90.p90Code,p91.p91Code,p82.p82Code,p82.p90ID,");
+            sb(_db.GetSQL1_Ocas("p99", false, false, true));
+            sb(" FROM p99Invoice_Proforma a INNER JOIN p82Proforma_Payment p82 ON a.p82ID=p82.p82ID INNER JOIN p91Invoice p91 ON a.p91ID=p91.p91ID INNER JOIN p90Proforma p90 ON p82.p90ID=p90.p90ID");
+            object pars = null;
+
+            if (p90id > 0)
+            {
+                sb(" WHERE p82.p90ID=@p90id");
+                pars = new { p90id = p90id };
+            }
+            if (p91id > 0)
+            {
+                sb(" WHERE a.p91ID=@p91id");
+                pars = new { p91id = p91id };
+            }
+            if (p82id > 0)
+            {
+                sb(" WHERE a.p82ID=@p82id");
+                pars = new { p82id = p82id };
+            }
+            return _db.GetList<BO.p99Invoice_Proforma>(sbret(), pars);
+        }
+
+        public int CreateCreditNote(int p91id,int p92id_creditnote,bool bolJistota)
+        {
+            string strSP = "p91_create_creditnote";
+            if (bolJistota) strSP = "p91_create_creditnote_jistota";
+
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                var pars = new Dapper.DynamicParameters();
+
+                pars.Add("p91id_bind", p91id, DbType.Int32);
+                pars.Add("j03id_sys", _mother.CurrentUser.pid, DbType.Int32);
+                pars.Add("p92id_creditnote", p92id_creditnote, DbType.Int32);
+                pars.Add("ret_p91id", 0, DbType.Int32, ParameterDirection.Output);
+                pars.Add("err_ret", null, DbType.String, ParameterDirection.Output, 1000);
+
+                if (_db.RunSp(strSP, ref pars) == "1")
+                {
+                    sc.Complete();
+
+                    return pars.Get<int>("ret_p91id");
+                }
+                else
+                {
+                    return 0;
+                }
+
+
+
+            }
         }
 
     }
