@@ -75,15 +75,15 @@
 </div>
 
 
-<div class="card recpagebox400">
+<div class="card recpageboxauto" style="width:290px;">
     <div class="card-body">
         <h6 class="card-title recpagetitle bgp90">
             @_f.tra("Částka")
         </h6>
 
         <div class="row">
-            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Celkem")):</label>
-            <div class="col-sm-10 col-md-9">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Celkem")):</label>
+            <div class="col-sm-7 col-md-7">
                 <myval datatype="num" value="@Model.Rec.p90Amount" valueafter="@Model.Rec.j27Code"></myval>
 
             </div>
@@ -91,22 +91,22 @@
         @if (Model.Rec.p90VatRate > 0)
         {
             <div class="row my-1">
-                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Sazba DPH")):</label>
-                <div class="col-sm-10 col-md-9">
+                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Sazba DPH")):</label>
+                <div class="col-sm-7 col-md-7">
                     <myval datatype="num" value="@Model.Rec.p90VatRate" valueafter="%"></myval>
 
                 </div>
             </div>
             <div class="row my-1">
-                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Bez DPH")):</label>
-                <div class="col-sm-10 col-md-9">
+                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Bez DPH")):</label>
+                <div class="col-sm-7 col-md-7">
                     <myval datatype="num" value="@Model.Rec.p90Amount_WithoutVat" valueafter="@Model.Rec.j27Code"></myval>
 
                 </div>
             </div>
             <div class="row my-1">
-                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Částka DPH")):</label>
-                <div class="col-sm-10 col-md-9">
+                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Částka DPH")):</label>
+                <div class="col-sm-7 col-md-7">
                     <myval datatype="num" value="@Model.Rec.p90Amount_Vat" valueafter="@Model.Rec.j27Code"></myval>
 
                 </div>
@@ -114,15 +114,15 @@
         }
 
         <div class="row my-1">
-            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Zbývá uhradit")):</label>
-            <div class="col-sm-10 col-md-9">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Zbývá uhradit")):</label>
+            <div class="col-sm-7 col-md-7">
                 <myval datatype="num" value="@Model.Rec.p90Amount_Debt" valueafter="@Model.Rec.j27Code"></myval>
 
             </div>
         </div>
         <div class="row my-1">
-            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Poslední úhrada")):</label>
-            <div class="col-sm-10 col-md-9">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Poslední úhrada")):</label>
+            <div class="col-sm-7 col-md-7">
                 <myval datatype="date" value="@Model.Rec.p90DateBilled"></myval>
 
             </div>

@@ -9,7 +9,7 @@ namespace BL
     public interface Ip86BankAccountBL
     {
         public BO.p86BankAcc Load(int pid);
-        
+        public BO.p86BankAcc LoadInvoiceAccount(int p91id);
         public IEnumerable<BO.p86BankAcc> GetList(BO.myQuery mq);
         public int Save(BO.p86BankAcc rec);
 
@@ -34,7 +34,12 @@ namespace BL
         {
             return _db.Load<BO.p86BankAcc>(GetSQL1(" WHERE a.p86ID=@pid"), new { pid = pid });
         }
-       
+
+        public BO.p86BankAcc LoadInvoiceAccount(int p91id)   //vrátí bankovní účet pro fakturu p91id
+        {
+            return _db.Load<BO.p86BankAcc>(GetSQL1(" WHERE a.p86ID=dbo.p91_get_p86id(@p91id)"), new { p91id = p91id });
+        }
+
         public IEnumerable<BO.p86BankAcc> GetList(BO.myQuery mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);

@@ -854,7 +854,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
 
 .numeric_reaodnly_110 {
     display: inline-block;
-    width: 110px;
+    width: 100px;
     text-align: right;
     margin-right:4px;
 }

@@ -31,7 +31,7 @@ namespace UI.Menu
 
         private void Handle_GridUrl(MenuItem item)
         {
-            if (_f.CBL.LoadUserParamBool("grid-" + item.ID.Substring(3, 3) + "-show11", false))
+            if (_f.CBL.LoadUserParamBool("grid-" + item.ID.Substring(3, 3) + "-show11", true))
             {
                 item.Url = item.Url.Replace("FlatView", "MasterView");
             }

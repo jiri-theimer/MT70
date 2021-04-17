@@ -1,0 +1,176 @@
+﻿@model UI.Models.Recpage.p91RecPage
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Model.Rec == null) return;
+
+    Model.PageTitle = Model.Rec.p91Code;
+
+}
+
+@addTagHelper *, UI
+
+
+
+<div class="input-group bg-light m-0" style="padding-top:1px; padding-left:1px;">
+    <div id="layout_sidebar_contextmenu">
+        @if (Model.pid > 0)
+        {
+            <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.p91Code" onclick="_cm(event, 'p91',@Model.Rec.pid);">☰@(Model.Rec.p91Code) </a>
+            <h4 id="layout_sidebar_contextmenu_onlytext">
+            </h4>
+        }
+        <mycombo entity="p91Invoice" asp-for="@Model.SearchedPid" search-result-width="600" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
+    </div>
+    @if (Model.pid > 0)
+    {
+        <div class="nonmobile tabovergrid" style="margin-left:2px;">
+            @_f.tra("Stránka vyúčtování")
+        </div>
+
+        <div>
+            <a class="btn btn-light" href="/p91/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+            @if (_f.CurrentUser.j04IsMenu_Invoice)
+            {
+                <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
+            }
+
+        </div>
+
+    }
+
+    <div class="p-2 nonmobile">
+        <span>@Model.MenuCode</span>
+
+    </div>
+
+    <div class="nonmobile" style="margin-left:auto;">
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="cmdPageSetting" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="k-icon k-i-gears"></span>
+                @_f.tra("Nastavení stránky")
+            </button>
+            <div id="divRecPageSetting" class="dropdown-menu" aria-labelledby="cmdPageSetting" style="width:350px;">
+                Loading...
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div id="layout_sidebar" class="cm_recpage">Loading...</div>
+
+
+
+<div id="layout_main">
+    @if (Model.PanelHeight != "none")
+    {
+        <div style="max-height:@(Model.PanelHeight);overflow-y:auto;overflow-x:hidden;">
+            @Html.EditorFor(m => m, "~/Views/Shared/_p91RecPageContent.cshtml")
+        </div>
+    }
+
+
+    <div class="tabs_container">
+        <ul id="navtabs" class="nav nav-tabs">
+            @foreach (var tab in Model.NavTabs)
+            {
+                <li class="nav-item onetab">
+                    <a class="@tab.CssClass" id="tab@(tab.Entity)" href="@tab.Url" target="fra_subgrid" onclick="tabclick(this)">
+                        @tab.Name
+                        @if (tab.Badge != null)
+                        {
+                            <span class="badge bg-primary">@tab.Badge</span>
+                        }
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div id="divTabContent">
+        <iframe id="fra_subgrid" name="fra_subgrid" src="@Model.DefaultNavTabUrl" frameborder="0" scrolling="yes" style="width:100%;" onload="$('#divTabContent').css('background','none');"></iframe>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var cmd = document.getElementById("cmdPageSetting");
+        cmd.addEventListener("show.bs.dropdown", function () {
+
+            $.post("/Menu/RecPageSetting", { prefix: "p91" }, function (data) {
+                $("#divRecPageSetting").html(data);
+            });
+
+        });
+
+
+        @if(Model.pid>0)
+        {
+            <text>
+            $.post("/Menu/ContextMenu", {source: "recpage", entity: "p91Invoice", pid: @Model.pid }, function(data) {
+
+            $("#layout_sidebar").html(data);
+
+            });
+            </text>
+        }
+        else
+        {
+        <text>
+        $("#layout_main").css("display", "none");
+        $("#layout_sidebar").html("");
+        </text>
+        }
+
+        var offset = $("#divTabContent").offset();
+        var h_vertical = _device.innerHeight - offset.top;
+        h_vertical = parseInt(h_vertical);
+
+        if (_device.type === "Phone")
+        {
+            h_vertical = 400;
+        }
+
+        $("#divTabContent").css("height", h_vertical + "px");
+
+        _mainmenu_highlight_current("recpagep91","cmdp91");
+
+
+
+
+    });
+
+
+    function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
+        $("#navtabs .nav-link").removeClass("active");
+        $(tab).addClass("active");
+        $.post("/Common/SetUserParam", { key: "recpage-tab-p91", value: tab.id.replace("tab", "") }, function (data) {
+
+
+        });
+    }
+
+    function reload() {
+        location.replace(_ep("/p91/RecPage?pid=@Model.pid"));
+    }
+
+    function on_search(pid) {
+        location.replace(_ep("/p91/RecPage?pid=" + pid));
+    }
+
+    function save_page_setting(key,val) {
+        $.post("/Common/SetUserParam", { key: key, value: val }, function (data) {
+            reload();
+        });
+    }
+
+</script>
+
+

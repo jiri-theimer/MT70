@@ -103,7 +103,15 @@ namespace UI.Controllers
                 if (c.pid > 0)
                 {
 
-                    v.SetJavascript_CallOnLoad(c.pid);
+                    if (v.recpid > 0)
+                    {
+                        v.SetJavascript_CallOnLoad(v.recpid);
+                    }
+                    else
+                    {
+                        v.SetJavascript_CallOnLoad(c.pid);
+                    }
+                    
                     return View(v);
                 }
 

@@ -14,6 +14,7 @@ namespace BL
         public BO.p91Invoice LoadMyLastCreated();
         public BO.p91Invoice LoadCreditNote(int p91id);
         public BO.p91Invoice LoadLastOfClient(int p28id);
+        public BO.p91RecDisposition InhaleRecDisposition(BO.p91Invoice rec);
         public IEnumerable<BO.p91Invoice> GetList(BO.myQueryP91 mq);
         public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI);
         public int Create(BO.p91Create rec);
@@ -56,7 +57,7 @@ namespace BL
             sb(",a.p91Datep31_From,a.p91Datep31_Until,a.p91Amount_WithoutVat,a.p91Amount_Vat,a.p91Amount_Billed,a.p91Amount_WithVat,a.p91Amount_Debt,a.p91RoundFitAmount,a.p91Text1,a.p91Text2,a.p91ProformaAmount,a.p91ProformaBilledAmount,a.p91Amount_WithoutVat_None,a.p91VatRate_Low,a.p91Amount_WithVat_Low,a.p91Amount_WithoutVat_Low,a.p91Amount_Vat_Low");
             sb(",a.p91VatRate_Standard,a.p91Amount_WithVat_Standard,a.p91Amount_WithoutVat_Standard,a.p91Amount_Vat_Standard,a.p91VatRate_Special,a.p91Amount_WithVat_Special,a.p91Amount_WithoutVat_Special,a.p91Amount_Vat_Special,a.p91Amount_TotalDue");            
             sb(",p28client.p28Name,p92.p92Name,p92.p93ID,isnull(p41.p41NameShort,p41.p41Name) as p41Name,b02.b02Name,j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,j17.j17Name,j27.j27Code,p92.p92InvoiceType,p92.b01ID,p28client.p28CompanyName");
-                        
+            sb(",a.p91Client,a.p91ClientPerson,a.p91ClientPerson_Salutation,a.p91Client_RegID,a.p91Client_VatID,a.p91ClientAddress1_Street,a.p91ClientAddress1_City,a.p91ClientAddress1_ZIP,a.p91ClientAddress1_Country,a.p91ClientAddress2,a.p91LockFlag,a.p91Client_ICDPH_SK");
             sb(" FROM p91Invoice a");
             sb(" INNER JOIN p92InvoiceType p92 ON a.p92ID=p92.p92ID");
             sb(" INNER JOIN j27Currency j27 ON a.j27ID=j27.j27ID");
@@ -480,6 +481,26 @@ namespace BL
             return _db.GetList<BO.p91_CenovyRozpis>("exec dbo.p91_get_cenovy_rozpis @pid,@include_rounding,@include_proforma,@langindex", new { pid = p91id, include_rounding=bolIncludeRounding, include_proforma=bolIncludeProforma, langindex=langindex });
             
         }
+
+
+        public BO.p91RecDisposition InhaleRecDisposition(BO.p91Invoice rec)
+        {
+            var c = new BO.p91RecDisposition();
+
+            if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Owner))
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                return c;
+            }
+            if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Reader))
+            {
+                c.ReadAccess = true;
+                return c;
+            }
+
+            return c;
+        }
+
 
 
     }

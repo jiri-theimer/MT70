@@ -43,6 +43,8 @@ namespace UI.Controllers
                     lis = new b07ContextMenu(Factory, pid, source).GetItems(); break;
                 case "p90":
                     lis = new p90ContextMenu(Factory, pid, source).GetItems(); break;
+                case "p91":
+                    lis = new p91ContextMenu(Factory, pid, source).GetItems(); break;
                 default:
                     break;
             }

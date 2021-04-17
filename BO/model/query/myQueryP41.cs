@@ -63,7 +63,7 @@ namespace BO
             }
             if (this.p91id > 0)
             {
-                AQ("a.p91ID=@p61id", "p91id", this.p91id);
+                AQ("a.p41ID IN (select p41ID FROM p31Worksheet WHERE p91ID=@p91id)", "p91id", this.p91id);
             }
             return this.InhaleRows();
 
