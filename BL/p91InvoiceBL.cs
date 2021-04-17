@@ -10,7 +10,10 @@ namespace BL
     public interface Ip91InvoiceBL
     {
         public BO.p91Invoice Load(int pid);
+        public BO.p91Invoice LoadByCode(string code);
         public BO.p91Invoice LoadMyLastCreated();
+        public BO.p91Invoice LoadCreditNote(int p91id);
+        public BO.p91Invoice LoadLastOfClient(int p28id);
         public IEnumerable<BO.p91Invoice> GetList(BO.myQueryP91 mq);
         public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI);
         public int Create(BO.p91Create rec);
@@ -70,9 +73,24 @@ namespace BL
         {
             return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.p91ID=@pid"), new { pid = pid });
         }
+        public BO.p91Invoice LoadByCode(string code)
+        {
+            return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.p91Code LIKE @code"), new { code = code });
+        }
         public BO.p91Invoice LoadMyLastCreated()
         {
             return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.j02ID_Owner=@j02id_owner ORDER BY a.p91ID DESC",1), new { j02id_owner = _mother.CurrentUser.j02ID });
+        }
+        public BO.p91Invoice LoadCreditNote(int p91id)
+        {
+            sb(GetSQL1());
+            sb(" INNER JOIN p91Invoice sourcedoc ON a.p91ID_CreditNoteBind=sourcedoc.p91ID");
+            sb(" WHERE sourcedoc.p91ID=@p91id");
+            return _db.Load<BO.p91Invoice>(sbret(),new { p91id = p91id });
+        }
+        public BO.p91Invoice LoadLastOfClient(int p28id)
+        {
+            return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.p28ID=@p28id AND a.p91Amount_WithoutVat>0 ORDER BY a.p91ID DESC", 1), new { p28id = p28id });
         }
 
         public IEnumerable<BO.p91Invoice> GetList(BO.myQueryP91 mq)
