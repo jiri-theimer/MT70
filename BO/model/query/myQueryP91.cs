@@ -36,11 +36,11 @@ namespace BO
             }
             if (this.p41id > 0)
             {
-                AQ("a.p91ID In (SELECT p91ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND p41ID=@p41id)", "p41id", this.p41id);
+                AQ("a.p91ID IN (SELECT p91ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND p41ID=@p41id)", "p41id", this.p41id);
             }
             if (this.p56id > 0)
             {
-                AQ("a.p91ID In (SELECT p91ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND p56ID=@p56id)", "p56id", this.p56id);
+                AQ("a.p91ID IN (SELECT p91ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND p56ID=@p56id)", "p56id", this.p56id);
             }
             if (this.j27id > 0)
             {
@@ -52,7 +52,7 @@ namespace BO
             }
             if (this.j02id > 0)
             {
-                AQ("a.p91ID In (SELECT p91ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND j02ID=@j02id)", "j02id", this.j02id);
+                AQ("a.p91ID IN (SELECT p91ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND j02ID=@j02id)", "j02id", this.j02id);
             }
             if (this.o38id > 0)
             {
@@ -61,7 +61,7 @@ namespace BO
 
             if (_searchstring != null && _searchstring.Length > 2)
             {
-                AQ("(a.p91Code Like '%'+@expr+'%' OR a.p91Text1 LIKE '%'+@expr+'%' OR a.p91Client_RegID LIKE '%'+@expr+'%' OR a.p91Client_VatID LIKE @expr+'%' OR p41.p41Name LIKE '%'+@expr+'%' OR a.p91Client LIKE '%'+@expr+'%' OR p28client.p28Name LIKE '%'+@expr+'%' OR p28client.p28CompanyShortName LIKE '%'+@expr+'%')", "expr", _searchstring);
+                AQ("(a.p91Code Like '%'+@expr+'%' OR a.p91Text1 LIKE '%'+@expr+'%' OR a.p91Client_RegID LIKE '%'+@expr+'%' OR a.p91Client_VatID LIKE @expr+'%' OR a.p41ID_First IN (select xa.p41ID FROM p41Project xa LEFT OUTER JOIN p28Contact xb ON xa.p28ID_Client=xb.p28ID WHERE xa.p41Name LIKE '%'+@expr+'%' OR xa.p41Code LIKE '%'+@expr+'%' OR xb.p28Name LIKE '%'+@expr+'%') OR a.p91Client LIKE '%'+@expr+'%' OR a.p28ID IN (select p28ID FROM p28Contact WHERE p28CompanyShortName LIKE '%'+@expr+'%' OR p28Name LIKE '%'+@expr+'%'))", "expr", _searchstring);
 
             }
 

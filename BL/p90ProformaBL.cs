@@ -145,15 +145,20 @@ namespace BL
                     {
                         return 0;
                     }
-
+                   
+                   
                     if (_db.RunSql("exec dbo.p90_aftersave @p90id,@j03id_sys", new { p90id = intPID, j03id_sys = _mother.CurrentUser.pid }))
                     {
                         sc.Complete();
+                        return intPID;
                     }
+
+                    
 
                 }
 
                 return intPID;
+                
             }
                 
 
