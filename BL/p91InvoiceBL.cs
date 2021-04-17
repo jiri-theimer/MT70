@@ -10,12 +10,23 @@ namespace BL
     public interface Ip91InvoiceBL
     {
         public BO.p91Invoice Load(int pid);
+        public BO.p91Invoice LoadMyLastCreated();
         public IEnumerable<BO.p91Invoice> GetList(BO.myQueryP91 mq);
         public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI);
         public int Create(BO.p91Create rec);
-        public bool ChangeVat(int p91id, int x15id, double newvatrate);
-        public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id, int p91id, int p82id);
+        public bool ChangeVat(int p91id, int x15id, double newvatrate);        
         public int CreateCreditNote(int p91id, int p92id_creditnote, bool bolJistota);
+        public bool ChangeCurrency(int p91id, int j27id);
+        public bool ConvertFromDraft(int p91id);
+        public bool SaveP99(int p91id, int p90id, int p82id, double percentage);
+        public bool DeleteP99(int p99id);
+        public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id, int p91id, int p82id);
+        public bool RecalcFPR(DateTime d1, DateTime d2, int p51id = 0);
+        public int SaveP94(BO.p94Invoice_Payment rec);
+        public IEnumerable<BO.p94Invoice_Payment> GetList_p94(int p91id);
+        public bool DeleteP94(int p94id, int p91id);
+        public void ClearExchangeDate(int p91id);
+        public IEnumerable<BO.p91_CenovyRozpis> GetList_CenovyRozpis(int p91id, bool bolIncludeRounding, bool bolIncludeProforma, int langindex);
 
     }
     class p91InvoiceBL : BaseBL, Ip91InvoiceBL
@@ -26,9 +37,16 @@ namespace BL
         }
 
 
-        private string GetSQL1(string strAppend = null)
+        private string GetSQL1(string strAppend = null, int toprec = 0)
         {
-            sb("SELECT ");
+            if (toprec == 0)
+            {
+                sb("SELECT ");
+            }
+            else
+            {
+                sb($"SELECT TOP {toprec} ");
+            }            
             sb(_db.GetSQL1_Ocas("p91"));
             sb(",a.p92ID,a.p28ID,a.j27ID,a.j19ID,a.j02ID_Owner,a.p41ID_First,a.p91ID_CreditNoteBind,a.j17ID,a.p98ID,a.p63ID,a.p80ID,a.o38ID_Primary,a.o38ID_Delivery,a.x15ID,a.b02ID,a.j02ID_ContactPerson,a.p91FixedVatRate,a.p91Code,a.p91IsDraft,a.p91Date,a.p91DateBilled,a.p91DateMaturity,a.p91DateSupply,a.p91DateExchange,a.p91ExchangeRate");
             
@@ -51,6 +69,10 @@ namespace BL
         public BO.p91Invoice Load(int pid)
         {
             return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.p91ID=@pid"), new { pid = pid });
+        }
+        public BO.p91Invoice LoadMyLastCreated()
+        {
+            return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.j02ID_Owner=@j02id_owner ORDER BY a.p91ID DESC",1), new { j02id_owner = _mother.CurrentUser.j02ID });
         }
 
         public IEnumerable<BO.p91Invoice> GetList(BO.myQueryP91 mq)
@@ -225,31 +247,7 @@ namespace BL
         }
 
 
-        public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id, int p91id, int p82id)
-        {
-            sb("SELECT a.*,p90.p90Code,p91.p91Code,p82.p82Code,p82.p90ID,");
-            sb(_db.GetSQL1_Ocas("p99", false, false, true));
-            sb(" FROM p99Invoice_Proforma a INNER JOIN p82Proforma_Payment p82 ON a.p82ID=p82.p82ID INNER JOIN p91Invoice p91 ON a.p91ID=p91.p91ID INNER JOIN p90Proforma p90 ON p82.p90ID=p90.p90ID");
-            object pars = null;
-
-            if (p90id > 0)
-            {
-                sb(" WHERE p82.p90ID=@p90id");
-                pars = new { p90id = p90id };
-            }
-            if (p91id > 0)
-            {
-                sb(" WHERE a.p91ID=@p91id");
-                pars = new { p91id = p91id };
-            }
-            if (p82id > 0)
-            {
-                sb(" WHERE a.p82ID=@p82id");
-                pars = new { p82id = p82id };
-            }
-            return _db.GetList<BO.p99Invoice_Proforma>(sbret(), pars);
-        }
-
+        
         public int CreateCreditNote(int p91id,int p92id_creditnote,bool bolJistota)
         {
             string strSP = "p91_create_creditnote";
@@ -280,6 +278,191 @@ namespace BL
 
             }
         }
+
+        public bool ChangeCurrency(int p91id,int j27id)
+        {
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                var pars = new Dapper.DynamicParameters();
+
+                pars.Add("p91id", p91id, DbType.Int32);
+                pars.Add("j03id_sys", _mother.CurrentUser.pid, DbType.Int32);
+                pars.Add("j27id", j27id, DbType.Int32);                
+                pars.Add("err_ret", null, DbType.String, ParameterDirection.Output, 1000);
+
+                if (_db.RunSp("p91_change_currency", ref pars) == "1")
+                {
+                    sc.Complete();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool ConvertFromDraft(int p91id)
+        {
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                var pars = new Dapper.DynamicParameters();
+                pars.Add("p91id", p91id, DbType.Int32);
+                pars.Add("j03id_sys", _mother.CurrentUser.pid, DbType.Int32);               
+                pars.Add("err_ret", null, DbType.String, ParameterDirection.Output, 1000);
+
+                if (_db.RunSp("p91_convertdraft", ref pars) == "1")
+                {
+                    sc.Complete();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool SaveP99(int p91id, int p90id,int p82id,double percentage)
+        {
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                var pars = new Dapper.DynamicParameters();
+
+                pars.Add("p91id", p91id, DbType.Int32);
+                pars.Add("p90id", p90id, DbType.Int32);
+                pars.Add("p82id", p82id, DbType.Int32);
+                pars.Add("percentage", percentage, DbType.Double);
+                pars.Add("j03id_sys", _mother.CurrentUser.pid, DbType.Int32);                
+                pars.Add("err_ret", null, DbType.String, ParameterDirection.Output, 1000);
+
+                if (_db.RunSp("p91_proforma_save", ref pars) == "1")
+                {
+                    sc.Complete();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool DeleteP99(int p99id)
+        {
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                var pars = new Dapper.DynamicParameters();
+
+                pars.Add("p99id", p99id, DbType.Int32);                
+                pars.Add("j03id_sys", _mother.CurrentUser.pid, DbType.Int32);
+                pars.Add("err_ret", null, DbType.String, ParameterDirection.Output, 1000);
+
+                if (_db.RunSp("p91_proforma_delete", ref pars) == "1")
+                {
+                    sc.Complete();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id, int p91id, int p82id)
+        {
+            sb("SELECT a.*,p90.p90Code,p91.p91Code,p82.p82Code,p82.p90ID,");
+            sb(_db.GetSQL1_Ocas("p99", false, false, true));
+            sb(" FROM p99Invoice_Proforma a INNER JOIN p82Proforma_Payment p82 ON a.p82ID=p82.p82ID INNER JOIN p91Invoice p91 ON a.p91ID=p91.p91ID INNER JOIN p90Proforma p90 ON p82.p90ID=p90.p90ID");
+            object pars = null;
+
+            if (p90id > 0)
+            {
+                sb(" WHERE p82.p90ID=@p90id");
+                pars = new { p90id = p90id };
+            }
+            if (p91id > 0)
+            {
+                sb(" WHERE a.p91ID=@p91id");
+                pars = new { p91id = p91id };
+            }
+            if (p82id > 0)
+            {
+                sb(" WHERE a.p82ID=@p82id");
+                pars = new { p82id = p82id };
+            }
+            return _db.GetList<BO.p99Invoice_Proforma>(sbret(), pars);
+        }
+
+        public bool RecalcFPR(DateTime d1,DateTime d2,int p51id = 0)
+        {
+            return _db.RunSql("exec dbo.p91_fpr_recalc_all_invoices @d1,@d2,@p51id", new { d1 = d1, d2 = d2, p51id = p51id });
+        }
+
+
+        public int SaveP94(BO.p94Invoice_Payment rec)
+        {
+            if (rec.p94Amount == 0)
+            {
+                this.AddMessage("Částka nesmí být nula.");return 0;
+            }
+
+            var p = new DL.Params4Dapper();
+            p.AddInt("pid", rec.pid);
+            p.AddInt("p91ID", rec.p91ID,true);
+            p.AddDateTime("p94Date", rec.p94Date);
+            p.AddDouble("p94Amount", rec.p94Amount);
+            p.AddString("p94Code", rec.p94Code);
+            p.AddString("p94Description", rec.p94Description);
+            
+            int intPID = _db.SaveRecord("p94Invoice_Payment", p, rec);
+            if (intPID > 0)
+            {
+                Handle_RecalcAmount(rec.p91ID);
+            }
+
+            return intPID;
+
+        }
+
+        public IEnumerable<BO.p94Invoice_Payment> GetList_p94(int p91id)
+        {
+            sb("select a.*");
+            sb(_db.GetSQL1_Ocas("p94",false,false,true));
+            sb(" FROM p94Invoice_Payment a WHERE a.p91ID=@p91id ORDER BY a.p94Date DESC");
+
+            return _db.GetList<BO.p94Invoice_Payment>(sbret(), new { p91id = p91id });
+        }
+        public bool DeleteP94(int p94id,int p91id)
+        {
+            if (_db.RunSql("DELETE FROM p94Invoice_Payment WHERE p94ID=@p94id", new { p94id = p94id }))
+            {
+                Handle_RecalcAmount(p91id);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void ClearExchangeDate(int p91id)
+        {
+            _db.RunSql("update p91Invoice set p91DateExchange=null,p91ExchangeRate=null WHERE p91ID=@p91id", new { p91id = p91id });            
+        }
+
+        public IEnumerable<BO.p91_CenovyRozpis> GetList_CenovyRozpis(int p91id, bool bolIncludeRounding, bool bolIncludeProforma, int langindex)
+        {
+
+            return _db.GetList<BO.p91_CenovyRozpis>("exec dbo.p91_get_cenovy_rozpis @pid,@include_rounding,@include_proforma,@langindex", new { pid = p91id, include_rounding=bolIncludeRounding, include_proforma=bolIncludeProforma, langindex=langindex });
+            
+        }
+
 
     }
 }
