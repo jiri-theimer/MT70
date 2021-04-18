@@ -11,6 +11,34 @@ namespace UI.Controllers
 {
     public class p91Controller : BaseController
     {
+        public IActionResult p94(int p91id)
+        {
+            var v = new p94ViewModel() { p91ID = p91id };
+            return View(v);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult p94(p94ViewModel v)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                var c = new BO.p94Invoice_Payment() { p91ID = v.p91ID };
+                c.pid = Factory.p91InvoiceBL.SaveP94(c);
+                if (c.pid > 0)
+                {
+
+                    v.SetJavascript_CallOnLoad(c.pid);
+                    return View(v);
+                }
+
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
+        }
+
         public IActionResult Info(int pid)
         {
             var v = new p91RecPage() { Factory = this.Factory, prefix = "p91", pid = pid };            
