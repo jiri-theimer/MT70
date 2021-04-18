@@ -11,6 +11,7 @@ namespace BO
         public int j02id { get; set; }
         public int p28id { get; set; }
         public int p41id { get; set; }
+        public int p91id { get; set; }
         public string tabquery { get; set; }
 
         public myQueryP31()
@@ -31,7 +32,11 @@ namespace BO
             }
             if (this.p28id > 0)
             {
-                AQ("p41x.p28ID_Client=@p28id", "p28id", this.p28id);
+                AQ("a.p41ID IN (select p41ID FROM p41Project WHERE p28ID_Client=@p28id)", "p28id", this.p28id);
+            }
+            if (this.p91id > 0)
+            {
+                AQ("a.p91ID=@p91id", "p91id", this.p91id);
             }
 
             if (this.tabquery != null)

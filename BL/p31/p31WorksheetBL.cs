@@ -12,7 +12,7 @@ namespace BL
 
         public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF);
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
-        public IEnumerable<BO.p31Worksheet> GetList(BO.myQuery mq);
+        public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq);
         public void UpdateExternalPID(int pid, string strExternalPID);
 
     }
@@ -104,7 +104,7 @@ namespace BL
             return rec;
         }
 
-        public IEnumerable<BO.p31Worksheet> GetList(BO.myQuery mq)
+        public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p31Worksheet>(fq.FinalSql, fq.Parameters);

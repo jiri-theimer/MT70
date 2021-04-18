@@ -12,7 +12,11 @@ namespace UI.Models.Recpage
         public BO.p86BankAcc RecP86 { get; set; }
         public IEnumerable<BO.p91_CenovyRozpis> lisCenovyRozpis { get; set; }
 
-        public IEnumerable<BO.p41Project> lisP41 { get; set; }
+        public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
+
+        public string StatByPrefix { get; set; }
         
     }
+
+   
 }

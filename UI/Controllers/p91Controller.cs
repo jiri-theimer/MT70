@@ -13,7 +13,7 @@ namespace UI.Controllers
     {
         public IActionResult Info(int pid)
         {
-            var v = new p91RecPage() { Factory = this.Factory, prefix = "p91", pid = pid };
+            var v = new p91RecPage() { Factory = this.Factory, prefix = "p91", pid = pid };            
             v.SetGridUrl();
             RefreshStateInfo(v);
             return View(v);
@@ -21,6 +21,7 @@ namespace UI.Controllers
         public IActionResult Tab1(int pid)
         {
             var v = new p91RecPage() { Factory = this.Factory, prefix = "p91", pid = pid };
+            v.StatByPrefix = Factory.CBL.LoadUserParam("recpage-p91-statprefix", "p41");
             RefreshStateInfo(v);
             return View(v);
         }
@@ -38,7 +39,8 @@ namespace UI.Controllers
 
                 v.SetTagging();
                 v.lisCenovyRozpis = Factory.p91InvoiceBL.GetList_CenovyRozpis(v.pid,true,true,Factory.CurrentUser.j03LangIndex);
-                v.lisP41 = Factory.p41ProjectBL.GetList(new BO.myQueryP41() { p91id = v.pid });
+                //v.lisP41 = Factory.p41ProjectBL.GetList(new BO.myQueryP41() { p91id = v.pid });
+                v.lisP31 = Factory.p31WorksheetBL.GetList(new BO.myQueryP31() { p91id = v.pid });
                 v.SetFreeFields(0);
             }
         }
@@ -46,6 +48,7 @@ namespace UI.Controllers
         public IActionResult RecPage(int pid)
         {
             var v = new p91RecPage() { Factory = this.Factory, pid = pid, prefix = "p91" };
+            v.StatByPrefix = Factory.CBL.LoadUserParam("recpage-p91-statprefix", "p41");
 
             v.NavTabs = new List<NavTab>();
 

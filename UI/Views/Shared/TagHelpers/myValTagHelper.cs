@@ -17,11 +17,14 @@ namespace UI.Views.Shared.TagHelpers
         [HtmlAttributeName("value")]
         public object Value { get; set; }
 
-        [HtmlAttributeName("datatype")]
+        [HtmlAttributeName("datatype")]     //string | date | datetime | num | html | link
         public string DataType { get; set; } = "string";
 
         [HtmlAttributeName("valueafter")]
         public string ValueAfter { get; set; }
+
+        [HtmlAttributeName("withoutcss")]
+        public bool IsWithoutCssClass { get; set; }     //pokud true, pak není podklad šedý box: val-readonly
 
         [HtmlAttributeName("format")]
         public string Format { get; set; }
@@ -62,21 +65,31 @@ namespace UI.Views.Shared.TagHelpers
             if (this.HoverSymbol == null)
             {
                 this.HoverSymbol = "ℹ";
-                //this.HoverSymbol = "i";
-                //this.HoverSymbol = "<img src='/Images/info.png'/>";
+                
             }
-            
-            if (this.HoverPrefix !=null || this.HoverInfo != null || this.HoverUrl != null)
+            string strClass = null;            
+            if (this.HoverPrefix != null || this.HoverInfo != null || this.HoverUrl != null)
             {
-                output.Attributes.SetAttribute("class", "val-readonly-wrap rowvalhover");                
+                if (this.IsWithoutCssClass)
+                {
+                    strClass = "rowvalhover";
+                }
+                else
+                {
+                    strClass = "val-readonly-wrap rowvalhover";
+                }                
             }
             else
             {
-                output.Attributes.SetAttribute("class", "val-readonly");
+                if (!this.IsWithoutCssClass)
+                {
+                    strClass = "val-readonly";
+                }                
             }
-            
-            
-            
+
+            output.Attributes.SetAttribute("class", strClass);
+
+           
             if (this.Tooltip != null)
             {
                 output.Attributes.SetAttribute("title", this.Tooltip);
