@@ -16,9 +16,15 @@ namespace UI.Models.Record
         public string ComboJ19Name { get; set; }
         public string ComboP98Name { get; set; }
         public string ComboJ17Name { get; set; }
+        
+        
 
         public FreeFieldsViewModel ff1 { get; set; }
 
         public bool CanEditRecordCode { get; set; }
+
+        public bool Isp91LockFlag2 { get; set; }
+        public bool Isp91LockFlag4 { get; set; }
+        public bool Isp91LockFlag8 { get; set; }
     }
 }

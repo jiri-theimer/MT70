@@ -10,6 +10,7 @@ namespace BL
     {
         public BO.o38Address Load(int pid);
         public BO.o38Address LoadInvoiceAddress(int p28id);
+        public BO.o38Address LoadPostAddress(int p28id);
         public IEnumerable<BO.o38Address> GetList(BO.myQueryO38 mq);
         public int Save(BO.o38Address rec, int p28id, int o36id);
         public bool ValidateBeforeSave(BO.o38Address rec, int p28id, int o36id);
@@ -39,6 +40,10 @@ namespace BL
         public BO.o38Address LoadInvoiceAddress(int p28id)
         {
             return _db.Load<BO.o38Address>(GetSQL1(" WHERE a.o38ID IN (select o38ID FROM o37Contact_Address WHERE p28ID=@p28id AND o36ID=1)"), new { p28id = p28id });
+        }
+        public BO.o38Address LoadPostAddress(int p28id)
+        {
+            return _db.Load<BO.o38Address>(GetSQL1(" WHERE a.o38ID IN (select o38ID FROM o37Contact_Address WHERE p28ID=@p28id AND o36ID=2)"), new { p28id = p28id });
         }
         public IEnumerable<BO.o38Address> GetList(BO.myQueryO38 mq)
         {

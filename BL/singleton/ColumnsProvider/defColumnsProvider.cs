@@ -134,6 +134,14 @@ namespace BL
             AA("p07NameInflection", "Koho čeho");
             AppendTimestamp();
 
+            this.EntityName = "o38Address";
+            AA("FullAddress", "Adresa", gdc1, "isnull(a.o38Street+', ','')+isnull(a.o38City+', ','')+isnull(a.o38ZIP,'')");
+            AA("o38Street", "Ulice",gdc2);
+            AA("o38City", "Město", gdc2);
+            AA("o38ZIP", "PSČ", gdc2);
+            AA("o38Country", "Stát", gdc1);
+            AppendTimestamp();
+
             this.EntityName = "p29ContactType";
             AA("p29Name", "Typ klienta", gdc1, null, "string", false, true);
             AFNUM0("p29Ordinary", "#");

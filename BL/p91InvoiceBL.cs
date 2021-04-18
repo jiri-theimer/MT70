@@ -486,12 +486,17 @@ namespace BL
         public BO.p91RecDisposition InhaleRecDisposition(BO.p91Invoice rec)
         {
             var c = new BO.p91RecDisposition();
-
-            if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Owner))
+            if (_mother.CurrentUser.IsAdmin)
             {
                 c.OwnerAccess = true; c.ReadAccess = true;
                 return c;
             }
+            if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Owner)) //je vlastník nebo má globální roli vlastit všechny faktury
+            {
+                c.OwnerAccess = !BO.BAS.bit_compare_or(rec.p91LockFlag, 8);c.ReadAccess = true;
+                return c;
+            }           
+            
             if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Reader))
             {
                 c.ReadAccess = true;

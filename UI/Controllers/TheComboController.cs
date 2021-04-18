@@ -182,15 +182,7 @@ namespace UI.Controllers
             }
 
             string strTextField = "a__" + entity + "__" + mq.Prefix + "Name";
-            if (mq.Prefix == "a17")
-            {
-                mq.explicit_selectsql = "a17UIVCode+' - '+ a17Name as CodePlusName";
-                strTextField = "CodePlusName";
-            }
-            if (mq.Prefix == "x32")
-            {
-                strTextField = "a__x32ReportType__TreeItem";                
-            }
+            
             string strGroupField = null;
             string strLastGroup = null;
             string strGroup = null;

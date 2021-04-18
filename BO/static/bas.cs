@@ -425,6 +425,18 @@ namespace BO
             return strLogin.Substring(pos + 1, strLogin.Length - pos - 1 - tecka);
         }
 
+        public static bool bit_compare_or(int intBitTotalValue, int intOneValue)
+        {
+            if (intBitTotalValue == 0)
+                return false;
+
+            if ((intBitTotalValue & intOneValue) == intOneValue)
+                return true;
+
+                              
+            return false;
+        }
+
     }
 
 }

@@ -30,7 +30,7 @@
 
 
 <div class="modal_record_container">
-    <div class="tab-content">        
+    <div class="tab-content">
         <div class="tab-pane" id="tab1" role="tabpanel">
             <!-- Tab1 -->
             <div class="row">
@@ -106,33 +106,171 @@
 
             <div class="row my-2">
                 <label class="col-auto col-form-label">@_f.tra("Období vyúčtovaných úkonů od"):</label>
-                <div class="col-auto">
+                <div class="col-sm-3 col-md-2">
                     <mydate asp-for="Rec.p91Datep31_From"></mydate>
                 </div>
 
                 <label class="col-auto col-form-label">@_f.tra("Do"):</label>
-                <div class="col-auto">
+                <div class="col-sm-3 col-md-2">
                     <mydate asp-for="Rec.p91Datep31_Until"></mydate>
+                </div>
+                <label class="col-auto col-form-label">@_f.tra("Vlastník záznamu"):</label>
+                <div class="col-sm-4 col-md-4">
+                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.ComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="k-icon k-i-lock"></span>
+                    <span class="k-icon k-i-lock" style="color:blue;"></span>
+                    <span class="k-icon k-i-lock" style="color:hotpink;"></span>
+                    @_f.tra("Zámky nad vyúčtováním")
+                </div>
+                <div class="card-body">
+                    <div>
+                        <input type="checkbox" id="chkLockFlag2" asp-for="@Model.Isp91LockFlag2" />
+                        <label for="chkLockFlag2">@_f.tra("Zákaz upravovat cenu vyúčtování") <span class="k-icon k-i-lock" style="color:black;"></span></label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="chkLockFlag4" asp-for="@Model.Isp91LockFlag4" />
+                        <label for="chkLockFlag4">@_f.tra("Zákaz manipulace s úkony s nulovou cenou (zahrnout do paušálu/odpis)") <span class="k-icon k-i-lock" style="color:blue;"></span></label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="chkLockFlag8" asp-for="@Model.Isp91LockFlag8" />
+                        <label for="chkLockFlag8">@_f.tra("Zákaz upravovat/odstraňovat kartu vyúčtování (s výjimkou administrátora)") <span class="k-icon k-i-lock" style="color:hotpink;"></span></label>
+                    </div>
                 </div>
             </div>
 
         </div>
-
         <div class="tab-pane" id="tab2" role="tabpanel">
             <!-- Tab2 -->
+            <div class="row">
+                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Klient (odběratel)"):</label>
+                <div class="col-sm-10 col-md-9">
+                    <mycombo entity="p28Contact" asp-for="Rec.p28ID" selectedtext="@Model.ComboP28Name" filter-flag="1" event_after_changevalue="p28id_change"></mycombo>
+                </div>
+
+            </div>
+            
+
+            <div class="card my-2">
+                <div class="card-header">
+                    @_f.tra("Systém si ukládá údaje o klientovi, které platili v okamžiku vystavení vyúčtování")
+                </div>
+                <div class="card-body">
+                    <button id="cmdLoadClient" type="button" class="btn btn-sm btn-outline-primary">@_f.tra("Načíst profil klienta do vyúčtování")</button>
+                    <div class="row">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název klienta"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <input class="form-control" asp-for="Rec.p91Client" />
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Kontaktní osoba klienta"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <input class="form-control" asp-for="Rec.p91ClientPerson" />
+                        </div>
+
+                    </div>
+                    <div class="row my-1">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ/DIČ"):</label>
+                        <div class="col-sm-3 col-md-2">
+                            <input class="form-control" asp-for="Rec.p91Client_RegID" placeholder="@_f.tra("IČ")" />
+                        </div>
+                        <div class="col-sm-3 col-md-2">
+                            <input class="form-control" asp-for="Rec.p91Client_VatID" placeholder="@_f.tra("DIČ")" />
+                        </div>
+                        <div class="col-sm-3 col-md-2">
+                            <input class="form-control" asp-for="Rec.p91Client_ICDPH_SK" placeholder="IČ DPH (Slovensko)" />
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Ulice"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <textarea asp-for="Rec.p91ClientAddress1_Street" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Město"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <input class="form-control" asp-for="Rec.p91ClientAddress1_City" />
+                        </div>
+
+                    </div>
+                    <div class="row my-1">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("PSČ"):</label>
+                        <div class="col-sm-4 col-md-4">
+                            <input class="form-control" asp-for="Rec.p91ClientAddress1_ZIP" />
+                        </div>
+                        <div class="col-sm-7 col-md-6">
+                            <input class="form-control" placeholder="@_f.tra("Stát")" asp-for="Rec.p91ClientAddress1_Country" />
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Poštovní adresa"):</label>
+                        <div class="col-sm-11 col-md-10">
+                            <textarea asp-for="Rec.p91ClientAddress2" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane" id="tab3" role="tabpanel">
+            <!-- Tab3 -->
             @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
+
+        </div>
+        <div class="tab-pane" id="tab4" role="tabpanel">
+            <!-- Tab4 -->
+
 
         </div>
     </div>
 </div>
 
-
+<input type="hidden" asp-for="@Model.Rec.o38ID_Primary" value="@Model.Rec.o38ID_Primary" />
+<input type="hidden" asp-for="@Model.Rec.o38ID_Delivery" value="@Model.Rec.o38ID_Delivery" />
 <input type="hidden" asp-for="@Model.Rec.p91Code" value="@Model.Rec.p91Code" />
 <input type="hidden" asp-for="@Model.CanEditRecordCode" />
 
 <script type="text/javascript">
     $(document).ready(function () {
 
+        $("#cmdLoadClient").click(function () {
+
+            var p28id = $("#Rec_p28ID").val();
+            if (p28id == "" || p28id == "0") {
+                _notify_message("Chybí vybrat [Klient].");
+                return;
+            }
+            $.post("/p91/LoadClientProfile", { p28id: p28id }, function (data) {                
+                $("#Rec_p91Client").val(data.p28name);
+                $("#Rec_p91Client_RegID").val(data.p28RegID);
+                $("#Rec_p91Client_VatID").val(data.p28VatID);
+                $("#Rec_p91Client_ICDPH_SK").val(data.p28ICDPH_SK);
+            });
+
+            $.post("/p91/LoadClientAddress", { p28id: p28id,o36id: 1 }, function (data) {
+                $("#Rec_p91ClientAddress1_Street").val(data.o38Street);
+                $("#Rec_p91ClientAddress1_City").val(data.o38City);
+                $("#Rec_p91ClientAddress1_ZIP").val(data.o38ZIP);
+                $("#Rec_p91ClientAddress1_Country").val(data.o38Country);
+            });
+
+            $.post("/p91/LoadClientAddress", { p28id: p28id, o36id: 2 }, function (data) {
+                if (data == undefined) {
+                    $("#Rec_p91ClientAddress2").val(null);
+                    return;
+                }
+                var s = data.o38Street + "\n" + data.o38City + "\n" + data.o38ZIP;
+                $("#Rec_p91ClientAddress2").val(s);
+                
+            });
+
+        });
 
 
 
@@ -146,7 +284,10 @@
         form1.submit();
     }
 
-    
+    function p28id_change(p28id) {
+        form1.action = _ep("/p91/Record?oper=p28id");
+        form1.submit();
+    }
     function hardrefresh(pid, flag) {
         if (flag != undefined) {
             if (flag.includes("recordcode")) {
