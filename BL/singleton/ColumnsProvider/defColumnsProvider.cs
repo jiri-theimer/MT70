@@ -51,6 +51,10 @@ namespace BL
             AA("j17Code", "Kód");
             AppendTimestamp();
 
+            this.EntityName = "j19PaymentType";
+            AA("j19Name", "Forma úhrady", gdc1, null, "string", false, true);
+            AFNUM0("j19Ordinary", "#");
+
             this.EntityName = "c21FondCalendar";
             AA("c21Name", "Název fondu", gdc1, null, "string", false, true);
             AFNUM0("c21Ordinary", "#").DefaultColumnFlag = gdc2;

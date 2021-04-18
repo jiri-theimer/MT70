@@ -63,7 +63,10 @@ namespace BL
             AE("j07PersonPosition", "Pozice osob", "Pozice", "j07PersonPosition a ", "a.j07Ordinary");
             AE("j18Region", "Střediska", "Středisko", "j18Region a ", "a.j18Ordinary");
             AE("j17Country", "Regiony", "Region", "j17Country a ", "a.j17Ordinary");
+            AE("j19PaymentType", "Forma úhrady", "Forma úhrady", "j19PaymentType a ", "a.j19Ordinary");
             
+
+
             AE("j27Currency", "Měny", "Měna", "j27Currency a ", "a.j27Ordinary,a.j27Code");
             AE("j61TextTemplate", "Šablony poštovních zpráv", "Šablona poštovní zprávy", "j61TextTemplate a ", "a.j61Ordinary");
 

@@ -111,5 +111,81 @@ namespace UI.Controllers
             deftab.CssClass += " active";
             v.DefaultNavTabUrl = deftab.Url;
         }
+
+
+        public IActionResult Record(int pid)
+        {
+            var v = new p91Record() { rec_pid = pid, rec_entity = "p91" };
+            if (v.rec_pid == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí ID faktury.");
+            }
+            v.Rec = Factory.p91InvoiceBL.Load(v.rec_pid);
+            if (v.Rec == null)
+            {
+                return RecNotFound(v);
+            }
+            
+
+            v.SetTagging(Factory.o51TagBL.GetTagging("p91", v.rec_pid));
+            
+            v.ComboP28Name = v.Rec.p28Name;
+            v.ComboOwner = v.Rec.Owner;
+            v.ComboJ17Name = v.Rec.j17Name;
+            if (v.Rec.j19ID > 0)
+            {
+                v.ComboJ19Name = Factory.FBL.LoadJ19(v.Rec.j19ID).j19Name;
+            }
+            
+            RefreshStateRecord(v);
+            if (!InhalePermissions(v))
+            {
+                return this.StopPage(true, "Nemáte oprávnění k záznamu.");
+            }
+
+            v.Toolbar = new MyToolbarViewModel(v.Rec);
+            
+            return View(v);
+        }
+
+        private void RefreshStateRecord(p91Record v)
+        {
+            if (v.RecP92 == null)
+            {
+                v.RecP92 = Factory.p92InvoiceTypeBL.Load(v.Rec.p92ID);
+            }
+            if (v.ff1 == null)
+            {
+                v.ff1 = new FreeFieldsViewModel();
+                v.ff1.InhaleFreeFieldsView(Factory, v.rec_pid, "p91");
+            }
+            v.ff1.RefreshInputsVisibility(Factory, v.rec_pid, "p91", v.Rec.p92ID);
+
+        }
+
+
+
+
+        private bool InhalePermissions(p91Record v)
+        {
+            var mydisp = Factory.p91InvoiceBL.InhaleRecDisposition(v.Rec);
+            if (!mydisp.ReadAccess)
+            {
+                return false;
+            }
+            if (!v.Rec.p91IsDraft)
+            {
+                if (v.RecP92.x38ID > 0)
+                {
+                    v.CanEditRecordCode = Factory.x38CodeLogicBL.CanEditRecordCode(v.RecP92.x38ID, mydisp);
+                }
+                else
+                {
+                    v.CanEditRecordCode = mydisp.OwnerAccess;
+                }
+            }
+            
+            return true;
+        }
     }
 }
