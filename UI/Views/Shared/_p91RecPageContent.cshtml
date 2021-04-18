@@ -41,6 +41,18 @@
         <div class="card-body">
             <h6 class="card-title recpagetitle bgp91">
                 @_f.tra("Vyúčtování")
+                @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 2))
+                {
+                    <span class="k-icon k-i-lock" style="color:black;"></span>
+                }
+                @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 4))
+                {
+                    <span class="k-icon k-i-lock" style="color: blue;"></span>
+                }
+                @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 8))
+                {
+                    <span class="k-icon k-i-lock" style="color: hotpink;"></span>
+                }
             </h6>
             <div class="row">
                 <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Číslo")):</label>
