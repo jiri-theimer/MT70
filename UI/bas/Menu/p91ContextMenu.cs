@@ -32,7 +32,7 @@ namespace UI.Menu
                 AMI("Upravit kartu vyúčtování", $"javascript:_edit('p91',{pid})", "k-i-edit");
                 
             }
-            AMI("Zapsat úhradu", $"javascript: _window_open('/p82/Record?pid=0&p90id={pid}')");
+            AMI("Zapsat úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')");
 
             DIV();
 

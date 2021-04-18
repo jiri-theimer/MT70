@@ -1,0 +1,48 @@
+﻿@model UI.Models.p94ViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Zapsat úhradu faktury");
+
+}
+
+@addTagHelper *, UI
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdOK" class="btn btn-success">@_f.tra("Uložit úhradu faktury")</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<form id="form1" asp-controller="p91oper" asp-action="p94" method="POST">
+
+
+    <input type="hidden" asp-for="@Model.p91ID" />
+</form>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdOK").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+
+
+
+
+        });
+
+
+
+    })
+
+
+
+</script>
