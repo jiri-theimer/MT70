@@ -32,13 +32,28 @@ namespace UI.Menu
                 AMI("Upravit kartu vyúčtování", $"javascript:_edit('p91',{pid})", "k-i-edit");
                 
             }
-            AMI("Zapsat úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')");
+            if (rec.p91Amount_Billed > 0)
+            {
+                AMI("Zapsat/Odstranit úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')", "$");
+            }
+            else
+            {
+                AMI("Zapsat úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')", "$");
+            }
+            
 
             DIV();
 
             AMI_Report("91", pid, null);
 
             AMI("Další", null, null, null, "more");
+            AMI("Převést vyúčtování na jinou měnu", $"javascript: _window_open('/p91oper/j27?p91id={pid}')", "$","more");
+            if (rec.p91ExchangeRate != 1)
+            {
+                AMI("Aktualizovat měnový kurz", $"javascript: _window_open('/p91oper/exupdate?p91id={pid}')", "$", "more");
+            }
+            AMI("Převést vyúčtování na jinou DPH sazbu", $"javascript: _window_open('/p91oper/vat?p91id={pid}')", "%", "more");
+            DIV(null, "more");
             AMI_Memo("p91", pid, "more");
             AMI_Doc("p91", pid, "more");
             AMI_SendMail("p91", pid, "more");

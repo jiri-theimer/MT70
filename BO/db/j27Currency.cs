@@ -10,5 +10,7 @@ namespace BO
         public string j27Country { get; set; }
 
         public int j27Ordinary { get; set; }
+
+        
     }
 }

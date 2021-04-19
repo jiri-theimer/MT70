@@ -26,7 +26,7 @@ namespace BO
         public DateTime? p91DateBilled { get; set; }
         public DateTime p91DateMaturity { get; set; }
         public DateTime p91DateSupply { get; set; }
-        public DateTime p91DateExchange { get; set; }
+        public DateTime? p91DateExchange { get; set; }
 
         public double p91ExchangeRate { get; set; }
         public DateTime? p91Datep31_From { get; set; }

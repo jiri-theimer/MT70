@@ -64,7 +64,7 @@ namespace BL
         }
         public IEnumerable<BO.j27Currency> GetListCurrency()
         {
-            return _db.GetList<BO.j27Currency>("SELECT * FROM j27Currency a WHERE GETDATE() BETWEEN j27ValidFrom AND j27ValidUntil");
+            return _db.GetList<BO.j27Currency>("SELECT a.*,a.j27ID as pid FROM j27Currency a WHERE GETDATE() BETWEEN a.j27ValidFrom AND a.j27ValidUntil");
         }
         
 

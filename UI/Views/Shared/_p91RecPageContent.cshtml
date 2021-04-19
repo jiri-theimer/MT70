@@ -98,7 +98,15 @@
                     </div>
                 </div>
             }
-
+            @if (Model.Rec.p91ExchangeRate != 1.00)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Měnový kurz")):</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@(Model.Rec.p91ExchangeRate.ToString()+" / "+BO.BAS.ObjectDate2String(Model.Rec.p91DateExchange))" hoversymol="Aktualizovat" hoverurl="javascript:recpage_exupdate(@Model.Rec.pid)"></myval>
+                    </div>
+                </div>
+            }
 
 
 
@@ -160,7 +168,15 @@
             <div class="row my-1">
                 <label class="col-sm-5 col-md-5 col-form-label recpagelabel" style="color:red;">@(_f.tra("Celkový dluh")):</label>
                 <div class="col-sm-7 col-md-7">
-                    <myval datatype="num" value="@Model.Rec.p91Amount_Debt" valueafter="@Model.Rec.j27Code"></myval>
+                    @if (Math.Abs(Model.Rec.p91Amount_Debt)>0.01)
+                    {
+                        <myval datatype="num" value="@Model.Rec.p91Amount_Debt" tooltip="@_f.tra("Zapsat úhradu")"  hoversymol="$" hoverurl="javascript:recpage_p94(@(Model.Rec.pid))"></myval>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">@_f.tra("Uhrazeno")</span>
+                    }
+
 
                 </div>
             </div>
@@ -197,7 +213,16 @@
 
                 </div>
             </div>
+            @if (Model.Rec.p91DateExchange != null)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum měnového kurzu")):</label>
+                    <div class="col-sm-7 col-md-7">
+                        <myval datatype="date" value="@Model.Rec.p91DateExchange"></myval>
 
+                    </div>
+                </div>
+            }
         </div>
 
 
@@ -406,4 +431,10 @@
             });
         }
 
+        function recpage_p94(p91id) {
+            _window_open("/p91oper/p94?p91id=" + p91id);
+        }
+        function recpage_exupdate(p91id) {
+            _window_open("/p91oper/exupdate?p91id=" + p91id);
+        }
     </script>

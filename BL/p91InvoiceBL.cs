@@ -29,7 +29,7 @@ namespace BL
         public int SaveP94(BO.p94Invoice_Payment rec);
         public IEnumerable<BO.p94Invoice_Payment> GetList_p94(int p91id);
         public bool DeleteP94(int p94id, int p91id);
-        public void ClearExchangeDate(int p91id);
+        public void ClearExchangeDate(int p91id, bool recalc);
         public IEnumerable<BO.p91_CenovyRozpis> GetList_CenovyRozpis(int p91id, bool bolIncludeRounding, bool bolIncludeProforma, int langindex);
 
     }
@@ -439,7 +439,7 @@ namespace BL
             p.AddString("p94Code", rec.p94Code);
             p.AddString("p94Description", rec.p94Description);
             
-            int intPID = _db.SaveRecord("p94Invoice_Payment", p, rec);
+            int intPID = _db.SaveRecord("p94Invoice_Payment", p, rec,false,true);
             if (intPID > 0)
             {
                 Handle_RecalcAmount(rec.p91ID);
@@ -451,7 +451,7 @@ namespace BL
 
         public IEnumerable<BO.p94Invoice_Payment> GetList_p94(int p91id)
         {
-            sb("select a.*");
+            sb("select a.*,");
             sb(_db.GetSQL1_Ocas("p94",false,false,true));
             sb(" FROM p94Invoice_Payment a WHERE a.p91ID=@p91id ORDER BY a.p94Date DESC");
 
@@ -470,9 +470,13 @@ namespace BL
             }
         }
 
-        public void ClearExchangeDate(int p91id)
+        public void ClearExchangeDate(int p91id,bool recalc)
         {
-            _db.RunSql("update p91Invoice set p91DateExchange=null,p91ExchangeRate=null WHERE p91ID=@p91id", new { p91id = p91id });            
+            _db.RunSql("update p91Invoice set p91DateExchange=null,p91ExchangeRate=null WHERE p91ID=@p91id", new { p91id = p91id });
+            if (recalc)
+            {
+                Handle_RecalcAmount(p91id);
+            }
         }
 
         public IEnumerable<BO.p91_CenovyRozpis> GetList_CenovyRozpis(int p91id, bool bolIncludeRounding, bool bolIncludeProforma, int langindex)
