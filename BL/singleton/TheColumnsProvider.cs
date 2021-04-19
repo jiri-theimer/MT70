@@ -112,7 +112,7 @@ namespace BL
                 ret.Add(Clone2NewInstance(c));
             }
 
-            List<BO.EntityRelation> rels = _ep.getApplicableRelations(mq.Prefix);
+            List<BO.EntityRelation> rels = _ep.getApplicableRelations(mq.Prefix);   //všechny dostupné relace pro entitu mq.prefix
 
             switch (mq.Prefix)
             {
@@ -128,14 +128,7 @@ namespace BL
                     break;
 
 
-                //case "b02":
-                //    ret.Add(InhaleColumn4Relation("b02_b01", "b01WorkflowTemplate", "b01Name", rels, bolComboColumns));
 
-                //    break;
-                //case "b05":
-                //    ret.Add(InhaleColumn4Relation("b05_j03", "j03User", "j03Login", rels, bolComboColumns));
-                //    ret.Add(InhaleColumn4Relation("b05_b06", "b06WorkflowStep", "b06Name", rels, bolComboColumns));
-                //    break;
                 case "j61":
                     ret.Add(InhaleColumn4Relation("j61_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("j61_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
@@ -152,8 +145,8 @@ namespace BL
                     }
 
                     break;
-                case "p31":                    
-                        ret.Add(InhaleColumn4Relation("p31_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
+                case "p31":
+                    ret.Add(InhaleColumn4Relation("p31_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p31_p41_p28", "p28Contact", "p28Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p31_p41", "p41Project", "p41Name", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p31_p32", "p32Activity", "p32Name", rels, bolComboColumns));
@@ -298,12 +291,12 @@ namespace BL
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
 
             string[] arr;
-           
+
             for (var i = 0; i < sels.Count; i++)
             {
                 arr = sels[i].Split("__");
                 if (_lis.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
-                {                    
+                {
                     BO.TheGridColumn c = CreateNewInstanceColumn(_lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First(), arr, intLangIndex, applicable_rels);
 
                     if ((i == sels.Count - 1) && (c.FieldType == "num" || c.FieldType == "num0" || c.FieldType == "num3"))
@@ -313,7 +306,7 @@ namespace BL
                     ret.Add(c);
 
                 }
-                  
+
             }
 
             return ret;
@@ -327,8 +320,8 @@ namespace BL
             List<BO.EntityRelation> applicable_rels = _ep.getApplicableRelations(strPrimaryPrefix);
             List<string> sels = BO.BAS.ConvertString2List(strJ72Columns, ",");
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
-            
-            string[] arr;            
+
+            string[] arr;
             for (var i = 0; i < sels.Count(); i++)
             {
                 arr = sels[i].Split("__");
@@ -348,9 +341,9 @@ namespace BL
                     }
                 }
 
-                if (colSource !=null)
+                if (colSource != null)
                 {
-                    BO.TheGridColumn c = CreateNewInstanceColumn(colSource,arr, intLangIndex, applicable_rels);
+                    BO.TheGridColumn c = CreateNewInstanceColumn(colSource, arr, intLangIndex, applicable_rels);
 
                     if ((i == sels.Count - 1) && (c.FieldType == "num" || c.FieldType == "num0" || c.FieldType == "num3"))
                     {
@@ -358,15 +351,15 @@ namespace BL
                     }
                     ret.Add(c);
                 }
-                
+
             }
-                        
+
             return ret;
 
         }
 
         private BO.TheGridColumn CreateNewInstanceColumn(BO.TheGridColumn colSource, string[] arr, int intLangIndex, List<BO.EntityRelation> applicable_rels)
-        {            
+        {
             BO.TheGridColumn c = Clone2NewInstance(colSource);
             switch (intLangIndex)
             {
