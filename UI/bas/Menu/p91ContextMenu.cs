@@ -47,12 +47,20 @@ namespace UI.Menu
             AMI_Report("91", pid, null);
 
             AMI("Další", null, null, null, "more");
-            AMI("Převést vyúčtování na jinou měnu", $"javascript: _window_open('/p91oper/j27?p91id={pid}')", "$","more");
-            if (rec.p91ExchangeRate != 1)
+            if (rec.p92InvoiceType == BO.p92InvoiceTypeENUM.ClientInvoice)
             {
-                AMI("Aktualizovat měnový kurz", $"javascript: _window_open('/p91oper/exupdate?p91id={pid}')", "$", "more");
+                AMI("Vytvořit k faktuře opravný doklad", $"javascript: _window_open('/p91oper/creditnote?p91id={pid}')", "k-i-reset-color", "more");
             }
-            AMI("Převést vyúčtování na jinou DPH sazbu", $"javascript: _window_open('/p91oper/vat?p91id={pid}')", "%", "more");
+            if (!BO.BAS.bit_compare_or(rec.p91LockFlag, 2))
+            {
+                AMI("Převést vyúčtování na jinou měnu", $"javascript: _window_open('/p91oper/j27?p91id={pid}')", "$", "more");
+                if (rec.p91ExchangeRate != 1)
+                {
+                    AMI("Aktualizovat měnový kurz", $"javascript: _window_open('/p91oper/exupdate?p91id={pid}')", "$", "more");
+                }
+                AMI("Převést vyúčtování na jinou DPH sazbu", $"javascript: _window_open('/p91oper/vat?p91id={pid}')", "%", "more");
+            }
+            
             DIV(null, "more");
             AMI_Memo("p91", pid, "more");
             AMI_Doc("p91", pid, "more");

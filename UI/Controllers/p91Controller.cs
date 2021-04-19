@@ -44,6 +44,11 @@ namespace UI.Controllers
                 //v.lisP41 = Factory.p41ProjectBL.GetList(new BO.myQueryP41() { p91id = v.pid });
                 v.lisP31 = Factory.p31WorksheetBL.GetList(new BO.myQueryP31() { p91id = v.pid });
                 v.SetFreeFields(0);
+
+                if (v.Rec.p92InvoiceType == BO.p92InvoiceTypeENUM.CreditNote)
+                {
+                    v.RecOpravovanyDoklad = Factory.p91InvoiceBL.Load(v.Rec.p91ID_CreditNoteBind);
+                }
             }
         }
 

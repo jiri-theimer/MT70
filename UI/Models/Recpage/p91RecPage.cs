@@ -15,6 +15,8 @@ namespace UI.Models.Recpage
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
 
         public string StatByPrefix { get; set; }
+
+        public BO.p91Invoice RecOpravovanyDoklad { get; set; }
         
     }
 

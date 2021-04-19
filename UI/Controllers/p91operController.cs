@@ -15,6 +15,54 @@ namespace UI.Controllers
         {
             _cp = cp;
         }
+
+        //Vytvořit dobropis
+        public IActionResult creditnote(int p91id)
+        {
+            var v = new creditnoteViewModel() { p91ID = p91id };
+            if (v.p91ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí faktura.");
+            }
+            RefreshStateCreditNote(v);
+
+
+            return View(v);
+        }
+        private void RefreshStateCreditNote(creditnoteViewModel v)
+        {
+            v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult creditnote(creditnoteViewModel v, string oper)
+        {
+            RefreshStateCreditNote(v);
+            if (oper != null)
+            {
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (v.SelectedP92ID == 0)
+                {
+                    this.AddMessage("Chybí typ opravného dokladu."); return View(v);
+                }
+
+                int intPID = Factory.p91InvoiceBL.CreateCreditNote(v.p91ID, v.SelectedP92ID, true);
+                if (intPID > 0)
+                {
+                    v.SetJavascript_CallOnLoad(v.p91ID);
+                    return View(v);
+                }
+
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
+        }
+
         //Převést kompletně na jinou sazbu DPH
         public IActionResult vat(int p91id)
         {
@@ -46,15 +94,15 @@ namespace UI.Controllers
             {
                 return View(v);
             }
-            
+
             if (ModelState.IsValid)
             {
                 if ((int)v.SelectedX15ID == 0)
                 {
-                    this.AddMessage("Musíte vybrat cílovou DPH hladinu.");return View(v);
+                    this.AddMessage("Musíte vybrat cílovou DPH hladinu."); return View(v);
                 }
-                
-                if (!Factory.p91InvoiceBL.ChangeVat(v.p91ID,(int)v.SelectedX15ID, v.VatRate))
+
+                if (!Factory.p91InvoiceBL.ChangeVat(v.p91ID, (int)v.SelectedX15ID, v.VatRate))
                 {
                     return View(v);
                 }
@@ -90,7 +138,7 @@ namespace UI.Controllers
 
             if (ModelState.IsValid)
             {
-                Factory.p91InvoiceBL.ClearExchangeDate(v.p91ID,true);
+                Factory.p91InvoiceBL.ClearExchangeDate(v.p91ID, true);
                 v.SetJavascript_CallOnLoad(v.p91ID);
                 return View(v);
             }
@@ -108,12 +156,12 @@ namespace UI.Controllers
                 return this.StopPage(true, "Na vstupu chybí faktura.");
             }
             RefreshStateJ27(v);
-            
+
             return View(v);
         }
 
         private void RefreshStateJ27(j27ViewModel v)
-        {            
+        {
             if (v.RecP91 == null)
             {
                 v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
@@ -126,17 +174,17 @@ namespace UI.Controllers
         public IActionResult j27(j27ViewModel v, string oper)
         {
             RefreshStateJ27(v);
-           
+
             if (oper != null)
             {
                 return View(v);
             }
 
             if (ModelState.IsValid)
-            {      
+            {
                 if (v.SelectedJ27ID == 0)
                 {
-                    this.AddMessage("Musíte vybrat cílovou měnu vyúčtování.");return View(v);
+                    this.AddMessage("Musíte vybrat cílovou měnu vyúčtování."); return View(v);
                 }
                 if (Factory.p91InvoiceBL.ChangeCurrency(v.p91ID, v.SelectedJ27ID))
                 {
@@ -158,9 +206,9 @@ namespace UI.Controllers
                 return this.StopPage(true, "Na vstupu chybí faktura.");
             }
             RefreshStateP94(v);
-            v.Rec = new BO.p94Invoice_Payment() { p94Date = DateTime.Today,p94Amount=v.RecP91.p91Amount_Debt };
+            v.Rec = new BO.p94Invoice_Payment() { p94Date = DateTime.Today, p94Amount = v.RecP91.p91Amount_Debt };
 
-            
+
             return View(v);
         }
 
@@ -174,18 +222,18 @@ namespace UI.Controllers
             {
                 v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
             }
-            
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult p94(p94ViewModel v,string oper,int p94id)
+        public IActionResult p94(p94ViewModel v, string oper, int p94id)
         {
             RefreshStateP94(v);
 
-            if (oper=="delete" && p94id > 0)
+            if (oper == "delete" && p94id > 0)
             {
-                if (Factory.p91InvoiceBL.DeleteP94(p94id,v.p91ID))
+                if (Factory.p91InvoiceBL.DeleteP94(p94id, v.p91ID))
                 {
                     v.SetJavascript_CallOnLoad(v.p91ID);
                     return View(v);
@@ -199,7 +247,7 @@ namespace UI.Controllers
 
             if (ModelState.IsValid)
             {
-                var c = new BO.p94Invoice_Payment() { p91ID = v.p91ID,p94Amount=v.Rec.p94Amount,p94Date=v.Rec.p94Date,p94Description=v.Rec.p94Description };
+                var c = new BO.p94Invoice_Payment() { p91ID = v.p91ID, p94Amount = v.Rec.p94Amount, p94Date = v.Rec.p94Date, p94Description = v.Rec.p94Description };
                 c.pid = Factory.p91InvoiceBL.SaveP94(c);
                 if (c.pid > 0)
                 {

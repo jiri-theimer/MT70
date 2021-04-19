@@ -35,145 +35,158 @@
     _qrystat = _qrystat.OrderBy(p => p.groupbyalias);
 
 
-    }
+}
 
-    @addTagHelper *, UI
+@addTagHelper *, UI
 
 
-    <div class="card recpagebox400">
-        <div class="card-body">
-            <h6 class="card-title recpagetitle bgp91">
-                @_f.tra("Vyúčtování")
-                @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 2))
-                {
-                    <span class="k-icon k-i-lock" style="color:black;"></span>
-                }
-                @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 4))
-                {
-                    <span class="k-icon k-i-lock" style="color: blue;"></span>
-                }
-                @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 8))
-                {
-                    <span class="k-icon k-i-lock" style="color: hotpink;"></span>
-                }
-            </h6>
-            <div class="row">
-                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Číslo")):</label>
-                <div class="col-sm-10 col-md-9">
-                    <myval value="@Model.Rec.p91Code"></myval>
-
-                </div>
-            </div>
-            <div class="row my-1">
-                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Typ faktury")):</label>
-                <div class="col-sm-10 col-md-9">
-                    <myval value="@Model.Rec.p92Name" hoverprefix="p92" hoverpid="@Model.Rec.p92ID"></myval>
-
-                </div>
-            </div>
-            @if (Model.Rec.b01ID > 0)
+<div class="card recpagebox400">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp91">
+            @_f.tra("Vyúčtování")
+            @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 2))
             {
-                <div class="row my-1">
-                    <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Aktuální stav")):</label>
-                    <div class="col-sm-10 col-md-9">
-                        <myval value="@Model.Rec.b02Name" hoverprefix="b02" hoverpid="@Model.Rec.b02ID"></myval>
-
-                    </div>
-                </div>
+                <span class="k-icon k-i-lock" style="color:black;"></span>
             }
-            @if (Model.RecP93 != null)
+            @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 4))
             {
-                <div class="row my-1">
-                    <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Vystavovatel")):</label>
-                    <div class="col-sm-10 col-md-9">
-                        <myval value="@Model.RecP93.p93Name" hoverprefix="p93" hoverpid="@Model.Rec.p93ID"></myval>
-
-                    </div>
-                </div>
+                <span class="k-icon k-i-lock" style="color: blue;"></span>
             }
-            @if (Model.RecP86 != null)
+            @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 8))
             {
-                <div class="row my-1">
-                    <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Bankovní účet")):</label>
-                    <div class="col-sm-10 col-md-9">
-                        <myval value="@(Model.RecP86.p86BankAccount+"/"+Model.RecP86.p86BankCode)" hoverprefix="p86" hoverpid="@Model.RecP86.pid"></myval>
-
-                    </div>
-                </div>
+                <span class="k-icon k-i-lock" style="color: hotpink;"></span>
             }
-            @if (Model.Rec.p91ExchangeRate != 1.00)
-            {
-                <div class="row my-1">
-                    <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Měnový kurz")):</label>
-                    <div class="col-sm-10 col-md-9">
-                        <myval value="@(Model.Rec.p91ExchangeRate.ToString()+" / "+BO.BAS.ObjectDate2String(Model.Rec.p91DateExchange))" hoversymol="Aktualizovat" hoverurl="javascript:recpage_exupdate(@Model.Rec.pid)"></myval>
-                    </div>
-                </div>
-            }
-
-
-
-
-            @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFieldsRO.cshtml")
-
-            <div>
-                <small class="text-secondary" title="@_f.tra("Založení záznamu")">
-                    @(Model.Rec.UserInsert+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateInsert,"dd.MM.yyyy HH:mm ddd"))
-                </small>
-                @if (Model.Rec.DateUpdate > Model.Rec.DateInsert)
-                {
-                    <small class="text-success float-end" title="@_f.tra("Poslední aktualizace záznamu")">
-                        @(Model.Rec.UserUpdate+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateUpdate,"dd.MM.yyyy HH:mm ddd"))
-
-                    </small>
-
-                }
+        </h6>
+        <div class="row">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Číslo")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p91Code"></myval>
             </div>
         </div>
 
+        @if (Model.Rec.p92InvoiceType == BO.p92InvoiceTypeENUM.CreditNote && Model.RecOpravovanyDoklad !=null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Opravovaný doklad")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.RecOpravovanyDoklad.p91Code" hoverprefix="p91" hoverpid="@Model.RecOpravovanyDoklad.pid"></myval>
+                </div>
+            </div>
+        }
+        
 
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Typ faktury")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p92Name" hoverprefix="p92" hoverpid="@Model.Rec.p92ID"></myval>
+
+            </div>
+        </div>
+        @if (Model.Rec.b01ID > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Aktuální stav")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.b02Name" hoverprefix="b02" hoverpid="@Model.Rec.b02ID"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.RecP93 != null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Vystavovatel")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.RecP93.p93Name" hoverprefix="p93" hoverpid="@Model.Rec.p93ID"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.RecP86 != null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Bankovní účet")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@(Model.RecP86.p86BankAccount+"/"+Model.RecP86.p86BankCode)" hoverprefix="p86" hoverpid="@Model.RecP86.pid"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.Rec.p91ExchangeRate != 1.00)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Měnový kurz")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@(Model.Rec.p91ExchangeRate.ToString()+" / "+BO.BAS.ObjectDate2String(Model.Rec.p91DateExchange))" hoversymol="Aktualizovat" hoverurl="javascript:recpage_exupdate(@Model.Rec.pid)"></myval>
+                </div>
+            </div>
+        }
+
+
+
+
+        @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFieldsRO.cshtml")
+
+        <div>
+            <small class="text-secondary" title="@_f.tra("Založení záznamu")">
+                @(Model.Rec.UserInsert+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateInsert,"dd.MM.yyyy HH:mm ddd"))
+            </small>
+            @if (Model.Rec.DateUpdate > Model.Rec.DateInsert)
+            {
+                <small class="text-success float-end" title="@_f.tra("Poslední aktualizace záznamu")">
+                    @(Model.Rec.UserUpdate+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateUpdate,"dd.MM.yyyy HH:mm ddd"))
+
+                </small>
+
+            }
+        </div>
     </div>
 
-    <div class="card recpageboxauto" style="width:290px;">
-        <div class="card-body">
-            <h6 class="card-title recpagetitle bgp91">
-                @_f.tra("Částka")
-            </h6>
 
-            <div class="row">
-                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Částka bez DPH")):</label>
-                <div class="col-sm-7 col-md-7">
-                    <myval datatype="num" value="@Model.Rec.p91Amount_WithoutVat" valueafter="@Model.Rec.j27Code"></myval>
+</div>
 
-                </div>
+<div class="card recpageboxauto" style="width:290px;">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp91">
+            @_f.tra("Částka")
+        </h6>
+
+        <div class="row">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Částka bez DPH")):</label>
+            <div class="col-sm-7 col-md-7">
+                <myval datatype="num" value="@Model.Rec.p91Amount_WithoutVat" valueafter="@Model.Rec.j27Code"></myval>
+
             </div>
-            <div class="row my-1">
-                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Částka DPH")):</label>
-                <div class="col-sm-7 col-md-7">
-                    <myval datatype="num" value="@Model.Rec.p91Amount_Vat" valueafter="@Model.Rec.j27Code"></myval>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Částka DPH")):</label>
+            <div class="col-sm-7 col-md-7">
+                <myval datatype="num" value="@Model.Rec.p91Amount_Vat" valueafter="@Model.Rec.j27Code"></myval>
 
-                </div>
             </div>
-            <div class="row my-1">
-                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Částka vč.DPH")):</label>
-                <div class="col-sm-7 col-md-7">
-                    <myval datatype="num" value="@Model.Rec.p91Amount_WithVat" valueafter="@Model.Rec.j27Code"></myval>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Částka vč.DPH")):</label>
+            <div class="col-sm-7 col-md-7">
+                <myval datatype="num" value="@Model.Rec.p91Amount_WithVat" valueafter="@Model.Rec.j27Code"></myval>
 
-                </div>
             </div>
-            <div class="row my-1">
-                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Haléřové zaokrouhlení")):</label>
-                <div class="col-sm-7 col-md-7">
-                    <myval datatype="num" value="@Model.Rec.p91RoundFitAmount" valueafter="@Model.Rec.j27Code"></myval>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Haléřové zaokrouhlení")):</label>
+            <div class="col-sm-7 col-md-7">
+                <myval datatype="num" value="@Model.Rec.p91RoundFitAmount" valueafter="@Model.Rec.j27Code"></myval>
 
-                </div>
             </div>
+        </div>
+        @if (Model.Rec.p92InvoiceType == BO.p92InvoiceTypeENUM.ClientInvoice)
+        {
             <div class="row my-1">
                 <label class="col-sm-5 col-md-5 col-form-label recpagelabel" style="color:red;">@(_f.tra("Celkový dluh")):</label>
                 <div class="col-sm-7 col-md-7">
-                    @if (Math.Abs(Model.Rec.p91Amount_Debt)>0.01)
+                    @if (Math.Abs(Model.Rec.p91Amount_Debt) > 0.01)
                     {
-                        <myval datatype="num" value="@Model.Rec.p91Amount_Debt" tooltip="@_f.tra("Zapsat úhradu")"  hoversymol="$" hoverurl="javascript:recpage_p94(@(Model.Rec.pid))"></myval>
+                        <myval datatype="num" value="@Model.Rec.p91Amount_Debt" tooltip="@_f.tra("Zapsat úhradu")" hoversymol="$" hoverurl="javascript:recpage_p94(@(Model.Rec.pid))"></myval>
                     }
                     else
                     {
@@ -183,262 +196,264 @@
 
                 </div>
             </div>
-
-        </div>
-
-
-    </div>
-
-    <div class="card recpageboxauto" style="width:290px;">
-        <div class="card-body">
-            <h6 class="card-title recpagetitle bgp91">
-                @_f.tra("Datumy")
-            </h6>
-            <div class="row">
-                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum vystavení")):</label>
-                <div class="col-sm-7 col-md-7">
-                    <myval datatype="date" value="@Model.Rec.p91Date"></myval>
-
-                </div>
-            </div>
-
-            <div class="row my-1">
-                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum plnění")):</label>
-                <div class="col-sm-7 col-md-7">
-                    <myval datatype="date" value="@Model.Rec.p91DateSupply"></myval>
-
-                </div>
-            </div>
-            <div class="row my-1">
-                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum splatnosti")):</label>
-                <div class="col-sm-7 col-md-7">
-                    <myval datatype="date" value="@Model.Rec.p91DateMaturity"></myval>
-
-                </div>
-            </div>
-            @if (Model.Rec.p91DateExchange != null)
-            {
-                <div class="row my-1">
-                    <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum měnového kurzu")):</label>
-                    <div class="col-sm-7 col-md-7">
-                        <myval datatype="date" value="@Model.Rec.p91DateExchange"></myval>
-
-                    </div>
-                </div>
-            }
-        </div>
+        }
 
 
     </div>
 
 
-    <div class="card recpagebox400">
-        <div class="card-body">
-            <h6 class="card-title recpagetitle bgp91">
-                @_f.tra("Klient")
-                |
-                @_f.tra("Statistika")
-            </h6>
-            <div class="row">
-                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Klient")):</label>
+</div>
+
+<div class="card recpageboxauto" style="width:290px;">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp91">
+            @_f.tra("Datumy")
+        </h6>
+        <div class="row">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum vystavení")):</label>
+            <div class="col-sm-7 col-md-7">
+                <myval datatype="date" value="@Model.Rec.p91Date"></myval>
+
+            </div>
+        </div>
+
+        <div class="row my-1">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum plnění")):</label>
+            <div class="col-sm-7 col-md-7">
+                <myval datatype="date" value="@Model.Rec.p91DateSupply"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum splatnosti")):</label>
+            <div class="col-sm-7 col-md-7">
+                <myval datatype="date" value="@Model.Rec.p91DateMaturity"></myval>
+
+            </div>
+        </div>
+        @if (Model.Rec.p91DateExchange != null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-5 col-md-5 col-form-label recpagelabel">@(_f.tra("Datum měnového kurzu")):</label>
+                <div class="col-sm-7 col-md-7">
+                    <myval datatype="date" value="@Model.Rec.p91DateExchange"></myval>
+
+                </div>
+            </div>
+        }
+    </div>
+
+
+</div>
+
+
+<div class="card recpagebox400">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp91">
+            @_f.tra("Klient")
+            |
+            @_f.tra("Statistika")
+        </h6>
+        <div class="row">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Klient")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p91Client" hoverprefix="p28" hoverpid="@Model.Rec.p28ID"></myval>
+
+            </div>
+        </div>
+        @if (Model.Rec.p91Client_RegID != null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("IČ")):</label>
                 <div class="col-sm-10 col-md-9">
-                    <myval value="@Model.Rec.p91Client" hoverprefix="p28" hoverpid="@Model.Rec.p28ID"></myval>
+                    <div class="val-readonly rowvalhover">
+                        <span>@Model.Rec.p91Client_RegID</span>
+                        @if (Model.Rec.p91Client_ICDPH_SK != null)
+                        {
+                            <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.ObchodnyRegister(Model.Rec.p91Client_RegID)">obchodný register</a>
+                        }
+                        else
+                        {
+                            <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Justice(Model.Rec.p91Client_RegID)">justice</a>
+                            <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Ares(Model.Rec.p91Client_RegID)">ares</a>
+                            <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Insolvence(Model.Rec.p91Client_RegID)">insolvence</a>
+                        }
 
-                </div>
-            </div>
-            @if (Model.Rec.p91Client_RegID != null)
-            {
-                <div class="row my-1">
-                    <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("IČ")):</label>
-                    <div class="col-sm-10 col-md-9">
-                        <div class="val-readonly rowvalhover">
-                            <span>@Model.Rec.p91Client_RegID</span>
-                            @if (Model.Rec.p91Client_ICDPH_SK != null)
-                            {
-                                <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.ObchodnyRegister(Model.Rec.p91Client_RegID)">obchodný register</a>
-                            }
-                            else
-                            {
-                                <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Justice(Model.Rec.p91Client_RegID)">justice</a>
-                                <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Ares(Model.Rec.p91Client_RegID)">ares</a>
-                                <a class="valhover_tooltip" target='_blank' href="@BO.basRejstriky.Insolvence(Model.Rec.p91Client_RegID)">insolvence</a>
-                            }
-
-                        </div>
                     </div>
                 </div>
-            }
-
-
-            <div class="my-1">
-
-                <div class="rowvalhover">
-                    <span>@(Model.Rec.PrimaryAddress)</span>
-                    <a class="valhover_tooltip" target='_blank' href="https://mapy.cz/zakladni?q=@(Model.Rec.p91ClientAddress1_City+"+"+Model.Rec.p91ClientAddress1_Street)">mapy</a>
-                    <a class="valhover_tooltip" target='_blank' href="https://www.google.com/maps/place/@(Model.Rec.p91ClientAddress1_City+"+"+Model.Rec.p91ClientAddress1_Street)">google</a>
-                </div>
             </div>
-
-            <table class="table table-sm table-bordered table-hover">
-                <tr>
-                    <th>
-                        <select asp-for="@Model.StatByPrefix" onchange="statbyprefix_change(this)">
-                            <option value="p41">@_f.tra("Projekt")</option>
-                            <option value="j02">@_f.tra("Osoba")</option>
-                            <option value="p32">@_f.tra("Aktivita")</option>
-                            <option value="p34">@_f.tra("Sešit")</option>
-                            <option value="p95">@_f.tra("Fakturační oddíl")</option>
-                            <option value="vat">@_f.tra("DPH sazba")</option>
-                        </select>
-                    </th>
-                    <th>@Model.Rec.j27Code</th>
-                    <th title="Hodiny vyúčtované">H1</th>
-                    <th title="Hodiny vykázané">H0</th>
-                </tr>
-                @foreach (var c in _qrystat)
-                {
-                    <tr>
-                        <td>
-                            <myval value="@c.groupbyalias" hoverprefix="@(Model.StatByPrefix)" hoverpid="@c.groupbypid" withoutcss="true"></myval>
-                        </td>
-                        <td style="text-align:right;">
-                            @(BO.BAS.Number2String(c.bezdph))
-
-                        </td>
-                        <td style="text-align:right;">
-                            @(BO.BAS.Number2String(c.hvyf))
-                        </td>
-                        <td style="text-align:right;">
-                            @(BO.BAS.Number2String(c.hvyk))
-                        </td>
-                    </tr>
-
-                }
-                <tr>
-                    <th><span class="k-icon k-i-sum"></span></th>
-                    <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.bezdph)))</th>
-                    <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.hvyf)))</th>
-                    <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.hvyk)))</th>
-                </tr>
-            </table>
+        }
 
 
+        <div class="my-1">
+
+            <div class="rowvalhover">
+                <span>@(Model.Rec.PrimaryAddress)</span>
+                <a class="valhover_tooltip" target='_blank' href="https://mapy.cz/zakladni?q=@(Model.Rec.p91ClientAddress1_City+"+"+Model.Rec.p91ClientAddress1_Street)">mapy</a>
+                <a class="valhover_tooltip" target='_blank' href="https://www.google.com/maps/place/@(Model.Rec.p91ClientAddress1_City+"+"+Model.Rec.p91ClientAddress1_Street)">google</a>
+            </div>
         </div>
+
+        <table class="table table-sm table-bordered table-hover">
+            <tr>
+                <th>
+                    <select asp-for="@Model.StatByPrefix" onchange="statbyprefix_change(this)">
+                        <option value="p41">@_f.tra("Projekt")</option>
+                        <option value="j02">@_f.tra("Osoba")</option>
+                        <option value="p32">@_f.tra("Aktivita")</option>
+                        <option value="p34">@_f.tra("Sešit")</option>
+                        <option value="p95">@_f.tra("Fakturační oddíl")</option>
+                        <option value="vat">@_f.tra("DPH sazba")</option>
+                    </select>
+                </th>
+                <th>@Model.Rec.j27Code</th>
+                <th title="Hodiny vyúčtované">H1</th>
+                <th title="Hodiny vykázané">H0</th>
+            </tr>
+            @foreach (var c in _qrystat)
+            {
+                <tr>
+                    <td>
+                        <myval value="@c.groupbyalias" hoverprefix="@(Model.StatByPrefix)" hoverpid="@c.groupbypid" withoutcss="true"></myval>
+                    </td>
+                    <td style="text-align:right;">
+                        @(BO.BAS.Number2String(c.bezdph))
+
+                    </td>
+                    <td style="text-align:right;">
+                        @(BO.BAS.Number2String(c.hvyf))
+                    </td>
+                    <td style="text-align:right;">
+                        @(BO.BAS.Number2String(c.hvyk))
+                    </td>
+                </tr>
+
+            }
+            <tr>
+                <th><span class="k-icon k-i-sum"></span></th>
+                <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.bezdph)))</th>
+                <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.hvyf)))</th>
+                <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.hvyk)))</th>
+            </tr>
+        </table>
 
 
     </div>
 
 
+</div>
 
 
-    @if (Model.Rec.p91Text1 != null || Model.Rec.p91Text2 != null)
-    {
-        <div class="card recpageboxauto">
-            <div class="card-body">
-                <i>
-                    @Html.Raw(BO.BAS.Text2Html(Model.Rec.p91Text1))
-                </i>
-
-                @if (Model.Rec.p91Text2 != null)
-                {
-                    <hr />
-                    <i>
-                        @Html.Raw(BO.BAS.Text2Html(Model.Rec.p91Text2))
-                    </i>
-                }
-            </div>
-        </div>
-    }
-
-    @if (Model.TagHtml != null)
-    {
-        <div class="card recpageboxauto">
-            <div class="card-body">
-                <div class="card-title recpagetitle bgp91">
-                    @_f.tra("Štítky")
-                </div>
-                @Html.Raw(Model.TagHtml)
-
-            </div>
-        </div>
-    }
 
 
-    <div style="clear:both;"></div>
-    <table class="table table-sm table-bordered table-hover" style="max-width:650px;float:left;">
-        <thead style="background-color: #F5F5F5;">
-            <tr>
-                <th>@_f.tra("Cenový rozpis faktury")</th>
-                <th>@_f.tra("Bez DPH")</th>
-                <th style="width:50px;">@_f.tra("DPH%")</th>
-                <th>@_f.tra("Částka DPH")</th>
-                <th>@_f.tra("Včetně DPH")</th>
-                <th style="width:40px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var c in Model.lisCenovyRozpis)
+@if (Model.Rec.p91Text1 != null || Model.Rec.p91Text2 != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <i>
+                @Html.Raw(BO.BAS.Text2Html(Model.Rec.p91Text1))
+            </i>
+
+            @if (Model.Rec.p91Text2 != null)
             {
-                <tr>
-                    <td>
-                        @c.Oddil
-                    </td>
-                    <td style="text-align:right;">
-                        @(BO.BAS.Number2String(c.BezDPH))
-                    </td>
-                    <td style="text-align:right;">
-                        @c.DPHSazba
-                        %
-                    </td>
-                    <td style="text-align:right;">
-                        @(BO.BAS.Number2String(c.DPH))
-                    </td>
-                    <td style="text-align:right;">
-                        @(BO.BAS.Number2String(c.VcDPH))
-                    </td>
-                    <td>
-                        @c.j27Code
-                    </td>
-                </tr>
+                <hr />
+                <i>
+                    @Html.Raw(BO.BAS.Text2Html(Model.Rec.p91Text2))
+                </i>
             }
-        </tbody>
-        <tfoot style="background-color: #E5E5E5;">
+        </div>
+    </div>
+}
+
+@if (Model.TagHtml != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp91">
+                @_f.tra("Štítky")
+            </div>
+            @Html.Raw(Model.TagHtml)
+
+        </div>
+    </div>
+}
+
+
+<div style="clear:both;"></div>
+<table class="table table-sm table-bordered table-hover" style="max-width:650px;float:left;">
+    <thead style="background-color: #F5F5F5;">
+        <tr>
+            <th>@_f.tra("Cenový rozpis faktury")</th>
+            <th>@_f.tra("Bez DPH")</th>
+            <th style="width:50px;">@_f.tra("DPH%")</th>
+            <th>@_f.tra("Částka DPH")</th>
+            <th>@_f.tra("Včetně DPH")</th>
+            <th style="width:40px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.lisCenovyRozpis)
+        {
             <tr>
-                <td></td>
-                <td style="text-align:right;">
-                    @(BO.BAS.Number2String(Model.lisCenovyRozpis.Sum(p=>p.BezDPH)))
-                </td>
-                <td></td>
-                <td style="text-align:right;">
-                    @(BO.BAS.Number2String(Model.lisCenovyRozpis.Sum(p=>p.DPH)))
+                <td>
+                    @c.Oddil
                 </td>
                 <td style="text-align:right;">
-                    @(BO.BAS.Number2String(Model.lisCenovyRozpis.Sum(p=>p.VcDPH)))
+                    @(BO.BAS.Number2String(c.BezDPH))
+                </td>
+                <td style="text-align:right;">
+                    @c.DPHSazba
+                    %
+                </td>
+                <td style="text-align:right;">
+                    @(BO.BAS.Number2String(c.DPH))
+                </td>
+                <td style="text-align:right;">
+                    @(BO.BAS.Number2String(c.VcDPH))
                 </td>
                 <td>
-                    @Model.Rec.j27Code
+                    @c.j27Code
                 </td>
             </tr>
-        </tfoot>
-
-    </table>
-
-
-
-    <script type="text/javascript">
-
-
-        function statbyprefix_change(cbx) {
-            $.post("/Common/SetUserParam", { key: "recpage-p91-statprefix", value: cbx.value }, function (data) {
-                location.reload(location.href);
-
-            });
         }
+    </tbody>
+    <tfoot style="background-color: #E5E5E5;">
+        <tr>
+            <td></td>
+            <td style="text-align:right;">
+                @(BO.BAS.Number2String(Model.lisCenovyRozpis.Sum(p=>p.BezDPH)))
+            </td>
+            <td></td>
+            <td style="text-align:right;">
+                @(BO.BAS.Number2String(Model.lisCenovyRozpis.Sum(p=>p.DPH)))
+            </td>
+            <td style="text-align:right;">
+                @(BO.BAS.Number2String(Model.lisCenovyRozpis.Sum(p=>p.VcDPH)))
+            </td>
+            <td>
+                @Model.Rec.j27Code
+            </td>
+        </tr>
+    </tfoot>
 
-        function recpage_p94(p91id) {
-            _window_open("/p91oper/p94?p91id=" + p91id);
-        }
-        function recpage_exupdate(p91id) {
-            _window_open("/p91oper/exupdate?p91id=" + p91id);
-        }
-    </script>
+</table>
+
+
+
+<script type="text/javascript">
+
+
+    function statbyprefix_change(cbx) {
+        $.post("/Common/SetUserParam", { key: "recpage-p91-statprefix", value: cbx.value }, function (data) {
+            location.reload(location.href);
+
+        });
+    }
+
+    function recpage_p94(p91id) {
+        _window_open("/p91oper/p94?p91id=" + p91id);
+    }
+    function recpage_exupdate(p91id) {
+        _window_open("/p91oper/exupdate?p91id=" + p91id);
+    }
+</script>
