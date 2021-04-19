@@ -9,13 +9,25 @@ namespace BO
 {
     public class BASFILE
     {
-        public static void LogInfo(string message,string username=null)
+        public static void LogError(string message, string username = null, string procname = null)
+        {
+            Handle_Log_Write("error", message, username, procname);            
+        }
+        public static void LogInfo(string message, string username = null, string procname = null)
+        {
+            Handle_Log_Write("info", message, username, procname);
+        }
+        private static void Handle_Log_Write (string logname,string message,string username=null,string procname=null)
         {
             var strLogDir = System.IO.Directory.GetCurrentDirectory() + "\\Logs";           
-            var strPath = string.Format("{0}\\log-info-{1}-{2}.log", strLogDir,username, DateTime.Now.ToString("yyyy.MM.dd"));            
+            var strPath = string.Format("{0}\\log-{1}-{2}-{3}.log", strLogDir,logname,username, DateTime.Now.ToString("yyyy.MM.dd"));            
             try
             {
                 System.IO.File.AppendAllLines(strPath, new List<string>() { "", "", "------------------------------", DateTime.Now.ToString() });
+                if (procname != null)
+                {
+                    System.IO.File.AppendAllLines(strPath, new List<string>() { "procname: " + procname });
+                }
                 System.IO.File.AppendAllLines(strPath, new List<string>() { "message: " + message });
             }
             catch

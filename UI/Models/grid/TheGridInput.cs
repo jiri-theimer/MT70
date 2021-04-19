@@ -17,7 +17,37 @@ namespace UI.Models
         public string oncmclick { get; set; } = "tg_cm(event)";
         public string ondblclick { get; set; } = "tg_dblclick";
         public string controllername { get; set; } = "TheGrid"; //název controlleru, přes který se zpracovávají grid události
-        public string fixedcolumns { get; set; }
+
+        private string _fixedcolumns { get; set; }
+        public string fixedcolumns
+        {
+            get
+            {
+                return _fixedcolumns;
+            }
+            set
+            {
+                _fixedcolumns = value;
+                if (!string.IsNullOrEmpty(_fixedcolumns))
+                {
+                    List<string> lis = new List<string>();
+                    var arr = _fixedcolumns.Split(",");
+                    for(int i = 0; i < arr.Count(); i++)
+                    {
+                        if (arr[i].Contains("__"))
+                        {
+                            lis.Add(arr[i]);
+                        }
+                        else
+                        {
+                            lis.Add("a__" + entity + "__" + arr[i]);
+                        }
+                    }
+                    _fixedcolumns = string.Join(",", lis);
+                }
+
+            }
+        }
 
         public string extendpagerhtml { get; set; }
         public string viewstate { get; set; } 

@@ -26,6 +26,7 @@ namespace UI.Controllers
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
+            v.gridinput.fixedcolumns = tgi.fixedcolumns;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
 
             return c.Event_HandleTheGridFilter(tgi, filter);
@@ -35,6 +36,7 @@ namespace UI.Controllers
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
+            v.gridinput.fixedcolumns = tgi.fixedcolumns;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             
             return c.Event_HandleTheGridOper(tgi);
@@ -45,6 +47,7 @@ namespace UI.Controllers
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
+            v.gridinput.fixedcolumns = tgi.fixedcolumns;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridMenu(tgi.j72id);
             
@@ -55,6 +58,7 @@ namespace UI.Controllers
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
+            v.gridinput.fixedcolumns = tgi.fixedcolumns;
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             return c.Event_HandleTheGridExport(format, tgi.j72id, pids);
         }        

@@ -23,23 +23,25 @@ namespace UI.Controllers
             {
                 return this.StopPage(true, "Na vstupu chybí faktura.");
             }
-            v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
-
-            v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = "p91id|int|" + v.p91ID.ToString(), oncmclick = "", ondblclick = "" };
-            v.gridinput.query = new BO.InitMyQuery().Load("p31", null, 0, "p91id|int|"+v.p91ID.ToString());
-            //v.gridinput.query.explicit_columns= "p31Amount_WithoutVat_Invoiced,p31Amount_Vat_Invoiced,p31Text"
-
-            v.gridinput.query.explicit_columns = _cp.getDefaultPallete(false, v.gridinput.query);
+            RefreshStateVAT(v);
 
 
             return View(v);
+        }
+
+        private void RefreshStateVAT(vatViewModel v)
+        {
+            v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
+            v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = "p91id|int|" + v.p91ID.ToString(), oncmclick = "", ondblclick = "" };
+            v.gridinput.query = new BO.InitMyQuery().Load("p31", null, 0, "p91id|int|" + v.p91ID.ToString());
+            v.gridinput.fixedcolumns = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult vat(vatViewModel v, string oper)
         {
-            v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
+            RefreshStateVAT(v);
             if (oper != null)
             {
                 return View(v);

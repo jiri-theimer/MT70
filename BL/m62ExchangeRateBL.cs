@@ -120,6 +120,10 @@ namespace BL
             }
             string url = string.Format("http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date={0}", BO.BAS.ObjectDate2String(d, "dd.MM.yyyy"));
             string strRaw = Handle_ImportCnb(client, Convert.ToDateTime(d)).Result;
+            if (strRaw == null)
+            {
+                return 0;   //chybový stav
+            }
             var rows = BO.BAS.ConvertString2List(strRaw, "\n");
 
             string strDate = rows[0].Split(" ")[0];
@@ -149,13 +153,20 @@ namespace BL
             string url = string.Format("http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date={0}", BO.BAS.ObjectDate2String(d, "dd.MM.yyyy"));
             using (var request = new HttpRequestMessage(new HttpMethod("GET"), url))
             {
+                try
+                {
+                    var response = await client.SendAsync(request);
 
-                var response = await client.SendAsync(request);
+                    var strRet = await response.Content.ReadAsStringAsync();
 
-                var strRet = await response.Content.ReadAsStringAsync();
-
-               
-                return strRet;
+                    return strRet;
+                }
+                catch(Exception ex)
+                {
+                    BO.BASFILE.LogError(ex.Message,"robot", "Handle_ImportCnb");
+                    return null;
+                }
+                
 
             }
 

@@ -281,8 +281,7 @@ namespace BL
 
         }
 
-
-
+        
         public List<BO.TheGridColumn> ParseTheGridColumns(string strPrimaryPrefix, string strJ72Columns, int intLangIndex)
         {
             //v strJ72Columns je čárkou oddělený seznam sloupců z pole j72Columns: název relace+__+entita+__+field
@@ -292,7 +291,7 @@ namespace BL
 
             string[] arr;
 
-            for (var i = 0; i < sels.Count; i++)
+            for (int i = 0; i < sels.Count; i++)
             {
                 arr = sels[i].Split("__");
                 if (_lis.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
@@ -322,7 +321,7 @@ namespace BL
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
 
             string[] arr;
-            for (var i = 0; i < sels.Count(); i++)
+            for (int i = 0; i < sels.Count(); i++)
             {
                 arr = sels[i].Split("__");
                 BO.TheGridColumn colSource = null;
