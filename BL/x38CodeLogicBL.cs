@@ -9,7 +9,7 @@ namespace BL
     public interface Ix38CodeLogicBL
     {
         public BO.x38CodeLogic Load(int pid);
-        public IEnumerable<BO.x38CodeLogic> GetList(BO.myQuery mq);
+        public IEnumerable<BO.x38CodeLogic> GetList(BO.myQueryX38 mq);
         public int Save(BO.x38CodeLogic rec);
         public bool CanEditRecordCode(int x38id, BO.BaseRecDisposition disp);
 
@@ -35,7 +35,7 @@ namespace BL
             return _db.Load<BO.x38CodeLogic>(GetSQL1(" WHERE a.x38ID=@pid"), new { pid = pid });
         }
 
-        public IEnumerable<BO.x38CodeLogic> GetList(BO.myQuery mq)
+        public IEnumerable<BO.x38CodeLogic> GetList(BO.myQueryX38 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.x38CodeLogic>(fq.FinalSql, fq.Parameters);

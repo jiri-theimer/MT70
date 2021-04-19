@@ -30,28 +30,28 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Číselná řada faktury"):</label>
         <div class="col-sm-11 col-md-10">
-            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" filter-flag="1" myqueryinline="x29id|int|391"></mycombo>
+            <mycombo entity="x38CodeLogic" asp-for="Rec.x38ID" selectedtext="@Model.ComboX38Name" myqueryinline="x29id|int|391"></mycombo>
         </div>
 
     </div>
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Výchozí měna faktury"):</label>
         <div class="col-sm-5 col-md-4">
-            <mycombo entity="j27Currency" asp-for="Rec.j27ID" selectedtext="@Model.ComboJ27Code" filter-flag="1"></mycombo>
+            <mycombo entity="j27Currency" asp-for="Rec.j27ID" selectedtext="@Model.ComboJ27Code"></mycombo>
         </div>
         <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Výchozí zaokrouhlovací pravidlo"):</label>
         <div class="col-sm-3 col-md-3">
-            <mycombo entity="p80InvoiceAmountStructure" asp-for="Rec.p98ID" selectedtext="@Model.ComboP98Name" filter-flag="1"></mycombo>
+            <mycombo entity="p80InvoiceAmountStructure" asp-for="Rec.p98ID" selectedtext="@Model.ComboP98Name"></mycombo>
         </div>
     </div>
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vystavovatel faktury"):</label>
         <div class="col-sm-5 col-md-4">
-            <mycombo entity="p93InvoiceHeader" asp-for="Rec.p93ID" selectedtext="@Model.ComboP93Name" filter-flag="1"></mycombo>
+            <mycombo entity="p93InvoiceHeader" asp-for="Rec.p93ID" selectedtext="@Model.ComboP93Name"></mycombo>
         </div>
         <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Výchozí struktura cenového rozpisu"):</label>
         <div class="col-sm-3 col-md-3">
-            <mycombo entity="p80InvoiceAmountStructure" asp-for="Rec.p80ID" selectedtext="@Model.ComboP80Name" filter-flag="1"></mycombo>
+            <mycombo entity="p80InvoiceAmountStructure" asp-for="Rec.p80ID" selectedtext="@Model.ComboP80Name"></mycombo>
         </div>
     </div>
 
@@ -88,7 +88,7 @@
                     </div>
                     <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("DPH region dokladu"):</label>
                     <div class="col-sm-3 col-md-3">
-                        <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name" filter-flag="1"></mycombo>
+                        <mycombo entity="j17Country" asp-for="Rec.j17ID" selectedtext="@Model.ComboJ17Name"></mycombo>
                     </div>
                 </div>
 

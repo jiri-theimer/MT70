@@ -39,7 +39,7 @@ namespace UI.Controllers.Admin
                 }
                 if (v.Rec.x38ID > 0)
                 {
-                    v.ComboP98Name = Factory.x38CodeLogicBL.Load(v.Rec.x38ID).x38Name;
+                    v.ComboX38Name = Factory.x38CodeLogicBL.Load(v.Rec.x38ID).x38Name;
                 }
             }
             RefreshState(v);

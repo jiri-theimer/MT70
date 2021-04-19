@@ -24,6 +24,9 @@
         case "p95":
             _qrystat = Model.lisP31.GroupBy(p => p.p95ID).Select(p => new { groupbypid = p.Key, groupbyalias = p.Min(p => p.p95Name), hvyf = p.Sum(p => p.p31Hours_Invoiced), hvyk = p.Sum(p => p.p31Hours_Orig), bezdph = p.Sum(p => p.p31Amount_WithoutVat_Invoiced) });
             break;
+        case "vat":
+            _qrystat = Model.lisP31.GroupBy(p => Convert.ToInt32(p.p31VatRate_Invoiced)).Select(p => new { groupbypid = p.Key, groupbyalias = p.Min(p => p.p31VatRate_Invoiced.ToString()), hvyf = p.Sum(p => p.p31Hours_Invoiced), hvyk = p.Sum(p => p.p31Hours_Orig), bezdph = p.Sum(p => p.p31Amount_WithoutVat_Invoiced) });
+            break;
         default:
             _qrystat = Model.lisP31.GroupBy(p => p.p41ID).Select(p => new { groupbypid = p.Key, groupbyalias = p.Min(p => p.p41Name), hvyf = p.Sum(p => p.p31Hours_Invoiced), hvyk = p.Sum(p => p.p31Hours_Orig), bezdph = p.Sum(p => p.p31Amount_WithoutVat_Invoiced) });
             break;
@@ -285,6 +288,7 @@
                             <option value="p32">@_f.tra("Aktivita")</option>
                             <option value="p34">@_f.tra("Sešit")</option>
                             <option value="p95">@_f.tra("Fakturační oddíl")</option>
+                            <option value="vat">@_f.tra("DPH sazba")</option>
                         </select>
                     </th>
                     <th>@Model.Rec.j27Code</th>

@@ -53,6 +53,7 @@ namespace UI.Controllers
                 {
                     this.AddMessage("Musíte vybrat cílovou DPH hladinu.");return View(v);
                 }
+                
                 if (!Factory.p91InvoiceBL.ChangeVat(v.p91ID,(int)v.SelectedX15ID, v.VatRate))
                 {
                     return View(v);

@@ -46,7 +46,9 @@ namespace UI.Controllers
                 case "p91":
                     lis = new p91ContextMenu(Factory, pid, source).GetItems(); break;
                 default:
+                    lis = new defContextMenu(Factory, pid, source,prefix).GetItems();
                     break;
+                    
             }
 
             return basMenu.FlushResult_UL(lis, true, true, source);
