@@ -91,10 +91,42 @@ namespace BL
 
         }
 
+        public string getDefaultPalletePreSaved(string entity,BO.baseQuery mq)  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
+        {
+            string s = null;     
+            switch (mq.Prefix)
+                {
+                case "p31":
+                    s= "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
+                    break;
+                default:
+                    return null;
+            }
 
+            if (s !=null)
+            {
+                List<string> lis = new List<string>();
+                var arr = s.Split(",");
+                for (int i = 0; i < arr.Count(); i++)
+                {
+                    if (arr[i].Contains("__"))
+                    {
+                        lis.Add(arr[i]);
+                    }
+                    else
+                    {
+                        lis.Add("a__" + entity + "__" + arr[i]);
+                    }
+                }
+                s = string.Join(",", lis);
+            }
+
+            return s;
+
+        }
         public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
         {
-
+           
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
             IEnumerable<BO.TheGridColumn> qry = null;
             if (bolComboColumns)

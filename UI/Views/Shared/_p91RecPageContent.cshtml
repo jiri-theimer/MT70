@@ -43,7 +43,9 @@
 <div class="card recpagebox400">
     <div class="card-body">
         <h6 class="card-title recpagetitle bgp91">
-            @_f.tra("Vyúčtování")
+            @Model.Rec.p92Name
+            
+
             @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 2))
             {
                 <span class="k-icon k-i-lock" style="color:black;"></span>

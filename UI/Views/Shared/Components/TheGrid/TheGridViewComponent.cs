@@ -42,9 +42,14 @@ namespace UI.Views.Shared.Components.TheGrid
 
             if (gridState == null)   //pro uživatele zatím nebyl vygenerován záznam v j72 -> vygenerovat
             {
-                var cols = _colsProvider.getDefaultPallete(false, input.query);    //výchozí paleta sloupců
+                string strJ72Columns = _colsProvider.getDefaultPalletePreSaved(input.entity,input.query);
+                if (strJ72Columns == null)
+                {
+                    var cols = _colsProvider.getDefaultPallete(false, input.query);    //výchozí paleta sloupců
+                    strJ72Columns = String.Join(",", cols.Select(p => p.UniqueName));
+                }                
 
-                var recJ72 = new BO.j72TheGridTemplate() { j72IsSystem = true, j72Entity = input.entity, j03ID = _f.CurrentUser.pid, j72Columns = String.Join(",", cols.Select(p => p.UniqueName)), j72MasterEntity = input.master_entity };
+                var recJ72 = new BO.j72TheGridTemplate() { j72IsSystem = true, j72Entity = input.entity, j03ID = _f.CurrentUser.pid, j72Columns = strJ72Columns, j72MasterEntity = input.master_entity };
 
                 var intJ72ID = _f.j72TheGridTemplateBL.Save(recJ72, null, null, null);
                 gridState = _f.j72TheGridTemplateBL.LoadState(intJ72ID, _f.CurrentUser.pid);
