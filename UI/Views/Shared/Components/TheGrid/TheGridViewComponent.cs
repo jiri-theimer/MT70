@@ -42,7 +42,7 @@ namespace UI.Views.Shared.Components.TheGrid
 
             if (gridState == null)   //pro uživatele zatím nebyl vygenerován záznam v j72 -> vygenerovat
             {
-                string strJ72Columns = _colsProvider.getDefaultPalletePreSaved(input.entity,input.query);
+                string strJ72Columns = _colsProvider.getDefaultPalletePreSaved(input.entity,input.master_entity,input.query);
                 if (strJ72Columns == null)
                 {
                     var cols = _colsProvider.getDefaultPallete(false, input.query);    //výchozí paleta sloupců
