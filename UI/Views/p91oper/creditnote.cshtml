@@ -21,7 +21,8 @@
 <form id="form1" asp-controller="p91oper" asp-action="creditnote" method="POST">
     <div class="modal_record_container">
         <div class="alert alert-warning">
-            
+            <p>Původně vyúčtované úkony zůstanou uloženy beze změny v původním vyúčtování (faktuře).</p>
+            <p>Opravný doklad bude technicky nové vyúčtování čistěn peněžních úkonů s mínus znaménky. Opravný doklad bude obsahovat pro každou sazbu DPH jeden peněžní úkon.</p>
         </div>
         <div class="alert alert-primary">
             @(Model.RecP91.p92Name+": "+Model.RecP91.p91Code)

@@ -112,8 +112,8 @@
 
         $("#cmdSaveMyToolbar").click(function () {
             document.dispatchEvent(event_form1_beforesave);
-            
-            if (event_form1_beforesave.detail.cancel == true) {                
+
+            if (event_form1_beforesave.detail.cancel == true) {
                 _notify_message("@_f.tra("Uložení formuláře zrušeno.")","info");
                 return;
             }
@@ -133,11 +133,17 @@
 
 
     function toolbar_try_delete() {
+        var strEntity = "@(Model.RecordEntity)";
+        var intPID = @(Model.RecordPID);
+        if (strEntity == "p91") {
+            location.replace("/p91oper/p91delete?p91id=" + intPID);
+            return;
+        }
         if (confirm("@_f.tra("Opravdu chcete nenávratně odstranit tento záznam?")")) {
 
             var url = '@Url.Action("DeleteRecord", "Common")';
 
-                    $.post(url, { entity:"@Model.RecordEntity", pid: @Model.RecordPID }, function (data) {
+                    $.post(url, { entity:strEntity, pid: intPID }, function (data) {
 
                         if (data == "1") {
                             _reload_layout_and_close();

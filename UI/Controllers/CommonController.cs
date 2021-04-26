@@ -26,7 +26,7 @@ namespace UI.Controllers
 
         public string DeleteRecord(string entity, int pid)  //Univerzální mazání záznamů
         {
-
+            
             return this.Factory.CBL.DeleteRecord(entity, pid);
         }
 

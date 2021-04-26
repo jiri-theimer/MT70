@@ -31,6 +31,7 @@ namespace BL
         public bool DeleteP94(int p94id, int p91id);
         public void ClearExchangeDate(int p91id, bool recalc);
         public IEnumerable<BO.p91_CenovyRozpis> GetList_CenovyRozpis(int p91id, bool bolIncludeRounding, bool bolIncludeProforma, int langindex);
+        public bool Delete(int p91id, string guid, int selectedoper);
 
     }
     class p91InvoiceBL : BaseBL, Ip91InvoiceBL
@@ -133,6 +134,30 @@ namespace BL
                 return 0;
 
             }
+        }
+
+        public bool Delete(int p91id, string guid,int selectedoper)
+        {
+            if (p91id==0 || string.IsNullOrEmpty(guid) || selectedoper==0)
+            {
+                this.AddMessageTranslated("p91id or guid or selectedoper missing");return false;
+            }
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                _db.RunSql("DELETE FROM p85TempBox WHERE p85GUID=@guid AND p85Prefix='p31'", new { guid = guid });
+                _db.RunSql("INSERT INTO p85TempBox(p85GUID,p85Prefix,p85DataPID,p85OtherKey1) SELECT @guid,'p31',p31ID,@oper FROM p31Worksheet WHERE p91ID=@p91id", new { guid = guid, oper = selectedoper,p91id=p91id });
+
+                if (_db.RunSql("exec dbo.p91_delete @j03id_sys,@pid,@guid,@err_ret OUTPUT", new { j03id_sys = _mother.CurrentUser.pid, pid = p91id, guid = guid, err_ret = "" }))
+                {
+                    sc.Complete();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+               
         }
 
         public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI)

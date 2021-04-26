@@ -30,7 +30,10 @@ namespace BO
         
 
         public string p28Name { get; }
-      
+        public string p28RegID { get; }
+        public string p28VatID { get; }
+
+
         public string p89Name { get; }
         
 

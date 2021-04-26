@@ -16,6 +16,56 @@ namespace UI.Controllers
             _cp = cp;
         }
 
+        //odstranit vyúčtování
+        public IActionResult p91delete(int p91id)
+        {
+            var v = new p91deleteViewModel() { p91ID = p91id,TempGuid=BO.BAS.GetGuid() };
+            if (v.p91ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí faktura.");
+            }
+            RefreshStateDelete(v);
+
+
+            return View(v);
+        }
+        private void RefreshStateDelete(p91deleteViewModel v)
+        {
+            v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
+            v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = "p91id|int|" + v.p91ID.ToString(), oncmclick = "", ondblclick = "" };
+            v.gridinput.query = new BO.InitMyQuery().Load("p31", null, 0, "p91id|int|" + v.p91ID.ToString());
+            v.gridinput.fixedcolumns = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult p91delete(p91deleteViewModel v, string oper)
+        {
+            RefreshStateDelete(v);
+            if (oper != null)
+            {
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (v.SelectedOper == 0)
+                {
+                    this.AddMessage("Musíte zvolit, jak naložit s úkony ve vyúčtování."); return View(v);
+                }
+
+              
+                if (!Factory.p91InvoiceBL.Delete(v.p91ID,v.TempGuid,v.SelectedOper))
+                {
+                    return View(v);
+                }
+                v.SetJavascript_CallOnLoad(v.p91ID);
+                return View(v);
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
+        }
+
         //Vytvořit dobropis
         public IActionResult creditnote(int p91id)
         {
@@ -62,6 +112,10 @@ namespace UI.Controllers
             this.Notify_RecNotSaved();
             return View(v);
         }
+
+        
+
+       
 
         //Převést kompletně na jinou sazbu DPH
         public IActionResult vat(int p91id)

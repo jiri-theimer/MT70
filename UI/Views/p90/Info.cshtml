@@ -1,5 +1,102 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model UI.Models.Recpage.p90RecPage
+@inject BL.Factory _f
+
 @{
+
+    Layout = "~/Views/Shared/_LayoutSubform.cshtml";
+    if (Model.Rec == null) return;
+
+    var _disp = _f.p90ProformaBL.InhaleRecDisposition(Model.Rec);
 }
+
+@addTagHelper *, UI
+
+
+<div class="info_record_container">
+    <div class="row">
+        <div class="col-sm-2 col-md-3">
+            @if (_disp.OwnerAccess)
+            {
+                <a class="btn btn-sm btn-outline-secondary" href="javascript:_edit('p90',@Model.pid)">@_f.tra("Karta")</a>
+            }
+
+            <a class="btn btn-sm btn-outline-secondary" href="/p90/RecPage?pid=@Model.pid" target="_top">@_f.tra("Stránka")</a>
+            @if (_f.CurrentUser.j04IsMenu_Proforma)
+            {
+                <a class="btn btn-sm btn-outline-secondary" href="@(basUI.GetGridUrl(_f,"p90",Model.pid))" target="_top">Grid</a>
+            }
+
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <myval value="@Model.Rec.p90Code"></myval>
+
+        </div>
+        <div class="col-sm-5 col-md-4">
+            <myval value="@Model.Rec.p89Name"></myval>
+
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <div class="col-sm-6 col-md-5">
+            <myval value="@Model.Rec.p28Name"></myval>
+
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <myval value="@Model.Rec.p28RegID"></myval>
+
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <myval value="@Model.Rec.p28VatID"></myval>
+
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("Částka")) @(Model.Rec.j27Code):</label>
+        <div class="col-sm-3 col-md-2">
+            <myval datatype="num" value="@Model.Rec.p90Amount"></myval>
+
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@(_f.tra("Datum")):</label>
+        <div class="col-sm-3 col-md-2">
+            <myval datatype="date" value="@Model.Rec.p90Date"></myval>
+
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("Dluh")):</label>
+        <div class="col-sm-3 col-md-2">
+            <myval datatype="num" value="@Model.Rec.p90Amount_Debt"></myval>
+
+        </div>
+
+        <label class="col-sm-1 col-md-1 col-form-label">@(_f.tra("Splatnost")):</label>
+        <div class="col-sm-3 col-md-2">
+            <myval datatype="date" value="@Model.Rec.p90DateMaturity"></myval>
+
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@(_f.tra("Sazba DPH")):</label>
+        <div class="col-sm-3 col-md-2">
+            <myval datatype="num" value="@Model.Rec.p90VatRate"></myval>
+
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@(_f.tra("DPH")):</label>
+        <div class="col-sm-3 col-md-2">
+            <myval datatype="num" value="@Model.Rec.p90Amount_Vat"></myval>
+
+        </div>
+    </div>
+    @if (Model.Rec.p90Text1 != null)
+    {
+        <div class="my-2">
+            <i>
+                @Html.Raw(BO.BAS.Text2Html(Model.Rec.p90Text1))
+            </i>
+        </div>
+    }
+
+    @Html.Raw(Model.TagHtml)
+</div>
