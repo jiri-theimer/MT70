@@ -27,7 +27,7 @@ namespace UI.Controllers
             return View();
         }
 
-        public string ContextMenu(string entity, int pid,string source)
+        public string ContextMenu(string entity, int pid,string source,string master_entity)
         {
             string prefix = entity.Substring(0, 3);
             var lis = new List<MenuItem>();
@@ -37,6 +37,8 @@ namespace UI.Controllers
                     lis = new j02ContextMenu(Factory,pid,source).GetItems();break;
                 case "p28":
                     lis = new p28ContextMenu(Factory, pid,source).GetItems(); break;
+                case "p31":
+                    lis = new p31ContextMenu(Factory, pid, source,master_entity).GetItems(); break;
                 case "o23":
                     lis = new o23ContextMenu(Factory, pid, source).GetItems(); break;
                 case "b07":

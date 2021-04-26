@@ -159,7 +159,9 @@ function _notify_message(strMessage, strTemplate = "error", milisecs = "3000") {
 
 
 //vyvolání kontextového menu
-function _cm(e, entity, pid, menu_source) {
+function _cm(e, entity, pid, menu_source,master_entity) {
+    if (menu_source === undefined) menu_source = null;
+    if (master_entity === undefined) master_entity = null;
 
     var ctl = e.target;
 
@@ -202,8 +204,7 @@ function _cm(e, entity, pid, menu_source) {
         $("#" + menuid).html("Loading...");
         menuLoadByServer = true;
 
-    }
-
+    }    
     
     $(ctl).contextMenu({
         menuSelector: "#" + menuid,
@@ -211,6 +212,7 @@ function _cm(e, entity, pid, menu_source) {
         menuEntity: entity,
         menuPid: pid,
         menuSource: menu_source,
+        menuMasterEntity: master_entity,
         menuLoadByServer: menuLoadByServer
 
     });

@@ -14,7 +14,7 @@ namespace BL
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq);
         public void UpdateExternalPID(int pid, string strExternalPID);
-
+        public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec);
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
     {
@@ -249,6 +249,25 @@ namespace BL
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec)
         {
             return BL.bas.p31Support.ValidateBeforeSaveOrigRecord(_mother, _db, rec);
+        }
+
+        public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec)
+        {
+            var c = new BO.p31RecDisposition();
+            if (_mother.CurrentUser.IsAdmin)
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                
+            }
+            if (rec.j02ID==_mother.CurrentUser.j02ID || rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P31_Owner)) //je vlastník nebo má globální roli vlastit všechny úkony
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                
+            }
+
+           
+
+            return c;
         }
 
     }

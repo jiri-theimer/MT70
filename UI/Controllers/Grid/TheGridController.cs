@@ -136,6 +136,10 @@ namespace UI.Controllers
                     break;
                 case "p91":
                     tabs.Add(AddTab("Tab1", "tab1", "/p91/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
+                    tabs.Add(AddTab("Úkony", "p31Worksheet", "SlaveView?prefix=p31"));
+                    tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
+                    tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
+                    tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
                     tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
                     break;
 

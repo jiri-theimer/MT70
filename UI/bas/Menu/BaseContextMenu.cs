@@ -65,7 +65,11 @@ namespace UI.Menu
         {
             return AMI("Nová poznámka", $"javascript: _window_open('/b07/Record?prefix={prefix}&pid=0&recpid={pid}')", "k-i-comment", parentmenuid);
         }
-        
+        public MenuItem AMI_ChangeLog(string prefix, int pid, string parentmenuid = "more")
+        {
+            return AMI("CHANGE-LOG", $"javascript: _window_open('/Record/ChangeLog?prefix={prefix}&pid={pid}',2)", "k-i-stick", parentmenuid);
+        }
+
         public void DIV(string strName = null, string strParentID = null)
         {
             _lis.Add(new MenuItem() { IsDivider = true, Name = BO.BAS.OM2(strName, 30), ParentID = strParentID });

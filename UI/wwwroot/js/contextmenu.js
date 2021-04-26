@@ -9,6 +9,7 @@
         var menuEntity = settings.menuEntity;
         var menuPid = settings.menuPid;
         var menuSource = settings.menuSource;
+        var menuMasterEntity = settings.menuMasterEntity;
         var menuLoadByServer = settings.menuLoadByServer;
 
         $menu.data("menuSelector", settings.menuSelector);
@@ -90,8 +91,8 @@
 
                 callOnMenuShow(menu);
                 return false;
-            }
-            $.post("/Menu/ContextMenu", { entity: menuEntity, pid: menuPid, source: menuSource }, function (data) {
+            }            
+            $.post("/Menu/ContextMenu", { entity: menuEntity, pid: menuPid, source: menuSource, master_entity: menuMasterEntity }, function (data) {
                 //menu položky natahované dynamicky ze serveru
                 if (_device.type === "Phone") {
                     data = data + "<hr><button class='btn btn-light' style='margin-left:100px;' type='button'><img src='/images/close.png'/></button>";
