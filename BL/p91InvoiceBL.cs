@@ -10,6 +10,7 @@ namespace BL
     public interface Ip91InvoiceBL
     {
         public BO.p91Invoice Load(int pid);
+        public BO.p91Invoice LoadByP31ID(int p31id);
         public BO.p91Invoice LoadByCode(string code);
         public BO.p91Invoice LoadMyLastCreated();
         public BO.p91Invoice LoadCreditNote(int p91id);
@@ -74,6 +75,10 @@ namespace BL
         public BO.p91Invoice Load(int pid)
         {
             return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.p91ID=@pid"), new { pid = pid });
+        }
+        public BO.p91Invoice LoadByP31ID(int p31id)
+        {
+            return _db.Load<BO.p91Invoice>(GetSQL1(" WHERE a.p91ID IN (SELECT p91ID FROM p31Worksheet WHERE p31ID=@pid)"), new { pid = p31id });
         }
         public BO.p91Invoice LoadByCode(string code)
         {

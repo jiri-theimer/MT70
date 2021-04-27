@@ -16,6 +16,30 @@ namespace UI.Controllers
             _cp = cp;
         }
 
+        //upravit položku vyúčtování
+        public IActionResult p31edit(int p31id)
+        {
+            var v = new p31editViewModel() { p31ID = p31id};
+            if (v.p31ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí úkon.");
+            }
+            RefreshStateEdit(v);
+            v.p31Text = v.Rec.p31Text;
+            v.SelectedP70ID = v.Rec.p70ID;
+            v.p31Hours_Invoiced = v.Rec.p31Hours_Invoiced;
+            v.p31VatRate_Invoiced = v.Rec.p31VatRate_Invoiced;
+            v.p31Amount_WithoutVat_Invoiced = v.Rec.p31Amount_WithoutVat_Invoiced;
+
+            return View(v);
+        }
+        private void RefreshStateEdit(p31editViewModel v)
+        {
+            v.RecP91 = Factory.p91InvoiceBL.LoadByP31ID(v.p31ID);
+            v.Rec = Factory.p31WorksheetBL.Load(v.p31ID);
+            
+        }
+
         //odstranit vyúčtování
         public IActionResult p91delete(int p91id)
         {
