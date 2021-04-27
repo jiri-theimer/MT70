@@ -249,7 +249,7 @@ namespace UI.Controllers
         //{
         //    var setting = LoadMySearchSetting();
         //    var sb = new System.Text.StringBuilder();
-            
+
         //    sb.AppendLine("<div style='padding:20px;'>");
         //    sb.Append("<h5>"+Factory.tra("FULLTEXT nastavení")+"</h5>");
         //    sb.Append("<hr>");
@@ -287,7 +287,7 @@ namespace UI.Controllers
         //    return sb.ToString();
         //}
 
-        
+
         //public string GetHtml4Search(string entity, string searchstring) //Vrací HTML zdroj tabulky pro MySearch
         //{
         //    var setting = LoadMySearchSetting();
@@ -295,7 +295,7 @@ namespace UI.Controllers
         //    //mq.SearchImplementation = Factory.App.Implementation;
         //    //mq.IsRecordValid = true;    //v combo nabídce pouze časově platné záznamy
 
-            
+
         //    mq.SearchString = searchstring; //filtrování na straně serveru
         //    mq.TopRecordsOnly = setting.TopRecs; //maximálně prvních 50 záznamů, které vyhovují podmínce
         //    //mq.a01IsTemporary = false;  //vyloučit temp akce
@@ -336,7 +336,7 @@ namespace UI.Controllers
         //    s.Append("<thead><tr>");
         //    foreach (var col in cols)
         //    {
-                
+
         //        switch (Factory.CurrentUser.j03LangIndex)
         //        {
         //            case 1:
@@ -384,20 +384,48 @@ namespace UI.Controllers
 
         //    return s.ToString();
         //}
+        public string GetHourIntervalItems(string o15flag) //Vrací hodnoty nabídky zápisu hodin
+        {
+            if (Factory.CurrentUser.j03HoursEntrySettingV7 == null)
+            {
+                Factory.CurrentUser.j03HoursEntrySettingV7 = "30|30";
+            }
+            string strFormat = Factory.CurrentUser.j03DefaultHoursFormat;
+            string ret = "";
+            var ct = new BO.CLS.TimeSupport();
+            var arr = Factory.CurrentUser.j03HoursEntrySettingV7.Split("|");
+            double intStart = Convert.ToDouble(arr[0]);
+            
+            double intKrat = 4;
+            if (intStart == 60) intKrat = 10;
+            if (intStart == 30) intKrat = 8;
+            if (intStart == 5 || intStart==10 || intStart==6) intKrat = 3;
+            for(double i = intStart; i <= intKrat * 60; i += intStart)
+            {
+                if (i > intStart)
+                {
+                    ret += "|";
+                }
+                if (strFormat == "T")
+                {
+                    ret += ct.ShowAsHHMM((i / 60.00).ToString());
+                }
+                else
+                {
+                    ret += (i / 60.00).ToString();
+                }
+            }
 
+            
+            return ret;
+
+        }
         public string GetAutoCompleteHtmlItems(int o15flag, string tableid) //Vrací options pro datalist v rámci autocomplete pole
         {
             var mq = new BO.myQuery("o15");
             var lis = Factory.o15AutoCompleteBL.GetList(mq).Where(p => (int)p.o15Flag == o15flag);
-            var s = new System.Text.StringBuilder();
-
-            s.Append("<option></option>");
-            foreach (var item in lis)
-            {
-                s.Append(string.Format("<option value='{0}'></option>", item.o15Value));
-            }
-           
-            return s.ToString();
+            return string.Join("|", lis.Select(p => p.o15Value));
+            
         }
 
         public string GetMySelectHtmlOptions(string entity,string textfield,string orderfield)

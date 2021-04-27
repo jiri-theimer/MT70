@@ -156,18 +156,19 @@ function datepicker_set_value(ctlClientID, datValue) {
 
 /*_MyAutoComplete*/
 function myautocomplete_init(c) {
-    var _listid = c.controlid + "_list";
-   
+    
     $("#" + c.controlid).on("mouseover", function () {
-        if ($("#" + _listid).prop("filled") === true || $("#" + _listid).prop("filling") === true) return;    //datalist už bylo dříve načten
+        if ($("#" + c.controlid).prop("filled") === true || $("#" + c.controlid).prop("filling") === true) return;    //datalist už bylo dříve načten
 
-        $("#" + _listid).prop("filling", true); //momentálně běží plnění
+        $("#" + c.controlid).prop("filling", true); //momentálně běží plnění
                 
         handle_load_options();
                         
     });
     $("#" + c.controlid).on("focus", function () {
-        if ($("#" + _listid).prop("filled") === true) return;    //datalist už bylo dříve načten
+        if ($("#" + c.controlid).prop("filled") === true) {
+            return;
+        }
 
         handle_load_options();
 
@@ -177,11 +178,23 @@ function myautocomplete_init(c) {
     function handle_load_options() {
         var strCurPlaceHolder = $("#" + c.controlid).attr("placeholder");
         $("#" + c.controlid).attr("placeholder", "Loading...");
-        $.post(_ep(c.posturl), { o15flag: c.o15flag }, function (data) {
+        $.post(_ep(c.posturl), { o15flag: c.o15flag }, function (data) {            
+            var arr = data.split("|");
+            $("#" + c.controlid).autocomplete({
+                source: [arr],
+                visibleLimit: 20,
+                openOnFocus: true,
+                highlight: false,
+                autoselect: true
+            });
 
-            $("#" + _listid).html(data);
+            $("#" + c.controlid).prop("filled", true);
 
-            $("#" + _listid).prop("filled", true);
+            $("#" + c.controlid).on("focus", function (e, data) {
+                $(this).select();
+            });
+            
+            
 
             $("#" + c.controlid).attr("placeholder", strCurPlaceHolder);
 

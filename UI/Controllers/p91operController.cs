@@ -31,6 +31,23 @@ namespace UI.Controllers
             {
                 case BO.p33IdENUM.Cas:
                     v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;
+                    if (v.Rec.IsRecommendedHHMM_Invoiced())
+                    {
+                        v.Hours = v.Rec.p31HHMM_Invoiced;
+                    }
+                    else
+                    {
+                        v.Hours = v.Rec.p31Hours_Invoiced.ToString();
+                    }
+                    if (v.Rec.p31Value_FixPrice.ToString().Length>5)
+                    {
+                        var ct = new BO.CLS.TimeSupport();
+                        v.Hours_FixPrice = ct.ShowAsHHMM(v.Rec.p31Value_FixPrice.ToString());
+                    }
+                    else
+                    {
+                        v.Hours_FixPrice = v.Rec.p31Value_FixPrice.ToString();
+                    }
                     break;
                 case BO.p33IdENUM.Kusovnik:
                     v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;
@@ -41,8 +58,7 @@ namespace UI.Controllers
             
             v.p31VatRate_Invoiced = v.Rec.p31VatRate_Invoiced;
             v.p31Amount_WithoutVat_Invoiced = v.Rec.p31Amount_WithoutVat_Invoiced;
-            v.p31Text = v.Rec.p31Text;
-
+            v.p31Text = v.Rec.p31Text;            
             return View(v);
         }
         private void RefreshStateEdit(p31editViewModel v)

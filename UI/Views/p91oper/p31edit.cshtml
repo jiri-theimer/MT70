@@ -9,6 +9,7 @@
 
 @addTagHelper *, UI
 
+
 <div class="bg-light" style="padding:10px;">
     <button type="button" id="cmdOK" class="btn btn-success">@_f.tra("Uložit změny")</button>
 
@@ -59,7 +60,7 @@
                                 @_f.tra("Hodiny k fakturaci"):
                             </td>
                             <td>
-                                <input type="text" class="form-control" asp-for="@Model.p31Value_Invoiced" />
+                                <myhours asp-for="@Model.Hours"></myhours>
                             </td>
                             <td>
                             </td>
@@ -75,6 +76,20 @@
                                 @Model.RecP91.j27Code
                             </td>
                         </tr>
+                        @if (Model.SelectedP70ID == BO.p70IdENUM.ZahrnutoDoPausalu)
+                        {
+                            <tr>
+                                <td>
+                                    @_f.tra("Hodiny v paušálu"):
+                                </td>
+                                <td>
+                                    <myhours asp-for="@Model.Hours_FixPrice"></myhours>
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        }
                     }
                     @if (Model.Rec.p33ID == BO.p33IdENUM.Kusovnik)
                     {
@@ -144,6 +159,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        
+
 
         $("#cmdOK").click(function () {
 
@@ -154,7 +171,7 @@
 
         });
 
-
+        _resize_textareas();
 
     })
 

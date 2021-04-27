@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/kendo/styles/kendo.common.min.css" type="text/css" />
     <link href="~/lib/datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="~/lib/qtip/jquery.qtip.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="~/css/@_f.CurrentUser.getFontSizeCss()" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="@_f.App.CssCustomSkin" />
@@ -26,16 +27,16 @@
 <body>
     <script type="text/javascript">
         var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
-        
+
         var event_form1_beforesave = new CustomEvent("form1_beforesave", { detail: { cancel: false } });
-        
+
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
-
     <script src="~/lib/qtip/jquery.qtip.min.js"></script>
+    <script src="~/lib/autocomplete/jquery.autocomplete.min.js"></script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/mycombo.js" asp-append-version="true"></script>
@@ -51,7 +52,7 @@
 
     }
 
-       
+
     </script>
 
 
@@ -88,16 +89,16 @@
             {
                 <button type="button" onclick="toolbar_handle_validity(event)" class="btn btn-light btn-sm px-0">@_f.tra("Časová platnost ručně")</button>
             }
-            </div>
         </div>
-        @if (IsSectionDefined("after_form"))
-        {
-            @RenderSection("after_form")
-        }
+    </div>
+    @if (IsSectionDefined("after_form"))
+    {
+        @RenderSection("after_form")
+    }
 
 
 
-        <script type="text/javascript">
+    <script type="text/javascript">
         var _modal;
 
     $(document).ready(function ()
@@ -257,9 +258,9 @@
 
 
 
-        </script>
+    </script>
 
-        @RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 
 
 </body>

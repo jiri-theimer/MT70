@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="~/lib/qtip/jquery.qtip.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/kendo/styles/kendo.common.min.css" type="text/css" />
     <link rel="stylesheet" href="~/css/@_f.CurrentUser.getFontSizeCss()" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -51,6 +52,7 @@
             break;
     }
     <script src="~/lib/qtip/jquery.qtip.min.js"></script>
+    <script src="~/lib/autocomplete/jquery.autocomplete.min.js"></script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/mycombo.js" asp-append-version="true"></script>
@@ -94,9 +96,9 @@
 
         @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
-           
+
                 @:_notify_message("@c.Value","@c.Key");
-            
+
              }
         }
         if ($("#toolbar_changeinfo").length) {

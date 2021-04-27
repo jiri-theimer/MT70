@@ -54,7 +54,9 @@ namespace BO
 
 
         public string j03DefaultHoursFormat { get; set; }     // nový sloupec ve verzi 6        možné hodnoty: N a T
-        
+        public string j03HoursEntrySettingV7 { get; set; }    //nastavení zápisu hodin: Interval1|Interval2|Vstup #### Interval1: 30/60/5/10/6|, Interval2: 30/60, Vstup: H/M
+
+
         public int j03GridSelectionModeFlag { get; set; } = 0; // používá se pouze pro podporu clipboard v gridu
         public int j03GlobalCssFlag { get; set; }     // zvolená velikost písma
         public int j03FreelanceFlag { get; set; } = 0; // 1 - freelance uživatel a plátce DPH 2 - freelance neplátce DPH

@@ -89,12 +89,11 @@ namespace BO.CLS
         }
 
         public string ShowAsHHMM(string strTime, int lngMinTimeUnit = 0)
-        {
-            int lngSec;
+        {            
             // strTime jsou dekadické hodiny
             // fce vrací čas z dekadického hodinového výrazu na hh:mm
             string strHHMM;
-            lngSec = ConvertTimeToSeconds(strTime);
+            int lngSec = ConvertTimeToSeconds(strTime);
             if (lngMinTimeUnit > 0)
                 lngSec = RoundSeconds(lngSec, lngMinTimeUnit);
             strHHMM = GetTimeFromSeconds(System.Convert.ToDouble(lngSec));
@@ -103,14 +102,13 @@ namespace BO.CLS
 
         public string GetTimeFromSeconds(double tim, bool bolIncludeSeconds = false)
         {
-            double hod;
+            
             string cmin;
             string chod;
             string znam;
             // tim... časový úsek vyjádřený v sekundách
-            int Min;
-
-            if (tim == 0)
+            
+            if (tim == 0.00)
             {
                 if (!bolIncludeSeconds)
                     return "00:00";
@@ -128,14 +126,14 @@ namespace BO.CLS
             else
                 znam = "";
 
-            // 'hod = Int(tim / 90000)
-            hod = Convert.ToDouble(Convert.ToInt32(tim / 3600));
 
-            // 'If hod > 0 Then tim = tim - (hod * 90000)
+            double hod = Convert.ToDouble(Convert.ToInt32(tim) / 3600);    //zaokrouhlí na celé hodiny dolů!
+            
+
             if (hod > 0)
                 tim = tim - (hod * 3600);
 
-            Min = Convert.ToInt32(tim / 60);
+            int Min = Convert.ToInt32(tim) / 60;
             if (Min > 0)
                 tim = tim - (Min * 60);
 

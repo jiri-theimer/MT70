@@ -14,6 +14,8 @@ namespace UI.Models.p91oper
 
         public BO.p70IdENUM SelectedP70ID { get; set; }        
         public double p31Value_Invoiced { get; set; }
+        public string Hours { get; set; }
+        public string Hours_FixPrice { get; set; }
         public double p31Rate_Billing_Invoiced { get; set; }
         public double p31Amount_WithoutVat_Invoiced { get; set; }
         public double p31VatRate_Invoiced { get; set; }
