@@ -27,9 +27,21 @@ namespace UI.Controllers
             RefreshStateEdit(v);
             v.p31Text = v.Rec.p31Text;
             v.SelectedP70ID = v.Rec.p70ID;
-            v.p31Hours_Invoiced = v.Rec.p31Hours_Invoiced;
+            switch (v.Rec.p33ID)
+            {
+                case BO.p33IdENUM.Cas:
+                    v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;
+                    break;
+                case BO.p33IdENUM.Kusovnik:
+                    v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;
+                    break;
+                default:
+                    break;
+            }
+            
             v.p31VatRate_Invoiced = v.Rec.p31VatRate_Invoiced;
             v.p31Amount_WithoutVat_Invoiced = v.Rec.p31Amount_WithoutVat_Invoiced;
+            v.p31Text = v.Rec.p31Text;
 
             return View(v);
         }
@@ -38,6 +50,30 @@ namespace UI.Controllers
             v.RecP91 = Factory.p91InvoiceBL.LoadByP31ID(v.p31ID);
             v.Rec = Factory.p31WorksheetBL.Load(v.p31ID);
             
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult p31edit(p31editViewModel v, string oper)
+        {
+            RefreshStateEdit(v);
+            if (oper != null)
+            {
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {
+                
+                if (1==1)
+                {
+                    return View(v);
+                }
+                v.SetJavascript_CallOnLoad(v.p31ID);
+                return View(v);
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
         }
 
         //odstranit vyúčtování

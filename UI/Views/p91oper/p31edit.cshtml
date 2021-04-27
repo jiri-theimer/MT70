@@ -27,19 +27,117 @@
             @(Model.RecP91.p91Client)
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                @_f.tra("Vyberte cílovou měnu vyúčtování")
+        <div class="row">
+            <div class="col-auto">
+                <div class="card">
+                    <div class="card-header">
+                        @_f.tra("Fakturační stav úkonu")
+                    </div>
+                    <div class="card-body">
+                        <input type="radio" asp-for="@Model.SelectedP70ID" id="opg4" value="Vyfakturovano" onchange="postback()" />
+                        <label for="opg4">@_f.tra("Fakturovat")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.SelectedP70ID" id="opg6" value="ZahrnutoDoPausalu" onchange="postback()" />
+                        <label for="opg6">@_f.tra("Zahrnout do paušálu")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.SelectedP70ID" id="opg2" value="ViditelnyOdpis" onchange="postback()" />
+                        <label for="opg2">@_f.tra("Viditelný odpis")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.SelectedP70ID" id="opg3" value="SkrytyOdpis" onchange="postback()" />
+                        <label for="opg3">@_f.tra("Skrytý odpis")</label>
+                        <br />
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <myradiolist asp-for="@Model.SelectedJ27ID" datasource="@Model.lisJ27" textfield="j27Code" valuefield="pid"></myradiolist>
+
+            <div class="col-auto">
+                <table>
+                    @if (Model.Rec.p33ID == BO.p33IdENUM.Cas)
+                    {
+                        <tr style="display:@Model.CssDisplayMoney">
+                            <td>
+                                @_f.tra("Hodiny k fakturaci"):
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.p31Value_Invoiced" />
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr style="display:@Model.CssDisplayMoney">
+                            <td>
+                                @_f.tra("Hodinová sazba"):
+                            </td>
+                            <td>
+                                <mynumber asp-for="@Model.p31Rate_Billing_Invoiced"></mynumber>
+                            </td>
+                            <td>
+                                @Model.RecP91.j27Code
+                            </td>
+                        </tr>
+                    }
+                    @if (Model.Rec.p33ID == BO.p33IdENUM.Kusovnik)
+                    {
+                        <tr style="display:@Model.CssDisplayMoney">
+                            <td>
+                                @_f.tra("Počet k fakturaci"):
+                            </td>
+                            <td>
+                                <mynumber asp-for="@Model.p31Value_Invoiced"></mynumber>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr style="display:@Model.CssDisplayMoney">
+                            <td>
+                                @_f.tra("Sazba za kus"):
+                            </td>
+                            <td>
+                                <mynumber asp-for="@Model.p31Rate_Billing_Invoiced"></mynumber>
+                            </td>
+                            <td>
+                                @Model.RecP91.j27Code
+                            </td>
+                        </tr>
+                    }
+                    @if (Model.Rec.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.Rec.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+                    {
+                        <tr style="display:@Model.CssDisplayMoney">
+                            <td>
+                                @_f.tra("Fakturační cena bez DPH"):
+                            </td>
+                            <td>
+                                <mynumber asp-for="@Model.p31Amount_WithoutVat_Invoiced"></mynumber>
+                            </td>
+                            <td>
+                                @Model.RecP91.j27Code
+                            </td>
+                        </tr>
+                    }
+
+                    <tr style="display:@Model.CssDisplayMoney">
+                        <td>
+                            @_f.tra("Sazba DPH"):
+                        </td>
+                        <td>
+                            <mynumber asp-for="@Model.p31VatRate_Invoiced"></mynumber>
+                        </td>
+                        <td>
+                            %
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
+
+        
+        <textarea asp-for="@Model.p31Text" class="form-control" placeholder="@_f.tra("Text úkonu")"></textarea>
 
     </div>
 
 
-    <input type="hidden" asp-for="@Model.p91ID" />
+    <input type="hidden" asp-for="@Model.p31ID" />
+    
 </form>
 
 
@@ -61,6 +159,10 @@
     })
 
 
+    function postback() {
+        form1.action = _ep("/p91oper/p31edit?oper=postback");
+        form1.submit();
+    }
 
 
 </script>
