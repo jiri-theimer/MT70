@@ -389,8 +389,7 @@ namespace UI.Controllers
             if (Factory.CurrentUser.j03HoursEntrySettingV7 == null)
             {
                 Factory.CurrentUser.j03HoursEntrySettingV7 = "30|30";
-            }
-            string strFormat = Factory.CurrentUser.j03DefaultHoursFormat;
+            }            
             string ret = "";
             var ct = new BO.CLS.TimeSupport();
             var arr = Factory.CurrentUser.j03HoursEntrySettingV7.Split("|");
@@ -406,7 +405,7 @@ namespace UI.Controllers
                 {
                     ret += "|";
                 }
-                if (strFormat == "T")
+                if (Factory.CurrentUser.j03DefaultHoursFormat == "T")
                 {
                     ret += ct.ShowAsHHMM((i / 60.00).ToString());
                 }

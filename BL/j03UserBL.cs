@@ -110,7 +110,7 @@ namespace BL
             p.AddString("j03HomePageUrl",rec.j03HomePageUrl);
             p.AddString("j03SiteMenuMyLinksV7", rec.j03SiteMenuMyLinksV7);
             p.AddString("j03PageSplitterFlagV7", rec.j03PageSplitterFlagV7);
-            p.AddString("j03HoursEntrySettingV7", rec.j03HoursEntrySettingV7);
+            p.AddInt("j03HoursEntryFlagV7", rec.j03HoursEntryFlagV7);
 
             p.AddString("j03DefaultHoursFormat", rec.j03DefaultHoursFormat);
             p.AddInt("j03GlobalCssFlag", rec.j03GlobalCssFlag);
