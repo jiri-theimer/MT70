@@ -32,9 +32,7 @@
                         <br />
                         <input type="radio" asp-for="@Model.HoursFormat" id="opgFormatT" value="T" />
                         <label for="opgFormatT">@_f.tra("HH:MM (např. 01:30)")</label>
-                        <hr />
-                        <input type="checkbox" asp-for="@Model.TimesheetEntryByMinutes" id="chkTimesheetEntryByMinutes" />
-                        <label for="chkTimesheetEntryByMinutes">@_f.tra("Odpracovaný čas vykazovat v minutách (např. 90)")</label>
+                        
                     </div>
                 </div>
 
@@ -69,11 +67,25 @@
         </div>
         
         
-
+        <div class="card my-2" style="display:@(BO.BAS.IIFS(Model.PageSource=="timesheet","block","none"))">
+            <div class="card-header">
+                @_f.tra("Vykazování odpracovaného času")
+            </div>
+            <div class="card-body">
+                <input type="checkbox" asp-for="@Model.TimesheetEntryByMinutes" id="chkTimesheetEntryByMinutes" />
+                <label for="chkTimesheetEntryByMinutes">@_f.tra("Odpracovaný čas vykazovat v minutách (např. 90)")</label>
+                <hr />
+                <input type="checkbox" asp-for="@Model.OfferTrimming" id="chkOfferTrimming" />
+                <label for="chkOfferTrimming">@_f.tra("U časových a peněžních úkonů nabízet možnost zapsat korekci")</label>
+                <hr />
+                <input type="checkbox" asp-for="@Model.OfferContactPerson" id="chkOfferContactPerson" />
+                <label for="chkOfferContactPerson">@_f.tra("Nabízet k vyplnění kontaktní osobu klienta/projektu")</label>
+            </div>
+        </div>
     </div>
 
 
-    
+    <input type="hidden" asp-for="@Model.PageSource" />
 </form>
 
 

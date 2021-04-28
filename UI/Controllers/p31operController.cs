@@ -11,9 +11,9 @@ namespace UI.Controllers
     public class p31operController : BaseController
     {
         //Nastavení vykazování hodin
-        public IActionResult hes()
+        public IActionResult hes(string pagesource)
         {
-            var v = new hesViewModel() { HoursFormat = Factory.CurrentUser.j03DefaultHoursFormat, TotalFlagValue = Factory.CurrentUser.j03HoursEntryFlagV7 };
+            var v = new hesViewModel() {PageSource= pagesource, HoursFormat = Factory.CurrentUser.j03DefaultHoursFormat, TotalFlagValue = Factory.CurrentUser.j03HoursEntryFlagV7 };
             if (BO.BAS.bit_compare_or(v.TotalFlagValue, 2)) v.HoursInterval = 30;
             if (BO.BAS.bit_compare_or(v.TotalFlagValue, 4)) v.HoursInterval = 60;
             if (BO.BAS.bit_compare_or(v.TotalFlagValue, 8)) v.HoursInterval = 5;
@@ -21,6 +21,8 @@ namespace UI.Controllers
             if (BO.BAS.bit_compare_or(v.TotalFlagValue, 32)) v.HoursInterval = 6;
             if (BO.BAS.bit_compare_or(v.TotalFlagValue, 64)) v.HoursInterval = 15;
             if (BO.BAS.bit_compare_or(v.TotalFlagValue, 128)) v.TimesheetEntryByMinutes = true;
+            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 256)) v.OfferTrimming = true;
+            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 512)) v.OfferContactPerson = true;
 
             return View(v);
         }
@@ -47,6 +49,8 @@ namespace UI.Controllers
                 if (v.HoursInterval == 6) v.TotalFlagValue += 32;
                 if (v.HoursInterval == 15) v.TotalFlagValue += 64;
                 if (v.TimesheetEntryByMinutes) v.TotalFlagValue += 128;
+                if (v.OfferTrimming) v.TotalFlagValue += 256;
+                if (v.OfferContactPerson) v.TotalFlagValue += 512;
 
                 Factory.CurrentUser.j03HoursEntryFlagV7 = v.TotalFlagValue;
                 Factory.CurrentUser.j03DefaultHoursFormat = v.HoursFormat;
