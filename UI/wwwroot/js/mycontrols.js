@@ -204,7 +204,7 @@ function myautocomplete_init(c) {
 }
 
 function myhours_setting() {
-    _window_open(_ep("/p31oper/hes"));
+    _window_open(_ep("/p31oper/hes",1));
 }
 
 function myhours_init(c) {

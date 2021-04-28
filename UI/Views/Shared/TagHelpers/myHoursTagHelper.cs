@@ -37,6 +37,7 @@ namespace UI.Views.Shared.TagHelpers
         {
             output.TagMode = TagMode.StartTagAndEndTag;
             _sb = new System.Text.StringBuilder();
+            if (this.HoursEntryFlag == 0) this.HoursEntryFlag = 2;
             Handle_Intervals();
 
             if (this.ShowSettingButton)
