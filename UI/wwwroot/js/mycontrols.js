@@ -203,6 +203,49 @@ function myautocomplete_init(c) {
     
 }
 
+function myhours_setting() {
+    _window_open(_ep("/p31oper/hes"));
+}
+
+function myhours_init(c) {
+
+    $("#" + c.controlid).on("mouseover", function () {
+        if ($("#" + c.controlid).prop("filled") === true || $("#" + c.controlid).prop("filling") === true) return;    //datalist už bylo dříve načten
+
+        $("#" + c.controlid).prop("filling", true); //momentálně běží plnění
+
+        handle_setup_myhours();
+
+    });
+    $("#" + c.controlid).on("focus", function () {
+        if ($("#" + c.controlid).prop("filled") === true) {
+            return;
+        }
+
+        handle_setup_myhours();
+
+    });
+
+
+    function handle_setup_myhours() {        
+        var arr = c.intervals.split("|");
+        $("#" + c.controlid).autocomplete({
+            source: [arr],
+            visibleLimit: 20,
+            openOnFocus: true,
+            highlight: false,
+            autoselect: true
+        });
+
+        $("#" + c.controlid).prop("filled", true);
+
+        $("#" + c.controlid).on("focus", function (e, data) {
+            $(this).select();
+        });
+    }
+
+}
+
 
 function mystitky_multiselect(event, entity) {
     var o51ids = $("#TagPids").val();

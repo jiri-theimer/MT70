@@ -31,23 +31,10 @@ namespace UI.Controllers
             {
                 case BO.p33IdENUM.Cas:
                     v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;
-                    if (v.Rec.IsRecommendedHHMM_Invoiced())
-                    {
-                        v.Hours = v.Rec.p31HHMM_Invoiced;
-                    }
-                    else
-                    {
-                        v.Hours = v.Rec.p31Hours_Invoiced.ToString();
-                    }
-                    if (v.Rec.p31Value_FixPrice.ToString().Length>5)
-                    {
-                        var ct = new BO.CLS.TimeSupport();
-                        v.Hours_FixPrice = ct.ShowAsHHMM(v.Rec.p31Value_FixPrice.ToString());
-                    }
-                    else
-                    {
-                        v.Hours_FixPrice = v.Rec.p31Value_FixPrice.ToString();
-                    }
+                    v.Hours = v.Rec.p31Hours_Invoiced.ToString();
+                    v.Hours_FixPrice = v.Rec.p31Value_FixPrice.ToString();
+
+
                     break;
                 case BO.p33IdENUM.Kusovnik:
                     v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;

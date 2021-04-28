@@ -1,0 +1,107 @@
+﻿@model UI.Models.p31oper.hesViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Nastavení vykazování hodin");
+
+}
+
+@addTagHelper *, UI
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdOK" class="btn btn-success">@_f.tra("Uložit změny")</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<form id="form1" asp-controller="p31oper" asp-action="hes" method="POST">
+    <div class="modal_record_container">
+        <div class="row">
+            <div class="col-auto">
+                <div class="card">
+                    <div class="card-header">
+                        @_f.tra("Vstupní formát pro zápis hodin")
+                    </div>
+                    <div class="card-body">
+                        <input type="radio" asp-for="@Model.HoursFormat" id="opgFormatN" value="N" />
+                        <label for="opgFormatN">@_f.tra("Dekadické číslo (např. 1,5)")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.HoursFormat" id="opgFormatT" value="T" />
+                        <label for="opgFormatT">@_f.tra("HH:MM (např. 01:30)")</label>
+                        <hr />
+                        <input type="checkbox" asp-for="@Model.TimesheetEntryByMinutes" id="chkTimesheetEntryByMinutes" />
+                        <label for="chkTimesheetEntryByMinutes">@_f.tra("Odpracovaný čas vykazovat v minutách (např. 90)")</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-auto">
+                <div class="card">
+                    <div class="card-header">
+                        @_f.tra("Nabídka předvyplněných intervalů pro zápis hodin")
+                    </div>
+                    <div class="card-body">
+                        <input type="radio" asp-for="@Model.HoursInterval" id="opgInterval5" value="5" />
+                        <label for="opgInterval5">@_f.tra("Po 5ti minutách")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.HoursInterval" id="opgInterval6" value="6" />
+                        <label for="opgInterval6">@_f.tra("Po 6ti minutách")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.HoursInterval" id="opgInterval10" value="10" />
+                        <label for="opgInterval10">@_f.tra("Po 10ti minutách")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.HoursInterval" id="opgInterval15" value="15" />
+                        <label for="opgInterval15">@_f.tra("Po 15ti minutách")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.HoursInterval" id="opgInterval30" value="30" />
+                        <label for="opgInterval30">@_f.tra("Po 30ti minutách")</label>
+                        <br />
+                        <input type="radio" asp-for="@Model.HoursInterval" id="opgInterval60" value="60" />
+                        <label for="opgInterval60">@_f.tra("Po 60ti minutách")</label>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+    </div>
+
+
+    
+</form>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdOK").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+
+
+        });
+
+
+
+    })
+
+
+    function postback() {
+        form1.action = _ep("/p31oper/hes?oper=postback");
+        form1.submit();
+    }
+
+
+    
+
+</script>
+

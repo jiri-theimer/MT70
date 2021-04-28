@@ -384,41 +384,7 @@ namespace UI.Controllers
 
         //    return s.ToString();
         //}
-        public string GetHourIntervalItems(string o15flag) //Vrací hodnoty nabídky zápisu hodin
-        {
-            if (Factory.CurrentUser.j03HoursEntrySettingV7 == null)
-            {
-                Factory.CurrentUser.j03HoursEntrySettingV7 = "30|30";
-            }            
-            string ret = "";
-            var ct = new BO.CLS.TimeSupport();
-            var arr = Factory.CurrentUser.j03HoursEntrySettingV7.Split("|");
-            double intStart = Convert.ToDouble(arr[0]);
-            
-            double intKrat = 4;
-            if (intStart == 60) intKrat = 10;
-            if (intStart == 30) intKrat = 8;
-            if (intStart == 5 || intStart==10 || intStart==6) intKrat = 3;
-            for(double i = intStart; i <= intKrat * 60; i += intStart)
-            {
-                if (i > intStart)
-                {
-                    ret += "|";
-                }
-                if (Factory.CurrentUser.j03DefaultHoursFormat == "T")
-                {
-                    ret += ct.ShowAsHHMM((i / 60.00).ToString());
-                }
-                else
-                {
-                    ret += (i / 60.00).ToString();
-                }
-            }
-
-            
-            return ret;
-
-        }
+        
         public string GetAutoCompleteHtmlItems(int o15flag, string tableid) //Vrací options pro datalist v rámci autocomplete pole
         {
             var mq = new BO.myQuery("o15");

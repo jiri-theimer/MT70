@@ -20,7 +20,7 @@
 </div>
 
 <form id="form1" asp-controller="p91oper" asp-action="p31edit" method="POST">
-    <div class="modal_record_container">
+    <div style="max-width:800px;">
 
         <div class="alert alert-primary">
             @(Model.RecP91.p92Name+": "+Model.RecP91.p91Code)
@@ -60,7 +60,7 @@
                                 @_f.tra("Hodiny k fakturaci"):
                             </td>
                             <td>
-                                <myhours asp-for="@Model.Hours"></myhours>
+                                <myhours asp-for="@Model.Hours" showsettingbutton="true" hoursentryflag="@_f.CurrentUser.j03HoursEntryFlagV7" hoursentryformat="@_f.CurrentUser.j03DefaultHoursFormat"></myhours>
                             </td>
                             <td>
                             </td>
@@ -83,7 +83,7 @@
                                     @_f.tra("Hodiny v paušálu"):
                                 </td>
                                 <td>
-                                    <myhours asp-for="@Model.Hours_FixPrice"></myhours>
+                                    <myhours asp-for="@Model.Hours_FixPrice" showsettingbutton="true" hoursentryflag="@_f.CurrentUser.j03HoursEntryFlagV7" hoursentryformat="@_f.CurrentUser.j03DefaultHoursFormat"></myhours>
                                 </td>
                                 <td>
                                     
@@ -181,6 +181,8 @@
         form1.submit();
     }
 
-
+    function hardrefresh(pid, flag) {        
+        postback();
+    }
 </script>
 
