@@ -23,9 +23,22 @@
     <div style="max-width:800px;">
 
         <div class="alert alert-primary">
-            @(Model.RecP91.p92Name+": "+Model.RecP91.p91Code)
+            <table>
+                <tr>
+                    <td>
+                        @(Model.RecP91.p92Name+": "+Model.RecP91.p91Code)
+                    </td>
+                    <td>
+                        <myval value="@_f.tra("ÚKON")" hoverprefix="p31" hoverpid="@Model.p31ID"></myval>
+                    </td>
+                </tr>
+            </table>
+            
+            
             <hr />
             @(Model.RecP91.p91Client)
+
+
         </div>
 
         <div class="row">

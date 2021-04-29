@@ -1,0 +1,97 @@
+﻿@model UI.Models.p31Info
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutSubform.cshtml";
+    if (Model.Rec == null) return;
+
+    var _disp = _f.p31WorksheetBL.InhaleRecDisposition(Model.Rec);
+}
+
+@addTagHelper *, UI
+
+
+<div class="info_record_container">
+
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum"):</label>
+        <div class="col-sm-5 col-md-4">
+            <myval datatype="date" value="@Model.Rec.p31Date"></myval>
+        </div>
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Sešit"):</label>
+        <div class="col-sm-5 col-md-4">
+            <myval value="@Model.Rec.p34Name"></myval>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
+        <div class="col-sm-5 col-md-4">
+            <myval value="@Model.Rec.Person"></myval>
+        </div>
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Aktivita"):</label>
+        <div class="col-sm-5 col-md-4">
+            <myval value="@Model.Rec.p32Name"></myval>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient"):</label>
+        <div class="col-sm-5 col-md-4">
+            <myval value="@Model.Rec.ClientName"></myval>
+        </div>
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Projekt"):</label>
+        <div class="col-sm-5 col-md-4">
+            <myval value="@Model.Rec.p41Name"></myval>
+        </div>
+    </div>
+    <div style="background-color:#FFFFCC;">
+        <i>
+            @BO.BAS.Text2Html(Model.Rec.p31Text)
+        </i>        
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Vykázáno")
+            <small class="float-end">
+                @(Model.Rec.UserInsert+"/"+Model.Rec.DateInsert.ToString())
+            </small>
+        </div>
+        <div class="card-body">
+            @if (Model.Rec.p33ID == BO.p33IdENUM.Cas)
+            {
+                <div class="row">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Hodiny"):</label>
+                    <div class="col-sm-5 col-md-4">
+                        <myval datatype="num" value="@Model.Rec.p31Hours_Orig"></myval>
+                    </div>
+                    <label class="col-sm-1 col-md-2 col-form-label">HH:MM:</label>
+                    <div class="col-sm-5 col-md-4">
+                        <myval value="@Model.Rec.p31HHMM_Orig"></myval>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Fakturační sazba"):</label>
+                    <div class="col-sm-5 col-md-4">
+                        <myval datatype="num" value="@Model.Rec.p31Rate_Billing_Orig" valueafter="@Model.Rec.j27Code_Billing_Orig"></myval>
+                    </div>
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nákladová sazba"):</label>
+                    <div class="col-sm-5 col-md-4">
+                        <myval datatype="num" value="@Model.Rec.p31Rate_Internal_Orig"></myval>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Honorář"):</label>
+                    <div class="col-sm-5 col-md-4">
+                        <myval datatype="num" value="@Model.Rec.p31Amount_WithoutVat_Orig" valueafter="@Model.Rec.j27Code_Billing_Orig"></myval>
+                    </div>
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nákladový honorář"):</label>
+                    <div class="col-sm-5 col-md-4">
+                        <myval datatype="num" value="@Model.Rec.p31Amount_Internal"></myval>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
