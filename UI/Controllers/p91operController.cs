@@ -46,7 +46,11 @@ namespace UI.Controllers
             
             v.p31VatRate_Invoiced = v.Rec.p31VatRate_Invoiced;
             v.p31Amount_WithoutVat_Invoiced = v.Rec.p31Amount_WithoutVat_Invoiced;
-            v.p31Text = v.Rec.p31Text;            
+            v.p31Text = v.Rec.p31Text;
+            var tg = Factory.o51TagBL.GetTagging("p31", v.p31ID);
+            v.TagPids = tg.TagPids;
+            v.TagNames = tg.TagNames;
+            v.TagHtml = tg.TagHtml;
             return View(v);
         }
         private void RefreshStateEdit(p31editViewModel v)
@@ -107,6 +111,8 @@ namespace UI.Controllers
 
                 if (Factory.p31WorksheetBL.UpdateInvoice(v.RecP91.pid,lis))
                 {
+                    Factory.o51TagBL.SaveTagging("p31", c.p31ID, v.TagPids);
+
                     v.SetJavascript_CallOnLoad(v.p31ID);
                     return View(v);
                 }
