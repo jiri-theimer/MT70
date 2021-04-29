@@ -93,7 +93,10 @@ namespace BL
             p.AddDouble("p85FreeNumber02", rec.p85FreeNumber02);
             p.AddDouble("p85FreeNumber03", rec.p85FreeNumber03);
             p.AddDouble("p85FreeNumber04", rec.p85FreeNumber04);
-         
+            p.AddDouble("p85FreeFloat01", rec.p85FreeFloat01);
+            p.AddDouble("p85FreeFloat02", rec.p85FreeFloat02);
+            p.AddDouble("p85FreeFloat03", rec.p85FreeFloat03);
+
             p.AddDateTime("p85FreeDate01", rec.p85FreeDate01);
             p.AddDateTime("p85FreeDate02", rec.p85FreeDate02);
             p.AddDateTime("p85FreeDate03", rec.p85FreeDate03);

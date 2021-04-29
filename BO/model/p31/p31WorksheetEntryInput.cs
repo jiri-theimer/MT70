@@ -191,15 +191,15 @@ namespace BO
                         {
                             case p33IdENUM.Cas:
                                 {
-                                    var cTime = new BO.CLS.TimeSupport();
-                                    _p31Minutes_Trimmed = cTime.ConvertTimeToSeconds(strValue) / (int)60;
+                                    
+                                    _p31Minutes_Trimmed = BO.basTime.ConvertTimeToSeconds(strValue) / (int)60;
                                     if (_p31Minutes_Trimmed == 0)
                                     {
                                         _Error = "Pro korekci statusu [Fakturovat] musí být hodiny větší než nula.";
                                         return false;
                                     }
                                     _p31Value_Trimmed = _p31Minutes_Trimmed / (double)60;
-                                    this.p31HHMM_Trimmed = cTime.ShowAsHHMM(strValue);
+                                    this.p31HHMM_Trimmed = BO.basTime.ShowAsHHMM(strValue);
                                     break;
                                 }
 
@@ -233,16 +233,16 @@ namespace BO
         {
             int intSeconds_Orig = 0;
             // časový úkon
-            var cTime = new BO.CLS.TimeSupport();
+            
             switch (this.p31HoursEntryflag)
             {
                 case BO.p31HoursEntryFlagENUM.Hodiny:
                     {
                         if (this.p31RecordSourceFlag > 0)
                             // hodiny zadané mimo web aplikaci - desetinná čárka nebo tečka podle regional settings web.config                   
-                            intSeconds_Orig = cTime.ConvertTimeToSeconds(this.Value_Orig);
+                            intSeconds_Orig = BO.basTime.ConvertTimeToSeconds(this.Value_Orig);
                         else
-                            intSeconds_Orig = cTime.ConvertTimeToSeconds(this.Value_Orig);
+                            intSeconds_Orig = BO.basTime.ConvertTimeToSeconds(this.Value_Orig);
 
 
                         if (!(string.IsNullOrEmpty(this.TimeFrom) || this.TimeFrom == "00:00" || string.IsNullOrEmpty(this.TimeUntil) || this.TimeUntil == "00:00"))
@@ -250,10 +250,10 @@ namespace BO
                             if (this.p31RecordSourceFlag == 0)
                             {
                                 // pouze ve výchozí aplikaci, mobilní aplikace si to dělá sama
-                                intSeconds_Orig = cTime.ConvertTimeToSeconds(this.TimeUntil) - cTime.ConvertTimeToSeconds(this.TimeFrom);
+                                intSeconds_Orig = BO.basTime.ConvertTimeToSeconds(this.TimeUntil) - BO.basTime.ConvertTimeToSeconds(this.TimeFrom);
                                 if (intSeconds_Orig == 0)
                                 {
-                                    intSeconds_Orig = cTime.ConvertTimeToSeconds(this.Value_Orig);
+                                    intSeconds_Orig = BO.basTime.ConvertTimeToSeconds(this.Value_Orig);
                                     if (intSeconds_Orig == 0)
                                     {
                                         _Error = "Chybí [Hodiny].";
@@ -273,8 +273,8 @@ namespace BO
 
                             if (!string.IsNullOrEmpty(this.TimeFrom) && !string.IsNullOrEmpty(this.TimeUntil))
                             {
-                                _p31DateTimeFrom_Orig = this.p31Date.AddSeconds(cTime.ConvertTimeToSeconds(this.TimeFrom));
-                                _p31DateTimeUntil_Orig = this.p31Date.AddSeconds(cTime.ConvertTimeToSeconds(this.TimeUntil));
+                                _p31DateTimeFrom_Orig = this.p31Date.AddSeconds(BO.basTime.ConvertTimeToSeconds(this.TimeFrom));
+                                _p31DateTimeUntil_Orig = this.p31Date.AddSeconds(BO.basTime.ConvertTimeToSeconds(this.TimeUntil));
                             }
                             else
                             {
@@ -302,9 +302,9 @@ namespace BO
                 return false;
             }
 
-            intSeconds_Orig = cTime.RoundSeconds(intSeconds_Orig, 60 * intRound2Minutes);  // zaokrouhlení nahoru
+            intSeconds_Orig = BO.basTime.RoundSeconds(intSeconds_Orig, 60 * intRound2Minutes);  // zaokrouhlení nahoru
             _p31Minutes_Orig = Convert.ToInt32(intSeconds_Orig / (double)60);
-            _p31HHMM_Orig = cTime.GetTimeFromSeconds(intSeconds_Orig);
+            _p31HHMM_Orig = BO.basTime.GetTimeFromSeconds(intSeconds_Orig);
             _p31Value_Orig = System.Convert.ToDouble(intSeconds_Orig / (double)60 / 60);
 
             return true;

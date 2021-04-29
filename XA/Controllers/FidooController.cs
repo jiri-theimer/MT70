@@ -37,10 +37,10 @@ namespace XA.Controllers
         public string Doba()
         {
 
-            var c = new BO.CLS.TimeSupport();
+            
             var d1 = DateTime.Now;
             var d2 = d1.AddMinutes(1.4);
-            return c.DurationFormatted(d1, d2);
+            return BO.basTime.DurationFormatted(d1, d2);
         }
         public string zch()
         {

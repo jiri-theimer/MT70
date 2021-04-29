@@ -59,14 +59,12 @@ namespace UI.Views.Shared.TagHelpers
             else
             {
                 if (this.HoursEntryFormat == "T" && !strValue.Contains(":"))
-                {
-                    var ct = new BO.CLS.TimeSupport();
-                    strValue = ct.ShowAsHHMM(strValue);
+                {                   
+                    strValue = BO.basTime.ShowAsHHMM(strValue);
                 }
                 if (strValue.Length>5 && !strValue.Contains(":"))
-                {
-                    var ct = new BO.CLS.TimeSupport();
-                    strValue = ct.ShowAsHHMM(strValue);
+                {                    
+                    strValue = BO.basTime.ShowAsHHMM(strValue);
                 }
             }
 
@@ -106,8 +104,7 @@ namespace UI.Views.Shared.TagHelpers
                 return;
             }
             this.ExplicitIntervals = "";
-
-            var ct = new BO.CLS.TimeSupport();
+            
             double dblStart = 30.00;double dblKrat = 8.00;
             if (BO.BAS.bit_compare_or(this.HoursEntryFlag, 2))
             {
@@ -136,7 +133,7 @@ namespace UI.Views.Shared.TagHelpers
                 switch (this.HoursEntryFormat)
                 {
                     case "T":
-                        this.ExplicitIntervals += ct.ShowAsHHMM((i / 60.00).ToString());
+                        this.ExplicitIntervals += BO.basTime.ShowAsHHMM((i / 60.00).ToString());
                         break;
                     case "M":
                         this.ExplicitIntervals += i.ToString();

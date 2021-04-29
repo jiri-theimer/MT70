@@ -151,10 +151,9 @@ namespace BL
             if (rec.x31IsRunInDay6 && dNow.DayOfWeek == DayOfWeek.Saturday) b = true;
             if (rec.x31IsRunInDay7 && dNow.DayOfWeek == DayOfWeek.Sunday) b = true;
             if (!b) return false;
-            var cT = new BO.CLS.TimeSupport();
-
+            
             int secsNow = dNow.Hour * 60 * 60 + dNow.Minute * 60 + dNow.Second;
-            if (secsNow >= cT.ConvertTimeToSeconds(rec.x31RunInTime)){
+            if (secsNow >= BO.basTime.ConvertTimeToSeconds(rec.x31RunInTime)){
                 if (rec.x31LastScheduledRun == null)
                 {
                     return true;//sestava ještě nikdy nebyla generována

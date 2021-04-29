@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BO.CLS
+namespace BO
 {
-    public class TimeSupport
+    public static class basTime
     {
-        public int ConvertTimeToSeconds(string strTime)
-        {            
+        public static int ConvertTimeToSeconds(string strTime)
+        {
             try
             {
                 double dblTime = System.Convert.ToDouble(strTime);
@@ -23,35 +23,20 @@ namespace BO.CLS
             string[] arr = strTime.Split(":");
             int lngMinutes = 0;
             int lngHours = 0;
-            if (arr.Length <2)
+            if (arr.Length < 2)
                 return 0;
 
             if (BO.BAS.InInt(arr[0]) != 0)
                 lngHours = System.Convert.ToInt32(arr[0]);
-           
-            if (BO.BAS.InInt(arr[1]) !=0)
+
+            if (BO.BAS.InInt(arr[1]) != 0)
                 lngMinutes = System.Convert.ToInt32(arr[1]);
 
 
             return lngHours * 60 * 60 + lngMinutes * 60;
         }
-        //public int ConvertMobileNumberToSeconds(string strValue)
-        //{
-        //    if (strValue.Contains(",") | strValue.Contains("."))
-        //    {
-        //        string[] n = strValue.Split(strValue.Contains(",") ? "," : ".");
-        //        int intSecs = System.Convert.ToInt32(n[0]) * 60 * 60;
-        //        if (n[1].Length > 15)
-                    
-        //            n[1] = BO.BAS.LeftString(n[1], 15);
-        //        intSecs += (60 * 60 * (System.Convert.ToDouble(n[1]) / System.Convert.ToDouble("1" + BO.BAS.LeftString("000000000000000", n[1].Length))));
-        //        return intSecs;
-        //    }
-        //    else
-        //        return ConvertTimeToSeconds(strValue);
-        //}
 
-        public double ShowAsDec(string strTime, double dblRetWithPrec = 0, int lngMinTimeUnit = 0)
+        public static double ShowAsDec(string strTime, double dblRetWithPrec = 0, int lngMinTimeUnit = 0)
         {
             // strTime je ve formátu hh:mm
             // fce vrací čas z výrazu hh:mm na decadické číslo
@@ -61,13 +46,13 @@ namespace BO.CLS
             return System.Convert.ToDouble(lngSec) / 60 / 60;
         }
 
-        public int RoundSeconds(int lngSeconds, int lngMinTimeSecUnit)
+        public static int RoundSeconds(int lngSeconds, int lngMinTimeSecUnit)
         {
             // zaokrouhlí sekundy na jednotky lngMinTimeSecUnit - vše NAHORU!!
             if (lngMinTimeSecUnit == 0)
                 return lngSeconds; // nezaokrouhlovat
 
-            int ret;                
+            int ret;
             int lng;
             double dbl = System.Convert.ToDouble(lngSeconds) / System.Convert.ToDouble(lngMinTimeSecUnit);
 
@@ -88,8 +73,8 @@ namespace BO.CLS
             return ret;
         }
 
-        public string ShowAsHHMM(string strTime, int lngMinTimeUnit = 0)
-        {            
+        public static string ShowAsHHMM(string strTime, int lngMinTimeUnit = 0)
+        {
             // strTime jsou dekadické hodiny
             // fce vrací čas z dekadického hodinového výrazu na hh:mm
             string strHHMM;
@@ -100,14 +85,11 @@ namespace BO.CLS
             return strHHMM;
         }
 
-        public string GetTimeFromSeconds(double tim, bool bolIncludeSeconds = false)
+        public static string GetTimeFromSeconds(double tim, bool bolIncludeSeconds = false)
         {
             
-            string cmin;
-            string chod;
-            string znam;
             // tim... časový úsek vyjádřený v sekundách
-            
+
             if (tim == 0.00)
             {
                 if (!bolIncludeSeconds)
@@ -115,9 +97,13 @@ namespace BO.CLS
                 else
                     return "00:00:00";
             }
+            string cmin;
+            string chod;
+            string znam;
+
             tim = Convert.ToDouble(Convert.ToInt32(tim));
 
-            
+
             if (tim < 0)
             {
                 znam = "-";
@@ -126,9 +112,7 @@ namespace BO.CLS
             else
                 znam = "";
 
-
             double hod = Convert.ToDouble(Convert.ToInt32(tim) / 3600);    //zaokrouhlí na celé hodiny dolů!
-            
 
             if (hod > 0)
                 tim = tim - (hod * 3600);
@@ -166,7 +150,7 @@ namespace BO.CLS
                 return znam + chod + ":" + cmin;
         }
 
-        public double GetDecTimeFromSeconds(double tim, double dblRetPrec = 0, int lngRoundToDecimals = 0)
+        public static double GetDecTimeFromSeconds(double tim, double dblRetPrec = 0, int lngRoundToDecimals = 0)
         {
             if (lngRoundToDecimals == 0)
                 lngRoundToDecimals = 3;
@@ -176,18 +160,17 @@ namespace BO.CLS
                 return 0;
             }
 
-            int lng = 0;
-            double dbl = 0;
-
-            lng = System.Convert.ToInt32(tim);
-            dbl = Math.Round(tim / 60 / 60, lngRoundToDecimals);
+           
+            
+           
+           double dbl = Math.Round(tim / 60 / 60, lngRoundToDecimals);
             dblRetPrec = Math.Round(tim / 60 / 60, 6);
             return dbl;
         }
 
-        public string DurationFormatted(DateTime datFrom, DateTime datTo,string strFormat=null)
-        {            
-            TimeSpan span = datTo-datFrom;
+        public static string DurationFormatted(DateTime datFrom, DateTime datTo, string strFormat = null)
+        {
+            TimeSpan span = datTo - datFrom;
 
             string[] values = new string[4];  //4 slots: days, hours, minutes, seconds
             StringBuilder readableTime = new StringBuilder();
@@ -237,18 +220,18 @@ namespace BO.CLS
             return readableTime.ToString();
         }
 
-        public DateTime GetDateFromDecimal(double decHours)
+        public static DateTime GetDateFromDecimal(double decHours)
         {
             double intMinutes = decHours * 60;
             return DateTime.Today.AddMinutes(intMinutes);
         }
-
-        public double GetDecimalFromDate(DateTime dat)
+        public static double GetDecimalFromDate(DateTime dat)
         {
             double intHours = dat.Hour;
             double intMinutes = dat.Minute;
             return intHours + intMinutes / (double)60;
         }
     }
+
 
 }

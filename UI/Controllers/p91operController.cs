@@ -33,13 +33,14 @@ namespace UI.Controllers
                     v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;
                     v.Hours = v.Rec.p31Hours_Invoiced.ToString();
                     v.Hours_FixPrice = v.Rec.p31Value_FixPrice.ToString();
-
+                    v.p31Rate_Billing_Invoiced = v.Rec.p31Rate_Billing_Invoiced;
 
                     break;
                 case BO.p33IdENUM.Kusovnik:
                     v.p31Value_Invoiced = v.Rec.p31Hours_Invoiced;
+                    v.p31Rate_Billing_Invoiced = v.Rec.p31Rate_Billing_Invoiced;
                     break;
-                default:
+                default:                    
                     break;
             }
             
@@ -65,14 +66,52 @@ namespace UI.Controllers
             }
 
             if (ModelState.IsValid)
-            {
+            {                
+                var c = new BO.p31WorksheetInvoiceChange() { p31ID = v.Rec.pid,p33ID=v.Rec.p33ID,p32ManualFeeFlag=v.Rec.p32ManualFeeFlag };
+                c.TextUpdate = v.p31Text;
+                c.p70ID = v.SelectedP70ID;
                 
-                if (1==1)
+                c.p31Code = v.p31Code;
+
+                if (v.SelectedP70ID == BO.p70IdENUM.Vyfakturovano)
                 {
+                    c.InvoiceVatRate = v.p31VatRate_Invoiced;
+
+                    switch (v.Rec.p33ID)
+                    {
+                        case BO.p33IdENUM.Cas:
+                            c.InvoiceValue = BO.basTime.ShowAsDec(v.Hours);
+                            c.InvoiceRate = v.p31Rate_Billing_Invoiced;                           
+                            break;
+                        case BO.p33IdENUM.Kusovnik:
+                            c.InvoiceValue = v.p31Value_Invoiced;
+                            c.InvoiceRate = v.p31Rate_Billing_Invoiced;
+                            break;
+                        default:
+                            c.InvoiceValue = v.p31Amount_WithoutVat_Invoiced;
+                            break;
+                    }
+                }
+                if (v.SelectedP70ID == BO.p70IdENUM.ZahrnutoDoPausalu)
+                {
+                    if (v.Rec.p33ID == BO.p33IdENUM.Cas)
+                    {
+                        c.FixPriceValue = BO.basTime.ShowAsDec(v.Hours_FixPrice);
+                    }
+                }
+                
+                
+
+                var lis = new List<BO.p31WorksheetInvoiceChange>();
+                lis.Add(c);
+
+                if (Factory.p31WorksheetBL.UpdateInvoice(v.RecP91.pid,lis))
+                {
+                    v.SetJavascript_CallOnLoad(v.p31ID);
                     return View(v);
                 }
-                v.SetJavascript_CallOnLoad(v.p31ID);
-                return View(v);
+                
+                
             }
 
             this.Notify_RecNotSaved();

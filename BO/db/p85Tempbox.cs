@@ -42,6 +42,9 @@ namespace BO
         public double p85FreeNumber03 { get; set; }
         public double p85FreeNumber04 { get; set; }
       
+        public double p85FreeFloat01 { get; set; }
+        public double p85FreeFloat02 { get; set; }
+        public double p85FreeFloat03 { get; set; }
 
         public bool p85FreeBoolean01 { get; set; }
         public bool p85FreeBoolean02 { get; set; }

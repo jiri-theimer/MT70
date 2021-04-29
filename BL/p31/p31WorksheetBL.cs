@@ -15,6 +15,7 @@ namespace BL
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq);
         public void UpdateExternalPID(int pid, string strExternalPID);
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec);
+        public bool UpdateInvoice(int p91id, List<BO.p31WorksheetInvoiceChange> lisP31);
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
     {
@@ -249,6 +250,62 @@ namespace BL
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec)
         {
             return BL.bas.p31Support.ValidateBeforeSaveOrigRecord(_mother, _db, rec);
+        }
+
+        public bool UpdateInvoice(int p91id,List<BO.p31WorksheetInvoiceChange> lisP31)
+        {
+            if (lisP31.Count() == 0)
+            {
+                this.AddMessage("Na vstupu chybí úkon.");return false;
+            }
+            if (lisP31.Any(p=>p.p70ID==BO.p70IdENUM.Nic))
+            {
+                this.AddMessage("Na vstupu je minimálně jeden úkon, který postrádá fakturační status."); return false;
+            }
+            if (lisP31.Any(p => p.p70ID == BO.p70IdENUM.Vyfakturovano && p.p32ManualFeeFlag==0 && (p.p33ID==BO.p33IdENUM.Cas || p.p33ID==BO.p33IdENUM.Kusovnik) && (p.InvoiceRate==0 || p.InvoiceValue==0)))
+            {
+                this.AddMessage("Na vstupu je minimálně jeden časový úkon pro fakturaci s nulovou sazbou nebo nulovým počtem hodin."); return false;
+            }
+            if (lisP31.Any(p => p.p70ID == BO.p70IdENUM.Vyfakturovano && p.p32ManualFeeFlag == 1 && p.p33ID == BO.p33IdENUM.Cas && (p.ManualFee == 0 || p.InvoiceValue == 0)))
+            {
+                this.AddMessage("Na vstupu je minimálně jeden časový úkon pro fakturaci s nulovým pevným honorářem nebo s nulovým počtem hodin."); return false;
+            }
+            if (lisP31.Any(p => p.p70ID == BO.p70IdENUM.Vyfakturovano && (p.p33ID == BO.p33IdENUM.PenizeBezDPH || p.p33ID==BO.p33IdENUM.PenizeVcDPHRozpisu) && p.InvoiceValue == 0))
+            {
+                this.AddMessage("Na vstupu je minimálně jeden peněžní úkon pro fakturaci s nulovou částkou."); return false;
+            }
+            var guid = BO.BAS.GetGuid();
+            foreach(var c in lisP31)
+            {
+                var ctemp = new BO.p85Tempbox() {
+                    p85GUID = guid
+                    ,p85Prefix = "p31"
+                    ,p85DataPID = c.p31ID
+                    ,p85OtherKey1 = (int) c.p70ID
+                    ,p85Message=c.TextUpdate
+                    ,p85FreeFloat01=c.InvoiceValue
+                    ,p85FreeFloat02=c.InvoiceRate
+                    ,p85FreeFloat03=c.InvoiceVatRate
+                    ,p85FreeNumber01 = c.FixPriceValue* 10000000
+                    ,p85FreeBoolean01 = c.p31IsInvoiceManual
+                    ,p85FreeNumber02 = c.ManualFee* 10000000
+                    ,p85FreeText09=c.p31Code
+                };
+                _mother.p85TempboxBL.Save(ctemp);
+
+                var pars = new Dapper.DynamicParameters();
+                pars.Add("p91id", p91id, System.Data.DbType.Int32);
+                pars.Add("guid", guid, System.Data.DbType.String);
+                pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);                
+                pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
+
+                if (_db.RunSp("p31_change_invoice", ref pars,true) != "1")               
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec)
