@@ -22,7 +22,7 @@ namespace UI.Models.p91oper
         public double p31Value_FixPrice { get; set; }
         public string p31Text { get; set; }
         public string p31Code { get; set; }
-
+        public FreeFieldsViewModel ff1 { get; set; }
         public string TagPids { get; set; }
         public string TagNames { get; set; }
         public string TagHtml { get; set; }

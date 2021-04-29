@@ -57,7 +57,14 @@ namespace UI.Controllers
         {
             v.RecP91 = Factory.p91InvoiceBL.LoadByP31ID(v.p31ID);
             v.Rec = Factory.p31WorksheetBL.Load(v.p31ID);
-            
+
+            if (v.ff1 == null)
+            {
+                v.ff1 = new FreeFieldsViewModel();
+                v.ff1.InhaleFreeFieldsView(Factory, v.p31ID, "p31");
+            }
+            v.ff1.RefreshInputsVisibility(Factory, v.p31ID, "p31", v.Rec.p34ID);
+
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,7 +116,7 @@ namespace UI.Controllers
                 var lis = new List<BO.p31WorksheetInvoiceChange>();
                 lis.Add(c);
 
-                if (Factory.p31WorksheetBL.UpdateInvoice(v.RecP91.pid,lis))
+                if (Factory.p31WorksheetBL.UpdateInvoice(v.RecP91.pid,lis, v.ff1.inputs))
                 {
                     Factory.o51TagBL.SaveTagging("p31", c.p31ID, v.TagPids);
 

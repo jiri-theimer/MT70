@@ -38,18 +38,39 @@
         <mydate asp-for="@Model.inputs[i].DateInput" elementid-prefix="@Model.elementidprefix"></mydate>
         break;
 
-    @case "datetime":
-    <mydate asp-for="@Model.inputs[i].DateInput" include-time="true" elementid-prefix="@Model.elementidprefix"></mydate>
-    break;
+        @case "datetime":
+        <mydate asp-for="@Model.inputs[i].DateInput" include-time="true" elementid-prefix="@Model.elementidprefix"></mydate>
+        break;
 
-@case "boolean":
-<input type="checkbox" asp-for="@Model.inputs[i].CheckInput" />
-<label for="ff1_inputs_@(i)__CheckInput">@Model.inputs[i].x28Name</label>
-break;
+        @case "boolean":
+        <input type="checkbox" asp-for="@Model.inputs[i].CheckInput" />
+        <label for="ff1_inputs_@(i)__CheckInput">@Model.inputs[i].x28Name</label>
+        break;
 
-@default:
-<input type="text" class="form-control" asp-for="@Model.inputs[i].StringInput" />
-break;
+        @default:
+        @if (Model.inputs[i].x28IsFixedDataSource)
+        {
+            <select class="form-select" asp-for="@Model.inputs[i].StringInput">
+                @foreach(var xx in BO.BAS.ConvertString2List(Model.inputs[i].x28DataSource, ";"))
+                {
+                    <option value="@(xx)">@(xx)</option>
+                }
+                
+            </select>
+        }
+        else
+        {
+            <input type="text" class="form-control" asp-for="@Model.inputs[i].StringInput" />
+            @if (Model.inputs[i].x28DataSource != null)
+            {
+                <script type="text/javascript">
+                _autocomplete_setup("ff1_inputs_@(i)__StringInput","@(Model.inputs[i].x28DataSource)",";")
+
+                </script>
+            }
+        }
+
+        break;
 }
 
         </div>
@@ -65,3 +86,4 @@ break;
     <input type="hidden" asp-for="@Model.inputs[i].x29ID" />
     <input type="hidden" asp-for="@Model.inputs[i].x24ID" />
 }
+

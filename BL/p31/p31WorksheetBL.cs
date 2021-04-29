@@ -15,7 +15,7 @@ namespace BL
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq);
         public void UpdateExternalPID(int pid, string strExternalPID);
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec);
-        public bool UpdateInvoice(int p91id, List<BO.p31WorksheetInvoiceChange> lisP31);
+        public bool UpdateInvoice(int p91id, List<BO.p31WorksheetInvoiceChange> lisP31, List<BO.FreeFieldInput> lisFFI);
         public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
@@ -253,7 +253,7 @@ namespace BL
             return BL.bas.p31Support.ValidateBeforeSaveOrigRecord(_mother, _db, rec);
         }
 
-        public bool UpdateInvoice(int p91id,List<BO.p31WorksheetInvoiceChange> lisP31)
+        public bool UpdateInvoice(int p91id,List<BO.p31WorksheetInvoiceChange> lisP31, List<BO.FreeFieldInput> lisFFI)
         {
             if (lisP31.Count() == 0)
             {
@@ -315,7 +315,10 @@ namespace BL
                 {
                     return false;
                 }
+                DL.BAS.SaveFreeFields(_db, c.p31ID, lisFFI);
             }
+
+            
 
             return true;
         }

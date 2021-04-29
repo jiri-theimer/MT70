@@ -148,6 +148,10 @@
         
         <textarea asp-for="@Model.p31Text" class="form-control" placeholder="@_f.tra("Text úkonu")"></textarea>
 
+        <div>
+            @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
+        </div>
+
         <div class="my-2">
             <mystitky entity="p31Worksheet" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
         </div>

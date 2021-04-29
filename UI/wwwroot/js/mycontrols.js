@@ -247,6 +247,8 @@ function myhours_init(c) {
 }
 
 
+
+
 function mystitky_multiselect(event, entity) {
     var o51ids = $("#TagPids").val();
     _zoom(event, null, null, 250, "♣Oštítkovat...", "/o51/MultiSelect?entity=" + entity + "&o51ids=" + o51ids);
@@ -594,3 +596,18 @@ function myselect_focus(e, cbx, entity, textfield,orderfield) { //zpracování u
 
 
 
+function _autocomplete_setup(txtid,datasource,delimiter) {
+    var arr = datasource.split(delimiter);
+
+    $("#" + txtid).autocomplete({
+        source: [arr],
+        visibleLimit: 20,
+        openOnFocus: true,
+        highlight: false,
+        autoselect: true
+    });
+
+    $("#" + txtid).on("focus", function (e, data) {
+        $(this).select();
+    });
+}
