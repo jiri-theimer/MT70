@@ -68,9 +68,9 @@ namespace UI.Controllers
             if (ModelState.IsValid)
             {                
                 var c = new BO.p31WorksheetInvoiceChange() { p31ID = v.Rec.pid,p33ID=v.Rec.p33ID,p32ManualFeeFlag=v.Rec.p32ManualFeeFlag };
+                c.p31IsInvoiceManual = true;    //částky úkonu se odvíjejí z tohoto formuláře a nikoliv ze schválených hodnot
                 c.TextUpdate = v.p31Text;
                 c.p70ID = v.SelectedP70ID;
-                
                 c.p31Code = v.p31Code;
 
                 if (v.SelectedP70ID == BO.p70IdENUM.Vyfakturovano)

@@ -16,6 +16,7 @@ namespace BL
         public void UpdateExternalPID(int pid, string strExternalPID);
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec);
         public bool UpdateInvoice(int p91id, List<BO.p31WorksheetInvoiceChange> lisP31);
+        public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
     {
@@ -274,6 +275,17 @@ namespace BL
             {
                 this.AddMessage("Na vstupu je minimálně jeden peněžní úkon pro fakturaci s nulovou částkou."); return false;
             }
+            var recP91 = _mother.p91InvoiceBL.Load(p91id);
+
+            foreach(var c in lisP31.Where(p => p.p70ID==BO.p70IdENUM.Vyfakturovano && p.InvoiceVatRate > 0))
+            {
+                var recP31 = Load(c.p31ID);
+                if (!ValidateVatRate(c.InvoiceVatRate, recP31.p41ID, recP91.p91DateSupply, recP91.j27ID))
+                {
+                    this.AddMessageTranslated(string.Format("DPH sazba {0}% není platná pro projekt ({1}), datum ({2}) a měnu ({3}).",c.InvoiceVatRate,recP31.p41Name,recP91.p91DateSupply,recP91.j27Code));
+                    return false;
+                }
+            }
             var guid = BO.BAS.GetGuid();
             foreach(var c in lisP31)
             {
@@ -325,6 +337,12 @@ namespace BL
            
 
             return c;
+        }
+
+        public bool ValidateVatRate(double vatrate,int p41id,DateTime d,int j27id)
+        {
+            var ret =_db.Load<BO.GetBool>("select dbo.p31_testvat(@vatrate,@p41id,@dat,@j27id) as Value", new { vatrate = vatrate, p41id = p41id, dat = d, j27id = j27id });
+            return ret.Value;
         }
 
     }
