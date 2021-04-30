@@ -401,6 +401,11 @@ function _init_qtip_onpage() {
         var mywidth = iframeWidth;
         var $this = $(this);
         var myurl = $this.attr("data-rel");
+        var myheight = $this.attr("data-height");
+        
+        if (myheight===undefined || myheight === null || myheight === "") {
+            myheight = 270;
+        }
         var mytitle = $this.attr("data-title");
         if (mytitle === null || mytitle === "") {
             mytitle = "Detail";
@@ -414,7 +419,7 @@ function _init_qtip_onpage() {
 
         $this.qtip({
             content: {
-                text: "<iframe id='fraRecZoom' framemargin='0' style='height:270px;width:100%;' src='" + myurl + "'></iframe>",
+                text: "<iframe id='fraRecZoom' framemargin='0' style='height:"+myheight+"px;width:100%;' src='" + myurl + "'></iframe>",
                 title: {
                     text: mytitle
                 },
@@ -436,7 +441,7 @@ function _init_qtip_onpage() {
             style: {
                 classes: "qtip-tipped",
                 width: mywidth,
-                height: 300
+                height: parseInt(myheight)+30
 
             }
         });

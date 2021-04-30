@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UI.Models
+namespace UI.Models.Info
 {
-    public class p31Info:BaseViewModel
+    public class p31Info:BaseInfoViewModel
     {
         public BO.p31Worksheet Rec { get; set; }
-        public int pid { get; set; }
+        
+        public BO.p91Invoice RecP91 { get; set; }
     }
 }

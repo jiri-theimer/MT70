@@ -39,7 +39,10 @@ namespace UI.Views.Shared.TagHelpers
 
         [HtmlAttributeName("hoverprefix")]
         public string HoverPrefix { get; set; }
-        
+
+        [HtmlAttributeName("hoverheight")]
+        public int HoverHeight { get; set; }
+
         [HtmlAttributeName("hoverpid")]
         public int HoverPid { get; set; }
 
@@ -159,14 +162,15 @@ namespace UI.Views.Shared.TagHelpers
 
             if (this.HoverPrefix != null)
             {
+                if (this.HoverHeight == 0) this.HoverHeight = 270;
                 //output.Content.AppendHtml(string.Format("<a class='valhover_tooltip' onclick=\"_zoom(event,'{0}',{1},900,'Info')\">{2}</a>", this.HoverPrefix, this.HoverPid, this.HoverSymbol));
                 if (this.DataType == "html")
                 {
-                    output.Content.AppendHtml(string.Format("<a class='reczoom' data-rel='/{0}/Info?pid={1}&hover_by_reczoom=1'>{2}</a>", this.HoverPrefix, this.HoverPid, this.HoverSymbol));
+                    output.Content.AppendHtml(string.Format("<a class='reczoom' data-rel='/{0}/Info?pid={1}&hover_by_reczoom=1' data-height='{2}'>{3}</a>", this.HoverPrefix, this.HoverPid,this.HoverHeight, this.HoverSymbol));
                 }
                 else
                 {
-                    output.Content.AppendHtml(string.Format("<a class='reczoom' data-title='{0}' data-rel='/{1}/Info?pid={2}&hover_by_reczoom=1'>{3}</a>", this.Value, this.HoverPrefix, this.HoverPid, this.HoverSymbol));
+                    output.Content.AppendHtml(string.Format("<a class='reczoom' data-title='{0}' data-rel='/{1}/Info?pid={2}&hover_by_reczoom=1' data-height='{3}'>{4}</a>", this.Value, this.HoverPrefix, this.HoverPid,this.HoverHeight, this.HoverSymbol));
                 }
                 
             }
