@@ -47,7 +47,7 @@
     </div>
     <div style="background-color:#FFFFCC;border-radius:6px;margin-bottom:6px;">
         <i>
-            @BO.BAS.Text2Html(Model.Rec.p31Text)
+            @Html.Raw(BO.BAS.Text2Html(Model.Rec.p31Text))
         </i>
     </div>
 
@@ -169,13 +169,17 @@
                             <myval datatype="num" value="@Model.Rec.p31Rate_Internal_Approved"></myval>
                         </div>
                     </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Honorář"):</label>
-                        <div class="col-sm-5 col-md-4">
-                            <myval datatype="num" value="@Model.Rec.p31Amount_WithoutVat_Approved" valueafter="@Model.Rec.j27Code_Billing_Orig"></myval>
-                        </div>
+                    @if (Model.Rec.p72ID_AfterApprove == BO.p72IdENUM.Fakturovat)
+                    {
+                        <div class="row my-2">
+                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Honorář"):</label>
+                            <div class="col-sm-5 col-md-4">
+                                <myval datatype="num" value="@Model.Rec.p31Amount_WithoutVat_Approved" valueafter="@Model.Rec.j27Code_Billing_Orig"></myval>
+                            </div>
 
-                    </div>
+                        </div>
+                    }
+
                 }
                 @if (Model.Rec.p33ID == BO.p33IdENUM.Kusovnik)
                 {
@@ -187,7 +191,7 @@
 
                     </div>
                 }
-                @if (Model.Rec.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.Rec.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+                @if (Model.Rec.p72ID_AfterApprove == BO.p72IdENUM.Fakturovat && (Model.Rec.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.Rec.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu))
                 {
                     <div class="row">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Bez DPH"):</label>
@@ -238,7 +242,7 @@
                         <myval datatype="link" linktarget="_top" linkurl="/p28/RecPage?pid=@Model.RecP91.p28ID" value="@Model.RecP91.p91Client"></myval>
                     </div>
                 </div>
-                @if (Model.Rec.p33ID == BO.p33IdENUM.Cas)
+                @if (Model.Rec.p33ID == BO.p33IdENUM.Cas && Model.Rec.p70ID==BO.p70IdENUM.Vyfakturovano)
                 {
                     <div class="row">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vyúčtované hodiny"):</label>
@@ -251,7 +255,7 @@
                         </div>
                     </div>
                 }
-                @if (Model.Rec.p33ID == BO.p33IdENUM.Kusovnik)
+                @if (Model.Rec.p33ID == BO.p33IdENUM.Kusovnik && Model.Rec.p70ID == BO.p70IdENUM.Vyfakturovano)
                 {
                     <div class="row">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vyúčtováno ks"):</label>
@@ -261,7 +265,7 @@
 
                     </div>
                 }
-                @if (Model.Rec.p33ID == BO.p33IdENUM.Cas || Model.Rec.p33ID == BO.p33IdENUM.Kusovnik)
+                @if ((Model.Rec.p33ID == BO.p33IdENUM.Cas || Model.Rec.p33ID == BO.p33IdENUM.Kusovnik) && Model.Rec.p70ID == BO.p70IdENUM.Vyfakturovano)
                 {
                     <div class="row my-2">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Fakturační sazba"):</label>
@@ -272,26 +276,30 @@
                     </div>
 
                 }
-                <div class="row">
-                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Bez DPH"):</label>
-                    <div class="col-sm-5 col-md-4">
-                        <myval datatype="num" value="@Model.Rec.p31Amount_WithoutVat_Invoiced" valueafter="@Model.RecP91.j27Code"></myval>
+                @if (Model.Rec.p70ID == BO.p70IdENUM.Vyfakturovano)
+                {
+                    <div class="row">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Bez DPH"):</label>
+                        <div class="col-sm-5 col-md-4">
+                            <myval datatype="num" value="@Model.Rec.p31Amount_WithoutVat_Invoiced" valueafter="@Model.RecP91.j27Code"></myval>
+                        </div>
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Včetně DPH"):</label>
+                        <div class="col-sm-5 col-md-4">
+                            <myval datatype="num" value="@Model.Rec.p31Amount_WithVat_Invoiced" valueafter="@Model.RecP91.j27Code"></myval>
+                        </div>
                     </div>
-                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Včetně DPH"):</label>
-                    <div class="col-sm-5 col-md-4">
-                        <myval datatype="num" value="@Model.Rec.p31Amount_WithVat_Invoiced" valueafter="@Model.RecP91.j27Code"></myval>
+                    <div class="row">
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("DPH sazba"):</label>
+                        <div class="col-sm-5 col-md-4">
+                            <myval datatype="num" value="@Model.Rec.p31VatRate_Invoiced" valueafter="%"></myval>
+                        </div>
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Částka DPH"):</label>
+                        <div class="col-sm-5 col-md-4">
+                            <myval datatype="num" value="@Model.Rec.p31Amount_Vat_Invoiced" valueafter="@Model.RecP91.j27Code"></myval>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("DPH sazba"):</label>
-                    <div class="col-sm-5 col-md-4">
-                        <myval datatype="num" value="@Model.Rec.p31VatRate_Invoiced" valueafter="%"></myval>
-                    </div>
-                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Částka DPH"):</label>
-                    <div class="col-sm-5 col-md-4">
-                        <myval datatype="num" value="@Model.Rec.p31Amount_Vat_Invoiced" valueafter="@Model.RecP91.j27Code"></myval>
-                    </div>
-                </div>
+                }
+
             </div>
         </div>
     }
