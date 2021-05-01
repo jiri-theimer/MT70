@@ -16,6 +16,68 @@ namespace UI.Controllers
             _cp = cp;
         }
 
+        //vyjmout položku z vyúčtování
+        public IActionResult p31remove(int p31id)
+        {
+            var v = new p31removeViewModel() { p31ID = p31id };
+            if (v.p31ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí úkon.");
+            }
+            RefreshStateRemove(v);
+                        
+            return View(v);
+        }
+        private void RefreshStateRemove(p31removeViewModel v)
+        {
+            v.RecP91 = Factory.p91InvoiceBL.LoadByP31ID(v.p31ID);
+            v.Rec = Factory.p31WorksheetBL.Load(v.p31ID);            
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult p31remove(p31removeViewModel v, string oper)
+        {
+            RefreshStateRemove(v);
+            if (oper != null)
+            {
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (v.SelectedOper == 0)
+                {
+                    this.AddMessage("Chybí cílový stav úkonu."); return View(v);
+                }
+                var p31ids = new List<int> { v.p31ID };
+                if (!Factory.p31WorksheetBL.RemoveFromInvoice(v.RecP91.pid, p31ids))
+                {
+                    return View(v);
+                }
+
+                switch (v.SelectedOper)
+                {
+                    case 1:                        
+                        break;
+                    case 2:                        
+                        Factory.p31WorksheetBL.RemoveFromApprove(p31ids);
+                        break;
+                    case 3:
+                        Factory.p31WorksheetBL.RemoveFromApprove(p31ids);
+                        Factory.p31WorksheetBL.Move2Bin(true, p31ids);
+                        break;
+                }
+
+                
+                
+                v.SetJavascript_CallOnLoad(v.p31ID);
+                return View(v);
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
+        }
+
         //upravit položku vyúčtování
         public IActionResult p31edit(int p31id)
         {

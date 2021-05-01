@@ -90,13 +90,19 @@
 
             </div>
 
-            <div class="my-2">
-                <textarea class="form-control" asp-for="Rec.x28DataSource" placeholder="@_f.tra("Obor možných hodnot pole (oddělovač středník)")"></textarea>
+            <div class="card my-2">
+                <div class="card-body">
+                    <div class="card-title">@_f.tra("Obor hodnot pole")</div>
+                    <div>
+                        <textarea class="form-control" asp-for="Rec.x28DataSource" placeholder="@_f.tra("Obor možných hodnot pole (oddělovač středník)")"></textarea>
+                    </div>
+                    <div>
+                        <input type="checkbox" asp-for="Rec.x28IsFixedDataSource" />
+                        <label class="col-form-label label-checkbox" for="Rec_x28IsFixedDataSource">@_f.tra("Výběr z oboru hodnot je zafixován (pro uživatele se nabízí roletová nabídka (combo))")</label>
+                    </div>
+                </div>
             </div>
-            <div>
-                <input type="checkbox" asp-for="Rec.x28IsFixedDataSource" />
-                <label class="col-form-label label-checkbox" for="Rec_x28IsFixedDataSource">@_f.tra("Výběr z oboru hodnot je zafixován (pro uživatele se nabízí roletová nabídka (combo))")</label>
-            </div>
+            
         }
 
         <div class="my-2">

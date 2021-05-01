@@ -16,6 +16,9 @@ namespace BL
         public void UpdateExternalPID(int pid, string strExternalPID);
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec);
         public bool UpdateInvoice(int p91id, List<BO.p31WorksheetInvoiceChange> lisP31, List<BO.FreeFieldInput> lisFFI);
+        public bool RemoveFromInvoice(int p91id, List<int> p31ids);
+        public bool RemoveFromApprove(List<int> p31ids);
+        public bool Move2Bin(bool move2bin, List<int> p31ids);
         public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
@@ -321,6 +324,71 @@ namespace BL
             
 
             return true;
+        }
+
+        public bool RemoveFromApprove(List<int> p31ids)
+        {
+            if (p31ids == null || p31ids.Count() == 0)
+            {
+                this.AddMessage("Na vstupu chybí úkon."); return false;
+            }
+            var guid = BO.BAS.GetGuid();
+            _db.RunSql("INSERT INTO p85TempBox(p85GUID,p85Prefix,p85DataPID) SELECT @guid,'p31',p31ID FROM p31Worksheet WHERE p31ID IN (" + string.Join(",", p31ids) + ")",new { guid = guid });
+
+            var pars = new Dapper.DynamicParameters();            
+            pars.Add("guid", guid, System.Data.DbType.String);
+            pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);
+            pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
+
+            if (_db.RunSp("p31_remove_approve", ref pars, true) != "1")
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool RemoveFromInvoice(int p91id, List<int> p31ids)
+        {
+            if (p31ids==null || p31ids.Count() == 0)
+            {
+                this.AddMessage("Na vstupu chybí úkon."); return false;
+            }
+            if (p91id == 0)
+            {
+                this.AddMessageTranslated("p91id missing");return false;
+            }
+            var lis = GetList(new BO.myQueryP31() { p91id = p91id });
+            if (lis.Count() <= p31ids.Count())
+            {
+                this.AddMessage("Vyúčtování musí obsahovat minimálně jednu položku. Nemůžete vyjmout všechny úkony z vyúčtování.");return false;
+            }
+
+            var guid = BO.BAS.GetGuid();
+            _db.RunSql("INSERT INTO p85TempBox(p85GUID,p85Prefix,p85DataPID) SELECT @guid,'p31',p31ID FROM p31Worksheet WHERE p31ID IN (" + string.Join(",", p31ids)+")",new { guid = guid });
+
+            var pars = new Dapper.DynamicParameters();
+            pars.Add("p91id", p91id, System.Data.DbType.Int32);
+            pars.Add("guid", guid, System.Data.DbType.String);
+            pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);
+            pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
+
+            if (_db.RunSp("p31_remove_invoice", ref pars, true) != "1")
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool Move2Bin(bool move2bin,List<int> p31ids)
+        {
+            if (move2bin)
+            {
+                return _db.RunSql("UPDATE p31Worksheet SET p31ValidUntil=getdate() WHERE p31ID IN (" + string.Join(",", p31ids) + ")");
+            }
+            else
+            {
+                return _db.RunSql("UPDATE p31Worksheet SET p31ValidUntil=convert(datetime,'01.01.3000',104) WHERE p31ID IN (" + string.Join(",", p31ids) + ")");
+            }
+            
         }
 
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec)
