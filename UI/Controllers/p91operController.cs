@@ -16,6 +16,48 @@ namespace UI.Controllers
             _cp = cp;
         }
 
+        //přesunout položku do jiného vyúčtování
+        public IActionResult p31move2invoice(int p31id)
+        {
+            var v = new p31move2invoiceViewModel() { p31ID = p31id };
+            if (v.p31ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí úkon.");
+            }
+            RefreshStateMove2Invoice(v);
+
+            return View(v);
+        }
+        private void RefreshStateMove2Invoice(p31move2invoiceViewModel v)
+        {
+            v.RecP91 = Factory.p91InvoiceBL.LoadByP31ID(v.p31ID);
+            v.Rec = Factory.p31WorksheetBL.Load(v.p31ID);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult p31move2invoice(p31move2invoiceViewModel v, string oper)
+        {
+            RefreshStateMove2Invoice(v);
+            if (oper != null)
+            {
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {                               
+                if (!Factory.p31WorksheetBL.Move2Invoice(v.SelectedP91ID, v.p31ID))
+                {
+                    return View(v);
+                }
+               
+                v.SetJavascript_CallOnLoad(v.p31ID);
+                return View(v);
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
+        }
+
         //vyjmout položku z vyúčtování
         public IActionResult p31remove(int p31id)
         {

@@ -16,6 +16,8 @@ namespace UI.Menu
             if (master_entity == "p91Invoice")
             {
                 AMI("Upravit položku vyúčtování", $"javascript: _window_open('/p91oper/p31edit?p31id={pid}')", "k-i-edit");
+                AMI("Vyjmout položku z vyúčtování", $"javascript: _window_open('/p91oper/p31remove?p31id={pid}')", "k-i-cut");
+                AMI("Přesunout do jiného vyúčtování", $"javascript: _window_open('/p91oper/p31move2invoice?p31id={pid}')", "k-i-insert-up");
                 if (disp.OwnerAccess)
                 {                                     
                     AMI_Clone("p31", pid);

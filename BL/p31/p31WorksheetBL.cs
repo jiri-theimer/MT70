@@ -18,6 +18,7 @@ namespace BL
         public bool UpdateInvoice(int p91id, List<BO.p31WorksheetInvoiceChange> lisP31, List<BO.FreeFieldInput> lisFFI);
         public bool RemoveFromInvoice(int p91id, List<int> p31ids);
         public bool RemoveFromApprove(List<int> p31ids);
+        public bool Move2Invoice(int p91id_dest, int p31id);
         public bool Move2Bin(bool move2bin, List<int> p31ids);
         public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
     }
@@ -373,6 +374,29 @@ namespace BL
             pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
 
             if (_db.RunSp("p31_remove_invoice", ref pars, true) != "1")
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool Move2Invoice(int p91id_dest, int p31id)
+        {
+            if (p31id==0)
+            {
+                this.AddMessage("Na vstupu chybí úkon."); return false;
+            }
+            if (p91id_dest == 0)
+            {
+                this.AddMessageTranslated("Chybí cílové vyúčtování (faktura)."); return false;
+            }
+            
+            var pars = new Dapper.DynamicParameters();
+            pars.Add("p31id", p31id, System.Data.DbType.Int32);
+            pars.Add("p91id_dest", p91id_dest, System.Data.DbType.Int32);
+            pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);
+            pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
+
+            if (_db.RunSp("p31_move_to_another_invoice", ref pars, true) != "1")
             {
                 return false;
             }

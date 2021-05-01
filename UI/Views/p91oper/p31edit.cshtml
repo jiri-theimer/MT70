@@ -16,13 +16,13 @@
     <div style="padding:10px;">
         <table>
             <tr>
-                
-                <td>
-                    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
-                </td>
                 <td>
                     <myval value="@_f.tra("Detail položky vyúčtování (úkonu)")" hoverprefix="p31" hoverheight="600" hoverpid="@Model.p31ID"></myval>
                 </td>
+                <td>
+                    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+                </td>
+                
             </tr>
         </table>
     </div>
@@ -35,7 +35,7 @@
             <a id="link_tab2" class="nav-link" href="/p91oper/p31remove?p31id=@Model.p31ID">@_f.tra("Vyjmout položku z vyúčtování")</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Přesunout do jiného vyúčtování")</a>
+            <a id="link_tab3" class="nav-link" href="/p91oper/p31move2invoice?p31id=@Model.p31ID">@_f.tra("Přesunout do jiného vyúčtování")</a>
         </li>
 
     </ul>
