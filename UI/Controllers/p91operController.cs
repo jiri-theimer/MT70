@@ -16,6 +16,25 @@ namespace UI.Controllers
             _cp = cp;
         }
 
+        //vyjmout grid úkony z vyúčtování
+        public IActionResult p31removebatch(string p31ids)
+        {
+            var v = new p31removebatchViewModel() { p31ID = p31id };
+            if (v.p31ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí úkon.");
+            }
+            RefreshStateRemove(v);
+
+            return View(v);
+        }
+        private void RefreshStateRemove(p31removeViewModel v)
+        {
+            v.RecP91 = Factory.p91InvoiceBL.LoadByP31ID(v.p31ID);
+            v.Rec = Factory.p31WorksheetBL.Load(v.p31ID);
+        }
+
+
         //přesunout položku do jiného vyúčtování
         public IActionResult p31move2invoice(int p31id)
         {

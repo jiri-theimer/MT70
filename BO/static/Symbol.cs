@@ -53,8 +53,8 @@ namespace BO
                 return "<span style='font-size:170%;' class='k-icon k-i-myspace'></span>";
         }
         public static string p91()
-        {
-            return "<span style='font-size:130%;'>💰</span>";
+        {            
+            return "<span style='font-size:170%;color:green;' class='k-icon k-i-file-audio'></span>";
         }
         public static string p90()
         {

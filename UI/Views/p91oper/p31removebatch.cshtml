@@ -1,0 +1,57 @@
+﻿@model UI.Models.p91oper.p31removebatchViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Převést vyúčtování na jinou DPH sazbu");
+
+}
+
+@addTagHelper *, UI
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdOK" class="btn btn-success">@_f.tra("Potvrdit")</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+</div>
+
+<form id="form1" asp-controller="p91oper" asp-action="p31removebatch" method="POST">
+    <div class="modal_record_container">
+        <div class="alert alert-primary">
+            @(Model.RecP91.p92Name+": "+Model.RecP91.p91Code)
+            <hr />
+            @(Model.RecP91.p91Client)
+        </div>
+    </div>
+
+
+    <input type="hidden" asp-for="@Model.p91ID" />
+    <input type="hidden" asp-for="@Model.p31ids" />
+</form>
+
+<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdOK").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+
+
+        });
+
+
+
+    })
+
+
+
+
+</script>
+

@@ -4,6 +4,7 @@
 @{
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
     Model.PageTitle = _f.tra("Upravit položku vyúčtování") + ": " + Model.RecP91.p92Name + " / " + Model.RecP91.p91Code + " (" + Model.RecP91.p91Client + ")";
+    Model.PageSymbol = BO.Symbol.p91();
 
 }
 
