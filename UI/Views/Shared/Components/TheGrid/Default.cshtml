@@ -260,8 +260,11 @@
 
                 $.post("/Menu/TheGridSelMenu", { tgi: get_all_tgi_params() }, function (data) {
 
-
                     $("#ulGridSelMenu").html(data);
+                    if (($("#ulGridSelMenu").height() + $("#ulGridSelMenu").offset().top+40) > $(document).height()) {
+                        $("#ulGridSelMenu").css("columns", "2");
+                    }
+                    
 
                     _gridSelMenuFilled = true;
                 });

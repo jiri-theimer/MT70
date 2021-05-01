@@ -15,6 +15,56 @@
 @addTagHelper *,UI
 
 
+<div class="input-group m-0" style="padding-top:1px;">
+    <div class="tabovergrid nonmobile" style="margin-left:1px;">
+        ÚKONY?
+        <span id="TheGridRows" class="badge bg-primary"></span>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="TheGridIcon" class="k-icon k-i-table"></span>
+            <span id="TheGridName">Grid<strong> & </strong>@_f.tra("Sloupce")</span>
+        </button>
+        <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
+            Loading...
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridSelMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="k-icon k-i-checkbox-checked"></span>
+            @_f.tra("Zaškrtlé záznamy")
+        </button>
+        <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
+    </div>
+
+    @if (Model.prefix == "p31" || Model.prefix == "p41")
+    {
+        <div>
+            @Html.EditorFor(m => m.period, "~/Views/Shared/_Period.cshtml")
+        </div>
+
+    }
+
+    @if (Model.IsCanbeMasterView)
+    {
+        <div style="margin-left:auto;margin-right:2px;" class="nonmobile btn-group">
+            <button type="button" class="btn btn-light" onclick="switch_to_masterview()"><span class="k-icon k-i-table-row-insert-below"></span> @_f.tra("Zapnou spodní panel")</button>
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridDblclickSetting" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="k-icon k-i-gears"></span>
+                    @_f.tra("Dvojklik")
+                </button>
+                <ul id="ulGridDblclickSetting" class="dropdown-menu" aria-labelledby="cmdGridDblclickSetting">
+                    Loading...
+                </ul>
+
+            </div>
+        </div>
+    }
+
+</div>
+
 
 <vc:the-grid input="@Model.gridinput"></vc:the-grid>
 
@@ -95,7 +145,16 @@
         }
 
        
+        function p91oper_p31operbatch(baseoper) {            
+            var pids = $("#tg_selected_pids").val();            
+            if (pids === "") {
+                _notify_message(_tg_musite_vybrat_zaznam);
+                return;
+            }
+            
+            _window_open(_ep("/p91oper/p31operbatch?baseoper=" + baseoper + "&p31ids=" + pids + "&p91id=" + _tg_master_pid));
 
+        }
         
     </script>
 

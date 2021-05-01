@@ -356,19 +356,31 @@ namespace UI.Controllers
 
         public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
         {
+            switch (tgi.prefix)
+            {
+                case "p31":
+                    if (tgi.master_entity == "p91Invoice")
+                    {
+                        AMI("Vyjmout úkony z vyúčtování", "javascript:p91oper_p31operbatch('remove')");
+                        AMI("Zahrnout do paušálu", "javascript:p91oper_p31operbatch('p70-6')");
+                        AMI("Viditelný odpis", "javascript:p91oper_p31operbatch('p70-2')");
+                        AMI("Skrytý odpis", "javascript:p91oper_p31operbatch('p70-3')");
+                    }
+                    
+                    break;
+            }
+            if ("p31,p41,p28,j02,p91".Contains(tgi.prefix))
+            {
+                DIV();
+                AMI("Hromadné oštítkování záznamů", "javascript:tg_tagging()", "♣");
+            }
+
+            DIV();
             AMI("MS EXCEL Export", "javascript:tg_export('xlsx','selected')", "k-i-file-excel");
             AMI("CSV Export", "javascript:tg_export('csv','selected')", "k-i-file-csv");
 
 
-            if ("p31,p41,p28,j02".Contains(tgi.prefix))
-            {
-                DIV();
-                AMI("Hromadné oštítkování záznamů", "javascript:tg_tagging()", "♣");
-
-
-
-
-            }
+            
 
             return basMenu.FlushResult_UL(_lis,true, false);
         }

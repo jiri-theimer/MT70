@@ -430,7 +430,7 @@ namespace UI
         {
             int intPageSize = _grid.GridState.j75PageSize;
 
-            _s.Append("<select title='" + _Factory.tra("Stránkování záznamů") + "' onchange='tg_pagesize(this)'>");
+            _s.Append("<select title='" + _Factory.tra("Stránkování záznamů") + "' style='margin-top:2px;' onchange='tg_pagesize(this)'>");
             render_select_option("50", "50", intPageSize.ToString());
             render_select_option("100", "100", intPageSize.ToString());
             render_select_option("200", "200", intPageSize.ToString());
@@ -439,13 +439,15 @@ namespace UI
             _s.Append("</select>");
             if (intRowsCount < 0)
             {
+                RenderButtonMore();
                 Render_ExtendPagerHtml();
-                RenderGridMessage();
+                RenderGridMessage();                
                 return;
             }
 
             if (intRowsCount <= intPageSize)
             {
+                RenderButtonMore();
                 Render_ExtendPagerHtml();
                 RenderGridMessage();
                 return;
@@ -511,9 +513,14 @@ namespace UI
             int intLastIndex = intRowsCount - (intRowsCount % intPageSize);  //% je zbytek po celočíselném dělení
             _s.Append(string.Format("<button type='button' title='" + _Factory.tra("Poslední") + "' class='btn btn-light tgp' onclick='tg_pager(\n{0}\n)'>&gt;&gt;</button>", intLastIndex));
 
+            RenderButtonMore();
             Render_ExtendPagerHtml();
-
             RenderGridMessage();
+        }
+
+        private void RenderButtonMore()
+        {
+            _s.Append("<button type='button' class='btn btn-light tgp' style='margin-left:6px;' onclick='tg_button_more(this)'><span class='k-icon k-i-check-outline'></span></button>");
         }
 
         private void RenderGridMessage()
@@ -587,25 +594,24 @@ namespace UI
                 }
                 sb.Append(string.Format("<td><a class='nav-link py-0' href='javascript:change_grid({0})'>{1}</a></td>", c.pid, c.j72Name));
 
-                sb.AppendLine(string.Format("<td style='width:50px;'><a title='" + strGridNavrhar + "' class='btn btn-sm btn-outline-secondary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={0}\",2);'>{1}</a></td>", c.pid, _Factory.tra("Upravit")));
+                sb.AppendLine(string.Format("<td style='width:80px;'><a title='" + strGridNavrhar + "' class='btn btn-sm btn-outline-secondary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={0}\",2);'>{1}</a></td>", c.pid, _Factory.tra("GRID návrhář")));
                 sb.AppendLine("</tr>");
             }
             sb.AppendLine("</table>");
             sb.Append("</div>");
 
-            sb.AppendLine("<ul style='border:0px;list-style-type: none;background-color:#E6F0FF;border-top:solid 1px silver;'>");
+            sb.AppendLine("<ul style='border:0px;list-style-type: none;border-top:solid 1px silver;'>");
 
 
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='k-icon k-i-file-excel' style='width:30px;'></span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='k-icon k-i-file-csv' style='width:30px;'></span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
-
-
-            sb.AppendLine("<li><hr class='hr-mini' /></li>");
-            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(20)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 20)) + "</a></li>");
-            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(50)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 50)) + "</a></li>");
-            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(100)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 100)) + "</a></li>");
-            sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(1000)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra("Zaškrtnout všechny záznamy na stránce") + "</a></li>");
-
+       
+            //sb.AppendLine("<li><hr class='hr-mini' /></li>");
+            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(20)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 20)) + "</a></li>");
+            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(50)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 50)) + "</a></li>");
+            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(100)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 100)) + "</a></li>");
+            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(1000)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra("Zaškrtnout všechny záznamy na stránce") + "</a></li>");
+            
 
             sb.AppendLine("</ul>");
 

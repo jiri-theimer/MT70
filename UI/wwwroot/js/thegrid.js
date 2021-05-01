@@ -1089,3 +1089,49 @@ function tg_dblclick_save_setting(val) {
         location.reload(location.href);
     });
 }
+
+function tg_button_more(cmd) {
+    var div = document.getElementById("tg_div_selecting");
+    if (!div) {
+        var el = document.createElement("DIV");
+        el.id = "tg_div_selecting";
+        document.body.appendChild(el);
+        div = document.getElementById("tg_div_selecting");
+
+    } else {
+        if ($(div).css("display") === "block") {
+            $(div).css("display", "none");
+            return;
+        } else {
+            $(div).css("display", "block");
+        }
+
+    }
+
+    var s = "<div class='card'><div class='card-header'>Vybrat záznamy v přehledu <button type='button' class='btn' onclick='tg_div_close_synthetic_divs()'><span aria-hidden='true'>&times;</span></button></div>";
+    s += "<div class='card-body d-grid gap-2'>";
+    s += "<button type='button' onclick='tg_select(20)' class='btn btn-outline-secondary'>Vybrat prvních 20</button>";
+    s += "<button type='button' onclick='tg_select(50)' class='btn btn-outline-secondary'>Vybrat prvních 50</button>";
+    s += "<button type='button' onclick='tg_select(100)' class='btn btn-outline-secondary'>Vybrat prvních 100</button>";
+    s += "<button type='button' onclick='tg_select(1000)' class='btn btn-outline-secondary'>Vybrat všechny záznamy na stránce</button>";
+
+    s += "</div></div>";
+
+    $(div).html(s);
+
+    if ($(div).height() < 100) $(div).height(150);
+
+    var ofs = $(cmd).offset();
+    var x = ofs.left - 20;
+    if (_device.type === "Phone") x = -5;
+    $(div).css("left", x);
+    $(div).css("top", ofs.top - $(cmd).height() - $(div).height() - 15);
+}
+
+function tg_div_close_synthetic_divs() {
+    if (document.getElementById("tg_div_setting")) $("#tg_div_setting").css("display", "none");
+    if (document.getElementById("tg_div_selecting")) $("#tg_div_selecting").css("display", "none");
+    if (document.getElementById("tg_div_print")) $("#tg_div_print").css("display", "none");
+
+
+}

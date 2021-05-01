@@ -16,22 +16,92 @@ namespace UI.Controllers
             _cp = cp;
         }
 
-        //vyjmout grid úkony z vyúčtování
-        public IActionResult p31removebatch(string p31ids)
+        //hromadné operace nad položkami vyúčtování
+        public IActionResult p31operbatch(string baseoper,int p91id,string p31ids)
         {
-            var v = new p31removebatchViewModel() { p31ID = p31id };
-            if (v.p31ID == 0)
+            var v = new p31operbatchViewModel() { p91ID = p91id,p31ids=p31ids,BaseOper= baseoper };
+            if (v.p91ID == 0 || string.IsNullOrEmpty(v.BaseOper))
             {
-                return this.StopPage(true, "Na vstupu chybí úkon.");
+                return this.StopPage(true,"p91id or baseoper missing");
             }
-            RefreshStateRemove(v);
+            if (string.IsNullOrEmpty(v.p31ids))
+            {
+                return this.StopPage(true, "Na vstupu chybí úkony.");
+            }
+            if (v.BaseOper == "p70-6") v.SelectedOper = 6;
+            if (v.BaseOper == "p70-2") v.SelectedOper = 2;
+            if (v.BaseOper == "p70-3") v.SelectedOper = 3;
+            RefreshStateOperBatch(v);
 
             return View(v);
         }
-        private void RefreshStateRemove(p31removeViewModel v)
+        private void RefreshStateOperBatch(p31operbatchViewModel v)
         {
-            v.RecP91 = Factory.p91InvoiceBL.LoadByP31ID(v.p31ID);
-            v.Rec = Factory.p31WorksheetBL.Load(v.p31ID);
+            v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
+            var pids = BO.BAS.ConvertString2ListInt(v.p31ids);
+            v.lisP31 = Factory.p31WorksheetBL.GetList(new BO.myQueryP31() { pids = pids });
+
+            v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = "pids|list_int|" + v.p31ids, oncmclick = "", ondblclick = "" };
+            v.gridinput.query = new BO.InitMyQuery().Load("p31", null, 0, "pids|list_int|" + v.p31ids);
+            v.gridinput.fixedcolumns = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult p31operbatch(p31operbatchViewModel v, string oper)
+        {
+            RefreshStateOperBatch(v);
+            if (oper != null)
+            {
+                return View(v);
+            }
+            
+            if (ModelState.IsValid)
+            {
+                var p31ids = v.lisP31.Select(p => p.pid).ToList();
+                if (v.BaseOper == "remove")
+                {
+                    if (v.SelectedOper == 0)
+                    {
+                        this.AddMessage("Chybí cílový stav úkonu."); return View(v);
+                    }
+                    
+                    if (!Factory.p31WorksheetBL.RemoveFromInvoice(v.RecP91.pid, p31ids))
+                    {
+                        return View(v);
+                    }
+                    switch (v.SelectedOper)
+                    {
+                        case 1:
+                            break;
+                        case 2:
+                            Factory.p31WorksheetBL.RemoveFromApprove(p31ids);
+                            break;
+                        case 3:
+                            Factory.p31WorksheetBL.RemoveFromApprove(p31ids);
+                            Factory.p31WorksheetBL.Move2Bin(true, p31ids);
+                            break;
+                    }
+                }
+                if (v.BaseOper.Substring(0, 3) == "p70")
+                {
+                    var lis = new List<BO.p31WorksheetInvoiceChange>();
+                    foreach(var c in v.lisP31)
+                    {
+                        lis.Add(new BO.p31WorksheetInvoiceChange() { p31ID = c.pid, p70ID =(BO.p70IdENUM) v.SelectedOper });
+                    }
+                    if (!Factory.p31WorksheetBL.UpdateInvoice(v.p91ID, lis, null))
+                    {
+                        return View(v);
+                    }
+                }
+                
+                v.SetJavascript_CallOnLoad(p31ids.First());
+                return View(v);
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
         }
 
 

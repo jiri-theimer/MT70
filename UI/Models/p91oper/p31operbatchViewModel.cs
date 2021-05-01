@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace UI.Models.p91oper
 {
-    public class p31removebatchViewModel:BaseViewModel
+    public class p31operbatchViewModel:BaseViewModel
     {
         public string p31ids { get; set; }
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
+        public string BaseOper { get; set; }
         public int SelectedOper { get; set; }
         public BO.p91Invoice RecP91 { get; set; }
         public int p91ID { get; set; }

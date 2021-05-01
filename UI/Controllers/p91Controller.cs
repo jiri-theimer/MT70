@@ -102,6 +102,10 @@ namespace UI.Controllers
 
             string strBadge = null;
 
+            v.NavTabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31"));
+            v.NavTabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
+            v.NavTabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
+            v.NavTabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
             v.NavTabs.Add(AddTab("Poznámky", "b07", "/b07/List?source=recpage", true, strBadge));
 
             string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-p91");

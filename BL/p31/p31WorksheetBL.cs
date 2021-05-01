@@ -319,7 +319,11 @@ namespace BL
                 {
                     return false;
                 }
-                DL.BAS.SaveFreeFields(_db, c.p31ID, lisFFI);
+                if (lisFFI != null)
+                {
+                    DL.BAS.SaveFreeFields(_db, c.p31ID, lisFFI);
+                }
+                
             }
 
             
