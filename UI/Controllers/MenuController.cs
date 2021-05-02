@@ -372,7 +372,7 @@ namespace UI.Controllers
             if ("p31,p41,p28,j02,p91".Contains(tgi.prefix))
             {
                 DIV();
-                AMI("Hromadné oštítkování záznamů", "javascript:tg_tagging()", "♣");
+                AMI("Oštítkovat", "javascript:tg_tagging()", "♣");
             }
 
             DIV();

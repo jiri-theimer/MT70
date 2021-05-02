@@ -1,0 +1,173 @@
+﻿@model UI.Models.p91oper.proformaViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Spárovat fakturu s úhradou zálohy");
+
+}
+
+@addTagHelper *, UI
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdOK" class="btn btn-success">@_f.tra("Potvrdit")</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+</div>
+
+
+<form id="form1" asp-controller="p91oper" asp-action="proforma" method="POST">
+    <div class="modal_record_container">
+        <div class="alert alert-primary">
+            @(Model.RecP91.p92Name+": "+Model.RecP91.p91Code+" ("+@Model.RecP91.p91Client+")")
+            <hr />
+            <span>@_f.tra("Zbývá uhradit")</span>
+            <span>@(Model.RecP91.j27Code):</span>
+            <span class="badge bg-danger">@(BO.BAS.Number2String(Model.RecP91.p91Amount_Debt))</span>
+            <span>@_f.tra("z toho bez DPH")</span>
+            <span class="badge bg-primary">@(BO.BAS.Number2String(Model.ZbyvaUhraditBezDph))</span>
+
+        </div>
+
+        <div class="my-2">
+            <input type="checkbox" asp-for="@Model.FilterCustomerOnly" id="chkCustomerOnly" onchange="postback('filter')" />
+            <label for="chkCustomerOnly">@_f.tra("Nabízet pouze zálohy klienta faktury")</label>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Vyberte zálohu"):</label>
+            <div class="col-sm-10 col-md-9">
+                @if (Model.FilterCustomerOnly)
+                {
+                    <mycombo entity="p90Proforma" asp-for="@Model.SelectedP90ID" selectedtext="@Model.SelectedP90Alias" event_after_changevalue="p90id_change" myqueryinline="p28id|int|@(Model.RecP91.p28ID)"></mycombo>
+                }
+                else
+                {
+                    <mycombo entity="p90Proforma" asp-for="@Model.SelectedP90ID" selectedtext="@Model.SelectedP90Alias" event_after_changevalue="p90id_change"></mycombo>
+                }
+
+            </div>
+
+        </div>
+        @if (Model.SelectedP90ID > 0 && Model.lisP82 != null)
+        {
+            <div class="row my-2">
+                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Úhrada"):</label>
+                <div class="col-sm-10 col-md-9">
+                    <mydropdown asp-for="@Model.SelectedP82ID" datasource="@Model.lisP82" textfield="DateWithAmount" valuefield="pid" event_after_changevalue="p82id_change"></mydropdown>
+                </div>
+            </div>
+            @if (Model.SelectedP82ID > 0)
+            {
+                <div class="row my-2">
+                    <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Zadejte podíl z úhrady v %"):</label>
+                    <div class="col-sm-2 col-md-2">
+                        <select asp-for="@Model.PodilProcento" class="form-select" onchange="postback('procento')">
+                            @for (int i = 100; i > 0; i--)
+                            {
+                                <option value="@(i)">@(i)%</option>
+                            }
+                        </select>
+
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Nebo zadejte částku bez DPH"):</label>
+                    <div class="col-sm-2 col-md-2">
+                        <mynumber asp-for="@Model.PodilBezDph"></mynumber>
+
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                        <span>@_f.tra("Celkem"):</span>
+                        <strong>@(BO.BAS.Number2String(Model.PodilCelkem))</strong>
+                        <span>, @_f.tra("z toho DPH"):</span>
+                        <strong>@(BO.BAS.Number2String(Model.PodilDph))</strong>
+                    </div>
+                </div>
+
+            }
+        }
+
+
+        @if (Model.lisP99.Count() > 0)
+        {
+            <div class="card">
+                <div class="card-header">@_f.tra("Již spárované úhrady")</div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>@_f.tra("Částka")</th>
+                            <th>@_f.tra("Bez DPH")</th>
+                        </tr>
+                        @foreach (var c in Model.lisP99)
+                        {
+                            <tr>
+                                <td>
+                                    @(BO.BAS.Number2String(c.p99Amount))
+                                </td>
+                                <td>
+                                    @(BO.BAS.Number2String(c.p99Amount_WithoutVat))
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+        }
+
+
+
+
+
+
+    </div>
+
+
+    <input type="hidden" asp-for="@Model.p91ID" />
+    <input type="hidden" asp-for="@Model.PodilCelkem" />
+    <input type="hidden" asp-for="@Model.PodilDph" />
+</form>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdOK").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+
+
+        });
+
+
+
+    })
+
+    function postback(oper) {      
+        if (oper == undefined) {
+            oper = "postback";
+        }
+        form1.action = _ep("/p91oper/proforma?oper=" + oper);
+        form1.submit();
+    }
+    function p90id_change(p90id) {        
+        postback("p90id");
+    }
+    function p82id_change(cbx) {
+        postback("p82id");
+    }
+
+    function deleterecord(p99id) {
+        if (confirm("Opravdu odstranit úhradu?")) {
+            form1.action = _ep("/p91oper/proforma?oper=delete&p99id=" + p99id);
+            form1.submit();
+        }
+
+    }
+
+</script>

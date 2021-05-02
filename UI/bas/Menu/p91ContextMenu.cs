@@ -49,6 +49,7 @@ namespace UI.Menu
             AMI("Další", null, null, null, "more");
             if (rec.p92InvoiceType == BO.p92InvoiceTypeENUM.ClientInvoice)
             {
+                AMI("Spárovat fakturu s úhradou zálohy", $"javascript: _window_open('/p91oper/proforma?p91id={pid}')", "k-i-reset-color", "more");
                 AMI("Vytvořit k faktuře opravný doklad", $"javascript: _window_open('/p91oper/creditnote?p91id={pid}')", "k-i-reset-color", "more");
             }
             if (!BO.BAS.bit_compare_or(rec.p91LockFlag, 2))

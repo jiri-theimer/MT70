@@ -376,6 +376,14 @@ namespace BL
 
         public bool SaveP99(int p91id, int p90id,int p82id,double percentage)
         {
+            if (p90id == 0)
+            {
+                this.AddMessage("Na vstupu chybí vybrat zálohovou fakturu.");return false;
+            }
+            if (p82id == 0)
+            {
+                this.AddMessage("Na vstupu chybí vybrat úhradu zálohové faktury."); return false;
+            }
             using (var sc = new System.Transactions.TransactionScope())
             {
                 var pars = new Dapper.DynamicParameters();

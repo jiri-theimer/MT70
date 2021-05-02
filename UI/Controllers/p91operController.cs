@@ -16,6 +16,94 @@ namespace UI.Controllers
             _cp = cp;
         }
 
+        //spárovat fakturu s uhrazenou zálohou
+        public IActionResult proforma(int p91id)
+        {
+            var v = new proformaViewModel() { p91ID = p91id,FilterCustomerOnly=true,PodilProcento=100 };
+            if (v.p91ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí faktura.");
+            }
+            RefreshStateProforma(v);                       
+            v.Rec = new BO.p99Invoice_Proforma() { p91ID = v.p91ID };
+
+            return View(v);
+        }
+        private void RefreshStateProforma(proformaViewModel v)
+        {            
+            if (v.RecP91 == null)
+            {
+                v.RecP91 = Factory.p91InvoiceBL.Load(v.p91ID);
+            }
+            if (v.RecP91.p91VatRate_Standard>0.00 && v.RecP91.p91Amount_Vat_Standard>0.00 && v.RecP91.p91Amount_Vat_Low == 0.00)
+            {
+                v.ZbyvaUhraditBezDph = v.RecP91.p91Amount_Debt / (1 + v.RecP91.p91VatRate_Standard / 100);
+            }
+            if (v.RecP91.p91VatRate_Low > 0.00 && v.RecP91.p91Amount_Vat_Low > 0.00 && v.RecP91.p91Amount_Vat_Standard == 0.00)
+            {
+                v.ZbyvaUhraditBezDph = v.RecP91.p91Amount_Debt / (1 + v.RecP91.p91VatRate_Low / 100);
+            }
+            v.lisP99 = Factory.p91InvoiceBL.GetList_p99(0, v.p91ID, 0);
+            if (v.SelectedP90ID > 0)
+            {
+                v.lisP82 = Factory.p82Proforma_PaymentBL.GetList(v.SelectedP90ID);
+                if (v.SelectedP82ID==0 && v.lisP82.Count() > 0)
+                {
+                    v.SelectedP82ID = v.lisP82.First().pid;
+                }
+            }
+        }
+        private void Handle_Recalc_Proforma(proformaViewModel v)
+        {            
+            if (v.SelectedP82ID == 0) return;
+            if (v.PodilProcento == 0) v.PodilProcento = 100;
+            var recP82 = Factory.p82Proforma_PaymentBL.Load(v.SelectedP82ID);
+            var proc = Convert.ToDouble(v.PodilProcento);           
+            v.PodilBezDph = Math.Round(recP82.p82Amount_WithoutVat * proc / 100, 2);
+            v.PodilCelkem = recP82.p82Amount;
+            v.PodilDph = v.PodilCelkem - v.PodilBezDph;
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult proforma(proformaViewModel v, string oper, int p99id)
+        {
+            RefreshStateProforma(v);
+            if (oper == "filter")
+            {
+                v.SelectedP90ID = 0;v.SelectedP90Alias = null;v.SelectedP82ID = 0;
+            }
+            if (oper == "procento" || oper=="p82id" || oper=="p90id")
+            {
+                Handle_Recalc_Proforma(v);
+            }
+            if (!string.IsNullOrEmpty(oper))
+            {
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {                
+                var c = new BO.p99Invoice_Proforma() { p91ID = v.p91ID };
+                var proc = Convert.ToDouble(v.PodilProcento);
+                if (v.PodilBezDph > 0)
+                {
+                    proc = proc * 100000;
+                }
+                if (Factory.p91InvoiceBL.SaveP99(v.p91ID, v.SelectedP90ID, v.SelectedP82ID,proc))
+                {
+                    v.SetJavascript_CallOnLoad(v.p91ID);
+                    return View(v);
+                }
+                
+
+            }
+
+            this.Notify_RecNotSaved();
+            return View(v);
+        }
+
+
+
         //hromadné operace nad položkami vyúčtování
         public IActionResult p31operbatch(string baseoper,int p91id,string p31ids)
         {

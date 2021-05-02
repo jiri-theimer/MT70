@@ -17,7 +17,7 @@ namespace BO
         {
             get
             {
-                return BO.BAS.ObjectDate2String(p82Date) + " - " + BO.BAS.GN(this.p82Amount);
+                return BO.BAS.ObjectDate2String(p82Date) + ": " + BO.BAS.Number2String(this.p82Amount);
             }
         }
     }
