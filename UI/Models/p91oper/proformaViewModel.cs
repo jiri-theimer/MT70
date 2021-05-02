@@ -12,8 +12,7 @@ namespace UI.Models.p91oper
         public bool FilterCustomerOnly { get; set; }
         public int SelectedP90ID { get; set; }
         public string SelectedP90Alias { get; set; }
-        public int SelectedP82ID { get; set; }
-        public BO.p99Invoice_Proforma Rec { get; set; }        
+        public int SelectedP82ID { get; set; }          
         public IEnumerable<BO.p82Proforma_Payment> lisP82 { get; set; }
         public IEnumerable<BO.p99Invoice_Proforma> lisP99 { get; set; }
 

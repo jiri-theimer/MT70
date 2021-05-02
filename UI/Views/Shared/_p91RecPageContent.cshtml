@@ -44,7 +44,7 @@
     <div class="card-body">
         <h6 class="card-title recpagetitle bgp91">
             @Model.Rec.p92Name
-            
+
 
             @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 2))
             {
@@ -66,7 +66,7 @@
             </div>
         </div>
 
-        @if (Model.Rec.p92InvoiceType == BO.p92InvoiceTypeENUM.CreditNote && Model.RecOpravovanyDoklad !=null)
+        @if (Model.Rec.p92InvoiceType == BO.p92InvoiceTypeENUM.CreditNote && Model.RecOpravovanyDoklad != null)
         {
             <div class="row my-1">
                 <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Opravovaný doklad")):</label>
@@ -75,7 +75,7 @@
                 </div>
             </div>
         }
-        
+
 
         <div class="row my-1">
             <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Typ faktury")):</label>
@@ -205,6 +205,40 @@
 
 
 </div>
+
+@if (Model.lisP99.Count() > 0)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp91">
+                <a href="javascript:_window_open('/p91oper/proforma?p91id=@(Model.pid)')">
+                    @_f.tra("Spárované úhrady záloh")
+                </a>                
+            </div>
+            <table class="table table-sm table-hover">
+                @foreach (var c in Model.lisP99)
+                {
+                <tr style="border-bottom-color:white;">
+                    <td>
+                        @c.p90Code
+                    </td>
+                    <td>
+                        @c.p82Code
+                    </td>
+
+                    <td class="tdnum">
+                        @BO.BAS.Number2String(c.p99Amount)
+                    </td>
+                    <td class="tdnum">
+                        @BO.BAS.Number2String(c.p99Amount_WithoutVat)
+                    </td>
+                </tr>                    
+                }
+            </table>
+
+        </div>
+    </div>
+}
 
 <div class="card recpageboxauto" style="width:290px;">
     <div class="card-body">

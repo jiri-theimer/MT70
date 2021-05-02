@@ -25,8 +25,7 @@ namespace UI.Controllers
                 return this.StopPage(true, "Na vstupu chybí faktura.");
             }
             RefreshStateProforma(v);                       
-            v.Rec = new BO.p99Invoice_Proforma() { p91ID = v.p91ID };
-
+            
             return View(v);
         }
         private void RefreshStateProforma(proformaViewModel v)
@@ -68,6 +67,14 @@ namespace UI.Controllers
         public IActionResult proforma(proformaViewModel v, string oper, int p99id)
         {
             RefreshStateProforma(v);
+            if (oper == "delete" && p99id > 0)
+            {
+                if (Factory.p91InvoiceBL.DeleteP99(p99id))
+                {
+                    v.SetJavascript_CallOnLoad(v.p91ID);
+                    return View(v);
+                }
+            }
             if (oper == "filter")
             {
                 v.SelectedP90ID = 0;v.SelectedP90Alias = null;v.SelectedP82ID = 0;
@@ -87,7 +94,7 @@ namespace UI.Controllers
                 var proc = Convert.ToDouble(v.PodilProcento);
                 if (v.PodilBezDph > 0)
                 {
-                    proc = proc * 100000;
+                    proc = v.PodilBezDph * 100000;
                 }
                 if (Factory.p91InvoiceBL.SaveP99(v.p91ID, v.SelectedP90ID, v.SelectedP82ID,proc))
                 {

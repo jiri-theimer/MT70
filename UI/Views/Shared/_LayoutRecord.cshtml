@@ -122,7 +122,7 @@
         @if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
 
-                @:_notify_message("@c.Value","@c.Key");
+                @:_notify_message("@Html.Raw(c.Value)","@c.Key");
 
             }
         }

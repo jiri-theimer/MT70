@@ -49,6 +49,8 @@ namespace UI.Controllers
                 {
                     v.RecOpravovanyDoklad = Factory.p91InvoiceBL.Load(v.Rec.p91ID_CreditNoteBind);
                 }
+
+                v.lisP99 = Factory.p91InvoiceBL.GetList_p99(0, v.pid, 0);
             }
         }
 

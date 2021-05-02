@@ -78,12 +78,16 @@
                         <mynumber asp-for="@Model.PodilBezDph"></mynumber>
 
                     </div>
-                    <div class="col-sm-4 col-md-4">
-                        <span>@_f.tra("Celkem"):</span>
-                        <strong>@(BO.BAS.Number2String(Model.PodilCelkem))</strong>
-                        <span>, @_f.tra("z toho DPH"):</span>
-                        <strong>@(BO.BAS.Number2String(Model.PodilDph))</strong>
-                    </div>
+                    @if (Model.PodilCelkem > 0)
+                    {
+                        <div class="col-sm-4 col-md-4">
+                            <span>@_f.tra("Celkem"):</span>
+                            <strong>@(BO.BAS.Number2String(Model.PodilCelkem))</strong>
+                            <span>, @_f.tra("z toho DPH"):</span>
+                            <strong>@(BO.BAS.Number2String(Model.PodilDph))</strong>
+                        </div>
+                    }
+
                 </div>
 
             }
@@ -97,19 +101,35 @@
                 <div class="card-body">
                     <table class="table table-hover">
                         <tr>
+                            <th>@_f.tra("Záloha")</th>
+                            <th>@_f.tra("Úhrada")</th>
                             <th>@_f.tra("Částka")</th>
                             <th>@_f.tra("Bez DPH")</th>
+                            <th>@_f.tra("DPH")</th>
+                            <th></th>
                         </tr>
                         @foreach (var c in Model.lisP99)
                         {
-                            <tr>
-                                <td>
-                                    @(BO.BAS.Number2String(c.p99Amount))
-                                </td>
-                                <td>
-                                    @(BO.BAS.Number2String(c.p99Amount_WithoutVat))
-                                </td>
-                            </tr>
+                    <tr>
+                        <td>
+                            @c.p91Code
+                        </td>
+                        <td>
+                            @c.p82Code
+                        </td>
+                        <td class="tdnum">
+                            @(BO.BAS.Number2String(c.p99Amount))
+                        </td>
+                        <td class="tdnum">
+                            @(BO.BAS.Number2String(c.p99Amount_WithoutVat))
+                        </td>
+                        <td class="tdnum">
+                            @(BO.BAS.Number2String(c.p99Amount_Vat))
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleterecord(@(c.pid))">@_f.tra("Odstranit úhradu z faktury")</button>
+                        </td>
+                    </tr>
                         }
                     </table>
                 </div>
@@ -148,14 +168,14 @@
 
     })
 
-    function postback(oper) {      
+    function postback(oper) {
         if (oper == undefined) {
             oper = "postback";
         }
         form1.action = _ep("/p91oper/proforma?oper=" + oper);
         form1.submit();
     }
-    function p90id_change(p90id) {        
+    function p90id_change(p90id) {
         postback("p90id");
     }
     function p82id_change(cbx) {

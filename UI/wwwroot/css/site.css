@@ -1207,3 +1207,8 @@ label.recpagelabel {
     background-color:lightpink;
 }
 
+td.tdnum{
+    text-align:right;
+    width:120px;
+    padding-right:20px;
+}

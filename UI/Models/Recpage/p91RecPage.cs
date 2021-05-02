@@ -17,6 +17,8 @@ namespace UI.Models.Recpage
         public string StatByPrefix { get; set; }
 
         public BO.p91Invoice RecOpravovanyDoklad { get; set; }
+
+        public IEnumerable<BO.p99Invoice_Proforma> lisP99 { get; set; }
         
     }
 
