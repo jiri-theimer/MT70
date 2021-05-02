@@ -348,64 +348,58 @@ namespace DL
 
         public string GetSQL1_Ocas(string strPrefix, bool isthegrid = false, bool isvalidity = true,bool istimestamp=true)
         {
-            switch (strPrefix)
+            string s = null;
+            if (isvalidity)
             {
-                case "a01":
-                    if (isthegrid == true)
-                    {
-                        return "a.a01ID as pid,dbo._core_a01_isclosed(a.a01IsClosed,a.a01ValidFrom,a.a01ValidUntil) as isclosed,bc.b02Color as bgcolor,a.a01ParentID as parentpid,a.a01ChildsCount as childscount,a.a01IsTemporary as issimulation";
-                    }
-                    else
-                    {
-                        return "a.a01ID as pid,dbo._core_a01_isclosed(a.a01IsClosed,a.a01ValidFrom,a.a01ValidUntil) as isclosed,'a01' as entity,a.a01DateInsert as DateInsert,a.a01UserInsert as UserInsert,a.a01DateUpdate as DateUpdate,a.a01UserUpdate as UserUpdate,a.a01ValidFrom as ValidFrom,a.a01ValidUntil as ValidUntil,a.a01ParentID as parentpid,a.a01ChildsCount as childscount,a.a01IsTemporary as issimulation";
-                    }
-
-                
-                case "a03":
-                    if (isthegrid == true)
-                    {
-                        return string.Format("a.{0}ID as pid,convert(bit,CASE WHEN GETDATE() BETWEEN a.{0}ValidFrom AND a.{0}ValidUntil THEN 0 ELSE 1 end) as isclosed,a.a03ParentFlag as parentflag,a.a03IsTestRecord as istestrecord", strPrefix);
-                    }
-                    else
-                    {
-                        return string.Format("a.{0}ID as pid,CASE WHEN GETDATE() BETWEEN a.{0}ValidFrom AND a.{0}ValidUntil THEN 0 ELSE 1 end as isclosed,'{0}' as entity,a.{0}DateInsert as DateInsert,a.{0}UserInsert as UserInsert,a.{0}DateUpdate as DateUpdate,a.{0}UserUpdate as UserUpdate,a.{0}ValidFrom as ValidFrom,a.{0}ValidUntil as ValidUntil,a.a03ParentFlag as parentflag,a.a03IsTestRecord as istestrecord", strPrefix);
-                    }
-                default:
-                    if (isvalidity == true)
-                    {
-                        if (isthegrid == true)
-                        {
-                            return string.Format("a.{0}ID as pid,convert(bit,CASE WHEN GETDATE() BETWEEN a.{0}ValidFrom AND a.{0}ValidUntil THEN 0 ELSE 1 end) as isclosed", strPrefix);
-                        }
-                        else
-                        {
-                            return string.Format("a.{0}ID as pid,CASE WHEN GETDATE() BETWEEN a.{0}ValidFrom AND a.{0}ValidUntil THEN 0 ELSE 1 end as isclosed,'{0}' as entity,a.{0}DateInsert as DateInsert,a.{0}UserInsert as UserInsert,a.{0}DateUpdate as DateUpdate,a.{0}UserUpdate as UserUpdate,a.{0}ValidFrom as ValidFrom,a.{0}ValidUntil as ValidUntil", strPrefix);
-                        }
-
-                    }
-                    else
-                    {
-                        if (isthegrid == true)
-                        {
-                            return string.Format("a.{0}ID as pid,convert(bit,0) as isclosed", strPrefix);
-                        }
-                        else
-                        {
-                            if (istimestamp == true)
-                            {
-                                return string.Format("a.{0}ID as pid,0 as isclosed,'{0}' as entity,a.{0}DateInsert as DateInsert,a.{0}UserInsert as UserInsert,a.{0}DateUpdate as DateUpdate,a.{0}UserUpdate as UserUpdate", strPrefix);
-                            }
-                            else
-                            {
-                                return string.Format("a.{0}ID as pid,0 as isclosed,'{0}' as entity", strPrefix);
-                            }
-                            
-
-                        }
-
-                    }
+                if (isthegrid)
+                {
+                    s = $"a.{strPrefix}ID as pid,convert(bit,CASE WHEN GETDATE() BETWEEN a.{strPrefix}ValidFrom AND a.{strPrefix}ValidUntil THEN 0 ELSE 1 end) as isclosed";
+                }
+                else
+                {
+                    s = $"a.{strPrefix}ID as pid,CASE WHEN GETDATE() BETWEEN a.{strPrefix}ValidFrom AND a.{strPrefix}ValidUntil THEN 0 ELSE 1 end as isclosed,'{strPrefix}' as entity,a.{strPrefix}DateInsert as DateInsert,a.{strPrefix}UserInsert as UserInsert,a.{strPrefix}DateUpdate as DateUpdate,a.{strPrefix}UserUpdate as UserUpdate,a.{strPrefix}ValidFrom as ValidFrom,a.{strPrefix}ValidUntil as ValidUntil";
+                }
 
             }
+            else
+            {
+                if (isthegrid)
+                {
+                    s = $"a.{strPrefix}ID as pid,convert(bit,0) as isclosed";
+                }
+                else
+                {
+                    if (istimestamp)
+                    {
+                        s = $"a.{strPrefix}ID as pid,0 as isclosed,'{strPrefix}' as entity,a.{strPrefix}DateInsert as DateInsert,a.{strPrefix}UserInsert as UserInsert,a.{strPrefix}DateUpdate as DateUpdate,a.{strPrefix}UserUpdate as UserUpdate";
+                    }
+                    else
+                    {
+                        s = $"a.{strPrefix}ID as pid,0 as isclosed,'{strPrefix}' as entity";
+                    }
+
+
+                }
+
+            }
+            if (isthegrid)
+            {
+                switch (strPrefix)
+                {
+                    case "p91":
+                        s += ",a.p91IsDraft,a.p91DateMaturity,a.p91Amount_Debt,a.p91Amount_TotalDue,a.p91LockFlag";
+                        break;
+                    case "p31":
+                        s += ",a.p72ID_AfterApprove,a.p72ID_AfterTrimming,a.p70ID,a.p71ID,a.p91ID,p91x.p91IsDraft";
+                        break;
+                    case "p28":
+                        s += "a.p28TreePrev as treeprev,a.p28TreeNext as treenext";
+                        break;
+                }
+            }
+
+            return s;
+            
 
         }
 

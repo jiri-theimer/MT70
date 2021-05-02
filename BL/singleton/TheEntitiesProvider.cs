@@ -105,7 +105,7 @@ namespace BL
             
             AE("view_PrimaryAddress", "Adresy", "Adresa", "view_PrimaryAddress a",null);
             
-            AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a INNER JOIN p41Project p41x ON a.p41ID=p41x.p41ID INNER JOIN p32Activity p32x ON a.p32ID=p32x.p32ID INNER JOIN p34ActivityGroup p34x ON p32x.p34ID=p34x.p34ID", "a.p31ID DESC");            
+            AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a INNER JOIN p41Project p41x ON a.p41ID=p41x.p41ID INNER JOIN p32Activity p32x ON a.p32ID=p32x.p32ID INNER JOIN p34ActivityGroup p34x ON p32x.p34ID=p34x.p34ID LEFT OUTER JOIN p91Invoice p91x ON a.p91ID=p91x.p91ID", "a.p31ID DESC");            
             AE("o23Doc", "Dokumenty", "Dokument", "o23Doc a", "a.o23ID DESC");
             AE("b07Comment", "Poznámky", "Poznámka", "b07Comment a INNER JOIN j02Person j02x ON a.j02ID_Owner=j02x.j02ID AND (a.b07Value IS NULL OR a.b07Value NOT LIKE 'upload')", "a.b07ID DESC");
 

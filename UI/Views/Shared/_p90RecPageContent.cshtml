@@ -159,14 +159,47 @@
 
                             <span style="margin-left:2px;">@Model.Rec.j27Code</span>
                         </td>
-                        
+
                     </tr>
                     <tr>
                         <td colspan="4">
                             <i>@(c.p82Text)</i>
                         </td>
                     </tr>
-                   
+
+                }
+            </table>
+
+        </div>
+    </div>
+}
+
+@if (Model.lisP99 !=null && Model.lisP99.Count() > 0)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp90">
+                @_f.tra("Spárované úhrady s daňovou fakturou")
+            </div>
+            <table class="table table-sm table-hover">
+                @foreach (var c in Model.lisP99)
+                {
+                    <tr style="border-bottom-color:white;">
+                        <td>
+                            @c.p91Code
+                        </td>
+                        <td>
+                            @c.p82Code
+                        </td>
+
+                        <td class="tdnum">
+                            @BO.BAS.Number2String(c.p99Amount)
+                        </td>
+                        <td class="tdnum">
+                            @BO.BAS.Number2String(c.p99Amount_WithoutVat)
+                        </td>
+                    </tr>
+
                 }
             </table>
 

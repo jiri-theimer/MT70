@@ -33,7 +33,7 @@ namespace UI.Controllers
 
                 v.SetTagging();
                 v.lisP82 = Factory.p82Proforma_PaymentBL.GetList(v.pid);
-                
+                v.lisP99 = Factory.p91InvoiceBL.GetList_p99(v.pid, 0, 0);
                 v.SetFreeFields(0);
             }
         }

@@ -307,43 +307,25 @@ namespace UI
                     _s.Append("<td class='td0' style='width:20px;'></td>");
                 }
 
-                if ((mq.Prefix == "a01" || mq.Prefix == "a11") && dbRow["bgcolor"] != System.DBNull.Value)
-                {
-                    _s.Append(string.Format("<td class='td1' style='width:20px;background-color:{0}'>", dbRow["bgcolor"]));
-                }
-                else
-                {
-                    _s.Append("<td class='td1' style='width:20px;'>");
-                }
+                
+                _s.Append("<td class='td1'");
 
-                if (mq.Prefix == "a01")
+                switch (mq.Prefix)
                 {
-                    if (dbRow["parentpid"] != DBNull.Value)
-                    {
-                        _s.Append("<img src='/images/child.png'/>");
-                    }
-                    else
-                    {
-                        if (Convert.ToInt32(dbRow["childscount"]) > 0) _s.Append("<img src='/images/mother.png'/>");
-                    }
+                    case "p31":
+                        _s.Append(" style='width:20px;" + UI.TheGridRowSymbol.p31_td_style(dbRow)+"'>");
+                        _s.Append(UI.TheGridRowSymbol.p31_td_inner(dbRow));
+                        break;
+                    case "p91":
+                        _s.Append(" style='width:20px;"+UI.TheGridRowSymbol.p91_td_style(dbRow)+"'>");                       
+                        _s.Append(UI.TheGridRowSymbol.p91_td_inner(dbRow));
+                        break;
+                    default:
+                        _s.Append(" style='width:20px;'>");
+                        break;
                 }
-                if (mq.Prefix == "a03")
-                {
-                    if (dbRow["parentflag"] != DBNull.Value)
-                    {
-                        if (Convert.ToInt32(dbRow["parentflag"]) == 1)
-                        {
-                            _s.Append("<img src='/images/a03ParentFlag1.png'/>");
-                        }
-                        if (Convert.ToInt32(dbRow["parentflag"]) == 2)
-                        {
-                            _s.Append("<img src='/images/a03ParentFlag2.png'/>");
-                        }
-
-                    }
-
-
-                }
+                
+                
                 _s.Append("</td>");
 
 
@@ -520,7 +502,7 @@ namespace UI
 
         private void RenderButtonMore()
         {
-            _s.Append("<button type='button' class='btn btn-light tgp' style='margin-left:6px;' onclick='tg_button_more(this)'><span class='k-icon k-i-check-outline'></span></button>");
+            _s.Append("<button type='button' class='btn btn-light tgp' style='margin-left:6px;' onclick='tg_button_more(this)'><span class='k-icon k-i-grid-layout'></span></button>");
         }
 
         private void RenderGridMessage()
