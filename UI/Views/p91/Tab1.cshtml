@@ -11,11 +11,21 @@
 
 @addTagHelper *, UI
 
+<button type="button" class="btn btn-sm btn-warning" onclick="p91report(1,1)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
+<button type="button" class="btn btn-sm btn-info" onclick="p91report(1,1)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava přílohy")</button>
+<button type="button" class="btn btn-sm btn-outline-secondary" onclick="p91sendmail(@Model.pid)"><span class="k-icon k-i-email"></span> @_f.tra("Odeslat poštou")</button>
+
+@if (Model.Rec.p91IsDraft)
+{
+    <button type="button" class="btn btn-sm btn-outline-primary" onclick="converfromdraft(@Model.pid)">@_f.tra("Převést DRAFT na oficiální doklad")</button>
+}
+
 <div class="info_record_container">
 
     @Html.EditorFor(m => m, "~/Views/Shared/_p91RecPageContent.cshtml")
 
 </div>
+
 
 
 

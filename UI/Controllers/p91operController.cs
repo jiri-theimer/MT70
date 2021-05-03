@@ -15,6 +15,19 @@ namespace UI.Controllers
         {
             _cp = cp;
         }
+        //převést draft fakturu na oficiální číslo
+        public string converfromdraft(int p91id)
+        {
+            if (Factory.p91InvoiceBL.ConvertFromDraft(p91id))
+            {
+                return "1";
+            }
+            else
+            {
+                return "0";
+            }
+            
+        }
 
         //spárovat fakturu s uhrazenou zálohou
         public IActionResult proforma(int p91id)

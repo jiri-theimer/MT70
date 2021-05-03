@@ -493,4 +493,22 @@
     function recpage_exupdate(p91id) {
         _window_open("/p91oper/exupdate?p91id=" + p91id);
     }
+
+    function converfromdraft(p91id) {
+        $.post(_ep("/p91oper/converfromdraft"), { p91id: p91id }, function (data) {
+            if (data == "0")
+            {
+                alert("Error");
+            }
+            location.reload(location.href);
+
+        });
+    }
+
+    function p91report(x31id,p91id) {
+
+    }
+    function p91sendmail(p91id) {
+        _window_open(_ep("/Mail/SendMail?x29id=391&x40datapid=" + p91id));
+    }
 </script>
