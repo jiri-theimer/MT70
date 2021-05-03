@@ -304,18 +304,18 @@ namespace UI
              
                 if (string.IsNullOrEmpty(this.gridinput.ondblclick))
                 {
-                    _s.Append(string.Format("<tr id='r{0}' class='{1}'>", dbRow["pid"], strRowClass));
+                    _s.Append($"<tr id='r{dbRow["pid"]}' class='{strRowClass}'>");
                 }
                 else
                 {
-                    _s.Append(string.Format("<tr id='r{0}' class='{1}' ondblclick='{2}(this)'>", dbRow["pid"], strRowClass, this.gridinput.ondblclick));
+                    _s.Append($"<tr id='r{dbRow["pid"]}' class='{strRowClass}' ondblclick='{this.gridinput.ondblclick}(this)'>");
                 }
 
 
 
                 if (_grid.GridState.j72SelectableFlag > 0)
                 {
-                    _s.Append(string.Format("<td class='td0' style='width:20px;'><input type='checkbox' id='chk{0}'/></td>", dbRow["pid"]));
+                    _s.Append($"<td class='td0' style='width:20px;'><input type='checkbox' id='chk{dbRow["pid"]}'/></td>");
                 }
                 else
                 {
@@ -537,6 +537,7 @@ namespace UI
         private void RenderButtonMore()
         {
             _s.Append("<button type='button' class='btn btn-light tgp' style='margin-left:6px;' onclick='tg_button_more(this)'><span class='k-icon k-i-grid-layout'></span></button>");
+            _s.Append("<span id='gridcurrow'></span>");
         }
 
         private void RenderGridMessage()

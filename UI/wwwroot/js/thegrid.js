@@ -254,7 +254,8 @@ function tg_setup_selectable() {
         }
 
         var pid = this.id.replace("r", "");
-        _tg_rowindex = this.rowindex;
+        _tg_rowindex = this.rowIndex;
+        
         _tg_current_pid = pid;
 
         var pid_pre = $("#tg_selected_pid").val();
@@ -263,7 +264,7 @@ function tg_setup_selectable() {
             var event_thegridrowselect = new CustomEvent("thegrid_rowselect", { detail: { pid: pid, pid_pre: pid_pre } });
             document.dispatchEvent(event_thegridrowselect);
 
-
+            $("#gridcurrow").text(" #" + (_tg_rowindex+1));
             //thegrid_handle_event("rowselect", pid); //již se nepoužívá
         }
         if (e.ctrlKey) {
@@ -1110,9 +1111,9 @@ function tg_button_more(cmd) {
 
     var s = "<div class='card'><div class='card-header'>Vybrat záznamy v přehledu <button type='button' class='btn' onclick='tg_div_close_synthetic_divs()'><span aria-hidden='true'>&times;</span></button></div>";
     s += "<div class='card-body d-grid gap-2'>";
-    s += "<button type='button' onclick='tg_select(20)' class='btn btn-outline-secondary'>Vybrat prvních 20</button>";
-    s += "<button type='button' onclick='tg_select(50)' class='btn btn-outline-secondary'>Vybrat prvních 50</button>";
-    s += "<button type='button' onclick='tg_select(100)' class='btn btn-outline-secondary'>Vybrat prvních 100</button>";
+    s += "<button type='button' onclick='tg_select(20)' class='btn btn-outline-secondary'>Vybrat prvních #20</button>";
+    s += "<button type='button' onclick='tg_select(50)' class='btn btn-outline-secondary'>Vybrat prvních #50</button>";
+    s += "<button type='button' onclick='tg_select(100)' class='btn btn-outline-secondary'>Vybrat prvních #100</button>";
     s += "<button type='button' onclick='tg_select(1000)' class='btn btn-outline-secondary'>Vybrat všechny záznamy na stránce</button>";
 
     s += "</div></div>";
