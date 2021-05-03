@@ -390,10 +390,10 @@ namespace DL
                         s += ",a.p91IsDraft,a.p91DateMaturity,a.p91Amount_Debt,a.p91Amount_TotalDue,a.p91LockFlag";
                         break;
                     case "p31":
-                        s += ",a.p72ID_AfterApprove,a.p72ID_AfterTrimming,a.p70ID,a.p71ID,a.p91ID,p91x.p91IsDraft";
+                        s += ",a.p72ID_AfterApprove,a.p72ID_AfterTrimming,a.p70ID,a.p71ID,a.p91ID,p91x.p91IsDraft,p34x.p33ID,p34x.p34IncomeStatementFlag,a.o23ID_First,p32x.p32IsBillable,a.p31Rate_Billing_Orig";
                         break;
                     case "p28":
-                        s += "a.p28TreePrev as treeprev,a.p28TreeNext as treenext";
+                        s += ",a.p28TreePrev as treeprev,a.p28TreeNext as treenext";
                         break;
                 }
             }

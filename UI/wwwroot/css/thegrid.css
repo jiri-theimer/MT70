@@ -233,12 +233,25 @@ td.td_nowrap {
     text-decoration: line-through;
 }
 
-#tabgrid1 tr.trtestrecord td {
-    color: brown;
+#tabgrid1 tr.trexp {
+    color: #A52A2A; /*záznam peněžního výdaje*/
 }
 
-#tabgrid1 tr.trsimulation td {
-    color: gold;
+#tabgrid1 tr.trfee {
+    color: #0000FF; /*záznam paušální odměny*/
+}
+
+#tabgrid1 tr.trpc {
+    color: #9400D3; /*záznam kusovníku*/
+}
+
+#tabgrid1 td.nefa { /*úkon s nefakturovatelnou aktivitou*/
+    border-right: solid 3px red;
+}
+
+
+#tabgrid1 td.nusa { /*fakturovatelný úkon s nulovou výchozí sazbou*/
+    border-right: solid 3px #149414;
 }
 
 

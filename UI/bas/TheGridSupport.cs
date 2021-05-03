@@ -279,14 +279,29 @@ namespace UI
                 {
                     strRowClass += " trbin";
                 }
-                if (mq.Prefix == "a01" && Convert.ToBoolean(dbRow["issimulation"]))
+                if (mq.Prefix == "p31")
                 {
-                    strRowClass += " trsimulation";
+                    switch (Convert.ToInt32(dbRow["p33ID"]))
+                    {
+                        case 2:
+                        case 5:
+                            if (Convert.ToInt32(dbRow["p34IncomeStatementFlag"]) == 2)
+                            {
+                                strRowClass += " trfee";    //peněžní/paušální odměna
+                            }
+                            else
+                            {
+                                strRowClass += " trexp";     //peněžní výdaj
+                            }
+                            break;
+                        case 3:
+                            strRowClass += " trpc";         //kusovník
+                            break;
+                    }
+                    
+                    
                 }
-                if (mq.Prefix == "a03" && Convert.ToBoolean(dbRow["istestrecord"]))
-                {
-                    strRowClass += " trtestrecord";
-                }
+             
                 if (string.IsNullOrEmpty(this.gridinput.ondblclick))
                 {
                     _s.Append(string.Format("<tr id='r{0}' class='{1}'>", dbRow["pid"], strRowClass));
@@ -313,8 +328,12 @@ namespace UI
                 switch (mq.Prefix)
                 {
                     case "p31":
-                        _s.Append(" style='width:20px;" + UI.TheGridRowSymbol.p31_td_style(dbRow)+"'>");
+                        _s.Append(" style='width:20px;" + UI.TheGridRowSymbol.p31_td_style(dbRow) + "'>");
                         _s.Append(UI.TheGridRowSymbol.p31_td_inner(dbRow));
+                        if (dbRow["o23ID_First"] != System.DBNull.Value)
+                        {
+                            _s.Append("<span class='k-icon k-i-attachment'></span>");
+                        }
                         break;
                     case "p91":
                         _s.Append(" style='width:20px;"+UI.TheGridRowSymbol.p91_td_style(dbRow)+"'>");                       
@@ -328,14 +347,29 @@ namespace UI
                 
                 _s.Append("</td>");
 
-
+                strRowClass = "td2";
+                if (mq.Prefix == "p31")
+                {
+                    if (!Convert.ToBoolean(dbRow["p32IsBillable"]))
+                    {
+                        strRowClass += " nefa"; //nefakturovatelný úkon podle aktivity
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(dbRow["p33ID"]) == 1 && dbRow["p71ID"]==System.DBNull.Value && Convert.ToDouble(dbRow["p31Rate_Billing_Orig"]) == 0)
+                        {
+                            strRowClass += " nusa"; //fakturovatelný čas s nulovou hodinovou sazbou
+                        }
+                        
+                    }
+                }
                 if (!string.IsNullOrEmpty(this.gridinput.oncmclick))
                 {
-                    _s.Append(string.Format("<td class='td2' style='width:20px;'><a class='cm' onclick='{0}'>&#9776;</a></td>", this.gridinput.oncmclick));      //hamburger menu
+                    _s.Append($"<td class='{strRowClass}' style='width:20px;'><a class='cm' onclick='{this.gridinput.oncmclick}'>&#9776;</a></td>");      //hamburger menu
                 }
                 else
                 {
-                    _s.Append("<td class='td2' style='width:20px;'>");  //bez hamburger menu
+                    _s.Append($"<td class='{strRowClass}' style='width:20px;'>");  //bez hamburger menu
                 }
 
 
