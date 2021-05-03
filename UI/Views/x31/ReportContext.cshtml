@@ -1,0 +1,192 @@
+﻿@model ReportContextViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = null;
+}
+@addTagHelper *, UI
+
+
+<!DOCTYPE html>
+
+<html lang="cs">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@_f.tra("Tisková sestava")</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/qtip/jquery.qtip.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="~/css/@_f.CurrentUser.getFontSizeCss()" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/datepicker/bootstrap-datepicker.cs.min.js"></script>
+    <script src="~/lib/qtip/jquery.qtip.min.js"></script>
+
+    <script src="/js/reporting/resources.en.js"></script>
+    <script src="/js/reporting/resources.cs.js"></script>
+
+
+    <link href="/kendo/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="/kendo/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="/kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/mycombo.js" asp-append-version="true"></script>
+
+    <script src="~/js/contextmenu.js" asp-append-version="true"></script>
+    <script src="~/js/mycontrols.js" asp-append-version="true"></script>
+
+    <script src="/api/reports/resources/js/telerikReportViewer"></script>
+
+    <style>
+        #reportViewer1 {
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            top: 50px;
+            bottom: 5px;
+            overflow: hidden;
+            font-family: Verdana, Arial;
+        }
+    </style>
+</head>
+
+<body>
+    @if (Model.RecX31 != null && Model.RecX31.x31FormatFlag == BO.x31FormatFlagENUM.Telerik)
+    {
+        <div id="reportViewer1">
+
+            loading...
+
+        </div>
+    }
+
+
+    <script type="text/javascript">
+        @if(Model.Javascript_CallOnLoad != null)
+    {
+        @Html.Raw(Model.Javascript_CallOnLoad);
+
+
+    }
+    </script>
+
+
+    <form id="form1" asp-controller="x31" asp-action="ReportContext" method="POST">
+        <input type="hidden" asp-for="@Model.rec_prefix" />
+        <input type="hidden" asp-for="@Model.rec_pid" />
+        <input type="hidden" asp-for="@Model.UserParamKey" />
+        <input type="hidden" asp-for="@Model.GeneratedTempFileName" />
+
+        <div class="modal_record_container">
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Tisková sestava"):</label>
+                <div class="col-sm-9 col-md-8">
+                    <mycombo entity="x31Report" asp-for="@Model.SelectedX31ID" selectedtext="@Model.SelectedReport" myqueryinline="@(Model.ComboMyQueryInline)" event_after_changevalue="x31id_change"></mycombo>
+
+                    
+
+                </div>
+                
+                <div class="col-sm-1 col-md-1 btn-group">
+                    <button id="cmdClose" type="button" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+                    <button type="button" onclick="_helppage()" title="@_f.tra("Nápověda")" class="btn btn-light"><b>?</b></button>
+                </div>
+
+            </div>
+            @if (Model.RecX31 != null && Model.RecX31.x31FormatFlag == BO.x31FormatFlagENUM.DOCX)
+            {
+                <button type="button" class="btn btn-primary" onclick="generate_docx()">@_f.tra("Vygenerovat dokument")</button>
+            }
+            @if (string.IsNullOrEmpty(Model.GeneratedTempFileName) == false)
+            {
+                <a type="button" class="btn btn-success" href="/FileUpload/FileDownloadTempFile?tempfilename=@Model.GeneratedTempFileName" target="_blank">@_f.tra("Stáhnout vygenerovaný dokument")</a>
+                @if (Model.AllGeneratedTempFileNames != null && Model.AllGeneratedTempFileNames.Count() > 1)
+                {
+                    @for (int i = 1; i < Model.AllGeneratedTempFileNames.Count(); i++)
+                    {
+                        <a type="button" class="btn btn-success" href="/FileUpload/FileDownloadTempFile?tempfilename=@Model.AllGeneratedTempFileNames[i]" target="_blank">#@i</a>
+                    }
+                }
+            }
+        </div>
+
+    </form>
+
+    <script type="text/javascript">
+
+
+    $(document).ready(function ()
+    {
+       @if(Model.RecX31 != null && Model.RecX31.x31FormatFlag==BO.x31FormatFlagENUM.Telerik)
+       {
+           <text>
+        $("#reportViewer1")
+            .telerik_ReportViewer(
+                {
+                serviceUrl: "/api/reports/",
+                reportSource: {
+                    report: "@(Model.ReportFileName+"###"+_f.CurrentUser.j03Login)",
+                    parameters: { pid: @Model.rec_pid,langindex:"@Model.LangIndex"}
+                },
+                viewMode: telerikReportViewer.ViewModes.INTERACTIVE,
+                scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+                scale: 1.0,
+                    enableAccessibility: false,
+                    parameters: {
+                        editors: {
+                            singleSelect: telerikReportViewer.ParameterEditorTypes.COMBO_BOX, //  defineds the editor type for the single select parameters
+                            multiSelect: telerikReportViewer.ParameterEditorTypes.COMBO_BOX, //defineds the editor type for the multi select parameters
+                        }
+                    },
+                sendEmail: { enabled: false }
+                }
+            );
+
+            </text>
+       }
+
+
+
+
+
+        @if (_f.CurrentUser.Messages4Notify != null) {
+            @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
+            
+            @:_notify_message("@c.Value","@c.Key");
+           
+             }
+        }
+
+
+
+    });
+
+
+
+        function x31id_change(x31id) {
+            form1.action = "/x31/ReportContext?oper=change_x31id";
+            form1.submit();
+        }
+
+        function generate_docx() {
+            form1.action = "/x31/ReportContext?oper=generate_docx";
+            form1.submit();
+        }
+        function refresh() {
+            form1.action = "/x31/ReportContext?oper=postback";
+            form1.submit();
+        }
+
+    </script>
+
+
+</body>
+</html>
+
