@@ -38,7 +38,7 @@ namespace UI.Controllers
                     v.RecP93 = Factory.p93InvoiceHeaderBL.Load(v.Rec.p93ID);
                 }
                 v.RecP86 = Factory.p86BankAccountBL.LoadInvoiceAccount(v.pid);
-
+                v.RecP92 = Factory.p92InvoiceTypeBL.Load(v.Rec.p92ID);
                 v.SetTagging();
                 v.lisCenovyRozpis = Factory.p91InvoiceBL.GetList_CenovyRozpis(v.pid,true,true,Factory.CurrentUser.j03LangIndex);
                 //v.lisP41 = Factory.p41ProjectBL.GetList(new BO.myQueryP41() { p91id = v.pid });
@@ -51,6 +51,7 @@ namespace UI.Controllers
                 }
 
                 v.lisP99 = Factory.p91InvoiceBL.GetList_p99(0, v.pid, 0);
+                
             }
         }
 

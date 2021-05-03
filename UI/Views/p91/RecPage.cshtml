@@ -45,6 +45,24 @@
         <span>@Model.MenuCode</span>
 
     </div>
+    <div class="nomobile">
+
+        @if (Model.RecP92.x31ID_Invoice > 0)
+        {
+            <button type="button" class="btn btn-sm btn-warning my-1" onclick="p91report(@(Model.RecP92.x31ID_Invoice),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
+        }
+        @if (Model.RecP92.x31ID_Attachment > 0)
+        {
+            <button type="button" class="btn btn-sm btn-info" onclick="p91report(@(Model.RecP92.x31ID_Attachment),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava přílohy")</button>
+        }
+
+        <button type="button" class="btn btn-sm btn-outline-secondary my-2" onclick="p91sendmail(@Model.pid)"><span class="k-icon k-i-email"></span> @_f.tra("Odeslat poštou")</button>
+
+        @if (Model.Rec.p91IsDraft)
+        {
+            <button type="button" class="btn btn-sm btn-outline-primary my-2" onclick="converfromdraft(@Model.pid)">@_f.tra("Převést DRAFT na oficiální doklad")</button>
+        }
+    </div>
 
     <div class="nonmobile" style="margin-left:auto;">
         <div class="dropdown">

@@ -9,6 +9,7 @@ namespace UI.Models.Recpage
     {
         public BO.p91Invoice Rec { get; set; }
         public BO.p93InvoiceHeader RecP93 { get; set; }
+        public BO.p92InvoiceT RecP92 { get; set; }
         public BO.p86BankAcc RecP86 { get; set; }
         public IEnumerable<BO.p91_CenovyRozpis> lisCenovyRozpis { get; set; }
 
@@ -19,6 +20,8 @@ namespace UI.Models.Recpage
         public BO.p91Invoice RecOpravovanyDoklad { get; set; }
 
         public IEnumerable<BO.p99Invoice_Proforma> lisP99 { get; set; }
+
+       
         
     }
 

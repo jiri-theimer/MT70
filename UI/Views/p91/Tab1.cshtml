@@ -11,8 +11,15 @@
 
 @addTagHelper *, UI
 
-<button type="button" class="btn btn-sm btn-warning" onclick="p91report(1,1)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
-<button type="button" class="btn btn-sm btn-info" onclick="p91report(1,1)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava přílohy")</button>
+@if (Model.RecP92.x31ID_Invoice > 0)
+{
+    <button type="button" class="btn btn-sm btn-warning" onclick="p91report(@(Model.RecP92.x31ID_Invoice),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
+}
+@if (Model.RecP92.x31ID_Attachment > 0)
+{
+    <button type="button" class="btn btn-sm btn-info" onclick="p91report(@(Model.RecP92.x31ID_Attachment),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava přílohy")</button>
+}
+
 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="p91sendmail(@Model.pid)"><span class="k-icon k-i-email"></span> @_f.tra("Odeslat poštou")</button>
 
 @if (Model.Rec.p91IsDraft)
