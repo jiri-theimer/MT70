@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Packaging;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Winnovative.PDFMerge;
 
 using UI.Models;
 using UI.Models.Record;
@@ -201,6 +202,18 @@ namespace UI.Controllers
             if (oper== "generate_docx")
             {
                 ReportContext_GenerateDOCX(v);
+            }
+            if (oper == "merge")
+            {
+                MergeReports(v);
+            }
+            if (oper== "merge_and_mail")
+            {
+                string strTempFileName = MergeReports(v);
+                if (strTempFileName != null)
+                {
+                    return RedirectToAction("SendMail", "Mail", new { tempfile = strTempFileName, recpid=v.rec_pid,x29id=v.x29ID });
+                }
             }
             
             return View(v);
@@ -543,6 +556,51 @@ namespace UI.Controllers
                 wordDocument.MainDocumentPart.Document.Save();
 
             }
+        }
+
+        private string MergeReports(ReportContextViewModel v)
+        {
+            if (v.SelectedX31ID == 0)
+            {
+                this.AddMessage("Chybí vybrat tiskovou sestavu.");return null;
+            }
+            if (v.MergedX31ID_1 == 0 && v.MergedX31ID_2==0 && v.MergedX31ID_3==0)
+            {
+                this.AddMessage("Musíte zvolit minimálně jednu slučovanou sestavu."); return null;
+            }
+            //PDF merge po rumunsku:
+            PdfDocumentOptions pdfDocumentOptions = new PdfDocumentOptions();
+            pdfDocumentOptions.PdfCompressionLevel = PDFCompressionLevel.Normal;
+            pdfDocumentOptions.PdfPageSize = PdfPageSize.A4;
+            PDFMerge pdfMerge = new PDFMerge(pdfDocumentOptions);
+
+            var cc = new TheReportSupport();
+            string s = null;
+            if (v.SelectedX31ID > 0)
+            {
+                s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.SelectedX31ID), BO.BAS.GetGuid(), v.rec_pid);
+                pdfMerge.AppendPDFFile(s);
+            }
+            if (v.MergedX31ID_1 > 0)
+            {
+                s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_1), BO.BAS.GetGuid(), v.rec_pid);
+                pdfMerge.AppendPDFFile(s);
+            }
+            if (v.MergedX31ID_2 > 0)
+            {
+                s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_2), BO.BAS.GetGuid(), v.rec_pid);
+                pdfMerge.AppendPDFFile(s);
+            }
+            if (v.MergedX31ID_3 > 0)
+            {
+                s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_3), BO.BAS.GetGuid(), v.rec_pid);
+                pdfMerge.AppendPDFFile(s);
+            }
+            
+            s="result.pdf";
+            pdfMerge.SaveMergedPDFToFile(Factory.x35GlobalParamBL.TempFolder() + "\\"+s);
+
+            return s;
         }
 
 

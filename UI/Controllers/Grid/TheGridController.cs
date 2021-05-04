@@ -198,17 +198,7 @@ namespace UI.Controllers
 
             return View(v);
         }
-        private string get_param_key(string strKey,string strMasterEntity)
-        {
-            if (strMasterEntity != null)
-            {
-                return (strKey += "-" + strMasterEntity);
-            }
-            else
-            {
-                return strKey;
-            }
-        }
+        
 
 
         private bool TestGridPermissions(string prefix)
@@ -273,7 +263,8 @@ namespace UI.Controllers
                 
                 v.period = new PeriodViewModel();
                 v.period.IsShowButtonRefresh = true;
-                var per = basUI.InhalePeriodDates(_pp,Factory,v.prefix,masterentity);
+                
+                var per = InhaleGridPeriodDates(v.prefix,masterentity);
                 v.period.PeriodValue = per.pid;
                 v.period.d1 = per.d1;
                 v.period.d2 = per.d2;
@@ -285,14 +276,7 @@ namespace UI.Controllers
             {
                 v.IsCanbeMasterView = true;
                 v.dblClickSetting = Factory.CBL.LoadUserParam("grid-" + v.prefix + "-dblclick", "edit");
-                //if (pagename == "flatview")
-                //{
-                //    v.gridinput.extendpagerhtml= "<button type='button' class='btn btn-secondary btn-sm mx-4 nonmobile' onclick='switch_to_master(\"" + v.prefix+"\")'>Zapnout spodní panel</button>";
-                //}
-                //if (pagename == "masterview")
-                //{
-                //    v.gridinput.extendpagerhtml = "<button type='button' class='btn btn-secondary btn-sm mx-4' onclick='switch_to_flat(\"" + v.prefix + "\")'>" + Factory.tra("Vypnout spodní panel") + "</button>";
-                //}
+                
             }
 
             
@@ -301,9 +285,35 @@ namespace UI.Controllers
 
         }
 
-       
-        
-        
+
+        private BO.ThePeriod InhaleGridPeriodDates(string prefix, string masterentity)
+        {
+            int x = Factory.CBL.LoadUserParamInt(get_param_key("grid-period-value-" + prefix, masterentity));  //podformuláře filtrují období za sebe a nikoliv globálně jako flatview/masterview
+            switch (x)
+            {
+                case 0: //nefiltrovat období
+                    return _pp.ByPid(0);
+                case 1:     //ručně zadaný interval d1-d2
+                    var ret = _pp.ByPid(1);
+                    ret.d1 = Factory.CBL.LoadUserParamDate(get_param_key("grid-period-d1-" + prefix, masterentity));
+                    ret.d2 = Factory.CBL.LoadUserParamDate(get_param_key("grid-period-d2-" + prefix, masterentity));
+                    return ret;
+                default:    //pojmenované období
+                    return _pp.ByPid(x);
+            }
+        }
+
+        private string get_param_key(string strKey, string strMasterEntity)
+        {
+            if (strMasterEntity != null)
+            {
+                return (strKey += "-" + strMasterEntity);
+            }
+            else
+            {
+                return strKey;
+            }
+        }
 
     }
 }

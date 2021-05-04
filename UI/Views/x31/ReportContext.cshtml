@@ -107,15 +107,21 @@
 
         <div class="modal_record_container">
             <div class="row">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Tisková sestava"):</label>
-                <div class="col-sm-7 col-md-6">
+                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Tisková sestava"):</label>
+                <div class="col-sm-6 col-md-5">
                     <mycombo entity="x31Report" asp-for="@Model.SelectedX31ID" selectedtext="@Model.SelectedReport" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID" event_after_changevalue="x31id_change"></mycombo>
 
 
 
                 </div>
 
-                <div class="col-sm-2 col-md-2 btn-group">
+                <div class="col-auto">
+                    <button id="cmdMerge" type="button" class="btn btn-light dropdown-toggle">
+                        <span class="k-icon k-i-file-pdf"></span>
+                        PDF MERGE
+                    </button>
+                </div>
+                <div class="col-auto">
                     <button id="cmdClose" type="button" onclick="sendbymail()" class="btn btn-light">
                         <span class="k-icon k-i-hyperlink-email"></span>
                         @_f.tra("Odeslat poštou")
@@ -128,6 +134,7 @@
                 </div>
 
             </div>
+
             @if (Model.IsPeriodFilter)
             {
                 <div class="row my-2">
@@ -155,15 +162,50 @@
                     }
                 }
             }
+
+        <div id="divMerge" style="display:none;">
+            <div class="row my-2">
+                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #1:</label>
+                <div class="col-sm-6 col-md-5">
+                    <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_1" selectedtext="@Model.MergedX31Name_1" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #3:</label>
+                <div class="col-sm-6 col-md-5">
+                    <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_2" selectedtext="@Model.MergedX31Name_2" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                </div>
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #3:</label>
+                <div class="col-sm-6 col-md-5">
+                    <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_3" selectedtext="@Model.MergedX31Name_3" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="generate_merge()">@_f.tra("Vygenerovat PDF dokument")</button>
+            <button type="button" class="btn btn-primary" onclick="generate_merge_and_mail()">@_f.tra("Odeslat PDF dokument poštou")</button>
+        </div>
         </div>
 
     </form>
 
     <script type="text/javascript">
-
+        var _topx = $("#reportViewer1").offset().top;
 
     $(document).ready(function ()
     {
+        $("#cmdMerge").click(function () {
+
+            $("#divMerge").toggle();
+            if ($("#divMerge").css("display") == "none") {
+                $("#reportViewer1").css("top",_topx)
+            } else {
+                $("#reportViewer1").css("top", (_topx + 130));
+            }
+
+        });
+
         var d1;
         var d2;
 
@@ -245,7 +287,16 @@
     function refresh() {
         form1.action = _ep("/x31/ReportContext?oper=postback");
         form1.submit();
-    }
+        }
+
+        function generate_merge() {
+            form1.action = _ep("/x31/ReportContext?oper=merge");
+            form1.submit();
+        }
+        function generate_merge_and_mail() {
+            form1.action = _ep("/x31/ReportContext?oper=merge_and_mail");
+            form1.submit();
+        }
 
 
         function sendbymail() {

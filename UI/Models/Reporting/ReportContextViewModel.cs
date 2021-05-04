@@ -28,5 +28,12 @@ namespace UI.Models
         public DateTime d2 { get; set; }
         public PeriodViewModel PeriodFilter { get; set; }
 
+        public int MergedX31ID_1 { get; set; }
+        public string MergedX31Name_1 { get; set; }
+        public int MergedX31ID_2 { get; set; }
+        public string MergedX31Name_2 { get; set; }
+        public int MergedX31ID_3 { get; set; }
+        public string MergedX31Name_3 { get; set; }
+
     }
 }

@@ -63,10 +63,20 @@
         <span id="spanX31Name"></span>
 
     </div>
+    @if (Model.SelectedReport != null)
+    {
+        <div class="col-auto">
+            <button id="cmdSendByMail" type="button" class="btn btn-light">
+                <span class="k-icon k-i-hyperlink-email"></span>
+                @_f.tra("Odeslat poštou")
+            </button>
+        </div>
+    }
+
     @if (_f.CurrentUser.IsAdmin)
     {
         <div class="col-auto nonmobile" style="width:40px;">
-            <button id="cmdRecord" type="button" class="btn btn-sm btn-outline-secondary" title="@_f.tra("Administrace sestavy")"><span class="k-icon k-i-cogs"></span></button>
+            <button id="cmdRecord" type="button" class="btn btn-light" title="@_f.tra("Administrace sestavy")"><span class="k-icon k-i-cogs"></span></button>
         </div>
     }
 
@@ -156,7 +166,7 @@
         var h_vertical = _device.innerHeight - $("#fra1").offset().top - 10;
         $("#fra1").css("height", h_vertical + "px");
 
-        
+
 
     });
 
@@ -170,6 +180,10 @@
 
         $("#cmdRecord").on("click", function () {
             _window_open(_ep("/x31/Record?pid=" + x31id), 1);
+        });
+
+        $("#cmdSendByMail").on("click", function () {
+            _window_open(_ep("/Mail/SendMail?x31id=" + x31id), 1);
         });
     }
 
