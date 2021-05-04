@@ -172,14 +172,11 @@ namespace BL
             {
                 return handle_result_error("Chybí příjemce zprávy");
             }
-            if (string.IsNullOrEmpty(m.Body) == true)
+            if (string.IsNullOrEmpty(m.Body) && string.IsNullOrEmpty(m.Subject))
             {
-                return handle_result_error("Chybí text zprávy.");
+                return handle_result_error("Chybí předmět nebo text zprávy.");
             }
-            if (string.IsNullOrEmpty(m.Subject) == true)
-            {
-                return handle_result_error("Chybí předmět zprávy.");
-            }
+            
            
             if (_account.o40IsUsePersonalReply)
             {
@@ -311,7 +308,7 @@ namespace BL
             p.AddEnumInt("x29ID", rec.x29ID, true);
             if (rec.j03ID_Sys == 0) rec.j03ID_Sys = _mother.CurrentUser.pid;
             p.AddInt("j03ID_Sys", rec.j03ID_Sys, true);
-            p.AddInt("x40DataPID", rec.x40RecordPID, true);
+            p.AddInt("x40RecordPID", rec.x40RecordPID, true);
             
             if (m != null)
             {

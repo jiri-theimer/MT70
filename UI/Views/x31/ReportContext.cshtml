@@ -108,13 +108,20 @@
         <div class="modal_record_container">
             <div class="row">
                 <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Tisková sestava"):</label>
-                <div class="col-sm-9 col-md-8">
+                <div class="col-sm-7 col-md-6">
                     <mycombo entity="x31Report" asp-for="@Model.SelectedX31ID" selectedtext="@Model.SelectedReport" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID" event_after_changevalue="x31id_change"></mycombo>
 
 
 
                 </div>
 
+                <div class="col-sm-2 col-md-2 btn-group">
+                    <button id="cmdClose" type="button" onclick="sendbymail()" class="btn btn-light">
+                        <span class="k-icon k-i-hyperlink-email"></span>
+                        @_f.tra("Odeslat poštou")
+                    </button>
+
+                </div>
                 <div class="col-sm-1 col-md-1 btn-group">
                     <button id="cmdClose" type="button" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
 
@@ -241,7 +248,9 @@
     }
 
 
-
+        function sendbymail() {
+            window.open("/Mail/SendMail?x31id=@(Model.SelectedX31ID)&x29id=@(Model.x29ID)&recpid=@(Model.rec_pid)","_self");
+        }
 
 
     </script>

@@ -23,6 +23,7 @@ namespace BL
         public string GetUploadFolder(int o13id);
         public bool CopyOneTempFile2Upload(string strTempFileName, string strDestFolderName, string strDestFileName);
         public void Move2Deleted(BO.o27Attachment rec);
+        public string CreateTempInfoxFile(string strGuid, int intO13ID, string strTempFileName, string strOrigFileName, string strContentType);
 
     }
     class o27AttachmentBL : BaseBL, Io27AttachmentBL
@@ -419,6 +420,18 @@ namespace BL
             }
 
             return c.SharpFolder;
+        }
+
+       
+        public string CreateTempInfoxFile(string strGuid,int intO13ID,string strTempFileName,string strOrigFileName,string strContentType)
+        {
+            
+            string strInfoxFileName = strGuid + "_"+strOrigFileName+".infox";
+            int intFileSize= Convert.ToInt32(BO.BASFILE.GetFileInfo(_mother.x35GlobalParamBL.TempFolder()+"\\"+strTempFileName).Length);
+
+            System.IO.File.AppendAllText(_mother.x35GlobalParamBL.TempFolder() + "\\" + strInfoxFileName, strContentType +"| " + intFileSize.ToString() + "|"+strOrigFileName+"|" + strTempFileName+"|" + strGuid + "|" + intO13ID.ToString() + "|");
+
+            return _mother.x35GlobalParamBL.TempFolder() + "\\" + strInfoxFileName;
         }
 
     }

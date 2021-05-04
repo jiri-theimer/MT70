@@ -124,7 +124,7 @@ namespace UI.Controllers
                             v.IsPeriodFilter = true;
                             v.PeriodFilter = new PeriodViewModel();
                             v.PeriodFilter.IsShowButtonRefresh = true;
-                            var per = InhalePeriodFilter();
+                            var per =Factory.x31ReportBL.InhalePeriodFilter(_pp);
                             v.PeriodFilter.PeriodValue = per.pid;
                             v.PeriodFilter.d1 = per.d1;
                             v.PeriodFilter.d2 = per.d2;
@@ -242,7 +242,7 @@ namespace UI.Controllers
                             v.IsPeriodFilter = true;
                             v.PeriodFilter = new PeriodViewModel();
                             v.PeriodFilter.IsShowButtonRefresh = true;
-                            var per = InhalePeriodFilter();
+                            var per = Factory.x31ReportBL.InhalePeriodFilter(_pp);
                             v.PeriodFilter.PeriodValue = per.pid;
                             v.PeriodFilter.d1 = per.d1;
                             v.PeriodFilter.d2 = per.d2;
@@ -357,31 +357,31 @@ namespace UI.Controllers
         }
 
 
-        private BO.ThePeriod InhalePeriodFilter()
-        {
-            var ret = _pp.ByPid(0);
-            int x = Factory.CBL.LoadUserParamInt("report-period-value");
-            switch (x)
-            {
-                case 0:
-                    ret.d1 = new DateTime(2000,1,1);
-                    ret.d2 = new DateTime(3000, 1, 1);
-                    return ret;
-                case 1:
-                    ret = _pp.ByPid(x);
-                    ret.d1 = Factory.CBL.LoadUserParamDate("report-period-d1");                    
-                    ret.d2 = Factory.CBL.LoadUserParamDate("report-period-d2");
-                    if (ret.d1 == null) ret.d1 = new DateTime(2000, 1, 1);
-                    if (ret.d2 == null) ret.d2= new DateTime(3000, 1, 1);
-                    break;
-                default:
-                    ret = _pp.ByPid(x);
-                    break;
-            }
+        //private BO.ThePeriod InhalePeriodFilter()
+        //{
+        //    var ret = _pp.ByPid(0);
+        //    int x = Factory.CBL.LoadUserParamInt("report-period-value");
+        //    switch (x)
+        //    {
+        //        case 0:
+        //            ret.d1 = new DateTime(2000,1,1);
+        //            ret.d2 = new DateTime(3000, 1, 1);
+        //            return ret;
+        //        case 1:
+        //            ret = _pp.ByPid(x);
+        //            ret.d1 = Factory.CBL.LoadUserParamDate("report-period-d1");                    
+        //            ret.d2 = Factory.CBL.LoadUserParamDate("report-period-d2");
+        //            if (ret.d1 == null) ret.d1 = new DateTime(2000, 1, 1);
+        //            if (ret.d2 == null) ret.d2= new DateTime(3000, 1, 1);
+        //            break;
+        //        default:
+        //            ret = _pp.ByPid(x);
+        //            break;
+        //    }
            
             
-            return ret;
-        }
+        //    return ret;
+        //}
 
         private void handle_merge_value(Text item,DataTable dt, DataRow dr)
         {

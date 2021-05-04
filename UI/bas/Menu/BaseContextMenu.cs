@@ -55,7 +55,7 @@ namespace UI.Menu
         }
         public MenuItem AMI_SendMail(string prefix, int pid, string parentmenuid = "more")
         {
-            return AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id={BO.BASX29.GetInt(prefix)}&x40datapid={pid}',2)", "k-i-email",parentmenuid);
+            return AMI("Odeslat zprávu", $"javascript: _window_open('/Mail/SendMail?x29id={BO.BASX29.GetInt(prefix)}&recpid={pid}',2)", "k-i-email",parentmenuid);
         }
         public MenuItem AMI_Doc(string prefix, int pid,string parentmenuid="more")
         {

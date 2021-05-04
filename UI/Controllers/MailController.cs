@@ -14,12 +14,17 @@ namespace UI.Controllers
 {
     public class MailController : BaseController
     {
-        
-        public IActionResult SendMail(int x40id,int b65id,int j02id,int x29id,int x40datapid)
+        private readonly BL.ThePeriodProvider _pp;
+        public MailController(BL.ThePeriodProvider pp)
         {
-            if (x40datapid == 0 || x29id == 0)
+            _pp = pp;
+        }
+
+        public IActionResult SendMail(int x40id,int x31id,int j02id,int x29id,int recpid)
+        {
+            if (recpid == 0 || x29id == 0)
             {
-                x40datapid = Factory.CurrentUser.j02ID;
+                recpid = Factory.CurrentUser.j02ID;
                 x29id = 102;
             }
             
@@ -27,7 +32,7 @@ namespace UI.Controllers
             v.Rec = new BO.x40MailQueue();
            
             v.Rec.x29ID = (BO.x29IdEnum) x29id;
-            v.Rec.x40RecordPID = x40datapid;
+            v.Rec.x40RecordPID = recpid;
             if (j02id > 0)
             {
                 v.Recipient = Factory.j02PersonBL.Load(j02id).j02Email;
@@ -41,6 +46,11 @@ namespace UI.Controllers
             }
             v.Rec.x40MessageID = BO.BAS.GetGuid();
 
+            if (x31id > 0)
+            {
+                var recX31 = Factory.x31ReportBL.Load(x31id);
+                GeneratePdfReport(recX31,v);
+            }
             
            
             if (x40id > 0)
@@ -250,6 +260,34 @@ namespace UI.Controllers
             }
 
 
+        }
+
+
+        private string GeneratePdfReport(BO.x31Report recX31, Models.SendMailViewModel v)
+        {
+            var uriReportSource = new Telerik.Reporting.UriReportSource();
+            uriReportSource.Uri = Factory.x35GlobalParamBL.ReportFolder() + "\\" + Factory.x31ReportBL.LoadReportDoc(recX31.pid).o27ArchiveFileName;
+            
+            var per = Factory.x31ReportBL.InhalePeriodFilter(_pp);
+            uriReportSource.Parameters.Add("pid",v.Rec.x40RecordPID);
+            uriReportSource.Parameters.Add("datfrom", per.d1);
+            uriReportSource.Parameters.Add("datuntil", per.d2);
+
+            Telerik.Reporting.Processing.ReportProcessor processor = new Telerik.Reporting.Processing.ReportProcessor(Factory.App.Configuration);
+
+            var result = processor.RenderReport("PDF", uriReportSource, null);
+
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            ms.Write(result.DocumentBytes, 0, result.DocumentBytes.Length);
+            ms.Seek(0, System.IO.SeekOrigin.Begin);
+
+            
+            BO.BASFILE.SaveStream2File(Factory.x35GlobalParamBL.TempFolder() + "\\" + v.UploadGuid + "_report.pdf", ms);
+
+            int intO13ID = 8;
+            
+            Factory.o27AttachmentBL.CreateTempInfoxFile(v.UploadGuid, intO13ID, v.UploadGuid + "_report.pdf", "report.pdf", "application/pdf");
+            return Factory.x35GlobalParamBL.TempFolder() + "\\" + v.UploadGuid + "_report.pdf";
         }
     }
 

@@ -185,7 +185,7 @@ namespace UI.Controllers
                 {
                     if (oper == "save_and_send")
                     {
-                        return Redirect("/Mail/SendMail?x29id=503&j02id=" + c.j02ID.ToString() + "&x40datapid=" + c.pid.ToString() + "&b65id=" + b65id.ToString()+ "&param1="+v.NewPassword);
+                        return Redirect("/Mail/SendMail?x29id=503&j02id=" + c.j02ID.ToString() + "&recpid=" + c.pid.ToString() + "&b65id=" + b65id.ToString()+ "&param1="+v.NewPassword);
                     }
                     else
                     {
