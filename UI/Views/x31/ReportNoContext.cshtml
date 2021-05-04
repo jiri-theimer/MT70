@@ -104,63 +104,63 @@
     }
     </script>
 
-    <td>
-        <form id="form1" asp-controller="x31" asp-action="ReportNoContext" method="POST">
-            <input type="hidden" asp-for="@Model.SelectedJ72ID" />
-            <input type="hidden" asp-for="@Model.SelectedX31ID" />
-            <input type="hidden" asp-for="@Model.IsPeriodFilter" />
-            <table>
-                <tr>
-                    @if (Model.RecX31.x31LangIndex > 0)
-                    {
-                        <td>
-                            <select asp-for="@Model.LangIndex" class="form-control" onchange="refresh()">
-                                <option value="0">Česky</option>
 
-                                <option value="2">Українська</option>
-                            </select>
+    <form id="form1" asp-controller="x31" asp-action="ReportNoContext" method="POST">
+        <input type="hidden" asp-for="@Model.SelectedJ72ID" />
+        <input type="hidden" asp-for="@Model.SelectedX31ID" />
+        <input type="hidden" asp-for="@Model.IsPeriodFilter" />
+        <table>
+            <tr>
+                @if (Model.RecX31.x31LangIndex > 0)
+                {
+                    <td>
+                        <select asp-for="@Model.LangIndex" class="form-control" onchange="refresh()">
+                            <option value="0">Česky</option>
+
+                            <option value="2">Українська</option>
+                        </select>
+                    </td>
+                }
+                @if (Model.lisJ72 != null)
+                {
+                    <td>
+                        <mydropdown asp-for="@Model.SelectedJ72ID" datasource="@Model.lisJ72" textfield="j72Name" valuefield="pid" firstemptyrowvalue="0" isfirstemptyrow="true" event_after_changevalue="j72id_change"></mydropdown>
+
+                    </td>
+                    @if (!Model.IsPeriodFilter)
+                    {
+                        <td style="width:40px;">
+                            <button id="cmdRefresh" type="button" onclick="refresh()" class="btn btn-primary"><span class="k-icon k-i-reload"></span></button>
                         </td>
                     }
-                    @if (Model.lisJ72 != null)
-                    {
-                        <td>
-                            <mydropdown asp-for="@Model.SelectedJ72ID" datasource="@Model.lisJ72" textfield="j72Name" valuefield="pid" firstemptyrowvalue="0" isfirstemptyrow="true" event_after_changevalue="j72id_change"></mydropdown>
+                }
 
-                        </td>
-                        @if (!Model.IsPeriodFilter)
-                        {
-                            <td style="width:40px;">
-                                <button id="cmdRefresh" type="button" onclick="refresh()" class="btn btn-primary"><span class="k-icon k-i-reload"></span></button>
-                            </td>
-                        }
-                    }
-                    
-                </tr>
-            </table>
+            </tr>
+        </table>
 
 
 
 
-            @if (Model.IsPeriodFilter)
-            {
-                @Html.EditorFor(m => m.PeriodFilter, "~/Views/Shared/_Period.cshtml")
+        @if (Model.IsPeriodFilter)
+        {
+            @Html.EditorFor(m => m.PeriodFilter, "~/Views/Shared/_Period.cshtml")
 
-            }
+        }
 
-        </form>
-        </div>
+    </form>
 
-        <div id="reportViewer1">
-            @if (Model.ReportFileName != null)
-            {
 
-                @:loading...
+    <div id="reportViewer1">
+        @if (Model.ReportFileName != null)
+        {
 
-            }
+            @:loading...
 
-        </div>
+        }
 
-        <script type="text/javascript">
+    </div>
+
+    <script type="text/javascript">
 
 
     $(document).ready(function ()
@@ -268,9 +268,9 @@
             form1.submit();
             }
 
-            
 
-        </script>
+
+    </script>
 
 
 </body>

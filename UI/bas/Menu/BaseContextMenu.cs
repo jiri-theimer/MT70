@@ -51,7 +51,7 @@ namespace UI.Menu
         }
         public MenuItem AMI_Report(string prefix,int pid, string parentmenuid = null)
         {
-            return AMI("Tisková sestava", $"javascript: _window_open('/x31/ReportContext?pid={pid}&prefix={prefix}',2)", "k-i-print", parentmenuid);
+            return AMI("Tisková sestava", $"javascript: _window_open('/x31/ReportContext?pid={pid}&prefix={prefix}')", "k-i-print", parentmenuid);
         }
         public MenuItem AMI_SendMail(string prefix, int pid, string parentmenuid = "more")
         {

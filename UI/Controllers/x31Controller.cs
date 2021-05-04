@@ -156,7 +156,7 @@ namespace UI.Controllers
         }
 
         
-        public IActionResult ReportContext(int pid, string prefix,int x31id,string x31pid)
+        public IActionResult ReportContext(int pid, string prefix,int x31id,string x31code)
         {
             var v = new ReportContextViewModel() { rec_pid = pid, rec_prefix = prefix };
             v.LangIndex = Factory.CurrentUser.j03LangIndex;
@@ -164,20 +164,28 @@ namespace UI.Controllers
             {
                 return StopPage(true, "pid or prefix missing");
             }
-            if (x31id == 0 && string.IsNullOrEmpty(x31pid))
+            if (x31id == 0 && string.IsNullOrEmpty(x31code))
             {
                 v.UserParamKey = "ReportContext-" + prefix + "-x31id";
                 x31id = Factory.CBL.LoadUserParamInt(v.UserParamKey);
 
             }
-            if (x31id==0 && !string.IsNullOrEmpty(x31pid))
+            if (x31id==0 && !string.IsNullOrEmpty(x31code))
             {
-                x31id = Factory.x31ReportBL.LoadByCode(x31pid, 0).pid;
+                x31id = Factory.x31ReportBL.LoadByCode(x31code, 0).pid;
+            }
+            if (x31id==0 && prefix == "p91")
+            {
+                var recP91 = Factory.p91InvoiceBL.Load(pid);
+                x31id = Factory.p92InvoiceTypeBL.Load(recP91.p92ID).x31ID_Invoice;
             }
             v.SelectedX31ID = x31id;
-            
-                        
+                                    
             RefreshStateReportContext(v);
+            if (v.RecX31 !=null && v.RecX31.x31FormatFlag == BO.x31FormatFlagENUM.DOCX)
+            {
+                ReportContext_GenerateDOCX(v); //automaticky vygenerovat DOCX
+            }
             return View(v);
         }
         [HttpPost]
@@ -192,16 +200,21 @@ namespace UI.Controllers
             }
             if (oper== "generate_docx")
             {
-                v.AllGeneratedTempFileNames=Handle_DocMailMerge(v);
-                
-                if (v.AllGeneratedTempFileNames !=null)
-                {
-                    v.GeneratedTempFileName = v.AllGeneratedTempFileNames[0];
-                    this.AddMessage("Dokument byl vygenerován.", "info");
-                }
+                ReportContext_GenerateDOCX(v);
             }
             
             return View(v);
+        }
+
+        private void ReportContext_GenerateDOCX(ReportContextViewModel v)
+        {
+            v.AllGeneratedTempFileNames = Handle_DocMailMerge(v);
+
+            if (v.AllGeneratedTempFileNames != null)
+            {
+                v.GeneratedTempFileName = v.AllGeneratedTempFileNames[0];
+                this.AddMessage("Dokument byl vygenerován.", "info");
+            }
         }
 
         private void RefreshStateReportContext(ReportContextViewModel v)
@@ -211,9 +224,8 @@ namespace UI.Controllers
             {
                 v.RecX31 = Factory.x31ReportBL.Load(v.SelectedX31ID);
                 v.SelectedReport = v.RecX31.x31Name;
-
-                var recO27 = Factory.x31ReportBL.LoadReportDoc(v.SelectedX31ID);
-               
+                
+                var recO27 = Factory.x31ReportBL.LoadReportDoc(v.SelectedX31ID);               
                 if (recO27 !=null)
                 {
                     v.ReportFileName = recO27.o27ArchiveFileName;
@@ -221,6 +233,30 @@ namespace UI.Controllers
                     {
                         v.ReportFileName = recO27.o27OriginalFileName;
                     }
+                    if (System.IO.File.Exists(Factory.x35GlobalParamBL.ReportFolder() + "\\" + v.ReportFileName))
+                    {
+                        var xmlReportSource = new Telerik.Reporting.XmlReportSource();
+                        var strXmlContent = System.IO.File.ReadAllText(Factory.x35GlobalParamBL.ReportFolder() + "\\" + v.ReportFileName);
+                        if (v.RecX31.x31IsPeriodRequired || (strXmlContent.Contains("datFrom", StringComparison.OrdinalIgnoreCase) && strXmlContent.Contains("datUntil", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            v.IsPeriodFilter = true;
+                            v.PeriodFilter = new PeriodViewModel();
+                            v.PeriodFilter.IsShowButtonRefresh = true;
+                            var per = InhalePeriodFilter();
+                            v.PeriodFilter.PeriodValue = per.pid;
+                            v.PeriodFilter.d1 = per.d1;
+                            v.PeriodFilter.d2 = per.d2;
+
+                        }
+                        else
+                        {
+                            v.IsPeriodFilter = false;
+                        }                        
+                    }
+
+                        
+                    
+
                 }
                 else
                 {
@@ -356,7 +392,7 @@ namespace UI.Controllers
 
                 if (item.Text.Contains("«" + col.ColumnName + "»", StringComparison.OrdinalIgnoreCase) || item.Text.Contains("<" + col.ColumnName + ">", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (dr[col] == null)
+                    if (dr[col] == System.DBNull.Value || dr[col]==null)
                     {
                         strVal = "";
                     }

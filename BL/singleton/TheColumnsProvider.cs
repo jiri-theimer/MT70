@@ -240,7 +240,11 @@ namespace BL
                     ret.Add(InhaleColumn4Relation("x28_x29", "x29Entity", "x29Name", rels, bolComboColumns));
                     break;
                 case "x31":
-                    ret.Add(InhaleColumn4Relation("x31_x29", "x29Entity", "x29Name", rels, bolComboColumns));
+                    if (!bolComboColumns)
+                    {
+                        ret.Add(InhaleColumn4Relation("x31_x29", "x29Entity", "x29Name", rels, bolComboColumns));
+                    }
+                    
                     break;
                 case "o40":
                     ret.Add(InhaleColumn4Relation("o40_j02", "j02Person", "fullname_desc", rels, bolComboColumns));

@@ -44,7 +44,7 @@ namespace UI.Menu
 
             DIV();
 
-            AMI_Report("91", pid, null);
+            AMI_Report("p91", pid, null);
 
             AMI("Další", null, null, null, "more");
             if (rec.p92InvoiceType == BO.p92InvoiceTypeENUM.ClientInvoice)

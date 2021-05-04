@@ -23,7 +23,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
     <script src="~/lib/datepicker/bootstrap-datepicker.cs.min.js"></script>
     <script src="~/lib/qtip/jquery.qtip.min.js"></script>
@@ -44,17 +44,35 @@
 
     <script src="/api/reports/resources/js/telerikReportViewer"></script>
 
-    <style>
-        #reportViewer1 {
-            position: absolute;
-            left: 5px;
-            right: 5px;
-            top: 50px;
-            bottom: 5px;
-            overflow: hidden;
-            font-family: Verdana, Arial;
-        }
-    </style>
+    @if (Model.IsPeriodFilter)
+    {
+        <style>
+            #reportViewer1 {
+                position: absolute;
+                left: 5px;
+                right: 5px;
+                top: 100px;
+                bottom: 5px;
+                overflow: hidden;
+                font-family: Verdana, Arial;
+            }
+        </style>
+    }
+    else
+    {
+        <style>
+            #reportViewer1 {
+                position: absolute;
+                left: 5px;
+                right: 5px;
+                top: 50px;
+                bottom: 5px;
+                overflow: hidden;
+                font-family: Verdana, Arial;
+            }
+        </style>
+    }
+
 </head>
 
 <body>
@@ -69,6 +87,8 @@
 
 
     <script type="text/javascript">
+    var _relpath = "@(Url.Content("~/favicon.ico").Replace("favicon.ico",""))";   //relativní cesta: detekce kvůli případnému IIS virtuálnímu adresáři
+
         @if(Model.Javascript_CallOnLoad != null)
     {
         @Html.Raw(Model.Javascript_CallOnLoad);
@@ -82,24 +102,34 @@
         <input type="hidden" asp-for="@Model.rec_prefix" />
         <input type="hidden" asp-for="@Model.rec_pid" />
         <input type="hidden" asp-for="@Model.UserParamKey" />
-        <input type="hidden" asp-for="@Model.GeneratedTempFileName" />
+        <input type="hidden" asp-for="@Model.UserParamKey" />
+
 
         <div class="modal_record_container">
             <div class="row">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Tisková sestava"):</label>
+                <label class="col-sm-1 col-md-2 col-form-label">@CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>():</label>
                 <div class="col-sm-9 col-md-8">
-                    <mycombo entity="x31Report" asp-for="@Model.SelectedX31ID" selectedtext="@Model.SelectedReport" myqueryinline="@(Model.ComboMyQueryInline)" event_after_changevalue="x31id_change"></mycombo>
+                    <mycombo entity="x31Report" asp-for="@Model.SelectedX31ID" selectedtext="@Model.SelectedReport" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID" event_after_changevalue="x31id_change"></mycombo>
 
-                    
+
 
                 </div>
-                
+
                 <div class="col-sm-1 col-md-1 btn-group">
-                    <button id="cmdClose" type="button" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
-                    <button type="button" onclick="_helppage()" title="@_f.tra("Nápověda")" class="btn btn-light"><b>?</b></button>
+                    <button id="cmdClose" type="button" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Tisková sestava")</button>
+                    <button type="button" onclick="_helppage()" title="@CreateTagHelper<global::UI.Views.Shared.TagHelpers.myComboTagHelper>()" class="btn btn-light"><b>?</b></button>
                 </div>
 
             </div>
+            @if (Model.IsPeriodFilter)
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Časové období"):</label>
+                    <div class="col-sm-9 col-md-8">
+                        @Html.EditorFor(m => m.PeriodFilter, "~/Views/Shared/_Period.cshtml")
+                    </div>
+
+                </div>
+            }
             @if (Model.RecX31 != null && Model.RecX31.x31FormatFlag == BO.x31FormatFlagENUM.DOCX)
             {
                 <button type="button" class="btn btn-primary" onclick="generate_docx()">@_f.tra("Vygenerovat dokument")</button>
@@ -124,6 +154,14 @@
 
     $(document).ready(function ()
     {
+        var d1;
+        var d2;
+
+        @                      @:d1 = new Date("@Model.PeriodFilter.d1_iso");
+            @:d2 = new Date("@Model.PeriodFilter.d2_iso");
+
+        }
+
        @if(Model.RecX31 != null && Model.RecX31.x31FormatFlag==BO.x31FormatFlagENUM.Telerik)
        {
            <text>
@@ -133,7 +171,7 @@
                 serviceUrl: "/api/reports/",
                 reportSource: {
                     report: "@(Model.ReportFileName+"###"+_f.CurrentUser.j03Login)",
-                    parameters: { pid: @Model.rec_pid,langindex:"@Model.LangIndex"}
+                    parameters: { pid: @Model.rec_pid, datFrom: d1, datUntil: d2,langindex:"@Model.LangIndex"}
                 },
                 viewMode: telerikReportViewer.ViewModes.INTERACTIVE,
                 scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
@@ -156,11 +194,234 @@
 
 
 
-        @if (_f.CurrentUser.Messages4Notify != null) {
+        @if (Model.IsPeriodFilter)
+        {
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 110 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = _f.tra("Časové období");
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 112 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = Html.EditorFor(m => m.PeriodFilter, "~/Views/Shared/_Period.cshtml");
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 115 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+        }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 117 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+        if (Model.RecX31 != null && Model.RecX31.x31FormatFlag == BO.x31FormatFlagENUM.DOCX)
+        {
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 119 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = _f.tra("Vygenerovat dokument");
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 119 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+        }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 121 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+        if (string.IsNullOrEmpty(Model.GeneratedTempFileName) == false)
+        {
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 123 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = Model.GeneratedTempFileName;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 123 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = _f.tra("Stáhnout vygenerovaný dokument");
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 123 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 124 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            if (Model.AllGeneratedTempFileNames != null && Model.AllGeneratedTempFileNames.Count() > 1)
+            {
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 126 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+                for (int i = 1; i < Model.AllGeneratedTempFileNames.Count(); i++)
+                {
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 128 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+                    __o = Model.AllGeneratedTempFileNames[i];
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 128 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+                    __o = i;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 128 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+                }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 129 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+            }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 130 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+        }
+
+#line default
+#line hidden
+#nullable disable
+        __Microsoft_AspNetCore_Mvc_TagHelpers_FormTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.FormTagHelper>();
+        __Microsoft_AspNetCore_Mvc_TagHelpers_FormTagHelper.Controller = "x31";
+        __Microsoft_AspNetCore_Mvc_TagHelpers_FormTagHelper.Action = "ReportContext";
+        await __tagHelperRunner.RunAsync(__tagHelperExecutionContext);
+#nullable restore
+#line 144 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+        if(Model.PeriodFilter != null)
+        {
+
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 147 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = Model.PeriodFilter.d1_iso;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 148 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 148 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = Model.PeriodFilter.d2_iso;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 149 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+        }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 152 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+        if(Model.RecX31 != null && Model.RecX31.x31FormatFlag==BO.x31FormatFlagENUM.Telerik)
+        {
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 160 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = Model.ReportFileName+"###"+_f.CurrentUser.j03Login;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 161 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = Model.rec_pid;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 161 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+            __o = Model.LangIndex;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 177 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+
+        }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 184 "c:\ASP.NET.2019\MARKTIME70\UI\Views\x31\ReportContext.cshtml"
+        if (_f.CurrentUser.Messages4Notify != null) {
             @foreach (var c in _f.CurrentUser.Messages4Notify) {  // <----  placed on the same line, WORKING !!!
-            
+
             @:_notify_message("@c.Value","@c.Key");
-           
+
              }
         }
 
@@ -171,18 +432,45 @@
 
 
         function x31id_change(x31id) {
-            form1.action = "/x31/ReportContext?oper=change_x31id";
+            form1.action = _ep("/x31/ReportContext?oper=change_x31id");
             form1.submit();
         }
 
         function generate_docx() {
-            form1.action = "/x31/ReportContext?oper=generate_docx";
+            form1.action = _ep("/x31/ReportContext?oper=generate_docx");
             form1.submit();
         }
         function refresh() {
-            form1.action = "/x31/ReportContext?oper=postback";
+            form1.action = _ep("/x31/ReportContext?oper=postback");
             form1.submit();
         }
+
+
+
+        $("#PeriodValue").on("change", function () {
+            $.post("/Common/SetUserParam", { key: "report-period-value",value:$(this).val()  }, function (data) {
+                form1.action = _ep("/x31/ReportContext?oper=change_period");
+                form1.submit();
+
+            });
+        });
+        $("#cmdRefreshPeriod").on("click", function () {
+            var k = [];
+            var v = [];
+            k.push("report-period-value");
+            v.push($("#PeriodValue").val());
+            k.push("report-period-d1");
+            v.push($("#d1helper").val());
+            k.push("report-period-d2");
+            v.push($("#d2helper").val());
+
+
+            $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
+                refresh();
+
+            });
+
+        });
 
     </script>
 

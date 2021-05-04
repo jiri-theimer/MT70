@@ -19,6 +19,10 @@
 {
     <button type="button" class="btn btn-sm btn-info" onclick="p91report(@(Model.RecP92.x31ID_Attachment),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava přílohy")</button>
 }
+@if (Model.RecP92.x31ID_Letter > 0)
+{
+    <button type="button" class="btn btn-sm btn-success" onclick="p91report(@(Model.RecP92.x31ID_Letter),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Průvodní dopis")</button>
+}
 
 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="p91sendmail(@Model.pid)"><span class="k-icon k-i-email"></span> @_f.tra("Odeslat poštou")</button>
 

@@ -335,8 +335,8 @@ namespace BL
             AA("x31Code", "Kód sestavy");
             AFBOOL("x31IsPeriodRequired", "Filtr čaového období");
 
-            AA("x31FileName", "Soubor šablony", gdc1);
-            AFNUM0("x31Ordinary", "#").DefaultColumnFlag = gdc1;
+            AA("x31FileName", "Soubor šablony", gdc2);
+            AFNUM0("x31Ordinary", "#").DefaultColumnFlag = gdc2;
 
             AA("x31ExportFileNameMask", "Maska export souboru");
             AA("x31IsScheduling", "Pravidelné odesílání");

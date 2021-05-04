@@ -23,7 +23,10 @@ namespace UI.Models
         public List<string> AllGeneratedTempFileNames { get; set; }
         public int LangIndex{get;set;}
 
-        public string ComboMyQueryInline { get; set; }
+        public bool IsPeriodFilter { get; set; }
+        public DateTime d1 { get; set; }
+        public DateTime d2 { get; set; }
+        public PeriodViewModel PeriodFilter { get; set; }
 
     }
 }
