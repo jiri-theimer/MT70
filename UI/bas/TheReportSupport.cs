@@ -67,7 +67,7 @@ namespace UI
 
             if (s == null)
             {
-                s = BO.BAS.GetGuid();
+                s = BO.BASFILE.PrepareFileName(recX31.x31Name);
             }
             else
             {

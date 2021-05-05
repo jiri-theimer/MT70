@@ -11,8 +11,7 @@ namespace BO
     {
         public static string PrepareFileName(string strFileName)
         {
-            string s = strFileName.Replace(" | ", "_").Replace(" ", "-").Replace(":", "_");
-            s = System.Text.RegularExpressions.Regex.Replace(s, "[^A-Za-z0-9 _ -]", "").Replace(" ", "");
+            string s = strFileName.Replace(" | ", "_").Replace(" ", "-").Replace(":", "_").Replace(",", "-");
             s = RemoveDiacritism(s);
             return s;
             
