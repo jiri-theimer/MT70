@@ -20,15 +20,19 @@ namespace UI.Controllers
             _pp = pp;
         }
 
-        public IActionResult SendMail(int x40id,int x31id,int j02id,int x29id,int recpid)
+        public IActionResult SendMail(int x40id,string uploadguid,int j02id,int x29id,int recpid)
         {
             if (recpid == 0 || x29id == 0)
             {
                 recpid = Factory.CurrentUser.j02ID;
                 x29id = 102;
             }
+            if (string.IsNullOrEmpty(uploadguid))
+            {
+                uploadguid = BO.BAS.GetGuid();
+            }
             
-            var v = new Models.SendMailViewModel() { UploadGuid = BO.BAS.GetGuid() };
+            var v = new Models.SendMailViewModel() { UploadGuid = uploadguid };
             v.Rec = new BO.x40MailQueue();
            
             v.Rec.x29ID = (BO.x29IdEnum) x29id;
@@ -46,12 +50,12 @@ namespace UI.Controllers
             }
             v.Rec.x40MessageID = BO.BAS.GetGuid();
 
-            if (x31id > 0)
-            {
-                var recX31 = Factory.x31ReportBL.Load(x31id);
-                var cc = new TheReportSupport();
-                cc.GeneratePdfReport(Factory,_pp,recX31,v.UploadGuid,v.Rec.x40RecordPID);
-            }
+            //if (x31id > 0)
+            //{
+            //    var recX31 = Factory.x31ReportBL.Load(x31id);
+            //    var cc = new TheReportSupport();
+            //    cc.GeneratePdfReport(Factory,_pp,recX31,v.UploadGuid,v.Rec.x40RecordPID);
+            //}
             
            
             if (x40id > 0)

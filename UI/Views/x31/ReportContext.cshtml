@@ -51,7 +51,7 @@
                 position: absolute;
                 left: 5px;
                 right: 5px;
-                top: 77px;
+                top: 80px;
                 bottom: 5px;
                 overflow: hidden;
                 font-family: Verdana, Arial;
@@ -103,6 +103,7 @@
         <input type="hidden" asp-for="@Model.rec_pid" />
         <input type="hidden" asp-for="@Model.UserParamKey" />
         <input type="hidden" asp-for="@Model.UserParamKey" />
+        <input type="hidden" asp-for="@Model.FinalMergedPdfFileName" />
 
 
         <div class="modal_record_container">
@@ -177,7 +178,7 @@
                 </div>
             </div>
             <div class="row my-2">
-                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #3:</label>
+                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #2:</label>
                 <div class="col-sm-6 col-md-5">
                     <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_2" selectedtext="@Model.MergedX31Name_2" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
                 </div>
@@ -189,8 +190,8 @@
                 </div>
             </div>
 
-            <button type="button" class="btn btn-primary" onclick="generate_merge()">@_f.tra("Vygenerovat PDF dokument")</button>
-            <button type="button" class="btn btn-primary" onclick="generate_merge_and_mail()">@_f.tra("Odeslat PDF dokument poštou")</button>
+            <button type="button" class="btn btn-primary" onclick="generate_merge()">@_f.tra("Vygenerovat PDF-MERGE dokument")</button>
+            <button type="button" class="btn btn-primary" onclick="generate_merge_and_mail()">@_f.tra("Vygenerovat a odeslat PDF-MERGE poštou")</button>
         </div>
         </div>
 
@@ -211,6 +212,11 @@
             }
 
         });
+
+        @if(Model.FinalMergedPdfFileName != null)
+        {
+            @:window.open("/FileUpload/FileDownloadTempFile?tempfilename=@Model.FinalMergedPdfFileName");
+        }
 
         $("#cmdAdmin").on("click", function() {
             window.open(_ep("/x31/Record?pid=@Model.SelectedX31ID"));
@@ -310,7 +316,9 @@
 
 
         function sendbymail() {
-            location.replace("/Mail/SendMail?x31id=@(Model.SelectedX31ID)&x29id=@(Model.x29ID)&recpid=@(Model.rec_pid)");
+            form1.action = _ep("/x31/ReportContext?oper=mail");
+            form1.submit();
+            
         }
 
 

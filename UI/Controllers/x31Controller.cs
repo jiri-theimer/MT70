@@ -181,7 +181,21 @@ namespace UI.Controllers
                 x31id = Factory.p92InvoiceTypeBL.Load(recP91.p92ID).x31ID_Invoice;
             }
             v.SelectedX31ID = x31id;
-                                    
+            try
+            {
+                v.MergedX31ID_1 = Factory.CBL.LoadUserParamInt("ReportContext-mergedx31id-1-"+v.rec_prefix);
+                if (v.MergedX31ID_1 > 0) v.MergedX31Name_1 = Factory.x31ReportBL.Load(v.MergedX31ID_1).x31Name;
+                v.MergedX31ID_2 = Factory.CBL.LoadUserParamInt("ReportContext-mergedx31id-2-"+v.rec_prefix);
+                if (v.MergedX31ID_2 > 0) v.MergedX31Name_2 = Factory.x31ReportBL.Load(v.MergedX31ID_2).x31Name;
+                v.MergedX31ID_3 = Factory.CBL.LoadUserParamInt("ReportContext-mergedx31id-3-"+v.rec_prefix);
+                if (v.MergedX31ID_3 > 0) v.MergedX31Name_3 = Factory.x31ReportBL.Load(v.MergedX31ID_3).x31Name;
+            }
+            catch(Exception ex)
+            {
+                this.AddMessageTranslated(ex.Message);
+            }
+            
+
             RefreshStateReportContext(v);
             if (v.RecX31 !=null && v.RecX31.x31FormatFlag == BO.x31FormatFlagENUM.DOCX)
             {
@@ -203,16 +217,23 @@ namespace UI.Controllers
             {
                 ReportContext_GenerateDOCX(v);
             }
-            if (oper == "merge")
+            if (oper == "merge")    //pdf merge
             {
-                MergeReports(v);
+               v.FinalMergedPdfFileName = MergeReports(v,BO.BAS.GetGuid());
+            }
+            if (oper == "mail") //odeslat sestavu poštou
+            {
+                var cc = new TheReportSupport();
+                string strUploadGuid = BO.BAS.GetGuid();
+                cc.GeneratePdfReport(Factory, _pp, v.RecX31, strUploadGuid, v.rec_pid);
+                return RedirectToAction("SendMail", "Mail", new { uploadguid = strUploadGuid, recpid = v.rec_pid, x29id = v.x29ID });
             }
             if (oper== "merge_and_mail")
             {
-                string strTempFileName = MergeReports(v);
-                if (strTempFileName != null)
+                string strUploadGuid = BO.BAS.GetGuid();                
+                if (MergeReports(v, strUploadGuid) != null)
                 {
-                    return RedirectToAction("SendMail", "Mail", new { tempfile = strTempFileName, recpid=v.rec_pid,x29id=v.x29ID });
+                    return RedirectToAction("SendMail", "Mail", new { uploadguid = strUploadGuid, recpid=v.rec_pid,x29id=v.x29ID });
                 }
             }
             
@@ -454,19 +475,7 @@ namespace UI.Controllers
             }
 
             var strFileName = BO.BAS.GetGuid();
-            DataRow dr0 = dt.Rows[0];
-            switch (v.rec_prefix)
-            {
-                case "a01":
-                    strFileName = dr0["a01Signature"] + "_" + BO.BAS.GetGuid();
-                    break;
-                case "a03":
-                    strFileName = dr0["a03REDIZO"] + "_" + BO.BAS.GetGuid();
-                    break;
-                case "j02":
-                    strFileName = dr0["j02LastName"] + "_" + dr0["j02FirstName"] + "_" + BO.BAS.GetGuid();
-                    break;
-            }
+            
 
             var filenames = new List<string>();
             int x = 0;
@@ -558,7 +567,7 @@ namespace UI.Controllers
             }
         }
 
-        private string MergeReports(ReportContextViewModel v)
+        private string MergeReports(ReportContextViewModel v,string strUploadGuid)
         {
             if (v.SelectedX31ID == 0)
             {
@@ -573,34 +582,40 @@ namespace UI.Controllers
             pdfDocumentOptions.PdfCompressionLevel = PDFCompressionLevel.Normal;
             pdfDocumentOptions.PdfPageSize = PdfPageSize.A4;
             PDFMerge pdfMerge = new PDFMerge(pdfDocumentOptions);
-
+            
             var cc = new TheReportSupport();
             string s = null;
             if (v.SelectedX31ID > 0)
             {
                 s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.SelectedX31ID), BO.BAS.GetGuid(), v.rec_pid);
-                pdfMerge.AppendPDFFile(s);
+                pdfMerge.AppendPDFFile(s);                
             }
             if (v.MergedX31ID_1 > 0)
             {
                 s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_1), BO.BAS.GetGuid(), v.rec_pid);
                 pdfMerge.AppendPDFFile(s);
+                Factory.CBL.SetUserParam("ReportContext-mergedx31id-1-"+v.rec_prefix, v.MergedX31ID_1.ToString());
             }
             if (v.MergedX31ID_2 > 0)
             {
                 s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_2), BO.BAS.GetGuid(), v.rec_pid);
                 pdfMerge.AppendPDFFile(s);
+                Factory.CBL.SetUserParam("ReportContext-mergedx31id-2-"+v.rec_prefix, v.MergedX31ID_2.ToString());
             }
             if (v.MergedX31ID_3 > 0)
             {
                 s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_3), BO.BAS.GetGuid(), v.rec_pid);
                 pdfMerge.AppendPDFFile(s);
+                Factory.CBL.SetUserParam("ReportContext-mergedx31id-3-"+v.rec_prefix, v.MergedX31ID_3.ToString());
             }
             
-            s="result.pdf";
-            pdfMerge.SaveMergedPDFToFile(Factory.x35GlobalParamBL.TempFolder() + "\\"+s);
+            
+            string strFinalRepFileName = cc.GetReportFileName(Factory, v.rec_pid, v.RecX31, "pdf");
+            pdfMerge.SaveMergedPDFToFile(Factory.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid+"_"+strFinalRepFileName);
+            Factory.o27AttachmentBL.CreateTempInfoxFile(strUploadGuid, 8, strUploadGuid + "_" + strFinalRepFileName, strFinalRepFileName, "application/pdf");
+            
 
-            return s;
+            return strUploadGuid+"_"+strFinalRepFileName;
         }
 
 

@@ -204,7 +204,7 @@ namespace BL
             var ret = _db.Load<BO.GetString>(s);
             if (ret != null)
             {
-                return ret.Value;
+                return ret.Value.Replace(".","").Replace(",","_");
             }
 
             return null;
