@@ -10,7 +10,7 @@ namespace UI.Models
 
         public BO.x31Report RecX31 { get; set; }
         public string ReportFileName { get; set; }
-
+        public string ReportExportName { get; set; }
         public int SelectedX31ID { get; set; }
         public string SelectedReport { get; set; }
 
@@ -25,6 +25,7 @@ namespace UI.Models
         public IEnumerable<BO.j72TheGridTemplate> lisJ72 { get; set; }
 
         public int LangIndex { get; set; }
+        
 
     }
 }

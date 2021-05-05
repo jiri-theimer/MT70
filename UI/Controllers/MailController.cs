@@ -20,7 +20,7 @@ namespace UI.Controllers
             _pp = pp;
         }
 
-        public IActionResult SendMail(int x40id,string uploadguid,int j02id,int x29id,int recpid)
+        public IActionResult SendMail(int x40id,string uploadguid,int j02id,int x29id,int recpid,int x31id)
         {
             if (recpid == 0 || x29id == 0)
             {
@@ -50,14 +50,14 @@ namespace UI.Controllers
             }
             v.Rec.x40MessageID = BO.BAS.GetGuid();
 
-            //if (x31id > 0)
-            //{
-            //    var recX31 = Factory.x31ReportBL.Load(x31id);
-            //    var cc = new TheReportSupport();
-            //    cc.GeneratePdfReport(Factory,_pp,recX31,v.UploadGuid,v.Rec.x40RecordPID);
-            //}
-            
-           
+            if (x31id > 0)  //tisková sestava bez kontextu odeslana do pošty
+            {
+                var recX31 = Factory.x31ReportBL.Load(x31id);
+                var cc = new TheReportSupport();
+                cc.GeneratePdfReport(Factory, _pp, recX31, v.UploadGuid,0);
+            }
+
+
             if (x40id > 0)
             {   //kopírování zprávy do nové podle vzoru x40id
                 v.Rec = Factory.MailBL.LoadMessageByPid(x40id);

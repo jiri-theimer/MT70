@@ -198,6 +198,10 @@ namespace BL
 
         public string ParseExportFileNameMask(string strExportFileNameMask,string prefix,int pid)
         {
+            if (pid==0 || prefix == null)
+            {
+                return strExportFileNameMask;
+            }
             int intX29ID = BO.BASX29.GetInt(prefix);
             string strTab = BO.BASX29.GetEntity((BO.x29IdEnum)intX29ID);
             string s = $"SELECT {strExportFileNameMask} as Value FROM {strTab} WHERE {prefix}ID = {pid}";

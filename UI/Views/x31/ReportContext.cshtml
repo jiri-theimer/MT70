@@ -103,6 +103,7 @@
         <input type="hidden" asp-for="@Model.rec_pid" />
         <input type="hidden" asp-for="@Model.UserParamKey" />
         <input type="hidden" asp-for="@Model.UserParamKey" />
+        <input type="hidden" asp-for="@Model.ReportExportName" value="@Model.ReportExportName" />
         <input type="hidden" asp-for="@Model.FinalMergedPdfFileName" />
 
 
@@ -129,7 +130,7 @@
                     </button>
 
                 </div>
-                @if (_f.CurrentUser.IsAdmin && Model.SelectedX31ID>0)
+                @if (_f.CurrentUser.IsAdmin && Model.SelectedX31ID > 0)
                 {
                     <div class="col-auto nonmobile" style="width:40px;">
                         <button id="cmdAdmin" type="button" class="btn btn-light" title="@_f.tra("Administrace sestavy")"><span class="k-icon k-i-cogs"></span></button>
@@ -170,29 +171,29 @@
                 }
             }
 
-        <div id="divMerge" style="display:none;">
-            <div class="row my-2">
-                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #1:</label>
-                <div class="col-sm-6 col-md-5">
-                    <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_1" selectedtext="@Model.MergedX31Name_1" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+            <div id="divMerge" style="display:none;">
+                <div class="row my-2">
+                    <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #1:</label>
+                    <div class="col-sm-6 col-md-5">
+                        <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_1" selectedtext="@Model.MergedX31Name_1" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                    </div>
                 </div>
-            </div>
-            <div class="row my-2">
-                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #2:</label>
-                <div class="col-sm-6 col-md-5">
-                    <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_2" selectedtext="@Model.MergedX31Name_2" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                <div class="row my-2">
+                    <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #2:</label>
+                    <div class="col-sm-6 col-md-5">
+                        <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_2" selectedtext="@Model.MergedX31Name_2" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                    </div>
                 </div>
-            </div>
-            <div class="row my-2">
-                <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #3:</label>
-                <div class="col-sm-6 col-md-5">
-                    <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_3" selectedtext="@Model.MergedX31Name_3" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                <div class="row my-2">
+                    <label class="col-sm-2 col-md-2 col-form-label">@_f.tra("Slučovaný report") #3:</label>
+                    <div class="col-sm-6 col-md-5">
+                        <mycombo entity="x31Report" asp-for="@Model.MergedX31ID_3" selectedtext="@Model.MergedX31Name_3" myqueryinline="MyRecordsDisponible|bool|1|x29id|int|@Model.x29ID"></mycombo>
+                    </div>
                 </div>
-            </div>
 
-            <button type="button" class="btn btn-primary" onclick="generate_merge()">@_f.tra("Vygenerovat PDF-MERGE dokument")</button>
-            <button type="button" class="btn btn-primary" onclick="generate_merge_and_mail()">@_f.tra("Vygenerovat a odeslat PDF-MERGE poštou")</button>
-        </div>
+                <button type="button" class="btn btn-primary" onclick="generate_merge()">@_f.tra("Vygenerovat PDF-MERGE dokument")</button>
+                <button type="button" class="btn btn-primary" onclick="generate_merge_and_mail()">@_f.tra("Vygenerovat a odeslat PDF-MERGE poštou")</button>
+            </div>
         </div>
 
     </form>
@@ -242,9 +243,9 @@
         $("#reportViewer1")
             .telerik_ReportViewer(
                 {
-                serviceUrl: "/api/reports/",
-                reportSource: {
-                    report: "@(Model.ReportFileName+"###"+_f.CurrentUser.j03Login)",
+                    serviceUrl: "/api/reports/",
+                    reportSource: {
+                    report: "@(Model.ReportFileName+"###"+_f.CurrentUser.j03Login+"###0###"+Model.ReportExportName)",
                     parameters: { pid: @Model.rec_pid, datFrom: d1, datUntil: d2,langindex:"@Model.LangIndex"}
                 },
                 viewMode: telerikReportViewer.ViewModes.INTERACTIVE,
@@ -318,7 +319,7 @@
         function sendbymail() {
             form1.action = _ep("/x31/ReportContext?oper=mail");
             form1.submit();
-            
+
         }
 
 

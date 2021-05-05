@@ -29,7 +29,7 @@ namespace UI
             ms.Seek(0, System.IO.SeekOrigin.Begin);
 
             int intO13ID = 8;
-            string strReportFileName = GetReportFileName(f, recpid, recX31, "pdf");
+            string strReportFileName = GetReportExportName(f, recpid, recX31)+".pdf";
 
             BO.BASFILE.SaveStream2File(f.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid + "_"+ strReportFileName, ms);
 
@@ -47,7 +47,7 @@ namespace UI
             
         }
 
-        public string GetReportFileName(BL.Factory f,int pid,BO.x31Report recX31,string filesuffix) //vygeneruje název PDF souboru tiskové sestavy
+        public string GetReportExportName(BL.Factory f,int pid,BO.x31Report recX31) //vygeneruje název PDF souboru tiskové sestavy
         {
             string s = null;
             string prefix = BO.BASX29.GetPrefix(recX31.x29ID);
@@ -56,7 +56,7 @@ namespace UI
                 s = f.x31ReportBL.ParseExportFileNameMask(recX31.x31ExportFileNameMask, prefix, pid);
                 if (s != null)
                 {
-                    return s+"."+filesuffix;
+                    return s;
                 }
             }
             
@@ -67,11 +67,11 @@ namespace UI
 
             if (s == null)
             {
-                s = BO.BAS.GetGuid() + "."+filesuffix;
+                s = BO.BAS.GetGuid();
             }
             else
             {
-                s = BO.BASFILE.PrepareFileName(s) + "." + filesuffix;
+                s = BO.BASFILE.PrepareFileName(s);
             }
 
 

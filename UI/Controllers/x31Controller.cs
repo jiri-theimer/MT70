@@ -105,6 +105,12 @@ namespace UI.Controllers
             {
                 v.RecX31 = Factory.x31ReportBL.Load(v.SelectedX31ID);
                 v.SelectedReport = v.RecX31.x31Name;
+                if (!string.IsNullOrEmpty(v.ReportExportName))
+                {
+                    var cc = new TheReportSupport();
+                    v.ReportExportName = cc.GetReportExportName(Factory, 0, v.RecX31);
+                }
+                
 
                 var recO27 = Factory.x31ReportBL.LoadReportDoc(v.SelectedX31ID);
                                
@@ -210,6 +216,8 @@ namespace UI.Controllers
 
             if (oper == "change_x31id" && v.SelectedX31ID>0)
             {
+                var cc = new TheReportSupport();
+                v.ReportExportName = cc.GetReportExportName(Factory, v.rec_pid, v.RecX31);
                 Factory.CBL.SetUserParam(v.UserParamKey, v.SelectedX31ID.ToString());
                 v.GeneratedTempFileName = "";
             }
@@ -258,6 +266,11 @@ namespace UI.Controllers
             {
                 v.RecX31 = Factory.x31ReportBL.Load(v.SelectedX31ID);
                 v.SelectedReport = v.RecX31.x31Name;
+                if (string.IsNullOrEmpty(v.ReportExportName))
+                {
+                    var cc = new TheReportSupport();
+                    v.ReportExportName = cc.GetReportExportName(Factory, v.rec_pid, v.RecX31);
+                }
                 
                 var recO27 = Factory.x31ReportBL.LoadReportDoc(v.SelectedX31ID);               
                 if (recO27 !=null)
@@ -610,7 +623,7 @@ namespace UI.Controllers
             }
             
             
-            string strFinalRepFileName = cc.GetReportFileName(Factory, v.rec_pid, v.RecX31, "pdf");
+            string strFinalRepFileName = cc.GetReportExportName(Factory, v.rec_pid, v.RecX31)+ ".pdf";
             pdfMerge.SaveMergedPDFToFile(Factory.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid+"_"+strFinalRepFileName);
             Factory.o27AttachmentBL.CreateTempInfoxFile(strUploadGuid, 8, strUploadGuid + "_" + strFinalRepFileName, strFinalRepFileName, "application/pdf");
             

@@ -109,6 +109,8 @@
         <input type="hidden" asp-for="@Model.SelectedJ72ID" />
         <input type="hidden" asp-for="@Model.SelectedX31ID" />
         <input type="hidden" asp-for="@Model.IsPeriodFilter" />
+        <input type="hidden" asp-for="@Model.ReportExportName" value="@Model.ReportExportName" />
+
         <table>
             <tr>
                 @if (Model.RecX31.x31LangIndex > 0)
@@ -135,7 +137,7 @@
                     }
                 }
 
-            
+
             </tr>
         </table>
 
@@ -187,7 +189,7 @@
                 {
                 serviceUrl: "/api/reports",
                     reportSource: {
-                        report: "@(Model.ReportFileName+"###"+_f.CurrentUser.j03Login+"###"+Model.SelectedJ72ID)",
+                        report: "@(Model.ReportFileName+"###"+_f.CurrentUser.j03Login+"###"+Model.SelectedJ72ID+"###"+Model.ReportExportName)",
                         parameters: { j02id: @_f.CurrentUser.j02ID, datFrom: d1, datUntil: d2,langindex:"@Model.LangIndex", langsource:""}
                     },
                 viewMode: telerikReportViewer.ViewModes.INTERACTIVE,

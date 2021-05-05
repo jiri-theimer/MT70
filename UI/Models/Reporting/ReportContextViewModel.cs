@@ -35,6 +35,7 @@ namespace UI.Models
         public int MergedX31ID_3 { get; set; }
         public string MergedX31Name_3 { get; set; }
 
+        public string ReportExportName { get; set; }
         public string FinalMergedPdfFileName { get; set; }
 
     }

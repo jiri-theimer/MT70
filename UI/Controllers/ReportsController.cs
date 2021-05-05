@@ -52,21 +52,27 @@ namespace UI.Controllers
         }
         public Telerik.Reporting.ReportSource Resolve(string reportId, OperationOrigin operationOrigin, IDictionary<string, object> currentParameterValues)
         {
-            //soubor sestavy###login uživatele###j72id            
+            //soubor sestavy###login uživatele###j72id###reportexportname
             
 
             List<string> lis = BO.BAS.ConvertString2List(reportId, "###");
             reportId = lis[0];
             string strLogin = lis[1];
             int intJ72ID = 0;
+            
             if (lis.Count > 2)
             {
                 intJ72ID = BO.BAS.InInt(lis[2]);
             }
-
             
 
+
+
             string reportXml = File.ReadAllText(_f.x35GlobalParamBL.ReportFolder() + "\\" + reportId);
+            if (lis.Count > 3)
+            {
+                reportXml = reportXml.Replace("report1", lis[3]);        //explicitně definovaný název exportu sestavy        
+            }
             
             if (reportXml.Contains("1=1"))
             {
@@ -91,22 +97,24 @@ namespace UI.Controllers
                 
             }
 
+            
+
             //if (operationOrigin.ToString() == "GenerateReportDocument")     //finální volání z report viewer - celkem se volá až 3x!
             //{
-                
+
             //    var uriReportSource = new Telerik.Reporting.UriReportSource();
             //    uriReportSource.Uri = _f.x35GlobalParamBL.ReportFolder() + "\\" + reportId;
 
             //    Telerik.Reporting.Processing.ReportProcessor processor = new Telerik.Reporting.Processing.ReportProcessor();
-               
+
             //    var result = processor.RenderReport("PDF", uriReportSource, null);
-               
+
             //    MemoryStream ms = new MemoryStream();
             //    ms.Write(result.DocumentBytes, 0, result.DocumentBytes.Length);
             //    ms.Seek(0, SeekOrigin.Begin);
             //    BO.BASFILE.SaveStream2File("c:\\temp\\marktime_report.pdf", ms);
             //}
-            
+
 
             return new Telerik.Reporting.XmlReportSource { Xml = reportXml };
         }
