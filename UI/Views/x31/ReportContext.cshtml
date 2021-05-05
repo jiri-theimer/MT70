@@ -128,6 +128,12 @@
                     </button>
 
                 </div>
+                @if (_f.CurrentUser.IsAdmin && Model.SelectedX31ID>0)
+                {
+                    <div class="col-auto nonmobile" style="width:40px;">
+                        <button id="cmdAdmin" type="button" class="btn btn-light" title="@_f.tra("Administrace sestavy")"><span class="k-icon k-i-cogs"></span></button>
+                    </div>
+                }
                 <div class="col-sm-1 col-md-1 btn-group">
                     <button id="cmdClose" type="button" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
 
@@ -204,6 +210,10 @@
                 $("#reportViewer1").css("top", (_topx + 130));
             }
 
+        });
+
+        $("#cmdAdmin").on("click", function() {
+            window.open(_ep("/x31/Record?pid=@Model.SelectedX31ID"));
         });
 
         var d1;
@@ -300,8 +310,11 @@
 
 
         function sendbymail() {
-            window.open("/Mail/SendMail?x31id=@(Model.SelectedX31ID)&x29id=@(Model.x29ID)&recpid=@(Model.rec_pid)","_self");
+            location.replace("/Mail/SendMail?x31id=@(Model.SelectedX31ID)&x29id=@(Model.x29ID)&recpid=@(Model.rec_pid)");
         }
+
+
+
 
 
     </script>

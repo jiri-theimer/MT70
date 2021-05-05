@@ -13,12 +13,12 @@ namespace BL
         public bool LoadUserParamBool(string strKey, bool bolDefault);
         public DateTime? LoadUserParamDate(string strKey);
         public bool SetUserParam(string strKey, string strValue);
-        public string EstimateRecordCode(string entity);
-        public string GetRecordAlias(string entity, int pid);
+        public string EstimateRecordCode(string entity);        
         public void ClearUserParamsCache();
         public int SaveRecordCode(string codevalue, string prefix, int pid);
         public string GetCurrentRecordCode(string prefix, int pid);
         public System.Data.DataTable GetList_Last10RecordCode(string prefix);
+        //public string GetRecordAlias(string entity, int pid);
         public string GetObjectAlias(string prefix, int pid);
     }
     class CBL :BaseBL, ICBL
@@ -107,25 +107,25 @@ namespace BL
             return _db.GetDataTable(s);
 
         }
-        public string GetRecordAlias(string entity,int pid)
-        {
-            BO.GetString c;
-            string strPrefix = entity.Substring(0, 3);
-            switch (strPrefix)
-            {
-                case "p51":
-                    c = _db.Load<BO.GetString>("select p51Code+' - '+p51Name as Value FROM p51Order WHERE p51ID=@pid", new { pid=pid });
-                    break;
-                case "j02":
-                    c = _db.Load<BO.GetString>("select j02LastName+' - '+j02FirstName as Value FROM j02Person WHERE j02ID=@pid", new { pid = pid });
-                    break;
-                default:
-                    c = _db.Load<BO.GetString>(string.Format("select {0}Name+' ['+{0}Code+']' as Value FROM {1} WHERE {0}ID=@pid",strPrefix,_mother.EProvider.ByPrefix(strPrefix).TableName), new { pid = pid });
-                    break;
-            }
+        //public string GetRecordAlias(string entity,int pid)
+        //{
+        //    BO.GetString c;
+        //    string strPrefix = entity.Substring(0, 3);
+        //    switch (strPrefix)
+        //    {
+        //        case "p51":
+        //            c = _db.Load<BO.GetString>("select p51Code+' - '+p51Name as Value FROM p51Order WHERE p51ID=@pid", new { pid=pid });
+        //            break;
+        //        case "j02":
+        //            c = _db.Load<BO.GetString>("select j02LastName+' - '+j02FirstName as Value FROM j02Person WHERE j02ID=@pid", new { pid = pid });
+        //            break;
+        //        default:
+        //            c = _db.Load<BO.GetString>(string.Format("select {0}Name+' ['+{0}Code+']' as Value FROM {1} WHERE {0}ID=@pid",strPrefix,_mother.EProvider.ByPrefix(strPrefix).TableName), new { pid = pid });
+        //            break;
+        //    }
             
-            return c.Value;
-        }
+        //    return c.Value;
+        //}
         public string LoadUserParam(string strKey, string strDefault = null)
         {     
             if (_userparams == null)

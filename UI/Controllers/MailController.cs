@@ -264,35 +264,7 @@ namespace UI.Controllers
         }
 
 
-        //private string GeneratePdfReport(BO.x31Report recX31, Models.SendMailViewModel v)
-        //{
-        //    var uriReportSource = new Telerik.Reporting.UriReportSource();
-        //    uriReportSource.Uri = Factory.x35GlobalParamBL.ReportFolder() + "\\" + Factory.x31ReportBL.LoadReportDoc(recX31.pid).o27ArchiveFileName;
-            
-        //    if (v.Rec.x40RecordPID > 0)
-        //    {
-        //        uriReportSource.Parameters.Add("pid", v.Rec.x40RecordPID);
-        //    }
-        //    var per = Factory.x31ReportBL.InhalePeriodFilter(_pp);            
-        //    uriReportSource.Parameters.Add("datfrom", per.d1);
-        //    uriReportSource.Parameters.Add("datuntil", per.d2);
-
-        //    Telerik.Reporting.Processing.ReportProcessor processor = new Telerik.Reporting.Processing.ReportProcessor(Factory.App.Configuration);
-
-        //    var result = processor.RenderReport("PDF", uriReportSource, null);
-
-        //    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-        //    ms.Write(result.DocumentBytes, 0, result.DocumentBytes.Length);
-        //    ms.Seek(0, System.IO.SeekOrigin.Begin);
-
-            
-        //    BO.BASFILE.SaveStream2File(Factory.x35GlobalParamBL.TempFolder() + "\\" + v.UploadGuid + "_report.pdf", ms);
-
-        //    int intO13ID = 8;
-            
-        //    Factory.o27AttachmentBL.CreateTempInfoxFile(v.UploadGuid, intO13ID, v.UploadGuid + "_report.pdf", "report.pdf", "application/pdf");
-        //    return Factory.x35GlobalParamBL.TempFolder() + "\\" + v.UploadGuid + "_report.pdf";
-        //}
+       
     }
 
 

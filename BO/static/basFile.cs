@@ -9,6 +9,26 @@ namespace BO
 {
     public class BASFILE
     {
+        public static string PrepareFileName(string strFileName)
+        {
+            string s = strFileName.Replace(" | ", "_").Replace(" ", "-").Replace(":", "_");
+            s = System.Text.RegularExpressions.Regex.Replace(s, "[^A-Za-z0-9 _ -]", "").Replace(" ", "");
+            s = RemoveDiacritism(s);
+            return s;
+            
+        }
+        public static string RemoveDiacritism(string s)
+        {
+            var stringFormD = s.Normalize(System.Text.NormalizationForm.FormD);
+            System.Text.StringBuilder retVal = new System.Text.StringBuilder();
+            for (int index = 0; index <= stringFormD.Length - 1; index++)
+            {
+                if ((System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stringFormD[index]) != System.Globalization.UnicodeCategory.NonSpacingMark))
+                    retVal.Append(stringFormD[index]);
+            }
+            return retVal.ToString().Normalize(System.Text.NormalizationForm.FormC);
+        }
+
         public static void LogError(string message, string username = null, string procname = null)
         {
             Handle_Log_Write("error", message, username, procname);            

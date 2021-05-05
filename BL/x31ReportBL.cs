@@ -14,6 +14,7 @@ namespace BL
         public BO.o27Attachment LoadReportDoc(int x31id);
         public bool IsReportWaiting4Generate(DateTime dNow, BO.x31Report rec);
         public BO.ThePeriod InhalePeriodFilter(BL.ThePeriodProvider pp);
+        public string ParseExportFileNameMask(string strExportFileNameMask, string prefix, int pid);
     }
     class x31ReportBL : BaseBL, Ix31ReportBL
     {
@@ -193,6 +194,20 @@ namespace BL
 
 
             return ret;
+        }
+
+        public string ParseExportFileNameMask(string strExportFileNameMask,string prefix,int pid)
+        {
+            int intX29ID = BO.BASX29.GetInt(prefix);
+            string strTab = BO.BASX29.GetEntity((BO.x29IdEnum)intX29ID);
+            string s = $"SELECT {strExportFileNameMask} as Value FROM {strTab} WHERE {prefix}ID = {pid}";
+            var ret = _db.Load<BO.GetString>(s);
+            if (ret != null)
+            {
+                return ret.Value;
+            }
+
+            return null;
         }
 
     }

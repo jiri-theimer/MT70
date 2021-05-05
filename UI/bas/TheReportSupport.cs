@@ -7,7 +7,7 @@ namespace UI
 {
     public class TheReportSupport
     {
-        public string GeneratePdfReport(BL.Factory f, BL.ThePeriodProvider pp,BO.x31Report recX31,string strUploadGuid,int recpid)
+        public string GeneratePdfReport(BL.Factory f, BL.ThePeriodProvider pp,BO.x31Report recX31,string strUploadGuid,int recpid,bool bolReturnFullPath=true)
         {
             var uriReportSource = new Telerik.Reporting.UriReportSource();
             uriReportSource.Uri = f.x35GlobalParamBL.ReportFolder() + "\\" + f.x31ReportBL.LoadReportDoc(recX31.pid).o27ArchiveFileName;
@@ -28,13 +28,57 @@ namespace UI
             ms.Write(result.DocumentBytes, 0, result.DocumentBytes.Length);
             ms.Seek(0, System.IO.SeekOrigin.Begin);
 
-
-            BO.BASFILE.SaveStream2File(f.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid + "_report.pdf", ms);
-
             int intO13ID = 8;
+            string strReportFileName = GetReportFileName(f, recpid, recX31, "pdf");
 
-            f.o27AttachmentBL.CreateTempInfoxFile(strUploadGuid, intO13ID, strUploadGuid + "_report.pdf", "report.pdf", "application/pdf");
-            return f.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid + "_report.pdf";
+            BO.BASFILE.SaveStream2File(f.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid + "_"+ strReportFileName, ms);
+
+            
+
+            f.o27AttachmentBL.CreateTempInfoxFile(strUploadGuid, intO13ID, strUploadGuid + "_"+ strReportFileName, strReportFileName, "application/pdf");
+            if (bolReturnFullPath)
+            {
+                return f.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid + "_"+ strReportFileName;
+            }
+            else
+            {
+                return strUploadGuid + "_"+ strReportFileName;
+            }
+            
+        }
+
+        public string GetReportFileName(BL.Factory f,int pid,BO.x31Report recX31,string filesuffix) //vygeneruje název PDF souboru tiskové sestavy
+        {
+            string s = null;
+            string prefix = BO.BASX29.GetPrefix(recX31.x29ID);
+            if (recX31.x31ExportFileNameMask != null)
+            {
+                s = f.x31ReportBL.ParseExportFileNameMask(recX31.x31ExportFileNameMask, prefix, pid);
+                if (s != null)
+                {
+                    return s+"."+filesuffix;
+                }
+            }
+            
+            if (s==null && prefix !=null && pid > 0 && prefix !="x31")
+            {
+                s = f.CBL.GetObjectAlias(prefix, pid);
+            }
+
+            if (s == null)
+            {
+                s = BO.BAS.GetGuid() + "."+filesuffix;
+            }
+            else
+            {
+                s = BO.BASFILE.PrepareFileName(s) + "." + filesuffix;
+            }
+
+
+            return s;
+
+
+
         }
     }
 }
