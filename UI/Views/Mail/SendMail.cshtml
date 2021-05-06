@@ -111,9 +111,7 @@
                 <mycombo entity="j61TextTemplate" asp-for="@Model.SelectedJ61ID" selectedtext="@Model.SelectedJ61Name" myqueryinline="x29id|int|@((int)Model.Rec.x29ID)|MyRecordsDisponible|bool|1" event_after_changevalue="j61id_onchange"></mycombo>
 
             </div>
-            <div class="col-sm-2 col-md-2">
-                <button type="button" class="btn btn-light" onclick="remember_p65id()">@_f.tra("Zapamatovat si šablonu")</button>
-            </div>
+          
         </div>
         <div class="my-2">
             <input type="checkbox" id="chkIsTest" asp-for="@Model.IsTest" />

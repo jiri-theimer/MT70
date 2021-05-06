@@ -37,17 +37,36 @@ namespace BL
             switch (prefix)
             {                
                 case "j02":
-                    sb.Append("a.*,j07.j07Name,j03.j03Login,j03.j03LangIndex,j04.*");
-                    sb.Append(" FROM j02Person a LEFT OUTER JOIN j07Position j07 on a.j07ID=j07.j07ID LEFT OUTER JOIN j03User j03 ON a.j02ID=j03.j02ID LEFT OUTER JOIN j04UserRole j04 ON j03.j04ID=j04.j04ID");
+                    sb.Append("a.*,j07.j07Name,j03.j03Login,j03.j03LangIndex,j04.*,j02free.*");
+                    sb.Append(" FROM j02Person a LEFT OUTER JOIN j07PersonPosition j07 on a.j07ID=j07.j07ID LEFT OUTER JOIN j03User j03 ON a.j02ID=j03.j02ID LEFT OUTER JOIN j04UserRole j04 ON j03.j04ID=j04.j04ID");
+                    sb.Append(" LEFT OUTER JOIN j02Person_FreeField j02free ON a.j02ID=j02free.j02ID");
                     break;
                 case "j03":
-                    sb.Append("a.*,j07.j07Name,j02.*,j04.*");
-                    sb.Append(" FROM j03User a INNER JOIN j04UserRole j04 ON a.j04ID=j04.j04ID LEFT OUTER JOIN j02Person j02 ON a.j02ID=j02.j02ID LEFT OUTER JOIN j07Position j07 on j02.j07ID=j07.j07ID");
+                    sb.Append("a.*,j07.*,j02.*,j04.*");
+                    sb.Append(" FROM j03User a INNER JOIN j04UserRole j04 ON a.j04ID=j04.j04ID LEFT OUTER JOIN j02Person j02 ON a.j02ID=j02.j02ID LEFT OUTER JOIN j07PersonPosition j07 on j02.j07ID=j07.j07ID");
+                    break;
+                case "p90":
+                    sb.Append("a.*,p89.*,p90free.*,p28.*,j27.*");
+                    sb.Append(" FROM p90Proforma a LEFT OUTER JOIN p89ProformaType p89 ON a.p89ID=p89.p89ID LEFT OUTER JOIN p28Contact p28 ON a.p28ID=p28.p28ID");
+                    sb.Append(" LEFT OUTER JOIN j27Currency j27 ON a.j27ID=j27.j27ID");
+                    sb.Append(" LEFT OUTER JOIN p90Proforma_FreeField p90free ON a.p90ID=p90free.p90ID");
                     break;
                 case "p91":
-                    sb.Append("a.*,p92.*,p93.*,p28.*,j27.*");
+                    sb.Append("a.*,p92.*,p93.*,p28.*,j27.*,p91free.*");
                     sb.Append(" FROM p91Invoice a INNER JOIN p92InvoiceType p92 ON a.p92ID=p92.p92ID LEFT OUTER JOIN p28Contact p28 ON a.p28ID=p28.p28ID LEFT OUTER JOIN p93InvoiceHeader p93 on p92.p93ID=p93.p93ID");
                     sb.Append(" LEFT OUTER JOIN j27Currency j27 ON a.j27ID=j27.j27ID");
+                    sb.Append(" LEFT OUTER JOIN p91Invoice_FreeField p91free ON a.p91ID=p91free.p91ID");
+                    break;
+                case "p28":
+                    sb.Append("a.*,p29.*,p28free.*");
+                    sb.Append(" FROM p28Contact a LEFT OUTER JOIN p29ContactType p29 on a.p29ID=p29.p29ID");
+                    sb.Append(" LEFT OUTER JOIN p28Contact_FreeField p28free ON a.p28ID=p28free.p28ID");
+                    break;
+                case "p41":
+                    sb.Append("a.*,p28.*,p42.*,p41free.*");
+                    sb.Append(" FROM p41Project a LEFT OUTER JOIN p42ProjectType p42 on a.p42ID=p42.p42ID");
+                    sb.Append(" LEFT OUTER JOIN p28Contact p28 a.p28ID_Client=p28.p28ID");
+                    sb.Append(" LEFT OUTER JOIN p41Project_FreeField p41free ON a.p41ID=p41free.p41ID");
                     break;
             }
             sb.Append(" WHERE a." + prefix + "ID=" + pid.ToString());

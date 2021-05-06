@@ -409,7 +409,7 @@
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Šablona zprávy pro elektronickou fakturaci"):</label>
                 <div class="col-sm-5 col-md-5">
-                    <mycombo entity="j61TextTemplate" asp-for="Rec.j61ID_Invoice" selectedtext="@Model.SelectedComboJ61Name" view-flag="2"></mycombo>
+                    <mycombo entity="j61TextTemplate" asp-for="Rec.j61ID_Invoice" selectedtext="@Model.SelectedComboJ61Name" myqueryinline="x29id|int|391"></mycombo>
                 </div>
                 <div class="col-auto">@_f.tra("Režijní přirážka k ceně faktury"):</div>
                 <div class="col-sm-3 col-md-2">

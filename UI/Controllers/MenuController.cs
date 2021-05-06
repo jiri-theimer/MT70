@@ -257,7 +257,7 @@ namespace UI.Controllers
             AMI("Ceníky sazeb", aurl("billing","p51"));
 
             AMI("Uživatelská pole", aurl("billing","x28","myqueryinline=x29id|int|391"));
-            AMI("Šablony poštovních zpráv", aurl("billing", "j61", "myqueryinline=x29id|int|391"));
+            AMI("Šablony poštovních zpráv", aurl("billing", "j61"));
 
             handle_selected_item(prefix);
 

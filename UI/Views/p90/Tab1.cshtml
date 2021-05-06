@@ -11,6 +11,11 @@
 
 @addTagHelper *, UI
 
+
+<button type="button" class="btn btn-sm btn-warning" onclick="_window_open('/x31/ReportContext?prefix=p90&pid=@(Model.pid)')"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
+
+<button type="button" class="btn btn-sm btn-outline-secondary" onclick="_window_open('/Mail/SendMail?x29id=390&recpid=@(Model.pid)')"><span class="k-icon k-i-email"></span> @_f.tra("Odeslat zprávu")</button>
+
 <div class="info_record_container">
 
     @Html.EditorFor(m => m, "~/Views/Shared/_p90RecPageContent.cshtml")

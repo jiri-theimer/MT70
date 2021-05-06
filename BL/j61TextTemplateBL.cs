@@ -56,6 +56,7 @@ namespace BL
                 p.AddString("j61Name", rec.j61Name);
                 p.AddInt("j02ID_Owner", rec.j02ID_Owner, true);
                 p.AddString("j61HtmlBody", rec.j61HtmlBody);
+                p.AddString("j61PlainTextBody", rec.j61PlainTextBody);
                 p.AddString("j61MailSubject", rec.j61MailSubject);
                 p.AddString("j61MailTO", rec.j61MailTO);
                 p.AddString("j61MailCC", rec.j61MailCC);
@@ -88,7 +89,7 @@ namespace BL
             }
             if (rec.j02ID_Owner == 0)
             {
-                this.AddMessage("Chybí vyplnit [Vlastník záznamu]."); return false;
+                rec.j02ID_Owner = _mother.CurrentUser.j02ID;
             }
 
             return true;

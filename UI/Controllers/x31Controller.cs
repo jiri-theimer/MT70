@@ -606,22 +606,23 @@ namespace UI.Controllers
             if (v.MergedX31ID_1 > 0)
             {
                 s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_1), BO.BAS.GetGuid(), v.rec_pid);
-                pdfMerge.AppendPDFFile(s);
-                Factory.CBL.SetUserParam("ReportContext-mergedx31id-1-"+v.rec_prefix, v.MergedX31ID_1.ToString());
+                pdfMerge.AppendPDFFile(s);                
             }
+            Factory.CBL.SetUserParam("ReportContext-mergedx31id-1-" + v.rec_prefix, v.MergedX31ID_1.ToString());
+
             if (v.MergedX31ID_2 > 0)
             {
                 s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_2), BO.BAS.GetGuid(), v.rec_pid);
-                pdfMerge.AppendPDFFile(s);
-                Factory.CBL.SetUserParam("ReportContext-mergedx31id-2-"+v.rec_prefix, v.MergedX31ID_2.ToString());
+                pdfMerge.AppendPDFFile(s);                
             }
+            Factory.CBL.SetUserParam("ReportContext-mergedx31id-2-" + v.rec_prefix, v.MergedX31ID_2.ToString());
+
             if (v.MergedX31ID_3 > 0)
             {
                 s = cc.GeneratePdfReport(Factory, _pp, Factory.x31ReportBL.Load(v.MergedX31ID_3), BO.BAS.GetGuid(), v.rec_pid);
-                pdfMerge.AppendPDFFile(s);
-                Factory.CBL.SetUserParam("ReportContext-mergedx31id-3-"+v.rec_prefix, v.MergedX31ID_3.ToString());
+                pdfMerge.AppendPDFFile(s);                
             }
-            
+            Factory.CBL.SetUserParam("ReportContext-mergedx31id-3-" + v.rec_prefix, v.MergedX31ID_3.ToString());
             
             string strFinalRepFileName = cc.GetReportExportName(Factory, v.rec_pid, v.RecX31)+ ".pdf";
             pdfMerge.SaveMergedPDFToFile(Factory.x35GlobalParamBL.TempFolder() + "\\" + strUploadGuid+"_"+strFinalRepFileName);

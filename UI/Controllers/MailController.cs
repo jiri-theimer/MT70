@@ -57,6 +57,21 @@ namespace UI.Controllers
                 cc.GeneratePdfReport(Factory, _pp, recX31, v.UploadGuid,0);
             }
 
+            if (v.Rec.x29ID == BO.x29IdEnum.p91Invoice && v.Rec.x40RecordPID>0)
+            {
+                //najít poštovní šablonu faktury klienta
+                var recP91 = Factory.p91InvoiceBL.Load(v.Rec.x40RecordPID);
+                var recP28 = Factory.p28ContactBL.Load(recP91.p28ID);
+                if (recP28.j61ID_Invoice > 0)   //klient má svojí výchozí poštovní šablonu
+                {
+                    var recJ61 = MailMergeByTextTemplate(recP28.j61ID_Invoice, "p91", v.Rec.x40RecordPID);
+                    v.Rec.x40Body = recJ61.j61PlainTextBody;
+                    v.Rec.x40Subject = recJ61.j61MailSubject;
+                    v.SelectedJ61ID = recJ61.pid;
+                    v.SelectedJ61Name = recJ61.j61Name;
+                }
+            }
+
 
             if (x40id > 0)
             {   //kopírování zprávy do nové podle vzoru x40id
