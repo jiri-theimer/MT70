@@ -89,8 +89,9 @@ namespace UI.Controllers
                 Handle_Receiver_From_List(v, Factory.j02PersonBL.GetList(new BO.myQueryJ02() { j07id = v.SelectedJ07ID }));
                 return View(v);
             }
+            
 
-            if (oper=="postback")
+            if (!string.IsNullOrEmpty(oper))
             {
                 return View(v);
             }
@@ -265,6 +266,17 @@ namespace UI.Controllers
             }
 
 
+        }
+
+        public BO.j61TextTemplate MailMergeByTextTemplate(int j61id,string prefix,int recpid)
+        {
+            var recJ61 = Factory.j61TextTemplateBL.Load(j61id);
+            var cMerge = new BO.CLS.MergeContent();
+            var dt = Factory.gridBL.GetList4MailMerge(prefix, recpid);
+            recJ61.j61PlainTextBody = cMerge.GetMergedContent(recJ61.j61PlainTextBody, dt);
+            recJ61.j61MailSubject = cMerge.GetMergedContent(recJ61.j61MailSubject, dt);
+
+            return recJ61;
         }
 
 

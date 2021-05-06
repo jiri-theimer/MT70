@@ -8,6 +8,10 @@
 
 @addTagHelper *, UI
 
+<div>
+    <a class="btn btn-sm btn-outline-success" href="javascript:_window_open('/b07/Record?pid=0&prefix=@(Model.master_entity.Substring(0,3))&recpid=@(Model.master_pid)')"><span class="k-icon k-i-plus"></span> @_f.tra("Nový")</a>
+</div>
+
 
 @foreach (var c in Model.lisB07)
 {

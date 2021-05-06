@@ -44,6 +44,11 @@ namespace BL
                     sb.Append("a.*,j07.j07Name,j02.*,j04.*");
                     sb.Append(" FROM j03User a INNER JOIN j04UserRole j04 ON a.j04ID=j04.j04ID LEFT OUTER JOIN j02Person j02 ON a.j02ID=j02.j02ID LEFT OUTER JOIN j07Position j07 on j02.j07ID=j07.j07ID");
                     break;
+                case "p91":
+                    sb.Append("a.*,p92.*,p93.*,p28.*,j27.*");
+                    sb.Append(" FROM p91Invoice a INNER JOIN p92InvoiceType p92 ON a.p92ID=p92.p92ID LEFT OUTER JOIN p28Contact p28 ON a.p28ID=p28.p28ID LEFT OUTER JOIN p93InvoiceHeader p93 on p92.p93ID=p93.p93ID");
+                    sb.Append(" LEFT OUTER JOIN j27Currency j27 ON a.j27ID=j27.j27ID");
+                    break;
             }
             sb.Append(" WHERE a." + prefix + "ID=" + pid.ToString());
             return _db.GetDataTable(sb.ToString());           

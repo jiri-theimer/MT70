@@ -102,13 +102,13 @@
 
 
         <div class="my-2">
-            <textarea asp-for="Rec.x40Body" class="form-control" placeholder="@_f.tra("Text zprávy")"></textarea>
+            <textarea asp-for="Rec.x40Body" id="txtBody" class="form-control" placeholder="@_f.tra("Text zprávy")"></textarea>
 
         </div>
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Šablona zprávy"):</label>
             <div class="col-sm-9 col-md-8">
-                <mycombo entity="j61TextTemplate" asp-for="@Model.SelectedJ61ID" selectedtext="@Model.SelectedJ61Name" myqueryinline="MyRecordsDisponible|bool@1" event_after_changevalue="j61id_onchange"></mycombo>
+                <mycombo entity="j61TextTemplate" asp-for="@Model.SelectedJ61ID" selectedtext="@Model.SelectedJ61Name" myqueryinline="x29id|int|@((int)Model.Rec.x29ID)|MyRecordsDisponible|bool|1" event_after_changevalue="j61id_onchange"></mycombo>
 
             </div>
             <div class="col-sm-2 col-md-2">
@@ -154,7 +154,7 @@
             separator: ", "
         });
 
-      
+
 
         $("#cmdMore").click(function () {
             $("#divMore").toggle();
@@ -184,7 +184,18 @@
         postback("j07id");
     }
     function j61id_onchange(j61id) {
-        postback("j61id");
+
+
+        $.post("/Mail/MailMergeByTextTemplate", {j61id:j61id, prefix: "@BO.BASX29.GetPrefix(Model.Rec.x29ID)", recpid:@(Model.Rec.x40RecordPID)}, function (data) {
+            $("#txtBody").text(data.j61PlainTextBody);
+            $("#txtSubject").val(data.j61MailSubject);
+
+            _resize_textareas();
+        });
+
+
+        
+
     }
     function postback(oper) {
         form1.action = "/Mail/SendMail?oper=" + oper;

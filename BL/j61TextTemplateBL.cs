@@ -9,7 +9,7 @@ namespace BL
     public interface Ij61TextTemplateBL
     {
         public BO.j61TextTemplate Load(int pid);
-        public IEnumerable<BO.j61TextTemplate> GetList(BO.myQuery mq);
+        public IEnumerable<BO.j61TextTemplate> GetList(BO.myQueryJ61 mq);
         public int Save(BO.j61TextTemplate rec);
 
     }
@@ -34,7 +34,7 @@ namespace BL
             return _db.Load<BO.j61TextTemplate>(GetSQL1(" WHERE a.j61ID=@pid"), new { pid = pid });
         }
 
-        public IEnumerable<BO.j61TextTemplate> GetList(BO.myQuery mq)
+        public IEnumerable<BO.j61TextTemplate> GetList(BO.myQueryJ61 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.j61TextTemplate>(fq.FinalSql, fq.Parameters);

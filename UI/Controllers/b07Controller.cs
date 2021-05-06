@@ -17,7 +17,7 @@ namespace UI.Controllers
                 return this.StopPageSubform("master_entity or master_pid missing");
             }
             var v = new b07list() { master_entity = master_entity, master_pid = master_pid };
-            v.lisB07 = Factory.b07CommentBL.GetList(new BO.myQueryB07() { x29id =BO.BASX29.GetInt(v.master_entity.Substring(0,3)), recpid = v.master_pid });
+            v.lisB07 = Factory.b07CommentBL.GetList(new BO.myQueryB07() { x29id = BO.BASX29.GetInt(v.master_entity.Substring(0, 3)), recpid = v.master_pid }).Where(p => p.b07WorkflowInfo == null && p.b07Value !="upload");
 
             v.lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07ids = v.lisB07.Select(p => p.pid).ToList() });
             return View(v);
