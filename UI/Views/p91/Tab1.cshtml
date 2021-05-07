@@ -11,6 +11,8 @@
 
 @addTagHelper *, UI
 
+<a class="btn btn-sm btn-outline-dark" href="/p91/RecPage?pid=@Model.pid" target="_top" title="@_f.tra("Stránka vyúčtování")"><span class="k-icon k-i-layout"></span></a>
+
 @Html.EditorFor(m => m, "~/Views/Shared/_p91RecPageButtons.cshtml")
 
 <div class="info_record_container">
