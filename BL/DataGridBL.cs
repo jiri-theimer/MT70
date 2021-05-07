@@ -68,6 +68,16 @@ namespace BL
                     sb.Append(" LEFT OUTER JOIN p28Contact p28 a.p28ID_Client=p28.p28ID");
                     sb.Append(" LEFT OUTER JOIN p41Project_FreeField p41free ON a.p41ID=p41free.p41ID");
                     break;
+                case "p31":
+                    sb.Append("a.*,j02.*,p32.*,p34.*,p28Client.*,p70.*,j27billing_orig.*");
+                    sb.Append(" FROM p31Worksheet a");
+                    sb.Append(" INNER JOIN j02Person j02 ON a.j02ID=j02.j02ID INNER JOIN p32Activity p32 ON a.p32ID=p32.p32ID");
+                    sb.Append(" INNER JOIN p34ActivityGroup p34 ON p32.p34ID=p34.p34ID INNER JOIN p41Project p41 ON a.p41ID=p41.p41ID");
+                    sb.Append(" LEFT OUTER JOIN p28Contact p28Client ON p41.p28ID_Client=p28Client.p28ID LEFT OUTER JOIN p48ProjectGroup p48 ON p41.p48ID=p48.p48ID");                    
+                    sb.Append(" LEFT OUTER JOIN p70BillingStatus p70 ON a.p70ID=p70.p70ID LEFT OUTER JOIN p71ApproveStatus p71 ON a.p71ID=p71.p71ID LEFT OUTER JOIN p72PreBillingStatus p72trim ON a.p72ID_AfterTrimming=p72trim.p72ID LEFT OUTER JOIN p72PreBillingStatus p72approve ON a.p72ID_AfterApprove=p72approve.p72ID");                    
+                    sb.Append(" LEFT OUTER JOIN j27Currency j27billing_orig ON a.j27ID_Billing_Orig=j27billing_orig.j27ID");
+                    
+                    break;
             }
             sb.Append(" WHERE a." + prefix + "ID=" + pid.ToString());
             return _db.GetDataTable(sb.ToString());           

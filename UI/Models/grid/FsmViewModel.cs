@@ -14,7 +14,7 @@ namespace UI.Models
         public string entityTitle { get; set; }
         public string prefix { get; set; }
       
-        public int master_pid { get; set; }
+        public int master_pid { get; set; }        
         public string myqueryinline { get; set; } //explicitní myquery ve tvaru název@typ@hodnota, lze předávat více parametrů najednou
 
         public List<NavTab> NavTabs;

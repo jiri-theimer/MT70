@@ -63,15 +63,13 @@
         <span id="spanX31Name"></span>
 
     </div>
-    @if (Model.SelectedReport != null)
-    {
-        <div class="col-auto">
-            <button id="cmdSendByMail" type="button" class="btn btn-light">
-                <span class="k-icon k-i-hyperlink-email"></span>
-                @_f.tra("Odeslat poštou")
-            </button>
-        </div>
-    }
+    <div class="col-auto">
+        <button id="cmdSendByMail" type="button" class="btn btn-light" style="display:none;">
+            <span class="k-icon k-i-hyperlink-email"></span>
+            @_f.tra("Odeslat poštou")
+        </button>
+    </div>
+    
 
     @if (_f.CurrentUser.IsAdmin)
     {
@@ -177,6 +175,7 @@
         $("#fra1").attr("src", "/x31/ReportNoContext?x31id=" + x31id);
         $(".nav-link").removeClass("selected");
         $("#report" + x31id).addClass("selected");
+        $("#cmdSendByMail").css("display", "block");
 
         $("#cmdRecord").on("click", function () {
             _window_open(_ep("/x31/Record?pid=" + x31id), 1);

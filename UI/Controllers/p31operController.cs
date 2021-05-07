@@ -10,6 +10,7 @@ namespace UI.Controllers
 {
     public class p31operController : BaseController
     {
+        
         //Nastavení vykazování hodin
         public IActionResult hes(string pagesource)
         {

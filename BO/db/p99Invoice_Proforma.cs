@@ -21,7 +21,8 @@ namespace BO
         public string p91Code { get; }
         
         public int p90ID { get; }
-        public int x31ID_Invoice { get; }
+        public int x31ID_Invoice { get; }   //tisková sestava daňové faktury
+        public int x31ID_Payment { get; }   //tisková sestava úhrady zálohy
 
 
     }

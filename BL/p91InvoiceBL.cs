@@ -433,10 +433,11 @@ namespace BL
 
         public IEnumerable<BO.p99Invoice_Proforma> GetList_p99(int p90id, int p91id, int p82id)
         {
-            sb("SELECT a.*,p90.p90Code,p91.p91Code,p82.p82Code,p82.p90ID,p92.x31ID_Invoice,");
+            sb("SELECT a.*,p90.p90Code,p91.p91Code,p82.p82Code,p82.p90ID,p92.x31ID_Invoice,p89.x31ID_Payment,");
             sb(_db.GetSQL1_Ocas("p99", false, false, true));
             sb(" FROM p99Invoice_Proforma a INNER JOIN p82Proforma_Payment p82 ON a.p82ID=p82.p82ID INNER JOIN p91Invoice p91 ON a.p91ID=p91.p91ID INNER JOIN p90Proforma p90 ON p82.p90ID=p90.p90ID");
             sb(" LEFT OUTER JOIN p92InvoiceType p92 ON p91.p92ID=p92.p92ID");
+            sb(" LEFT OUTER JOIN p89ProformaType p89 ON p90.p89ID=p89.p89ID");
             object pars = null;
 
             if (p90id > 0)

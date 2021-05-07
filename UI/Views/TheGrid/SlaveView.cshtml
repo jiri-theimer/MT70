@@ -73,6 +73,9 @@
 @section Scripts{
 
     <script type="text/javascript">
+        var _pageprefix = "@Model.prefix";
+        var _pagemasterprefix = "@Model.gridinput.master_entity.Substring(0,3)";
+
 
     $(document).ready(function () {
 
@@ -81,7 +84,7 @@
             $("#FilterMyInvolvement").css("background-color", "red");
         }
 
-        
+
 
         @if(Model.period != null)
         {
@@ -144,18 +147,36 @@
             });
         }
 
-       
-        function p91oper_p31operbatch(baseoper) {            
-            var pids = $("#tg_selected_pids").val();            
+        function grid_dblclick(row) {
+            var pid = row.id.replace("r", "");
+
+            var strDblSetting = "@Model.dblClickSetting";
+            if (strDblSetting == "recpage") {
+                location.replace(_ep("/" + _pageprefix + "/RecPage?pid=" + pid));
+                return;
+            }
+            switch (_pagemasterprefix) {
+                case "p91":
+                    _window_open(_ep("/p91oper/p31edit?p31id=" + pid));
+                    break;
+                default:
+                    _edit(_pageprefix, pid);
+                    break;
+            }
+        }
+
+
+        function p91oper_p31operbatch(baseoper) {
+            var pids = $("#tg_selected_pids").val();
             if (pids === "") {
                 _notify_message(_tg_musite_vybrat_zaznam);
                 return;
             }
-            
+
             _window_open(_ep("/p91oper/p31operbatch?baseoper=" + baseoper + "&p31ids=" + pids + "&p91id=" + _tg_master_pid));
 
         }
-        
+
     </script>
 
 }

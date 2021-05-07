@@ -21,6 +21,8 @@ namespace BL
         public bool Move2Invoice(int p91id_dest, int p31id);
         public bool Move2Bin(bool move2bin, List<int> p31ids);
         public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
+        public IEnumerable<BO.p31WorksheetTimelineDay> GetList_TimelineDays(List<int> j02ids, DateTime d1, DateTime d2, int j70id);
+
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
     {
@@ -442,6 +444,26 @@ namespace BL
         {
             var ret =_db.Load<BO.GetBool>("select dbo.p31_testvat(@vatrate,@p41id,@dat,@j27id) as Value", new { vatrate = vatrate, p41id = p41id, dat = d, j27id = j27id });
             return ret.Value;
+        }
+
+        public IEnumerable<BO.p31WorksheetTimelineDay> GetList_TimelineDays(List<int>j02ids,DateTime d1,DateTime d2,int j70id)
+        {
+            if (j02ids == null || j02ids.Count() == 0) j02ids = new List<int>() { _mother.CurrentUser.j02ID };
+            sb("SELECT a.j02ID,min(j02.j02LastName+' '+j02.j02FirstName) as Person");
+            sb(",a.p31Date,sum(a.p31Hours_Orig) as Hours,sum(case when p32.p32IsBillable=1 then a.p31Hours_Orig end) as Hours_Billable,sum(case when p32.p32IsBillable=0 then a.p31Hours_Orig end) as Hours_NonBillable,count(case when p34.p33id in (2,5) then 1 end) as Moneys,count(case when p34.p33id=3 then 1 end) as Pieces");
+
+            sb(" FROM p31Worksheet a");
+            sb(" INNER JOIN j02Person j02 ON a.j02ID=j02.j02ID INNER JOIN p32Activity p32 ON a.p32ID=p32.p32ID");
+            sb(" INNER JOIN p34ActivityGroup p34 ON p32.p34ID=p34.p34ID INNER JOIN p41Project p41 ON a.p41ID=p41.p41ID");
+            
+
+            sb(" WHERE a.p31Date BETWEEN @d1 AND @d2 AND a.p31ValidUntil>GETDATE() AND GETDATE() BETWEEN j02.j02ValidFrom AND j02.j02ValidUntil");
+            sb(" AND a.j02ID IN (" + string.Join(",", j02ids) + ")");
+            
+            sb(" GROUP BY a.j02ID, a.p31Date");
+            sb(" ORDER BY min(j02.j02LastName),min(j02.j02FirstName)");
+
+            return _db.GetList<BO.p31WorksheetTimelineDay>(sbret(), new { d1 = d1, d2 = d2 });
         }
 
     }
