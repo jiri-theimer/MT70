@@ -34,7 +34,13 @@
             <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary" onclick="month_next()"><span class="k-icon k-i-arrow-end-right"></span></button>
         </div>
         <div id="divQueryJ02" style="width: 200px;">
-
+            <mycombochecklist asp-for="@Model.j02IDs" entity="j02Person" myqueryinline="j02isintraperson|bool|1" placeholder="@_f.tra("Osoby/jednotlivci")" selectedtext="@Model.SelectedPersons"></mycombochecklist>
+        </div>
+        <div id="divQueryJ07" style="width: 170px;">
+            <mycombochecklist asp-for="@Model.j07IDs" entity="j07PersonPosition" placeholder="@_f.tra("Pozice")" selectedtext="@Model.SelectedPositions"></mycombochecklist>
+        </div>
+        <div id="divQueryJ11" style="width: 200px;">
+            <mycombochecklist asp-for="@Model.j11IDs" entity="j11Team" placeholder="@_f.tra("Týmy osob")" myqueryinline="notall|bool|1" selectedtext="@Model.SelectedTeams"></mycombochecklist>
         </div>
     </div>
 </div>
@@ -120,7 +126,7 @@
 
         $("#d0helper").change(function () {
             var d = $(this).val();
-            
+
         });
 
     });
