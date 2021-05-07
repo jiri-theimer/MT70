@@ -1,0 +1,137 @@
+﻿@model UI.Models.p31view.daylineViewModel
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Model.PageTitle = "DAYLINE";
+
+    string strClass = null;
+    string strTitle = null;
+    double dblHours = 0;
+    double dblFond = 0;
+}
+
+@addTagHelper *, UI
+
+@section header_content{
+
+    <link rel="stylesheet" href="~/css/dayline.css" />
+
+
+}
+
+<div class="btn-toolbar justify-content-between" role="toolbar">
+    <div class="input-group">
+        <div style="margin-left: 10px;">
+            <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary" onclick="month_prev()"><span class="k-icon k-i-arrow-end-left"></span></button>
+        </div>
+        <div style="width:130px;">
+            <mydate asp-for="@Model.d0"></mydate>
+        </div>
+        <div>
+            <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary" onclick="month_next()"><span class="k-icon k-i-arrow-end-right"></span></button>
+        </div>
+        <div id="divQueryJ02" style="width: 200px;">
+
+        </div>
+    </div>
+</div>
+
+<table id="timeline_table1" class="timeline_table">
+    <thead>
+        <tr>
+            <th class="th_position"></th>
+            <th class="th_person">@(BO.BAS.ObjectDate2String(Model.d1, "MMMM - yyyy"))</th>
+            <th class="th_sum"><span class="k-icon k-i-sum"></span></th>
+            @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+            {
+                strClass = "th_day";
+                strTitle = BO.BAS.ObjectDate2String(d, "dd.MM.yyyy ddd");
+                if (d == DateTime.Today)
+                {
+                    strClass += " th_today";
+                }
+                else
+                {
+                    if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        strClass += " th_weekend";
+                    }
+                }
+
+                <th class="@strClass" title="@strTitle">
+                    @BO.BAS.ObjectDate2String(d, "dd")
+                    <br />
+                    @BO.BAS.ObjectDate2String(d, "ddd")
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody id="timeline_tbody1">
+        @foreach (BO.j02Person recJ02 in Model.lisJ02)
+        {
+            dblHours = Model.lisSums.Where(p => p.j02ID == recJ02.pid).Sum(p => p.Hours);
+
+            <tr>
+                <td class="td_position">
+                    @(BO.BAS.OM2(recJ02.j07Name,12))
+                </td>
+                <td class="td_person" title="@(recJ02.FullNameAsc)">
+                    @(recJ02.FullNameDesc)
+                </td>
+                <td class="td_sum">
+                    @if (dblHours != 0)
+                    {
+                        @if (dblFond > 0)
+                        {
+
+                        }
+                        else
+                        {
+                            <strong style="color:navy;">@(BO.BAS.Number2String(dblHours))</strong>
+                        }
+                    }
+                </td>
+                @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+                {
+                    strClass = "td_day";
+                    if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        strClass += " td_weekend";
+                    }
+
+                    <td class="@strClass">
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        _mainmenu_highlight_current("cmdDayline");
+
+
+        $("#d0helper").change(function () {
+            var d = $(this).val();
+            
+        });
+
+    });
+
+
+    function month_prev() {
+
+    }
+    function month_next() {
+
+    }
+
+</script>
+

@@ -76,7 +76,7 @@ namespace UI.Menu
             {
                 ret.Add(GRD("p31",false));
                 ret.Add(new MenuItem() { Name = _f.tra("Kalendář"), Url = "/p31/Calendar",ID="cmdCalendar" });
-                ret.Add(new MenuItem() { Name = "Dayline",Url="/p31/Dayline",ID="cmdDayline"});
+                ret.Add(new MenuItem() { Name = "Dayline",Url="/p31view/Dayline",ID="cmdDayline"});
                 ret.Add(new MenuItem() { Name = _f.tra("Součty"), Url = "/p31/Totals",ID="cmdTotals" });
             }
             if (_f.CurrentUser.j04IsMenu_Project)
