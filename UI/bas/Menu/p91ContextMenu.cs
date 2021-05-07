@@ -45,6 +45,24 @@ namespace UI.Menu
             DIV();
 
             AMI_Report("p91", pid, null);
+            if (rec.p92InvoiceType == BO.p92InvoiceTypeENUM.CreditNote)
+            {
+                if (rec.p91ID_CreditNoteBind > 0)
+                {
+                    var recOD = f.p91InvoiceBL.Load(rec.p91ID_CreditNoteBind);
+                    var recP92 = f.p92InvoiceTypeBL.Load(recOD.p92ID);
+                    AMI("Sestava opravovaného dokladu", $"javascript: _window_open('/x31/ReportContext?pid={recOD.pid}&prefix=p91&x31id={recP92.x31ID_Invoice}')", "k-i-print");
+                }
+            }
+            else
+            {
+                var recOD = f.p91InvoiceBL.LoadCreditNote(rec.pid);
+                if (recOD != null)
+                {
+                    var recP92 = f.p92InvoiceTypeBL.Load(recOD.p92ID);
+                    AMI("Sestava opravného dokladu", $"javascript: _window_open('/x31/ReportContext?pid={recOD.pid}&prefix=p91&x31id={recP92.x31ID_Invoice}')", "k-i-print");
+                }
+            }
 
             AMI("Další", null, null, null, "more");
             if (rec.p92InvoiceType == BO.p92InvoiceTypeENUM.ClientInvoice)

@@ -12,7 +12,7 @@ namespace UI.Models
         public string TagHtml { get; set; }
 
         public int pid { get; set; }
-
+        
         public int pid_loaded { get; set; }     //pid načtený z user parametrů
         public List<NavTab> NavTabs;
 

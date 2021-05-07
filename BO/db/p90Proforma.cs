@@ -26,6 +26,8 @@ namespace BO
         public string TagsInlineHtml { get; set; }
                 
        public int x38ID { get; }
+        public int x31ID { get; }
+        public int x31ID_Payment { get; }
         public string j27Code { get; }
         
 

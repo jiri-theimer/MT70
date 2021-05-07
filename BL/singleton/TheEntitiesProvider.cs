@@ -125,6 +125,7 @@ namespace BL
             AE("p86BankAccount", "Bankovní účty", "Bankovní účet", "p86BankAccount a", "a.p86Name");
             AE("p98Invoice_Round_Setting_Template", "Zaokrouhlovací pravidla", "Zaokrouhlovací pravidlo", "p98Invoice_Round_Setting_Template a","a.p98Name");
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura rozpisu částky faktury", "p80InvoiceAmountStructure a", "a.p80Name");
+            AE("p82Proforma_Payment", "Úhrady záloh", "Úhrada zálohy", "p82Proforma_Payment a","a.p82ID DESC");
             AE("p89ProformaType", "Typy záloh", "Typ zálohy", "p89ProformaType a", "a.p89Name");
 
             AE("m62ExchangeRate", "Měnové kurzy", "Měnový kurz", "m62ExchangeRate a","a.m62ID DESC");

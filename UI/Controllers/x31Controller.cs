@@ -167,7 +167,7 @@ namespace UI.Controllers
         {
             var v = new ReportContextViewModel() { rec_pid = pid, rec_prefix = prefix };
             v.LangIndex = Factory.CurrentUser.j03LangIndex;
-            if (string.IsNullOrEmpty(v.rec_prefix)==true || v.rec_pid == 0)
+            if (string.IsNullOrEmpty(v.rec_prefix) || v.rec_pid == 0)
             {
                 return StopPage(true, "pid or prefix missing");
             }

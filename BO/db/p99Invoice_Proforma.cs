@@ -21,6 +21,8 @@ namespace BO
         public string p91Code { get; }
         
         public int p90ID { get; }
-       
+        public int x31ID_Invoice { get; }
+
+
     }
 }

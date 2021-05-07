@@ -1,0 +1,6 @@
+﻿@model UI.Models.Recpage.p90RecPage
+@inject BL.Factory _f
+
+<button type="button" class="btn btn-sm btn-warning" onclick="_window_open('/x31/ReportContext?x31id=@(Model.Rec.x31ID)&prefix=p90&pid=@(Model.pid)')"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
+
+<button type="button" class="btn btn-sm btn-outline-secondary" onclick="_window_open('/Mail/SendMail?x29id=390&recpid=@(Model.pid)')"><span class="k-icon k-i-email"></span> @_f.tra("Odeslat zprávu")</button>

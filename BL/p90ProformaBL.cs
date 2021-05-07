@@ -36,7 +36,7 @@ namespace BL
             //sb(",p82.p82ID as p82ID_First,j27.j27Code,p89.p89Name,p28.p28Name");
             sb(",j27.j27Code,p89.p89Name,p28.p28Name,p28.p28RegID,p28.p28VatID");
             sb(",j02owner.j02LastName+' '+j02owner.j02FirstName as Owner");
-            sb(",p89.x38ID,");
+            sb(",p89.x38ID,p89.x31ID,p89.x31ID_Payment,");
             sb(_db.GetSQL1_Ocas("p90"));
             sb(" FROM p90Proforma a");
             sb(" INNER JOIN p89ProformaType p89 ON a.p89ID=p89.p89ID");
