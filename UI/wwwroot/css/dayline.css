@@ -110,6 +110,7 @@ td.td_weekend {
     background-color: #fff0f7;
 }
 
+
 th.th_day {
     text-align: center;
     font-weight: bold;
@@ -149,4 +150,9 @@ a.anefa {
 div.dd {
     margin-top: 3px;
     text-align: center;
+}
+
+a.hz{
+    cursor:pointer;
+    text-decoration:underline;
 }

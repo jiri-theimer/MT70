@@ -50,7 +50,7 @@
             <button type="button" id="cmdRefresh" class="btn btn-primary" style="display:none;margin-left:10px;" onclick="save_setting_and_reload()">@_f.tra("Obnovit")</button>
         </div>
     </div>
-    
+
 </div>
 
 <div id="divMore" style="background-color:aliceblue;display:none;">
@@ -110,7 +110,7 @@
 
                     @if (Model.lisC26.Any(p => p.c26Date == d))
                     {
-                    <span title="@(Model.lisC26.First(p=>p.c26Date==d).c26Name)">🍷</span>
+                        <span title="@(Model.lisC26.First(p=>p.c26Date==d).c26Name)">🍷</span>
                     }
                 </th>
             }
@@ -151,10 +151,10 @@
                     }
 
                     <td class="@strClass">
-                        @if (qry.Count()>0)
+                        @if (qry.Count() > 0)
                         {
                             var rec = qry.First();
-                            <a href="javascript:re(@(recJ02.pid),'@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))')" style="@rec.CssStyle">@(rec.HoursFormatted)</a>
+                            <a class="hz" onclick="re(this,@(recJ02.pid),'@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))')" style="@rec.CssStyle">@(rec.HoursFormatted)</a>
                         }
                     </td>
                 }
@@ -259,8 +259,59 @@
 
     }
 
-    function re(j02id, d) {
-        alert("j02id: " + j02id + ", d: " + d);
+    function re(ctl, j02id, d) {
+        
+        
+        dayline_zoom(ctl,_ep("/p31view/dayline_zoom"));
+    }
+
+
+
+
+    function dayline_zoom(ctl,url) {
+        if (url != "") {
+            $("#myModalFrame").css("visibility", "hidden");
+        }
+
+
+        if (!$(_modal).attr("okno_nastaveno")) {
+            _make_element_draggable(document.getElementById("myModalContent"), document.getElementById("myModalFrame")); //předávání nefunguje přes jquery
+            $(_modal).attr("okno_nastaveno", true);
+        }
+        $("#myModalContentHeader").text("Nadpis");
+        _header_uschova = $("#myModalContentHeader").text();
+        $("#myModalContentHeader").text("LOADING CONTENT....");
+
+
+        var okno = $("#myModalContent");
+        var fra = $("#fraModalContent");
+
+        var w = _device.innerWidth-100;
+        var h = 450;
+        var x = 0;        
+        var y = $(ctl).offset().top + 20;
+        if (y + h+20 > _device.innerHeight) {
+            y = $(ctl).offset().top - h - 2;
+        }
+        
+        if (_device.innerWidth < w) w = _device.innerWidth;
+        if (_device.innerHeight < h) h = _device.innerHeight;
+        x = (_device.innerWidth - w) / 2;
+        
+        $("#spanToggle").attr("class", "k-icon k-i-window-maximize");
+
+        $(okno).css("width", w);
+        $(okno).css("height", h);
+        $(okno).css("left", x);
+        $(okno).css("top", y);
+        $(fra).css("width", w - 15);
+        $(fra).css("height", h - 30 - 10);    //10 padding dole, 30 div header
+
+        if (url !== "") {
+            $(fra).attr("src", url);
+        }
+
+        $(_modal).css("display", "block");
     }
 </script>
 
