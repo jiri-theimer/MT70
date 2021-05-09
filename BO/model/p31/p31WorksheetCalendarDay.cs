@@ -20,5 +20,7 @@ namespace BO
     {
         public int j02ID { get; set; }
         public string Person { get; set; }
+
+        public string HoursFormatted { get; set; }
     }
 }

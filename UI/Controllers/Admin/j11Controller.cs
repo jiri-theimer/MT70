@@ -91,11 +91,12 @@ namespace UI.Controllers
 
         private void RefreshState(Models.Record.j11Record v)
         {
-            string strMyQuery = "pids@list_int|-1";
+            string strMyQuery = "pids|list_int|-1";
             if (!string.IsNullOrEmpty(v.j02IDs))           
             {
-                strMyQuery = "pids|list_int|" + v.j02IDs;
+                strMyQuery = "pids|list_int|" + v.j02IDs;                
             }
+            
             v.gridinput = new TheGridInput() { entity = "j02Person", master_entity="inform",myqueryinline= strMyQuery,oncmclick="",ondblclick="" };
             v.gridinput.query = new BO.InitMyQuery().Load("j02", null, 0, strMyQuery);
             

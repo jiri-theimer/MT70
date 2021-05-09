@@ -10,6 +10,7 @@
     string strClass = null;
     string strTitle = null;
     double dblHours = 0;
+    string strHours = null;
     double dblFond = 0;
 }
 
@@ -24,7 +25,10 @@
 
 <div class="btn-toolbar justify-content-between" role="toolbar">
     <div class="input-group">
-        <div style="margin-left: 10px;">
+        <div>
+            <button class="btn btn-outline-secondary dropdown-toggle" id="cmdMore">@_f.tra("Zobrazení")</button>
+        </div>
+        <div style="margin-left:1px;">
             <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary" onclick="month_prev()"><span class="k-icon k-i-arrow-end-left"></span></button>
         </div>
         <div style="width:130px;">
@@ -44,6 +48,34 @@
         </div>
         <div style="width:110px;">
             <button type="button" id="cmdRefresh" class="btn btn-primary" style="display:none;margin-left:10px;" onclick="save_setting_and_reload()">@_f.tra("Obnovit")</button>
+        </div>
+    </div>
+</div>
+
+<div id="divMore" style="background-color:aliceblue;display:none;">
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Zobrazení")
+        </div>
+        <div class="card-body">
+            <input type="radio" asp-for="@Model.GroupBy" id="opg1" value="None" onchange="reload_setting(this)" />
+            <label for="opg1">@_f.tra("Zobrazovat pouze denní součty hodin")</label>
+            <br />
+            <input type="radio" asp-for="@Model.GroupBy" id="opg2" value="NoneRecs" onchange="reload_setting(this)" />
+            <label for="opg2">@_f.tra("Zobrazovat odkazy na časové úkony")</label>
+            <br />
+            <input type="radio" asp-for="@Model.GroupBy" id="opg3" value="p41" onchange="reload_setting(this)" />
+            <label for="opg3">@_f.tra("Rozepisovat sumy hodin podle projektů")</label>
+            <br />
+            <input type="radio" asp-for="@Model.GroupBy" id="opg4" value="p41Recs" onchange="reload_setting(this)" />
+            <label for="opg4">@_f.tra("Rozepisovat odkazy na časové úkony podle projektů")</label>
+            <br />
+            <input type="radio" asp-for="@Model.GroupBy" id="opg5" value="p28" onchange="reload_setting(this)" />
+            <label for="opg5">@_f.tra("Rozepisovat sumy hodin podle klientů")</label>
+            <br />
+            <input type="radio" asp-for="@Model.GroupBy" id="opg6" value="p28Recs" onchange="reload_setting(this)" />
+            <label for="opg6">@_f.tra("Rozepisovat odkazy na časové úkony podle klientů")</label>
+            <br />
         </div>
     </div>
 </div>
@@ -112,6 +144,11 @@
                     }
 
                     <td class="@strClass">
+                        @if (Model.lisSums.Any(p => p.j02ID == recJ02.pid && p.p31Date == d))
+                        {
+                            
+                            <a href="javascript:re(@(recJ02.pid),'@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))')">@(Model.lisSums.First(p => p.j02ID == recJ02.pid && p.p31Date == d).HoursFormatted)</a>
+                        }
                     </td>
                 }
             </tr>
@@ -121,7 +158,7 @@
 
 
 <script type="text/javascript">
-    
+
 
     $(document).ready(function () {
 
@@ -130,16 +167,24 @@
 
 
         $("#d0helper").change(function () {
-            
+
             reload();
+
+        });
+
+
+        $("#cmdMore").click(function () {
+
+            $("#divMore").toggle();
+
 
         });
 
     });
 
-    
 
-    function _save_param_and_reload(url,mykey, myval) {
+
+    function _save_param_and_reload(url, mykey, myval) {
         if (mykey == undefined || myval == undefined) {
             location.replace(url);
             return;
@@ -157,8 +202,8 @@
         }
         var d1 = new Date(d0.getFullYear(), d0.getMonth() - 1, 1);
         datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
-        
-        
+
+
     }
     function month_next() {
         var d0 = datepicker_get_value("d0");
@@ -167,14 +212,21 @@
         }
         var d1 = new Date(d0.getFullYear(), d0.getMonth() + 1, 1);
         datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
-       
-       
-        
+
+
+
     }
 
     function reload() {
         var d = $("#d0helper").val();
         location.replace(_ep("/p31view/Dayline?d=" + d));
+    }
+
+    function reload_setting(opg) {
+        $.post(_ep("/Common/SetUserParam"), { key: "dayline-groupby", value: opg.value }, function (data) {
+            reload();
+
+        });
     }
 
     function handle_can_reload(s) {
@@ -196,8 +248,12 @@
 
         });
 
-        
-        
+
+
+    }
+
+    function re(j02id, d) {
+        alert("j02id: " + j02id + ", d: " + d);
     }
 </script>
 

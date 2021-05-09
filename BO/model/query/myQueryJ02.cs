@@ -12,7 +12,9 @@ namespace BO
         
         public int j04id { get; set; }
         public int j11id { get; set; }
+        public List<int> j11ids { get; set; }
         public int j07id { get; set; }
+        public List<int> j07ids { get; set; }
         public int j18id { get; set; }
         public int p28id { get; set; }
         
@@ -54,9 +56,17 @@ namespace BO
             {
                 AQ("a.j02ID IN (select j02ID FROM j12Team_Person WHERE j11ID=@j11id)", "j11id", this.j11id);
             }
+            if (this.j11ids != null && this.j11ids.Count > 0)
+            {
+                AQ("a.j02ID IN (select j02ID FROM j12Team_Person WHERE j11ID IN ("+ string.Join(",", this.j11ids) + "))", null, null);
+            }
             if (this.j07id > 0)
             {
                 AQ("a.j07ID=@j07id", "j07id", this.j07id);
+            }
+            if (this.j07ids !=null && this.j07ids.Count > 0)
+            {
+                AQ("a.j07ID IN (" + string.Join(",", this.j07ids)+")", null, null);
             }
             if (this.j18id > 0)
             {
