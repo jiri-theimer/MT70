@@ -36,7 +36,7 @@ namespace UI.Controllers
             var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
-            v.gridinput.fixedcolumns = tgi.fixedcolumns;
+            v.gridinput.fixedcolumns = tgi.fixedcolumns;            
             var c = new UI.TheGridSupport(v.gridinput, Factory, _colsProvider);
             
             return c.Event_HandleTheGridOper(tgi);
@@ -234,8 +234,8 @@ namespace UI.Controllers
             v.entity = c.TableName;
             v.entityTitle = c.AliasPlural;
             
-
-            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=myqueryinline,ondblclick= "grid_dblclick" };
+            
+            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=v.myqueryinline,ondblclick= "grid_dblclick" };
             
 
             if (v.entity == "")

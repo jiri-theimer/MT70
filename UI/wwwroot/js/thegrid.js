@@ -1055,6 +1055,7 @@ function get_all_tgi_params() {
     if (_tg_viewstate !== "") {
         params.viewstate = _tg_viewstate.split("|");
     }
+    
     return params;
 }
 

@@ -7,9 +7,7 @@ namespace BO
 {
     public class InitMyQuery
     {
-        private List<string> _mqi { get; set; }
-        private DateTime? _globald1 { get; set; }
-        private DateTime? _globald2 { get; set; }
+        private List<string> _mqi { get; set; }     
         private string _master_prefix { get; set; }
         private int _master_pid { get; set; }
 
@@ -56,11 +54,7 @@ namespace BO
                 case "p28":
                     return handle_myquery_reflexe(new BO.myQueryP28());
                 case "p31":
-                    var mqP31 = new BO.myQueryP31();
-                    handle_myquery_reflexe(mqP31);
-                    mqP31.global_d1 = _globald1;
-                    mqP31.global_d2 = _globald2;
-                    return mqP31;
+                    return handle_myquery_reflexe(new BO.myQueryP31());
                 case "p32":
                     return handle_myquery_reflexe(new BO.myQueryP32());
                 case "p34":
@@ -107,22 +101,7 @@ namespace BO
                             BO.Reflexe.SetPropertyValue(mq, _mqi[i], Convert.ToInt32(_mqi[i + 2]));
                             break;
                         case "date":
-                            if (_mqi[i] == "global_d1" || _mqi[i] == "global_d2")
-                            {
-                                if (_mqi[i] == "global_d1")
-                                {
-                                    _globald1 = BO.BAS.String2Date(_mqi[i + 2]);
-                                }
-                                if (_mqi[i] == "global_d2")
-                                {
-                                    _globald2 = BO.BAS.String2Date(_mqi[i + 2]);
-                                }
-                            }
-                            else
-                            {
-                                BO.Reflexe.SetPropertyValue(mq, _mqi[i], BO.BAS.String2Date(_mqi[i + 2]));
-                            }                                
-                            
+                            BO.Reflexe.SetPropertyValue(mq, _mqi[i], BO.BAS.String2Date(_mqi[i + 2]));
                             break;
                         case "bool":
                             BO.Reflexe.SetPropertyValue(mq, _mqi[i], BO.BAS.BG(_mqi[i + 2]));

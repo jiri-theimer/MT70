@@ -22,6 +22,8 @@ namespace BO
         public int p91id { get; set; }
         public string tabquery { get; set; }
         public myQueryP31_Period periodfield { get; set; }
+        public DateTime? perd1 { get; set; }
+        public DateTime? perd2 { get; set; }
 
         public myQueryP31()
         {
@@ -30,13 +32,13 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
-            if (this.global_d1 !=null && this.global_d2 != null)
+            if (this.perd1 !=null && this.perd2 != null)
             {                
                 switch (this.periodfield)
                 {
                     case myQueryP31_Period.p31Date:
                     default:
-                        AQ("a.p31Date BETWEEN @d1 AND @d2", "d1", this.global_d1, "AND", null, null, "d2",this.global_d2);
+                        AQ("a.p31Date BETWEEN @d1 AND @d2", "d1", this.perd1, "AND", null, null, "d2",this.perd2);
                         break;
                 }
                 
