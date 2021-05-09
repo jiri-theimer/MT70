@@ -16,6 +16,7 @@ namespace UI.Models.p31view
         public IEnumerable<BO.j02Person> lisJ02 { get; set; }
         
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
+        public IEnumerable<BO.c26Holiday> lisC26 { get; set; }
         public List<BO.p31WorksheetTimelineDay> lisSums { get; set; }
         public string j07IDs { get; set; }
         public List<int> pids_j07 { get; set; }

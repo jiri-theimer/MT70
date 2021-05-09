@@ -50,6 +50,7 @@
             <button type="button" id="cmdRefresh" class="btn btn-primary" style="display:none;margin-left:10px;" onclick="save_setting_and_reload()">@_f.tra("Obnovit")</button>
         </div>
     </div>
+    
 </div>
 
 <div id="divMore" style="background-color:aliceblue;display:none;">
@@ -106,6 +107,11 @@
                     @BO.BAS.ObjectDate2String(d, "dd")
                     <br />
                     @BO.BAS.ObjectDate2String(d, "ddd")
+
+                    @if (Model.lisC26.Any(p => p.c26Date == d))
+                    {
+                    <span title="@(Model.lisC26.First(p=>p.c26Date==d).c26Name)">🍷</span>
+                    }
                 </th>
             }
         </tr>

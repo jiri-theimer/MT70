@@ -9,7 +9,7 @@ namespace BL
     public interface Ic26HolidayBL
     {
         public BO.c26Holiday Load(int pid);
-        public IEnumerable<BO.c26Holiday> GetList(BO.myQuery mq);
+        public IEnumerable<BO.c26Holiday> GetList(BO.myQueryC26 mq);
         public int Save(BO.c26Holiday rec);
 
     }
@@ -34,7 +34,7 @@ namespace BL
             return _db.Load<BO.c26Holiday>(GetSQL1(" WHERE a.c26ID=@pid"), new { pid = pid });
         }
 
-        public IEnumerable<BO.c26Holiday> GetList(BO.myQuery mq)
+        public IEnumerable<BO.c26Holiday> GetList(BO.myQueryC26 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.c26Holiday>(fq.FinalSql, fq.Parameters);

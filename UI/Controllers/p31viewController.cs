@@ -28,6 +28,7 @@ namespace UI.Controllers
             v.lisSums = Factory.p31WorksheetBL.GetList_TimelineDays(v.lisJ02.Select(p => p.pid).ToList(), v.d1, v.d2, 0).ToList();
             var mq = new BO.myQueryP31() { global_d1 = v.d1, global_d2 = v.d2 };
             v.lisP31 = Factory.p31WorksheetBL.GetList(mq);
+            v.lisC26 = Factory.c26HolidayBL.GetList(new BO.myQueryC26() { global_d1 = v.d1, global_d2 = v.d2 });
 
             dayline_format_hours(v);
 

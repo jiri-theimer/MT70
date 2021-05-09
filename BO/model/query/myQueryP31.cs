@@ -36,7 +36,7 @@ namespace BO
                 {
                     case myQueryP31_Period.p31Date:
                     default:
-                        AQ("a.p31Date BETWEEN @d1 AND @d2", "d1", this.global_d1, "AND", null, null, "d2");
+                        AQ("a.p31Date BETWEEN @d1 AND @d2", "d1", this.global_d1, "AND", null, null, "d2",this.global_d2);
                         break;
                 }
                 
