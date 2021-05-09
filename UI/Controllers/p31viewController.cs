@@ -25,7 +25,7 @@ namespace UI.Controllers
 
             v.lisJ02 = Factory.j02PersonBL.GetList(mqJ02);
 
-            v.lisSums = Factory.p31WorksheetBL.GetList_TimelineDays(v.lisJ02.Select(p=>p.pid).ToList(), v.d1, v.d2, 0).ToList();
+            v.lisSums = Factory.p31WorksheetBL.GetList_TimelineDays(v.lisJ02.Select(p => p.pid).ToList(), v.d1, v.d2, 0).ToList();
             var mq = new BO.myQueryP31() { global_d1 = v.d1, global_d2 = v.d2 };
             v.lisP31 = Factory.p31WorksheetBL.GetList(mq);
 
@@ -45,10 +45,10 @@ namespace UI.Controllers
                 for (DateTime d = v.d1; d <= v.d2; d = d.AddDays(1))
                 {
                     var qry = v.lisSums.Where(p => p.j02ID == recJ02.pid && p.p31Date == d);
-                    if (qry.Count()>0)
+                    if (qry.Count() > 0)
                     {
                         var rec = qry.First();
-                       if (v.ShowHHMM)
+                        if (v.ShowHHMM)
                         {
                             rec.HoursFormatted = BO.basTime.ShowAsHHMM(rec.Hours.ToString());
                         }
@@ -56,10 +56,18 @@ namespace UI.Controllers
                         {
                             rec.HoursFormatted = BO.BAS.Number2String(rec.Hours);
                         }
-                        
+                        if (rec.Hours_Billable > 0 && rec.Hours_NonBillable == 0)
+                        {
+                            rec.CssStyle = "color:green;";
+                        }
+                        else
+                        {
+                            if (rec.Hours_NonBillable > 0 && rec.Hours_Billable == 0) rec.CssStyle = "color:red;";
+                        }
+
                     }
                 }
-                    
+
             }
         }
         private void dayline_handle_defaults(daylineViewModel v, BO.myQueryJ02 mqJ02)
@@ -97,6 +105,6 @@ namespace UI.Controllers
         }
 
 
-       
+
     }
 }

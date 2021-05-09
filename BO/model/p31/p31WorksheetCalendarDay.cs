@@ -22,5 +22,6 @@ namespace BO
         public string Person { get; set; }
 
         public string HoursFormatted { get; set; }
+        public string CssStyle { get; set; }
     }
 }

@@ -137,6 +137,7 @@
                 </td>
                 @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
                 {
+                    var qry = Model.lisSums.Where(p => p.j02ID == recJ02.pid && p.p31Date == d);
                     strClass = "td_day";
                     if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
                     {
@@ -144,10 +145,10 @@
                     }
 
                     <td class="@strClass">
-                        @if (Model.lisSums.Any(p => p.j02ID == recJ02.pid && p.p31Date == d))
+                        @if (qry.Count()>0)
                         {
-                            
-                            <a href="javascript:re(@(recJ02.pid),'@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))')">@(Model.lisSums.First(p => p.j02ID == recJ02.pid && p.p31Date == d).HoursFormatted)</a>
+                            var rec = qry.First();
+                            <a href="javascript:re(@(recJ02.pid),'@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))')" style="@rec.CssStyle">@(rec.HoursFormatted)</a>
                         }
                     </td>
                 }
