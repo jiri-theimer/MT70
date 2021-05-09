@@ -23,5 +23,6 @@ namespace BO
 
         public string HoursFormatted { get; set; }
         public string CssStyle { get; set; }
+        public string p31DateString { get; }
     }
 }

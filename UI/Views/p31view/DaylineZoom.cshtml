@@ -1,0 +1,43 @@
+﻿@model UI.Models.p31view.daylineZoomViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = BO.BAS.ObjectDate2String(Model.SelectedDate) + ": " + Model.RecJ02.FullNameAsc;
+    Model.PageSymbol = BO.Symbol.p31();
+}
+
+@addTagHelper *, UI
+
+<div class="bg-light" style="padding:10px;">
+    
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<form id="form1" asp-controller="p31view" asp-action="DaylineZoom" method="POST">
+    
+
+    <input type="hidden" asp-for="@Model.j02ID" />
+    <input type="hidden" asp-for="@Model.SelectedDate" />
+</form>
+
+<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        
+
+
+
+    })
+
+
+
+
+</script>

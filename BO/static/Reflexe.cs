@@ -34,7 +34,7 @@ namespace BO
         {
             Type objType = obj.GetType();
             System.Reflection.PropertyInfo pInfo = objType.GetProperty(PropName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
-
+           
 
 
             if (pInfo.PropertyType.Name == "Int32")

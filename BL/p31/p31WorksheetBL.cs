@@ -451,7 +451,7 @@ namespace BL
             if (j02ids == null || j02ids.Count() == 0) j02ids = new List<int>() { _mother.CurrentUser.j02ID };
             sb("SELECT a.j02ID,min(j02.j02LastName+' '+j02.j02FirstName) as Person");
             sb(",a.p31Date,sum(a.p31Hours_Orig) as Hours,sum(case when p32.p32IsBillable=1 then a.p31Hours_Orig end) as Hours_Billable,sum(case when p32.p32IsBillable=0 then a.p31Hours_Orig end) as Hours_NonBillable,count(case when p34.p33id in (2,5) then 1 end) as Moneys,count(case when p34.p33id=3 then 1 end) as Pieces");
-
+            sb(",convert(varchar(10),a.p31Date,104) as p31DateString");
             sb(" FROM p31Worksheet a");
             sb(" INNER JOIN j02Person j02 ON a.j02ID=j02.j02ID INNER JOIN p32Activity p32 ON a.p32ID=p32.p32ID");
             sb(" INNER JOIN p34ActivityGroup p34 ON p32.p34ID=p34.p34ID INNER JOIN p41Project p41 ON a.p41ID=p41.p41ID");

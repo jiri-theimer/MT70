@@ -107,5 +107,25 @@ namespace UI.Controllers
 
 
 
+        //zobrazení ZOOM okna pro vybranou osobu a den
+        public IActionResult daylineZoom(int j02id,string d)
+        {
+            var v = new daylineZoomViewModel() { SelectedDate = BO.BAS.String2Date(d),j02ID=j02id };
+
+            if (v.j02ID==0 || v.SelectedDate == null)
+            {
+                return this.StopPage(true, "Na vstupu chybí osoba nebo datum.");
+            }
+            v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);
+
+            string strMyQueryInline = "j02id|int|" + v.j02ID.ToString()+ "|global_d1|date|"+BO.BAS.ObjectDate2String(v.SelectedDate,"dd.MM.yyyy") + "|global_d2|date|" + BO.BAS.ObjectDate2String(v.SelectedDate, "dd.MM.yyyy");
+         
+            v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = strMyQueryInline };
+            v.gridinput.query = new BO.InitMyQuery().Load("p31", null, 0, strMyQueryInline);
+            //v.gridinput.fixedcolumns = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
+
+            return View(v);
+        }
+
     }
 }

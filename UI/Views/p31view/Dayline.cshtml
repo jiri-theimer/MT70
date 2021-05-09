@@ -149,12 +149,13 @@
                     {
                         strClass += " td_weekend";
                     }
+                    
 
-                    <td class="@strClass">
+                    <td class="@strClass" data-j02id="@recJ02.pid" data-d="@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))">
                         @if (qry.Count() > 0)
                         {
                             var rec = qry.First();
-                            <a class="hz" onclick="re(this,@(recJ02.pid),'@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))')" style="@rec.CssStyle">@(rec.HoursFormatted)</a>
+                            <a class="hz" onclick="re(this,@(recJ02.pid),'@(rec.p31DateString)')" style="@rec.CssStyle">@(rec.HoursFormatted)</a>
                         }
                     </td>
                 }
@@ -174,18 +175,25 @@
 
 
         $("#d0helper").change(function () {
-
             reload();
+        });
 
+        $(".td_day").dblclick(function () {
+            var j02id = $(this).attr("data-j02id");
+            var d = $(this).attr("data-d");
+            _window_open(_ep("/p31/Record?j02id="+j02id+"&d="+d));
         });
 
 
         $("#cmdMore").click(function () {
-
             $("#divMore").toggle();
-
-
         });
+
+        
+        var h = _device.innerHeight - $("#timeline_tbody1").offset().top;
+        //h = h - 50;   
+        h = h - 20;
+        $("#timeline_tbody1").height(h);
 
     });
 
@@ -260,20 +268,16 @@
     }
 
     function re(ctl, j02id, d) {
+        var url = _ep("/p31view/DaylineZoom?j02id=" + j02id + "&d=" + d);
         
-        
-        dayline_zoom(ctl,_ep("/p31view/dayline_zoom"));
+        dayline_zoom(ctl,url);
     }
 
 
 
 
     function dayline_zoom(ctl,url) {
-        if (url != "") {
-            $("#myModalFrame").css("visibility", "hidden");
-        }
-
-
+        
         if (!$(_modal).attr("okno_nastaveno")) {
             _make_element_draggable(document.getElementById("myModalContent"), document.getElementById("myModalFrame")); //předávání nefunguje přes jquery
             $(_modal).attr("okno_nastaveno", true);
