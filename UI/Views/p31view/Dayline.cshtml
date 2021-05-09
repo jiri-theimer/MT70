@@ -34,13 +34,16 @@
             <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary" onclick="month_next()"><span class="k-icon k-i-arrow-end-right"></span></button>
         </div>
         <div id="divQueryJ02" style="width: 200px;">
-            <mycombochecklist asp-for="@Model.j02IDs" entity="j02Person" myqueryinline="j02isintraperson|bool|1" placeholder="@_f.tra("Osoby/jednotlivci")" selectedtext="@Model.SelectedPersons"></mycombochecklist>
+            <mycombochecklist asp-for="@Model.j02IDs" entity="j02Person" myqueryinline="j02isintraperson|bool|1" placeholder="@_f.tra("Osoby/jednotlivci")" selectedtext="@Model.SelectedPersons" event_after_changevalue="handle_can_reload"></mycombochecklist>
         </div>
         <div id="divQueryJ07" style="width: 170px;">
-            <mycombochecklist asp-for="@Model.j07IDs" entity="j07PersonPosition" placeholder="@_f.tra("Pozice")" selectedtext="@Model.SelectedPositions"></mycombochecklist>
+            <mycombochecklist asp-for="@Model.j07IDs" entity="j07PersonPosition" placeholder="@_f.tra("Pozice")" selectedtext="@Model.SelectedPositions" event_after_changevalue="handle_can_reload"></mycombochecklist>
         </div>
         <div id="divQueryJ11" style="width: 200px;">
-            <mycombochecklist asp-for="@Model.j11IDs" entity="j11Team" placeholder="@_f.tra("Týmy osob")" myqueryinline="notall|bool|1" selectedtext="@Model.SelectedTeams"></mycombochecklist>
+            <mycombochecklist asp-for="@Model.j11IDs" entity="j11Team" placeholder="@_f.tra("Týmy osob")" myqueryinline="notall|bool|1" selectedtext="@Model.SelectedTeams" event_after_changevalue="handle_can_reload"></mycombochecklist>
+        </div>
+        <div style="width:110px;">
+            <button type="button" id="cmdRefresh" class="btn btn-primary" style="display:none;margin-left:10px;" onclick="save_setting_and_reload()">@_f.tra("Obnovit")</button>
         </div>
     </div>
 </div>
@@ -118,6 +121,8 @@
 
 
 <script type="text/javascript">
+    
+
     $(document).ready(function () {
 
 
@@ -125,19 +130,74 @@
 
 
         $("#d0helper").change(function () {
-            var d = $(this).val();
+            
+            reload();
 
         });
 
     });
 
+    
 
+    function _save_param_and_reload(url,mykey, myval) {
+        if (mykey == undefined || myval == undefined) {
+            location.replace(url);
+            return;
+        }
+        $.post("/Common/SetUserParam", { key: mykey, value: myval }, function (data) {
+            location.replace(url);
+        });
+
+        alert("save_param_and_reload: ERROR");
+    }
     function month_prev() {
-
+        var d0 = datepicker_get_value("d0");
+        if (d0 == null) {
+            d0 = new Date();
+        }
+        var d1 = new Date(d0.getFullYear(), d0.getMonth() - 1, 1);
+        datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
+        
+        
     }
     function month_next() {
-
+        var d0 = datepicker_get_value("d0");
+        if (d0 == null) {
+            d0 = new Date();
+        }
+        var d1 = new Date(d0.getFullYear(), d0.getMonth() + 1, 1);
+        datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
+       
+       
+        
     }
 
+    function reload() {
+        var d = $("#d0helper").val();
+        location.replace(_ep("/p31view/Dayline?d=" + d));
+    }
+
+    function handle_can_reload(s) {
+        $("#cmdRefresh").css("display", "block");
+    }
+
+    function save_setting_and_reload() {
+        var k = [];
+        var v = [];
+        k.push("dayline-j02ids");
+        v.push($("#j02IDs").val());
+        k.push("dayline-j07ids");
+        v.push($("#j07IDs").val());
+        k.push("dayline-j11ids");
+        v.push($("#j11IDs").val());
+
+        $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {
+            reload();
+
+        });
+
+        
+        
+    }
 </script>
 

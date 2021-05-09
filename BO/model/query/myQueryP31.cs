@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace BO
 {
+    public enum myQueryP31_Period
+    {
+        p31Date = 1,
+        p31DateInsert = 2,
+        p91Date = 3,
+        p91DateSupply = 4,
+        p31TimerTimestamp = 5
+    }
     public class myQueryP31:baseQuery
     {
         public int j02id { get; set; }
@@ -13,6 +21,7 @@ namespace BO
         public int p41id { get; set; }
         public int p91id { get; set; }
         public string tabquery { get; set; }
+        public myQueryP31_Period periodfield { get; set; }
 
         public myQueryP31()
         {
@@ -21,7 +30,17 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
-            
+            if (this.global_d1 !=null && this.global_d2 != null)
+            {                
+                switch (this.periodfield)
+                {
+                    case myQueryP31_Period.p31Date:
+                    default:
+                        AQ("a.p31Date BETWEEN @d1 AND @d2", "d1", this.global_d1, "AND", null, null, "d2");
+                        break;
+                }
+                
+            }
             if (this.j02id > 0)
             {
                 AQ("a.j02ID=@j02id", "j02id", this.j02id);

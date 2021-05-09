@@ -182,6 +182,12 @@ namespace UI.Controllers
             }
 
             string strTextField = "a__" + entity + "__" + mq.Prefix + "Name";
+            switch (mq.Prefix)
+            {
+                case "j02":
+                    strTextField = "a__j02Person__fullname_desc";
+                    break;
+            }
             
             string strGroupField = null;
             string strLastGroup = null;
