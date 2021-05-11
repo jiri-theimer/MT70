@@ -92,6 +92,9 @@
     </div>
 }
 
+<div style="padding-top:10px;">
+    <a href="javascript:customperiods()">@_f.tra("Přidat/Upravit vlastní časová období")</a>
+</div>
 
 <script type="text/javascript">
     var _periodprefix = "@(Model.prefix)";
@@ -133,6 +136,9 @@
                 reload();
             });
         });
+
+        
+        
 
         $("#cmdRefreshPeriod").on("click", function () {
             if ($("#d1helper").val() == "" || $("#d2helper").val()=="") {
@@ -186,5 +192,8 @@
     }
 
 
+    function customperiods() {
+        _window_open(_ep("/Period/UserPeriods"));
+    }
 
 </script>

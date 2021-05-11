@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace BL
@@ -23,6 +24,7 @@ namespace BL
         public BO.j19PaymentType LoadJ19(int j19id);
         public BO.x21DatePeriod LoadX21(int x21id);
         public IEnumerable<BO.x21DatePeriod> GetListX21(int j03id);
+        public bool SaveX21Batch(List<BO.x21DatePeriod> lisX21);
     }
     class FBL : BaseBL, IFBL
     {
@@ -150,6 +152,51 @@ namespace BL
         public IEnumerable<BO.x21DatePeriod> GetListX21(int j03id)
         {
             return _db.GetList<BO.x21DatePeriod>("SELECT " + _db.GetSQL1_Ocas("x21",false,false,false) + ",a.* FROM x21DatePeriod a WHERE a.x21Ordinary=@j03id ORDER BY a.x21ValidFrom,a.x21ValidUntil",new { j03id = j03id });
+        }
+
+        public bool SaveX21Batch(List<BO.x21DatePeriod> lisX21)
+        {
+            if (lisX21.Any(p => string.IsNullOrEmpty(p.x21Name)))
+            {
+                this.AddMessage("V pojmenovaném období chybí název.");return false;
+            }
+            if (lisX21.Any(p => p.x21ValidFrom.Year<=1900 || p.x21ValidUntil.Year <= 1900))
+            {
+                this.AddMessage("V pojmenovaném období chybí rok."); return false;
+            }
+
+            using (var sc = new System.Transactions.TransactionScope())
+            {
+                foreach (var c in lisX21)
+                {
+                    if (c.IsTempDeleted)
+                    {
+                        if (c.pid > 0)
+                        {
+                            _db.RunSql("DELETE FROM x21DatePeriod WHERE x21ID=@pid", new { pid = c.pid });
+                        }
+                    }
+                    else
+                    {
+                        if (c.pid == 0)
+                        {
+                            int intMax = _db.GetIntegerFromSql("select max(x21ID) FROM x21DatePeriod") + 1;
+                            if (intMax <= 60) intMax = 61;
+                            _db.RunSql("SET IDENTITY_INSERT x21DatePeriod ON; INSERT INTO x21DatePeriod(x21ID,x21Name,x21ValidFrom,x21ValidUntil,x21Ordinary) VALUES(@x21id,@x21name,@d1,@d2,@j03id); SET IDENTITY_INSERT x21DatePeriod OFF", new { x21id = intMax, x21name = c.x21Name, d1 = c.x21ValidFrom, d2 = c.x21ValidUntil, j03id = _mother.CurrentUser.pid });
+                        }
+                        else
+                        {
+                            _db.RunSql("UPDATE x21DatePeriod SET x21Ordinary=@j03id,x21Name=@x21name,x21ValidFrom=@d1,x21ValidUntil=@d2 WHERE x21ID=@pid", new { pid = c.pid, x21name = c.x21Name, d1 = c.x21ValidFrom, d2 = c.x21ValidUntil, j03id = _mother.CurrentUser.pid });
+                        }
+
+                    }
+
+                }
+                sc.Complete();
+            }
+                
+
+            return true;
         }
     }
 }

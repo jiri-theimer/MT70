@@ -1,0 +1,85 @@
+﻿@model UI.Models.UserPeriodsViewModel
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Pojmenovaná časová období");
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+@addTagHelper *, UI
+
+
+<div class="bg-light" style="padding:10px;">
+    <button id="cmdSave" class="btn btn-success">@_f.tra("Uložit změny")</button>
+    <button id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+</div>
+
+<form id="form1" asp-controller="Period" asp-action="UserPeriods" method="POST">
+    <div class="modal_record_container">
+        <div>
+            <button type="button" class="btn btn-sm btn-primary" onclick="handle_add()">@_f.tra("Přidat")</button>
+        </div>
+        <table class="table table-hover" style="table-layout: fixed;">
+            @for (int i = 0; i < Model.lisX21.Count; i++)
+            {
+                <tr style="@(Model.lisX21[i].CssTempDisplay)">
+                    <td>
+                        <input type="text" class="form-control" asp-for="lisX21[i].x21Name" />
+
+                        <input type="hidden" asp-for="lisX21[i].IsTempDeleted" value="@Model.lisX21[i].IsTempDeleted" />
+                        <input type="hidden" asp-for="lisX21[i].TempGuid" value="@Model.lisX21[i].TempGuid" />
+                        <input type="hidden" asp-for="lisX21[i].pid" value="@Model.lisX21[i].pid" />
+                    </td>
+                    <td>
+                        <mydate asp-for="lisX21[i].x21ValidFrom"></mydate>
+                    </td>
+                    
+                    <td>
+                        <mydate asp-for="lisX21[i].x21ValidUntil"></mydate>
+                    </td>
+
+                    <td style="width:70px;">
+                        <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete('@(Model.lisX21[i].TempGuid)')">x</button>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        
+
+
+    </div>
+   
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdSave").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+
+
+        });
+
+
+
+    })
+
+    function postback() {
+        form1.action = _ep("Period/UserPeriods?oper=postback");
+        form1.submit();
+    }
+
+    function handle_add() {
+        form1.action = _ep("/Period/UserPeriods?oper=add");
+        form1.submit();
+    }
+    function handle_delete(guid) {
+        form1.action = _ep("/Period/UserPeriods?oper=delete&guid=" + guid);
+        form1.submit();
+    }
+</script>

@@ -13,6 +13,24 @@ namespace BO
         
         public DateTime x21ValidFrom { get; set; }
         public DateTime x21ValidUntil { get; set; }
-        
+
+
+
+        public bool IsTempDeleted { get; set; }
+        public string TempGuid { get; set; }
+        public string CssTempDisplay
+        {
+            get
+            {
+                if (this.IsTempDeleted)
+                {
+                    return "display:none;";
+                }
+                else
+                {
+                    return "display:table-row;";
+                }
+            }
+        }
     }
 }
