@@ -16,11 +16,25 @@
         }
     }
 
-    string _PeriodAlias = null;
-    if (Model.PeriodValue > 0)
+    var lisX21 = _f.FBL.GetListX21(_f.CurrentUser.pid);
+    foreach (var rec in lisX21)
     {
-        _PeriodAlias = _lisPeriods.First(p => p.pid == Model.PeriodValue).PeriodName;
+        var c = new BO.ThePeriod() {IsUserPeriod=true,pid=rec.pid, PeriodName = "* "+rec.x21Name, d1 = rec.ValidFrom, d2 = rec.ValidUntil };
+        _lisPeriods.Insert(2,c);
+
     }
+
+
+    if (Model.PeriodValue > 60)
+    {
+        var rec = _f.FBL.LoadX21(Model.PeriodValue);
+        if (rec != null)
+        {
+            Model.d1 = rec.x21ValidFrom;
+            Model.d2 = rec.x21ValidUntil;
+        }
+    }
+
 
     Layout = "~/Views/Shared/_LayoutSubform.cshtml";
 }
@@ -73,9 +87,9 @@
 </div>
 @if (Model.PeriodValue > 0)
 {
-<div style="padding-top:10px;">
-    <button type="button" id="cmdClear" class="btn btn-sm btn-outline-danger">@_f.tra("Zrušit časový filtr")</button>
-</div>
+    <div style="padding-top:10px;">
+        <button type="button" id="cmdClear" class="btn btn-sm btn-outline-danger">@_f.tra("Zrušit časový filtr")</button>
+    </div>
 }
 
 
@@ -141,6 +155,7 @@
 
         });
 
+        $("#PeriodValue").css("background-color", "#FFFFE0");
 
         handle_showhide();
     });

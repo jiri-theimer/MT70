@@ -21,6 +21,8 @@ namespace BL
         public IEnumerable<BO.j91RobotLog> GetListRobotLast20();
         public IEnumerable<BO.j19PaymentType> GetListJ19();
         public BO.j19PaymentType LoadJ19(int j19id);
+        public BO.x21DatePeriod LoadX21(int x21id);
+        public IEnumerable<BO.x21DatePeriod> GetListX21(int j03id);
     }
     class FBL : BaseBL, IFBL
     {
@@ -139,6 +141,15 @@ namespace BL
         public IEnumerable<BO.j91RobotLog> GetListRobotLast20()
         {
             return _db.GetList<BO.j91RobotLog>("select TOP 20 * FROM j91RobotLog ORDER BY j91ID DESC");
+        }
+
+        public BO.x21DatePeriod LoadX21(int x21id)
+        {
+            return _db.Load<BO.x21DatePeriod>("SELECT " + _db.GetSQL1_Ocas("x21",false,false,false) + ",a.* FROM x21DatePeriod a WHERE a.x21ID=@pid", new { pid = x21id });
+        }
+        public IEnumerable<BO.x21DatePeriod> GetListX21(int j03id)
+        {
+            return _db.GetList<BO.x21DatePeriod>("SELECT " + _db.GetSQL1_Ocas("x21",false,false,false) + ",a.* FROM x21DatePeriod a WHERE a.x21Ordinary=@j03id ORDER BY a.x21ValidFrom,a.x21ValidUntil",new { j03id = j03id });
         }
     }
 }

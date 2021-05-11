@@ -29,8 +29,24 @@
     }
     if (Model.PeriodValue > 1)
     {
-        var per = _pp.ByPid(Model.PeriodValue);
-        _PeriodAlias= _f.tra(per.PeriodName)+" ** "+BO.BAS.ObjectDate2String(per.d1)+" - "+ BO.BAS.ObjectDate2String(per.d2);
+        BO.ThePeriod per = null;
+        if (Model.PeriodValue > 60)
+        {
+            var rec = _f.FBL.LoadX21(Model.PeriodValue);
+            if (rec != null)
+            {
+                Model.d1 = rec.x21ValidFrom;
+                Model.d2 = rec.x21ValidUntil;
+                _PeriodAlias = rec.x21Name + " ** " + BO.BAS.ObjectDate2String(rec.x21ValidFrom) + " - " + BO.BAS.ObjectDate2String(rec.x21ValidUntil);
+            }
+        }
+        else
+        {
+            per = _pp.ByPid(Model.PeriodValue);
+            _PeriodAlias = _f.tra(per.PeriodName) + " ** " + BO.BAS.ObjectDate2String(per.d1) + " - " + BO.BAS.ObjectDate2String(per.d2);
+        }
+
+
     }
     if (Model.PeriodValue == 1)
     {

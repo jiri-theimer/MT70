@@ -38,6 +38,19 @@ namespace UI.Models
         public void InhaleUserPeriodSetting(BL.ThePeriodProvider pp, BL.Factory f,string prefix,string masterentity)
         {
             int x = f.CBL.LoadUserParamInt(get_param_key("grid-period-value-" + prefix, masterentity));  //podformuláře filtrují období za sebe a nikoliv globálně jako flatview/masterview
+            if (x > 0)
+            {
+                this.PeriodField = f.CBL.LoadUserParam(get_param_key("grid-period-field-" + prefix, masterentity));
+            }
+            if (x > 60)
+            {
+                //uživatelem definované období
+                var rec = f.FBL.LoadX21(x);
+                this.PeriodValue = rec.pid;                
+                this.d1 = rec.x21ValidFrom;
+                this.d2 = rec.x21ValidUntil;
+                return;
+            }
             switch (x)
             {
                 case 0: //nefiltrovat období
@@ -47,15 +60,13 @@ namespace UI.Models
                     var r1 = pp.ByPid(1);
                     this.PeriodValue = r1.pid;                    
                     this.d1 = f.CBL.LoadUserParamDate(get_param_key("grid-period-d1-" + prefix, masterentity));
-                    this.d2 = f.CBL.LoadUserParamDate(get_param_key("grid-period-d2-" + prefix, masterentity));
-                    this.PeriodField = f.CBL.LoadUserParam(get_param_key("grid-period-field-" + prefix, masterentity));
+                    this.d2 = f.CBL.LoadUserParamDate(get_param_key("grid-period-d2-" + prefix, masterentity));                    
                     break;
                 default:    //pojmenované období
                     var r = pp.ByPid(x);                    
                     this.PeriodValue = r.pid;                    
                     this.d1 = r.d1;
-                    this.d2 = r.d2;
-                    this.PeriodField = f.CBL.LoadUserParam(get_param_key("grid-period-field-" + prefix, masterentity));
+                    this.d2 = r.d2;                    
                     break;
             }
         }
