@@ -208,7 +208,11 @@ namespace BO.CLS
             while (dt.DayOfWeek != System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
                 dt = dt.AddDays(-1);
             return dt;
+           
         }
+
+
+        
 
     }
 

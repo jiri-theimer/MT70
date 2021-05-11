@@ -23,7 +23,7 @@ namespace UI.Controllers
         //-----------Začátek GRID událostí-------------
         public TheGridOutput HandleTheGridFilter(TheGridUIContext tgi,List<BO.StringPair> pathpars, List<BO.TheGridColumnFilter> filter) //TheGrid povinná metoda: sloupcový filtr
         {
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline,tgi.isperiodovergrid);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
             v.gridinput.fixedcolumns = tgi.fixedcolumns;
@@ -33,7 +33,7 @@ namespace UI.Controllers
         }
         public TheGridOutput HandleTheGridOper(TheGridUIContext tgi, List<BO.StringPair> pathpars)    //TheGrid povinná metoda: změna třídění, pageindex, změna stránky
         {
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline,tgi.isperiodovergrid);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
             v.gridinput.fixedcolumns = tgi.fixedcolumns;            
@@ -44,7 +44,7 @@ namespace UI.Controllers
         }
         public string HandleTheGridMenu(TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda: zobrazení grid menu
         {
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline,tgi.isperiodovergrid);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
             v.gridinput.fixedcolumns = tgi.fixedcolumns;
@@ -55,7 +55,7 @@ namespace UI.Controllers
 
         public TheGridExportedFile HandleTheGridExport(string format, string pids, TheGridUIContext tgi, List<BO.StringPair> pathpars)  //TheGrid povinná metoda pro export dat
         {
-            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline);
+            var v = LoadFsmViewModel(tgi.prefix, 0, tgi.pathname.Split("/").Last().ToLower(), tgi.master_entity, tgi.master_pid, tgi.myqueryinline,tgi.isperiodovergrid);
             v.gridinput.ondblclick = tgi.ondblclick;
             v.gridinput.oncmclick = tgi.oncmclick;
             v.gridinput.fixedcolumns = tgi.fixedcolumns;
@@ -70,7 +70,7 @@ namespace UI.Controllers
             {
                 return this.StopPage(false, "Nemáte oprávnění pro tento GRID přehled.");
             }
-            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"flatview",null,0,null);
+            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"flatview",null,0,null,TestIfPeriodOverGrid(prefix));
             
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("flatview-j72id-" + prefix);
 
@@ -86,7 +86,7 @@ namespace UI.Controllers
             {
                 return this.StopPage(false, "Nemáte oprávnění pro tento GRID přehled.");
             }
-            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"masterview",null,0,null);
+            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"masterview",null,0,null,TestIfPeriodOverGrid(prefix));
                       
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("masterview-j72id-" + prefix);
             
@@ -182,11 +182,18 @@ namespace UI.Controllers
                 return  "@pid";
             }
         }
-        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string myqueryinline)    //podřízený subform v rámci MasterView
+        private bool TestIfPeriodOverGrid(string prefix)
         {
-
-            FsmViewModel v = LoadFsmViewModel(prefix, go2pid, "slaveview", master_entity, master_pid, myqueryinline);
-
+            if (prefix == "p31" || prefix == "p41" || prefix == "p91" || prefix == "p90" || prefix == "p56")
+            {
+                return true;
+            }
+            return false;
+        }
+        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string myqueryinline)    //podřízený subform v rámci MasterView
+        {            
+            FsmViewModel v = LoadFsmViewModel(prefix, go2pid, "slaveview", master_entity, master_pid, myqueryinline, TestIfPeriodOverGrid(prefix));
+            
 
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("slaveview-j72id-" + prefix + "-" + master_entity);
 
@@ -226,7 +233,7 @@ namespace UI.Controllers
                     return true;
             }
         }
-        private FsmViewModel LoadFsmViewModel(string prefix,int go2pid,string pagename,string masterentity,int master_pid,string myqueryinline)
+        private FsmViewModel LoadFsmViewModel(string prefix,int go2pid,string pagename,string masterentity,int master_pid,string myqueryinline,bool isperiodovergrid)
         {
             var v = new FsmViewModel() { prefix = prefix,master_pid=master_pid, myqueryinline = myqueryinline };
 
@@ -235,7 +242,7 @@ namespace UI.Controllers
             v.entityTitle = c.AliasPlural;
             
             
-            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=v.myqueryinline,ondblclick= "grid_dblclick" };
+            v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=v.myqueryinline,ondblclick= "grid_dblclick",isperiodovergrid= isperiodovergrid };
             
 
             if (v.entity == "")
@@ -244,32 +251,25 @@ namespace UI.Controllers
             }
 
 
-
-
-
             v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, myqueryinline);
             v.gridinput.query.IsRecordValid = null;
-
+            
             if (!Factory.CurrentUser.IsAdmin)
             {
                 v.gridinput.query.MyRecordsDisponible = true;
             }
             
            
+            
 
-
-            if (v.prefix == "p31" || v.prefix == "p41" || v.prefix == "p91" || v.prefix == "p90" || v.prefix=="p56")
+            if (isperiodovergrid)
             {
+                v.period = new PeriodViewModel() { prefix = v.prefix, IsShowButtonRefresh=true };
+                v.period.InhaleUserPeriodSetting(_pp, Factory, v.prefix, masterentity);
                 
-                v.period = new PeriodViewModel();
-                v.period.IsShowButtonRefresh = true;
                 
-                var per = InhaleGridPeriodDates(v.prefix,masterentity);
-                v.period.PeriodValue = per.pid;
-                v.period.d1 = per.d1;
-                v.period.d2 = per.d2;
                 v.gridinput.query.global_d1 = v.period.d1;
-                v.gridinput.query.global_d2 = v.period.d2;
+                v.gridinput.query.global_d2 = v.period.d2;                
             }
 
             if (v.prefix=="p41" || v.prefix=="p28" || v.prefix == "j02" || v.prefix == "p91" || v.prefix=="o23" || v.prefix=="p90")
@@ -286,34 +286,7 @@ namespace UI.Controllers
         }
 
 
-        private BO.ThePeriod InhaleGridPeriodDates(string prefix, string masterentity)
-        {
-            int x = Factory.CBL.LoadUserParamInt(get_param_key("grid-period-value-" + prefix, masterentity));  //podformuláře filtrují období za sebe a nikoliv globálně jako flatview/masterview
-            switch (x)
-            {
-                case 0: //nefiltrovat období
-                    return _pp.ByPid(0);
-                case 1:     //ručně zadaný interval d1-d2
-                    var ret = _pp.ByPid(1);
-                    ret.d1 = Factory.CBL.LoadUserParamDate(get_param_key("grid-period-d1-" + prefix, masterentity));
-                    ret.d2 = Factory.CBL.LoadUserParamDate(get_param_key("grid-period-d2-" + prefix, masterentity));
-                    return ret;
-                default:    //pojmenované období
-                    return _pp.ByPid(x);
-            }
-        }
-
-        private string get_param_key(string strKey, string strMasterEntity)
-        {
-            if (strMasterEntity != null)
-            {
-                return (strKey += "-" + strMasterEntity);
-            }
-            else
-            {
-                return strKey;
-            }
-        }
+        
 
     }
 }

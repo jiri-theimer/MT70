@@ -39,14 +39,14 @@
         <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
     </div>
 
-    @if (Model.prefix == "p31" || Model.prefix == "p41")
+    @if (Model.period !=null)
     {
         <div>
             @Html.EditorFor(m => m.period, "~/Views/Shared/_Period.cshtml")
         </div>
 
     }
-
+   
     @if (Model.IsCanbeMasterView)
     {
         <div style="margin-left:auto;margin-right:2px;" class="nonmobile btn-group">
@@ -81,39 +81,7 @@
     $(document).ready(function () {
 
 
-        @if(Model.period != null)
-        {
-        <text>
-        $("#PeriodValue").on("change", function () {
-            $.post(_ep("/Common/SetUserParam"), { key: "grid-period-value-" + _pageprefix,value:$(this).val()  }, function (data) {
-                reload();
-
-            });
-        });
-
-        if ($("#PeriodValue").val() != "0" && $("#PeriodValue").val() != "") {
-            $("#PeriodValue").css("background-color", "red");
-        }
-
-        $("#cmdRefreshPeriod").on("click", function () {
-            var k = [];
-            var v = [];
-            k.push("grid-period-value-" + _pageprefix);
-            v.push($("#PeriodValue").val());
-            k.push("grid-period-d1-" + _pageprefix);
-            v.push($("#d1helper").val());
-            k.push("grid-period-d2-" + _pageprefix);
-            v.push($("#d2helper").val());
-
-            $.post(_ep("/Common/SetUserParams"), { keys: k, values:v  }, function (data) {
-                reload();
-
-            });
-
-        });
-
-        </text>
-        }
+        
 
 
         _mainmenu_highlight_current("cmd" + _pageprefix);

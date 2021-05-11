@@ -51,5 +51,7 @@ namespace UI.Models
         public string myqueryinline { get; set; }
         public int currentpid { get; set; }
 
+        public bool isperiodovergrid { get; set; }
+
     }
 }

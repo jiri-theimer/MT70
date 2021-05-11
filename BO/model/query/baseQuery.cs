@@ -6,6 +6,28 @@ using System.Text;
 
 namespace BO
 {
+    public class QueryPeriod
+    {
+        public DateTime d1;
+        private DateTime _d2;
+
+        public QueryPeriod(DateTime d1,DateTime d2)
+        {
+            this.d1 = d1;
+            this.d2 = d2;
+        }
+        public DateTime d2
+        {
+            get
+            {
+                return _d2;
+            }
+            set
+            {
+                _d2 = BO.BAS.ConvertDateTo235959(value);     //převést datum-do na čas 23:59:59
+            }
+        }
+    }
     public class QRow
     {
         public string StringWhere { get; set; }
@@ -27,7 +49,7 @@ namespace BO
         private string _pkfield;
         private string _prefix;
         private List<QRow> _lis;
-
+       
         public string Prefix
         {
             get
@@ -67,8 +89,8 @@ namespace BO
         public bool MyRecordsDisponible { get; set; }
         public bool? IsRecordValid { get; set; } = true;
         public List<int> o51ids { get; set; }
-        
-        
+
+        public string period_field { get; set; }
         public DateTime? global_d1;
         private DateTime? _global_d2;
         public DateTime? global_d2

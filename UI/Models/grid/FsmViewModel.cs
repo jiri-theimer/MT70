@@ -26,6 +26,8 @@ namespace UI.Models
         public bool IsCanbeMasterView { get; set; }
         public string dblClickSetting { get; set; }
 
+        
+
     }
 
 

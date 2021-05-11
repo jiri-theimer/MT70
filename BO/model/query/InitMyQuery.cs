@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 
@@ -10,7 +11,7 @@ namespace BO
         private List<string> _mqi { get; set; }     
         private string _master_prefix { get; set; }
         private int _master_pid { get; set; }
-
+        
         private void handle_myqueryinline_input(string myqueryinline)
         {
             if (string.IsNullOrEmpty(myqueryinline))
@@ -18,15 +19,15 @@ namespace BO
                 return;
             }
             _mqi = BO.BAS.ConvertString2List(myqueryinline, "|");
+            
         }
         public BO.baseQuery Load(string prefix, string master_prefix=null, int master_pid=0, string myqueryinline = null)
         {
-            handle_myqueryinline_input(myqueryinline);
-
+            handle_myqueryinline_input(myqueryinline);           
             _master_prefix = validate_prefix(master_prefix);
             _master_pid = master_pid;
 
-            var ret = new BO.myQuery(prefix.Substring(0, 3));
+            //var ret = new BO.myQuery(prefix.Substring(0, 3));
             switch (prefix.Substring(0, 3))
             {
                 case "b07":
@@ -100,7 +101,7 @@ namespace BO
                         case "int":
                             BO.Reflexe.SetPropertyValue(mq, _mqi[i], Convert.ToInt32(_mqi[i + 2]));
                             break;
-                        case "date":
+                        case "date":                           
                             BO.Reflexe.SetPropertyValue(mq, _mqi[i], BO.BAS.String2Date(_mqi[i + 2]));
                             break;
                         case "bool":

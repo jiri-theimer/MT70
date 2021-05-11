@@ -21,6 +21,7 @@ var _tg_is_enable_clipboard = true;
 var _tg_fixedcolumns;
 var _tg_viewstate;
 var _tg_myqueryinline;
+var _tg_isperiodovergrid;
 var _tg_langindex = 0;
 var _tg_musite_vybrat_zaznam = "Musíte vybrat minimálně jeden záznam.";
 
@@ -42,6 +43,7 @@ function tg_init(c) {
     _tg_fixedcolumns = c.fixedcolumns;
     _tg_viewstate = c.viewstate;
     _tg_myqueryinline = c.myqueryinline;
+    _tg_isperiodovergrid = c.isperiodovergrid;
     _tg_langindex = c.langindex;
 
     if (c.langindex === 2) {
@@ -182,6 +184,7 @@ function tg_post_handler(strOper, strKey, strValue) {
         master_entity: _tg_master_entity,
         master_pid: _tg_master_pid,
         myqueryinline: _tg_myqueryinline,
+        isperiodovergrid:_tg_isperiodovergrid,
         oncmclick: _tg_oncmclick,
         ondblclick: _tg_ondblclick,
         fixedcolumns: _tg_fixedcolumns,
@@ -193,7 +196,7 @@ function tg_post_handler(strOper, strKey, strValue) {
         params.viewstate = _tg_viewstate.split("|");
     }
     
-
+    
     $("#tabgrid1_tbody").html("<b>Loading...</b>");
     $.post(_tg_url_handler, { tgi: params, pathpars: get_all_path_values() }, function (data) {
         // _notify_message("vrátilo se: oper: " + strOper + ", key: " + strKey + ", value: " + strValue);
@@ -1049,6 +1052,7 @@ function get_all_tgi_params() {
         viewstate: [],
         master_pid: _tg_master_pid,
         myqueryinline: _tg_myqueryinline,
+        isperiodovergrid: _tg_isperiodovergrid,
         pathname: location.pathname,
         currentpid: _tg_current_pid
     }

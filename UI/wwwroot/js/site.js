@@ -136,7 +136,7 @@ function _notify_message(strMessage, strTemplate = "error", milisecs = "3000") {
     var s = "<div id='" + toast_id + "' class='toast' data-autohide='true' data-delay='" + milisecs + "' data-animation='true' style='margin-top:10px;min-width:" + w + ";'>";
     s = s + "<div class='toast-header text-dark bg-" + strTemplate + "'><i class='fas fa-" + img + "'></i>";
     //s = s + "<strong class='mr-auto' style='color:black;'>Toast Header</strong>";
-    s = s + "<div style='width:90%;'> " + strTemplate + "</div><button type='button' class='ml-2 mb-1 close' data-dismiss='toast'>&times;</button>";
+    s = s + "<div style='width:90%;'> " + strTemplate + "</div><button type='button' class='btn-close' data-bs-dismiss='toast' arial-label='Close'></button>";
     s = s + "</div>";
     s = s + "<div class='toast-body' style='font-size:130%;'>";
     s = s + strMessage;

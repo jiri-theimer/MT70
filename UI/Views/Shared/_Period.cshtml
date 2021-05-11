@@ -6,51 +6,78 @@
     {
         return;
     }
-    var _lisPeriods = _pp.getPallete();
-    if (_f.CurrentUser.j03LangIndex > 0)
+    string _PeriodFieldAlias = null;
+    string _PeriodAlias = null;
+    switch (Model.PeriodField)
     {
-        foreach (BO.ThePeriod c in _lisPeriods)
-        {
-            c.PeriodName = _f.tra(c.PeriodName);
+        case "p31Date":
+            _PeriodFieldAlias = _f.tra("Datum úkonu");break;
+        case "p91Date":
+        case "p90Date":
+            _PeriodFieldAlias = _f.tra("Datum vystavení vyúčtování"); break;
+        case "p91DateSupply":
+            _PeriodFieldAlias = _f.tra("DUZP vyúčtování"); break;
+        case "p31DateInsert":
+        case "p91DateInsert":
+        case "p90DateInsert":
+        case "p41DateInsert":
+        case "p28DateInsert":
+            _PeriodFieldAlias = _f.tra("Čas založení záznamu"); break;
+        default:
+            _PeriodFieldAlias = _f.tra("Časové období");
+            break;
+    }
+    if (Model.PeriodValue > 1)
+    {
+        var per = _pp.ByPid(Model.PeriodValue);
+        _PeriodAlias= _f.tra(per.PeriodName)+" ** "+BO.BAS.ObjectDate2String(per.d1)+" - "+ BO.BAS.ObjectDate2String(per.d2);
+    }
+    if (Model.PeriodValue == 1)
+    {
+        _PeriodAlias = BO.BAS.ObjectDate2String(Model.d1) + " - " + BO.BAS.ObjectDate2String(Model.d2);
+    }
+
+
         }
-    }
-}
 
-@addTagHelper *, UI
+        @addTagHelper *, UI
 
-<div class="input-group">
+        <button class="btn btn-light dropdown-toggle" id="cmdPeriodMore">
+            <span id="span1">@_PeriodFieldAlias</span>
+            <span id="span2">@(_PeriodAlias)</span>
+        </button>
 
-    <div style="min-width:170px;">
-        <mydropdown asp-for="@Model.PeriodValue" datasource="@_lisPeriods" valuefield="pid" textfield="Header" isfirstemptyrow="false"></mydropdown>
 
-    </div>
-    <div id="div_d1helper" >
-        <mydate asp-for="@Model.d1"></mydate>
-    </div>
-    <div id="div_d2helper" >
-        <mydate asp-for="@Model.d2"></mydate>
-    </div>
-    @if (Model.IsShowButtonRefresh)
-    {
-        <div id="div_cmdRefreshPeriod" style="margin-left:2px;">
-            <button type="button" id="cmdRefreshPeriod" class="btn btn-light" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></button>
-        </div>
-    }
 
-</div>
+<div id="divPeriodMore" style="display:none;"></div>
 
 <script type="text/javascript">
-    $("#d1helper").on("change", function () {
-        $("#PeriodValue").val("1");
-    })
-    $("#d2helper").on("change", function () {
-        $("#PeriodValue").val("1");
-    })
-
-    if ($("#PeriodValue").val() == "0") {
-        $("#div_d1helper").css("display", "none");
-        $("#div_d2helper").css("display", "none");
-        $("#div_cmdRefreshPeriod").css("display", "none");
-        
+    @if (Model.PeriodValue > 0) {
+        <text>
+    $("#cmdPeriodMore").css("background-color", "red");
+    $("#span2").css("color", "white");
+        </text>
     }
+
+    $("#cmdPeriodMore").click(function () {
+        $("#divPeriodMore").toggle();
+
+        if ($("#divPeriodMore").css("display") == "block" && $("#divPeriodMore").html().length < 10) {
+            var prefix = "@(Model.prefix)";
+            var masterentity = "@(Model.masterentity)";
+
+            var ifwidth = _device.innerWidth - $("#cmdPeriodMore").offset().left;
+            if (ifwidth > 900) {
+                ifwidth = 900;
+            }
+            var ifhtml = "<iframe src='/Period/PeriodIframe?prefix=" + prefix + "&masterentity=" + masterentity + "' width='100%' height='230px'></iframe>";
+            $("#divPeriodMore").css("width", ifwidth + "px");
+            $("#divPeriodMore").css("height", "240px");
+            $("#divPeriodMore").html(ifhtml);
+        }
+    });
+
+
+
+
 </script>

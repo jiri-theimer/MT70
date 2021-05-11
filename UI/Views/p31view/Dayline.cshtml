@@ -149,7 +149,8 @@
                     {
                         strClass += " td_weekend";
                     }
-                    
+                    if (qry.Count() == 0) strClass += " dc";
+
 
                     <td class="@strClass" data-j02id="@recJ02.pid" data-d="@(BO.BAS.ObjectDate2String(d,"dd.MM.yyyy"))">
                         @if (qry.Count() > 0)
@@ -178,7 +179,7 @@
             reload();
         });
 
-        $(".td_day").dblclick(function () {
+        $(".dc").dblclick(function () {
             var j02id = $(this).attr("data-j02id");
             var d = $(this).attr("data-d");
             _window_open(_ep("/p31/Record?j02id="+j02id+"&d="+d));

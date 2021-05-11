@@ -12,10 +12,12 @@ namespace BO
         {
             this.Prefix = "c26";
         }
+        
+        
 
         public override List<QRow> GetRows()
         {
-            if (this.global_d1 != null && this.global_d2 != null)
+            if (this.global_d1 != null && this.global_d2 !=null)
             {
                 AQ("a.c26Date BETWEEN @d1 AND @d2", "d1", this.global_d1, "AND", null, null, "d2",this.global_d2);
 

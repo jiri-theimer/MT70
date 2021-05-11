@@ -6,7 +6,7 @@ namespace BO
 {
     public class ThePeriod
     {
-        public int pid { get; set; }
+        public int pid { get; set; }        
         public string PeriodName { get; set; }
         public string PeriodInterval { get; set; }
         public DateTime? d1 { get; set; }
