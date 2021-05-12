@@ -166,15 +166,29 @@
 
             @if (Model.GroupBy == UI.Models.p31view.daylineGroupBy.p28)
             {
-                var grps = Model.lisP31.Where(p => p.j02ID == recJ02.pid).GroupBy(p => p.p28ID_Client);
-                foreach (var grp in grps)
+                var grpsp28 = Model.lisP31.Where(p => p.j02ID == recJ02.pid).GroupBy(p => p.p28ID_Client);
+                foreach (var grp in grpsp28)
                 {
+                    double hodiny = grp.Sum(p => p.p31Hours_Orig);
+
                     <tr>
                         <td class="td_client" colspan="2">@(BO.BAS.OM2(grp.First().ClientName,30))</td>
-                        <td class="td_sum"></td>
+                        <td class="td_sum">
+                            @if (hodiny != 0)
+                            {
+                                @if (Model.ShowHHMM)
+                                {
+                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
+                                }
+                                else
+                                {
+                                    @(BO.BAS.Number2String(hodiny))
+                                }
+                            }
+                        </td>
                         @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
                         {
-                            var hodiny = grp.Where(p=>p.p31Date==d).Sum(p => p.p31Hours_Orig);
+                            hodiny = grp.Where(p => p.p31Date == d).Sum(p => p.p31Hours_Orig);
                             <td class="td_day">
                                 @if (hodiny != 0)
                                 {
@@ -192,7 +206,53 @@
                         }
                     </tr>
                 }
+            }
 
+            @if (Model.GroupBy == UI.Models.p31view.daylineGroupBy.p41)
+            {
+                var grpsp41 = Model.lisP31.Where(p => p.j02ID == recJ02.pid).GroupBy(p => p.p41ID);
+                foreach (var grp in grpsp41)
+                {
+                    double hodiny = grp.Sum(p => p.p31Hours_Orig);
+
+                    <tr>
+                        <td class="td_project" colspan="2" title="@(grp.First().ClientName+" - "+grp.First().p41Name)">
+                            @(BO.BAS.OM2(grp.First().ClientName,25)+" - ")
+                            @(BO.BAS.OM2(grp.First().p41Name,15))
+                        </td>
+                        <td class="td_sum">
+                            @if (hodiny != 0)
+                            {
+                                @if (Model.ShowHHMM)
+                                {
+                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
+                                }
+                                else
+                                {
+                                    @(BO.BAS.Number2String(hodiny))
+                                }
+                            }
+                        </td>
+                        @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+                        {
+                            hodiny = grp.Where(p => p.p31Date == d).Sum(p => p.p31Hours_Orig);
+                            <td class="td_day">
+                                @if (hodiny != 0)
+                                {
+                                    if (Model.ShowHHMM)
+                                    {
+                                        @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
+                                    }
+                                    else
+                                    {
+                                        @(BO.BAS.Number2String(hodiny))
+                                    }
+
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
             }
         }
     </tbody>
@@ -341,7 +401,7 @@
             zoom_open(ctl, url);
             _lasturl = url;
         }
-        
+
     }
 
     function zoom_open(ctl, url)
@@ -378,7 +438,7 @@
 
     function handle_table_width() {
         var w = ($(".th_day").length * 45) + ($(".th_day_empty").length * 30);
-        
+
         w = w + 80 + 120 + 180;
         w = w + 30;
 
