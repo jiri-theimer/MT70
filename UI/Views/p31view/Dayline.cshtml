@@ -120,8 +120,10 @@
         @foreach (BO.j02Person recJ02 in Model.lisJ02)
         {
             dblHours = Model.lisSums.Where(p => p.j02ID == recJ02.pid).Sum(p => p.Hours);
+            strClass = "";
+            if (dblHours > 0 && Model.GroupBy != UI.Models.p31view.daylineGroupBy.None) strClass = "tr_person_projekty";
 
-            <tr>
+            <tr class="@(strClass)">
                 <td class="td_position">
                     @(BO.BAS.OM2(recJ02.j07Name,12))
                 </td>
@@ -161,13 +163,46 @@
                     </td>
                 }
             </tr>
+
+            @if (Model.GroupBy == UI.Models.p31view.daylineGroupBy.p28)
+            {
+                var grps = Model.lisP31.Where(p => p.j02ID == recJ02.pid).GroupBy(p => p.p28ID_Client);
+                foreach (var grp in grps)
+                {
+                    <tr>
+                        <td class="td_client" colspan="2">@(BO.BAS.OM2(grp.First().ClientName,30))</td>
+                        <td class="td_sum"></td>
+                        @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+                        {
+                            var hodiny = grp.Where(p=>p.p31Date==d).Sum(p => p.p31Hours_Orig);
+                            <td class="td_day">
+                                @if (hodiny != 0)
+                                {
+                                    if (Model.ShowHHMM)
+                                    {
+                                        @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
+                                    }
+                                    else
+                                    {
+                                        @(BO.BAS.Number2String(hodiny))
+                                    }
+
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+
+            }
         }
     </tbody>
 </table>
 
+<div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:1000;display:none;"></div>
 
 <script type="text/javascript">
-
+    var _zoomwin = document.getElementById("zoomwin");
+    var _lasturl = "";
 
     $(document).ready(function () {
 
@@ -190,12 +225,41 @@
             $("#divMore").toggle();
         });
 
-        
+        $(document).on("keydown", function (e) {
+            if (e.keyCode == 27 && _zoomwin.style.display == "block") {   //klávese ESCAPE
+                zoom_close();
+            }
+
+        });
+
+        $(document).on("click", function (e) {
+
+            if (e.target.className != "hz") {
+                zoom_close();
+            }
+        });
+
+
         var h = _device.innerHeight - $("#timeline_tbody1").offset().top;
-        //h = h - 50;   
+        //h = h - 50;
         h = h - 20;
         $("#timeline_tbody1").height(h);
 
+        @if (Model.j02IDs != null)
+        {
+            @:$("#divQueryJ02").css("background-color", "red");
+        }
+        @if (Model.j07IDs != null)
+        {
+            @:$("#divQueryJ07").css("background-color", "red");
+        }
+        @if (Model.j11IDs != null)
+        {
+            @:$("#divQueryJ11").css("background-color", "red");
+        }
+
+
+        handle_table_width();
     });
 
 
@@ -270,53 +334,67 @@
 
     function re(ctl, j02id, d) {
         var url = _ep("/p31view/DaylineZoom?j02id=" + j02id + "&d=" + d);
+        if (_lasturl == url && $("#zoomwin").css("display") == "block") {
+            zoom_close();
+        }else
+        {
+            zoom_open(ctl, url);
+            _lasturl = url;
+        }
         
-        dayline_zoom(ctl,url);
     }
 
+    function zoom_open(ctl, url)
+    {
+        var c = $("#zoomwin");
 
-
-
-    function dayline_zoom(ctl,url) {
-        
-        if (!$(_modal).attr("okno_nastaveno")) {
-            _make_element_draggable(document.getElementById("myModalContent"), document.getElementById("myModalFrame")); //předávání nefunguje přes jquery
-            $(_modal).attr("okno_nastaveno", true);
-        }
-        $("#myModalContentHeader").text("Nadpis");
-        _header_uschova = $("#myModalContentHeader").text();
-        $("#myModalContentHeader").text("LOADING CONTENT....");
-
-
-        var okno = $("#myModalContent");
-        var fra = $("#fraModalContent");
-
-        var w = _device.innerWidth-100;
+        var w = _device.innerWidth - 100;
         var h = 450;
-        var x = 0;        
         var y = $(ctl).offset().top + 20;
-        if (y + h+20 > _device.innerHeight) {
+        if (y + h + 20 > _device.innerHeight) {
             y = $(ctl).offset().top - h - 2;
         }
-        
+
         if (_device.innerWidth < w) w = _device.innerWidth;
         if (_device.innerHeight < h) h = _device.innerHeight;
         x = (_device.innerWidth - w) / 2;
-        
-        $("#spanToggle").attr("class", "k-icon k-i-window-maximize");
 
-        $(okno).css("width", w);
-        $(okno).css("height", h);
-        $(okno).css("left", x);
-        $(okno).css("top", y);
-        $(fra).css("width", w - 15);
-        $(fra).css("height", h - 30 - 10);    //10 padding dole, 30 div header
+        $(c).css("display", "block");
+        $(c).css("width", w + "px");
+        $(c).css("height", h + "px");
+        $(c).css("left", x + "px");
+        $(c).css("top", y + "px");
+        $(c).html("<iframe id='frazoom' style='border:solid 1px gray;' width='" + (w-50) + "px' height='"+(h-40)+"px' src='"+url+"'></iframe>");
+    }
 
-        if (url !== "") {
-            $(fra).attr("src", url);
+    function zoom_close() {
+        if ($("#zoomwin").css("display") == "block") {
+            $("#zoomwin").css("display", "none");
         }
 
-        $(_modal).css("display", "block");
     }
+
+
+
+    function handle_table_width() {
+        var w = ($(".th_day").length * 45) + ($(".th_day_empty").length * 30);
+        
+        w = w + 80 + 120 + 180;
+        w = w + 30;
+
+        $("#timeline_table1").width(w);
+
+
+        var offset_container = $("#timeline_tbody1").offset();
+        var h = _device.innerHeight - offset_container.top;
+        if (w > _device.innerWidth) {
+            h = h - 50;
+        } else {
+            h = h - 30;
+        }
+
+        $("#timeline_tbody1").height(h);
+    }
+
 </script>
 
