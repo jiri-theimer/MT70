@@ -286,14 +286,128 @@
 
             @if (Model.GroupBy == UI.Models.p31view.daylineGroupBy.p28Recs)
             {
-                var qryP31 = Model.lisP31.Where(p => p.j02ID == recJ02.pid);
+                var grpsp28 = Model.lisP31.Where(p => p.j02ID == recJ02.pid).GroupBy(p => p.p28ID_Client);
+                foreach (var grp in grpsp28)
+                {
+                    double hodiny = grp.Sum(p => p.p31Hours_Orig);
+
+                    <tr>
+                        <td class="td_client" colspan="2">@(BO.BAS.OM2(grp.First().ClientName,30))</td>
+                        <td class="td_sum">
+                            @if (hodiny != 0)
+                            {
+                                @if (Model.ShowHHMM)
+                                {
+                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
+                                }
+                                else
+                                {
+                                    @(BO.BAS.Number2String(hodiny))
+                                }
+                            }
+                        </td>
+                        @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+                        {
+
+                            <td class="td_day">
+                                @if (1==1)
+                                {
+                                    var qryP31 = Model.lisP31.Where(p => p.j02ID == recJ02.pid && p.p28ID_Client == grp.First().p28ID_Client && p.p31Date == d);
+
+                                    foreach (var recP31 in qryP31)
+                                    {
+                                        strClass = "afa";
+                                        if (!recP31.p32IsBillable)
+                                        {
+                                            strClass = "anefa";
+                                        }
+                                        if (Model.ShowHHMM)
+                                        {
+                                            strHours = recP31.p31HHMM_Orig;
+                                        }
+                                        else
+                                        {
+                                            strHours = BO.BAS.Number2String(recP31.p31Hours_Orig);
+                                        }
+                                        strTitle = recP31.p32Name + ": " + recP31.p41Name;
+
+                                        <div class="dd">
+                                            <a class="@(strClass)" href="javascript:p31_rec(@(recP31.pid))" title="@(strTitle)">@(strHours)</a>
+                                        </div>
 
 
-
-
-
-
+                                    }
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
             }
+
+
+            @if (Model.GroupBy == UI.Models.p31view.daylineGroupBy.p41Recs)
+            {
+                var grpsp41 = Model.lisP31.Where(p => p.j02ID == recJ02.pid).GroupBy(p => p.p41ID);
+                foreach (var grp in grpsp41)
+                {
+                    double hodiny = grp.Sum(p => p.p31Hours_Orig);
+
+                    <tr>
+                        <td class="td_project" colspan="2" title="@(grp.First().ClientName+" - "+grp.First().p41Name)">
+                            @(BO.BAS.OM2(grp.First().ClientName,25)+" - ")
+                            @(BO.BAS.OM2(grp.First().p41Name,15))
+                        </td>
+                        <td class="td_sum">
+                            @if (hodiny != 0)
+                            {
+                                @if (Model.ShowHHMM)
+                                {
+                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
+                                }
+                                else
+                                {
+                                    @(BO.BAS.Number2String(hodiny))
+                                }
+                            }
+                        </td>
+                        @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+                        {
+
+                            <td class="td_day">
+                                @if (1==1)
+                                {
+                                    var qryP31 = Model.lisP31.Where(p => p.j02ID == recJ02.pid && p.p41ID == grp.First().p41ID && p.p31Date == d);
+
+                                    foreach (var recP31 in qryP31)
+                                    {
+                                        strClass = "afa";
+                                        if (!recP31.p32IsBillable)
+                                        {
+                                            strClass = "anefa";
+                                        }
+                                        if (Model.ShowHHMM)
+                                        {
+                                            strHours = recP31.p31HHMM_Orig;
+                                        }
+                                        else
+                                        {
+                                            strHours = BO.BAS.Number2String(recP31.p31Hours_Orig);
+                                        }
+                                        strTitle = recP31.p32Name + ": " + recP31.p41Name;
+
+                                        <div class="dd">
+                                            <a class="@(strClass)" href="javascript:p31_rec(@(recP31.pid))" title="@(strTitle)">@(strHours)</a>
+                                        </div>
+
+
+                                    }
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+
         }
     </tbody>
 </table>
