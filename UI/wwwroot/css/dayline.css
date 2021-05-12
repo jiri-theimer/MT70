@@ -134,17 +134,31 @@ th.th_holiday {
 }
 
 a.afa {
-    background-color: green;
-    font-size: 85%;
-    color: white;
+    border:solid 1px silver;
+    font-size: 90%;
+    color: green;
     border-radius: 2px;
+    padding:1px;
+    font-weight:normal;
+    text-decoration:none;
+    
 }
 
 a.anefa {
-    background-color: red;
-    font-size: 85%;
-    color: white;
+    border: solid 1px silver;
+    font-size: 90%;
+    color: red;
     border-radius: 2px;
+    padding: 1px;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+a.afa:hover {
+    text-decoration: underline;    
+}
+a.anefa:hover {
+    text-decoration: underline;
 }
 
 div.dd {

@@ -160,6 +160,35 @@
                             var rec = qry.First();
                             <a class="hz" onclick="re(this,@(recJ02.pid),'@(rec.p31DateString)')" style="@rec.CssStyle">@(rec.HoursFormatted)</a>
                         }
+
+                        @if (Model.GroupBy == UI.Models.p31view.daylineGroupBy.NoneRecs)
+                        {
+                            var qryP31 = Model.lisP31.Where(p => p.j02ID == recJ02.pid && p.p31Date == d);
+
+                            foreach (var recP31 in qryP31)
+                            {
+                                strClass = "afa";
+                                if (!recP31.p32IsBillable)
+                                {
+                                    strClass = "anefa";
+                                }
+                                if (Model.ShowHHMM)
+                                {
+                                    strHours = recP31.p31HHMM_Orig;
+                                }
+                                else
+                                {
+                                    strHours = BO.BAS.Number2String(recP31.p31Hours_Orig);
+                                }
+                                strTitle = recP31.p32Name + ": " + recP31.ClientName + " - " + recP31.p41Name;
+
+                                <div class="dd">
+                                    <a class="@(strClass)" href="javascript:p31_rec(@(recP31.pid))" title="@(strTitle)">@(strHours)</a>
+                                </div>
+
+
+                            }
+                        }
                     </td>
                 }
             </tr>
@@ -253,6 +282,17 @@
                         }
                     </tr>
                 }
+            }
+
+            @if (Model.GroupBy == UI.Models.p31view.daylineGroupBy.p28Recs)
+            {
+                var qryP31 = Model.lisP31.Where(p => p.j02ID == recJ02.pid);
+
+
+
+
+
+
             }
         }
     </tbody>
