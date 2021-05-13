@@ -8,6 +8,7 @@ namespace UI.Models.p31view
     public abstract class calendarBaseViewModel:BaseViewModel
     {
         public int j02ID { get; set; }
+        public string SelectedPerson { get; set; }
         public bool ShowHHMM { get; set; }
         public DateTime d0 { get; set; }
         public DateTime d1 { get; set; }
