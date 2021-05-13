@@ -1,0 +1,280 @@
+﻿#mt_scheduler_calendar {
+    width: 100%;
+}
+
+    #mt_scheduler_calendar tr {
+        vertical-align: top;
+    }
+
+
+    #mt_scheduler_calendar td {
+        color: #A9A9A9;
+        text-align: left;
+        border-left: solid 1px #DCDCDC;
+    }
+
+        #mt_scheduler_calendar td:hover {
+            background-color: aliceblue;
+        }
+
+    #mt_scheduler_calendar th {
+        text-align: center;
+        background-color: white;
+    }
+
+.agenda_row_suda {
+    background-color: none;
+}
+
+.agenda_row_licha {
+    background-color: #F7F7F7;
+}
+
+.agenda_row_divider_week {
+    border-top: dashed 2px #82CAFA;
+}
+
+.agenda_row_divider_month {
+    border-top: solid 7px khaki;
+}
+
+#mt_scheduler_agenda {
+    width: 100%;
+}
+
+    #mt_scheduler_agenda tr {
+        vertical-align: top;
+    }
+
+        #mt_scheduler_agenda tr:hover {
+            background-color: aliceblue;
+        }
+
+    #mt_scheduler_agenda td {
+        color: #A9A9A9;
+        text-align: left;
+    }
+
+
+
+
+
+    #mt_scheduler_agenda th {
+        text-align: center;
+        background-color: white;
+        border-bottom: solid 1px gray;
+    }
+
+.mt_scheduler-day-in-month {
+    background-color: transparent;
+}
+
+.mt_scheduler-day-out-month {
+    background-color: #F5F5F5;
+}
+
+.mt_scheduler-day-holiday {
+    background-color: #ffe1f0;
+}
+
+.mt_scheduler-day-weekend {
+    background-color: #fff0f7;
+}
+
+
+
+.mt_scheduler-today {
+    background-color: #DAF2FF;
+}
+
+
+div.mt_scheduler-day {
+    min-height: 40px;
+    max-height: 350px;
+    overflow: auto;
+}
+
+
+
+div.mt_scheduler-p31text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-style: italic;
+    color: gray;
+    max-width: 400px;
+    margin-left: 10px;
+}
+
+div.mt_scheduler-day-header {
+    width: 100%;
+    background-color: #E8E8E8;
+}
+
+
+
+a.mt_scheduler-day-link {
+    padding: 4px;
+}
+
+    a.mt_scheduler-day-link:hover {
+        color: white;
+        background-color: #2D89EF;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+div.mt_scheduler-day-link-container {
+    width: 100%;
+    cursor: pointer;
+    color: black;
+}
+
+    div.mt_scheduler-day-link-container:hover {
+        background-color: #2D89EF;
+        border-radius: 10px;
+        color: white;
+    }
+
+
+
+a.p31_rec_link {
+    cursor: pointer;
+    color: black;
+}
+
+
+
+.mt_scheduler-caption {
+    color: black;
+}
+
+.mt_scheduler_total {
+    font-size: 100%;
+}
+
+
+a.mt_scheduler_valuelink {
+    font-weight: bold;
+}
+
+
+
+
+
+a.mt_scheduler_valuelink_nontime {
+    color: white;
+    background-color: brown;
+    font-weight: normal;
+    border-radius: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+a.mt_scheduler_valuelink_deadline {
+    color: black;
+    background-color: orange;
+    font-weight: normal;
+    border-radius: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-right: 4px;
+    margin-top: 1px;
+}
+
+
+
+
+.status_a2 {
+    background-color: red;
+    display: inline-block;
+    width: 10px;
+    height: 15px;
+}
+
+.status_a3 {
+    background-color: brown;
+    display: inline-block;
+    width: 10px;
+    height: 15px;
+}
+
+.status_a4 {
+    background-color: green;
+    display: inline-block;
+    width: 10px;
+    height: 15px;
+}
+
+.status_a6 {
+    background-color: pink;
+    display: inline-block;
+    width: 10px;
+    height: 15px;
+}
+
+/*styly pro denní, přesný kalendář: */
+.grid-day-container {
+    display: grid;
+    grid-column-gap: 2px;
+    padding: 0px;
+    width: 575px;
+}
+
+
+.hour_slot {
+    width: 50px;
+    background-color: #F7F7F7;
+    text-align: center;
+    border-top: solid 1px silver;
+}
+
+.minute_slot {
+    width: 50px;
+    background-color: #F7F7F7;
+    text-align: center;
+    border-top: none;
+    border-bottom: solid 1px silver;
+    border-right: solid 1px silver;
+    cursor: grab;
+}
+
+.data_slot {
+    background-color: #FBFBEF;
+    border: solid 1px silver;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.data_slot_mobile {
+    background-color: #FBFBEF;
+    border: solid 1px silver;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.nodata_slot {
+    background-color: white;
+}
+
+.bunka_selected {
+    background-color: orange;
+}
+
+a.link-daycolor_calendar {
+    color: #2D89EF;
+    border-radius: 3px;
+    float: right;
+}
+
+
+a.link-daycolor_agenda {
+    color: #2D89EF;
+    border-radius: 3px;
+}
+
+    a.link-daycolor_agenda:hover {
+        color: white;
+        background-color: #2D89EF;
+        padding: 2px;
+    }

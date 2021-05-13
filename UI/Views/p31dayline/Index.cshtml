@@ -513,7 +513,7 @@
 
     function reload() {
         var d = $("#d0helper").val();
-        location.replace(_ep("/p31view/Dayline?d=" + d));
+        location.replace(_ep("/p31dayline/Index?d=" + d));
     }
 
     function reload_setting(opg) {
@@ -547,7 +547,7 @@
     }
 
     function re(ctl, j02id, d) {
-        var url = _ep("/p31view/DaylineZoom?j02id=" + j02id + "&d=" + d);
+        var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&d=" + d);
         if (_lasturl == url && $("#zoomwin").css("display") == "block") {
             zoom_close();
         }else

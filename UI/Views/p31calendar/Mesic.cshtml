@@ -1,0 +1,191 @@
+﻿@model UI.Models.p31view.calmonthViewModel
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Model.PageTitle = _f.tra("Kalendář");
+
+    string strClass = null;
+    string strTitle = null;
+    double dblHours = 0;
+    string strHours = null;
+    double dblFond = 0;
+}
+
+@addTagHelper *, UI
+
+@section header_content{
+
+    <link rel="stylesheet" href="~/css/calendar.css" />
+
+
+}
+
+
+<div class="tabs_container_record">
+
+    <!-- Tab panes -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li>
+            <button class="btn btn-outline-secondary dropdown-toggle" id="cmdMore">
+                <span class="k-icon k-i-gears"></span>
+                @_f.tra("Nastavení")
+            </button>
+        </li>
+        <li style="margin-left:1px;">
+            <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary" onclick="month_prev()"><span class="k-icon k-i-arrow-end-left"></span></button>
+        </li>
+        <li style="width:130px;">
+            <mydate asp-for="@Model.d0"></mydate>
+        </li>
+        <li>
+            <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary" onclick="month_next()"><span class="k-icon k-i-arrow-end-right"></span></button>
+        </li>
+
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab1" class="nav-link active" href="/p31view/CalendarMonth">Měsíc</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab2" class="nav-link" href="/p31view/CalendarAgenda">Měsíční agenda</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab3" class="nav-link" href="/p31view/CalendarWeek">Týden</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab4" class="nav-link" href="/p31view/CalendarAgenda">Týdenní agenda</a>
+        </li>
+    </ul>
+</div>
+
+
+<div id="divMore" style="background-color:aliceblue;display:none;">
+    <div class="card">
+        <div class="card-header">
+            @_f.tra("Nastavení")
+        </div>
+        <div class="card-body">
+           
+        </div>
+    </div>
+</div>
+
+
+<div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:1000;display:none;"></div>
+
+
+<script type="text/javascript">
+    var _zoomwin = document.getElementById("zoomwin");
+    var _lasturl = "";
+
+
+    $(document).ready(function () {
+
+
+        _mainmenu_highlight_current("cmdCalendar");
+
+
+        $("#d0helper").change(function () {
+            reload();
+        });
+
+        $(".dc").dblclick(function () {
+            var j02id = $(this).attr("data-j02id");
+            var d = $(this).attr("data-d");
+            _window_open(_ep("/p31/Record?j02id="+j02id+"&d="+d));
+        });
+
+
+        $("#cmdMore").click(function () {
+            $("#divMore").toggle();
+        });
+
+        $(document).on("keydown", function (e) {
+            if (e.keyCode == 27 && _zoomwin.style.display == "block") {   //klávese ESCAPE
+                zoom_close();
+            }
+
+        });
+
+        $(document).on("click", function (e) {
+
+            if (e.target.className != "hz") {
+                zoom_close();
+            }
+        });
+
+
+        
+
+
+        
+    });
+
+    function reload() {
+        var d = $("#d0helper").val();
+        location.replace(_ep("/p31calendar/Mesic?d=" + d));
+    }
+
+    function re(ctl, j02id, d) {
+        var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&d=" + d);
+        if (_lasturl == url && $("#zoomwin").css("display") == "block") {
+            zoom_close();
+        } else {
+            zoom_open(ctl, url);
+            _lasturl = url;
+        }
+
+    }
+
+    function month_prev() {
+        var d0 = datepicker_get_value("d0");
+        if (d0 == null) {
+            d0 = new Date();
+        }
+        var d1 = new Date(d0.getFullYear(), d0.getMonth() - 1, 1);
+        datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
+
+
+    }
+    function month_next() {
+        var d0 = datepicker_get_value("d0");
+        if (d0 == null) {
+            d0 = new Date();
+        }
+        var d1 = new Date(d0.getFullYear(), d0.getMonth() + 1, 1);
+        datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
+
+    }
+
+
+    function zoom_open(ctl, url) {
+        var c = $("#zoomwin");
+
+        var w = _device.innerWidth - 100;
+        var h = 450;
+        var y = $(ctl).offset().top + 20;
+        if (y + h + 20 > _device.innerHeight) {
+            y = $(ctl).offset().top - h - 2;
+        }
+
+        if (_device.innerWidth < w) w = _device.innerWidth;
+        if (_device.innerHeight < h) h = _device.innerHeight;
+        x = (_device.innerWidth - w) / 2;
+
+        $(c).css("display", "block");
+        $(c).css("width", w + "px");
+        $(c).css("height", h + "px");
+        $(c).css("left", x + "px");
+        $(c).css("top", y + "px");
+        $(c).html("<iframe id='frazoom' style='border:solid 1px gray;' width='" + (w - 50) + "px' height='" + (h - 40) + "px' src='" + url + "'></iframe>");
+    }
+
+    function zoom_close() {
+        if ($("#zoomwin").css("display") == "block") {
+            $("#zoomwin").css("display", "none");
+        }
+
+        
+    }
+</script>

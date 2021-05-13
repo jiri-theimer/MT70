@@ -8,10 +8,9 @@ using UI.Models.p31view;
 
 namespace UI.Controllers
 {
-    public class p31viewController : BaseController
-    {
-        //DAYLINE rozhraní
-        public IActionResult dayline(string d)
+    public class p31daylineController : BaseController
+    {        
+        public IActionResult Index(string d)
         {
             var v = new daylineViewModel() { d0 = DateTime.Today, GroupBy = daylineGroupBy.None };
             if (!string.IsNullOrEmpty(d))
@@ -111,7 +110,7 @@ namespace UI.Controllers
 
 
         //zobrazení ZOOM okna pro vybranou osobu a den
-        public IActionResult daylineZoom(int j02id,string d)
+        public IActionResult Zoom(int j02id,string d)
         {
             var v = new daylineZoomViewModel() { SelectedDate = BO.BAS.String2Date(d),j02ID=j02id };
 
