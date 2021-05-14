@@ -70,24 +70,36 @@
         </div>
         <div class="card-body">
             <div>
+                <input type="checkbox" id="chkShowLeftPanel" asp-for="@Model.ShowLeftPanel" />
+                <label for="chkShowLeftPanel">@_f.tra("Zobrazovat levý panel")</label>
+            </div>
+            <div>
                 <input type="checkbox" id="chkShowWeekend" asp-for="@Model.ShowWeekend" />
                 <label for="chkShowWeekend">@_f.tra("Zobrazovat víkendy (So+Ne)")</label>
             </div>
-           
+
         </div>
     </div>
 </div>
 
 
 <div class="row" style="padding: 0px; margin: 0px;">
-    <div class="col-md-5 col-lg-3">
+    @if (Model.ShowLeftPanel)
+    {
+        <div class="col-md-5 col-lg-3">
 
-        @Html.EditorFor(m => m, "~/Views/Shared/_CalendarPanel.cshtml")
-    </div>
+            @Html.EditorFor(m => m, "~/Views/Shared/_CalendarPanel.cshtml")
+        </div>
 
-    <div class="col-md-7 col-lg-9">
+        <div class="col-md-7 col-lg-9">
+            @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
+        </div>
+    }
+    else
+    {
         @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
-    </div>
+    }
+
 </div>
 
 
@@ -125,6 +137,8 @@
                 var v = [];
                 k.push("p31calendar-showweekend");
                 v.push($("#chkShowWeekend").prop("checked"));
+                k.push("p31calendar-showleftpanel");
+                v.push($("#chkShowLeftPanel").prop("checked"));
                 
 
                 $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {

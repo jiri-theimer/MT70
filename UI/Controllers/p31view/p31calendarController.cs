@@ -34,6 +34,7 @@ namespace UI.Controllers.p31view
             v.ShowHHMM = false;
             if (Factory.CurrentUser.j03DefaultHoursFormat == "T") v.ShowHHMM = true;
             v.StatTotalsByPrefix = Factory.CBL.LoadUserParam("p31calendar-totalsby", "p28");
+            v.ShowLeftPanel = Factory.CBL.LoadUserParamBool("p31calendar-showleftpanel", true);
             v.ShowWeekend = Factory.CBL.LoadUserParamBool("p31calendar-showweekend", true);
             v.j02ID = Factory.CBL.LoadUserParamInt("p31calendar-j02id", Factory.CurrentUser.j02ID);
             v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);

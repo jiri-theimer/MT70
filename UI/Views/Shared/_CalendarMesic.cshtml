@@ -7,6 +7,10 @@
     string strClass = null;
     bool bolWeekendDay = false;
     bool bolHoliday = false;
+    bool bolOK = false;
+    string strStyle = null;
+    int x = 1;
+
 
 }
 
@@ -26,18 +30,25 @@
         }
     </tr>
 
-    @for(DateTime d = Model.d1; d <= Model.d2; d=d.AddDays(1))
-    {
-        strClass = null; bolWeekendDay = false;
+    @Html.Raw("<tr>")
 
-        if (d.Month==Model.m0 && d.Year == Model.y0)
+    @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+    {
+
+        strClass = "mt_scheduler-day-out-month"; bolWeekendDay = false;
+
+        if (d.Month == Model.m0 && d.Year == Model.y0)
         {
-            strClass = "mt_scheduler-day-out-month";
+            strClass = "mt_scheduler-day-in-month";
         }
-        if (d.DayOfWeek==DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+        if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
         {
             bolWeekendDay = true;
-            strClass = "mt_scheduler-day-weekend";
+            if (d.Month == Model.m0 && d.Year == Model.y0)
+            {
+                strClass = "mt_scheduler-day-weekend";
+            }
+
         }
         if (Model.lisC26.Any(p => p.c26Date == d))
         {
@@ -48,6 +59,40 @@
         {
             strClass = "mt_scheduler-today";
         }
+        bolOK = true;
+        if (bolWeekendDay && !Model.ShowWeekend)
+        {
+            bolOK = false;
+        }
+        if (bolOK)
+        {
+            strStyle = "14%";
+            if (!Model.ShowWeekend) strStyle = "20%";
+
+            <td class="@(strClass)" style="@(strStyle)">
+
+                @if (d.DayOfWeek == DayOfWeek.Monday)
+                {
+                    <a>@(BO.BAS.ObjectDate2String(d,"dd.MMM"))</a>
+                }
+                else
+                {
+                    <a>@(BO.BAS.ObjectDate2String(d,"dd"))</a>
+                }
+
+                <div class="mt_scheduler-day">
+
+                </div>
+            </td>
+        }
+        if (x == 7)
+        {
+            x = 0;
+            @Html.Raw("</tr>");
+            @Html.Raw("<tr>");
+
+        }
+        x += 1;
     }
 
 </table>

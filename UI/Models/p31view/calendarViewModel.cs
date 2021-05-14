@@ -29,7 +29,10 @@ namespace UI.Models.p31view
         public int m0 { get; set; }
         public int y0 { get; set; }
 
+        public int FirstDayOfWeek = 7;
+
         public bool ShowWeekend { get; set; }
+        public bool ShowLeftPanel { get; set; }
 
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
         public IEnumerable<BO.c26Holiday> lisC26 { get; set; }

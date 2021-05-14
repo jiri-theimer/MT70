@@ -1,5 +1,6 @@
 ﻿#mt_scheduler_calendar {
     width: 100%;
+    table-layout: fixed;
 }
 
     #mt_scheduler_calendar tr {
@@ -67,10 +68,12 @@
 
 .mt_scheduler-day-in-month {
     background-color: transparent;
+    
 }
 
 .mt_scheduler-day-out-month {
-    background-color: #F5F5F5;
+    background-color: #F5F5F5;    
+   
 }
 
 .mt_scheduler-day-holiday {
