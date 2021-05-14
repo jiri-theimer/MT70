@@ -10,15 +10,12 @@ namespace UI.Controllers.p31view
 {
     public class p31calendarController : BaseController
     {
-        public IActionResult Mesic(int j02id,string d)
-        {
-            var v = new calmonthViewModel() { d0 = DateTime.Today,j02ID=j02id };            
-            if (!string.IsNullOrEmpty(d))
-            {
-                v.d0 = BO.BAS.String2Date(d);
-            }
-            handle_defaults(v);
-            mesic_handle_defaults(v);
+        public IActionResult Index(int j02id,string d,int cv)
+        {            
+            var v = new calendarViewModel() { d0 = DateTime.Today,j02ID=j02id,CurrentView= CalendarViewEnum.Month };            
+            
+            handle_defaults(v,d,cv);
+            
 
             v.lisC26 = Factory.c26HolidayBL.GetList(new BO.myQueryC26() { global_d1 = v.d1, global_d2 = v.d2 });
 
@@ -29,8 +26,32 @@ namespace UI.Controllers.p31view
             return View(v);
         }
 
-        private void handle_defaults(calendarBaseViewModel v)
+        private void handle_defaults(calendarViewModel v,string d,int cv)
         {
+            if (cv <= 0 || cv > 6) cv = 1;
+            v.CurrentView = (CalendarViewEnum)cv;
+
+            if (!string.IsNullOrEmpty(d))
+            {
+                try
+                {
+                    v.d0 = BO.BAS.String2Date(d);
+                }
+                catch
+                {
+                    v.d0 = DateTime.Today;
+                }
+
+            }
+            switch (v.CurrentView)
+            {
+                
+                case CalendarViewEnum.Month:
+                    mesic_handle_defaults(v);
+                    break;
+                default:
+                    break;
+            }
             v.ShowHHMM = false;
             if (Factory.CurrentUser.j03DefaultHoursFormat == "T") v.ShowHHMM = true;
             v.StatTotalsByPrefix = Factory.CBL.LoadUserParam("p31calendar-totalsby", "p28");
@@ -39,7 +60,7 @@ namespace UI.Controllers.p31view
             v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);
         }
 
-        private void mesic_handle_defaults(calmonthViewModel v)
+        private void mesic_handle_defaults(calendarViewModel v)
         {
             v.d1 = new DateTime(v.d0.Year, v.d0.Month, 1);
             v.d2 = v.d1.AddMonths(1).AddDays(-1);

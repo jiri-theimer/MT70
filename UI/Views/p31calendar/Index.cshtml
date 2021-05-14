@@ -81,7 +81,7 @@
     </div>
 
     <div class="col-md-7 col-lg-9">
-
+        @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
     </div>
 </div>
 
@@ -137,7 +137,7 @@
 
         function reload() {
             var d = $("#d0helper").val();
-            location.replace(_ep("/p31calendar/Mesic?d=" + d));
+            location.replace(_ep("/p31calendar/Index?d=" + d));
         }
 
         function re(ctl, j02id, d) {

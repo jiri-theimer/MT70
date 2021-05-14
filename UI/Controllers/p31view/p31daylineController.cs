@@ -15,7 +15,14 @@ namespace UI.Controllers
             var v = new daylineViewModel() { d0 = DateTime.Today, GroupBy = daylineGroupBy.None };
             if (!string.IsNullOrEmpty(d))
             {
-                v.d0 = BO.BAS.String2Date(d);
+                try
+                {
+                    v.d0 = BO.BAS.String2Date(d);
+                }
+                catch
+                {
+                    v.d0 = DateTime.Today;
+                }
             }
 
             var mqJ02 = new BO.myQueryJ02() { j02isintraperson = true, explicit_orderby = "a.j02LastName,a.j02FirstName" };
