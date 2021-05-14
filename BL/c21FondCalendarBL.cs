@@ -12,6 +12,8 @@ namespace BL
         public IEnumerable<BO.c21FondCalendar> GetList(BO.myQuery mq);
         public int Save(BO.c21FondCalendar rec, List<BO.c28FondCalendar_Log> lisC28);
         public IEnumerable<BO.c28FondCalendar_Log> GetList_c28(int c21id);
+        public double GetSumHours(int c21id, int j17id, DateTime d1, DateTime d2);
+        public IEnumerable<BO.FondHours> GetSumHoursPerMonth(int c21id, int j17id, DateTime d1, DateTime d2);
 
     }
     class c21FondCalendarBL : BaseBL, Ic21FondCalendarBL
@@ -99,6 +101,27 @@ namespace BL
 
 
             return true;
+        }
+
+
+        public double GetSumHours(int c21id,int j17id,DateTime d1,DateTime d2)
+        {
+            var ret = _db.Load<BO.GetDouble>("SELECT sum(c22Hours_Work) as Value FROM c22FondCalendar_Date WHERE c21ID=@c21id AND isnull(j17ID,0)=@j17id AND c22Date BETWEEN @d1 AND @d2", new { c21id = c21id, j17id = j17id, d1 = d1, d2 = d2 });
+            if (ret != null)
+            {
+                return ret.Value;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+
+        public IEnumerable<BO.FondHours> GetSumHoursPerMonth(int c21id, int j17id, DateTime d1, DateTime d2)
+        {
+            string s = "SELECT sum(c22Hours_Work) as Hodiny,year(c22Date) as Rok,month(c22Date) as Mesic FROM c22FondCalendar_Date WHERE c21ID=@c21id AND isnull(j17ID,0)=@j17id AND c22Date BETWEEN @d1 AND @d2 GROUP BY year(c22Date),month(c22Date) ORDER BY year(c22Date),month(c22Date)";
+            return _db.GetList<BO.FondHours>(s, new { c21id = c21id, j17id = j17id, d1 = d1, d2 = d2 });
         }
 
     }

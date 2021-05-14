@@ -1,0 +1,232 @@
+﻿@model UI.Models.p31view.calendarBaseViewModel
+@inject BL.Factory _f
+
+@{
+    double _dblHodiny = Model.lisP31.Sum(p => p.p31Hours_Orig);
+    double _dblHodinyFa = Model.lisP31.Where(p => p.p32IsBillable).Sum(p => p.p31Hours_Orig);
+    double _dblHodinyWip = Model.lisP31.Where(p => p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+    double _dblHodinyFaWip = Model.lisP31.Where(p => p.p32IsBillable && p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+    double _dblHodinyNeFaWip = Model.lisP31.Where(p => !p.p32IsBillable && p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+    double _dblFond = 0.00;
+    if (Model.j02ID > 0)
+    {
+        _dblFond = _f.c21FondCalendarBL.GetSumHours(Model.RecJ02.c21ID, Model.RecJ02.j17ID, Model.d1, Model.d2);
+    }
+    double _dblUtilTotal = 0.00;
+    double _dblUtilFa = 0.00;
+    if (_dblFond > 0)
+    {
+        _dblUtilTotal = 100.00 * _dblHodiny / _dblFond;
+        _dblUtilFa = 100.00 * _dblHodinyFa / _dblFond;
+    }
+
+    double _dblHodiny4Approve = Model.lisP31.Where(p => p.p71ID == BO.p71IdENUM.Schvaleno && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+
+    double _dblHodinyVyfa4 = 0.00;
+    double _dblHodinyVyfa6 = 0.00;
+    double _dblHodinyVyfa23 = 0.00;
+
+    if (_f.CurrentUser.IsRatesAccess)
+    {
+        _dblHodinyVyfa4 = Model.lisP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.Vyfakturovano).Sum(p => p.p31Hours_Invoiced);
+        _dblHodinyVyfa6 = Model.lisP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.ZahrnutoDoPausalu).Sum(p => p.p31Hours_Orig);
+        _dblHodinyVyfa23 = Model.lisP31.Where(p => p.p91ID > 0 && (p.p70ID == BO.p70IdENUM.SkrytyOdpis || p.p70ID == BO.p70IdENUM.ViditelnyOdpis)).Sum(p => p.p31Hours_Orig);
+    }
+}
+
+<table class="table table-sm table-hover" style="margin-right:50px;">
+    <tr>
+        <td>
+            @_f.tra("Vykázané hodiny"):
+        </td>
+        <td class="tdnum bg-info">
+            @if (Model.ShowHHMM)
+            {
+                @(BO.basTime.ShowAsHHMM(_dblHodiny.ToString()))
+            }
+            else
+            {
+                @(BO.BAS.Number2String(_dblHodiny))
+            }
+        </td>
+        <td style="width:20px;">h.</td>
+    </tr>
+    <tr>
+        <td style="padding-left:20px;">
+            @_f.tra("Z toho fakturovatelné aktivity"):
+        </td>
+        <td class="tdnum" style="color:green;">
+            @if (Model.ShowHHMM)
+            {
+                @(BO.basTime.ShowAsHHMM(_dblHodinyFa.ToString()))
+            }
+            else
+            {
+                @(BO.BAS.Number2String(_dblHodinyFa))
+            }
+        </td>
+        <td style="width:20px;">h.</td>
+    </tr>
+    <tr style="border-top:solid 2px gray;">
+        <td style="padding-left:20px;">
+            @_f.tra("Z toho rozpracované (čeká na schválení)"):
+        </td>
+        <td class="tdnum">
+            @if (Model.ShowHHMM)
+            {
+                @(BO.basTime.ShowAsHHMM(_dblHodinyWip.ToString()))
+            }
+            else
+            {
+                @(BO.BAS.Number2String(_dblHodinyWip))
+            }
+        </td>
+        <td style="width:20px;">h.</td>
+    </tr>
+    <tr>
+        <td style="padding-left:40px;">
+            @_f.tra("Z toho fakturovatelné aktivity"):
+        </td>
+        <td class="tdnum" style="color:green;">
+            @if (Model.ShowHHMM)
+            {
+                @(BO.basTime.ShowAsHHMM(_dblHodinyFaWip.ToString()))
+            }
+            else
+            {
+                @(BO.BAS.Number2String(_dblHodinyFaWip))
+            }
+        </td>
+        <td style="width:20px;">h.</td>
+    </tr>
+    <tr>
+        <td style="padding-left:40px;">
+            @_f.tra("Z toho nefakturovatelné aktivity"):
+        </td>
+        <td class="tdnum" style="color:red;">
+            @if (Model.ShowHHMM)
+            {
+                @(BO.basTime.ShowAsHHMM(_dblHodinyNeFaWip.ToString()))
+            }
+            else
+            {
+                @(BO.BAS.Number2String(_dblHodinyNeFaWip))
+            }
+        </td>
+        <td style="width:20px;">h.</td>
+    </tr>
+    <tr style="border-top:solid 2px gray;">
+        <td style="padding-left:20px;">
+            @_f.tra("Z toho schváleno a čeká na vyúčtování"):
+        </td>
+        <td class="tdnum">
+            @if (Model.ShowHHMM)
+            {
+                @(BO.basTime.ShowAsHHMM(_dblHodiny4Approve.ToString()))
+            }
+            else
+            {
+                @(BO.BAS.Number2String(_dblHodiny4Approve))
+            }
+        </td>
+        <td style="width:20px;">h.</td>
+    </tr>
+    @if (_f.CurrentUser.IsRatesAccess)
+    {
+        <tr>
+            <td style="padding-left:20px;">
+                @_f.tra("Z toho vyúčtováno"):
+            </td>
+            <td>
+            </td>
+            <td style="width:20px;"></td>
+        </tr>
+        <tr>
+            <td style="padding-left:40px;">
+                @_f.tra("Sazbou"):
+            </td>
+            <td class="tdnum" style="color:green;">
+                @if (Model.ShowHHMM)
+                {
+                    @(BO.basTime.ShowAsHHMM(_dblHodinyVyfa4.ToString()))
+                }
+                else
+                {
+                    @(BO.BAS.Number2String(_dblHodinyVyfa4))
+                }
+            </td>
+            <td style="width:20px;">h.</td>
+        </tr>
+        <tr>
+            <td style="padding-left:40px;">
+                @_f.tra("Zahrnuto do paušulu "):
+            </td>
+            <td class="tdnum" style="color:hotpink;">
+                @if (Model.ShowHHMM)
+                {
+                    @(BO.basTime.ShowAsHHMM(_dblHodinyVyfa6.ToString()))
+                }
+                else
+                {
+                    @(BO.BAS.Number2String(_dblHodinyVyfa6))
+                }
+            </td>
+            <td style="width:20px;">h.</td>
+        </tr>
+        <tr>
+            <td style="padding-left:40px;">
+                @_f.tra("Odepsáno"):
+            </td>
+            <td class="tdnum" style="color:brown;">
+                @if (Model.ShowHHMM)
+                {
+                    @(BO.basTime.ShowAsHHMM(_dblHodinyVyfa23.ToString()))
+                }
+                else
+                {
+                    @(BO.BAS.Number2String(_dblHodinyVyfa23))
+                }
+            </td>
+            <td style="width:20px;">h.</td>
+        </tr>
+
+    }
+    <tr style="border-top:solid 2px gray;">
+        <td>
+            @_f.tra("Fond pracovní doby"):
+        </td>
+        <td class="tdnum" style="color: #B8860B;">
+            @if (Model.ShowHHMM)
+            {
+                @(BO.basTime.ShowAsHHMM(_dblFond.ToString()))
+            }
+            else
+            {
+                @(BO.BAS.Number2String(_dblFond))
+            }
+        </td>
+        <td style="width:20px;">h.</td>
+    </tr>
+    @if (_dblFond > 0)
+    {
+        <tr>
+            <td style="padding-left:20px;">
+                @_f.tra("Utilizace (všechny hodiny)"):
+            </td>
+            <td class="tdnum" style="color: blue;">
+                @(BO.BAS.Number2String(_dblUtilTotal))
+            </td>
+            <td style="width:20px;">%</td>
+        </tr>
+        <tr>
+            <td style="padding-left:20px;">
+                @_f.tra("Utilizace (fakturovatelné aktivity)"):
+            </td>
+            <td class="tdnum" style="color: green;">
+                @(BO.BAS.Number2String(_dblUtilFa))
+            </td>
+            <td style="width:20px;">%</td>
+        </tr>
+    }
+
+</table>

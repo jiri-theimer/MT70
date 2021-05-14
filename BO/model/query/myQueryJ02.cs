@@ -8,8 +8,8 @@ namespace BO
     {
         public bool? j02isintraperson { get; set; }
         public bool? isvirtualperson { get; set; }
-        public bool? isintranonvirtualperson { get; set; }
-        
+        public bool? isintranonvirtualperson { get; set; }  //interní a ne-virtuální osoby
+        public bool? allowed_for_p31_entry { get; set; }    //osoby, za které přihlášený uživatel může vykazovat úkony
         public int j04id { get; set; }
         public int j11id { get; set; }
         public List<int> j11ids { get; set; }
@@ -37,6 +37,39 @@ namespace BO
             {
                 AQ("a.j02IsIntraPerson=1 AND a.j02VirtualParentID IS NULL", null, null);
             }
+            
+            if (!this.CurrentUser.IsAdmin)
+            {
+                if (this.allowed_for_p31_entry == true)
+                {
+                    if (this.CurrentUser.IsMasterPerson)
+                    {
+                        string s = "(a.j02ID IN (SELECT j02ID_Slave FROM j05MasterSlave WHERE j02ID_Master=@j02id_me AND j05IsCreate_p31=1)";
+                        s += " OR a.j02ID IN (SELECT j12.j02ID FROM j12Team_Person j12 INNER JOIN j05MasterSlave xj05 ON j12.j11ID=xj05.j11ID_Slave WHERE xj05.j02ID_Master=@j02id_me AND xj05.j05IsCreate_p31=1)";
+                        s += " OR a.j02ID=@j02id_me)";
+                        AQ(s, "j02id_me", this.CurrentUser.j02ID);
+                    }
+                    else
+                    {
+                        AQ("a.j02ID=@j02id_me", "j02id_me", this.CurrentUser.j02ID);
+                    }
+                }
+                if (this.MyRecordsDisponible)
+                {
+                    if (this.CurrentUser.IsMasterPerson)
+                    {
+                        string s = "(a.j02ID IN (SELECT j02ID_Slave FROM j05MasterSlave WHERE j02ID_Master=@j02id_me)";
+                        s += " OR a.j02ID IN (SELECT j12.j02ID FROM j12Team_Person j12 INNER JOIN j05MasterSlave xj05 ON j12.j11ID=xj05.j11ID_Slave WHERE xj05.j02ID_Master=@j02id_me)";
+                        s += " OR a.j02ID=@j02id_me OR a.j02IsIntraPerson=0)";
+                        AQ(s, "j02id_me", this.CurrentUser.j02ID);
+                    }
+                    else
+                    {
+                        AQ("a.j02ID=@j02id_me", "j02id_me", this.CurrentUser.j02ID);
+                    }
+                }
+            }
+
             if (this.isvirtualperson != null)
             {
                 if (this.isvirtualperson == true)

@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    
+
     <div class="row my-2">
         <div class="col-8">
             <select asp-for="@Model.Rec.c21ScopeFlag" class="form-select" onchange="scopeflag_change(this)">
@@ -66,7 +66,13 @@
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Sobota"):</label>
             <div class="col-sm-3 col-md-2">
-                <mynumber asp-for="Rec.c21Day5_Hours"></mynumber>
+                <mynumber asp-for="Rec.c21Day6_Hours"></mynumber>
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Neděle"):</label>
+            <div class="col-sm-3 col-md-2">
+                <mynumber asp-for="Rec.c21Day7_Hours"></mynumber>
             </div>
         </div>
     }

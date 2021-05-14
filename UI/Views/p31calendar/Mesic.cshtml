@@ -34,7 +34,7 @@
             </button>
         </li>
         <li style="width:200px;">
-            <mycombo entity="j02Person" asp-for="@Model.j02ID" search-result-width="600" placeholder="@_f.tra("Osoba")" selectedtext="@Model.SelectedPerson" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1" event_after_changevalue="j02id_change"></mycombo>
+            <mycombo entity="j02Person" asp-for="@Model.j02ID" search-result-width="600" placeholder="@_f.tra("Osoba")" selectedtext="@Model.RecJ02.FullNameDesc" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1|j02isintraperson|bool|1" event_after_changevalue="j02id_change"></mycombo>
         </li>
         <li style="margin-left:1px;">
             <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary" onclick="month_prev()"><span class="k-icon k-i-arrow-end-left"></span></button>
@@ -76,7 +76,8 @@
 
 <div class="row" style="padding: 0px; margin: 0px;">
     <div class="col-md-5 col-lg-3">
-        
+
+        @Html.EditorFor(m => m, "~/Views/Shared/_CalendarPanel.cshtml")
     </div>
 
     <div class="col-md-7 col-lg-9">
@@ -201,7 +202,17 @@
 
         }
 
-        function j02id_change(j02id) {
-            _notify_message(j02id);
+        function j02id_change(j02id) {            
+            if (j02id=="" || j02id=="0")
+            {
+                j02id = "@(_f.CurrentUser.j02ID)";
+            }
+           
+            $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-j02id", value: j02id }, function (data) {
+                reload();
+
+            });
+
+            
         }
     </script>

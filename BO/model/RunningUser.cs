@@ -17,40 +17,28 @@ namespace BO
         public bool j04IsMenu_Task { get; set; }
         public bool j04IsMenu_MyProfile { get; set; }
 
-        private bool _IsApprovingPerson { get; set; }    // detekce, zda uživatel může potenciálně schvalovat nějaký worksheet
-        private bool _IsMasterPerson { get; set; }       // detekce, zda osoba má pod sebou nějaké podřízené
-
+        
+        public bool IsMasterPerson { get; }         //detekce, zda je nadřízený jiným osobám
+        public bool IsApprovingPerson { get; }    // detekce, zda uživatel může potenciálně schvalovat nějaký worksheet
         private string _RoleValue { get; set; }
         private string _PersonalPage { get; set; }
         
 
-        public string AppName { get; set; }
+        public string AppName { get; }
 
         private int _MessagesCount { get; set; }  // počet zpráv, na které systém upozorňuje uživatele
-        private string _j11IDs { get; set; }          // seznam týmů osoby
+        public string j11IDs { get; }          // seznam týmů osoby
 
         
         public string ExplicitConnectString { get; set; }   // pro předávání jiného db connect stringu - pro FILIP
         public string ExplicitLogsDir { get; set; }   // pro předávání jiného logovacího adresáře - pro FILIP
 
-        private bool? _IsAdmin;
-        private bool? _IsRatesAccess;
+        
+        
         
 
-        public bool IsApprovingPerson
-        {
-            get
-            {
-                return _IsApprovingPerson;
-            }
-        }
-        public bool IsMasterPerson
-        {
-            get
-            {
-                return _IsMasterPerson;
-            }
-        }
+        
+        
         public string PersonalPage
         {
             get
@@ -92,6 +80,8 @@ namespace BO
             return false;
                 
         }
+
+        private bool? _IsAdmin;
         public bool IsAdmin
         {
             get
@@ -110,6 +100,7 @@ namespace BO
             }
         }
 
+        private bool? _IsRatesAccess;
         public bool IsRatesAccess
         {
             get
@@ -135,13 +126,7 @@ namespace BO
                 return _MessagesCount;
             }
         }
-        public string j11IDs
-        {
-            get
-            {
-                return _j11IDs;
-            }
-        }
+        
 
         
         
