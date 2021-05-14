@@ -20,5 +20,8 @@ namespace UI.Models.p31view
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
         public IEnumerable<BO.c26Holiday> lisC26 { get; set; }
         public List<BO.p31WorksheetTimelineDay> lisSums { get; set; }
+
+        public string StatTotalsByPrefix { get; set; }
+        
     }
 }

@@ -235,5 +235,36 @@ namespace BO
 
             return false;
         }
+
+        public string Project
+        {
+            get
+            {
+                if (this.p28ID_Client == 0)
+                {
+                    if (this.p41NameShort != null)
+                    {
+                        return this.p41NameShort;
+                    }
+                    else
+                    {
+                        return this.p41Name;
+                    }
+                }
+                else
+                {
+                    if (this.p41NameShort != null)
+                    {
+                        return this.ClientName+" - "+ this.p41NameShort;
+                    }
+                    else
+                    {
+                        return this.ClientName+" - "+ this.p41Name;
+                    }
+                }
+                
+            }
+        }
+        
     }
 }

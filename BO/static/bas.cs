@@ -256,7 +256,11 @@ namespace BO
             return string.Format("{0:#,0.00}",n);
         }
 
-        
+        public static string Num2StringNull(double n)
+        {
+            if (n == 0) return null;
+            return string.Format("{0:#,0.00}", n);
+        }
 
         public static string GetGuid()
         {

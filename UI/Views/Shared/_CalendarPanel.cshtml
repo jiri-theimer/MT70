@@ -2,6 +2,7 @@
 @inject BL.Factory _f
 
 @{
+    string _strMesic = Model.d1.Month.ToString() + "/" + Model.d1.Year.ToString();
     double _dblHodiny = Model.lisP31.Sum(p => p.p31Hours_Orig);
     double _dblHodinyFa = Model.lisP31.Where(p => p.p32IsBillable).Sum(p => p.p31Hours_Orig);
     double _dblHodinyWip = Model.lisP31.Where(p => p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
@@ -32,12 +33,20 @@
         _dblHodinyVyfa6 = Model.lisP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.ZahrnutoDoPausalu).Sum(p => p.p31Hours_Orig);
         _dblHodinyVyfa23 = Model.lisP31.Where(p => p.p91ID > 0 && (p.p70ID == BO.p70IdENUM.SkrytyOdpis || p.p70ID == BO.p70IdENUM.ViditelnyOdpis)).Sum(p => p.p31Hours_Orig);
     }
+
+
+
+    
 }
 
 <table class="table table-sm table-hover" style="margin-right:50px;">
     <tr>
         <td>
-            @_f.tra("Vykázané hodiny"):
+            @_f.tra("Vykázané hodiny")
+            <span class="badge bg-primary" style="font-size:100%;">
+                @(_strMesic)
+            </span>
+
         </td>
         <td class="tdnum bg-info">
             @if (Model.ShowHHMM)
@@ -46,7 +55,7 @@
             }
             else
             {
-                @(BO.BAS.Number2String(_dblHodiny))
+                @(BO.BAS.Num2StringNull(_dblHodiny))
             }
         </td>
         <td style="width:20px;">h.</td>
@@ -55,14 +64,14 @@
         <td style="padding-left:20px;">
             @_f.tra("Z toho fakturovatelné aktivity"):
         </td>
-        <td class="tdnum" style="color:green;">
+        <td class="tdnum fa">
             @if (Model.ShowHHMM)
             {
                 @(BO.basTime.ShowAsHHMM(_dblHodinyFa.ToString()))
             }
             else
             {
-                @(BO.BAS.Number2String(_dblHodinyFa))
+                @(BO.BAS.Num2StringNull(_dblHodinyFa))
             }
         </td>
         <td style="width:20px;">h.</td>
@@ -78,7 +87,7 @@
             }
             else
             {
-                @(BO.BAS.Number2String(_dblHodinyWip))
+                @(BO.BAS.Num2StringNull(_dblHodinyWip))
             }
         </td>
         <td style="width:20px;">h.</td>
@@ -87,14 +96,14 @@
         <td style="padding-left:40px;">
             @_f.tra("Z toho fakturovatelné aktivity"):
         </td>
-        <td class="tdnum" style="color:green;">
+        <td class="tdnum fa">
             @if (Model.ShowHHMM)
             {
                 @(BO.basTime.ShowAsHHMM(_dblHodinyFaWip.ToString()))
             }
             else
             {
-                @(BO.BAS.Number2String(_dblHodinyFaWip))
+                @(BO.BAS.Num2StringNull(_dblHodinyFaWip))
             }
         </td>
         <td style="width:20px;">h.</td>
@@ -103,14 +112,14 @@
         <td style="padding-left:40px;">
             @_f.tra("Z toho nefakturovatelné aktivity"):
         </td>
-        <td class="tdnum" style="color:red;">
+        <td class="tdnum nefa">
             @if (Model.ShowHHMM)
             {
                 @(BO.basTime.ShowAsHHMM(_dblHodinyNeFaWip.ToString()))
             }
             else
             {
-                @(BO.BAS.Number2String(_dblHodinyNeFaWip))
+                @(BO.BAS.Num2StringNull(_dblHodinyNeFaWip))
             }
         </td>
         <td style="width:20px;">h.</td>
@@ -126,7 +135,7 @@
             }
             else
             {
-                @(BO.BAS.Number2String(_dblHodiny4Approve))
+                @(BO.BAS.Num2StringNull(_dblHodiny4Approve))
             }
         </td>
         <td style="width:20px;">h.</td>
@@ -145,14 +154,14 @@
             <td style="padding-left:40px;">
                 @_f.tra("Sazbou"):
             </td>
-            <td class="tdnum" style="color:green;">
+            <td class="tdnum fa">
                 @if (Model.ShowHHMM)
                 {
                     @(BO.basTime.ShowAsHHMM(_dblHodinyVyfa4.ToString()))
                 }
                 else
                 {
-                    @(BO.BAS.Number2String(_dblHodinyVyfa4))
+                    @(BO.BAS.Num2StringNull(_dblHodinyVyfa4))
                 }
             </td>
             <td style="width:20px;">h.</td>
@@ -168,7 +177,7 @@
                 }
                 else
                 {
-                    @(BO.BAS.Number2String(_dblHodinyVyfa6))
+                    @(BO.BAS.Num2StringNull(_dblHodinyVyfa6))
                 }
             </td>
             <td style="width:20px;">h.</td>
@@ -184,7 +193,7 @@
                 }
                 else
                 {
-                    @(BO.BAS.Number2String(_dblHodinyVyfa23))
+                    @(BO.BAS.Num2StringNull(_dblHodinyVyfa23))
                 }
             </td>
             <td style="width:20px;">h.</td>
@@ -222,7 +231,7 @@
             <td style="padding-left:20px;">
                 @_f.tra("Utilizace (fakturovatelné aktivity)"):
             </td>
-            <td class="tdnum" style="color: green;">
+            <td class="tdnum fa">
                 @(BO.BAS.Number2String(_dblUtilFa))
             </td>
             <td style="width:20px;">%</td>
@@ -230,3 +239,132 @@
     }
 
 </table>
+
+
+<div class="dropdown">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="cmdSouctyPodle" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="k-icon k-i-sum"></span>
+        @_f.tra("Součty podle")
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="cmdSouctyPodle">
+        <li>
+            <input type="radio" asp-for="@Model.StatTotalsByPrefix" id="opg1" value="none" onchange="reload_totalsby(this)" />
+            <label for="opg1">@_f.tra("Nezobrazovat tabulku součtů")</label>
+        </li>
+        <li>
+            <input type="radio" asp-for="@Model.StatTotalsByPrefix" id="opgP28" value="p28" onchange="reload_totalsby(this)" />
+            <label for="opgP28">@_f.tra("Klient projektu")</label>
+        </li>
+        <li>
+            <input type="radio" asp-for="@Model.StatTotalsByPrefix" id="opgP41" value="p41" onchange="reload_totalsby(this)" />
+            <label for="opgP41">@_f.tra("Projekt")</label>
+        </li>
+        <li>
+            <input type="radio" asp-for="@Model.StatTotalsByPrefix" id="opgP32" value="p32" onchange="reload_totalsby(this)" />
+            <label for="opgP32">@_f.tra("Aktivita")</label>
+        </li>
+    </ul>
+</div>
+
+@if (Model.StatTotalsByPrefix == "p28")
+{
+    var qry = Model.lisP31.OrderBy(p=>p.ClientName).GroupBy(p => p.p28ID_Client);
+    <table class="table table-sm table-hover">
+        <tr>
+            <th>@_f.tra("Klient")</th>
+            <th class="numcell"><span class="k-icon k-i-sum"></span></th>
+            <th class="numcell fa">Fa</th>
+            <th class="numcell nefa">NeFa</th>
+        </tr>
+        @foreach (var c in qry)
+        {
+            <tr>
+                <td>
+                    <a style="text-decoration:none;" href="javascript:p31bystat('p28',@(c.First().p28ID_Client))">@(c.First().ClientName)</a>
+                </td>
+                <td class="numcell">
+                    @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                </td>
+                <td class="numcell fa">
+                    @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==true).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                </td>
+                <td class="numcell nefa">
+                    @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==false).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.StatTotalsByPrefix == "p41")
+{
+    var qry = Model.lisP31.OrderBy(p=>p.Project).GroupBy(p => p.p41ID);
+    <table class="table table-sm table-hover">
+        <tr>
+            <th>@_f.tra("Projekt")</th>
+            <th class="numcell"><span class="k-icon k-i-sum"></span></th>
+            <th class="numcell fa">Fa</th>
+            <th class="numcell nefa">NeFa</th>
+        </tr>
+        @foreach (var c in qry)
+        {
+    <tr>
+        <td>
+            <a style="text-decoration:none;" href="javascript:p31bystat('p41',@(c.First().p41ID))">@(c.First().Project)</a>
+        </td>
+        <td class="numcell">
+            @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+        </td>
+        <td class="numcell fa">
+            @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==true).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+
+        </td>
+        <td class="numcell nefa">
+            @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==false).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+        </td>
+    </tr>
+        }
+    </table>
+}
+
+@if (Model.StatTotalsByPrefix == "p32")
+{
+    var qry = Model.lisP31.OrderBy(p=>p.p32Name).GroupBy(p => p.p32ID);
+    <table class="table table-sm table-hover">
+        <tr>
+            <th>@_f.tra("Aktivita")</th>
+            <th class="numcell"><span class="k-icon k-i-sum"></span></th>
+            <th class="numcell fa">Fa</th>
+            <th class="numcell nefa">NeFa</th>
+        </tr>
+        @foreach (var c in qry)
+        {
+            <tr>
+                <td>
+                    <a style="text-decoration:none;" href="javascript:p31bystat('p32',@(c.First().p32ID))">@(c.First().p32Name)</a>
+                </td>
+                <td class="numcell">
+                    @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))                   
+                </td>
+                <td class="numcell fa">
+                    @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==true).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                </td>
+                <td class="numcell nefa">
+                    @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==false).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+<script type="text/javascript">
+    function reload_totalsby(opg) {
+
+        $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-totalsby", value: opg.value }, function (data) {
+            reload();
+
+        });
+
+
+    }
+</script>

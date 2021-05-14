@@ -1214,3 +1214,15 @@ td.tdnum{
     width:120px;
     padding-right:20px;
 }
+
+.numcell {
+    text-align: right;    
+    padding-right: 10px;
+}
+
+.fa{
+    color:green;
+}
+.nefa{
+    color:red;
+}

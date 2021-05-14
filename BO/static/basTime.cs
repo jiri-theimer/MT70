@@ -73,14 +73,31 @@ namespace BO
             return ret;
         }
 
+        public static string FormatNumeric(double hours,bool bolShowAsHHMM)
+        {
+            if (hours == 0) return null;
+            if (bolShowAsHHMM)
+            {
+                return ShowAsHHMM(hours.ToString());
+            }
+            else
+            {
+                return string.Format("{0:#,0.00}", hours);
+            }
+        }
+
         public static string ShowAsHHMM(string strTime, int lngMinTimeUnit = 0)
         {
             // strTime jsou dekadické hodiny
             // fce vrací čas z dekadického hodinového výrazu na hh:mm
             string strHHMM;
-            int lngSec = ConvertTimeToSeconds(strTime);
+            int lngSec = ConvertTimeToSeconds(strTime);            
             if (lngMinTimeUnit > 0)
+            {
                 lngSec = RoundSeconds(lngSec, lngMinTimeUnit);
+            }
+            if (lngSec == 0) return null;
+
             strHHMM = GetTimeFromSeconds(System.Convert.ToDouble(lngSec));
             return strHHMM;
         }
