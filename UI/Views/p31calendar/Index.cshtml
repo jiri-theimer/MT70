@@ -1,4 +1,4 @@
-﻿@model UI.Models.p31view.calmonthViewModel
+﻿@model UI.Models.p31view.calendarViewModel
 @inject BL.Factory _f
 
 @{
@@ -66,8 +66,13 @@
     <div class="card">
         <div class="card-header">
             @_f.tra("Nastavení")
+            <button type="button" id="cmdSaveSetting" class="btn btn-sm btn-success">@_f.tra("Uložit nastavení")</button>
         </div>
         <div class="card-body">
+            <div>
+                <input type="checkbox" id="chkShowWeekend" asp-for="@Model.ShowWeekend" />
+                <label for="chkShowWeekend">@_f.tra("Zobrazovat víkendy (So+Ne)")</label>
+            </div>
            
         </div>
     </div>
@@ -112,6 +117,22 @@
 
             $("#cmdMore").click(function () {
                 $("#divMore").toggle();
+            });
+
+
+            $("#cmdSaveSetting").click(function () {
+                var k = [];
+                var v = [];
+                k.push("p31calendar-showweekend");
+                v.push($("#chkShowWeekend").prop("checked"));
+                
+
+                $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {
+                    reload();
+
+                });
+
+                
             });
 
             $(document).on("keydown", function (e) {

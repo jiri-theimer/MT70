@@ -26,6 +26,8 @@ namespace UI.Models.p31view
         public DateTime d0 { get; set; }
         public DateTime d1 { get; set; }
         public DateTime d2 { get; set; }
+        public int m0 { get; set; }
+        public int y0 { get; set; }
 
         public bool ShowWeekend { get; set; }
 

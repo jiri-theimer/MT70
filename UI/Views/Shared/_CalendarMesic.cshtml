@@ -1,14 +1,53 @@
-﻿@model UI.Models.p31view.calmonthViewModel
+﻿@model UI.Models.p31view.calendarViewModel
 @inject BL.Factory _f
 
 @{
     string _strMesic = Model.d1.Month.ToString() + "/" + Model.d1.Year.ToString();
-    
 
-
+    string strClass = null;
+    bool bolWeekendDay = false;
+    bool bolHoliday = false;
 
 }
 
 
 
-<h1>hovado</h1>
+<table border="0" id="mt_scheduler_calendar">
+    <tr>
+        <th>Po</th>
+        <th>Út</th>
+        <th>St</th>
+        <th>Čt</th>
+        <th>Pá</th>
+        @if (Model.ShowWeekend)
+        {
+            <th>So</th>
+            <th>Ne</th>
+        }
+    </tr>
+
+    @for(DateTime d = Model.d1; d <= Model.d2; d=d.AddDays(1))
+    {
+        strClass = null; bolWeekendDay = false;
+
+        if (d.Month==Model.m0 && d.Year == Model.y0)
+        {
+            strClass = "mt_scheduler-day-out-month";
+        }
+        if (d.DayOfWeek==DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+        {
+            bolWeekendDay = true;
+            strClass = "mt_scheduler-day-weekend";
+        }
+        if (Model.lisC26.Any(p => p.c26Date == d))
+        {
+            bolHoliday = true;
+            strClass = "mt_scheduler-day-holiday";
+        }
+        if (d == DateTime.Today)
+        {
+            strClass = "mt_scheduler-today";
+        }
+    }
+
+</table>

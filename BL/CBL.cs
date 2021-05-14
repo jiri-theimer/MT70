@@ -172,7 +172,7 @@ namespace BL
             }
             else
             {
-                if (s == "1")
+                if (s == "1" || s=="true" || s=="True")
                 {
                     return true;
                 }

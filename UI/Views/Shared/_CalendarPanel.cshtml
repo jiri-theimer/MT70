@@ -2,12 +2,17 @@
 @inject BL.Factory _f
 
 @{
+    var qryP31 = Model.lisP31;
+    if (Model.CurrentView == UI.Models.p31view.CalendarViewEnum.Month)
+    {
+        qryP31 = Model.lisP31.Where(p => p.p31Date.Year == Model.y0 && p.p31Date.Month == Model.m0);
+    }
     string _strMesic = Model.d1.Month.ToString() + "/" + Model.d1.Year.ToString();
-    double _dblHodiny = Model.lisP31.Sum(p => p.p31Hours_Orig);
-    double _dblHodinyFa = Model.lisP31.Where(p => p.p32IsBillable).Sum(p => p.p31Hours_Orig);
-    double _dblHodinyWip = Model.lisP31.Where(p => p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
-    double _dblHodinyFaWip = Model.lisP31.Where(p => p.p32IsBillable && p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
-    double _dblHodinyNeFaWip = Model.lisP31.Where(p => !p.p32IsBillable && p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+    double _dblHodiny = qryP31.Sum(p => p.p31Hours_Orig);
+    double _dblHodinyFa = qryP31.Where(p => p.p32IsBillable).Sum(p => p.p31Hours_Orig);
+    double _dblHodinyWip = qryP31.Where(p => p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+    double _dblHodinyFaWip = qryP31.Where(p => p.p32IsBillable && p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+    double _dblHodinyNeFaWip = qryP31.Where(p => !p.p32IsBillable && p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
     double _dblFond = 0.00;
     if (Model.j02ID > 0)
     {
@@ -21,7 +26,7 @@
         _dblUtilFa = 100.00 * _dblHodinyFa / _dblFond;
     }
 
-    double _dblHodiny4Approve = Model.lisP31.Where(p => p.p71ID == BO.p71IdENUM.Schvaleno && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
+    double _dblHodiny4Approve = qryP31.Where(p => p.p71ID == BO.p71IdENUM.Schvaleno && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
 
     double _dblHodinyVyfa4 = 0.00;
     double _dblHodinyVyfa6 = 0.00;
@@ -29,14 +34,14 @@
 
     if (_f.CurrentUser.IsRatesAccess)
     {
-        _dblHodinyVyfa4 = Model.lisP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.Vyfakturovano).Sum(p => p.p31Hours_Invoiced);
-        _dblHodinyVyfa6 = Model.lisP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.ZahrnutoDoPausalu).Sum(p => p.p31Hours_Orig);
-        _dblHodinyVyfa23 = Model.lisP31.Where(p => p.p91ID > 0 && (p.p70ID == BO.p70IdENUM.SkrytyOdpis || p.p70ID == BO.p70IdENUM.ViditelnyOdpis)).Sum(p => p.p31Hours_Orig);
+        _dblHodinyVyfa4 = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.Vyfakturovano).Sum(p => p.p31Hours_Invoiced);
+        _dblHodinyVyfa6 = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.ZahrnutoDoPausalu).Sum(p => p.p31Hours_Orig);
+        _dblHodinyVyfa23 = qryP31.Where(p => p.p91ID > 0 && (p.p70ID == BO.p70IdENUM.SkrytyOdpis || p.p70ID == BO.p70IdENUM.ViditelnyOdpis)).Sum(p => p.p31Hours_Orig);
     }
 
 
 
-    
+
 }
 
 <table class="table table-sm table-hover" style="margin-right:50px;">
