@@ -16,7 +16,15 @@
     double _dblFond = 0.00;
     if (Model.j02ID > 0)
     {
-        _dblFond = _f.c21FondCalendarBL.GetSumHours(Model.RecJ02.c21ID, Model.RecJ02.j17ID, Model.d1, Model.d2);
+        if (Model.CurrentView == UI.Models.p31view.CalendarViewEnum.Month)
+        {
+            _dblFond = _f.c21FondCalendarBL.GetSumHours(Model.RecJ02.c21ID, Model.RecJ02.j17ID, new DateTime(Model.d0.Year, Model.d0.Month, 1), new DateTime(Model.d0.Year, Model.d0.Month, 1).AddMonths(1).AddDays(-1));
+        }
+        else
+        {
+            _dblFond = _f.c21FondCalendarBL.GetSumHours(Model.RecJ02.c21ID, Model.RecJ02.j17ID, Model.d1, Model.d2);
+        }
+
     }
     double _dblUtilTotal = 0.00;
     double _dblUtilFa = 0.00;
