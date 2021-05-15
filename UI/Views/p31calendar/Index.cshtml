@@ -175,7 +175,7 @@ else
                     });
 
             $(".dc").dblclick(function () {
-                        var j02id = $(this).attr("data-j02id");
+                var j02id = "@Model.j02ID";
                         var d = $(this).attr("data-d");
                         _window_open(_ep("/p31/Record?j02id=" + j02id + "&d=" + d));
                     });
@@ -391,5 +391,9 @@ else
             d = new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000);
         }
         return (d);
+    }
+
+    function p31c(d) {
+        alert(d);
     }
 </script>

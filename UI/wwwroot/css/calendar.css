@@ -107,7 +107,7 @@ div.mt_scheduler-day {
 
 
 
-div.mt_scheduler-p31text {
+.mt_scheduler-p31text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -116,6 +116,7 @@ div.mt_scheduler-p31text {
     max-width: 400px;
     margin-left: 10px;
 }
+
 
 div.mt_scheduler-day-header {
     width: 100%;
@@ -127,6 +128,7 @@ div.mt_scheduler-day-header {
 a.mt_scheduler-day-link {
     padding: 4px;
     text-decoration:none;
+    
 }
 
     a.mt_scheduler-day-link:hover {
@@ -136,17 +138,7 @@ a.mt_scheduler-day-link {
         text-decoration:underline;
     }
 
-div.mt_scheduler-day-link-container {
-    width: 100%;
-    cursor: pointer;
-    color: black;
-}
 
-    div.mt_scheduler-day-link-container:hover {
-        background-color: #2D89EF;
-        border-radius: 10px;
-        color: white;
-    }
 
 
 
@@ -160,6 +152,22 @@ a.p31_rec_link {
 }
 
     a.p31_rec_link:hover {
+        text-decoration: underline;
+    }
+
+
+a.p31_rec_link_agenda {
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+    display:inline-block;
+    text-overflow:ellipsis;
+    width:220px;
+}
+
+    a.p31_rec_link_agenda:hover {
         text-decoration: underline;
     }
 
@@ -327,3 +335,20 @@ a.stat_link {
         left: 0px;
     }
 }
+
+
+div.mt_scheduler-day-link-container {
+    width: 100%;
+    cursor: pointer;
+    color: black;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+}
+
+    div.mt_scheduler-day-link-container:hover {
+        background-color: #2D89EF;
+        border-radius: 10px;
+        color: white;
+    }
