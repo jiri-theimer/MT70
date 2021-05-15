@@ -117,9 +117,9 @@ namespace UI.Controllers
 
 
         //zobrazení ZOOM okna pro vybranou osobu a den
-        public IActionResult Zoom(int j02id,string d,int m,int y)
+        public IActionResult Zoom(int j02id,string d,int m,int y,int p28id,int p41id)
         {
-            var v = new daylineZoomViewModel() { j02ID=j02id };
+            var v = new daylineZoomViewModel() { j02ID=j02id,p28ID=p28id,p41ID=p41id };
             if (m>0 && y > 0)
             {
                 v.SelectedDate1 = new DateTime(y, m, 1);
@@ -138,8 +138,15 @@ namespace UI.Controllers
             v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);
 
             string strMyQueryInline = "j02id|int|" + v.j02ID.ToString()+ "|global_d1|date|" + BO.BAS.ObjectDate2String(v.SelectedDate1,"dd.MM.yyyy") + "|global_d2|date|" + BO.BAS.ObjectDate2String(v.SelectedDate2, "dd.MM.yyyy");
+            if (v.p28ID > 0)
+            {
+                strMyQueryInline += "|p28id|int|" + v.p28ID.ToString();
+            }
+            if (v.p41ID > 0)
+            {
+                strMyQueryInline += "|p41id|int|" + v.p41ID.ToString();
+            }
 
-            
             v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = strMyQueryInline,oncmclick= "local_cm(event)" }; //grid má vlastní zdroj kontextového menu
             v.gridinput.query = new BO.InitMyQuery().Load("p31", null, 0, strMyQueryInline);
             

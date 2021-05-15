@@ -208,14 +208,8 @@
                         <td class="td_sum">
                             @if (hodiny != 0)
                             {
-                                @if (Model.ShowHHMM)
-                                {
-                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
-                                }
-                                else
-                                {
-                                    @(BO.BAS.Number2String(hodiny))
-                                }
+                                <a class="hz" onclick="zoom_allmonth_p28(this,@(recJ02.pid),@(grp.First().p28ID_Client))">@(BO.basTime.FormatNumeric(hodiny, Model.ShowHHMM))</a>
+
                             }
                         </td>
                         @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
@@ -224,14 +218,7 @@
                             <td class="td_day">
                                 @if (hodiny != 0)
                                 {
-                                    if (Model.ShowHHMM)
-                                    {
-                                        @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
-                                    }
-                                    else
-                                    {
-                                        @(BO.BAS.Number2String(hodiny))
-                                    }
+                                    @(BO.basTime.FormatNumeric(hodiny,Model.ShowHHMM))
 
                                 }
                             </td>
@@ -255,14 +242,7 @@
                         <td class="td_sum">
                             @if (hodiny != 0)
                             {
-                                @if (Model.ShowHHMM)
-                                {
-                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
-                                }
-                                else
-                                {
-                                    @(BO.BAS.Number2String(hodiny))
-                                }
+                                <a class="hz" onclick="zoom_allmonth_p41(this,@(recJ02.pid),@(grp.First().p41ID))">@(BO.basTime.FormatNumeric(hodiny, Model.ShowHHMM))</a>
                             }
                         </td>
                         @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
@@ -271,14 +251,7 @@
                             <td class="td_day">
                                 @if (hodiny != 0)
                                 {
-                                    if (Model.ShowHHMM)
-                                    {
-                                        @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
-                                    }
-                                    else
-                                    {
-                                        @(BO.BAS.Number2String(hodiny))
-                                    }
+                                    @(BO.basTime.FormatNumeric(hodiny,Model.ShowHHMM))
 
                                 }
                             </td>
@@ -299,21 +272,14 @@
                         <td class="td_sum">
                             @if (hodiny != 0)
                             {
-                                @if (Model.ShowHHMM)
-                                {
-                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
-                                }
-                                else
-                                {
-                                    @(BO.BAS.Number2String(hodiny))
-                                }
+                                <a class="hz" onclick="zoom_allmonth_p28(this,@(recJ02.pid),@(grp.First().p28ID_Client))">@(BO.basTime.FormatNumeric(hodiny, Model.ShowHHMM))</a>
                             }
                         </td>
                         @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
                         {
 
                             <td class="td_day">
-                                @if (1==1)
+                                @if (1 == 1)
                                 {
                                     var qryP31 = Model.lisP31.Where(p => p.j02ID == recJ02.pid && p.p28ID_Client == grp.First().p28ID_Client && p.p31Date == d);
 
@@ -363,21 +329,14 @@
                         <td class="td_sum">
                             @if (hodiny != 0)
                             {
-                                @if (Model.ShowHHMM)
-                                {
-                                    @(BO.basTime.ShowAsHHMM(hodiny.ToString()))
-                                }
-                                else
-                                {
-                                    @(BO.BAS.Number2String(hodiny))
-                                }
+                                <a class="hz" onclick="zoom_allmonth_p41(this,@(recJ02.pid),@(grp.First().p41ID))">@(BO.basTime.FormatNumeric(hodiny, Model.ShowHHMM))</a>
                             }
                         </td>
                         @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
                         {
 
                             <td class="td_day">
-                                @if (1==1)
+                                @if (1 == 1)
                                 {
                                     var qryP31 = Model.lisP31.Where(p => p.j02ID == recJ02.pid && p.p41ID == grp.First().p41ID && p.p31Date == d);
 
@@ -420,6 +379,7 @@
 <script type="text/javascript">
     var _zoomwin = document.getElementById("zoomwin");
     var _lasturl = "";
+    var _lastctl = null;
 
     $(document).ready(function () {
 
@@ -552,24 +512,32 @@
 
     function re(ctl, j02id, d) {
         var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&d=" + d);
-        if (_lasturl == url && $("#zoomwin").css("display") == "block") {
-            zoom_close();
-        }else
-        {
-            zoom_open(ctl, url);
-            _lasturl = url;
-        }
-
+        zoom_open(ctl, url);
     }
 
     function zoom_allmonth(ctl,j02id) {
-        var url = _ep("/p31dayline/Zoom?j02id="+j02id+"&m=@(Model.d0.Month)&y=@(Model.d0.Year)");
-
+        var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&m=@(Model.d0.Month)&y=@(Model.d0.Year)");        
+        zoom_open(ctl, url);
+        
+    }
+    function zoom_allmonth_p28(ctl,j02id,p28id) {
+        var url = _ep("/p31dayline/Zoom?j02id="+j02id+"&p28id="+p28id+"&m=@(Model.d0.Month)&y=@(Model.d0.Year)");
+        zoom_open(ctl, url);
+    }
+    function zoom_allmonth_p41(ctl,j02id,p41id) {
+        var url = _ep("/p31dayline/Zoom?j02id="+j02id+"&p41id="+p41id+"&m=@(Model.d0.Month)&y=@(Model.d0.Year)");
         zoom_open(ctl, url);
     }
 
     function zoom_open(ctl, url)
     {
+        if (_lasturl == url && _lastctl == ctl && $("#zoomwin").css("display") == "block") {
+            zoom_close();
+            return;
+        }
+        _lasturl = url;
+        _lastctl = ctl;
+
         $(".zoom_ctl_current").removeClass("zoom_ctl_current");
         $(ctl).addClass("zoom_ctl_current");
 

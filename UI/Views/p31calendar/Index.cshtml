@@ -108,7 +108,7 @@
 <script type="text/javascript">
         var _zoomwin = document.getElementById("zoomwin");
         var _lasturl = "";
-
+        var _lastctl = null;
 
         $(document).ready(function () {
 
@@ -181,20 +181,13 @@
         }
 
         function re(ctl, j02id, d) {
-
             var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&d=" + d);
-            if (_lasturl == url && $("#zoomwin").css("display") == "block") {
-                zoom_close();
-            } else {
-                zoom_open(ctl, url);
-                _lasturl = url;
-            }
+            zoom_open(ctl, url);
 
     }
 
     function zoom_allmonth(ctl) {
         var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)");
-        
         zoom_open(ctl, url);
     }
 
@@ -220,6 +213,13 @@
 
 
     function zoom_open(ctl, url) {
+        if (_lasturl == url && _lastctl == ctl && $("#zoomwin").css("display") == "block") {
+            zoom_close();
+            return;
+        }
+        _lasturl = url;
+        _lastctl = ctl;
+
         $(".zoom_ctl_current").removeClass("zoom_ctl_current");
         $(ctl).addClass("zoom_ctl_current");
 

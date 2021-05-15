@@ -63,15 +63,11 @@
             
 
         </td>
-        <td class="tdnum bg-info">
-            @if (Model.ShowHHMM)
-            {
-                @(BO.basTime.ShowAsHHMM(_dblHodiny.ToString()))
-            }
-            else
-            {
-                @(BO.BAS.Num2StringNull(_dblHodiny))
-            }
+        <td class="tdnum">
+            <strong style="padding:3px;">
+                @(BO.basTime.FormatNumeric(_dblHodiny,Model.ShowHHMM))
+            </strong>
+            
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -80,14 +76,7 @@
             @_f.tra("Z toho fakturovatelné aktivity"):
         </td>
         <td class="tdnum fa">
-            @if (Model.ShowHHMM)
-            {
-                @(BO.basTime.ShowAsHHMM(_dblHodinyFa.ToString()))
-            }
-            else
-            {
-                @(BO.BAS.Num2StringNull(_dblHodinyFa))
-            }
+            @(BO.basTime.FormatNumeric(_dblHodinyFa,Model.ShowHHMM))
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -96,14 +85,7 @@
             @_f.tra("Z toho rozpracované (čeká na schválení)"):
         </td>
         <td class="tdnum">
-            @if (Model.ShowHHMM)
-            {
-                @(BO.basTime.ShowAsHHMM(_dblHodinyWip.ToString()))
-            }
-            else
-            {
-                @(BO.BAS.Num2StringNull(_dblHodinyWip))
-            }
+            @(BO.basTime.FormatNumeric(_dblHodinyWip,Model.ShowHHMM))
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -112,14 +94,7 @@
             @_f.tra("Z toho fakturovatelné aktivity"):
         </td>
         <td class="tdnum fa">
-            @if (Model.ShowHHMM)
-            {
-                @(BO.basTime.ShowAsHHMM(_dblHodinyFaWip.ToString()))
-            }
-            else
-            {
-                @(BO.BAS.Num2StringNull(_dblHodinyFaWip))
-            }
+            @(BO.basTime.FormatNumeric(_dblHodinyFaWip,Model.ShowHHMM))
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -128,14 +103,7 @@
             @_f.tra("Z toho nefakturovatelné aktivity"):
         </td>
         <td class="tdnum nefa">
-            @if (Model.ShowHHMM)
-            {
-                @(BO.basTime.ShowAsHHMM(_dblHodinyNeFaWip.ToString()))
-            }
-            else
-            {
-                @(BO.BAS.Num2StringNull(_dblHodinyNeFaWip))
-            }
+            @(BO.basTime.FormatNumeric(_dblHodinyNeFaWip,Model.ShowHHMM))
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -144,14 +112,7 @@
             @_f.tra("Z toho schváleno a čeká na vyúčtování"):
         </td>
         <td class="tdnum">
-            @if (Model.ShowHHMM)
-            {
-                @(BO.basTime.ShowAsHHMM(_dblHodiny4Approve.ToString()))
-            }
-            else
-            {
-                @(BO.BAS.Num2StringNull(_dblHodiny4Approve))
-            }
+            @(BO.basTime.FormatNumeric(_dblHodiny4Approve,Model.ShowHHMM))
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -170,14 +131,7 @@
                 @_f.tra("Sazbou"):
             </td>
             <td class="tdnum fa">
-                @if (Model.ShowHHMM)
-                {
-                    @(BO.basTime.ShowAsHHMM(_dblHodinyVyfa4.ToString()))
-                }
-                else
-                {
-                    @(BO.BAS.Num2StringNull(_dblHodinyVyfa4))
-                }
+                @(BO.basTime.FormatNumeric(_dblHodinyVyfa4,Model.ShowHHMM))
             </td>
             <td style="width:20px;">h.</td>
         </tr>
@@ -186,14 +140,7 @@
                 @_f.tra("Zahrnuto do paušulu "):
             </td>
             <td class="tdnum" style="color:hotpink;">
-                @if (Model.ShowHHMM)
-                {
-                    @(BO.basTime.ShowAsHHMM(_dblHodinyVyfa6.ToString()))
-                }
-                else
-                {
-                    @(BO.BAS.Num2StringNull(_dblHodinyVyfa6))
-                }
+                @(BO.basTime.FormatNumeric(_dblHodinyVyfa6,Model.ShowHHMM))
             </td>
             <td style="width:20px;">h.</td>
         </tr>
@@ -202,14 +149,7 @@
                 @_f.tra("Odepsáno"):
             </td>
             <td class="tdnum" style="color:brown;">
-                @if (Model.ShowHHMM)
-                {
-                    @(BO.basTime.ShowAsHHMM(_dblHodinyVyfa23.ToString()))
-                }
-                else
-                {
-                    @(BO.BAS.Num2StringNull(_dblHodinyVyfa23))
-                }
+                @(BO.basTime.FormatNumeric(_dblHodinyVyfa23,Model.ShowHHMM))
             </td>
             <td style="width:20px;">h.</td>
         </tr>
@@ -220,14 +160,7 @@
             @_f.tra("Fond pracovní doby"):
         </td>
         <td class="tdnum" style="color: #B8860B;">
-            @if (Model.ShowHHMM)
-            {
-                @(BO.basTime.ShowAsHHMM(_dblFond.ToString()))
-            }
-            else
-            {
-                @(BO.BAS.Number2String(_dblFond))
-            }
+            @(BO.basTime.FormatNumeric(_dblFond,Model.ShowHHMM))
         </td>
         <td style="width:20px;">h.</td>
     </tr>
