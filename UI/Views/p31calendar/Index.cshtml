@@ -157,7 +157,8 @@
             });
 
             $(document).on("click", function (e) {
-                if (!$(e.target).hasClass("mt_scheduler_valuelink") && e.target.id !="cmdSummaryZoom") {
+                if (!$(e.target).hasClass("mt_scheduler_valuelink") && !$(e.target).hasClass("stat_link"))
+                {
                     zoom_close();
 
 
@@ -189,6 +190,23 @@
     function zoom_allmonth(ctl) {
         var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)");
         zoom_open(ctl, url);
+    }
+    function zoom_stat(ctl, p32isbillable, iswip, p70id, isapproved_and_wait4invoice) {
+        var url = "/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)";
+        if (p32isbillable != undefined || p32isbillable != null) {
+            url = url + "&p32isbillable=" + p32isbillable;
+        }
+        if (iswip != undefined || iswip != null) {
+            url = url + "&iswip=" + iswip;
+        }
+        if (isapproved_and_wait4invoice != undefined || isapproved_and_wait4invoice != null) {
+            url = url + "&isapproved_and_wait4invoice=" + isapproved_and_wait4invoice;
+        }
+        if (p70id != undefined || p70id != null) {
+            url = url + "&p70id=" + p70id;
+        }
+        
+        zoom_open(ctl, _ep(url));
     }
 
         function month_prev() {

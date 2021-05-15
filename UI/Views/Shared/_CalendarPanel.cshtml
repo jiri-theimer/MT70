@@ -7,7 +7,7 @@
     {
         qryP31 = Model.lisP31.Where(p => p.p31Date.Year == Model.y0 && p.p31Date.Month == Model.m0);
     }
-    string _strMesic = Model.d1.Month.ToString() + "/" + Model.d1.Year.ToString();
+    string _strMesic = Model.d0.Month.ToString() + "/" + Model.d0.Year.ToString();
     double _dblHodiny = qryP31.Sum(p => p.p31Hours_Orig);
     double _dblHodinyFa = qryP31.Where(p => p.p32IsBillable).Sum(p => p.p31Hours_Orig);
     double _dblHodinyWip = qryP31.Where(p => p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
@@ -37,12 +37,14 @@
     double _dblHodiny4Approve = qryP31.Where(p => p.p71ID == BO.p71IdENUM.Schvaleno && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
 
     double _dblHodinyVyfa4 = 0.00;
+    double _dblHodinyVyfa4Orig = 0.00;
     double _dblHodinyVyfa6 = 0.00;
     double _dblHodinyVyfa23 = 0.00;
 
     if (_f.CurrentUser.IsRatesAccess)
-    {
+    {        
         _dblHodinyVyfa4 = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.Vyfakturovano).Sum(p => p.p31Hours_Invoiced);
+        _dblHodinyVyfa4Orig = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.Vyfakturovano).Sum(p => p.p31Hours_Orig);
         _dblHodinyVyfa6 = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.ZahrnutoDoPausalu).Sum(p => p.p31Hours_Orig);
         _dblHodinyVyfa23 = qryP31.Where(p => p.p91ID > 0 && (p.p70ID == BO.p70IdENUM.SkrytyOdpis || p.p70ID == BO.p70IdENUM.ViditelnyOdpis)).Sum(p => p.p31Hours_Orig);
     }
@@ -57,16 +59,16 @@
         <td>
             @_f.tra("Vykázané hodiny")
 
-            <button type="button" id="cmdSummaryZoom" class="btn btn-sm btn-primary" onclick="zoom_allmonth(this)">
+            <strong style="color:navy;">
                 @(_strMesic)
-            </button>
+            </strong>
             
 
         </td>
         <td class="tdnum">
-            <strong style="padding:3px;">
+            <a class="stat_link" onclick="zoom_allmonth(this)">
                 @(BO.basTime.FormatNumeric(_dblHodiny,Model.ShowHHMM))
-            </strong>
+            </a>
             
         </td>
         <td style="width:20px;">h.</td>
@@ -75,8 +77,11 @@
         <td style="padding-left:20px;">
             @_f.tra("Z toho fakturovatelné aktivity"):
         </td>
-        <td class="tdnum fa">
-            @(BO.basTime.FormatNumeric(_dblHodinyFa,Model.ShowHHMM))
+        <td class="tdnum">
+            <a class="stat_link fa" onclick="zoom_stat(this,'true')">
+                @(BO.basTime.FormatNumeric(_dblHodinyFa,Model.ShowHHMM))
+            </a>
+            
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -84,8 +89,10 @@
         <td style="padding-left:20px;">
             @_f.tra("Z toho rozpracované (čeká na schválení)"):
         </td>
-        <td class="tdnum">
-            @(BO.basTime.FormatNumeric(_dblHodinyWip,Model.ShowHHMM))
+        <td class="tdnum">            
+            <a class="stat_link" style="color:black;" onclick="zoom_stat(this,null,'true')">
+                @(BO.basTime.FormatNumeric(_dblHodinyWip,Model.ShowHHMM))
+            </a>
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -93,8 +100,10 @@
         <td style="padding-left:40px;">
             @_f.tra("Z toho fakturovatelné aktivity"):
         </td>
-        <td class="tdnum fa">
-            @(BO.basTime.FormatNumeric(_dblHodinyFaWip,Model.ShowHHMM))
+        <td class="tdnum">
+            <a class="stat_link fa" onclick="zoom_stat(this,'true','true')">
+                @(BO.basTime.FormatNumeric(_dblHodinyFaWip,Model.ShowHHMM))
+            </a>            
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -102,8 +111,11 @@
         <td style="padding-left:40px;">
             @_f.tra("Z toho nefakturovatelné aktivity"):
         </td>
-        <td class="tdnum nefa">
-            @(BO.basTime.FormatNumeric(_dblHodinyNeFaWip,Model.ShowHHMM))
+        <td class="tdnum">
+            <a class="stat_link nefa" onclick="zoom_stat(this,'false','true')">
+                @(BO.basTime.FormatNumeric(_dblHodinyNeFaWip,Model.ShowHHMM))
+            </a>
+            
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -111,8 +123,10 @@
         <td style="padding-left:20px;">
             @_f.tra("Z toho schváleno a čeká na vyúčtování"):
         </td>
-        <td class="tdnum">
-            @(BO.basTime.FormatNumeric(_dblHodiny4Approve,Model.ShowHHMM))
+        <td class="tdnum">            
+            <a class="stat_link" style="color:black;" onclick="zoom_stat(this,null,null,null,'true')">
+                @(BO.basTime.FormatNumeric(_dblHodiny4Approve,Model.ShowHHMM))
+            </a>
         </td>
         <td style="width:20px;">h.</td>
     </tr>
@@ -130,8 +144,14 @@
             <td style="padding-left:40px;">
                 @_f.tra("Sazbou"):
             </td>
-            <td class="tdnum fa">
-                @(BO.basTime.FormatNumeric(_dblHodinyVyfa4,Model.ShowHHMM))
+            <td class="tdnum fa">                
+                <a class="stat_link fa" onclick="zoom_stat(this,null,null,'4')">
+                    @(BO.basTime.FormatNumeric(_dblHodinyVyfa4,Model.ShowHHMM))
+                    @if (_dblHodinyVyfa4 != _dblHodinyVyfa4Orig)
+                    {
+                        @(" z "+BO.basTime.FormatNumeric(_dblHodinyVyfa4Orig, Model.ShowHHMM))
+                    }
+                </a>
             </td>
             <td style="width:20px;">h.</td>
         </tr>
@@ -139,8 +159,10 @@
             <td style="padding-left:40px;">
                 @_f.tra("Zahrnuto do paušulu "):
             </td>
-            <td class="tdnum" style="color:hotpink;">
-                @(BO.basTime.FormatNumeric(_dblHodinyVyfa6,Model.ShowHHMM))
+            <td class="tdnum">                
+                <a class="stat_link" style="color:pink;" onclick="zoom_stat(this,null,null,'6')">
+                    @(BO.basTime.FormatNumeric(_dblHodinyVyfa6,Model.ShowHHMM))
+                </a>
             </td>
             <td style="width:20px;">h.</td>
         </tr>
@@ -148,8 +170,10 @@
             <td style="padding-left:40px;">
                 @_f.tra("Odepsáno"):
             </td>
-            <td class="tdnum" style="color:brown;">
-                @(BO.basTime.FormatNumeric(_dblHodinyVyfa23,Model.ShowHHMM))
+            <td class="tdnum">                
+                <a class="stat_link" style="color:brown;" onclick="zoom_stat(this,null,null,'23')">
+                    @(BO.basTime.FormatNumeric(_dblHodinyVyfa23,Model.ShowHHMM))
+                </a>
             </td>
             <td style="width:20px;">h.</td>
         </tr>

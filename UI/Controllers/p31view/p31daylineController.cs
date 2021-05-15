@@ -117,9 +117,9 @@ namespace UI.Controllers
 
 
         //zobrazení ZOOM okna pro vybranou osobu a den
-        public IActionResult Zoom(int j02id,string d,int m,int y,int p28id,int p41id)
+        public IActionResult Zoom(int j02id,string d,int m,int y,int p28id,int p41id,bool? p32isbillable,int p70id,bool? iswip,bool? isapproved_and_wait4invoice)
         {
-            var v = new daylineZoomViewModel() { j02ID=j02id,p28ID=p28id,p41ID=p41id };
+            var v = new daylineZoomViewModel() { j02ID=j02id,p28ID=p28id,p41ID=p41id,p32IsBillable= p32isbillable,IsWip=iswip,p70ID=p70id, IsApproved_And_Wait4Invoice=isapproved_and_wait4invoice };
             if (m>0 && y > 0)
             {
                 v.SelectedDate1 = new DateTime(y, m, 1);
@@ -145,6 +145,22 @@ namespace UI.Controllers
             if (v.p41ID > 0)
             {
                 strMyQueryInline += "|p41id|int|" + v.p41ID.ToString();
+            }
+            if (v.p70ID > 0)
+            {
+                strMyQueryInline += "|p70id|int|" + v.p70ID.ToString();
+            }
+            if (v.p32IsBillable != null)
+            {
+                strMyQueryInline += "|p32isbillable|bool|" + BO.BAS.GB(Convert.ToBoolean(v.p32IsBillable));
+            }
+            if (v.IsWip != null)
+            {
+                strMyQueryInline += "|iswip|bool|" + BO.BAS.GB(Convert.ToBoolean(v.IsWip));
+            }
+            if (v.IsApproved_And_Wait4Invoice != null)
+            {
+                strMyQueryInline += "|isapproved_and_wait4invoice|bool|" + BO.BAS.GB(Convert.ToBoolean(v.IsApproved_And_Wait4Invoice));
             }
 
             v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = strMyQueryInline,oncmclick= "local_cm(event)" }; //grid má vlastní zdroj kontextového menu

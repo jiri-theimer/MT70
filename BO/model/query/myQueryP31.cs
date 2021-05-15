@@ -20,6 +20,12 @@ namespace BO
         public int p28id { get; set; }
         public int p41id { get; set; }
         public int p91id { get; set; }
+        public int p70id { get; set; }
+        public bool? iswip { get;set; }
+        public bool? isinvoiced { get; set; }
+        public bool? isapproved_and_wait4invoice { get; set; }
+        public bool? p32isbillable { get; set; }
+        public int p71id { get; set; }
         public string tabquery { get; set; }
         public myQueryP31_Period periodfield { get; set; }
         
@@ -82,6 +88,59 @@ namespace BO
             if (this.p91id > 0)
             {
                 AQ("a.p91ID=@p91id", "p91id", this.p91id);
+            }
+            if (this.p70id > 0)
+            {
+                if (this.p70id == 23)
+                {
+                    AQ("a.p70ID IN (2,3)",null,null);
+                }
+                else
+                {
+                    AQ("a.p70ID=@p70id", "p70id", this.p70id);
+                }
+                
+            }
+            if (this.p71id > 0)
+            {
+                AQ("a.p71ID=@p71id", "p71id", this.p71id);
+            }
+            if (this.p32isbillable != null)
+            {
+                AQ("p32x.p32IsBillable=@billable","billable",this.p32isbillable);
+            }
+            if (this.iswip != null)
+            {
+                if (this.iswip == true)
+                {
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL",null,null);
+                }
+                else
+                {
+                    AQ("a.p71ID IS NOT NULL", null, null);
+                }                
+            }
+            if (this.isinvoiced != null)
+            {
+                if (this.isinvoiced == true)
+                {
+                    AQ("a.p91ID IS NOT NULL", null, null);
+                }
+                else
+                {
+                    AQ("a.p91ID IS NULL", null, null);
+                }
+            }
+            if (this.isapproved_and_wait4invoice != null)
+            {
+                if (this.isapproved_and_wait4invoice == true)
+                {
+                    AQ("a.p71ID=1 AND a.p91ID IS NULL", null, null);
+                }
+                else
+                {
+                    AQ("a.p91ID IS NULL", null, null);
+                }
             }
 
             if (this.tabquery != null)
