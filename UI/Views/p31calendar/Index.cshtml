@@ -30,7 +30,7 @@
     <ul class="nav nav-tabs" role="tablist">
         <li>
             <button class="btn btn-outline-secondary dropdown-toggle" id="cmdMore" title="@_f.tra("Nastavení")">
-                <span class="k-icon k-i-gear"></span>                
+                <span class="k-icon k-i-gear"></span>
             </button>
         </li>
         <li style="width:200px;">
@@ -103,9 +103,9 @@
 </div>
 
 
-    <div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:1000;display:none;"></div>
+<div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:8000;display:none;"></div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
         var _zoomwin = document.getElementById("zoomwin");
         var _lasturl = "";
 
@@ -139,14 +139,14 @@
                 v.push($("#chkShowWeekend").prop("checked"));
                 k.push("p31calendar-showleftpanel");
                 v.push($("#chkShowLeftPanel").prop("checked"));
-                
+
 
                 $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {
                     reload();
 
                 });
 
-                
+
             });
 
             $(document).on("keydown", function (e) {
@@ -157,10 +157,15 @@
             });
 
             $(document).on("click", function (e) {
-
-                if (e.target.className != "hz") {
+                if (!$(e.target).hasClass("mt_scheduler_valuelink") && e.target.id !="cmdSummaryZoom") {
                     zoom_close();
+
+
                 }
+
+
+
+
             });
 
 
@@ -176,6 +181,7 @@
         }
 
         function re(ctl, j02id, d) {
+
             var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&d=" + d);
             if (_lasturl == url && $("#zoomwin").css("display") == "block") {
                 zoom_close();
@@ -184,7 +190,13 @@
                 _lasturl = url;
             }
 
-        }
+    }
+
+    function zoom_allmonth(ctl) {
+        var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)");
+        
+        zoom_open(ctl, url);
+    }
 
         function month_prev() {
             var d0 = datepicker_get_value("d0");
@@ -207,7 +219,10 @@
         }
 
 
-        function zoom_open(ctl, url) {
+    function zoom_open(ctl, url) {
+        $(".zoom_ctl_current").removeClass("zoom_ctl_current");
+        $(ctl).addClass("zoom_ctl_current");
+
             var c = $("#zoomwin");
 
             var w = _device.innerWidth - 100;
@@ -227,6 +242,7 @@
             $(c).css("left", x + "px");
             $(c).css("top", y + "px");
             $(c).html("<iframe id='frazoom' style='border:solid 1px gray;' width='" + (w - 50) + "px' height='" + (h - 40) + "px' src='" + url + "'></iframe>");
+
         }
 
         function zoom_close() {
@@ -234,20 +250,20 @@
                 $("#zoomwin").css("display", "none");
             }
 
-
+            $(".zoom_ctl_current").removeClass("zoom_ctl_current");
         }
 
-        function j02id_change(j02id) {            
+        function j02id_change(j02id) {
             if (j02id=="" || j02id=="0")
             {
                 j02id = "@(_f.CurrentUser.j02ID)";
             }
-           
+
             $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-j02id", value: j02id }, function (data) {
                 reload();
 
             });
 
-            
+
         }
-    </script>
+</script>

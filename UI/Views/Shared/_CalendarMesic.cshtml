@@ -10,19 +10,30 @@
     bool bolOK = false;
     string strStyle = null;
     int x = 1;
-
+    string strTitleVykazatDo = _f.tra("Vykázat do");
+    string strTitleSouceHodiny = _f.tra("Součet hodin");
+    string strCisloDne = null;
+    string strDatum = null;
+    bool bolOutMonth = false;
+    DateTime datFirstDayOfMonth = new DateTime(Model.d0.Year, Model.d0.Month, 1);
+    DateTime datLastDayOfMonth = datFirstDayOfMonth.AddMonths(1).AddDays(-1);
+    string strHodiny = null;
 
 }
 
 
 
 <table border="0" id="mt_scheduler_calendar">
+    @{
+        strStyle = "14%";
+        if (!Model.ShowWeekend) strStyle = "20%";
+    }
     <tr>
-        <th>Po</th>
-        <th>Út</th>
-        <th>St</th>
-        <th>Čt</th>
-        <th>Pá</th>
+        <th style="@(strStyle)">Po</th>
+        <th style="@(strStyle)">Út</th>
+        <th style="@(strStyle)">St</th>
+        <th style="@(strStyle)">Čt</th>
+        <th style="@(strStyle)">Pá</th>
         @if (Model.ShowWeekend)
         {
             <th>So</th>
@@ -34,12 +45,12 @@
 
     @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
     {
-
-        strClass = "mt_scheduler-day-out-month"; bolWeekendDay = false;
+        strClass = "mt_scheduler-day-out-month"; bolWeekendDay = false; bolOutMonth = true; bolHoliday = false;
 
         if (d.Month == Model.m0 && d.Year == Model.y0)
         {
             strClass = "mt_scheduler-day-in-month";
+            bolOutMonth = false;
         }
         if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
         {
@@ -66,24 +77,72 @@
         }
         if (bolOK)
         {
-            strStyle = "14%";
-            if (!Model.ShowWeekend) strStyle = "20%";
+            @Html.Raw($"<td class='{strClass}'>");
 
-            <td class="@(strClass)" style="@(strStyle)">
+            strStyle = null;
+            strDatum = BO.BAS.ObjectDate2String(d, "dd.MM.yyyy");
+            if (d.DayOfWeek == DayOfWeek.Monday)
+            {
+                strCisloDne = BO.BAS.ObjectDate2String(d, "dd.MMM");
+            }
+            else
+            {
+                strCisloDne = BO.BAS.ObjectDate2String(d, "dd");
+            }
+            strClass = "mt_scheduler-day-link";
+            if (bolOutMonth)
+            {
+                strClass += " out-month";
+            }
+            if (d == datFirstDayOfMonth || d == datLastDayOfMonth)
+            {
+                @Html.Raw("<div class='mt_scheduler-day-header' style='background-color:khaki;'>");
+            }
+            else
+            {
+                @Html.Raw("<div class='mt_scheduler-day-header'>");
+            }
+            if (d == DateTime.Today)
+            {
+                strCisloDne += "<span class='k-icon k-i-star' style='color:orange;'></span>";
+            }
 
-                @if (d.DayOfWeek == DayOfWeek.Monday)
+            @Html.Raw($"<a class='{strClass}' href='javascript:p31c(\"{strDatum}\")' title='{strTitleVykazatDo}: {strDatum}'>{strCisloDne}</a>");
+
+            if (bolHoliday)
+            {
+                @Html.Raw($"<span title='{Model.lisC26.First(p => p.c26Date == d).c26Name}'>🍷{BO.BAS.OM2(Model.lisC26.First(p => p.c26Date == d).c26Name, 15)}</span>")
+            }
+
+            @Html.Raw("</div>");
+
+            @Html.Raw("<div class='mt_scheduler-day'>");
+            var qry = Model.lisSums.Where(p => p.p31Date == d);
+            if (qry.Count() > 0)
+            {
+                strStyle = "color:blue;";
+                if (qry.First().Hours_Billable > 0 && qry.First().Hours_NonBillable == 0)
                 {
-                    <a>@(BO.BAS.ObjectDate2String(d,"dd.MMM"))</a>
+                    strStyle = "color:green;";
                 }
                 else
                 {
-                    <a>@(BO.BAS.ObjectDate2String(d,"dd"))</a>
+                    if (qry.First().Hours_NonBillable > 0)
+                    {
+                        strStyle = "color:red;";
+                    }
                 }
+                strStyle += ";margin-left:3px;";
+                strHodiny = BO.basTime.FormatNumeric(qry.First().Hours, Model.ShowHHMM);
 
-                <div class="mt_scheduler-day">
+                @Html.Raw($"<a title='{strTitleSouceHodiny}' onclick='re(this,{Model.j02ID},\"{strDatum}\")'  class='mt_scheduler_valuelink' style='{strStyle}' p31date='{strDatum}' j02id='{Model.j02ID}'>{strHodiny}</a>");
 
-                </div>
-            </td>
+            }
+
+            @Html.Raw("</div>");
+
+            @Html.Raw("</td>");
+
         }
         if (x == 7)
         {

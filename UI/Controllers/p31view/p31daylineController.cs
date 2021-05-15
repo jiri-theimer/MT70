@@ -117,21 +117,32 @@ namespace UI.Controllers
 
 
         //zobrazení ZOOM okna pro vybranou osobu a den
-        public IActionResult Zoom(int j02id,string d)
+        public IActionResult Zoom(int j02id,string d,int m,int y)
         {
-            var v = new daylineZoomViewModel() { SelectedDate = BO.BAS.String2Date(d),j02ID=j02id };
+            var v = new daylineZoomViewModel() { j02ID=j02id };
+            if (m>0 && y > 0)
+            {
+                v.SelectedDate1 = new DateTime(y, m, 1);
+                v.SelectedDate2 = v.SelectedDate1.AddMonths(1).AddDays(-1);
+            }
+            else
+            {
+                v.SelectedDate1 = BO.BAS.String2Date(d);
+                v.SelectedDate2 = v.SelectedDate1;
+            }
 
-            if (v.j02ID==0 || v.SelectedDate == null)
+            if (v.j02ID==0 || v.SelectedDate1.Year<2000)
             {
                 return this.StopPage(true, "Na vstupu chybí osoba nebo datum.");
             }
             v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);
 
-            string strMyQueryInline = "j02id|int|" + v.j02ID.ToString()+ "|global_d1|date|" + BO.BAS.ObjectDate2String(v.SelectedDate,"dd.MM.yyyy") + "|global_d2|date|" + BO.BAS.ObjectDate2String(v.SelectedDate, "dd.MM.yyyy");
+            string strMyQueryInline = "j02id|int|" + v.j02ID.ToString()+ "|global_d1|date|" + BO.BAS.ObjectDate2String(v.SelectedDate1,"dd.MM.yyyy") + "|global_d2|date|" + BO.BAS.ObjectDate2String(v.SelectedDate2, "dd.MM.yyyy");
 
             
             v.gridinput = new TheGridInput() { entity = "p31Worksheet", master_entity = "inform", myqueryinline = strMyQueryInline,oncmclick= "local_cm(event)" }; //grid má vlastní zdroj kontextového menu
             v.gridinput.query = new BO.InitMyQuery().Load("p31", null, 0, strMyQueryInline);
+            
             //v.gridinput.fixedcolumns = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
             
             return View(v);

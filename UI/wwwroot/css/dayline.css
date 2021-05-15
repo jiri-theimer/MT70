@@ -168,5 +168,15 @@ div.dd {
 
 a.hz{
     cursor:pointer;
-    text-decoration:underline;
+    text-decoration:none;
+}
+
+a.hz:hover {
+    
+    text-decoration: underline;
+}
+
+.zoom_ctl_current {
+    border: solid 1px blue;
+    border-radius: 4px;
 }

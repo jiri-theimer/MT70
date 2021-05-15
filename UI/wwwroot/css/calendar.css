@@ -84,6 +84,10 @@
     background-color: #fff0f7;
 }
 
+.out-month {
+    color:gray;
+}
+
 
 
 .mt_scheduler-today {
@@ -118,13 +122,14 @@ div.mt_scheduler-day-header {
 
 a.mt_scheduler-day-link {
     padding: 4px;
+    text-decoration:none;
 }
 
     a.mt_scheduler-day-link:hover {
         color: white;
         background-color: #2D89EF;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
+        border-radius:4px;
+        text-decoration:underline;
     }
 
 div.mt_scheduler-day-link-container {
@@ -159,9 +164,13 @@ a.p31_rec_link {
 
 a.mt_scheduler_valuelink {
     font-weight: bold;
+    text-decoration:none;
 }
 
-
+a.mt_scheduler_valuelink:hover {    
+    text-decoration: underline;
+    cursor:pointer;
+}
 
 
 
@@ -281,3 +290,9 @@ a.link-daycolor_agenda {
         background-color: #2D89EF;
         padding: 2px;
     }
+
+.zoom_ctl_current{
+    border:solid 1px blue;
+    border-radius:4px;    
+    
+}

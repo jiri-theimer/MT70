@@ -133,13 +133,16 @@
                 <td class="td_sum">
                     @if (dblHours != 0)
                     {
+                        <a class="hz" onclick="zoom_allmonth(this,@(recJ02.pid))" style="color:navy;font-weight:bold;">@(BO.basTime.FormatNumeric(dblHours, Model.ShowHHMM))</a>
+
                         @if (dblFond > 0)
                         {
 
                         }
                         else
                         {
-                            <strong style="color:navy;">@(BO.BAS.Number2String(dblHours))</strong>
+
+
                         }
                     }
                 </td>
@@ -447,10 +450,11 @@
         });
 
         $(document).on("click", function (e) {
-
-            if (e.target.className != "hz") {
+            if ($(e.target).hasClass("hz") == false) {
                 zoom_close();
             }
+
+
         });
 
 
@@ -558,8 +562,17 @@
 
     }
 
+    function zoom_allmonth(ctl,j02id) {
+        var url = _ep("/p31dayline/Zoom?j02id="+j02id+"&m=@(Model.d0.Month)&y=@(Model.d0.Year)");
+
+        zoom_open(ctl, url);
+    }
+
     function zoom_open(ctl, url)
     {
+        $(".zoom_ctl_current").removeClass("zoom_ctl_current");
+        $(ctl).addClass("zoom_ctl_current");
+
         var c = $("#zoomwin");
 
         var w = _device.innerWidth - 100;
@@ -586,6 +599,7 @@
             $("#zoomwin").css("display", "none");
         }
 
+        $(".zoom_ctl_current").removeClass("zoom_ctl_current");
     }
 
 
