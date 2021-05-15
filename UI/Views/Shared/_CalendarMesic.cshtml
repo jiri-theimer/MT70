@@ -93,20 +93,13 @@
                 strCisloDne = BO.BAS.ObjectDate2String(d, "dd");
             }
             strClass = "mt_scheduler-day-link";
-            if (Model.CurrentView == UI.Models.p31view.CalendarViewEnum.Month)
+            if (bolOutMonth)
             {
-                if (bolOutMonth)
-                {
-                    strClass += " out-month";
-                }
-                if (d == datFirstDayOfMonth || d == datLastDayOfMonth)
-                {
-                    @Html.Raw("<div class='mt_scheduler-day-header' style='background-color:khaki;'>");
-                }
-                else
-                {
-                    @Html.Raw("<div class='mt_scheduler-day-header'>");
-                }
+                strClass += " out-month";
+            }
+            if (d == datFirstDayOfMonth || d == datLastDayOfMonth)
+            {
+                @Html.Raw("<div class='mt_scheduler-day-header' style='background-color:khaki;'>");
             }
             else
             {
