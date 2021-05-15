@@ -71,7 +71,7 @@
             </a>
             
         </td>
-        <td style="width:20px;">h.</td>
+        <td >h.</td>
     </tr>
     <tr>
         <td style="padding-left:20px;">
@@ -83,7 +83,7 @@
             </a>
             
         </td>
-        <td style="width:20px;">h.</td>
+        <td>h.</td>
     </tr>
     <tr style="border-top:solid 2px gray;">
         <td style="padding-left:20px;">
@@ -94,7 +94,7 @@
                 @(BO.basTime.FormatNumeric(_dblHodinyWip,Model.ShowHHMM))
             </a>
         </td>
-        <td style="width:20px;">h.</td>
+        <td>h.</td>
     </tr>
     <tr>
         <td style="padding-left:40px;">
@@ -117,7 +117,7 @@
             </a>
             
         </td>
-        <td style="width:20px;">h.</td>
+        <td>h.</td>
     </tr>
     <tr style="border-top:solid 2px gray;">
         <td style="padding-left:20px;">
@@ -128,7 +128,7 @@
                 @(BO.basTime.FormatNumeric(_dblHodiny4Approve,Model.ShowHHMM))
             </a>
         </td>
-        <td style="width:20px;"><span class="k-icon k-i-check-outline"></span></td>
+        <td><span class="k-icon k-i-check-outline"></span></td>
     </tr>
     @if (_f.CurrentUser.IsRatesAccess)
     {
@@ -138,7 +138,7 @@
             </td>
             <td>
             </td>
-            <td style="width:20px;"></td>
+            <td></td>
         </tr>
         <tr>
             <td style="padding-left:40px;">
@@ -153,7 +153,7 @@
                     }
                 </a>
             </td>
-            <td style="width:20px;background-color:green;">h.</td>
+            <td style="background-color:green;">h.</td>
         </tr>
         <tr>
             <td style="padding-left:40px;">
@@ -164,7 +164,7 @@
                     @(BO.basTime.FormatNumeric(_dblHodinyVyfa6,Model.ShowHHMM))
                 </a>
             </td>
-            <td style="width:20px;background-color:pink;">h.</td>
+            <td style="background-color:pink;">h.</td>
         </tr>
         <tr>
             <td style="padding-left:40px;">
@@ -175,7 +175,7 @@
                     @(BO.basTime.FormatNumeric(_dblHodinyVyfa23,Model.ShowHHMM))
                 </a>
             </td>
-            <td style="width:20px;background-color:brown;">h.</td>
+            <td style="background-color:brown;">h.</td>
         </tr>
 
     }
@@ -186,7 +186,7 @@
         <td class="tdnum" style="color: #B8860B;">
             @(BO.basTime.FormatNumeric(_dblFond,Model.ShowHHMM))
         </td>
-        <td style="width:20px;">h.</td>
+        <td>h.</td>
     </tr>
     @if (_dblFond > 0)
     {
@@ -197,7 +197,7 @@
             <td class="tdnum" style="color: blue;">
                 @(BO.BAS.Number2String(_dblUtilTotal))
             </td>
-            <td style="width:20px;">%</td>
+            <td>%</td>
         </tr>
         <tr>
             <td style="padding-left:20px;">
@@ -206,7 +206,7 @@
             <td class="tdnum fa">
                 @(BO.BAS.Number2String(_dblUtilFa))
             </td>
-            <td style="width:20px;">%</td>
+            <td>%</td>
         </tr>
     }
 

@@ -29,13 +29,13 @@
                 <span class="k-icon k-i-gear"></span>
             </button>
         </li>
-        <li style="width:200px;">
+        <li style="width:170px;">
             <mycombo entity="j02Person" asp-for="@Model.j02ID" search-result-width="600" placeholder="@_f.tra("Osoba")" selectedtext="@Model.RecJ02.FullNameDesc" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1|j02isintraperson|bool|1" event_after_changevalue="j02id_change"></mycombo>
         </li>
         <li style="margin-left:1px;">
             <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary" onclick="month_prev()"><span class="k-icon k-i-arrow-end-left"></span></button>
         </li>
-        <li style="width:130px;">
+        <li style="width:110px;">
             <mydate asp-for="@Model.d0"></mydate>
         </li>
         <li>
@@ -43,13 +43,13 @@
         </li>
 
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab1" class="nav-link active" href="javascript:reload()">Měsíc</a>
+            <a id="link_tab1" class="nav-link" href="javascript:reload(1)">Měsíc</a>
         </li>
         <li class="nav-item onetab" role="presentation">
             <a id="link_tab2" class="nav-link" href="/p31view/CalendarAgenda">Měsíční agenda</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab3" class="nav-link" href="/p31view/CalendarWeek">Týden</a>
+            <a id="link_tab3" class="nav-link" href="javascript:reload(3)">Týden</a>
         </li>
         <li class="nav-item onetab" role="presentation">
             <a id="link_tab4" class="nav-link" href="/p31view/CalendarAgenda">Týdenní agenda</a>
@@ -89,20 +89,20 @@
 @if (Model.ShowLeftPanel)
 {
 
-    <div class="row" style="padding: 0px; margin: 0px;">
-        <div id="divLeftPanel" class="col-md-5 col-lg-3" style="border-right:solid 2px silver;overflow:auto;padding-right:0px;">
+    <div style="position:relative;">
+        <div id="divLeftPanel">
 
             @Html.EditorFor(m => m, "~/Views/Shared/_CalendarPanel.cshtml")
         </div>
 
-        <div id="divRightPanel" class="col-md-7 col-lg-9" style="overflow: auto;">
+        <div id="divRightPanel">
             @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
         </div>
     </div>
 }
 else
 {
-    <div id="divRightPanel" style="overflow: auto;">
+    <div id="divOnlyOnePanel">
         @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
     </div>
 }
@@ -111,6 +111,8 @@ else
 <div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:8000;display:none;"></div>
 
 <script type="text/javascript">
+    var _cv = "@((int)Model.CurrentView)";
+    var _cvs = "@(Model.CurrentView.ToString().ToLower())";
         var _zoomwin = document.getElementById("zoomwin");
         var _lasturl = "";
     var _lastctl = null;
@@ -120,14 +122,22 @@ else
 
 
             _mainmenu_highlight_current("cmdCalendar");
+            $("#link_tab" + _cv).addClass("active");
 
             @if (Model.ShowLeftPanel)
             {
-                <text>
+            <text>
             var lpH = _device.innerHeight - $("#divLeftPanel").offset().top - 2;
             $("#divLeftPanel").css("height", lpH);
             $("#divRightPanel").css("height", lpH);
-                </text>
+            </text>
+            }
+            else
+            {
+            <text>
+            var lp = _device.innerHeight - $("#divOnlyOnePanel").offset().top - 2;
+            $("#divOnlyOnePanel").css("height", lp);
+            </text>
             }
 
 
@@ -197,9 +207,19 @@ else
 
         });
 
-        function reload() {
+        function reload(cv) {
             var d = $("#d0helper").val();
-            location.replace(_ep("/p31calendar/Index?d=" + d));
+            var url = "/p31calendar/Index?d=" + d;
+            if (cv != undefined) {
+                url = url + "&cv=" + cv;
+                if (cv != _cv) {
+                    $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-cv", value: cv }, function (data) {
+                        //uložena změna druhu kalendáře
+                    });
+                }
+
+            }
+            location.replace(_ep(url));
         }
 
         function re(ctl, j02id, d) {
@@ -245,6 +265,12 @@ else
                 d0 = new Date();
             }
             var d1 = new Date(d0.getFullYear(), d0.getMonth() - 1, 1);
+            var d1 = new Date(d0.getFullYear(), d0.getMonth() + 1, 1);
+            if (_cvs == "week" || _cvs == "weekagenda") {
+                d1 = new Date(d0.getTime() - 8 * 24 * 60 * 60 * 1000);
+                d1 = get_next_monday(d1);
+            }
+
             datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
 
 
@@ -254,7 +280,12 @@ else
             if (d0 == null) {
                 d0 = new Date();
             }
+
             var d1 = new Date(d0.getFullYear(), d0.getMonth() + 1, 1);
+            if (_cvs == "week" || _cvs == "weekagenda") {
+                d1 = get_next_monday(d0);
+
+            }
             datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
 
         }
@@ -313,5 +344,24 @@ else
             });
 
 
+    }
+
+
+    function get_next_monday(d) {
+        for (var i = 0; i < 7; i++) {
+            d = new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000);
+
+            if (d.getDay() == 1) {
+                return (d);
+            }
         }
+
+        alert("get_next_monday");
+    }
+    function get_next_days(d, days) {
+        for (var i = 0; i < days; i++) {
+            d = new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000);
+        }
+        return (d);
+    }
 </script>

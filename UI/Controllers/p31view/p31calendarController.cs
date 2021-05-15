@@ -28,9 +28,12 @@ namespace UI.Controllers.p31view
 
         private void handle_defaults(calendarViewModel v,string d,int cv)
         {
-            if (cv <= 0 || cv > 6) cv = 1;
+            if (cv < 0 || cv > 6) cv = 0;            
+            if (cv == 0)
+            {
+                cv = Factory.CBL.LoadUserParamInt("p31calendar-cv",1);
+            }
             v.CurrentView = (CalendarViewEnum)cv;
-
             v.ShowHHMM = false;
             if (Factory.CurrentUser.j03DefaultHoursFormat == "T") v.ShowHHMM = true;
             v.StatTotalsByPrefix = Factory.CBL.LoadUserParam("p31calendar-totalsby", "p28");

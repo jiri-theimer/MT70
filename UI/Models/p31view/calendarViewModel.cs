@@ -23,7 +23,7 @@ namespace UI.Models.p31view
         public bool ShowP31RecsNoTime { get; set; }
 
         public CalendarViewEnum CurrentView { get; set; } = CalendarViewEnum.Month;
-
+       
 
         public DateTime d0 { get; set; }
         public DateTime d1 { get; set; }

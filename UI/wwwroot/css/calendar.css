@@ -1,5 +1,6 @@
 ﻿#mt_scheduler_calendar {
     width: 100%;
+    min-width:700px;
     table-layout: fixed;
     
 }
@@ -293,4 +294,36 @@ a.stat_link {
 .bunka_hodiny{
     display:inline-block;
     width:30px;
+}
+
+#divLeftPanel {
+    position: absolute;
+    width: 412px;
+    border-right: solid 2px silver;
+    overflow: auto;
+}
+
+#divRightPanel {
+    position: absolute;
+    overflow: auto;
+    right: 0px;
+    left: 418px;
+    
+    
+}
+
+#divOnlyOnePanel{
+    overflow:auto;
+    
+}
+
+@media screen and (max-width: 1100px) {
+    #divLeftPanel {
+        display:none;
+    }
+
+    #divRightPanel {
+        
+        left: 0px;
+    }
 }
