@@ -57,10 +57,11 @@
         if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
         {
             bolWeekendDay = true;
-            if (d.Month == Model.m0 && d.Year == Model.y0)
-            {
-                strClass = "mt_scheduler-day-weekend";
-            }
+            strClass = "mt_scheduler-day-weekend";
+            //if (d.Month == Model.m0 && d.Year == Model.y0)
+            //{
+            //    strClass = "mt_scheduler-day-weekend";
+            //}
 
         }
         if (Model.lisC26.Any(p => p.c26Date == d))
