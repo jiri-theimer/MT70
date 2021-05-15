@@ -117,9 +117,9 @@ namespace UI.Controllers
 
 
         //zobrazení ZOOM okna pro vybranou osobu a den
-        public IActionResult Zoom(int j02id,string d,int m,int y,int p28id,int p41id,bool? p32isbillable,int p70id,bool? iswip,bool? isapproved_and_wait4invoice)
+        public IActionResult Zoom(int j02id,string d,int m,int y,int p28id,int p41id,int p32id,bool? p32isbillable,int p70id,bool? iswip,bool? isapproved_and_wait4invoice)
         {
-            var v = new daylineZoomViewModel() { j02ID=j02id,p28ID=p28id,p41ID=p41id,p32IsBillable= p32isbillable,IsWip=iswip,p70ID=p70id, IsApproved_And_Wait4Invoice=isapproved_and_wait4invoice };
+            var v = new daylineZoomViewModel() { j02ID=j02id,p28ID=p28id,p41ID=p41id,p32ID=p32id,p32IsBillable= p32isbillable,IsWip=iswip,p70ID=p70id, IsApproved_And_Wait4Invoice=isapproved_and_wait4invoice };
             if (m>0 && y > 0)
             {
                 v.SelectedDate1 = new DateTime(y, m, 1);
@@ -145,6 +145,10 @@ namespace UI.Controllers
             if (v.p41ID > 0)
             {
                 strMyQueryInline += "|p41id|int|" + v.p41ID.ToString();
+            }
+            if (v.p32ID > 0)
+            {
+                strMyQueryInline += "|p32id|int|" + v.p32ID.ToString();
             }
             if (v.p70ID > 0)
             {

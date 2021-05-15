@@ -5,6 +5,7 @@
     string _strMesic = Model.d1.Month.ToString() + "/" + Model.d1.Year.ToString();
 
     string strClass = null;
+    string strTitle = null;
     bool bolWeekendDay = false;
     bool bolHoliday = false;
     bool bolOK = false;
@@ -18,6 +19,7 @@
     DateTime datFirstDayOfMonth = new DateTime(Model.d0.Year, Model.d0.Month, 1);
     DateTime datLastDayOfMonth = datFirstDayOfMonth.AddMonths(1).AddDays(-1);
     string strHodiny = null;
+    var qryP31 = Model.lisP31;
 
 }
 
@@ -137,6 +139,70 @@
 
                 @Html.Raw($"<a title='{strTitleSouceHodiny}' onclick='re(this,{Model.j02ID},\"{strDatum}\")'  class='mt_scheduler_valuelink' style='{strStyle}' p31date='{strDatum}' j02id='{Model.j02ID}'>{strHodiny}</a>");
 
+                if (Model.ShowP31Recs)
+                {
+                    if (Model.ShowP31RecsNoTime)
+                    {
+                        qryP31 = Model.lisP31.Where(p => p.p31Date == d);
+                    }
+                    else
+                    {
+                        qryP31 = Model.lisP31.Where(p => p.p31Date == d && p.p33ID == BO.p33IdENUM.Cas);    //v rozpisu zobrazovat pouze časové úkony
+                    }
+
+                    foreach (var recP31 in qryP31)
+                    {
+                        strClass = "p31_rec_link";
+                        strTitle = recP31.p32Name + ": " + BO.BAS.OM2(recP31.p31Text, 20);
+                        @Html.Raw("<div>");
+
+                        switch (recP31.p33ID)
+                        {
+                            case BO.p33IdENUM.Kusovnik:
+                                strHodiny = recP31.p31Value_Orig.ToString();
+                                strClass += " kusovnik";
+                                break;
+                            case BO.p33IdENUM.Cas:
+                                if (recP31.p33ID == BO.p33IdENUM.Cas)
+                                {
+                                    if (Model.ShowHHMM)
+                                    {
+                                        strHodiny = recP31.p31HHMM_Orig;
+                                    }
+                                    else
+                                    {
+                                        strHodiny = BO.BAS.Num2StringNull(recP31.p31Hours_Orig);
+                                    }
+                                }
+                                break;
+
+                            default:
+                                strHodiny = recP31.j27Code_Billing_Orig;
+                                if (recP31.p34IncomeStatementFlag == BO.p34IncomeStatementFlagENUM.Prijem)
+                                {
+                                    strClass += " vydaj";
+                                }
+                                else
+                                {
+                                    strClass += " odmena";
+                                }
+                                break;
+                        }
+
+                        @Html.Raw($"<a class='{strClass}' title='{strTitle}' onclick='p31_rec({recP31.pid})'>");
+
+                        strHodiny = "<span class='bunka_hodiny'>" + strHodiny + "</span>";
+
+                        @Html.Raw(strHodiny + TheGridRowSymbol.p31_symbol(recP31));
+                        @Html.Raw(BO.BAS.OM2(recP31.p41Name, 15))
+                        if (recP31.p28ID_Client > 0)
+                        {
+                            @Html.Raw(" (" + BO.BAS.OM2(recP31.ClientName, 10) + ")")
+                        }
+                        @Html.Raw("</a>");
+                        @Html.Raw("</div>");
+                    }
+                }
             }
 
             @Html.Raw("</div>");

@@ -56,6 +56,7 @@ namespace BO
 
         public int p91ID { get; set; }
         public string p91Code { get; }
+        public bool p91IsDraft { get; }
 
         public int j02ID_Owner { get; set; }
         public string Owner { get; }

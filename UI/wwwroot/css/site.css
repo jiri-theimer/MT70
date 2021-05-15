@@ -1226,3 +1226,73 @@ td.tdnum{
 .nefa{
     color:red;
 }
+
+/* Stavy worksheet úkonů
+----------------------------------------------------------*/
+
+.a12 {
+    color: red;
+}
+
+.a13 {
+    color: brown;
+}
+
+.a14 {
+    color: green;
+}
+
+.a16 {
+    color: pink;
+}
+
+.a17 {
+    color: gold;
+}
+
+.a0 {    
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+
+.a2 {
+    background-color: red;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+
+.a3 {
+    background-color: brown;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+
+.a4 {
+    background-color: green;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+
+.a6 {
+    background-color: pink;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+
+
+.vydaj {
+    color: #A52A2A !important; /*záznam peněžního výdaje*/
+}
+
+.odmena {
+    color: #0000FF !important; /*záznam paušální odměny*/
+}
+
+.kusovnik {
+    color: #9400D3 !important; /*záznam kusovníku*/
+}

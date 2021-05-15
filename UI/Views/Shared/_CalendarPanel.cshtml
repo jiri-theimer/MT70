@@ -66,7 +66,7 @@
 
         </td>
         <td class="tdnum">
-            <a class="stat_link" onclick="zoom_allmonth(this)">
+            <a class="stat_link" style="font-weight:bold;" onclick="zoom_allmonth(this)">
                 @(BO.basTime.FormatNumeric(_dblHodiny,Model.ShowHHMM))
             </a>
             
@@ -128,7 +128,7 @@
                 @(BO.basTime.FormatNumeric(_dblHodiny4Approve,Model.ShowHHMM))
             </a>
         </td>
-        <td style="width:20px;">h.</td>
+        <td style="width:20px;"><span class="k-icon k-i-check-outline"></span></td>
     </tr>
     @if (_f.CurrentUser.IsRatesAccess)
     {
@@ -153,7 +153,7 @@
                     }
                 </a>
             </td>
-            <td style="width:20px;">h.</td>
+            <td style="width:20px;background-color:green;">h.</td>
         </tr>
         <tr>
             <td style="padding-left:40px;">
@@ -164,7 +164,7 @@
                     @(BO.basTime.FormatNumeric(_dblHodinyVyfa6,Model.ShowHHMM))
                 </a>
             </td>
-            <td style="width:20px;">h.</td>
+            <td style="width:20px;background-color:pink;">h.</td>
         </tr>
         <tr>
             <td style="padding-left:40px;">
@@ -175,7 +175,7 @@
                     @(BO.basTime.FormatNumeric(_dblHodinyVyfa23,Model.ShowHHMM))
                 </a>
             </td>
-            <td style="width:20px;">h.</td>
+            <td style="width:20px;background-color:brown;">h.</td>
         </tr>
 
     }
@@ -240,7 +240,7 @@
 
 @if (Model.StatTotalsByPrefix == "p28")
 {
-    var qry = Model.lisP31.OrderBy(p=>p.ClientName).GroupBy(p => p.p28ID_Client);
+    var qry = qryP31.OrderBy(p=>p.ClientName).GroupBy(p => p.p28ID_Client);
     <table class="table table-sm table-hover">
         <tr>
             <th>@_f.tra("Klient")</th>
@@ -254,8 +254,10 @@
                 <td>
                     <a style="text-decoration:none;" href="javascript:p31bystat('p28',@(c.First().p28ID_Client))">@(c.First().ClientName)</a>
                 </td>
-                <td class="numcell">
-                    @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                <td class="numcell">                    
+                    <a class="stat_link" onclick="zoom_stat(this,null,null,null,null,@(c.First().p28ID_Client))">
+                        @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                    </a>
                 </td>
                 <td class="numcell fa">
                     @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==true).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
@@ -270,7 +272,7 @@
 
 @if (Model.StatTotalsByPrefix == "p41")
 {
-    var qry = Model.lisP31.OrderBy(p=>p.Project).GroupBy(p => p.p41ID);
+    var qry = qryP31.OrderBy(p=>p.Project).GroupBy(p => p.p41ID);
     <table class="table table-sm table-hover">
         <tr>
             <th>@_f.tra("Projekt")</th>
@@ -284,8 +286,10 @@
         <td>
             <a style="text-decoration:none;" href="javascript:p31bystat('p41',@(c.First().p41ID))">@(c.First().Project)</a>
         </td>
-        <td class="numcell">
-            @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+        <td class="numcell">            
+            <a class="stat_link" onclick="zoom_stat(this,null,null,null,null,null,@(c.First().p41ID))">
+                @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+            </a>
         </td>
         <td class="numcell fa">
             @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==true).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
@@ -301,7 +305,7 @@
 
 @if (Model.StatTotalsByPrefix == "p32")
 {
-    var qry = Model.lisP31.OrderBy(p=>p.p32Name).GroupBy(p => p.p32ID);
+    var qry = qryP31.OrderBy(p=>p.p32Name).GroupBy(p => p.p32ID);
     <table class="table table-sm table-hover">
         <tr>
             <th>@_f.tra("Aktivita")</th>
@@ -315,8 +319,10 @@
                 <td>
                     <a style="text-decoration:none;" href="javascript:p31bystat('p32',@(c.First().p32ID))">@(c.First().p32Name)</a>
                 </td>
-                <td class="numcell">
-                    @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))                   
+                <td class="numcell">                    
+                    <a class="stat_link" onclick="zoom_stat(this,null,null,null,null,null,null,@(c.First().p32ID))">
+                        @(BO.basTime.FormatNumeric(c.Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))
+                    </a>
                 </td>
                 <td class="numcell fa">
                     @(BO.basTime.FormatNumeric(c.Where(p=>p.p32IsBillable==true).Sum(p=>p.p31Hours_Orig),Model.ShowHHMM))

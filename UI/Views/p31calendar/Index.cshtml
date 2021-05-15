@@ -7,11 +7,7 @@
 
     Model.PageTitle = _f.tra("Kalendář");
 
-    string strClass = null;
-    string strTitle = null;
-    double dblHours = 0;
-    string strHours = null;
-    double dblFond = 0;
+
 }
 
 @addTagHelper *, UI
@@ -77,30 +73,39 @@
                 <input type="checkbox" id="chkShowWeekend" asp-for="@Model.ShowWeekend" />
                 <label for="chkShowWeekend">@_f.tra("Zobrazovat víkendy (So+Ne)")</label>
             </div>
-
+            <div>
+                <input type="checkbox" id="chkShowP31Recs" asp-for="@Model.ShowP31Recs" />
+                <label for="chkShowP31Recs">@_f.tra("V buňkách kalendáře podrobný rozpis úkonů")</label>
+            </div>
+            <div>
+                <input type="checkbox" id="chkShowP31RecsNoTime" asp-for="@Model.ShowP31RecsNoTime" />
+                <label for="chkShowP31RecsNoTime">@_f.tra("V podrobném rozpisu úkonů uvádět i ne-časové úkony")</label>
+            </div>
         </div>
     </div>
 </div>
 
 
-<div class="row" style="padding: 0px; margin: 0px;">
-    @if (Model.ShowLeftPanel)
-    {
-        <div class="col-md-5 col-lg-3">
+@if (Model.ShowLeftPanel)
+{
+
+    <div class="row" style="padding: 0px; margin: 0px;">
+        <div id="divLeftPanel" class="col-md-5 col-lg-3" style="border-right:solid 2px silver;overflow:auto;padding-right:0px;">
 
             @Html.EditorFor(m => m, "~/Views/Shared/_CalendarPanel.cshtml")
         </div>
 
-        <div class="col-md-7 col-lg-9">
+        <div id="divRightPanel" class="col-md-7 col-lg-9" style="overflow: auto;">
             @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
         </div>
-    }
-    else
-    {
+    </div>
+}
+else
+{
+    <div id="divRightPanel" style="overflow: auto;">
         @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
-    }
-
-</div>
+    </div>
+}
 
 
 <div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:8000;display:none;"></div>
@@ -108,12 +113,24 @@
 <script type="text/javascript">
         var _zoomwin = document.getElementById("zoomwin");
         var _lasturl = "";
-        var _lastctl = null;
+    var _lastctl = null;
+    $(document.body).css("overflow", "hidden");
 
         $(document).ready(function () {
 
 
             _mainmenu_highlight_current("cmdCalendar");
+
+            @if (Model.ShowLeftPanel)
+            {
+                <text>
+            var lpH = _device.innerHeight - $("#divLeftPanel").offset().top - 2;
+            $("#divLeftPanel").css("height", lpH);
+            $("#divRightPanel").css("height", lpH);
+                </text>
+            }
+
+
 
 
             $("#d0helper").change(function () {
@@ -139,6 +156,10 @@
                 v.push($("#chkShowWeekend").prop("checked"));
                 k.push("p31calendar-showleftpanel");
                 v.push($("#chkShowLeftPanel").prop("checked"));
+                k.push("p31calendar-showp31recs");
+                v.push($("#chkShowP31Recs").prop("checked"));
+                k.push("p31calendar-showp31recsnotime");
+                v.push($("#chkShowP31RecsNoTime").prop("checked"));
 
 
                 $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {
@@ -191,7 +212,7 @@
         var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)");
         zoom_open(ctl, url);
     }
-    function zoom_stat(ctl, p32isbillable, iswip, p70id, isapproved_and_wait4invoice) {
+    function zoom_stat(ctl, p32isbillable, iswip, p70id, isapproved_and_wait4invoice,p28id,p41id,p32id) {
         var url = "/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)";
         if (p32isbillable != undefined || p32isbillable != null) {
             url = url + "&p32isbillable=" + p32isbillable;
@@ -205,7 +226,16 @@
         if (p70id != undefined || p70id != null) {
             url = url + "&p70id=" + p70id;
         }
-        
+        if (p28id != undefined || p28id != null) {
+            url = url + "&p28id=" + p28id;
+        }
+        if (p41id != undefined || p41id != null) {
+            url = url + "&p41id=" + p41id;
+        }
+        if (p32id != undefined || p32id != null) {
+            url = url + "&p32id=" + p32id;
+        }
+
         zoom_open(ctl, _ep(url));
     }
 

@@ -11,7 +11,8 @@ namespace UI.Models.p31view
         public DateTime SelectedDate2 { get; set; }        
         public int j02ID { get; set; }
         public int p28ID { get; set; }
-        public int p41ID { get; set; }      
+        public int p41ID { get; set; }
+        public int p32ID { get; set; }
         public bool? p32IsBillable { get; set; }
         public int p70ID { get; set; }
         public bool? IsWip { get; set; }

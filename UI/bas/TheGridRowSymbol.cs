@@ -86,6 +86,69 @@ namespace UI
             }
             return null;
         }
+        public static string p31_symbol(BO.p31Worksheet rec)    //symbol mimo grid z BO.p31Worksheet
+        {
+            return $"<div class='a{(int)rec.p70ID}'>" + p31_inner_symbol(rec) + "</div>";
+        }
+        private static string p31_inner_symbol(BO.p31Worksheet rec)
+        {
+            if (rec.p91ID == 0)
+            {
+                if (rec.p71ID==BO.p71IdENUM.Nic)
+                {
+                    if (rec.p72ID_AfterApprove != BO.p72IdENUM._NotSpecified)
+                    {
+                        switch (rec.p72ID_AfterApprove)
+                        {
+                            case BO.p72IdENUM.ZahrnoutDoPausalu: //korekce: paušál
+                                return "<span class='k-icon k-i-arrow-down' style='color:pink;'></span>";
+                            case BO.p72IdENUM.ViditelnyOdpis: //korekce: viditelný odpis
+                                return "<span class='k-icon k-i-arrow-down' style='color:red;'></span>";
+                            case BO.p72IdENUM.SkrytyOdpis: //korekce: skrytý odpis
+                                return "<span class='k-icon k-i-arrow-down' style='color:brown;'></span>";
+                            case BO.p72IdENUM.Fakturovat: //korekce: fakturovat
+                                return "<span class='k-icon k-i-arrows-swap' style='color:green;'></span>";
+                        }
+                    }
+                }
+                else
+                {
+                    
+                    if (rec.p71ID == BO.p71IdENUM.Schvaleno)
+                    {
+                        switch (rec.p72ID_AfterApprove)
+                        {
+                            case BO.p72IdENUM.Fakturovat:
+                                return "<span class='k-icon k-i-check-outline' style='color:green;'></span>";
+                            case BO.p72IdENUM.ZahrnoutDoPausalu:
+                                return "<span class='k-icon k-i-check-outline' style='color:pink;'></span>";
+                            case BO.p72IdENUM.SkrytyOdpis:
+                                return "<span class='k-icon k-i-check-outline' style='color:brown;'></span>";
+                            case BO.p72IdENUM.ViditelnyOdpis:
+                                return "<span class='k-icon k-i-check-outline' style='color:red;'></span>";
+
+                        }
+
+                    }
+                    if (rec.p71ID == BO.p71IdENUM.Neschvaleno)
+                    {
+                        return "<span class='k-icon k-i-minus-circle' style='color:red;'></span>"; //neschváleno
+                    }
+
+                }
+
+            }
+            else
+            {
+                
+                if (rec.p91IsDraft)
+                {
+                    return "<span class='k-icon k-i-pin'></span>";
+                }
+            }
+
+            return null;
+        }
         public static string p91_td_inner(System.Data.DataRow dbrow)
         {
             int lockflag = Convert.ToInt32(dbrow["p91LockFlag"]);

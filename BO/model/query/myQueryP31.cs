@@ -19,6 +19,7 @@ namespace BO
         public int j02id { get; set; }
         public int p28id { get; set; }
         public int p41id { get; set; }
+        public int p32id { get; set; }
         public int p91id { get; set; }
         public int p70id { get; set; }
         public bool? iswip { get;set; }
@@ -88,6 +89,10 @@ namespace BO
             if (this.p91id > 0)
             {
                 AQ("a.p91ID=@p91id", "p91id", this.p91id);
+            }
+            if (this.p32id > 0)
+            {
+                AQ("a.p32ID=@p32id", "p32id", this.p32id);
             }
             if (this.p70id > 0)
             {

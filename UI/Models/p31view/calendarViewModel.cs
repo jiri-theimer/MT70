@@ -19,6 +19,8 @@ namespace UI.Models.p31view
         public int j02ID { get; set; }
         public BO.j02Person RecJ02 { get; set; }
         public bool ShowHHMM { get; set; }
+        public bool ShowP31Recs { get; set; }
+        public bool ShowP31RecsNoTime { get; set; }
 
         public CalendarViewEnum CurrentView { get; set; } = CalendarViewEnum.Month;
 
