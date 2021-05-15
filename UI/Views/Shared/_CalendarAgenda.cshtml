@@ -1,0 +1,125 @@
+﻿@model UI.Models.p31view.calendarViewModel
+@inject BL.Factory _f
+
+@{
+
+    string strClass = null;
+    string strTitle = null;
+    bool bolWeekendDay = false;
+    bool bolHoliday = false;
+    bool bolOK = false;
+    string strStyle = null;
+    int x = 1;
+    int x_ok = 0;
+    string strTitleVykazatDo = _f.tra("Vykázat do");
+    string strTitleSouceHodiny = _f.tra("Součet hodin");
+    string strCisloDne = null;
+    string strDatum = null;
+    int intLastM = 0;
+
+
+    var qryP31 = Model.lisP31;
+    double _dblHodiny = qryP31.Sum(p => p.p31Hours_Orig);
+
+}
+
+
+<select asp-for="@Model.IsAgendaDescending">
+    <option value="0">@_f.tra("Vzestupně")</option>
+    <option value="1">@_f.tra("Sestupně")</option>
+</select>
+
+<table border="0" id="mt_scheduler_agenda">
+    <tr style="line-height:20px;">
+        <th style="color:navy;">
+            @(Model.m0)/@(Model.y0)
+        </th>
+        <th>
+
+            <a class="stat_link" style="font-weight:bold;" onclick="zoom_allmonth(this)">
+                @(BO.basTime.FormatNumeric(_dblHodiny,Model.ShowHHMM))
+            </a>
+        </th>
+        <th style="text-align:left;">
+            @(BO.BAS.ObjectDate2String(Model.d1)+" - "+ BO.BAS.ObjectDate2String(Model.d2))
+        </th>
+    </tr>
+
+
+
+    @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+    {
+        strClass = "mt_scheduler-day-in-month"; bolWeekendDay = false; bolHoliday = false;
+
+
+        if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+        {
+            bolWeekendDay = true;
+            if (d.Month == Model.m0 && d.Year == Model.y0)
+            {
+                strClass = "mt_scheduler-day-weekend";
+            }
+
+        }
+        if (Model.lisC26.Any(p => p.c26Date == d))
+        {
+            bolHoliday = true;
+            strClass = "mt_scheduler-day-holiday";
+        }
+        if (d == DateTime.Today)
+        {
+            strClass = "mt_scheduler-today";
+        }
+        bolOK = true;
+        if (bolWeekendDay && !Model.ShowWeekend)
+        {
+            bolOK = false;
+        }
+        if (bolWeekendDay && Model.CurrentView == UI.Models.p31view.CalendarViewEnum.NAgenda && x <= 2)
+        {
+            bolOK = false;
+        }
+
+        if (bolOK)
+        {
+            if (x > 1)
+            {
+                if (!Model.IsAgendaDescending && d.Month != intLastM)
+                {
+                    @Html.Raw("<tr class='agenda_row_divider_month'><td></td><td></td><td></td></tr>");
+                }
+                if (!Model.IsAgendaDescending && d.DayOfWeek == DayOfWeek.Monday)
+                {
+                    @Html.Raw("<tr class='agenda_row_divider_week'><td></td><td></td><td></td></tr>");
+                }
+            }
+            if (x_ok % 2 == 0)
+            {
+                @Html.Raw("<tr class='agenda_row_suda'>");
+            }
+            else
+            {
+                @Html.Raw("<tr class='agenda_row_licha'>");
+            }
+
+            strCisloDne = BO.BAS.ObjectDate2String(d, "dd") + "<br>" + BO.BAS.ObjectDate2String(d, "dddd");
+            if (intLastM != d.Month || d.DayOfWeek == DayOfWeek.Monday)
+            {
+                strCisloDne += $"<br><small>{BO.BAS.ObjectDate2String(d, "MMMM")}</small>";
+            }
+            @Html.Raw($"<td class='{strClass}'>{strCisloDne}</td>");
+
+            @Html.Raw($"<td class='{strClass}'></td>");
+            @Html.Raw($"<td class='{strClass}'></td>");
+
+            @Html.Raw("</tr>");
+            x_ok += 1;
+        }
+
+
+
+
+        intLastM = d.Month;
+        x += 1;
+    }
+</table>

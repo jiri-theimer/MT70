@@ -41,6 +41,9 @@ namespace UI.Models.p31view
         public List<BO.p31WorksheetTimelineDay> lisSums { get; set; }
 
         public string StatTotalsByPrefix { get; set; }
-        
+
+        public bool IsAgendaDescending { get; set; }
+
+
     }
 }

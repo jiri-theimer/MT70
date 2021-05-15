@@ -63,14 +63,21 @@ namespace UI.Controllers.p31view
             {
                 
                 case CalendarViewEnum.Month:
-                    mesic_handle_defaults(v);
+                    v.d1 = new DateTime(v.d0.Year, v.d0.Month, 1);
+                    v.d2 = v.d1.AddMonths(1).AddDays(-1);
+                    v.d1 = get_first_prev_monday(v.d1);
+                    v.d2 = get_first_prev_monday(v.d2).AddDays(6);
+                    break;
+                case CalendarViewEnum.MonthAgenda:
+                    v.d1 = new DateTime(v.d0.Year, v.d0.Month, 1);
+                    v.d2 = v.d1.AddMonths(1).AddDays(-1);
                     break;
                 case CalendarViewEnum.Week:
-                    tyden_handle_defaults(v);
-                    break;
                 case CalendarViewEnum.WeekAgenda:
-                    tyden_handle_defaults(v);
+                    v.d1 = get_first_prev_monday(v.d0);
+                    v.d2 = v.d1.AddDays(6);
                     break;
+               
                 default:
                     
                     break;
@@ -79,24 +86,7 @@ namespace UI.Controllers.p31view
             
         }
 
-        private void mesic_handle_defaults(calendarViewModel v)
-        {
-            v.d1 = new DateTime(v.d0.Year, v.d0.Month, 1);            
-            v.d2 = v.d1.AddMonths(1).AddDays(-1);
-            v.d1 = get_first_prev_monday(v.d1);
-            v.d2 = get_first_prev_monday(v.d2).AddDays(6);
-
-
-        }
-
-        private void tyden_handle_defaults(calendarViewModel v)
-        {
-            v.d1 = get_first_prev_monday(v.d0);
-            v.d2 = v.d1.AddDays(6);
-
-
-        }
-
+        
 
 
         private DateTime get_first_prev_monday(DateTime d)

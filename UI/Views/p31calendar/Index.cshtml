@@ -43,16 +43,16 @@
         </li>
 
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab1" class="nav-link" href="javascript:reload(1)">Měsíc</a>
+            <a id="link_tab1" class="nav-link" href="javascript:reload(1)">@_f.tra("Měsíc")</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab2" class="nav-link" href="/p31view/CalendarAgenda">Měsíční agenda</a>
+            <a id="link_tab2" class="nav-link" href="javascript:reload(2)">@_f.tra("Měsíční agenda")</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab3" class="nav-link" href="javascript:reload(3)">Týden</a>
+            <a id="link_tab3" class="nav-link" href="javascript:reload(3)">@_f.tra("Týden")</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab4" class="nav-link" href="/p31view/CalendarAgenda">Týdenní agenda</a>
+            <a id="link_tab4" class="nav-link" href="javascript:reload(4)">@_f.tra("Týdenní agenda")</a>
         </li>
     </ul>
 </div>
@@ -96,15 +96,42 @@
         </div>
 
         <div id="divRightPanel">
-            @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
+            @{
+                switch (Model.CurrentView)
+                {
+                    case UI.Models.p31view.CalendarViewEnum.Month:
+                    case UI.Models.p31view.CalendarViewEnum.Week:
+                        @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml");
+                        break;
+                    case UI.Models.p31view.CalendarViewEnum.MonthAgenda:
+                    case UI.Models.p31view.CalendarViewEnum.WeekAgenda:
+                        @Html.EditorFor(m => m, "~/Views/Shared/_CalendarAgenda.cshtml");
+                        break;
+                }
+
+            }
+
         </div>
     </div>
 }
 else
 {
-    <div id="divOnlyOnePanel">
-        @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml")
-    </div>
+<div id="divOnlyOnePanel">
+    @{
+        switch (Model.CurrentView)
+        {
+            case UI.Models.p31view.CalendarViewEnum.Month:
+            case UI.Models.p31view.CalendarViewEnum.Week:
+                @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml");
+                break;
+            case UI.Models.p31view.CalendarViewEnum.MonthAgenda:
+            case UI.Models.p31view.CalendarViewEnum.WeekAgenda:
+                @Html.EditorFor(m => m, "~/Views/Shared/_CalendarAgenda.cshtml");
+                break;
+        }
+
+    }
+</div>
 }
 
 
@@ -113,18 +140,18 @@ else
 <script type="text/javascript">
     var _cv = "@((int)Model.CurrentView)";
     var _cvs = "@(Model.CurrentView.ToString().ToLower())";
-        var _zoomwin = document.getElementById("zoomwin");
-        var _lasturl = "";
-    var _lastctl = null;
+                var _zoomwin = document.getElementById("zoomwin");
+                var _lasturl = "";
+                var _lastctl = null;
     $(document.body).css("overflow", "hidden");
 
         $(document).ready(function () {
 
 
-            _mainmenu_highlight_current("cmdCalendar");
+                    _mainmenu_highlight_current("cmdCalendar");
             $("#link_tab" + _cv).addClass("active");
 
-            @if (Model.ShowLeftPanel)
+                    @if (Model.ShowLeftPanel)
             {
             <text>
             var lpH = _device.innerHeight - $("#divLeftPanel").offset().top - 2;
@@ -133,7 +160,7 @@ else
             </text>
             }
             else
-            {
+                    {
             <text>
             var lp = _device.innerHeight - $("#divOnlyOnePanel").offset().top - 2;
             $("#divOnlyOnePanel").css("height", lp);
@@ -144,38 +171,38 @@ else
 
 
             $("#d0helper").change(function () {
-                reload();
-            });
+                        reload();
+                    });
 
             $(".dc").dblclick(function () {
-                var j02id = $(this).attr("data-j02id");
-                var d = $(this).attr("data-d");
-                _window_open(_ep("/p31/Record?j02id=" + j02id + "&d=" + d));
-            });
+                        var j02id = $(this).attr("data-j02id");
+                        var d = $(this).attr("data-d");
+                        _window_open(_ep("/p31/Record?j02id=" + j02id + "&d=" + d));
+                    });
 
 
             $("#cmdMore").click(function () {
                 $("#divMore").toggle();
-            });
+                    });
 
 
             $("#cmdSaveSetting").click(function () {
-                var k = [];
-                var v = [];
-                k.push("p31calendar-showweekend");
-                v.push($("#chkShowWeekend").prop("checked"));
-                k.push("p31calendar-showleftpanel");
-                v.push($("#chkShowLeftPanel").prop("checked"));
-                k.push("p31calendar-showp31recs");
-                v.push($("#chkShowP31Recs").prop("checked"));
-                k.push("p31calendar-showp31recsnotime");
-                v.push($("#chkShowP31RecsNoTime").prop("checked"));
+                        var k = [];
+                        var v = [];
+                        k.push("p31calendar-showweekend");
+                        v.push($("#chkShowWeekend").prop("checked"));
+                        k.push("p31calendar-showleftpanel");
+                        v.push($("#chkShowLeftPanel").prop("checked"));
+                        k.push("p31calendar-showp31recs");
+                        v.push($("#chkShowP31Recs").prop("checked"));
+                        k.push("p31calendar-showp31recsnotime");
+                        v.push($("#chkShowP31RecsNoTime").prop("checked"));
 
 
                 $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {
-                    reload();
+                            reload();
 
-                });
+                        });
 
 
             });
@@ -188,13 +215,13 @@ else
             });
 
             $(document).on("click", function (e) {
-                if (!$(e.target).hasClass("mt_scheduler_valuelink") && !$(e.target).hasClass("stat_link"))
+                if ($(e.target).hasClass("mt_scheduler_valuelink") || $(e.target).hasClass("stat_link"))
                 {
-                    zoom_close();
-
+                    return;
 
                 }
 
+                zoom_close();
 
 
 
@@ -267,7 +294,6 @@ else
                 d0 = new Date();
             }
             var d1 = new Date(d0.getFullYear(), d0.getMonth() - 1, 1);
-            var d1 = new Date(d0.getFullYear(), d0.getMonth() + 1, 1);
             if (_cvs == "week" || _cvs == "weekagenda") {
                 d1 = new Date(d0.getTime() - 8 * 24 * 60 * 60 * 1000);
                 d1 = get_next_monday(d1);
