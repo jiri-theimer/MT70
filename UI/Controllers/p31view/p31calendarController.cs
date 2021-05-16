@@ -20,8 +20,8 @@ namespace UI.Controllers.p31view
             v.lisC26 = Factory.c26HolidayBL.GetList(new BO.myQueryC26() { global_d1 = v.d1, global_d2 = v.d2 });
 
             v.lisSums = Factory.p31WorksheetBL.GetList_TimelineDays(new List<int> { v.j02ID }, v.d1, v.d2, 0).ToList();
-            var mq = new BO.myQueryP31() {j02id=v.j02ID, global_d1 = v.d1, global_d2 = v.d2 };            
-            v.lisP31 = Factory.p31WorksheetBL.GetList(mq);
+            var mq = new BO.myQueryP31() {j02id=v.j02ID, global_d1 = v.d1, global_d2 = v.d2 };
+            v.lisP31 = Factory.p31WorksheetBL.GetList(mq).OrderBy(p => p.p31DateTimeFrom_Orig);
             
             return View(v);
         }

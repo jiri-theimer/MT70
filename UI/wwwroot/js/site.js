@@ -682,3 +682,15 @@ function _splitter_resize_after_init(splitterLayout, defaultPanel1Size) {   //sp
 
     }
 }
+
+
+function _showloading() {
+    var index = "1";
+    if (window !== top) {   //voláno uvnitř iframe
+        index = "2";
+    }
+    if (document.getElementById("#site_loading" + index)) {
+        $("#site_loading" + index).css("display", "block");
+    }
+
+}

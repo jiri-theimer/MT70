@@ -18,7 +18,7 @@
     int intLastM = 0;
 
 
-    var qryP31 = Model.lisP31;
+    IEnumerable<BO.p31Worksheet> qryP31 = Model.lisP31;
 
     double _dblHodiny = qryP31.Sum(p => p.p31Hours_Orig);
     DateTime d = Model.d1;
@@ -229,6 +229,11 @@
                     @Html.Raw($"<a class='{strClass}' onclick='p31_rec({recP31.pid})'>");
 
                     strHodiny = "<span class='bunka_hodiny'>" + strHodiny + "</span>";
+
+                    if (recP31.p33ID==BO.p33IdENUM.Cas && recP31.p31DateTimeFrom_Orig != null && recP31.p31DateTimeUntil_Orig !=null)
+                    {
+                        strHodiny += "<span class='k-icon k-i-clock' style='color:blue;'></span><small>" + recP31.TimeFrom + " - " + recP31.TimeUntil + "</small>";
+                    }
 
                     @Html.Raw(strHodiny + TheGridRowSymbol.p31_symbol(recP31));
                     @Html.Raw(BO.BAS.OM2(recP31.p41Name, 15))

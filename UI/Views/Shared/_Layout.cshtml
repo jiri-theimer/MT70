@@ -94,6 +94,7 @@
     <script src="~/js/contextmenu.js" asp-append-version="true"></script>
     <script src="~/js/mycontrols.js" asp-append-version="true"></script>
 
+    <div id="site_loading1">Loading...</div>
     <div>
         <main role="main" class="p-0 m-0">
             @RenderBody()
@@ -160,6 +161,7 @@
                 }
             });
 
+            document.getElementById("site_loading1").style.display = "none";
             register_menu("cmdHome", "divMainMenu", "MainMenu");
             register_menu("cmdMainMenuNew", "ulNew", "MenuNewRecord");
             register_menu("cmdLangIndex", "ulLangIndex","CurrentUserLangIndex");
