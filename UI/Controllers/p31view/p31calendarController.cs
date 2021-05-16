@@ -90,6 +90,11 @@ namespace UI.Controllers.p31view
                     v.d1 = v.d0;
                     v.d2 = v.d1.AddDays(v.AgendaNdays-1);
                     break;
+                case CalendarViewEnum.ExactDay:
+                    v.d1 = v.d0;
+                    v.d2 = v.d0;
+                    v.DayView_MinutesGap= Factory.CBL.LoadUserParamInt("p31calendar-minutesgap", 15);
+                    break;
                 default:                    
                     break;
                 

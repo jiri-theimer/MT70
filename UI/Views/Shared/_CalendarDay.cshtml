@@ -1,0 +1,57 @@
+﻿@model UI.Models.p31view.calendarViewModel
+@inject BL.Factory _f
+
+@{
+
+    string strClass = null;
+    string strHodiny = null;
+    bool bolWeekendDay = false;
+    bool bolHoliday = false;
+    bool bolOK = false;
+    string strStyle = null;
+
+    int x_ok = 0;
+    string strTitleVykazatDo = _f.tra("Vykázat do");
+    string strTitleSouceHodiny = _f.tra("Součet hodin");
+    string strCisloDne = null;
+    string strDatum = null;
+    int intLastM = 0;
+    int h0 = 8;
+    int h1 = 20;
+
+    double _dblHodiny = Model.lisP31.Sum(p => p.p31Hours_Orig);
+
+    IEnumerable<BO.p31Worksheet> qryP31 = Model.lisP31.Where(p => p.p31DateTimeFrom_Orig != null);  //úkony s přesným časem
+
+    if (qryP31.Any(p => Convert.ToDateTime(p.p31DateTimeFrom_Orig).Hour < h0))
+    {
+        h0 = qryP31.Min(p => Convert.ToDateTime(p.p31DateTimeFrom_Orig).Hour);
+    }
+    if (qryP31.Any(p => Convert.ToDateTime(p.p31DateTimeUntil_Orig).Hour > h1))
+    {
+        h1 = qryP31.Max(p => Convert.ToDateTime(p.p31DateTimeUntil_Orig).Hour);
+    }
+    var hours_slots = new List<string>();
+    var hhmm_slots = new List<string>();
+    var blocks = new List<string>();
+    var time_slots = new List<DateTime>();
+
+    for(int h = h0; h <= h1; h++)
+    {
+        hours_slots.Add(BO.BAS.RightString("0"+h.ToString(),2) + ":00");
+        for(int m = 5; m <= 60; m+=5)
+        {
+            blocks.Add(Model.GetMinuteGapPixels().ToString() + "px");
+            string sss=BO.BAS.RightString("0" + h.ToString(), 2)+":"+ BO.BAS.RightString("0" + (m - 5).ToString(), 2);
+            hhmm_slots.Add(sss);
+            DateTime dx = Model.d0.AddHours(Convert.ToDouble(h)).AddMinutes(Convert.ToDouble(m)).AddMilliseconds(-100);
+            time_slots.Add(dx);
+        }
+    }
+
+    @Html.Raw("<div id='grid_day_container' class='grid-day-container' style='grid-template-rows:{0};'>");
+
+
+
+    @Html.Raw("</div>");
+}

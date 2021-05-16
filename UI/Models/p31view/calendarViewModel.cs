@@ -44,7 +44,28 @@ namespace UI.Models.p31view
 
         public bool IsAgendaDescending { get; set; }
         public int AgendaNdays { get; set; }
+        public int DayView_MinutesGap { get; set; }
 
 
+        public int GetMinuteGapPixels()
+        {
+            switch (this.DayView_MinutesGap)
+            {
+                case 5:
+                    return 8;
+                case 10:
+                    return 7;
+                case 15:
+                    return 6;
+                case 20:
+                    return 5;
+                case 30:
+                    return 5;
+                case 60:
+                    return 5;
+                default:
+                    return 3;
+            }
+        }
     }
 }

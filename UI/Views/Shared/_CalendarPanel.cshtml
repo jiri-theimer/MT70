@@ -7,7 +7,21 @@
     {
         qryP31 = Model.lisP31.Where(p => p.p31Date.Year == Model.y0 && p.p31Date.Month == Model.m0);
     }
-    string _strMesic = Model.d0.Month.ToString() + "/" + Model.d0.Year.ToString();
+    string _strMesic = null;
+    switch (Model.CurrentView)
+    {
+        case UI.Models.p31view.CalendarViewEnum.Month:
+        case UI.Models.p31view.CalendarViewEnum.MonthAgenda:
+            _strMesic = Model.d0.Month.ToString() + "/" + Model.d0.Year.ToString();
+            break;
+        case UI.Models.p31view.CalendarViewEnum.ExactDay:
+            _strMesic = Model.d0.Month.ToString();
+            break;
+        default:
+            _strMesic = BO.BAS.ObjectDate2String(Model.d1) + " - " + BO.BAS.ObjectDate2String(Model.d2);
+            break;
+    }
+    
     double _dblHodiny = qryP31.Sum(p => p.p31Hours_Orig);
     double _dblHodinyFa = qryP31.Where(p => p.p32IsBillable).Sum(p => p.p31Hours_Orig);
     double _dblHodinyWip = qryP31.Where(p => p.p71ID == BO.p71IdENUM.Nic && p.p91ID == 0).Sum(p => p.p31Hours_Orig);
@@ -42,7 +56,7 @@
     double _dblHodinyVyfa23 = 0.00;
 
     if (_f.CurrentUser.IsRatesAccess)
-    {        
+    {
         _dblHodinyVyfa4 = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.Vyfakturovano).Sum(p => p.p31Hours_Invoiced);
         _dblHodinyVyfa4Orig = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.Vyfakturovano).Sum(p => p.p31Hours_Orig);
         _dblHodinyVyfa6 = qryP31.Where(p => p.p91ID > 0 && p.p70ID == BO.p70IdENUM.ZahrnutoDoPausalu).Sum(p => p.p31Hours_Orig);
@@ -52,16 +66,16 @@
 
 
 
-}
+    }
 
 <table class="table table-sm table-hover" style="margin-right:50px;">
     <tr>
         <td>
             @_f.tra("Vykázané hodiny")
 
-            <strong style="color:navy;">
+            <span class="badge bg-info">
                 @(_strMesic)
-            </strong>
+            </span>
             
 
         </td>
