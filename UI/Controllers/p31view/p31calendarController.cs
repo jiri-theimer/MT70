@@ -50,6 +50,10 @@ namespace UI.Controllers.p31view
             {
                 v.AgendaNdays = Factory.CBL.LoadUserParamInt("p31calendar-agendandays", 3);
             }
+            if (v.CurrentView == CalendarViewEnum.ExactDay)
+            {
+                v.DayView_MinutesGap = Factory.CBL.LoadUserParamInt("p31calendar-minutesgap", 15);
+            }
 
             v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);
 

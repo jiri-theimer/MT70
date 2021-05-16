@@ -421,6 +421,12 @@ else
         });
     }
 
+    function change_minutesgap(cbx) {
+        $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-minutesgap", value: cbx.value }, function (data) {
+            reload();
+        });
+    }
+
     function reccm(e,p31id) {
         _cm(e, "p31Worksheet", p31id, "calendar");
     }

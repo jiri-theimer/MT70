@@ -227,6 +227,7 @@ a.mt_scheduler_valuelink_deadline {
     background-color: #F7F7F7;
     text-align: center;
     border-top: solid 1px silver;
+    
 }
 
 .minute_slot {
@@ -237,6 +238,7 @@ a.mt_scheduler_valuelink_deadline {
     border-bottom: solid 1px silver;
     border-right: solid 1px silver;
     cursor: grab;
+    
 }
 
 .data_slot {
