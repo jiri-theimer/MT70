@@ -152,9 +152,11 @@ else
 <script type="text/javascript">
     var _cv = "@((int)Model.CurrentView)";
     var _cvs = "@(Model.CurrentView.ToString().ToLower())";
-                var _zoomwin = document.getElementById("zoomwin");
-                var _lasturl = "";
-                var _lastctl = null;
+    var _ndays = parseInt("@((int)Model.AgendaNdays)");
+    var _zoomwin = document.getElementById("zoomwin");
+    var _lasturl = "";
+    var _lastctl = null;
+
     $(document.body).css("overflow", "hidden");
 
         $(document).ready(function () {
@@ -310,6 +312,12 @@ else
                 d1 = new Date(d0.getTime() - 8 * 24 * 60 * 60 * 1000);
                 d1 = get_next_monday(d1);
             }
+            if (_cvs == "nagenda") {
+                d1 = get_prev_days(d0, _ndays);
+            }
+            if (_cvs == "exactday") {
+                d1 = get_prev_days(d0, 1);
+            }
 
             datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
 
@@ -324,8 +332,14 @@ else
             var d1 = new Date(d0.getFullYear(), d0.getMonth() + 1, 1);
             if (_cvs == "week" || _cvs == "weekagenda") {
                 d1 = get_next_monday(d0);
-
             }
+            if (_cvs == "nagenda") {
+                d1 = get_next_days(d0, _ndays);
+            }
+            if (_cvs == "exactday") {
+                d1 = get_next_days(d0, 1);
+            }
+
             datepicker_set_value("d0", d1); //tímto se spustí se $("#d0helper").change
 
         }
@@ -401,6 +415,12 @@ else
     function get_next_days(d, days) {
         for (var i = 0; i < days; i++) {
             d = new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000);
+        }
+        return (d);
+    }
+    function get_prev_days(d, days) {
+        for (var i = 0; i < days; i++) {
+            d = new Date(d.getTime() - 1 * 24 * 60 * 60 * 1000);
         }
         return (d);
     }

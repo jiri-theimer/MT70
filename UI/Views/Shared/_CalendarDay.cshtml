@@ -83,32 +83,34 @@
         int intStartIndex = -1; int intEndIndex = time_slots.Count() - 1;
         foreach (DateTime d in time_slots)
         {
-            if (d >= Convert.ToDateTime(c.p31DateTimeFrom_Orig) && intStartIndex == 1)
+            if (d>=Convert.ToDateTime(c.p31DateTimeFrom_Orig) && intStartIndex == -1)
             {
                 intStartIndex = x;
             }
-            if (d.AddMilliseconds(101) >= Convert.ToDateTime(c.p31DateTimeUntil_Orig) && intStartIndex > -1)
+            
+            if (DateTime.Compare(d.AddMilliseconds(101), Convert.ToDateTime(c.p31DateTimeUntil_Orig)) > 0 && intStartIndex > -1)
             {
                 intEndIndex = x;
                 break;
             }
+
             x += 1;
         }
         if (intStartIndex > -1)
         {
             string strRCM = $"<a class='cm' onclick='reccm(event,{c.pid})'>&#9776;</a>";
             int intSpanRows = intEndIndex - intStartIndex + 1;
-            string strLink = c.TimeFrom + " - " + c.TimeUntil;
+            string strLink = c.TimeFrom + "-" + c.TimeUntil;
             if (c.p32IsBillable)
             {
-                strLink += "<span style='color:green;margin-left:6px;'>" + BO.basTime.FormatNumeric(c.p31Hours_Orig, Model.ShowHHMM) + "</span>";
+                strLink += "<span style='color:green;margin-left:6px;'>" + BO.basTime.FormatNumeric(c.p31Hours_Orig, Model.ShowHHMM) + "h. </span>";
             }
             else
             {
-                strLink += "<span style='color:red;margin-left:6px;'>" + BO.basTime.FormatNumeric(c.p31Hours_Orig, Model.ShowHHMM) + "</span>";
+                strLink += "<span style='color:red;margin-left:6px;'>" + BO.basTime.FormatNumeric(c.p31Hours_Orig, Model.ShowHHMM) + "h. </span>";
             }
 
-            strLink += "h. "+TheGridRowSymbol.p31_symbol(c);
+            strLink += TheGridRowSymbol.p31_symbol(c);
 
             string strProject = BO.BAS.OM2(c.p41Name, 15);
             if (c.p28ID_Client > 0)
@@ -116,9 +118,9 @@
                 strProject += " (" + BO.BAS.OM2(c.ClientName, 15) + ")";
             }
             string strText = BO.BAS.OM2(c.p31Text, 300);
-            
 
-            @Html.Raw($"<div class='data_slot' style='grid-row:{(intStartIndex + 1)}/span {intSpanRows};'>{strRCM}<a href='javascript:void(0)' onclick='p31_record_open({c.pid})'>{strLink} {strProject}</a><i style='padding-left:20px;'>{strText}</i></div>");
+
+            @Html.Raw($"<div class='data_slot' style='grid-row:{(intStartIndex + 1)}/span {intSpanRows};'>{strRCM}<a class='exactdayp31reclink' onclick='p31_record_open({c.pid})'>{strLink} {strProject}</a><i style='padding-left:20px;'>{strText}</i></div>");
         }
     }
 

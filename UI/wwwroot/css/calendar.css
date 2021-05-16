@@ -259,6 +259,15 @@ a.mt_scheduler_valuelink_deadline {
     background-color: white;
 }
 
+a.exactdayp31reclink{
+    text-decoration:none;
+    cursor:pointer;
+
+}
+a.exactdayp31reclink:hover {
+    text-decoration: underline;
+}
+
 .bunka_selected {
     background-color: orange;
 }
