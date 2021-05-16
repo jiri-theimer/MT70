@@ -111,6 +111,7 @@
                         break;
                     case UI.Models.p31view.CalendarViewEnum.MonthAgenda:
                     case UI.Models.p31view.CalendarViewEnum.WeekAgenda:
+                    case UI.Models.p31view.CalendarViewEnum.NAgenda:
                         @Html.EditorFor(m => m, "~/Views/Shared/_CalendarAgenda.cshtml");
                         break;
                 }
@@ -132,6 +133,7 @@ else
                 break;
             case UI.Models.p31view.CalendarViewEnum.MonthAgenda:
             case UI.Models.p31view.CalendarViewEnum.WeekAgenda:
+            case UI.Models.p31view.CalendarViewEnum.NAgenda:
                 @Html.EditorFor(m => m, "~/Views/Shared/_CalendarAgenda.cshtml");
                 break;
         }
@@ -154,10 +156,10 @@ else
         $(document).ready(function () {
 
 
-                    _mainmenu_highlight_current("cmdCalendar");
+            _mainmenu_highlight_current("cmdCalendar");
             $("#link_tab" + _cv).addClass("active");
 
-                    @if (Model.ShowLeftPanel)
+            @if (Model.ShowLeftPanel)
             {
             <text>
             var lpH = _device.innerHeight - $("#divLeftPanel").offset().top - 2;
@@ -402,4 +404,17 @@ else
     function p31c(d) {
         alert(d);
     }
+
+
+    function change_agenda_descending(cbx) {
+        $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-agendadescending", value: cbx.value }, function (data) {
+            reload();
+        });
+    }
+    function change_agenda_ndays(cbx) {
+        $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-agendandays", value: cbx.value }, function (data) {
+            reload();
+        });
+    }
+    
 </script>

@@ -42,6 +42,15 @@ namespace UI.Controllers.p31view
             v.ShowP31Recs = Factory.CBL.LoadUserParamBool("p31calendar-showp31recs", true);
             v.ShowP31RecsNoTime = Factory.CBL.LoadUserParamBool("p31calendar-showp31recsnotime", true);
             v.j02ID = Factory.CBL.LoadUserParamInt("p31calendar-j02id", Factory.CurrentUser.j02ID);
+            if (v.CurrentView ==CalendarViewEnum.MonthAgenda || v.CurrentView==CalendarViewEnum.WeekAgenda || v.CurrentView == CalendarViewEnum.NAgenda)
+            {
+                v.IsAgendaDescending = Factory.CBL.LoadUserParamBool("p31calendar-agendadescending", false);
+            }
+            if (v.CurrentView == CalendarViewEnum.NAgenda)
+            {
+                v.AgendaNdays = Factory.CBL.LoadUserParamInt("p31calendar-agendandays", 3);
+            }
+
             v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);
 
             if (!string.IsNullOrEmpty(d))
@@ -72,14 +81,16 @@ namespace UI.Controllers.p31view
                     v.d1 = new DateTime(v.d0.Year, v.d0.Month, 1);
                     v.d2 = v.d1.AddMonths(1).AddDays(-1);
                     break;
-                case CalendarViewEnum.Week:
-                case CalendarViewEnum.WeekAgenda:
+                case CalendarViewEnum.Week:                    
+                case CalendarViewEnum.WeekAgenda:                    
                     v.d1 = get_first_prev_monday(v.d0);
                     v.d2 = v.d1.AddDays(6);
                     break;
-               
-                default:
-                    
+                case CalendarViewEnum.NAgenda:
+                    v.d1 = v.d0;
+                    v.d2 = v.d1.AddDays(v.AgendaNdays-1);
+                    break;
+                default:                    
                     break;
                 
             }

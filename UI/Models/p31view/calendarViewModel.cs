@@ -43,6 +43,7 @@ namespace UI.Models.p31view
         public string StatTotalsByPrefix { get; set; }
 
         public bool IsAgendaDescending { get; set; }
+        public int AgendaNdays { get; set; }
 
 
     }

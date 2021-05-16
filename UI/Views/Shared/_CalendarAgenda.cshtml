@@ -9,7 +9,7 @@
     bool bolHoliday = false;
     bool bolOK = false;
     string strStyle = null;
-    int x = 1;
+
     int x_ok = 0;
     string strTitleVykazatDo = _f.tra("Vykázat do");
     string strTitleSouceHodiny = _f.tra("Součet hodin");
@@ -19,16 +19,14 @@
 
 
     var qryP31 = Model.lisP31;
-    
-    double _dblHodiny = qryP31.Sum(p => p.p31Hours_Orig);
 
+    double _dblHodiny = qryP31.Sum(p => p.p31Hours_Orig);
+    DateTime d = Model.d1;
+    if (Model.IsAgendaDescending) d = Model.d2;
 }
 
 
-<select asp-for="@Model.IsAgendaDescending">
-    <option value="0">@_f.tra("Vzestupně")</option>
-    <option value="1">@_f.tra("Sestupně")</option>
-</select>
+
 
 <table border="0" id="mt_scheduler_agenda">
     <tr style="line-height:20px;">
@@ -41,15 +39,36 @@
                 @(BO.basTime.FormatNumeric(_dblHodiny,Model.ShowHHMM))
             </a>
         </th>
-        <th style="text-align:left;">
-            @(BO.BAS.ObjectDate2String(Model.d1)+" - "+ BO.BAS.ObjectDate2String(Model.d2))
+        <th style="text-align:left;font-weight:normal;">
+            <span class="badge bg-info">
+                @(BO.BAS.ObjectDate2String(Model.d1)+" - "+ BO.BAS.ObjectDate2String(Model.d2))
+            </span>
+            @if (Model.CurrentView == UI.Models.p31view.CalendarViewEnum.NAgenda)
+            {
+                <label for="AgendaNdays" style="margin-left:30px;">@_f.tra("Počet zobrazovaných dní"):</label>
+                <select asp-for="@Model.AgendaNdays" onchange="change_agenda_ndays(this)">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="10">10</option>
+                    <option value="14">14</option>
+                    <option value="20">20</option>
+                </select>
+            }
+
+
+            <select asp-for="@Model.IsAgendaDescending" onchange="change_agenda_descending(this)" style="margin-left:30px;">
+                <option value="false">@_f.tra("Vzestupně")</option>
+                <option value="true">@_f.tra("Sestupně")</option>
+            </select>
         </th>
-        <th></th>
+        
     </tr>
 
 
 
-    @for (DateTime d = Model.d1; d <= Model.d2; d = d.AddDays(1))
+    @for (int x=1;x<50;x++)
     {
         strClass = "mt_scheduler-day-in-month"; bolWeekendDay = false; bolHoliday = false;
 
@@ -77,21 +96,22 @@
         if (bolWeekendDay && !Model.ShowWeekend)
         {
             bolOK = false;
+            if (Model.CurrentView == UI.Models.p31view.CalendarViewEnum.NAgenda) bolOK = true;  //Nagenda víkendy zobrazuje vždy!
         }
-        if (bolWeekendDay && Model.CurrentView == UI.Models.p31view.CalendarViewEnum.NAgenda && x <= 2)
-        {
-            bolOK = false;
-        }
+        //if (bolWeekendDay && Model.CurrentView == UI.Models.p31view.CalendarViewEnum.NAgenda && x <= 2)
+        //{
+        //    bolOK = false;
+        //}
 
         if (bolOK)
         {
             if (x > 1)
             {
-                if (!Model.IsAgendaDescending && d.Month != intLastM)
+                if (d.Month != intLastM)
                 {
                     @Html.Raw("<tr class='agenda_row_divider_month'><td></td><td></td><td></td></tr>");
                 }
-                if (!Model.IsAgendaDescending && d.DayOfWeek == DayOfWeek.Monday)
+                if (d.DayOfWeek == DayOfWeek.Monday)
                 {
                     @Html.Raw("<tr class='agenda_row_divider_week'><td></td><td></td><td></td></tr>");
                 }
@@ -231,13 +251,27 @@
 
 
             @Html.Raw("</tr>");
+
             x_ok += 1;
+
+        }
+
+        intLastM = d.Month;
+
+        if (Model.IsAgendaDescending)
+        {
+            d = d.AddDays(-1);
+        }
+        else
+        {
+            d = d.AddDays(1);
+        }
+        if (d < Model.d1 || d > Model.d2)
+        {
+            break;
         }
 
 
 
-
-        intLastM = d.Month;
-        x += 1;
     }
 </table>
