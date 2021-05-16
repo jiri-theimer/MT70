@@ -37,17 +37,30 @@
         }
     }
 
-    <div>
-        <label for="DayView_MinutesGap" style="margin-left:30px;">@_f.tra("Časové intervaly (minuty)"):</label>
-        <select asp-for="@Model.DayView_MinutesGap" onchange="change_minutesgap(this)">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="60">60</option>
+    <div class="input-group" style="border-bottom:solid 1px black;margin-bottom:2px;">
+        <div style="margin-left:55px;">
+            <a class="stat_link" style="font-weight:bold;" onclick="zoom_alldays(this)">
+                @(BO.basTime.FormatNumeric(_dblHodiny,Model.ShowHHMM))
+            </a>
+        </div>
+        <div style="margin-left:30px;">
+            <span class="badge bg-info">
+                @(BO.BAS.ObjectDate2String(Model.d1))
+            </span>
+        </div>
+        <div style="margin-left:30px;">
+            <label for="DayView_MinutesGap">@_f.tra("Časové intervaly (minuty)"):</label>
+            <select asp-for="@Model.DayView_MinutesGap" onchange="change_minutesgap(this)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="60">60</option>
 
-        </select>
+            </select>
+        </div>
+        
     </div>
 
     @Html.Raw($"<div id='grid_day_container' class='grid-day-container' style='grid-template-rows:{string.Join(" ", blocks)};'>");

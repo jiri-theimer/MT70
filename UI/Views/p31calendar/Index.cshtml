@@ -275,8 +275,21 @@ else
         var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)");
         zoom_open(ctl, url);
     }
+    function zoom_alldays(ctl) {
+        if (_cvs == "month" || _cvs == "monthagenda") {
+            zoom_allmonth(ctl);
+            return;
+        }
+        var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&d1=@(BO.BAS.ObjectDate2String(Model.d1,"dd.MM.yyyy"))&d2=@(BO.BAS.ObjectDate2String(Model.d2,"dd.MM.yyyy"))");
+        zoom_open(ctl, url);
+    }
     function zoom_stat(ctl, p32isbillable, iswip, p70id, isapproved_and_wait4invoice,p28id,p41id,p32id) {
-        var url = "/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)";
+        var url = "/p31dayline/Zoom?j02id=@(Model.j02ID)";
+        if (_cvs == "month" || _cvs == "monthagenda") {
+            url = url + "&m=@(Model.m0)&y=@(Model.y0)";
+        } else {
+            url = url + "&d1=@(BO.BAS.ObjectDate2String(Model.d1,"dd.MM.yyyy"))&d2=@(BO.BAS.ObjectDate2String(Model.d2,"dd.MM.yyyy"))";
+        }
         if (p32isbillable != undefined || p32isbillable != null) {
             url = url + "&p32isbillable=" + p32isbillable;
         }
