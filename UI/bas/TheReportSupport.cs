@@ -16,7 +16,10 @@ namespace UI
             {
                 uriReportSource.Parameters.Add("pid", recpid);
             }
-            var per = f.x31ReportBL.InhalePeriodFilter(pp);
+
+            var per = new UI.Models.PeriodViewModel() { UserParamKey = "report-period" };
+            per.InhaleUserPeriodSetting(pp, f, null, null);
+            
             uriReportSource.Parameters.Add("datfrom", per.d1);
             uriReportSource.Parameters.Add("datuntil", per.d2);
 

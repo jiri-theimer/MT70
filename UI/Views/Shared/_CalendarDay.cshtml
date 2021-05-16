@@ -5,7 +5,10 @@
 
 
     int h0 = 8;
-    int h1 = 20;
+    if (DateTime.Now.Hour < h0) h0 = DateTime.Now.Hour;
+    int h1 = 19;
+    if (DateTime.Now.Hour > h1) h1 = DateTime.Now.Hour;
+
 
     double _dblHodiny = Model.lisP31.Sum(p => p.p31Hours_Orig);
 

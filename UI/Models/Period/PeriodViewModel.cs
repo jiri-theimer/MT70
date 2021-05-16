@@ -9,9 +9,11 @@ namespace UI.Models
     {
         public string prefix { get; set; }
         public string masterentity { get; set; }
+        public string UserParamKey { get; set; } = "grid-period";
         public string PeriodField { get; set; }
         public DateTime? d1 { get; set; }
         public DateTime? d2 { get; set; }
+        
 
         public int PeriodValue { get; set; }
         
@@ -37,10 +39,10 @@ namespace UI.Models
 
         public void InhaleUserPeriodSetting(BL.ThePeriodProvider pp, BL.Factory f,string prefix,string masterentity)
         {
-            int x = f.CBL.LoadUserParamInt(get_param_key("grid-period-value-" + prefix, masterentity));  //podformuláře filtrují období za sebe a nikoliv globálně jako flatview/masterview
+            int x = f.CBL.LoadUserParamInt(get_param_key(this.UserParamKey+"-value-" + prefix, masterentity));  //podformuláře filtrují období za sebe a nikoliv globálně jako flatview/masterview
             if (x > 0)
             {
-                this.PeriodField = f.CBL.LoadUserParam(get_param_key("grid-period-field-" + prefix, masterentity));
+                this.PeriodField = f.CBL.LoadUserParam(get_param_key(this.UserParamKey+"-field-" + prefix, masterentity));
             }
             if (x > 60)
             {
@@ -59,8 +61,8 @@ namespace UI.Models
                 case 1:     //ručně zadaný interval d1-d2
                     var r1 = pp.ByPid(1);
                     this.PeriodValue = r1.pid;                    
-                    this.d1 = f.CBL.LoadUserParamDate(get_param_key("grid-period-d1-" + prefix, masterentity));
-                    this.d2 = f.CBL.LoadUserParamDate(get_param_key("grid-period-d2-" + prefix, masterentity));                    
+                    this.d1 = f.CBL.LoadUserParamDate(get_param_key(this.UserParamKey+"-d1-" + prefix, masterentity));
+                    this.d2 = f.CBL.LoadUserParamDate(get_param_key(this.UserParamKey+"-d2-" + prefix, masterentity));                    
                     break;
                 default:    //pojmenované období
                     var r = pp.ByPid(x);                    

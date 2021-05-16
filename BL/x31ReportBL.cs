@@ -13,7 +13,7 @@ namespace BL
         public int Save(BO.x31Report rec);
         public BO.o27Attachment LoadReportDoc(int x31id);
         public bool IsReportWaiting4Generate(DateTime dNow, BO.x31Report rec);
-        public BO.ThePeriod InhalePeriodFilter(BL.ThePeriodProvider pp);
+        //public BO.ThePeriod InhalePeriodFilter*/(BL.ThePeriodProvider pp);
         public string ParseExportFileNameMask(string strExportFileNameMask, string prefix, int pid);
     }
     class x31ReportBL : BaseBL, Ix31ReportBL
@@ -170,31 +170,31 @@ namespace BL
 
         }
 
-        public BO.ThePeriod InhalePeriodFilter(BL.ThePeriodProvider pp)
-        {           
-            var ret = pp.ByPid(0);
-            int x = _mother.CBL.LoadUserParamInt("report-period-value");
-            switch (x)
-            {
-                case 0:
-                    ret.d1 = new DateTime(2000, 1, 1);
-                    ret.d2 = new DateTime(3000, 1, 1);
-                    return ret;
-                case 1:
-                    ret = pp.ByPid(x);
-                    ret.d1 = _mother.CBL.LoadUserParamDate("report-period-d1");
-                    ret.d2 = _mother.CBL.LoadUserParamDate("report-period-d2");
-                    if (ret.d1 == null) ret.d1 = new DateTime(2000, 1, 1);
-                    if (ret.d2 == null) ret.d2 = new DateTime(3000, 1, 1);
-                    break;
-                default:
-                    ret = pp.ByPid(x);
-                    break;
-            }
+        //public BO.ThePeriod InhalePeriodFilter(BL.ThePeriodProvider pp)
+        //{           
+        //    var ret = pp.ByPid(0);
+        //    int x = _mother.CBL.LoadUserParamInt("report-period-value");
+        //    switch (x)
+        //    {
+        //        case 0:
+        //            ret.d1 = new DateTime(2000, 1, 1);
+        //            ret.d2 = new DateTime(3000, 1, 1);
+        //            return ret;
+        //        case 1:
+        //            ret = pp.ByPid(x);
+        //            ret.d1 = _mother.CBL.LoadUserParamDate("report-period-d1");
+        //            ret.d2 = _mother.CBL.LoadUserParamDate("report-period-d2");
+        //            if (ret.d1 == null) ret.d1 = new DateTime(2000, 1, 1);
+        //            if (ret.d2 == null) ret.d2 = new DateTime(3000, 1, 1);
+        //            break;
+        //        default:
+        //            ret = pp.ByPid(x);
+        //            break;
+        //    }
 
 
-            return ret;
-        }
+        //    return ret;
+        //}
 
         public string ParseExportFileNameMask(string strExportFileNameMask,string prefix,int pid)
         {

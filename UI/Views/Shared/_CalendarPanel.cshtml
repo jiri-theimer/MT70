@@ -15,7 +15,7 @@
             _strMesic = Model.d0.Month.ToString() + "/" + Model.d0.Year.ToString();
             break;
         case UI.Models.p31view.CalendarViewEnum.ExactDay:
-            _strMesic = Model.d0.Month.ToString();
+            _strMesic = Model.d0.ToString("dd.MM.yyyy ddd");
             break;
         default:
             _strMesic = BO.BAS.ObjectDate2String(Model.d1) + " - " + BO.BAS.ObjectDate2String(Model.d2);

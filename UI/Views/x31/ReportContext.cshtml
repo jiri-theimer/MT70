@@ -145,13 +145,9 @@
 
             @if (Model.IsPeriodFilter)
             {
-                <div class="row my-2">
-                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Časové období"):</label>
-                    <div class="col-sm-9 col-md-8">
-                        @Html.EditorFor(m => m.PeriodFilter, "~/Views/Shared/_Period.cshtml")
-                    </div>
-
-                </div>
+        <div>
+            @Html.EditorFor(m => m.PeriodFilter, "~/Views/Shared/_Period.cshtml")
+        </div>
             }
 
 
@@ -265,30 +261,7 @@
             </text>
        }
 
-        $("#PeriodValue").on("change", function () {
-            $.post("/Common/SetUserParam", { key: "report-period-value", value: $(this).val() }, function (data) {
-                form1.action = _ep("/x31/ReportContext?oper=change_period");
-                form1.submit();
-
-            });
-        });
-        $("#cmdRefreshPeriod").on("click", function () {
-            var k = [];
-            var v = [];
-            k.push("report-period-value");
-            v.push($("#PeriodValue").val());
-            k.push("report-period-d1");
-            v.push($("#d1helper").val());
-            k.push("report-period-d2");
-            v.push($("#d2helper").val());
-
-
-            $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {
-                refresh();
-
-            });
-
-        });
+        
     });
 
 
@@ -301,10 +274,10 @@
         form1.action = _ep("/x31/ReportContext?oper=generate_docx");
         form1.submit();
     }
-    function refresh() {
+    function reload() {
         form1.action = _ep("/x31/ReportContext?oper=postback");
         form1.submit();
-        }
+    }
 
         function generate_merge() {
             form1.action = _ep("/x31/ReportContext?oper=merge");

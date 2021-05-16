@@ -129,12 +129,10 @@ namespace UI.Controllers
                         if (v.RecX31.x31IsPeriodRequired || (strXmlContent.Contains("datFrom", StringComparison.OrdinalIgnoreCase) && strXmlContent.Contains("datUntil", StringComparison.OrdinalIgnoreCase)))      
                         {
                             v.IsPeriodFilter = true;
-                            v.PeriodFilter = new PeriodViewModel();
+                            v.PeriodFilter = new PeriodViewModel() { UserParamKey = "report-period" };
+                            v.PeriodFilter.InhaleUserPeriodSetting(_pp, Factory, null, null);
                             v.PeriodFilter.IsShowButtonRefresh = true;
-                            var per =Factory.x31ReportBL.InhalePeriodFilter(_pp);
-                            v.PeriodFilter.PeriodValue = per.pid;
-                            v.PeriodFilter.d1 = per.d1;
-                            v.PeriodFilter.d2 = per.d2;
+                            
                             
                         }
                         else
@@ -287,12 +285,9 @@ namespace UI.Controllers
                         if (v.RecX31.x31IsPeriodRequired || (strXmlContent.Contains("datFrom", StringComparison.OrdinalIgnoreCase) && strXmlContent.Contains("datUntil", StringComparison.OrdinalIgnoreCase)))
                         {
                             v.IsPeriodFilter = true;
-                            v.PeriodFilter = new PeriodViewModel();
+                            v.PeriodFilter = new PeriodViewModel() { UserParamKey = "report-period" };
                             v.PeriodFilter.IsShowButtonRefresh = true;
-                            var per = Factory.x31ReportBL.InhalePeriodFilter(_pp);
-                            v.PeriodFilter.PeriodValue = per.pid;
-                            v.PeriodFilter.d1 = per.d1;
-                            v.PeriodFilter.d2 = per.d2;
+                            v.PeriodFilter.InhaleUserPeriodSetting(_pp, Factory, null, null);
 
                         }
                         else

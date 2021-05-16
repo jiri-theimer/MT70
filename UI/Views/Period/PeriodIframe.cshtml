@@ -63,26 +63,30 @@
 </div>
 
 <div id="div_periodfield" style="padding-top:10px;">
-    <select id="PeriodField" asp-for="@Model.PeriodField" class="form-select form-select-sm" style="max-width:200px;">
-        @switch (Model.prefix)
-        {
-            case "p31":
-                <option value="p31Date">Datum úkonu</option>
-                <option value="p91Date">Datum vyúčtování</option>
-                <option value="p91DateSupply">DUZP vyúčtování</option>
-                <option value="p31DateInsert">Čas založení úkonu</option>
-                break;
-            case "p90":
-                <option value="p90Date">Datum vystavení</option>
-                <option value="p90DateInsert">Čas založení záznamu</option>
-                break;
-            case "p91":
-                <option value="p91Date">Datum vystavení</option>
-                <option value="p91DateSupply">Datum zdanitelné plnění</option>
-                <option value="p91DateInsert">Čas založení záznamu</option>
-                break;
-        }
-    </select>
+    @if (Model.prefix != null)
+    {
+        <select id="PeriodField" asp-for="@Model.PeriodField" class="form-select form-select-sm" style="max-width:200px;">
+            @switch (Model.prefix)
+            {
+                case "p31":
+                    <option value="p31Date">Datum úkonu</option>
+                    <option value="p91Date">Datum vyúčtování</option>
+                    <option value="p91DateSupply">DUZP vyúčtování</option>
+                    <option value="p31DateInsert">Čas založení úkonu</option>
+                    break;
+                case "p90":
+                    <option value="p90Date">Datum vystavení</option>
+                    <option value="p90DateInsert">Čas založení záznamu</option>
+                    break;
+                case "p91":
+                    <option value="p91Date">Datum vystavení</option>
+                    <option value="p91DateSupply">Datum zdanitelné plnění</option>
+                    <option value="p91DateInsert">Čas založení záznamu</option>
+                    break;
+            }
+        </select>
+    }
+
 
 </div>
 @if (Model.PeriodValue > 0)
@@ -99,6 +103,7 @@
 <script type="text/javascript">
     var _periodprefix = "@(Model.prefix)";
     var _periodmasterentity = "@(Model.masterentity)";
+    var _userparamkey = "@(Model.UserParamKey)";
 
     $(document).ready(function () {
 
@@ -120,19 +125,19 @@
                 handle_showhide();
                 return;
             }
-            $.post("/Common/SetUserParam", { key: "grid-period-value-" + _periodprefix, value: $(this).val() }, function (data) {
+            $.post("/Common/SetUserParam", { key: _userparamkey+"-value-" + _periodprefix, value: $(this).val() }, function (data) {
                 reload();
             });
         });
         $("#PeriodField").on("change", function () {
 
-            $.post("/Common/SetUserParam", { key: "grid-period-field-" + _periodprefix, value: $(this).val() }, function (data) {
+            $.post("/Common/SetUserParam", { key: _userparamkey+"-field-" + _periodprefix, value: $(this).val() }, function (data) {
                 reload();
             });
         });
 
         $("#cmdClear").on("click", function () {
-            $.post("/Common/SetUserParam", { key: "grid-period-value-" + _periodprefix, value: "0" }, function (data) {
+            $.post("/Common/SetUserParam", { key: _userparamkey+"-value-" + _periodprefix, value: "0" }, function (data) {
                 reload();
             });
         });
@@ -147,11 +152,11 @@
             }
             var k = [];
             var v = [];
-            k.push("grid-period-value-" + _periodprefix);
+            k.push(_userparamkey+"-value-" + _periodprefix);
             v.push($("#PeriodValue").val());
-            k.push("grid-period-d1-" + _periodprefix);
+            k.push(_userparamkey+"-d1-" + _periodprefix);
             v.push($("#d1helper").val());
-            k.push("grid-period-d2-" + _periodprefix);
+            k.push(_userparamkey+"-d2-" + _periodprefix);
             v.push($("#d2helper").val());
 
             $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {

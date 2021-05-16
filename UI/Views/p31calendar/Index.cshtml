@@ -140,6 +140,9 @@ else
             case UI.Models.p31view.CalendarViewEnum.NAgenda:
                 @Html.EditorFor(m => m, "~/Views/Shared/_CalendarAgenda.cshtml");
                 break;
+            case UI.Models.p31view.CalendarViewEnum.ExactDay:
+                @Html.EditorFor(m => m, "~/Views/Shared/_CalendarDay.cshtml");
+                break;
         }
 
     }

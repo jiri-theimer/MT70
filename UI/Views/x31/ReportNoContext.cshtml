@@ -116,7 +116,7 @@
                 @if (Model.RecX31.x31LangIndex > 0)
                 {
                     <td>
-                        <select asp-for="@Model.LangIndex" class="form-control" onchange="refresh()">
+                        <select asp-for="@Model.LangIndex" class="form-control" onchange="reload()">
                             <option value="0">Česky</option>
 
                             <option value="2">Українська</option>
@@ -132,7 +132,7 @@
                     @if (!Model.IsPeriodFilter)
                     {
                         <td style="width:40px;">
-                            <button id="cmdRefresh" type="button" onclick="refresh()" class="btn btn-primary"><span class="k-icon k-i-reload"></span></button>
+                            <button id="cmdRefresh" type="button" onclick="reload()" class="btn btn-primary"><span class="k-icon k-i-reload"></span></button>
                         </td>
                     }
                 }
@@ -223,30 +223,7 @@
 
 
 
-        $("#PeriodValue").on("change", function () {
-            $.post("/Common/SetUserParam", { key: "report-period-value",value:$(this).val()  }, function (data) {
-                form1.action = _ep("/x31/ReportNoContext?oper=change_period");
-                form1.submit();
-
-            });
-        });
-        $("#cmdRefreshPeriod").on("click", function () {
-            var k = [];
-            var v = [];
-            k.push("report-period-value");
-            v.push($("#PeriodValue").val());
-            k.push("report-period-d1");
-            v.push($("#d1helper").val());
-            k.push("report-period-d2");
-            v.push($("#d2helper").val());
-
-
-            $.post("/Common/SetUserParams", { keys: k, values:v  }, function (data) {
-                location.replace(_ep("/x31/ReportNoContext?x31id=@Model.SelectedX31ID"));
-
-            });
-
-        });
+        
 
 
 
@@ -266,7 +243,7 @@
             form1.action = _ep("/x31/ReportNoContext?oper=change_j72id");
             form1.submit();
         }
-        function refresh() {
+        function reload() {
             form1.action = _ep("/x31/ReportNoContext?oper=postback");
             form1.submit();
         }
