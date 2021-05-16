@@ -162,9 +162,10 @@ a.p31_rec_link_agenda {
     text-decoration: none;
     overflow: hidden;
     white-space: nowrap;
-    display:inline-block;
-    text-overflow:ellipsis;
-    width:220px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    width: 220px;
+    vertical-align:bottom;
 }
 
     a.p31_rec_link_agenda:hover {
@@ -352,3 +353,5 @@ div.mt_scheduler-day-link-container {
         border-radius: 10px;
         color: white;
     }
+
+

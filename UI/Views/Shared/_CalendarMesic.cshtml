@@ -191,6 +191,7 @@
                                 }
                                 break;
                         }
+                        @Html.Raw($"<a class='cm' onclick='reccm(event,{recP31.pid})'>&#9776;</a>");
 
                         @Html.Raw($"<a class='{strClass}' title='{strTitle}' onclick='p31_rec({recP31.pid})'>");
 
