@@ -149,6 +149,7 @@ namespace BO
             if (this.pids != null && this.pids.Any())
             {
                 AQ(_pkfield + " IN (" + String.Join(",", this.pids) + ")", "", null);
+                this.IsRecordValid = null;  //pokud jsou na vstupu konkrétní ID záznamů, filtr časové platnosti nemá význam
             }
             if (this.IsRecordValid != null)
             {

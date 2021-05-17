@@ -30,7 +30,7 @@
     }
 
 
-    <div>
+    <div id="divPageCommands">
         <a class="btn btn-light" href="/Record/RecPage?prefix=@(Model.prefix)&pid=@(Model.pid)" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
         @if (_f.CurrentUser.j04IsMenu_Contact)
         {
@@ -177,6 +177,14 @@
         tg_select(1);
             </text>
 
+        }
+
+    @if (Model.pid == 0)
+        {
+            <text>
+        $(".tabovergrid").css("visibility", "hidden");
+        $("#divPageCommands").css("visibility", "hidden");
+            </text>
         }
         
 
