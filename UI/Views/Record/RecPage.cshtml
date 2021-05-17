@@ -1,12 +1,11 @@
-﻿@model UI.Models.Recpage.p28RecPage
+﻿@model UI.Models.RecPageViewModel
 @inject BL.Factory _f
 
 @{
 
     Layout = "~/Views/Shared/_Layout.cshtml";
-    if (Model.Rec == null) return;
-
-    Model.PageTitle = Model.Rec.p28name;
+    
+    Model.PageTitle = Model.MenuCode;
 
 }
 
@@ -14,10 +13,10 @@
 
 <div class="input-group m-0" style="padding-top:1px;">
     <div class="tabovergrid" style="margin-left:1px;">
-        @_f.tra("Stránka klienta")
+        @Model.TabName
     </div>
 
-    @if (Model.ShowGridPanel)
+    @if (Model.ShowGridPanel && Model.pid > 0)
     {
         <div class="dropdown nonmobile">
             <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,7 +31,7 @@
 
 
     <div>
-        <a class="btn btn-light" href="/p28/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+        <a class="btn btn-light" href="/Record/RecPage?prefix=@(Model.prefix)&pid=@(Model.pid)" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
         @if (_f.CurrentUser.j04IsMenu_Contact)
         {
             <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
@@ -41,7 +40,7 @@
     </div>
 
     <div style="width:200px;">
-        <mycombo entity="p28Contact" asp-for="@Model.SearchedPid" search-result-width="800" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
+        <mycombo entity="@Model.entity" asp-for="@Model.SearchedPid" search-result-width="800" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
     </div>
     <div class="p-2 nonmobile">
         <span>@Model.MenuCode</span>
@@ -63,7 +62,7 @@
 
 </div>
 
-@if (Model.ShowGridPanel)
+@if (Model.ShowGridPanel && Model.pid > 0)
 {
     <div style="height:70px;">
         <vc:the-grid input="@Model.gridinput"></vc:the-grid>
@@ -75,7 +74,7 @@
     <div id="layout_sidebar_contextmenu">
         @if (Model.pid > 0)
         {
-            <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.p28name" onclick="_cm(event, 'p28',@Model.Rec.pid);">☰@(Model.Rec.p28name) </a>
+            <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.MenuCode" onclick="_cm(event, '@Model.prefix',@Model.pid);">☰@(Model.MenuCode) </a>
             <h4 id="layout_sidebar_contextmenu_onlytext"></h4>
         }
 
@@ -96,7 +95,7 @@
 }
 
 
-<div class="tabs_container bgp28">
+<div class="tabs_container bg@(Model.prefix)">
     <ul id="navtabs" class="nav nav-tabs">
         @foreach (var tab in Model.NavTabs)
         {
@@ -126,12 +125,15 @@
 
 
 <script type="text/javascript">
+    var _prefix = "@Model.prefix";
+    var _entity = "@Model.entity";
+
     $(document).ready(function () {
 
         var cmd = document.getElementById("cmdPageSetting");
         cmd.addEventListener("show.bs.dropdown", function () {
 
-            $.post("/Menu/RecPageSetting", { prefix: "p28" }, function (data) {
+            $.post("/Menu/RecPageSetting", { prefix: _prefix }, function (data) {
                 $("#divRecPageSetting").html(data);
             });
 
@@ -141,7 +143,7 @@
         @if(Model.pid > 0 && Model.ShowContextMenu)
         {
             <text>
-                $.post("/Menu/ContextMenu", {source: "recpage", entity: "p28Contact", pid: @Model.pid }, function(data) {
+                $.post("/Menu/ContextMenu", {source: "recpage", entity: _entity, pid: @Model.pid }, function(data) {
 
                 $("#layout_sidebar").html(data);
 
@@ -168,10 +170,16 @@
 
         $("#divTabContent").css("height", h_vertical + "px");
 
-        _mainmenu_highlight_current("recpagep28","cmdp28");
+        _mainmenu_highlight_current("recpage"+_prefix,"cmd"+_prefix);
 
+        @if(Model.pid > 0 && Model.ShowGridPanel)
+        {
+            <text>
+        tg_select(1);
+            </text>
 
-
+        }
+        
 
     });
 
@@ -179,24 +187,24 @@
     function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
         $("#navtabs .nav-link").removeClass("active");
         $(tab).addClass("active");
-        $.post("/Common/SetUserParam", { key: "recpage-tab-p28", value: tab.id.replace("tab", "") }, function (data) {
+        $.post("/Common/SetUserParam", { key: "recpage-tab-"+_prefix, value: tab.id.replace("tab", "") }, function (data) {
 
 
         });
     }
-    function change_grid(j72id) {        
-        $.post(_ep("/Common/SetUserParam"), { key: "slaveview-j72id-p28-recpage", value: j72id }, function (data) {
+    function change_grid(j72id) {
+        $.post(_ep("/Common/SetUserParam"), { key: "masterview-j72id-"+_prefix, value: j72id }, function (data) {
             reload();
 
         });
     }
 
     function reload() {
-        location.replace(_ep("/p28/RecPage?pid=@Model.pid"));
+        location.replace(_ep("/Record/RecPage?prefix="+_prefix+"&pid=@Model.pid"));
     }
 
     function on_search(pid) {
-        location.replace(_ep("/p28/RecPage?pid=" + pid));
+        location.replace(_ep("/Record/RecPage?prefix="+_prefix+"&pid=" + pid));
     }
 
     function save_page_setting(key,val) {
@@ -207,9 +215,10 @@
 
     function grid_dblclick(row) {
         var pid = row.id.replace("r", "");
-        _edit("p28", pid);
+        _edit(_prefix, pid);
     }
 
 </script>
+
 
 

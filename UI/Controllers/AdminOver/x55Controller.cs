@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
 using UI.Models.Record;
-using UI.Models.Recpage;
+using UI.Models.Tab1;
 
 namespace UI.Controllers
 {
@@ -13,7 +13,7 @@ namespace UI.Controllers
     {
         public IActionResult Help(int pid, string x55code)
         {
-            var v = new x55RecPage() { pid = pid };
+            var v = new x55Tab1() { pid = pid };
             if (!string.IsNullOrEmpty(x55code))
             {
                 v.Rec = Factory.x55WidgetBL.LoadByCode(x55code,0);

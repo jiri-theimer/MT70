@@ -5,25 +5,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
 using UI.Models.Record;
-using UI.Models.Recpage;
+using UI.Models.Tab1;
 
 namespace UI.Controllers
 {
     public class j02Controller : BaseController
-    {               
+    {
         public IActionResult Info(int pid)
         {
-            var v = new j02RecPage() { Factory = this.Factory,prefix = "j02", pid = pid };
-            RefreshStateInfo(v);
-            return View(v);
+            return Tab1(pid);
         }
         public IActionResult Tab1(int pid)
         {
-            var v = new j02RecPage() { Factory = this.Factory, prefix = "j02", pid = pid };
-            RefreshStateInfo(v);
+            var v = new j02Tab1() { Factory = this.Factory, prefix = "j02", pid = pid };
+            RefreshStateTab1(v);
             return View(v);
         }
-        private void RefreshStateInfo(j02RecPage v)
+        private void RefreshStateTab1(j02Tab1 v)
         {
             v.Rec = Factory.j02PersonBL.Load(v.pid);
             if (v.Rec != null)
@@ -45,106 +43,7 @@ namespace UI.Controllers
 
             }
         }
-        public IActionResult RecPage(int pid, string login)
-        {            
-            var v = new j02RecPage() {Factory=this.Factory, pid = pid, prefix = "j02" };
-           
-
-            v.NavTabs = new List<NavTab>();
-            if (v.pid == 0 && String.IsNullOrEmpty(login) == false)
-            {
-                var recJ03 = Factory.j03UserBL.LoadByLogin(login,0);
-                if (recJ03 != null && recJ03.j02ID > 0)
-                {
-                    v.pid = recJ03.j02ID;
-                }
-            }
-                        
-            if (v.pid == 0)
-            {
-                v.pid = v.LoadLastUsedPid();
-            }
-            if (v.pid > 0)
-            {
-                v.SetGridUrl();
-                
-                v.Rec = Factory.j02PersonBL.Load(v.pid);
-                if (v.Rec == null)
-                {
-                    this.Notify_RecNotFound();
-                    v.pid = 0;
-                }
-                else
-                {
-                    
-                    v.MenuCode = v.Rec.FullNameAsc;
-                    v.SetTagging();
-                    v.SaveLastUsedPid();
-                    
-                 
-                    if (v.Rec.j03ID > 0)
-                    {
-                        v.RecJ03 = Factory.j03UserBL.Load(v.Rec.j03ID);
-                        v.RecSum = Factory.j02PersonBL.LoadSumRow(v.Rec.pid);
-                    }
-                   
-                    if (!v.Rec.j02IsIntraPerson)
-                    {
-                        v.lisP30 = Factory.p30Contact_PersonBL.GetList(new BO.myQueryP30() { j02id = v.pid });                        
-                    }
-
-                    RefreshNavTabs(v);
-                    
-                }
-
-            }
-
-            if (v.pid == 0)
-            {
-                v.Rec = new BO.j02Person();
-            }
-
-            return View(v);
-
-        }
-
-        private void RefreshNavTabs(j02RecPage v)
-        {
-            var c = Factory.j02PersonBL.LoadSumRow(v.pid);
-            if (v.PanelHeight == "none")
-            {
-                v.NavTabs.Add(AddTab("Tab1", "tab1", "/j02/Tab1?pid=" + v.pid.ToString(), false, null));
-            }
-            
-            string strBadge = null;
-            if (c.p31_Wip_Time_Count > 0 || c.p31_Wip_Expense_Count>0 || c.p31_Wip_Fee_Count>0)
-            {
-                strBadge = c.p31_Wip_Time_Count.ToString() + c.p31_Wip_Expense_Count.ToString() + "+" + c.p31_Wip_Fee_Count.ToString();
-            }
-
-            v.NavTabs.Add(AddTab("Úkony", "p31", "/TheGrid/SlaveView?prefix=p31", false,strBadge));
-            v.NavTabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time", false, strBadge));
-            v.NavTabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense", false, strBadge));
-            v.NavTabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee", false, strBadge));
-
-
-            v.NavTabs.Add(AddTab("PING Log", "j92PingLog", "/TheGrid/SlaveView?prefix=j92",true,strBadge));
-            v.NavTabs.Add(AddTab("LOGIN Log", "j90LoginAccessLog", "/TheGrid/SlaveView?prefix=j90", true, strBadge));
-
-            string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-j02");
-            var deftab = v.NavTabs[0];
-
-            foreach (var tab in v.NavTabs)
-            {
-                tab.Url += "&master_entity=j02Person&master_pid=" + v.pid.ToString();
-                if (strDefTab != null && tab.Entity == strDefTab)
-                {
-                    deftab = tab;  //uživatelem naposledy vybraná záložka                    
-                }
-            }
-            deftab.CssClass += " active";
-            v.DefaultNavTabUrl = deftab.Url;
-        }
+        
 
 
         public IActionResult Record(int pid, bool isclone,bool isintraperson,string tempguid,int p28id)

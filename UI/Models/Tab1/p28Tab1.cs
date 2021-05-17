@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UI.Models.Recpage
+namespace UI.Models.Tab1
 {
-    public class p28RecPage: BaseRecPageViewModel
+    public class p28Tab1:BaseTab1ViewModel
     {
-        public TheGridInput gridinput { get; set; }
         public BO.p28Contact Rec { get; set; }
         public BO.p28ContactSum RecSum { get; set; }
         public IEnumerable<BO.o38Address> lisO38 { get; set; }

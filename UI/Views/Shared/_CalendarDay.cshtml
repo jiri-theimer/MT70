@@ -2,7 +2,8 @@
 @inject BL.Factory _f
 
 @{
-
+    string strClass = null;
+    string strHodiny = null;
 
     int h0 = 8;
     if (DateTime.Now.Hour < h0) h0 = DateTime.Now.Hour;
@@ -13,6 +14,7 @@
     double _dblHodiny = Model.lisP31.Sum(p => p.p31Hours_Orig);
 
     IEnumerable<BO.p31Worksheet> qryP31 = Model.lisP31.Where(p => p.p31DateTimeFrom_Orig != null);  //úkony s přesným časem
+    IEnumerable<BO.p31Worksheet> qryP31NoTime = Model.lisP31.Where(p => p.p31DateTimeFrom_Orig == null);  //úkony bez přesného času
 
     if (qryP31.Any(p => Convert.ToDateTime(p.p31DateTimeFrom_Orig).Hour < h0))
     {
@@ -63,8 +65,69 @@
 
             </select>
         </div>
-        
+
     </div>
+
+    @if (qryP31NoTime.Count() > 0)
+    {
+        @foreach (var recP31 in qryP31NoTime)
+        {
+            strClass = "p31_rec_link_agenda";
+            @Html.Raw("<div>");
+
+            switch (recP31.p33ID)
+            {
+                case BO.p33IdENUM.Kusovnik:
+                    strHodiny = recP31.p31Value_Orig.ToString();
+                    strClass += " kusovnik";
+                    break;
+                case BO.p33IdENUM.Cas:
+                    if (recP31.p33ID == BO.p33IdENUM.Cas)
+                    {
+                        if (Model.ShowHHMM)
+                        {
+                            strHodiny = recP31.p31HHMM_Orig;
+                        }
+                        else
+                        {
+                            strHodiny = BO.BAS.Num2StringNull(recP31.p31Hours_Orig);
+                        }
+                    }
+                    break;
+
+                default:
+                    strHodiny = recP31.j27Code_Billing_Orig;
+                    if (recP31.p34IncomeStatementFlag == BO.p34IncomeStatementFlagENUM.Prijem)
+                    {
+                        strClass += " vydaj";
+                    }
+                    else
+                    {
+                        strClass += " odmena";
+                    }
+                    break;
+            }
+
+            @Html.Raw($"<a class='cm' onclick='reccm(event,{recP31.pid})'>&#9776;</a>");
+            @Html.Raw($"<a class='{strClass}' onclick='p31_rec({recP31.pid})'>");
+
+            strHodiny = "<span class='bunka_hodiny'>" + strHodiny + "</span>";
+            @Html.Raw(strHodiny + TheGridRowSymbol.p31_symbol(recP31));
+            @Html.Raw(BO.BAS.OM2(recP31.p41Name, 15))
+            if (recP31.p28ID_Client > 0)
+            {
+                @Html.Raw(" (" + BO.BAS.OM2(recP31.ClientName, 15) + ")")
+            }
+            @Html.Raw("</a>");
+
+            @Html.Raw($"<span class='mt_scheduler-p31text'>{BO.BAS.OM2(recP31.p31Text, 100)}</span>");
+
+            @Html.Raw("</div>");
+
+        }
+
+        @Html.Raw("<hr style='color:black;margin:0px;'>");
+    }
 
     @Html.Raw($"<div id='grid_day_container' class='grid-day-container' style='grid-template-rows:{string.Join(" ", blocks)};'>");
 
@@ -99,11 +162,11 @@
         int intStartIndex = -1; int intEndIndex = time_slots.Count() - 1;
         foreach (DateTime d in time_slots)
         {
-            if (d>=Convert.ToDateTime(c.p31DateTimeFrom_Orig) && intStartIndex == -1)
+            if (d >= Convert.ToDateTime(c.p31DateTimeFrom_Orig) && intStartIndex == -1)
             {
                 intStartIndex = x;
             }
-            
+
             if (DateTime.Compare(d.AddMilliseconds(101), Convert.ToDateTime(c.p31DateTimeUntil_Orig)) > 0 && intStartIndex > -1)
             {
                 intEndIndex = x;

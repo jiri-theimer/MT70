@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UI.Models.Recpage
+namespace UI.Models.Tab1
 {
-    public class x55RecPage:BaseViewModel
+    public class x55Tab1:BaseViewModel
     {
         public BO.x55Widget Rec { get; set; }
         

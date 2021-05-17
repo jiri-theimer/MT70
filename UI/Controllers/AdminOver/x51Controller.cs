@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
 using UI.Models.Record;
-using UI.Models.Recpage;
+using UI.Models.Tab1;
 using Microsoft.AspNetCore.Hosting;
 
 
@@ -21,7 +21,7 @@ namespace UI.Controllers
         public IActionResult Index(string viewurl, string pagetitle, int listflag)
         {
             
-            var v = new x51RecPage() { InputViewUrl = viewurl,PageTitle=pagetitle,NearListFlag= listflag };
+            var v = new x51Tab1() { InputViewUrl = viewurl,PageTitle=pagetitle,NearListFlag= listflag };
           
             if (string.IsNullOrEmpty(v.InputViewUrl) ==false)
             {

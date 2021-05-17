@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UI.Models.Recpage
+namespace UI.Models.Tab1
 {
-    public class x51RecPage : BaseViewModel
+    public class x51Tab1 : BaseViewModel
     {
         public BO.x51HelpCore Rec { get; set; }
         public string InputViewUrl { get; set; }

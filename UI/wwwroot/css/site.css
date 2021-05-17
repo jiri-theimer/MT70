@@ -1020,6 +1020,7 @@ div.tabs_container {
     margin-right: 4px;
     background-color: white;
     padding-top: 4px;
+    padding-right:4px;
     padding-bottom: 6px;
     min-width: 100px;
     text-align: center;

@@ -38,7 +38,7 @@ namespace UI
                 gridState.j72Columns = this.gridinput.fixedcolumns;
             }
 
-            return render_thegrid_html(gridState, this.gridinput.query);
+            return render_thegrid_html(gridState);
         }
 
 
@@ -91,7 +91,7 @@ namespace UI
 
             if (_Factory.j72TheGridTemplateBL.SaveState(gridState, _Factory.CurrentUser.pid) > 0)   //uložení změny grid stavu
             {
-                return render_thegrid_html(gridState, gridinput.query);
+                return render_thegrid_html(gridState);
             }
             else
             {
@@ -124,7 +124,7 @@ namespace UI
 
             if (_Factory.j72TheGridTemplateBL.SaveState(gridState, _Factory.CurrentUser.pid) > 0)
             {
-                return render_thegrid_html(gridState, gridinput.query);
+                return render_thegrid_html(gridState);
             }
             else
             {
@@ -133,12 +133,13 @@ namespace UI
         }
 
 
-        private TheGridOutput render_thegrid_html(BO.TheGridState gridState, BO.baseQuery mq) //vrací kompletní html gridu: header+body+footer+message
-        {
-            var ret = new TheGridOutput();
+        private TheGridOutput render_thegrid_html(BO.TheGridState gridState) //vrací kompletní html gridu: header+body+footer+message
+        {            
+             var ret = new TheGridOutput();
             _grid = new TheGridViewModel();
             _grid.GridState = gridState;
-           
+
+            BO.baseQuery mq = this.gridinput.query;
 
             ret.sortfield = gridState.j75SortDataField;
             ret.sortdir = gridState.j75SortOrder;
@@ -153,11 +154,11 @@ namespace UI
                 _grid.Columns = _colsProvider.ParseTheGridColumns(mq.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex);
             }
 
-
+            
 
             mq.explicit_columns = _grid.Columns.ToList();
             
-            if (_grid.GridState.j72MasterEntity !="recpage")    //v recpage je vypnuté filtrování
+            if (!this.gridinput.isrecpagegrid)    //v gridu je vypnuté filtrování
             {
                 if (!String.IsNullOrEmpty(gridState.j75Filter))
                 {
@@ -170,18 +171,29 @@ namespace UI
                     _grid.GridMessage = _Factory.j72TheGridTemplateBL.getFiltrAlias(gridState.j72Entity.Substring(0, 3), mq);
                 }
             }
-            
 
-            var dtFooter = _Factory.gridBL.GetList(mq, true);
+
+            System.Data.DataTable dtFooter = null;
             int intVirtualRowsCount = 0;
-            if (dtFooter.Columns.Count > 0)
-            {
-                intVirtualRowsCount = Convert.ToInt32(dtFooter.Rows[0]["RowsCount"]);
+
+            if (this.gridinput.isrecpagegrid)
+            {                
+                intVirtualRowsCount = 1;    //u recpage gridu není třeba součtová řádka
             }
             else
             {
-                _Factory.CurrentUser.AddMessage("GRID Error: Dynamic SQL failed.");
+                dtFooter=_Factory.gridBL.GetList(mq, true);
+                if (dtFooter.Columns.Count > 0)
+                {
+                    intVirtualRowsCount = Convert.ToInt32(dtFooter.Rows[0]["RowsCount"]);
+                }
+                else
+                {
+                    _Factory.CurrentUser.AddMessage("GRID Error: Dynamic SQL failed.");
+                }
             }
+            
+            
 
             if (intVirtualRowsCount > 500)
             {   //dotazy nad 500 záznamů budou mít zapnutý OFFSET režim stránkování
@@ -189,12 +201,16 @@ namespace UI
                 mq.OFFSET_PageNum = gridState.j75CurrentPagerIndex / gridState.j75PageSize;
             }
 
-            //třídění řešit až po spuštění FOOTER summary DOTAZu
-            if (String.IsNullOrEmpty(gridState.j75SortDataField) == false && _grid.Columns.Where(p => p.UniqueName == gridState.j75SortDataField).Count() > 0)
+            if (!this.gridinput.isrecpagegrid)  //v recpage gridu se netřídí
             {
-                var c = _grid.Columns.Where(p => p.UniqueName == gridState.j75SortDataField).First();
-                mq.explicit_orderby = c.getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
+                //třídění řešit až po spuštění FOOTER summary DOTAZu
+                if (String.IsNullOrEmpty(gridState.j75SortDataField) == false && _grid.Columns.Where(p => p.UniqueName == gridState.j75SortDataField).Count() > 0)
+                {
+                    var c = _grid.Columns.Where(p => p.UniqueName == gridState.j75SortDataField).First();
+                    mq.explicit_orderby = c.getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
+                }
             }
+            
             
             var dt = _Factory.gridBL.GetList(mq);
             
@@ -244,14 +260,19 @@ namespace UI
 
             Render_DATAROWS(dt, mq);
             ret.body = _s.ToString();
-            _s = new System.Text.StringBuilder();
+            
 
-            Render_TOTALS(dtFooter);
-            ret.foot = _s.ToString();
-            _s = new System.Text.StringBuilder();
+            if (!this.gridinput.isrecpagegrid)
+            {
+                _s = new System.Text.StringBuilder();
+                Render_TOTALS(dtFooter);
+                ret.foot = _s.ToString();
 
-            RENDER_PAGER(intVirtualRowsCount);
-            ret.pager = _s.ToString();
+                _s = new System.Text.StringBuilder();
+                RENDER_PAGER(intVirtualRowsCount);
+                ret.pager = _s.ToString();
+                
+            }
             return ret;
         }
 
@@ -701,7 +722,7 @@ namespace UI
                 }
                 //this.gridinput.query.explicit_orderby = _colsProvider.ByUniqueName(gridState.j75SortDataField).getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
             }
-            if (_grid.GridState.j72MasterEntity != "recpage")   //v recpage je vypnuté filtrování
+            if (!this.gridinput.isrecpagegrid)   //v gridu je vypnuté filtrování
             {
                 if (!String.IsNullOrEmpty(gridState.j75Filter))
                 {

@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 
 namespace UI.Models
 {
-    public class BaseRecPageViewModel:BaseViewModel
+    public class RecPageViewModel: BaseViewModel
     {
         public BL.Factory Factory;
-        public string prefix { get; set; }
-        public string TagHtml { get; set; }
-
+        public string prefix { get; set; }        
         public int pid { get; set; }
-        
+        public string TabName { get; set; }
         public int pid_loaded { get; set; }     //pid načtený z user parametrů
         public List<NavTab> NavTabs;
 
@@ -23,52 +21,53 @@ namespace UI.Models
 
         public int SearchedPid { get; set; }
         public string SearchedText { get; set; }
-        
-        private string _PanelHeight { get; set; }
+
+        private string _entity { get; set; }
         private bool? _ShowGridPanel { get; set; }
         private bool? _ShowContextMenu { get; set; }
 
-        public FreeFieldsViewModel ff1 { get; set; }
+        public TheGridInput gridinput { get; set; }
 
         public void SetGridUrl()
         {
             if (this.pid > 0)
             {
-                this.Go2GridUrl = basUI.GetGridUrl(Factory, this.prefix, this.pid);                
+                this.Go2GridUrl = basUI.GetGridUrl(Factory, this.prefix, this.pid);
             }
 
 
         }
         public int LoadLastUsedPid()
         {
-            this.pid_loaded= Factory.CBL.LoadUserParamInt($"recpage-{this.prefix}-pid");
+            this.pid_loaded = Factory.CBL.LoadUserParamInt($"recpage-{this.prefix}-pid");
             return this.pid_loaded;
         }
 
         public void SaveLastUsedPid()
         {
-            if (this.pid > 0 && this.pid_loaded !=this.pid)
+            if (this.pid > 0 && this.pid_loaded != this.pid)
             {
                 Factory.CBL.SetUserParam($"recpage-{prefix}-pid", this.pid.ToString());
             }
-            
+
         }
 
-        public string PanelHeight {
+     
+        public string entity
+        {
             get
             {
-                if (_PanelHeight == null)
+                if (_entity == null)
                 {
-                    _PanelHeight = Factory.CBL.LoadUserParam($"recpage-{prefix}-panel-height", "200px");
+                    _entity = BO.BASX29.GetEntity(this.prefix);
                 }
-                return _PanelHeight;
+                return _entity;
             }
         }
-
-        
         public bool ShowGridPanel
         {
-            get{
+            get
+            {
                 if (_ShowGridPanel == null)
                 {
                     _ShowGridPanel = Factory.CBL.LoadUserParamBool($"recpage-{prefix}-panel-grid", true);
@@ -89,26 +88,8 @@ namespace UI.Models
         }
 
 
-        public void SetTagging()
-        {
-            var tg = Factory.o51TagBL.GetTagging(this.prefix, this.pid);
-            
-            this.TagHtml = tg.TagHtml;
-        }
+       
 
-        public void SetFreeFields(int intRecTypePid)
-        {
-            if (this.ff1 == null)
-            {
-                this.ff1 = new FreeFieldsViewModel();
-                this.ff1.InhaleFreeFieldsView(Factory, this.pid, this.prefix);
-
-                if (this.ff1.VisibleInputsCount > 0)
-                {
-                    this.ff1.RefreshInputsVisibility(Factory, this.pid, this.prefix, intRecTypePid);
-                }
-            }
-        }
         
     }
 }

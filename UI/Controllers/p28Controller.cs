@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
 using UI.Models.Record;
-using UI.Models.Recpage;
+using UI.Models.Tab1;
 
 namespace UI.Controllers
 {
@@ -13,18 +13,15 @@ namespace UI.Controllers
     {
         public IActionResult Info(int pid)
         {
-            var v = new p28RecPage() { Factory = this.Factory, prefix = "p28", pid = pid };
-            v.SetGridUrl();
-            RefreshStateInfo(v);
-            return View(v);
+            return Tab1(pid);
         }
         public IActionResult Tab1(int pid)
         {
-            var v = new p28RecPage() { Factory = this.Factory, prefix = "p28", pid = pid };
-            RefreshStateInfo(v);
+            var v = new p28Tab1 () { Factory = this.Factory, prefix = "p28", pid = pid };
+            RefreshStateTab1(v);
             return View(v);
         }
-        private void RefreshStateInfo(p28RecPage v)
+        private void RefreshStateTab1(p28Tab1 v)
         {
             v.Rec = Factory.p28ContactBL.Load(v.pid);
             if (v.Rec != null)
@@ -39,81 +36,7 @@ namespace UI.Controllers
                 v.SetFreeFields(0);
             }
         }
-        public IActionResult RecPage(int pid)
-        {
-            var v = new p28RecPage() { Factory = this.Factory, pid = pid, prefix = "p28" };
-
-            v.NavTabs = new List<NavTab>();
-            
-            if (v.pid == 0)
-            {
-                v.pid = v.LoadLastUsedPid();
-            }
-            if (v.pid > 0)
-            {
-                RefreshStateInfo(v);
-                              
-                if (v.Rec == null)
-                {
-                    this.Notify_RecNotFound();
-                    v.pid = 0;
-                }
-                else
-                {
-                    v.SetGridUrl();
-                    v.MenuCode = v.Rec.p28name;                    
-                    v.SaveLastUsedPid();
-                   
-                    RefreshNavTabs(v);
-
-                }
-
-                v.gridinput = new TheGridInput() { entity = "p28Contact", myqueryinline = "pids|list_int|" + v.pid.ToString(), ondblclick = "grid_dblclick", master_entity = "recpage" };
-                v.gridinput.query = new BO.InitMyQuery().Load("p28", null, 0, "pids|list_int|" + v.pid.ToString());
-                
-
-            }
-
-            if (v.pid == 0)
-            {
-                v.Rec = new BO.p28Contact();
-            }
-
-            return View(v);
-
-        }
-
-        private void RefreshNavTabs(p28RecPage v)
-        {
-            var c = Factory.p28ContactBL.LoadSumRow(v.pid);
-            v.NavTabs.Add(AddTab("Tab1", "tab1", "/p28/Tab1?pid=" + v.pid.ToString(), false, null));
-
-            string strBadge = null;
-            //if (c.p31_Wip_Time_Count > 0 || c.p31_Wip_Expense_Count > 0 || c.p31_Wip_Fee_Count > 0)
-            //{
-            //    strBadge = c.p31_Wip_Time_Count.ToString() + c.p31_Wip_Expense_Count.ToString() + "+" + c.p31_Wip_Fee_Count.ToString();
-            //}
-
-            v.NavTabs.Add(AddTab("Úkony", "p31", "/TheGrid/SlaveView?prefix=p31", false, strBadge));
-            v.NavTabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time", false, strBadge));
-            v.NavTabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense", false, strBadge));
-            v.NavTabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee", false, strBadge));
-
-            string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-p28");
-            var deftab = v.NavTabs[0];
-
-            foreach (var tab in v.NavTabs)
-            {
-                tab.Url += "&master_entity=p28Contact&master_pid=" + v.pid.ToString();
-                if (strDefTab != null && tab.Entity == strDefTab)
-                {
-                    deftab = tab;  //uživatelem naposledy vybraná záložka                    
-                }
-            }
-            deftab.CssClass += " active";
-            v.DefaultNavTabUrl = deftab.Url;
-        }
-
+        
         public IActionResult VatInfo(string dic)
         {
             var v = new VatInfoViewModel() { DIC = dic };

@@ -33,7 +33,7 @@ namespace UI.Menu
         public MenuItem AMI_RecPage(string strName, string prefix,int pid)
         {
             //return AMI(strName, $"javascript:_location_replace_top('/{prefix}/RecPage?pid={pid}')", "k-i-layout");
-            return AMI(strName, $"/{prefix}/RecPage?pid={pid}", "k-i-layout",null,null,"_top");
+            return AMI(strName, $"/Record/RecPage?prefix={prefix}&pid={pid}", "k-i-layout",null,null,"_top");
         }
         public MenuItem AMI_RecGrid(string strName, string prefix, int pid)
         {

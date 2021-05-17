@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
 using UI.Models.Record;
-using UI.Models.Recpage;
 
 
 namespace UI.Controllers

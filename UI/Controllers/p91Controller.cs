@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
 using UI.Models.Record;
-using UI.Models.Recpage;
+using UI.Models.Tab1;
 
 namespace UI.Controllers
 {
@@ -15,19 +15,16 @@ namespace UI.Controllers
 
         public IActionResult Info(int pid)
         {
-            var v = new p91RecPage() { Factory = this.Factory, prefix = "p91", pid = pid };            
-            v.SetGridUrl();
-            RefreshStateInfo(v);
-            return View(v);
+            return Tab1(pid);
         }
         public IActionResult Tab1(int pid)
         {
-            var v = new p91RecPage() { Factory = this.Factory, prefix = "p91", pid = pid };
+            var v = new p91Tab1() { Factory = this.Factory, prefix = "p91", pid = pid };
             v.StatByPrefix = Factory.CBL.LoadUserParam("recpage-p91-statprefix", "p41");
-            RefreshStateInfo(v);
+            RefreshStateTab1(v);
             return View(v);
         }
-        private void RefreshStateInfo(p91RecPage v)
+        private void RefreshStateTab1(p91Tab1 v)
         {
             v.Rec = Factory.p91InvoiceBL.Load(v.pid);
             if (v.Rec != null)
@@ -55,77 +52,7 @@ namespace UI.Controllers
             }
         }
 
-        public IActionResult RecPage(int pid)
-        {
-            var v = new p91RecPage() { Factory = this.Factory, pid = pid, prefix = "p91" };
-            v.StatByPrefix = Factory.CBL.LoadUserParam("recpage-p91-statprefix", "p41");
-
-            v.NavTabs = new List<NavTab>();
-
-            if (v.pid == 0)
-            {
-                v.pid = v.LoadLastUsedPid();
-            }
-            if (v.pid > 0)
-            {
-                RefreshStateInfo(v);
-
-                if (v.Rec == null)
-                {
-                    this.Notify_RecNotFound();
-                    v.pid = 0;
-                }
-                else
-                {
-                    v.SetGridUrl();
-                    v.MenuCode = v.Rec.p91Code;
-                    v.SaveLastUsedPid();
-
-                    RefreshNavTabs(v);
-
-                }
-
-            }
-
-            if (v.pid == 0)
-            {
-                v.Rec = new BO.p91Invoice();
-            }
-
-            return View(v);
-
-        }
-
-        private void RefreshNavTabs(p91RecPage v)
-        {
-            if (v.PanelHeight == "none")
-            {
-                v.NavTabs.Add(AddTab("Tab1", "tab1", "/p91/Tab1?pid=" + v.pid.ToString(), false, null));
-            }
-
-            string strBadge = null;
-
-            v.NavTabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31"));
-            v.NavTabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
-            v.NavTabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
-            v.NavTabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
-            v.NavTabs.Add(AddTab("Poznámky", "b07", "/b07/List?source=recpage", true, strBadge));
-
-            string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-p91");
-            var deftab = v.NavTabs[0];
-
-            foreach (var tab in v.NavTabs)
-            {
-                tab.Url += "&master_entity=p91Invoice&master_pid=" + v.pid.ToString();
-                if (strDefTab != null && tab.Entity == strDefTab)
-                {
-                    deftab = tab;  //uživatelem naposledy vybraná záložka                    
-                }
-            }
-            deftab.CssClass += " active";
-            v.DefaultNavTabUrl = deftab.Url;
-        }
-
+        
 
         public IActionResult Record(int pid)
         {

@@ -17,14 +17,14 @@
                 {
 
                     _strStyle = "width:" + c.ColumnWidthPixels;
-
-                    if (c.IsSortable)
+                    
+                    if (!c.IsSortable || Model.GridInput.isrecpagegrid)
                     {
-                        c.CssClass = "sortcolumn";
+                        c.CssClass = "nonsortable";
                     }
                     else
                     {
-                        c.CssClass = "nonsortable";
+                        c.CssClass = "sortcolumn";
                     }
 
 
@@ -32,7 +32,7 @@
                 }
 
             </tr>
-            @if (Model.GridState.j72MasterEntity !="recpage")
+            @if (!Model.GridInput.isrecpagegrid)
             {
                 <tr id="tr_header_query">
 

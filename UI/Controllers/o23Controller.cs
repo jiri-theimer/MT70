@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
 using UI.Models.Record;
-using UI.Models.Recpage;
+using UI.Models.Tab1;
 
 namespace UI.Controllers
 {
@@ -13,85 +13,19 @@ namespace UI.Controllers
     {
         public IActionResult Info(int pid)
         {
-            var v = new o23RecPage() { Factory = this.Factory, prefix = "o23", pid = pid };
-            v.SetGridUrl();
-            RefreshStateInfo(v);
-            return View(v);
+            return Tab1(pid);
         }
         public IActionResult Tab1(int pid)
         {
-            var v = new o23RecPage() { Factory = this.Factory, prefix = "o23", pid = pid };
-            RefreshStateInfo(v);
+            var v = new o23Tab1() { Factory = this.Factory, prefix = "o23", pid = pid };
+            RefreshStateTab1(v);
             return View(v);
         }
-        public IActionResult RecPage(int pid)
-        {
-            var v = new o23RecPage() { Factory = this.Factory, pid = pid, prefix = "o23" };
+        
 
-            v.NavTabs = new List<NavTab>();
+        
 
-            if (v.pid == 0)
-            {
-                v.pid = v.LoadLastUsedPid();
-            }
-            if (v.pid > 0)
-            {
-                RefreshStateInfo(v);
-
-                if (v.Rec == null)
-                {
-                    this.Notify_RecNotFound();
-                    v.pid = 0;
-                }
-                else
-                {
-                    v.SetGridUrl();
-                    v.MenuCode =v.Rec.o23Name;
-                    v.SaveLastUsedPid();
-
-                    RefreshNavTabs(v);
-
-                }
-
-            }
-
-            if (v.pid == 0)
-            {
-                v.Rec = new BO.o23Doc();
-            }
-
-            return View(v);
-
-        }
-
-        private void RefreshNavTabs(o23RecPage v)
-        {
-            
-            if (v.PanelHeight == "none")
-            {
-                v.NavTabs.Add(AddTab("Tab1", "tab1", "/o23/Tab1?pid=" + v.pid.ToString(), false, null));
-            }
-
-            string strBadge = null;
-            
-            v.NavTabs.Add(AddTab("Poznámky", "b07", "/b07/List?source=recpage", true, strBadge));
-            
-            string strDefTab = Factory.CBL.LoadUserParam("recpage-tab-o23");
-            var deftab = v.NavTabs[0];
-
-            foreach (var tab in v.NavTabs)
-            {
-                tab.Url += "&master_entity=o23Doc&master_pid=" + v.pid.ToString();
-                if (strDefTab != null && tab.Entity == strDefTab)
-                {
-                    deftab = tab;  //uživatelem naposledy vybraná záložka                    
-                }
-            }
-            deftab.CssClass += " active";
-            v.DefaultNavTabUrl = deftab.Url;
-        }
-
-        private void RefreshStateInfo(o23RecPage v)
+        private void RefreshStateTab1(o23Tab1 v)
         {
             v.Rec = Factory.o23DocBL.Load(v.pid);
             if (v.Rec != null)

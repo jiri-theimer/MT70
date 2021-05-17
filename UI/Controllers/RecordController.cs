@@ -5,12 +5,98 @@ using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Math;
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
-using UI.Models.Record;
 
 namespace UI.Controllers
 {
     public class RecordController : BaseController
     {
+        public IActionResult RecPage(string prefix, int pid)
+        {
+            var v = new RecPageViewModel() { Factory = this.Factory, pid = pid, prefix = prefix };
+
+            
+
+            if (v.pid == 0)
+            {
+                v.pid = v.LoadLastUsedPid();
+            }
+            if (v.pid > 0)
+            {
+                v.MenuCode = Factory.CBL.GetObjectAlias(v.prefix, v.pid);
+                if (v.MenuCode == null)
+                {
+                    this.Notify_RecNotFound();
+                    v.pid = 0;
+                }
+                else
+                {
+                    v.SetGridUrl();
+                    v.SaveLastUsedPid();
+
+                    RefreshState_RecPage(v);
+
+                }
+
+                v.gridinput = new TheGridInput() { entity = v.entity, myqueryinline = "pids|list_int|" + v.pid.ToString(), ondblclick = "grid_dblclick", isrecpagegrid = true };
+                v.gridinput.query = new BO.InitMyQuery().Load(v.prefix, null, 0, "pids|list_int|" + v.pid.ToString());
+                v.gridinput.j72id = Factory.CBL.LoadUserParamInt($"masterview-j72id-{v.prefix}");
+
+            }
+
+            if (v.NavTabs == null)
+            {
+                v.NavTabs = new List<NavTab>();
+            }
+
+            return View(v);
+
+        }
+
+        private void RefreshState_RecPage(RecPageViewModel v)
+        {
+
+            var cTabs = new NavTabsSupport(Factory);
+            v.NavTabs = cTabs.getTabs(v.prefix, v.pid, true);
+            switch (v.prefix)
+            {
+                case "j02":
+                    v.TabName = Factory.tra("Stránka osoby");
+                    break;
+                case "o23":
+                    v.TabName = Factory.tra("Stránka dokumentu");
+                    break;                
+                case "p28":
+                    v.TabName = Factory.tra("Stránka klienta");
+                    break;
+                case "p41":
+                    v.TabName = Factory.tra("Stránka projektu");
+                    break;
+                case "p56":
+                    v.TabName = Factory.tra("Stránka úkolu");
+                    break;
+                case "p90":
+                    v.TabName = Factory.tra("Stránka zálohy");
+                    break;
+                case "p91":
+                    v.TabName = Factory.tra("Stránka vyúčtování");
+                    break;
+            }
+
+            string strDefTab = Factory.CBL.LoadUserParam($"recpage-tab-{v.prefix}");
+            var deftab = v.NavTabs[0];
+
+            foreach (var tab in v.NavTabs)
+            {
+                tab.Url += $"&master_entity={v.entity}&master_pid={v.pid}";
+                if (strDefTab != null && tab.Entity == strDefTab)
+                {
+                    deftab = tab;  //uživatelem naposledy vybraná záložka                    
+                }
+            }
+            deftab.CssClass += " active";
+            v.DefaultNavTabUrl = deftab.Url;
+        }
+
         public IActionResult GridMultiSelect(string prefix)
         {
             var c = Factory.EProvider.ByPrefix(prefix);

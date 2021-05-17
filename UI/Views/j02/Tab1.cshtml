@@ -1,4 +1,4 @@
-﻿@model UI.Models.Recpage.j02RecPage
+﻿@model UI.Models.Tab1.j02Tab1
 @inject BL.Factory _f
 
 @{
@@ -6,13 +6,259 @@
     Layout = "~/Views/Shared/_LayoutSubform.cshtml";
     if (Model.Rec == null) return;
 
-    
+    string _Teams = Model.GetTeams();
+
 }
 
 @addTagHelper *, UI
 
-<div class="info_record_container">
+@Html.Raw("<div class='info_record_container'>")
 
-    @Html.EditorFor(m => m, "~/Views/Shared/_j02RecPageContent.cshtml")
 
+<div class="card recpagebox400">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgj02">
+            Osobní profil
+        </h6>
+        <div class="row">
+            <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Jméno")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.FullNameAsc"></myval>
+
+            </div>
+        </div>
+
+        @if (Model.Rec.j07ID > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Pozice")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.j07Name"></myval>
+
+                </div>
+            </div>
+        }
+
+        @if (Model.Rec.c21ID > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Pracovní fond")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.c21Name"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.Rec.j18ID > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Středisko")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.j18Name"></myval>
+
+                </div>
+            </div>
+        }
+        @if (_Teams != null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Člen týmů")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@_Teams"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.Rec.j02JobTitle != null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Funkce")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.j02JobTitle"></myval>
+
+                </div>
+            </div>
+        }
+
+        @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFieldsRO.cshtml")
+
+        <div>
+            <small class="text-secondary" title="@_f.tra("Založení záznamu")">
+                @(Model.Rec.UserInsert+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateInsert,"dd.MM.yyyy HH:mm ddd"))
+            </small>
+            @if (Model.Rec.DateUpdate > Model.Rec.DateInsert)
+            {
+                <small class="text-success float-end" title="@_f.tra("Poslední aktualizace záznamu")">
+                    @(Model.Rec.UserUpdate+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateUpdate,"dd.MM.yyyy HH:mm ddd"))
+
+                </small>
+
+            }
+        </div>
+    </div>
 </div>
+
+@if (Model.RecJ03 != null)
+{
+    <div class="card recpagebox400">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgj02">
+                Uživatelský účet
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-md-3 col-form-label">Login:</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.RecJ03.j03Login"></myval>
+
+                </div>
+            </div>
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Aplikační role"):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.RecJ03.j04Name" tooltip="@(_f.tra("Aplikační role"))" hoverprefix="j04" hoverpid="@Model.RecJ03.j04ID"></myval>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+@if (Model.Rec.j02Email != null)
+{
+    <div class="card recpagebox400">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgj02">
+                @_f.tra("Kontakt")
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-md-3 col-form-label">E-mail:</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval datatype="link" linkurl="mailto:@Model.Rec.j02Email" value="@Model.Rec.j02Email"></myval>
+                </div>
+            </div>
+            @if (Model.Rec.j02Mobile != null)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-2 col-md-3 col-form-label">TEL:</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.Rec.j02Mobile"></myval>
+
+                    </div>
+                </div>
+
+            }
+            @if (Model.Rec.j02Phone != null)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-2 col-md-3 col-form-label">TEL:</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.Rec.j02Phone"></myval>
+
+                    </div>
+                </div>
+
+            }
+
+            @if (Model.Rec.j02Office != null)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-2 col-md-3 col-form-label">OFFICE:</label>
+                    <div class="col-sm-10 col-md-9">
+                        <myval value="@Model.Rec.j02Office"></myval>
+
+                    </div>
+                </div>
+
+            }
+
+
+        </div>
+    </div>
+}
+
+@if (Model.TagHtml != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgj02">
+                @_f.tra("Štítky")
+            </div>
+            @Html.Raw(Model.TagHtml)
+
+        </div>
+    </div>
+}
+@if (Model.lisP30 != null && Model.lisP30.Count() > 0)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgj02">
+                @_f.tra("Kontaktní osoba")
+            </div>
+            @foreach (var c in Model.lisP30)
+            {
+                <div class="my-1">
+                    @if (c.p28ID > 0)
+                    {
+                        <myval value="@c.p28Name" hoverpid="@c.p28ID" hoverprefix="p28"></myval>
+                    }
+                    @if (c.p41ID > 0)
+                    {
+                        <myval value="@(c.p41Name+" ("+c.p41Code+")")" hoverpid="@c.p41ID" hoverprefix="p41"></myval>
+                    }
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+@if (Model.RecSum != null && (Model.RecSum.Last_Worksheet != null || Model.RecSum.Last_Access != null))
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgj02">
+                @_f.tra("Protokol")
+            </div>
+            <table>
+                @if (Model.RecSum.Last_Access != null)
+                {
+                    <tr>
+                        <td>
+                            @_f.tra("Poslední PING v MT"):
+                        </td>
+                        <td>
+                            <strong>
+                                @BO.BAS.ObjectDateTime2String(Model.RecSum.Last_Access)
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Naposledy vykázaný úkon"):
+                        </td>
+                        <td>
+                            <strong>
+                                @Model.RecSum.Last_Worksheet
+                            </strong>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+    </div>
+}
+
+<div style="clear:both;"></div>
+
+
+
+
+
+
+
+
+
+@Html.Raw("</div>")

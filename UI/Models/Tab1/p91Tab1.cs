@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UI.Models.Recpage
+namespace UI.Models.Tab1
 {
-    public class p91RecPage:BaseRecPageViewModel
+    public class p91Tab1:BaseTab1ViewModel
     {
         public BO.p91Invoice Rec { get; set; }
         public BO.p93InvoiceHeader RecP93 { get; set; }
@@ -20,10 +20,5 @@ namespace UI.Models.Recpage
         public BO.p91Invoice RecOpravovanyDoklad { get; set; }
 
         public IEnumerable<BO.p99Invoice_Proforma> lisP99 { get; set; }
-
-       
-        
     }
-
-   
 }

@@ -14,7 +14,8 @@ namespace UI.Models
         public int master_pid { get; set; }
         public BO.baseQuery query { get; set; }
         public string myqueryinline { get; set; }   // explicitní myquery ve tvaru název@typ@hodnota, může být víc hodnot
-        public bool isperiodovergrid { get; set; }        
+        public bool isperiodovergrid { get; set; }  
+        public bool isrecpagegrid { get; set; }     //zda se jedná o jednořádkový recpage grid bez součtů
         public string oncmclick { get; set; } = "tg_cm(event)";
         public string ondblclick { get; set; } = "tg_dblclick";
         public string controllername { get; set; } = "TheGrid"; //název controlleru, přes který se zpracovávají grid události

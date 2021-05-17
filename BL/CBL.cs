@@ -51,10 +51,14 @@ namespace BL
             return "";
         }
         public string GetObjectAlias(string prefix, int pid)
-        {
-            
+        {            
             BO.GetString c = _db.Load<BO.GetString>("select dbo.GetObjectAlias(@prefix,@pid) as Value", new { prefix = prefix, pid = pid });
-            return c.Value;
+            if (c != null)
+            {
+                return c.Value;
+            }
+            return null;
+            
         }
         public string EstimateRecordCode(string entity)
         {

@@ -82,7 +82,7 @@ namespace UI.Views.Shared.Components.TheGrid
                 ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex);
             }
 
-            if (gridState.j72MasterEntity !="recpage")    //pokud není vypnutý sloupcový filtr
+            if (!input.isrecpagegrid)    //pokud není vypnutý sloupcový filtr
             {
                 ret.AdhocFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, ret.Columns);
             }
