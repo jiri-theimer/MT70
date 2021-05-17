@@ -52,6 +52,7 @@ namespace UI.Models
         public int currentpid { get; set; }
 
         public bool isperiodovergrid { get; set; }
+        public bool isnotuse_filtering { get; set; }
 
     }
 }

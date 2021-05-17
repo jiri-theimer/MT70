@@ -68,6 +68,10 @@ namespace UI.Controllers
 
                 }
 
+                v.gridinput = new TheGridInput() { entity = "p28Contact", myqueryinline = "pids|list_int|" + v.pid.ToString(), ondblclick = "grid_dblclick", master_entity = "recpage" };
+                v.gridinput.query = new BO.InitMyQuery().Load("p28", null, 0, "pids|list_int|" + v.pid.ToString());
+                
+
             }
 
             if (v.pid == 0)
@@ -82,10 +86,7 @@ namespace UI.Controllers
         private void RefreshNavTabs(p28RecPage v)
         {
             var c = Factory.p28ContactBL.LoadSumRow(v.pid);
-            if (v.PanelHeight == "none")
-            {
-                v.NavTabs.Add(AddTab("Tab1", "tab1", "/p28/Tab1?pid=" + v.pid.ToString(), false, null));
-            }
+            v.NavTabs.Add(AddTab("Tab1", "tab1", "/p28/Tab1?pid=" + v.pid.ToString(), false, null));
 
             string strBadge = null;
             //if (c.p31_Wip_Time_Count > 0 || c.p31_Wip_Expense_Count > 0 || c.p31_Wip_Fee_Count > 0)

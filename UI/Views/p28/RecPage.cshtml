@@ -12,38 +12,40 @@
 
 @addTagHelper *, UI
 
-
-
-<div class="input-group bg-light m-0" style="padding-top:1px; padding-left:1px;">
-    <div id="layout_sidebar_contextmenu">
-        @if (Model.pid > 0)
-        {
-            <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.p28name" onclick="_cm(event, 'p28',@Model.Rec.pid);">☰@(Model.Rec.p28name) </a>
-            <h4 id="layout_sidebar_contextmenu_onlytext">
-            </h4>
-        }
-        <mycombo entity="p28Contact" asp-for="@Model.SearchedPid" search-result-width="600" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
+<div class="input-group m-0" style="padding-top:1px;">
+    <div class="tabovergrid" style="margin-left:1px;">
+        @_f.tra("Stránka klienta")
     </div>
-    @if (Model.pid > 0)
+
+    @if (Model.ShowGridPanel)
     {
-        <div class="nonmobile tabovergrid" style="margin-left:2px;">
-            @_f.tra("Stránka klienta")
+        <div class="dropdown nonmobile">
+            <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                <span id="TheGridIcon" class="k-icon k-i-table"></span>
+                <span id="TheGridName">Grid<strong> & </strong>@_f.tra("Sloupce")</span>
+            </button>
+            <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
+                Loading...
+            </div>
         </div>
-
-        <div>
-            <a class="btn btn-light" href="/p28/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
-            @if (_f.CurrentUser.j04IsMenu_Contact)
-            {
-                <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
-            }
-
-        </div>
-
     }
+
+
+    <div>
+        <a class="btn btn-light" href="/p28/RecPage?pid=@Model.pid" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+        @if (_f.CurrentUser.j04IsMenu_Contact)
+        {
+            <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
+        }
+
+    </div>
 
     <div class="p-2 nonmobile">
         <span>@Model.MenuCode</span>
 
+    </div>
+    <div style="width:200px;">
+        <mycombo entity="p28Contact" asp-for="@Model.SearchedPid" search-result-width="800" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
     </div>
 
     <div class="nonmobile" style="margin-left:auto;">
@@ -61,41 +63,66 @@
 
 </div>
 
-<div id="layout_sidebar" class="cm_recpage">Loading...</div>
+@if (Model.ShowGridPanel)
+{
+    <div style="height:70px;">
+        <vc:the-grid input="@Model.gridinput"></vc:the-grid>
+    </div>
+}
 
 
+<div class="input-group bg-light m-0" style="padding-top:1px; padding-left:1px;">
+    <div id="layout_sidebar_contextmenu">
+        @if (Model.pid > 0)
+        {
+            <a id="layout_sidebar_contextmenu_link" class="cm h4 mx-0" title="@Model.Rec.p28name" onclick="_cm(event, 'p28',@Model.Rec.pid);">☰@(Model.Rec.p28name) </a>
+            <h4 id="layout_sidebar_contextmenu_onlytext"></h4>
+        }
 
-<div id="layout_main">
-    @if (Model.PanelHeight != "none")
-    {
-        <div style="max-height:@(Model.PanelHeight);overflow-y:auto;overflow-x:hidden;">
-            @Html.EditorFor(m => m, "~/Views/Shared/_p28RecPageContent.cshtml")
-        </div>
-    }
-
-
-    <div class="tabs_container bgp28">
-        <ul id="navtabs" class="nav nav-tabs">
-            @foreach (var tab in Model.NavTabs)
-            {
-                <li class="nav-item onetab">
-                    <a class="@tab.CssClass" id="tab@(tab.Entity)" href="@tab.Url" target="fra_subgrid" onclick="tabclick(this)">
-                        @tab.Name
-                        @if (tab.Badge != null)
-                        {
-                            <span class="badge bg-primary">@tab.Badge</span>
-                        }
-                    </a>
-                </li>
-            }
-        </ul>
     </div>
 
-    <div id="divTabContent">
-        <iframe id="fra_subgrid" name="fra_subgrid" src="@Model.DefaultNavTabUrl" frameborder="0" scrolling="yes" style="width:100%;" onload="$('#divTabContent').css('background','none');"></iframe>
-    </div>
+
 
 </div>
+
+
+
+
+@{ if (Model.ShowContextMenu)
+    {
+        @Html.Raw("<div id='layout_sidebar' class='cm_recpage'>Loading...</div>");
+        @Html.Raw("<div id='layout_main'>");
+    }
+}
+
+
+<div class="tabs_container bgp28">
+    <ul id="navtabs" class="nav nav-tabs">
+        @foreach (var tab in Model.NavTabs)
+        {
+            <li class="nav-item onetab">
+                <a class="@tab.CssClass" id="tab@(tab.Entity)" href="@tab.Url" target="fra_subgrid" onclick="tabclick(this)">
+                    @tab.Name
+                    @if (tab.Badge != null)
+                    {
+                        <span class="badge bg-primary">@tab.Badge</span>
+                    }
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+<div id="divTabContent">
+    <iframe id="fra_subgrid" name="fra_subgrid" src="@Model.DefaultNavTabUrl" frameborder="0" scrolling="yes" style="width:100%;" onload="$('#divTabContent').css('background','none');"></iframe>
+</div>
+
+@{
+    if (Model.ShowContextMenu)
+    {
+        @Html.Raw("</div>");
+    }
+}
 
 
 <script type="text/javascript">
@@ -111,15 +138,16 @@
         });
 
 
-        @if(Model.pid>0)
+        @if(Model.pid > 0 && Model.ShowContextMenu)
         {
             <text>
-            $.post("/Menu/ContextMenu", {source: "recpage", entity: "p28Contact", pid: @Model.pid }, function(data) {
+                $.post("/Menu/ContextMenu", {source: "recpage", entity: "p28Contact", pid: @Model.pid }, function(data) {
 
-            $("#layout_sidebar").html(data);
+                $("#layout_sidebar").html(data);
 
-            });
+                });
             </text>
+
         }
         else
         {
@@ -169,6 +197,11 @@
         $.post("/Common/SetUserParam", { key: key, value: val }, function (data) {
             reload();
         });
+    }
+
+    function grid_dblclick(row) {
+        var pid = row.id.replace("r", "");
+        _edit("p28", pid);
     }
 
 </script>

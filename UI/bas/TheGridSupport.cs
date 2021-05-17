@@ -32,7 +32,7 @@ namespace UI
             {
                 return render_thegrid_error("gridState is null!");
             }
-
+            
             if (!string.IsNullOrEmpty(this.gridinput.fixedcolumns))
             {
                 gridState.j72Columns = this.gridinput.fixedcolumns;
@@ -105,7 +105,7 @@ namespace UI
         {
 
             var gridState = _Factory.j72TheGridTemplateBL.LoadState(tgi.j72id, _Factory.CurrentUser.pid);
-
+           
 
             if (string.IsNullOrEmpty(this.gridinput.fixedcolumns) == false)
             {
@@ -138,7 +138,7 @@ namespace UI
             var ret = new TheGridOutput();
             _grid = new TheGridViewModel();
             _grid.GridState = gridState;
-
+           
 
             ret.sortfield = gridState.j75SortDataField;
             ret.sortdir = gridState.j75SortOrder;
@@ -156,19 +156,21 @@ namespace UI
 
 
             mq.explicit_columns = _grid.Columns.ToList();
-
-            if (!String.IsNullOrEmpty(gridState.j75Filter))
+            
+            if (_grid.GridState.j72MasterEntity !="recpage")    //v recpage je vypnuté filtrování
             {
-                mq.TheGridFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, mq.explicit_columns);
+                if (!String.IsNullOrEmpty(gridState.j75Filter))
+                {
+                    mq.TheGridFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, mq.explicit_columns);
+                }
+
+                if (gridState.j72HashJ73Query)
+                {
+                    mq.lisJ73 = _Factory.j72TheGridTemplateBL.GetList_j73(gridState.j72ID, gridState.j72Entity.Substring(0, 3));
+                    _grid.GridMessage = _Factory.j72TheGridTemplateBL.getFiltrAlias(gridState.j72Entity.Substring(0, 3), mq);
+                }
             }
-
-            if (gridState.j72HashJ73Query)
-            {
-                mq.lisJ73 = _Factory.j72TheGridTemplateBL.GetList_j73(gridState.j72ID, gridState.j72Entity.Substring(0, 3));
-                _grid.GridMessage = _Factory.j72TheGridTemplateBL.getFiltrAlias(gridState.j72Entity.Substring(0, 3), mq);
-
-
-            }
+            
 
             var dtFooter = _Factory.gridBL.GetList(mq, true);
             int intVirtualRowsCount = 0;
@@ -699,14 +701,18 @@ namespace UI
                 }
                 //this.gridinput.query.explicit_orderby = _colsProvider.ByUniqueName(gridState.j75SortDataField).getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
             }
-            if (String.IsNullOrEmpty(gridState.j75Filter) == false)
+            if (_grid.GridState.j72MasterEntity != "recpage")   //v recpage je vypnuté filtrování
             {
-                this.gridinput.query.TheGridFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, this.gridinput.query.explicit_columns);
+                if (!String.IsNullOrEmpty(gridState.j75Filter))
+                {
+                    this.gridinput.query.TheGridFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, this.gridinput.query.explicit_columns);
+                }
+                if (gridState.j72HashJ73Query)
+                {
+                    this.gridinput.query.lisJ73 = _Factory.j72TheGridTemplateBL.GetList_j73(gridState.j72ID, gridState.j72Entity.Substring(0, 3));
+                }
             }
-            if (gridState.j72HashJ73Query)
-            {
-                this.gridinput.query.lisJ73 = _Factory.j72TheGridTemplateBL.GetList_j73(gridState.j72ID, gridState.j72Entity.Substring(0, 3));
-            }
+                
 
             return _Factory.gridBL.GetList(this.gridinput.query);
         }

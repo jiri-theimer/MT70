@@ -404,19 +404,28 @@ namespace UI.Controllers
 
         public string RecPageSetting(string prefix)  //menu pro nastavení stránky záznamu
         {
-            string icon0 = "k-i-radiobutton";
-            string icon1 = "k-i-radiobutton-checked";
-            string skey = $"recpage-{prefix}-panel-height";
-            var sval = Factory.CBL.LoadUserParam(skey, "200px");
+            string icon0 = "k-i-checkbox";
+            string icon1 = "k-i-checkbox-checked";
 
-            HEADER("Nastavit výšku horního panelu stránky");
-            AMI("Horní panel vůbec nezobrazovat", "javascript:save_page_setting('"+skey+"','none')", BO.BAS.IIFS(sval == "none", icon1, icon0));
-            AMI_NOTRA(Factory.tra("Výška") + " AUTO", "javascript:save_page_setting('" + skey + "','auto')", BO.BAS.IIFS(sval == "auto", icon1, icon0));
-            AMI_NOTRA(Factory.tra("Výška")+" max 200px", "javascript:save_page_setting('" + skey + "','200px')", BO.BAS.IIFS(sval == "200px", icon1, icon0));
-            AMI_NOTRA(Factory.tra("Výška") + " max 300px", "javascript:save_page_setting('" + skey + "','300px')", BO.BAS.IIFS(sval == "300px", icon1, icon0));
-            AMI_NOTRA(Factory.tra("Výška") + " max 20%", "javascript:save_page_setting('" + skey + "','20%')", BO.BAS.IIFS(sval == "20%", icon1, icon0));
-            AMI_NOTRA(Factory.tra("Výška") + " max 30%", "javascript:save_page_setting('" + skey + "','30%')", BO.BAS.IIFS(sval == "30%", icon1, icon0));
-            
+            HEADER("Nastavit zobrazení stránky");
+            string skey = $"recpage-{prefix}-panel-grid";
+            if (Factory.CBL.LoadUserParamBool(skey, true))
+            {
+                AMI("Zobrazovat nahoře GRID", $"javascript:save_page_setting('{skey}','0')", icon1);
+            }
+            else
+            {
+                AMI("Zobrazovat nahoře GRID", $"javascript:save_page_setting('{skey}','1')", icon0);
+            }
+            skey = $"recpage-{prefix}-panel-cm";
+            if (Factory.CBL.LoadUserParamBool(skey, true))
+            {
+                AMI("Zobrazovat vlevo kontextové menu", $"javascript:save_page_setting('{skey}','0')", icon1);
+            }
+            else
+            {
+                AMI("Zobrazovat vlevo kontextové menu", $"javascript:save_page_setting('{skey}','1')", icon0);
+            }
 
             return basMenu.FlushResult_UL(_lis, true, false);
         }

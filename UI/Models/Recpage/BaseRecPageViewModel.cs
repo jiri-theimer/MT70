@@ -25,6 +25,8 @@ namespace UI.Models
         public string SearchedText { get; set; }
         
         private string _PanelHeight { get; set; }
+        private bool? _ShowGridPanel { get; set; }
+        private bool? _ShowContextMenu { get; set; }
 
         public FreeFieldsViewModel ff1 { get; set; }
 
@@ -62,7 +64,30 @@ namespace UI.Models
                 return _PanelHeight;
             }
         }
+
         
+        public bool ShowGridPanel
+        {
+            get{
+                if (_ShowGridPanel == null)
+                {
+                    _ShowGridPanel = Factory.CBL.LoadUserParamBool($"recpage-{prefix}-panel-grid", true);
+                }
+                return Convert.ToBoolean(_ShowGridPanel);
+            }
+        }
+        public bool ShowContextMenu
+        {
+            get
+            {
+                if (_ShowContextMenu == null)
+                {
+                    _ShowContextMenu = Factory.CBL.LoadUserParamBool($"recpage-{prefix}-panel-cm", true);
+                }
+                return Convert.ToBoolean(_ShowContextMenu);
+            }
+        }
+
 
         public void SetTagging()
         {

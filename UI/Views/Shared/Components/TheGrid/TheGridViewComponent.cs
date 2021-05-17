@@ -42,12 +42,12 @@ namespace UI.Views.Shared.Components.TheGrid
 
             if (gridState == null)   //pro uživatele zatím nebyl vygenerován záznam v j72 -> vygenerovat
             {
-                string strJ72Columns = _colsProvider.getDefaultPalletePreSaved(input.entity,input.master_entity,input.query);
+                string strJ72Columns = _colsProvider.getDefaultPalletePreSaved(input.entity, input.master_entity, input.query);
                 if (strJ72Columns == null)
                 {
                     var cols = _colsProvider.getDefaultPallete(false, input.query);    //výchozí paleta sloupců
                     strJ72Columns = String.Join(",", cols.Select(p => p.UniqueName));
-                }                
+                }
 
                 var recJ72 = new BO.j72TheGridTemplate() { j72IsSystem = true, j72Entity = input.entity, j03ID = _f.CurrentUser.pid, j72Columns = strJ72Columns, j72MasterEntity = input.master_entity };
 
@@ -65,26 +65,30 @@ namespace UI.Views.Shared.Components.TheGrid
 
 
 
-            var cSup = new UI.TheGridSupport(input,_f, _colsProvider);
+            var cSup = new UI.TheGridSupport(input, _f, _colsProvider);
 
             var ret = new TheGridViewModel();
             ret.GridInput = input;
             ret.firstdata = cSup.GetFirstData(gridState);
-            
+
             ret.GridState = gridState;
             if (gridState.j72Columns.Contains("Free"))
             {
                 var lisFF = new BL.ffColumnsProvider(_f, input.entity.Substring(0, 3));
-                ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex,lisFF.getColumns());
+                ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex, lisFF.getColumns());
             }
             else
             {
                 ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex);
             }
+
+            if (gridState.j72MasterEntity !="recpage")    //pokud není vypnutý sloupcový filtr
+            {
+                ret.AdhocFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, ret.Columns);
+            }
             
-            ret.AdhocFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, ret.Columns);
-           
-            
+
+
             return View("Default", ret);
 
 
