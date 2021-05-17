@@ -39,12 +39,11 @@
 
     </div>
 
-    <div style="width:200px;">
-        <mycombo entity="@Model.entity" asp-for="@Model.SearchedPid" search-result-width="800" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
-    </div>
-    <div class="p-2 nonmobile">
-        <span>@Model.MenuCode</span>
 
+    
+
+    <div style="width:200px;margin-left:15px;">
+        <mycombo entity="@Model.entity" asp-for="@Model.SearchedPid" search-result-width="800" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
     </div>
 
     <div class="nonmobile" style="margin-left:auto;">
