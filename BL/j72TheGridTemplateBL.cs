@@ -257,13 +257,13 @@ namespace BL
             p.Add("j03id", intJ03ID);
             p.Add("entity", strEntity);
             p.Add("j04id", _mother.CurrentUser.j04ID);
-            if (string.IsNullOrEmpty(strMasterEntity) == true)
+            if (string.IsNullOrEmpty(strMasterEntity))
             {
-                s = string.Format("SELECT a.*,{0} FROM j72TheGridTemplate a WHERE a.j72Entity=@entity AND a.j72MasterEntity IS NULL", _db.GetSQL1_Ocas("j72"));
+                s = string.Format("SELECT a.*,{0} FROM j72TheGridTemplate a WHERE a.j72Entity=@entity AND ((a.j72IsSystem=1 AND a.j72MasterEntity IS NULL) OR a.j72IsSystem=0)", _db.GetSQL1_Ocas("j72"));
             }
             else
             {
-                s = string.Format("SELECT a.*,{0} FROM j72TheGridTemplate a WHERE a.j72Entity=@entity AND a.j72MasterEntity = @masterentity", _db.GetSQL1_Ocas("j72"));
+                s = string.Format("SELECT a.*,{0} FROM j72TheGridTemplate a WHERE a.j72Entity=@entity AND ((a.j72IsSystem=1 AND a.j72MasterEntity = @masterentity) OR a.j72IsSystem=0)", _db.GetSQL1_Ocas("j72"));
                 p.Add("masterentity", strMasterEntity);
             }
             s += " AND (a.j03ID=@j03id OR a.j72IsPublic=1 OR a.j72ID IN (select j72ID FROM j74TheGridReceiver WHERE j04ID=@j04id))";

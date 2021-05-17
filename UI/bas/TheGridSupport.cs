@@ -538,7 +538,7 @@ namespace UI
 
         private void RenderButtonMore()
         {
-            _s.Append("<button type='button' class='btn btn-light tgp' style='margin-left:6px;' onclick='tg_button_more(this)'><span class='k-icon k-i-grid-layout'></span></button>");
+            _s.Append("<button type='button' class='btn btn-sm btn-outline-secondary'  style='margin-left:6px;padding-top:0px;padding-bottom:0px;' onclick='tg_button_more(this)'>#</button>");
             _s.Append("<span id='gridcurrow'></span>");
         }
 

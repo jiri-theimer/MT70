@@ -40,12 +40,12 @@
 
     </div>
 
+    <div style="width:200px;">
+        <mycombo entity="p28Contact" asp-for="@Model.SearchedPid" search-result-width="800" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
+    </div>
     <div class="p-2 nonmobile">
         <span>@Model.MenuCode</span>
 
-    </div>
-    <div style="width:200px;">
-        <mycombo entity="p28Contact" asp-for="@Model.SearchedPid" search-result-width="800" selectedtext="@Model.SearchedText" filter-flag="1" placeholder="@_f.tra("Najít")..." event_after_changevalue="on_search"></mycombo>
     </div>
 
     <div class="nonmobile" style="margin-left:auto;">
@@ -181,6 +181,12 @@
         $(tab).addClass("active");
         $.post("/Common/SetUserParam", { key: "recpage-tab-p28", value: tab.id.replace("tab", "") }, function (data) {
 
+
+        });
+    }
+    function change_grid(j72id) {        
+        $.post(_ep("/Common/SetUserParam"), { key: "slaveview-j72id-p28-recpage", value: j72id }, function (data) {
+            reload();
 
         });
     }
