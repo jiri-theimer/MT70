@@ -31,8 +31,8 @@ namespace UI.Controllers
                 else
                 {
                     v.SetGridUrl();
-                    v.SaveLastUsedPid();
-
+                    Factory.CBL.SaveLastCallingRecPid(v.prefix, v.pid, "recpage", true, true);  //uložit info o naposledy navštíveném záznamu
+                    
                     RefreshState_RecPage(v);
 
                 }

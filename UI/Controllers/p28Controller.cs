@@ -13,11 +13,12 @@ namespace UI.Controllers
     {
         public IActionResult Info(int pid)
         {
-            return Tab1(pid);
+            return Tab1(pid,"info");
         }
-        public IActionResult Tab1(int pid)
+        public IActionResult Tab1(int pid,string caller)
         {
-            var v = new p28Tab1 () { Factory = this.Factory, prefix = "p28", pid = pid };
+            var v = new p28Tab1 () { Factory = this.Factory, prefix = "p28", pid = pid,caller=caller };
+            
             RefreshStateTab1(v);
             return View(v);
         }

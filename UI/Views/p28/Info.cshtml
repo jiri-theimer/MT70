@@ -5,7 +5,7 @@
 
     Layout = "~/Views/Shared/_LayoutSubform.cshtml";
     if (Model.Rec == null) return;
-    if (Model.ff1 !=null) Model.ff1.callername = "info";
+    if (Model.ff1 !=null) Model.ff1.caller = "info";
 
     var _disp = _f.p28ContactBL.InhaleRecDisposition(Model.Rec);
     InfoButtonsViewModel _buttons = new InfoButtonsViewModel() { prefix = Model.prefix, pid = Model.pid, disp = _disp };

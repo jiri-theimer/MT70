@@ -9,7 +9,7 @@ namespace UI.Models
     {
         public string elementidprefix { get; set; } = "ff1.";
         public List<BO.FreeFieldInput> inputs { get; set; }
-        public string callername { get; set; }
+        public string caller { get; set; }
         
 
         public int VisibleInputsCount { get

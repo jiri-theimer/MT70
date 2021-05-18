@@ -70,6 +70,10 @@ namespace UI.Controllers
             {
                 return this.StopPage(false, "Nemáte oprávnění pro tento GRID přehled.");
             }
+            if (go2pid == 0 && (prefix=="p28" || prefix=="p91" || prefix=="p41" || prefix=="j02" || prefix == "o23"))
+            {
+                go2pid = LoadLastUsedPid(prefix);
+            }
             FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"flatview",null,0,null,TestIfPeriodOverGrid(prefix));
             
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("flatview-j72id-" + prefix);
@@ -80,11 +84,14 @@ namespace UI.Controllers
         
 
         public IActionResult MasterView(string prefix,int go2pid)    //grid horní + spodní panel, není zde filtrovací pruh s fixním filtrem
-        {
-            
+        {            
             if (!TestGridPermissions(prefix))
             {
                 return this.StopPage(false, "Nemáte oprávnění pro tento GRID přehled.");
+            }
+            if (go2pid == 0)
+            {
+                go2pid = LoadLastUsedPid(prefix);
             }
             FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"masterview",null,0,null,TestIfPeriodOverGrid(prefix));
                       
@@ -190,7 +197,7 @@ namespace UI.Controllers
             }
             return false;
         }
-        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string myqueryinline)    //podřízený subform v rámci MasterView
+        public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string myqueryinline,string caller)    //podřízený subform v rámci MasterView
         {            
             FsmViewModel v = LoadFsmViewModel(prefix, go2pid, "slaveview", master_entity, master_pid, myqueryinline, TestIfPeriodOverGrid(prefix));
             
@@ -200,6 +207,11 @@ namespace UI.Controllers
             if (String.IsNullOrEmpty(master_entity) || master_pid == 0)
             {
                 AddMessage("Musíte vybrat záznam z nadřízeného panelu.");
+            }
+
+            if (caller != null)
+            {
+                Factory.CBL.SaveLastCallingRecPid(master_entity.Substring(0,3), master_pid, caller, true, false);
             }
 
 
@@ -286,7 +298,11 @@ namespace UI.Controllers
         }
 
 
-        
+        private int LoadLastUsedPid(string prefix)
+        {
+            return Factory.CBL.LoadUserParamInt($"recpage-{prefix}-pid",0,12);
+            
+        }
 
     }
 }

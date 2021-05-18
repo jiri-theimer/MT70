@@ -15,11 +15,11 @@ namespace UI.Controllers
 
         public IActionResult Info(int pid)
         {
-            return Tab1(pid);
+            return Tab1(pid,"info");
         }
-        public IActionResult Tab1(int pid)
+        public IActionResult Tab1(int pid,string caller)
         {
-            var v = new p91Tab1() { Factory = this.Factory, prefix = "p91", pid = pid };
+            var v = new p91Tab1() { Factory = this.Factory, prefix = "p91", pid = pid,caller=caller };
             v.StatByPrefix = Factory.CBL.LoadUserParam("recpage-p91-statprefix", "p41");
             RefreshStateTab1(v);
             return View(v);

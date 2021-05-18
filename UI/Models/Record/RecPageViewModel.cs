@@ -43,14 +43,8 @@ namespace UI.Models
             return this.pid_loaded;
         }
 
-        public void SaveLastUsedPid()
-        {
-            if (this.pid > 0 && this.pid_loaded != this.pid)
-            {
-                Factory.CBL.SetUserParam($"recpage-{prefix}-pid", this.pid.ToString());
-            }
 
-        }
+        
 
      
         public string entity
