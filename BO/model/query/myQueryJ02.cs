@@ -112,7 +112,8 @@ namespace BO
             
             if (this.p91id > 0)
             {
-                AQ("a.j02ID IN (select a1.j02ID FROM p30Contact_Person a1 INNER JOIN p91Invoice a2 ON a1.p28ID=a2.p28ID WHERE a2.p91ID=@p91id)", "p91id", this.p91id);
+                //AQ("a.j02ID IN (select a1.j02ID FROM p30Contact_Person a1 INNER JOIN p91Invoice a2 ON a1.p28ID=a2.p28ID WHERE a2.p91ID=@p91id)", "p91id", this.p91id);
+                AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p91ID=@p91id)", "p91id", this.p91id);
             }
            
 

@@ -17,6 +17,7 @@ namespace BO
         public int b02id { get; set; }
         public int j27id { get; set; }
         public int o38id { get; set; }
+        public int p90id { get; set; }
 
         public myQueryP91()
         {
@@ -57,6 +58,10 @@ namespace BO
             if (this.o38id > 0)
             {
                 AQ("(a.o38ID_Primary=@o38id OR a.o38ID_Delivery=@o38id)", "o38id", this.o38id);
+            }
+            if (this.p90id > 0)
+            {
+                AQ("a.p91ID IN (SELECT za.p91ID FROM p99Invoice_Proforma za INNER JOIN p82Proforma_Payment zb ON za.p82ID=zb.p82ID WHERE zb.p90ID=@p90id)", "p90id", this.p90id);
             }
 
             if (_searchstring != null && _searchstring.Length > 2)

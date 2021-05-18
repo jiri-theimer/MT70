@@ -23,6 +23,7 @@ namespace UI.Controllers
         //}
         public IActionResult Index()
         {
+            
 
             if (HttpContext.Request.Path.Value.Length <= 1)
             {
@@ -91,19 +92,8 @@ namespace UI.Controllers
 
         public IActionResult About()
         {
+
             
-
-            //PDF merge po rumunsku:
-            PdfDocumentOptions pdfDocumentOptions = new PdfDocumentOptions();
-            pdfDocumentOptions.PdfCompressionLevel = PDFCompressionLevel.Normal;
-            pdfDocumentOptions.PdfPageSize = PdfPageSize.A4;
-            PDFMerge pdfMerge = new PDFMerge(pdfDocumentOptions);
-
-            pdfMerge.AppendPDFFile("c:\\temp\\report1 (8).pdf");
-            pdfMerge.AppendPDFFile("c:\\temp\\Pohyb_23742929812_na_uctu_22000220.pdf");
-            pdfMerge.AppendPDFFile("c:\\temp\\report1 (4).pdf");
-
-            pdfMerge.SaveMergedPDFToFile("c:\\temp\\result.pdf");
 
             return View(new BaseViewModel());
         }

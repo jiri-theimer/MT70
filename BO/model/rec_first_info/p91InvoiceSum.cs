@@ -17,6 +17,7 @@ namespace BO
         public int p41_count { get; set; }
         public int p90_count { get; set; }
         public int p56_count { get; set; }
+        public int j02_count { get; set; }
         public int b07_count { get; set; }
         public int j13StarIndex { get; set; }
     }

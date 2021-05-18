@@ -96,71 +96,22 @@ namespace UI.Controllers
             FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"masterview",null,0,null,TestIfPeriodOverGrid(prefix));
                       
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("masterview-j72id-" + prefix);
-            
-            var tabs = new List<NavTab>();
-            
-            switch (prefix)
-            {
-                
-                case "j02":
-                    tabs.Add(AddTab("Tab1", "tab1", "/j02/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
 
-                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
-                    tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23"));
-                    tabs.Add(AddTab("Outbox", "x40MailQueue", "SlaveView?prefix=x40"));
-                    tabs.Add(AddTab("PING Log", "j92PingLog", "SlaveView?prefix=j92"));
-                    tabs.Add(AddTab("LOGIN Log", "j90LoginAccessLog", "SlaveView?prefix=j90"));
-                    
-                    break;
+            var cTabs = new NavTabsSupport(Factory);
+            v.NavTabs = cTabs.getTabs(v.prefix, go2pid);
 
-                case "p28":
-                    tabs.Add(AddTab("Tab1", "tab1", "/p28/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid),false));
-                    tabs.Add(AddTab("Úkony", "p31Worksheet", "SlaveView?prefix=p31"));
-                    tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
-                    tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
-                    tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
-                    tabs.Add(AddTab("Vyúčtování", "p91Invoice", "SlaveView?prefix=p91"));
-                    tabs.Add(AddTab("Zálohy", "p90Proforma", "SlaveView?prefix=p90"));
-                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
-                    tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23"));
-                    break;
-                case "p41":
-                    tabs.Add(AddTab("Tab1", "tab1", "/p41/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid), false));
-                    tabs.Add(AddTab("Úkony", "p31Worksheet", "SlaveView?prefix=p31"));
-                    tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
-                    tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
-                    tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
-                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
-                    tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23"));
-                    break;
-                case "o23":
-                    tabs.Add(AddTab("Tab1", "tab1", "/o23/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
-                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
-                    break;
-                case "p90":
-                    tabs.Add(AddTab("Tab1", "tab1", "/p90/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
-                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
-                    break;
-                case "p91":
-                    tabs.Add(AddTab("Tab1", "tab1", "/p91/Tab1?pid=" + AppendPid2Url(v.gridinput.go2pid)));
-                    tabs.Add(AddTab("Úkony", "p31Worksheet", "SlaveView?prefix=p31"));
-                    tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
-                    tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
-                    tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
-                    tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
-                    break;
-
-            }
+          
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);
-            var deftab = tabs[0];
+            var deftab = v.NavTabs[0];
             
-            foreach (var tab in tabs)
+            foreach (var tab in v.NavTabs)
             {
-               if (tab.Url.Contains("?pid")==false)
+               if (!tab.Url.Contains("?pid"))
                 {
                     tab.Url += "&master_entity=" + v.entity + "&master_pid=" + AppendPid2Url(v.gridinput.go2pid);
                    
                 }
+                tab.Url += "&caller=grid";
              
                 if (strDefTab !="" && tab.Entity== strDefTab)
                 {
@@ -174,7 +125,7 @@ namespace UI.Controllers
                 
             }
 
-            v.NavTabs = tabs;
+            
             return View(v);
         }
 
@@ -302,6 +253,12 @@ namespace UI.Controllers
         {
             return Factory.CBL.LoadUserParamInt($"recpage-{prefix}-pid",0,12);
             
+        }
+
+        public List<NavTab> getTabs(string prefix,int pid)  //volá se z javascriptu při změně řádky v gridu
+        {
+            var cTabs = new NavTabsSupport(Factory);
+            return cTabs.getTabs(prefix, pid);
         }
 
     }

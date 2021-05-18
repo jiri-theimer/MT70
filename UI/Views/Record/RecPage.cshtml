@@ -103,7 +103,7 @@
                     @tab.Name
                     @if (tab.Badge != null)
                     {
-                        <span class="badge bg-primary">@tab.Badge</span>
+                        @Html.Raw(tab.Badge)
                     }
                 </a>
             </li>

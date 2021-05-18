@@ -13,6 +13,7 @@ namespace BL
         public IEnumerable<BO.p90Proforma> GetList(BO.myQuery mq);
         public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI);
         public BO.p90RecDisposition InhaleRecDisposition(BO.p90Proforma rec);
+        public BO.p90ProformaSum LoadSumRow(int pid);
 
     }
     class p90ProformaBL : BaseBL, Ip90ProformaBL
@@ -140,6 +141,7 @@ namespace BL
                 
 
         }
+
         private bool ValidateBeforeSave(BO.p90Proforma rec)
         {
             if (rec.j02ID_Owner == 0) rec.j02ID_Owner = _mother.CurrentUser.j02ID;
@@ -175,7 +177,10 @@ namespace BL
             return true;
         }
 
-
+        public BO.p90ProformaSum LoadSumRow(int pid)
+        {
+            return _db.Load<BO.p90ProformaSum>("EXEC dbo.p90_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
+        }
 
     }
 }
