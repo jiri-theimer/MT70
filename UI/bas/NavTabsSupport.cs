@@ -81,11 +81,12 @@ namespace UI
                     break;
                 case "p91":
                     _tabs.Add(AddTab("Tab1", "tab1", "/p91/Tab1?pid=" + AppendPid2Url(pid)));
-                    _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31"));
-                    _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
-                    _tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
-                    _tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
-                    _tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
+                    var cp91 = _f.p91InvoiceBL.LoadSumRow(pid);                   
+                    _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31",true, cp91.p31_count.ToString()));
+                    _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time",true, cp91.p31_time_count.ToString()));
+                    _tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense",true, cp91.p31_expense_count.ToString()));
+                    _tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee",true, cp91.p31_fee_count.ToString()));
+                    _tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master",true, cp91.b07_count.ToString()));
                     break;
 
             }

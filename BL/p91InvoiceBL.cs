@@ -33,6 +33,7 @@ namespace BL
         public void ClearExchangeDate(int p91id, bool recalc);
         public IEnumerable<BO.p91_CenovyRozpis> GetList_CenovyRozpis(int p91id, bool bolIncludeRounding, bool bolIncludeProforma, int langindex);
         public bool Delete(int p91id, string guid, int selectedoper);
+        public BO.p91InvoiceSum LoadSumRow(int pid);
 
     }
     class p91InvoiceBL : BaseBL, Ip91InvoiceBL
@@ -548,6 +549,11 @@ namespace BL
             }
 
             return c;
+        }
+
+        public BO.p91InvoiceSum LoadSumRow(int pid)
+        {
+            return _db.Load<BO.p91InvoiceSum>("EXEC dbo.p91_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
         }
 
 
