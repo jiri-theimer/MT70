@@ -74,8 +74,8 @@
     </div>
     <div class="tabs_container bg@(Model.prefix)">
         <ul id="navtabs" class="nav nav-tabs">
-            <li>
-                <a id="cmdRCM" class="cm" onclick="rcm_from_tabs(event)">&#9776;</a>
+            <li style="padding-top:6px;">
+                <a id="cmdRCM" class="cm" onclick="rcm_from_tabs(event)" title="MENU"><span class="k-icon k-i-menu"></span></a>
             </li>
             @foreach (var tab in Model.NavTabs)
             {
@@ -224,7 +224,12 @@
     }
 
     function rcm_from_tabs(e) {
-        var pid = $("#cur_pid").val();    
+        var pid = $("#cur_pid").val();
+        
+        if (pid == "" || pid=="0") {
+            _notify_message("Musíte vybrat záznam z nadřízeného panelu.");
+            return;
+        }
         
         e.target.setAttribute("menu_je_inicializovano", null);  //vyčistit paměť o inicializaci menu v rámci tohoto tlačítka
         
