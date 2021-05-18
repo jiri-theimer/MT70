@@ -35,6 +35,9 @@
 
 
 
+<a id="cmdRecPage" class="btn btn-sm btn-outline-secondary" href="/Record/RecPage?prefix=p91&pid=@Model.pid" target="_top" title="@_f.tra("Stránka vyúčtování")"><span class="k-icon k-i-layout"></span></a>
+
+
 <button type="button" class="btn btn-sm btn-warning" onclick="p91report(@(Model.RecP92.x31ID_Invoice),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
 
 @if (Model.RecP92.x31ID_Attachment > 0)

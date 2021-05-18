@@ -74,6 +74,9 @@
     </div>
     <div class="tabs_container bg@(Model.prefix)">
         <ul id="navtabs" class="nav nav-tabs">
+            <li>
+                <a id="cmdRCM" class="cm" onclick="rcm_from_tabs(event)">&#9776;</a>
+            </li>
             @foreach (var tab in Model.NavTabs)
             {
                 <li class="nav-item onetab">
@@ -131,8 +134,8 @@
             thegrid_handle_rowselect(e.detail.pid);
         });
 
-        
-        
+
+
     });
 
 
@@ -198,8 +201,8 @@
             });
         }
 
-        
-    
+
+
 
 
     function switch_to_flatview() {    //vypnout spodní panel
@@ -218,6 +221,14 @@
         } else {
             _edit(_pageprefix, pid);
         }
+    }
+
+    function rcm_from_tabs(e) {
+        var pid = $("#cur_pid").val();    
+        
+        e.target.setAttribute("menu_je_inicializovano", null);  //vyčistit paměť o inicializaci menu v rámci tohoto tlačítka
+        
+        _cm(e, _pageprefix, pid, "grid");
     }
 </script>
 

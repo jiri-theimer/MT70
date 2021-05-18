@@ -18,7 +18,7 @@ namespace UI.Controllers
         public IActionResult Tab1(int pid)
         {
             var v = new j02Tab1() { Factory = this.Factory, prefix = "j02", pid = pid };
-            RefreshStateTab1(v);
+            RefreshStateTab1(v);            
             return View(v);
         }
         private void RefreshStateTab1(j02Tab1 v)

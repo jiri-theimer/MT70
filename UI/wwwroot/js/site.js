@@ -159,7 +159,8 @@ function _notify_message(strMessage, strTemplate = "error", milisecs = "3000") {
 
 
 //vyvolání kontextového menu
-function _cm(e, entity, pid, menu_source,master_entity) {
+function _cm(e, entity, pid, menu_source, master_entity) {
+    
     if (menu_source === undefined) menu_source = null;
     if (master_entity === undefined) master_entity = null;
 

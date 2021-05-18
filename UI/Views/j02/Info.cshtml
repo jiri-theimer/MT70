@@ -5,9 +5,11 @@
 
     Layout = "~/Views/Shared/_LayoutSubform.cshtml";
     if (Model.Rec == null) return;
+    if (Model.ff1 != null) Model.ff1.callername = "info";
 
     var _disp = _f.j02PersonBL.InhaleRecDisposition(Model.Rec);
     string _Teams = Model.GetTeams();
+    InfoButtonsViewModel _buttons = new InfoButtonsViewModel() { prefix = Model.prefix, pid = Model.pid, disp = _disp };
 }
 
 @addTagHelper *, UI
@@ -16,21 +18,8 @@
 <div class="info_record_container">
 
     <div class="row">
-        <div class="col-sm-2 col-md-3">
-            @if (_disp.OwnerAccess)
-            {
-                <a class="btn btn-sm btn-outline-secondary" href="javascript:_edit('j02',@Model.pid)">@_f.tra("Karta")</a>
-            }
-
-            @if (_disp.ReadAccess)
-            {
-                <a class="btn btn-sm btn-outline-secondary" href="/j02/RecPage?pid=@Model.pid" target="_top">@_f.tra("Stránka")</a>
-                @if (_f.CurrentUser.j04IsMenu_People)
-                {
-                    <a class="btn btn-sm btn-outline-secondary" href="@(basUI.GetGridUrl(_f,"j02",Model.pid))" target="_top">Grid</a>
-                }
-            }
-
+        <div class="col-sm-2 col-md-2">
+            @Html.EditorFor(m=> _buttons, "~/Views/Shared/_InfoButtons.cshtml")
         </div>
         <div class="col-sm-5 col-md-4">
             <myval value="@Model.Rec.FullNameAsc"></myval>
@@ -53,7 +42,7 @@
     @if (Model.Rec.j03ID > 0)
     {
         <div class="row my-1">
-            <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Uživatelský účet")):</label>
+            <label class="col-sm-2 col-md-2 col-form-label">@(_f.tra("Uživatelský účet")):</label>
             <div class="col-sm-5 col-md-4">
                 <myval value="@Model.RecJ03.j03Login"></myval>
             </div>
@@ -68,7 +57,7 @@
     @if (Model.Rec.j07ID > 0 || Model.Rec.c21ID > 0)
     {
         <div class="row my-1">
-            <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Pozice")):</label>
+            <label class="col-sm-2 col-md-2 col-form-label">@(_f.tra("Pozice")):</label>
             <div class="col-sm-5 col-md-4">
                 <myval value="@Model.Rec.j07Name"></myval>
 
@@ -84,7 +73,7 @@
     @if (_Teams != null || Model.Rec.j18ID > 0)
     {
         <div class="row my-1">
-            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Člen týmů")):</label>
+            <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@(_f.tra("Člen týmů")):</label>
             <div class="col-sm-5 col-md-4">
                 <myval value="@_Teams"></myval>
 

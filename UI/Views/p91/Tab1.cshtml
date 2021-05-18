@@ -36,7 +36,6 @@
 
 @addTagHelper *, UI
 
-<a class="btn btn-sm btn-outline-dark" href="/p91/RecPage?pid=@Model.pid" target="_top" title="@_f.tra("Stránka vyúčtování")"><span class="k-icon k-i-layout"></span></a>
 
 @Html.EditorFor(m => m, "~/Views/Shared/_p91Tab1Buttons.cshtml")
 
@@ -485,7 +484,13 @@
 @Html.Raw("</div>")
 
 <script type="text/javascript">
-
+    if (window.parent.window.location.href != undefined) {
+        if (window.parent.window.location.href.indexOf("RecPage")>0) {
+            $("#cmdRecPage").css("display", "none");
+            $("#cmdCM").css("display", "none");
+        }
+    }
+    
 
     function statbyprefix_change(cbx) {
         $.post("/Common/SetUserParam", { key: "recpage-p91-statprefix", value: cbx.value }, function (data) {
