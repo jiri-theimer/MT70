@@ -189,10 +189,8 @@
                 {
                     <tr>
                         <td style="padding-left:@(c.p07Level*10)px;">
-                           
-                            #@(c.p07Level)
-                        </td>
-                        <td>
+
+                            #@(c.p07Level):
                             @if (c.isclosed)
                             {
                                 <code>@_f.tra("Nevyužívat")</code>
@@ -201,8 +199,8 @@
                             {
                                 @(c.p07NameSingular)
                             }
-
                         </td>
+                       
                     </tr>
                 }
             </table>
