@@ -8,7 +8,7 @@ namespace UI.Models
     public class PeriodViewModel:BaseViewModel
     {
         public string prefix { get; set; }
-        public string masterentity { get; set; }
+        
         public string UserParamKey { get; set; } = "grid-period";
         public string PeriodField { get; set; }
         public DateTime? d1 { get; set; }

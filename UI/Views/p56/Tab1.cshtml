@@ -1,0 +1,216 @@
+﻿@model UI.Models.Tab1.p56Tab1
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutSubform.cshtml";
+    if (Model.Rec == null) return;
+
+
+}
+
+@addTagHelper *, UI
+
+
+
+@Html.Raw("<div class='info_record_container'>")
+
+<div class="card recpagebox400">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp56">
+            @_f.tra("Úkol")
+        </h6>
+        <div class="row">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Název")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p56Name"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Kód")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p56Code"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Typ úkolu")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p57Name" hoverprefix="p57" hoverpid="@Model.Rec.p57ID"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Projekt")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.ProjectWithClient" hoverprefix="p41" hoverpid="@Model.Rec.p41ID"></myval>
+
+            </div>
+        </div>
+
+
+        @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFieldsRO.cshtml")
+
+        <div>
+            <small class="text-secondary" title="@_f.tra("Založení záznamu")">
+                @(Model.Rec.UserInsert+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateInsert,"dd.MM.yyyy HH:mm ddd"))
+            </small>
+            @if (Model.Rec.DateUpdate > Model.Rec.DateInsert)
+            {
+                <small class="text-success float-end" title="@_f.tra("Poslední aktualizace záznamu")">
+                    @(Model.Rec.UserUpdate+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateUpdate,"dd.MM.yyyy HH:mm ddd"))
+
+                </small>
+
+            }
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="card recpageboxauto">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp56">
+            @_f.tra("Plán/Rozpočet")
+        </h6>
+        @if (Model.Rec.p56PlanUntil != null)
+        {
+            <div class="row">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Termín")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval datatype="datetime" value="@Model.Rec.p56PlanUntil"></myval>
+
+                </div>
+            </div>
+        }
+
+        @if (Model.Rec.p56PlanFrom != null)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Plán zahájení")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval datatype="datetime" value="@Model.Rec.p56PlanFrom"></myval>
+
+                </div>
+            </div>
+        }
+
+        <table class="table table-sm table-hover">
+            <tr>
+                <th></th>
+                <th>
+                    @_f.tra("Plán")
+                </th>
+                <th>
+                    @_f.tra("Vykázáno")
+                </th>
+                <th>
+                    @_f.tra("Rozdíl")
+                </th>
+                <th>
+                    @_f.tra("Vyúčtováno")
+                </th>
+                <th>
+
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @_f.tra("Hodiny"):
+                </td>
+
+                <td class="numcell">
+                    @(BO.BAS.Num2StringNull( Model.Rec.p56Plan_Hours))
+                </td>
+                <td class="numcell">
+                </td>
+                <td class="numcell">
+                </td>
+                <td class="numcell">
+                </td>
+                <td>
+                    @if (Model.Rec.p56IsPlan_Hours_Ceiling)
+                    {
+                        @_f.tra("Zákaz překročit")
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @_f.tra("Výdaje"):
+                </td>
+
+                <td class="numcell">
+                    @(BO.BAS.Num2StringNull( Model.Rec.p56Plan_Expenses))
+                </td>
+                <td class="numcell">
+                </td>
+                <td class="numcell">
+                </td>
+                <td class="numcell">
+                </td>
+                <td>
+                    @if (Model.Rec.p56IsPlan_Expenses_Ceiling)
+                    {
+                        @_f.tra("Zákaz překročit")
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @_f.tra("Pevné odměny"):
+                </td>
+                <td class="numcell">
+                </td>
+                <td class="numcell">
+                </td>
+                <td class="numcell">
+                </td>
+                <td class="numcell">
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+@if (Model.Rec.p56Description != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <i>
+                @Html.Raw(BO.BAS.Text2Html(Model.Rec.p56Description))
+            </i>
+
+
+        </div>
+    </div>
+}
+
+@if (Model.TagHtml != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp90">
+                @_f.tra("Štítky")
+            </div>
+            @Html.Raw(Model.TagHtml)
+
+        </div>
+    </div>
+}
+
+@Html.Raw("</div>")

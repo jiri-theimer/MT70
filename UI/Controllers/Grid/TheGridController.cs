@@ -228,14 +228,14 @@ namespace UI.Controllers
             
             if (isperiodovergrid)
             {
-                v.period = new PeriodViewModel() { prefix = v.prefix, IsShowButtonRefresh=true,masterentity=masterentity };
+                v.period = new PeriodViewModel() { prefix = v.prefix, IsShowButtonRefresh=true };
                 if (string.IsNullOrEmpty(masterentity))
                 {
-                    v.period.UserParamKey = $"grid-period-{v.period.prefix}";
+                    v.period.UserParamKey = $"grid-period-{v.prefix}";
                 }
                 else
                 {
-                    v.period.UserParamKey = $"grid-period-{v.period.prefix}-{v.period.masterentity}";
+                    v.period.UserParamKey = $"grid-period-{v.prefix}-{masterentity}";
                 }
                 
                 v.period.InhaleUserPeriodSetting(_pp, Factory);

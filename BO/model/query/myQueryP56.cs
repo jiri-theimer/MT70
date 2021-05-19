@@ -75,6 +75,11 @@ namespace BO
             {
                 AQ("a.p56ID IN (select p56ID FROM p31Worksheet WHERE p56ID IS NOT NULL AND p91ID=@p91id)", "p91id", this.p91id);
             }
+            if (this.j02id > 0)
+            {
+                //obdržel jakoukoliv roli v úkolu
+                AQ("a.p56ID IN (SELECT x69.x69RecordPID FROM x69EntityRole_Assign x69 INNER JOIN x67EntityRole x67 ON x69.x67ID=x67.x67ID WHERE x67.x29ID=356 AND (x69.j02ID=@j02id OR x69.j11ID IN (SELECT j11ID FROM j12Team_Person WHERE j02ID = @j02id)))", "j02id", this.j02id);
+            }
             return this.InhaleRows();
 
         }

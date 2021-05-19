@@ -139,14 +139,14 @@
 
         if ($("#divPeriodMore").css("display") == "block" && $("#divPeriodMore").html().length < 10) {
             var prefix = "@(Model.prefix)";
-            var masterentity = "@(Model.masterentity)";
+            
             var userparamkey = "@(Model.UserParamKey)";
 
             var ifwidth = _device.innerWidth - $("#cmdPeriodMore").offset().left;
             if (ifwidth > 900) {
                 ifwidth = 900;
             }
-            var ifhtml = "<iframe src='/Period/PeriodIframe?prefix=" + prefix + "&masterentity=" + masterentity + "&userparamkey="+userparamkey+"' width='100%' height='230px'></iframe>";
+            var ifhtml = "<iframe src='/Period/PeriodIframe?prefix=" + prefix + "&userparamkey="+userparamkey+"' width='100%' height='230px'></iframe>";
             $("#divPeriodMore").css("width", ifwidth + "px");
             $("#divPeriodMore").css("height", "240px");
             $("#divPeriodMore").html(ifhtml);

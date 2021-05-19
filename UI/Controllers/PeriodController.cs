@@ -15,9 +15,9 @@ namespace UI.Controllers
             _pp = pp;
         }
 
-        public IActionResult PeriodIFrame(string prefix,string masterentity,string userparamkey)
+        public IActionResult PeriodIFrame(string prefix,string userparamkey)
         {
-            var v = new PeriodViewModel() { prefix = prefix,masterentity=masterentity };
+            var v = new PeriodViewModel() { prefix = prefix };
             if (!string.IsNullOrEmpty(userparamkey))    //default je hodnota: grid-period
             {
                 v.UserParamKey = userparamkey;

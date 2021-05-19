@@ -12,6 +12,7 @@ namespace BL
         public IEnumerable<BO.p56Task> GetList(BO.myQuery mq);
         public int Save(BO.p56Task rec);
         public BO.p56TaskSum LoadSumRow(int pid);
+        public BO.p56RecDisposition InhaleRecDisposition(BO.p56Task rec);
 
     }
     class p56TaskBL : BaseBL, Ip56TaskBL
@@ -24,9 +25,9 @@ namespace BL
 
         private string GetSQL1(string strAppend = null)
         {
-            sb("SELECT a.p41ID,a.p57ID,a.j02ID_Owner,a.b02IDa.p56Name,a.p56NameShort,a.p56Code,a.p56Description,a.p56Ordinary,a.p56PlanFrom,a.p56PlanUntil,a.p56Plan_Hours,a.p56Plan_Expenses,a.p56RatingValue,a.p56CompletePercent,a.p56ExternalPID,a.p56IsPlan_Hours_Ceiling,a.p56IsPlan_Expenses_Ceiling,a.p56IsHtml,a.p56IsNoNotify");
+            sb("SELECT a.p41ID,a.p57ID,a.j02ID_Owner,a.b02ID,a.p56Name,a.p56NameShort,a.p56Code,a.p56Description,a.p56Ordinary,a.p56PlanFrom,a.p56PlanUntil,a.p56Plan_Hours,a.p56Plan_Expenses,a.p56RatingValue,a.p56CompletePercent,a.p56ExternalPID,a.p56IsPlan_Hours_Ceiling,a.p56IsPlan_Expenses_Ceiling,a.p56IsHtml,a.p56IsNoNotify");
             sb(",p28client.p28Name as Client,p57.p57Name,isnull(p41.p41NameShort,p41.p41Name) as p41Name,p41.p41Code,b02.b02Name,b02.b02Color,j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,p57.b01ID");
-            sb(_db.GetSQL1_Ocas("p56"));
+            sb(","+_db.GetSQL1_Ocas("p56"));
             sb(",dbo.p56_getroles_inline(a.p56ID) as ReceiversInLine");
             sb(" FROM p56Task a");
             sb(" INNER JOIN p57TaskType p57 ON a.p57ID=p57.p57ID INNER JOIN p41Project p41 ON a.p41ID=p41.p41ID");
@@ -145,6 +146,24 @@ namespace BL
         public BO.p56TaskSum LoadSumRow(int pid)
         {
             return _db.Load<BO.p56TaskSum>("EXEC dbo.p56_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
+        }
+
+        public BO.p56RecDisposition InhaleRecDisposition(BO.p56Task rec)
+        {
+            var c = new BO.p56RecDisposition();
+
+            if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin)
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                return c;
+            }
+            if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P56_Reader))
+            {
+                c.ReadAccess = true;
+                return c;
+            }
+
+            return c;
         }
 
     }
