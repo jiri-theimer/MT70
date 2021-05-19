@@ -65,26 +65,64 @@
 <div id="div_periodfield" style="padding-top:10px;">
     @if (Model.prefix != null)
     {
-        <select id="PeriodField" asp-for="@Model.PeriodField" class="form-select form-select-sm" style="max-width:200px;">
-            @switch (Model.prefix)
-            {
-                case "p31":
-                    <option value="p31Date">Datum úkonu</option>
-                    <option value="p91Date">Datum vyúčtování</option>
-                    <option value="p91DateSupply">DUZP vyúčtování</option>
-                    <option value="p31DateInsert">Čas založení úkonu</option>
-                    break;
-                case "p90":
-                    <option value="p90Date">Datum vystavení</option>
-                    <option value="p90DateInsert">Čas založení záznamu</option>
-                    break;
-                case "p91":
-                    <option value="p91Date">Datum vystavení</option>
-                    <option value="p91DateSupply">Datum zdanitelné plnění</option>
-                    <option value="p91DateInsert">Čas založení záznamu</option>
-                    break;
-            }
-        </select>
+    <select id="PeriodField" asp-for="@Model.PeriodField" class="form-select form-select-sm" style="max-width:200px;">
+        @switch (Model.prefix)
+        {
+            case "j02":
+                <option value="p31Date">Datum úkonu</option>
+                <option value="p91Date">Datum vyúčtování</option>
+                <option value="p91DateSupply">DUZP vyúčtování</option>
+                <option value="j02DateInsert">Čas založení osobního profilu</option>
+                break;
+            case "p31":
+                <option value="p31Date">Datum úkonu</option>
+                <option value="p91Date">Datum vyúčtování</option>
+                <option value="p91DateSupply">DUZP vyúčtování</option>
+                <option value="p31DateInsert">Čas založení úkonu</option>
+                break;
+            case "p28":
+                <option value="p31Date">Datum úkonu projektu klienta</option>
+                <option value="p91Date">Datum vyúčtování</option>
+                <option value="p91DateSupply">DUZP vyúčtování</option>
+                <option value="p28DateInsert">Čas založení klienta</option>
+                break;
+            case "p41":
+                <option value="p31Date">Datum úkonu</option>
+                <option value="p41PlanFrom">Plán zahájení</option>
+                <option value="p41PlanUntil">Plán dokončení</option>
+                <option value="p91Date">Datum vyúčtování</option>
+                <option value="p91DateSupply">DUZP vyúčtování</option>
+                <option value="p41DateInsert">Čas založení projektu</option>
+                break;
+            case "p56":
+                <option value="p31Date">Datum úkonu</option>
+                <option value="p56PlanFrom">Plán zahájení úkolu</option>
+                <option value="p56PlanUntil">Plán dokončení úkolu</option>
+                <option value="p91Date">Datum vyúčtování</option>
+                <option value="p91DateSupply">DUZP vyúčtování</option>
+                <option value="p56DateInsert">Čas založení úkolu</option>
+                break;
+            case "p90":
+                <option value="p90Date">Datum zálohy</option>
+                <option value="p90DateMaturity">Datum splatnosti</option>
+                <option value="p90DateInsert">Čas založení zálohy</option>
+                break;
+            case "p91":
+                <option value="p91Date">Datum vyúčtování</option>
+                <option value="p91DateSupply">Datum zdanitelného plnění</option>
+                <option value="p91DateMaturity">Datum splatnosti</option>
+                <option value="p91DateInsert">Čas vygenerování vyúčtování</option>
+                break;
+            case "o23":
+                <option value="o23DateInsert">Čas založení dokumentu</option>
+                break;
+            case "b07":
+                <option value="b07Date">Datum poznámky</option>
+                <option value="b07DateInsert">Čas založení poznámky</option>
+                break;
+
+        }
+    </select>
     }
 
 
@@ -130,9 +168,11 @@
             });
         });
         $("#PeriodField").on("change", function () {
-
-            $.post("/Common/SetUserParam", { key: _userparamkey+"-field-" + _periodprefix, value: $(this).val() }, function (data) {
-                reload();
+            $.post("/Common/SetUserParam", { key: _userparamkey + "-field-" + _periodprefix, value: $(this).val() }, function (data) {
+                if ($("#PeriodValue").val() != "0") {
+                    reload();
+                }
+                
             });
         });
 
@@ -183,13 +223,13 @@
 
     function handle_showhide() {
         if ($("#PeriodValue").val() == "0") {
-            $("#div_periodfield").css("display", "none");
+            //$("#div_periodfield").css("display", "none");
             $("#div_d1helper").css("display", "none");
             $("#div_d2helper").css("display", "none");
             $("#div_cmdRefreshPeriod").css("display", "none");
 
         } else {
-            $("#div_periodfield").css("display", "block");
+            //$("#div_periodfield").css("display", "block");
             $("#div_d1helper").css("display", "block");
             $("#div_d2helper").css("display", "block");
             $("#div_cmdRefreshPeriod").css("display", "block");

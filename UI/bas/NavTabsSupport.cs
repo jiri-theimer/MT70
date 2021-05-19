@@ -21,10 +21,17 @@ namespace UI
             
             switch (prefix)
             {
-                case "j02":
-                    
+                case "j02":                    
                     _tabs.Add(AddTab("Tab1", "tab1", "/j02/Tab1?pid=" + AppendPid2Url(pid)));
+                    var cpj02 = _f.j02PersonBL.LoadSumRow(pid);
 
+                    _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31", true, Badge3(cpj02.p31_Wip_Time_Count, cpj02.p31_Wip_Expense_Count, cpj02.p31_Wip_Fee_Count, "badge bg-warning text-dark")));
+                    _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time", true, Badge2(cpj02.p31_Wip_Time_Count, cpj02.p31_Approved_Time_Count)));
+                    _tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense", true, Badge2(cpj02.p31_Wip_Expense_Count, cpj02.p31_Approved_Expense_Count)));
+                    _tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee", true, Badge2(cpj02.p31_Wip_Fee_Count, cpj02.p31_Approved_Fee_Count)));
+                    _tabs.Add(AddTab("Vyúčtování", "p91Invoice", "/TheGrid/SlaveView?prefix=p91", true, Badge1(cpj02.p91_Count)));
+
+                    _tabs.Add(AddTab("Úkoly", "p56Task", "/TheGrid/SlaveView?prefix=p56", true, Badge2(cpj02.p56_Actual_Count, cpj02.p56_Closed_Count, "badge bg-primary", "badge bg-primary")));
                     _tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
                     _tabs.Add(AddTab("Dokumenty", "o23Doc", "/TheGrid/SlaveView?prefix=o23"));
                     _tabs.Add(AddTab("Outbox", "x40MailQueue", "/TheGrid/SlaveView?prefix=x40"));
@@ -47,13 +54,26 @@ namespace UI
                     _tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23",true, Badge1(cp28.o23_Count)));
                     break;
                 case "p41":
+                    var cp41 = _f.p41ProjectBL.LoadSumRow(pid);
                     _tabs.Add(AddTab("Tab1", "tab1", "/p41/Tab1?pid=" + AppendPid2Url(pid), false));
-                    _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31"));
-                    _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time"));
-                    _tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense"));
-                    _tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee"));
-                    _tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master"));
-                    _tabs.Add(AddTab("Dokumenty", "o23Doc", "/TheGrid/SlaveView?prefix=o23"));
+                    _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31",true, Badge3(cp41.p31_Wip_Time_Count, cp41.p31_Wip_Expense_Count, cp41.p31_Wip_Fee_Count, "badge bg-warning text-dark")));
+                    _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time",true, Badge2(cp41.p31_Wip_Time_Count, cp41.p31_Approved_Time_Count)));
+                    _tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense",true, Badge2(cp41.p31_Wip_Expense_Count, cp41.p31_Approved_Expense_Count)));
+                    _tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee",true, Badge2(cp41.p31_Wip_Fee_Count, cp41.p31_Approved_Fee_Count)));
+                    _tabs.Add(AddTab("Vyúčtování", "p91Invoice", "/TheGrid/SlaveView?prefix=p91", true, Badge1(cp41.p91_Count)));
+                    _tabs.Add(AddTab("Úkoly", "p56Task", "/TheGrid/SlaveView?prefix=p56", true, Badge2(cp41.p56_Actual_Count,cp41.p56_Closed_Count, "badge bg-primary", "badge bg-primary")));
+                    _tabs.Add(AddTab("Poznámky", "b07Comment", "/b07/List?source=master",true, Badge1(cp41.b07_Count)));
+                    _tabs.Add(AddTab("Dokumenty", "o23Doc", "/TheGrid/SlaveView?prefix=o23",true, Badge1(cp41.o23_Count)));
+                    break;
+                case "p56":
+                    var cp56 = _f.p56TaskBL.LoadSumRow(pid);
+                    _tabs.Add(AddTab("Tab1", "tab1", "/p56/Tab1?pid=" + AppendPid2Url(pid), false));
+                    _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31", true, Badge3(cp56.p31_Wip_Time_Count, cp56.p31_Wip_Expense_Count, cp56.p31_Wip_Fee_Count, "badge bg-warning text-dark")));
+                    _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time", true, Badge2(cp56.p31_Wip_Time_Count, cp56.p31_Approved_Time_Count)));
+                    _tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense", true, Badge2(cp56.p31_Wip_Expense_Count, cp56.p31_Approved_Expense_Count)));
+                    _tabs.Add(AddTab("Odměny", "p31fee", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|fee", true, Badge2(cp56.p31_Wip_Fee_Count, cp56.p31_Approved_Fee_Count)));
+                    _tabs.Add(AddTab("Vyúčtování", "p91Invoice", "/TheGrid/SlaveView?prefix=p91", true, Badge1(cp56.p91_Count)));
+                    _tabs.Add(AddTab("Dokumenty", "o23Doc", "/TheGrid/SlaveView?prefix=o23", true, Badge1(cp56.o23_Count)));
                     break;
                 case "o23":
                     _tabs.Add(AddTab("Tab1", "tab1", "/o23/Tab1?pid=" + AppendPid2Url(pid)));
@@ -98,6 +118,10 @@ namespace UI
         private string Badge2(int num1, int num2, string cssclassname1 = "badge bg-warning text-dark", string cssclassname2 = "badge bg-success")
         {
             string s = null;
+            if (cssclassname1== cssclassname2)
+            {
+                return $"<span class='{cssclassname1}'>{num1}+{num2}</span>";
+            }
             if (num1 !=0)
             {
                 s = $"<span class='{cssclassname1}'>{num1}</span>";

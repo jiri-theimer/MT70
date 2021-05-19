@@ -26,7 +26,50 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
-
+            if (this.global_d1 != null && this.global_d2 != null)
+            {
+                DateTime d1 = Convert.ToDateTime(this.global_d1); DateTime d2 = Convert.ToDateTime(this.global_d2);
+                if (d1.Year > 1900 || d2.Year < 3000)
+                {
+                    switch (this.period_field)
+                    {
+                        case "p91DateInsert":
+                            AQ("a.p91DateInsert BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2",this.global_d2_235959);
+                            break;
+                        case "p91DateMaturity":
+                            if (d2 > d1)
+                            {
+                                AQ("a.p91DateMaturity BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", d2);
+                            }
+                            else
+                            {
+                                AQ("a.p91DateMaturity = @d1", "d1", d1);
+                            }
+                            break;
+                        case "p91DateSupply":
+                            if (d2 > d1)
+                            {
+                                AQ("a.p91DateSupply BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", d2);
+                            }
+                            else
+                            {
+                                AQ("a.p91DateSupply = @d1", "d1", d1);
+                            }
+                            break;
+                        case "p91Date":
+                        default:
+                            if (d2 > d1)
+                            {
+                                AQ("a.p91Date BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", d2);
+                            }
+                            else
+                            {
+                                AQ("a.p91Date = @d1", "d1", d1);
+                            }
+                            break;
+                    }
+                }
+            }
             if (this.b02id > 0)
             {
                 AQ("a.b02ID=@b02id", "b02id", this.b02id);

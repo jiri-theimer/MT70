@@ -83,6 +83,10 @@ namespace UI.Menu
             {
                 ret.Add(GRD("p41",true));
             }
+            if (_f.CurrentUser.j04IsMenu_Task)
+            {
+                ret.Add(GRD("p56", true));
+            }
             if (_f.CurrentUser.j04IsMenu_Contact)
             {
                 ret.Add(GRD("p28",true));
@@ -114,7 +118,8 @@ namespace UI.Menu
             ret.Add(new MenuItem() { Name = "Stránka klienta", Url = "/Record/RecPage?prefix=p28", ID = "recpagep28" });
             ret.Add(new MenuItem() { Name = "Stránka vyúčtování", Url = "/Record/RecPage?prefix=p91", ID = "recpagep91" });
             ret.Add(new MenuItem() { Name = "Stránka osoby", Url = "/Record/RecPage?prefix=j02", ID = "recpagej02" });
-            
+            ret.Add(new MenuItem() { Name = "Stránka úkolu", Url = "/Record/RecPage?prefix=p56", ID = "recpagep56" });
+
 
             return ret;
         }

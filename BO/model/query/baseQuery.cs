@@ -91,24 +91,34 @@ namespace BO
         public List<int> o51ids { get; set; }
 
         public string period_field { get; set; }
-        public DateTime? global_d1;
-        private DateTime? _global_d2;
-        public DateTime? global_d2
+        public DateTime? global_d1 { get; set; }
+        public DateTime? global_d2 { get; set; }
+        //private DateTime? _global_d2 { get; set; }
+        //public DateTime? global_d2
+        //{
+        //    get
+        //    {
+        //        return _global_d2;
+        //    }
+        //    set
+        //    {
+        //        if (value != null)
+        //        {
+        //            _global_d2 = BO.BAS.ConvertDateTo235959(Convert.ToDateTime(value));     //převést datum-do na čas 23:59:59
+        //        }
+        //        else
+        //        {
+        //            _global_d2 = value;
+        //        }
+        //    }
+        //}
+
+        public DateTime global_d2_235959
         {
             get
             {
-                return _global_d2;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    _global_d2 = BO.BAS.ConvertDateTo235959(Convert.ToDateTime(value));     //převést datum-do na čas 23:59:59
-                }
-                else
-                {
-                    _global_d2 = value;
-                }
+                if (this.global_d2 == null) return new DateTime(3000, 1, 1);
+                return BO.BAS.ConvertDateTo235959(Convert.ToDateTime(this.global_d2));  //převést datum-do na čas 23:59:59
             }
         }
 

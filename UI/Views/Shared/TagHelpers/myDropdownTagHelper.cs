@@ -67,19 +67,19 @@ namespace UI.Views.Shared.TagHelpers
             var sb = new System.Text.StringBuilder();
 
             var strControlID = this.For.Name.Replace(".", "_").Replace("[", "_").Replace("]", "_");
-            
-            sb.AppendLine(string.Format("<select class='form-select' id='{0}' name='{1}'",strControlID, this.For.Name));
+
+            sb.AppendLine($"<select class='form-select' id='{strControlID}' name='{this.For.Name}'");
             if (this.IsMultiple)
             {
                 sb.Append(" multiple");
             }
             if (this.Event_After_ChangeValue != null)
             {
-                sb.Append(string.Format(" onchange='{0}(this)'", this.Event_After_ChangeValue));
+                sb.Append($" onchange='{this.Event_After_ChangeValue}(this)'");
             }
             if (this.DataValue != null)
             {
-                sb.Append(string.Format(" data-value='{0}'", this.DataValue));
+                sb.Append(" data-value='{this.DataValue}'");
             }
             sb.Append(">");
             if (this.IsFirstEmptyRow)
@@ -109,7 +109,7 @@ namespace UI.Views.Shared.TagHelpers
 
                     if (strGroup != strLastGroup)
                     {
-                        sb.AppendLine(string.Format("<option disabled style='background-color:silver;'>{0}</option>",strGroup));
+                        sb.AppendLine($"<option disabled style='background-color:silver;'>{strGroup}</option>");
 
                     }
                 }
@@ -119,11 +119,11 @@ namespace UI.Views.Shared.TagHelpers
                 
                 if (strSelectedValue == strValue)
                 {
-                    sb.Append(string.Format("<option value='{0}' selected", strValue, strText));
+                    sb.Append($"<option value='{strValue}' selected");
                 }
                 else
                 {
-                    sb.Append(string.Format("<option value='{0}'", strValue, strText));
+                    sb.Append($"<option value='{strValue}'");
                 }
                 if (this.CssField != null && DataSource.Metadata.ElementMetadata.Properties[this.CssField].PropertyGetter(item) != null)
                 {

@@ -25,6 +25,35 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
+            if (this.global_d1 != null && this.global_d2 != null)
+            {
+                DateTime d1 = Convert.ToDateTime(this.global_d1); DateTime d2 = Convert.ToDateTime(this.global_d2);
+                if (d1.Year > 1900 || d2.Year < 3000)
+                {
+                    switch (this.period_field)
+                    {
+                        case "p41DateInsert":
+                            AQ("a.p41DateInsert BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", this.global_d2_235959);
+                            break;
+                        case "p41PlanFrom":
+                            AQ("a.p41PlanFrom BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", this.global_d2_235959);
+                            break;
+                        case "p41PlanUntil":
+                            AQ("a.p41PlanUntil BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", this.global_d2_235959);
+                            break;
+                        case "p91Date":
+                            AQ("a.p41ID IN (select xa.p41ID FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xb.p91Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                        case "p91DateSupply":
+                            AQ("a.p41ID IN (select xa.p41ID FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xb.p91DateSupply BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                        case "p31Date":                            
+                        default:
+                            AQ("a.p41ID IN (select p41ID FROM p31Worksheet WHERE p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                    }
+                }
+            }
             if (this.p42id > 0)
             {
                 AQ("a.p42ID=@p42id)", "p42id", this.p42id);

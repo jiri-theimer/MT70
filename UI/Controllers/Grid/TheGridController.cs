@@ -142,11 +142,12 @@ namespace UI.Controllers
         }
         private bool TestIfPeriodOverGrid(string prefix)
         {
-            if (prefix == "p31" || prefix == "p41" || prefix == "p91" || prefix == "p90" || prefix == "p56")
-            {
-                return true;
-            }
-            return false;
+            return true;    //filtrování období mají všechny entity
+            //if (prefix == "p31" || prefix == "p41" || prefix=="p28" || prefix == "p91" || prefix=="j02" || prefix == "p56" || prefix == "p90")
+            //{
+            //    return true;
+            //}
+            //return false;
         }
         public IActionResult SlaveView(string master_entity,int master_pid, string prefix, int go2pid,string myqueryinline,string caller)    //podřízený subform v rámci MasterView
         {            
@@ -229,13 +230,13 @@ namespace UI.Controllers
             {
                 v.period = new PeriodViewModel() { prefix = v.prefix, IsShowButtonRefresh=true };
                 v.period.InhaleUserPeriodSetting(_pp, Factory, v.prefix, masterentity);
-                
-                
+
+                v.gridinput.query.period_field = v.period.PeriodField;
                 v.gridinput.query.global_d1 = v.period.d1;
                 v.gridinput.query.global_d2 = v.period.d2;                
             }
 
-            if (v.prefix=="p41" || v.prefix=="p28" || v.prefix == "j02" || v.prefix == "p91" || v.prefix=="o23" || v.prefix=="p90")
+            if (v.prefix=="p41" || v.prefix=="p28" || v.prefix == "j02" || v.prefix == "p91" || v.prefix=="o23" || v.prefix=="p90" || v.prefix=="p56")
             {
                 v.IsCanbeMasterView = true;
                 v.dblClickSetting = Factory.CBL.LoadUserParam("grid-" + v.prefix + "-dblclick", "edit");

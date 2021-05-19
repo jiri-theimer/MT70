@@ -102,7 +102,8 @@ namespace BL
 
             AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");            
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
-            
+            AE("p56Task", "Úkoly", "Úkol", "p56Task a INNER JOIN p41Project p41x ON a.p41ID=p41x.p41ID", "a.p56ID DESC");
+
             AE("view_PrimaryAddress", "Adresy", "Adresa", "view_PrimaryAddress a",null);
             
             AE("p31Worksheet", "Úkony", "Úkon", "p31Worksheet a INNER JOIN p41Project p41x ON a.p41ID=p41x.p41ID INNER JOIN p32Activity p32x ON a.p32ID=p32x.p32ID INNER JOIN p34ActivityGroup p34x ON p32x.p34ID=p34x.p34ID LEFT OUTER JOIN p91Invoice p91x ON a.p91ID=p91x.p91ID", "a.p31ID DESC");            
@@ -240,6 +241,12 @@ namespace BL
                 case "p53":
                     lis.Add(getREL("j27Currency", "p53_j27", "Měna", "LEFT OUTER JOIN j27Currency p53_j27 ON a.j27ID=p53_j27.j27ID"));
                     lis.Add(getREL("x15VatRateType", "p53_x15", "Hladina DPH", "LEFT OUTER JOIN x15VatRateType p53_x15 ON a.x15ID=p53_x15.x15ID"));
+                    break;
+                case "p56":
+                    lis.Add(getREL("p41Project", "p56_p41", "Projekt", "INNER JOIN p41Project p56_p41 ON a.p41ID=p56_p41.p41ID"));
+                    lis.Add(getREL("p57TaskType", "p56_p57", "Typ úkolu", "INNER JOIN p57TaskType p56_p57 ON a.p57ID=p56_p57.p57ID"));
+                    lis.Add(getREL("b02WorkflowStatus", "p56_b02", "Workflow stav", "LEFT OUTER JOIN b02WorkflowStatus p56_b02 ON a.b02ID=p56_b02.b02ID"));
+
                     break;
                 case "m62":                    
                     lis.Add(getREL("j27Currency", "m62_j27slave", "Cizí měna", "LEFT OUTER JOIN j27Currency m62_j27slave ON a.j27ID_Slave=m62_j27slave.j27ID"));

@@ -13,6 +13,7 @@ namespace BL
         public BO.p41Project LoadByExternalPID(string externalpid);
         public IEnumerable<BO.p41Project> GetList(BO.myQueryP41 mq);
         public int Save(BO.p41Project rec);
+        public BO.p41ProjectSum LoadSumRow(int pid);
 
 
     }
@@ -169,6 +170,11 @@ namespace BL
             }
 
             return true;
+        }
+
+        public BO.p41ProjectSum LoadSumRow(int pid)
+        {
+            return _db.Load<BO.p41ProjectSum>("EXEC dbo.p41_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
         }
 
     }

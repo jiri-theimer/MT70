@@ -29,6 +29,29 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
+            if (this.global_d1 != null && this.global_d2 != null)
+            {
+                DateTime d1 = Convert.ToDateTime(this.global_d1); DateTime d2 = Convert.ToDateTime(this.global_d2);
+                if (d1.Year > 1900 || d2.Year < 3000)
+                {
+                    switch (this.period_field)
+                    {
+                        case "j02DateInsert":
+                            AQ("a.j02DateInsert BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", this.global_d2_235959);
+                            break;                       
+                        case "p91Date":
+                            AQ("a.j02ID IN (select xa.j02ID FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xb.p91Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                        case "p91DateSupply":
+                            AQ("a.j02ID IN (select xa.j02ID FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xb.p91DateSupply BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                        case "p31Date":
+                        default:
+                            AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                    }
+                }
+            }
             if (this.j02isintraperson != null)
             {
                 AQ("a.j02IsIntraPerson=@isintra", "isintra", this.j02isintraperson);

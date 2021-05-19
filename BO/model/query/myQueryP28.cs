@@ -23,6 +23,30 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
+            if (this.global_d1 != null && this.global_d2 != null)
+            {
+                DateTime d1 = Convert.ToDateTime(this.global_d1); DateTime d2 = Convert.ToDateTime(this.global_d2);
+                if (d1.Year > 1900 || d2.Year < 3000)
+                {
+                    switch (this.period_field)
+                    {
+                        case "p28DateInsert":
+                            AQ("a.p28DateInsert BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", this.global_d2_235959);
+                            break;
+                        
+                        case "p91Date":
+                            AQ("(a.p28ID IN (select p28ID FROM p91Invoice WHERE p91Date BETWEEN @d1 AND @d2) OR a.p28ID IN (select xc.p28ID_Client FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID INNER JOIN p41Project xc ON xa.p41ID=xc.p41ID WHERE xc.p28ID_Client IS NOT NULL AND xb.p91Date BETWEEN @d1 AND @d2))", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                        case "p91DateSupply":
+                            AQ("(a.p28ID IN (select p28ID FROM p91Invoice WHERE p91DateSupply BETWEEN @d1 AND @d2) OR a.p28ID IN (select xc.p28ID_Client FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID INNER JOIN p41Project xc ON xa.p41ID=xc.p41ID WHERE xc.p28ID_Client IS NOT NULL AND xb.p91DateSupply BETWEEN @d1 AND @d2))", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                        case "p31Date":
+                        default:
+                            AQ("a.p28ID IN (select xb.p28ID_Client FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xb.p28ID_Client IS NOT NULL AND xa.p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            break;
+                    }
+                }
+            }
             if (this.o51ids != null)
             {
                 AQ(" AND a.p28ID IN (SELECT o52RecordPID FROM o52TagBinding WHERE x29ID=328 AND o51ID IN (" + String.Join(",", this.o51ids) + "))", null, null);

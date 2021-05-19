@@ -51,6 +51,7 @@ namespace BL
         private Ip34ActivityGroupBL _p34;
         private Ip41ProjectBL _p41;
         private Ip42ProjectTypeBL _p42;
+        private Ip56TaskBL _p56;
         private Ip29ContactTypeBL _p29;
         private Ip35UnitBL _p35;
         private Ip36LockPeriodBL _p36;
@@ -427,6 +428,14 @@ namespace BL
             {
                 if (_p42 == null) _p42 = new p42ProjectTypeBL(this);
                 return _p42;
+            }
+        }
+        public Ip56TaskBL p56TaskBL
+        {
+            get
+            {
+                if (_p56 == null) _p56 = new p56TaskBL(this);
+                return _p56;
             }
         }
         public Ip29ContactTypeBL p29ContactTypeBL

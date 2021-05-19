@@ -8,25 +8,70 @@
     }
     string _PeriodFieldAlias = null;
     string _PeriodAlias = null;
-    switch (Model.PeriodField)
+    if (Model.PeriodValue > 0)
     {
-        case "p31Date":
-            _PeriodFieldAlias = _f.tra("Datum úkonu");break;
-        case "p91Date":
-        case "p90Date":
-            _PeriodFieldAlias = _f.tra("Datum vystavení vyúčtování"); break;
-        case "p91DateSupply":
-            _PeriodFieldAlias = _f.tra("DUZP vyúčtování"); break;
-        case "p31DateInsert":
-        case "p91DateInsert":
-        case "p90DateInsert":
-        case "p41DateInsert":
-        case "p28DateInsert":
-            _PeriodFieldAlias = _f.tra("Čas založení záznamu"); break;
-        default:
-            _PeriodFieldAlias = _f.tra("Časové období");
-            break;
+        switch (Model.PeriodField)
+        {
+            case "p31Date":
+                _PeriodFieldAlias = _f.tra("Datum úkonu"); break;
+            case "p91Date":
+                _PeriodFieldAlias = _f.tra("Datum vyúčtování"); break;
+            case "p91DateMaturity":
+            case "p90DateMaturity":
+                _PeriodFieldAlias = _f.tra("Datum splatnosti"); break;
+            case "p90Date":
+                _PeriodFieldAlias = _f.tra("Datum zálohy"); break;
+            case "p91DateSupply":
+                _PeriodFieldAlias = _f.tra("DUZP vyúčtování"); break;
+            case "p31DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas založení úkonu"); break;
+            case "p91DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas vygenerování vyúčtování"); break;
+            case "p90DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas založení zálohy"); break;
+            case "p41DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas založení projektu"); break;
+            case "p28DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas založení klienta"); break;
+            case "j02DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas založení osobního profilu"); break;
+            case "o23DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas založení dokumentu"); break;
+            case "b07DateInsert":
+                _PeriodFieldAlias = _f.tra("Čas založení poznámky"); break;
+            case "p41PlanFrom":
+                _PeriodFieldAlias = _f.tra("Plán zahájení"); break;
+            case "p41PlanUntil":
+                _PeriodFieldAlias = _f.tra("Plán dokončení"); break;
+            case "p56PlanFrom":
+                _PeriodFieldAlias = _f.tra("Plán zahájení úkolu"); break;
+            case "p56PlanUntil":
+                _PeriodFieldAlias = _f.tra("Plán dokončení úkolu"); break;
+            case "b07Date":
+                _PeriodFieldAlias = _f.tra("Datum poznámky"); break;
+            default:
+                switch (Model.prefix)
+                {
+                    case "p91":
+                        _PeriodFieldAlias = _f.tra("Datum vyúčtování"); break;
+                    case "p90":
+                        _PeriodFieldAlias = _f.tra("Datum zálohy"); break;
+                    case "b07":
+                        _PeriodFieldAlias = _f.tra("Datum poznámky"); break;
+                    case "o23":
+                        _PeriodFieldAlias = _f.tra("Čas založení dokumentu"); break;
+                    default:
+                        _PeriodFieldAlias = _f.tra("Datum úkonu"); break;
+                }
+
+                break;
+        }
     }
+    else
+    {
+        _PeriodFieldAlias = _f.tra("Časové období");
+    }
+
     if (Model.PeriodValue > 1)
     {
         BO.ThePeriod per = null;
@@ -54,14 +99,14 @@
     }
 
 
-        }
+}
 
-        @addTagHelper *, UI
+@addTagHelper *, UI
 
-        <button type="button" class="btn btn-light dropdown-toggle" id="cmdPeriodMore">
-            <span id="span1">@_PeriodFieldAlias</span>
-            <span id="span2">@(_PeriodAlias)</span>
-        </button>
+<button type="button" class="btn btn-light dropdown-toggle" id="cmdPeriodMore">
+    <span id="span1">@_PeriodFieldAlias</span>
+    <span id="span2">@(_PeriodAlias)</span>
+</button>
 
 
 
@@ -90,8 +135,8 @@
                 $("#reportViewer1").css("top", _reportViewer1_top_uschova);
             }
         }
-        
-        
+
+
         if ($("#divPeriodMore").css("display") == "block" && $("#divPeriodMore").html().length < 10) {
             var prefix = "@(Model.prefix)";
             var masterentity = "@(Model.masterentity)";
