@@ -23,7 +23,7 @@ namespace UI.Controllers
                 v.UserParamKey = userparamkey;
             }
 
-            v.InhaleUserPeriodSetting(_pp,Factory, v.prefix, v.masterentity);
+            v.InhaleUserPeriodSetting(_pp,Factory);
 
             
             return View(v);

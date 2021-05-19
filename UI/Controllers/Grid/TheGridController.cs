@@ -70,7 +70,7 @@ namespace UI.Controllers
             {
                 return this.StopPage(false, "Nemáte oprávnění pro tento GRID přehled.");
             }
-            if (go2pid == 0 && (prefix=="p28" || prefix=="p91" || prefix=="p41" || prefix=="j02" || prefix == "o23"))
+            if (go2pid == 0 && (prefix=="p28" || prefix=="p91" || prefix=="p41" || prefix=="j02" || prefix == "o23" || prefix=="p56" || prefix=="p90"))
             {
                 go2pid = LoadLastUsedPid(prefix);
             }
@@ -225,12 +225,21 @@ namespace UI.Controllers
             
            
             
-
+            
             if (isperiodovergrid)
             {
-                v.period = new PeriodViewModel() { prefix = v.prefix, IsShowButtonRefresh=true };
-                v.period.InhaleUserPeriodSetting(_pp, Factory, v.prefix, masterentity);
-
+                v.period = new PeriodViewModel() { prefix = v.prefix, IsShowButtonRefresh=true,masterentity=masterentity };
+                if (string.IsNullOrEmpty(masterentity))
+                {
+                    v.period.UserParamKey = $"grid-period-{v.period.prefix}";
+                }
+                else
+                {
+                    v.period.UserParamKey = $"grid-period-{v.period.prefix}-{v.period.masterentity}";
+                }
+                
+                v.period.InhaleUserPeriodSetting(_pp, Factory);
+                
                 v.gridinput.query.period_field = v.period.PeriodField;
                 v.gridinput.query.global_d1 = v.period.d1;
                 v.gridinput.query.global_d2 = v.period.d2;                

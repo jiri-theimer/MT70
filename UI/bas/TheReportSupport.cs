@@ -18,7 +18,7 @@ namespace UI
             }
 
             var per = new UI.Models.PeriodViewModel() { UserParamKey = "report-period" };
-            per.InhaleUserPeriodSetting(pp, f, null, null);
+            per.InhaleUserPeriodSetting(pp, f);
             
             uriReportSource.Parameters.Add("datfrom", per.d1);
             uriReportSource.Parameters.Add("datuntil", per.d2);

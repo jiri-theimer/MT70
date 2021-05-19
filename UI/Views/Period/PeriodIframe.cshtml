@@ -138,9 +138,7 @@
     <a href="javascript:customperiods()">@_f.tra("Přidat/Upravit vlastní časová období")</a>
 </div>
 
-<script type="text/javascript">
-    var _periodprefix = "@(Model.prefix)";
-    var _periodmasterentity = "@(Model.masterentity)";
+<script type="text/javascript">        
     var _userparamkey = "@(Model.UserParamKey)";
 
     $(document).ready(function () {
@@ -163,12 +161,12 @@
                 handle_showhide();
                 return;
             }
-            $.post("/Common/SetUserParam", { key: _userparamkey+"-value-" + _periodprefix, value: $(this).val() }, function (data) {
+            $.post("/Common/SetUserParam", { key: _userparamkey+"-value", value: $(this).val() }, function (data) {
                 reload();
             });
         });
         $("#PeriodField").on("change", function () {
-            $.post("/Common/SetUserParam", { key: _userparamkey + "-field-" + _periodprefix, value: $(this).val() }, function (data) {
+            $.post("/Common/SetUserParam", { key: _userparamkey + "-field", value: $(this).val() }, function (data) {
                 if ($("#PeriodValue").val() != "0") {
                     reload();
                 }
@@ -177,7 +175,7 @@
         });
 
         $("#cmdClear").on("click", function () {
-            $.post("/Common/SetUserParam", { key: _userparamkey+"-value-" + _periodprefix, value: "0" }, function (data) {
+            $.post("/Common/SetUserParam", { key: _userparamkey+"-value", value: "0" }, function (data) {
                 reload();
             });
         });
@@ -192,11 +190,11 @@
             }
             var k = [];
             var v = [];
-            k.push(_userparamkey+"-value-" + _periodprefix);
+            k.push(_userparamkey+"-value");
             v.push($("#PeriodValue").val());
-            k.push(_userparamkey+"-d1-" + _periodprefix);
+            k.push(_userparamkey+"-d1");
             v.push($("#d1helper").val());
-            k.push(_userparamkey+"-d2-" + _periodprefix);
+            k.push(_userparamkey+"-d2");
             v.push($("#d2helper").val());
 
             $.post("/Common/SetUserParams", { keys: k, values: v }, function (data) {

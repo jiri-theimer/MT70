@@ -130,7 +130,7 @@ namespace UI.Controllers
                         {
                             v.IsPeriodFilter = true;
                             v.PeriodFilter = new PeriodViewModel() { UserParamKey = "report-period" };
-                            v.PeriodFilter.InhaleUserPeriodSetting(_pp, Factory, null, null);
+                            v.PeriodFilter.InhaleUserPeriodSetting(_pp, Factory);
                             v.PeriodFilter.IsShowButtonRefresh = true;
                             
                             
@@ -287,7 +287,7 @@ namespace UI.Controllers
                             v.IsPeriodFilter = true;
                             v.PeriodFilter = new PeriodViewModel() { UserParamKey = "report-period" };
                             v.PeriodFilter.IsShowButtonRefresh = true;
-                            v.PeriodFilter.InhaleUserPeriodSetting(_pp, Factory, null, null);
+                            v.PeriodFilter.InhaleUserPeriodSetting(_pp, Factory);
 
                         }
                         else

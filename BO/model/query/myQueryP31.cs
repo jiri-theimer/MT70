@@ -14,6 +14,7 @@ namespace BO
         public int p41id { get; set; }
         public int p32id { get; set; }
         public int p91id { get; set; }
+        public int p56id { get; set; }
         public int p70id { get; set; }
         public bool? iswip { get;set; }
         public bool? isinvoiced { get; set; }
@@ -80,6 +81,10 @@ namespace BO
             if (this.p32id > 0)
             {
                 AQ("a.p32ID=@p32id", "p32id", this.p32id);
+            }
+            if (this.p56id > 0)
+            {
+                AQ("a.p56ID=@p56id", "p56id", this.p56id);
             }
             if (this.p70id > 0)
             {
