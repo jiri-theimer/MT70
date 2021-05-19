@@ -266,7 +266,7 @@ namespace UI.Controllers
         }
         public void Handle_AdminProjects(string prefix)
         {            
-            AMI("Úrovně projektů", aurl("projects","p07"));
+            AMI("Úrovně projektů", "javascript:_window_open('/p07/ProjectLevels')");
             DIV();
             AMI("Typy projektů", aurl("projects","p42"));
             AMI("Role osob v projektech", aurl("projects","x67","myqueryinline=x29id|int|141"));

@@ -41,11 +41,11 @@
         @_f.tra("ÚVOD")
         <span id="TheGridRows" class="badge bg-primary"></span>
     </div>
-  
+
     <div class="nonmobile ml-2 col-auto">
         <a class="btn btn-light" href="/Admin/Index" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
     </div>
-   
+
 </div>
 
 <div id="layout_sidebar" class="cm_recpage"></div>
@@ -60,110 +60,151 @@
         </div>
         <div class="col-auto">
             <button id="cmdLogo" type="button" class="btn btn-primary"><span class="k-icon k-i-image"></span> @_f.tra("Nahrát grafické logo")</button>
-            
+
+        </div>
+      
+    </div>
+
+    <div class="row">
+        <div class="col-auto">
+            <div class="card">
+                <div class="card-header">
+
+                    <a href="javascript:_window_open('/x35/x35Params')">
+                        @_f.tra("Globální parametry")
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <th style="width:200px;"></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Verze aplikace"):
+                            </td>
+                            <td>
+                                @(_f.App.AppVersion)
+                                <br />
+                                @_f.App.AppBuild
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Veřejná URL adresa"):
+                            </td>
+                            <td>
+                                @_f.x35GlobalParamBL.LoadParam("AppHost")
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Název databáze"):
+                            </td>
+                            <td>
+                                @_f.x35GlobalParamBL.LoadParam("AppName")
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Zaokrouhlovat vykázané hodiny"):
+                            </td>
+                            <td>
+                                @_f.x35GlobalParamBL.LoadParam("Round2Minutes")
+                            </td>
+                            <td>
+                                @_f.tra("Minuty nahoru")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Povolit uživatelům obnovu zapomenutého hesla"):
+                            </td>
+                            <td>
+                                @_f.x35GlobalParamBL.LoadParam("IsAllowPasswordRecovery")
+                            </td>
+                            <td>
+                                @_f.tra("Tlačítko [Obnovit zapomenuté heslo] na přihlašovací stránce")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Domácí měna"):
+                            </td>
+                            <td>
+                                @_f.x35GlobalParamBL.LoadParam("j27ID_Domestic")
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Domácí stát"):
+                            </td>
+                            <td>
+                                @_f.x35GlobalParamBL.LoadParam("COUNTRY_CODE")
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @_f.tra("Čas posledního spuštění robota"):
+                            </td>
+                            <td>
+                                @_f.x35GlobalParamBL.LoadParam("robot_cache_lastrequest")
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="col-auto">
             <iframe frameborder="1" src="/FileUpload/LogoFile?logofilename=@(_f.x35GlobalParamBL.CompanyLogoFile())"></iframe>
-            
+
         </div>
     </div>
-
-    <div class="card" >
+    
+    <p></p>
+    <div class="card" style="max-width:500px">
         <div class="card-header">
-            @_f.tra("Globální parametry")
+            <a href="javascript:_window_open('/p07/ProjectLevels')">
+                @_f.tra("Stromové úrovně projektů")
+            </a>
         </div>
         <div class="card-body">
-            <table class="table table-sm">
-                <tr>
-                    <th style="width:200px;"></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Verze aplikace"):
-                    </td>
-                    <td>
-                        @(_f.App.AppVersion)
-                        <br />
-                        @_f.App.AppBuild
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Veřejná URL adresa"):
-                    </td>
-                    <td>
-                        @_f.x35GlobalParamBL.LoadParam("AppHost")
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Název databáze"):
-                    </td>
-                    <td>
-                        @_f.x35GlobalParamBL.LoadParam("AppName")
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Zaokrouhlovat vykázané hodiny"):
-                    </td>
-                    <td>
-                        @_f.x35GlobalParamBL.LoadParam("Round2Minutes")
-                    </td>
-                    <td>
-                        @_f.tra("Minuty nahoru")
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Povolit uživatelům obnovu zapomenutého hesla"):
-                    </td>
-                    <td>
-                        @_f.x35GlobalParamBL.LoadParam("IsAllowPasswordRecovery")
-                    </td>
-                    <td>
-                        @_f.tra("Tlačítko [Obnovit zapomenuté heslo] na přihlašovací stránce")
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Domácí měna"):
-                    </td>
-                    <td>
-                        @_f.x35GlobalParamBL.LoadParam("j27ID_Domestic")
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Domácí stát"):
-                    </td>
-                    <td>
-                        @_f.x35GlobalParamBL.LoadParam("COUNTRY_CODE")
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @_f.tra("Čas posledního spuštění robota"):
-                    </td>
-                    <td>
-                        @_f.x35GlobalParamBL.LoadParam("robot_cache_lastrequest")
-                    </td>
-                    <td>
-                    </td>
-                </tr>
+            <table class="table table-hover">
+                @foreach (var c in Model.lisP07.OrderBy(p=>p.p07Level))
+                {
+                    <tr>
+                        <td style="padding-left:@(c.p07Level*10)px;">
+                           
+                            #@(c.p07Level)
+                        </td>
+                        <td>
+                            @if (c.isclosed)
+                            {
+                                <code>@_f.tra("Nevyužívat")</code>
+                            }
+                            else
+                            {
+                                @(c.p07NameSingular)
+                            }
 
+                        </td>
+                    </tr>
+                }
             </table>
         </div>
     </div>
@@ -202,12 +243,12 @@
             </table>
         </div>
     </div>
-    
+
 </div>
 
 
 <script type="text/javascript">
-    
+
     $(document).ready(function () {
 
         $.post("/Menu/AdminMenu", function (data) {
@@ -232,7 +273,7 @@
         $("#layout_sidebar").css("height", h_vertical + "px");
 
         $("#cmdGlobalParams").on("click", function () {
-            _window_open("/x35/x35Params",1);
+            _window_open("/x35/x35Params", 1);
         });
         $("#cmdLogo").on("click", function () {
             _window_open("/Admin/CompanyLogo", 1);
@@ -240,7 +281,7 @@
     });
 
 
-   
+
 
 </script>
 

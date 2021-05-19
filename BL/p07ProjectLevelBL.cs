@@ -9,6 +9,7 @@ namespace BL
     public interface Ip07ProjectLevelBL
     {
         public BO.p07ProjectLevel Load(int pid);
+        public BO.p07ProjectLevel LoadByLevel(int levelindex);
         public IEnumerable<BO.p07ProjectLevel> GetList(BO.myQuery mq);
         public int Save(BO.p07ProjectLevel rec);
 
@@ -32,6 +33,10 @@ namespace BL
         public BO.p07ProjectLevel Load(int pid)
         {
             return _db.Load<BO.p07ProjectLevel>(GetSQL1(" WHERE a.p07ID=@pid"), new { pid = pid });
+        }
+        public BO.p07ProjectLevel LoadByLevel(int levelindex)
+        {
+            return _db.Load<BO.p07ProjectLevel>(GetSQL1(" WHERE a.p07Level=@level"), new { level = levelindex });
         }
         public IEnumerable<BO.p07ProjectLevel> GetList(BO.myQuery mq)
         {

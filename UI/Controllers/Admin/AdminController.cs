@@ -120,6 +120,7 @@ namespace UI.Controllers
             
             var v = new AdminHome();
             v.lisP87 = Factory.FBL.GetListP87().ToList();
+            v.lisP07 = Factory.p07ProjectLevelBL.GetList(new BO.myQuery("p07") { IsRecordValid = null });
             return View(v);
         }
         public IActionResult Page(string area,string prefix, int go2pid, string myqueryinline)

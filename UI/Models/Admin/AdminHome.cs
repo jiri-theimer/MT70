@@ -8,5 +8,6 @@ namespace UI.Models
     public class AdminHome: BaseViewModel
     {
         public List<BO.p87BillingLanguage> lisP87 { get; set; }
+        public IEnumerable<BO.p07ProjectLevel> lisP07 { get; set; }
     }
 }

@@ -98,83 +98,104 @@
             </div>
         }
 
-        <table class="table table-sm table-hover">
-            <tr>
-                <th></th>
-                <th>
-                    @_f.tra("Plán")
-                </th>
-                <th>
-                    @_f.tra("Vykázáno")
-                </th>
-                <th>
-                    @_f.tra("Rozdíl")
-                </th>
-                <th>
-                    @_f.tra("Vyúčtováno")
-                </th>
-                <th>
+    <table class="table table-sm table-hover">
+        <tr>
+            <th></th>
+            <th>
+                @_f.tra("Plán")
+            </th>
+            <th>
+                @_f.tra("Vykázáno")
+            </th>
+            <th>
+                @_f.tra("Rozdíl")
+            </th>
+            <th>
+                @_f.tra("Vyúčtováno")
+            </th>
+            <th>
 
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    @_f.tra("Hodiny"):
-                </td>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @_f.tra("Hodiny Fa"):
+            </td>
 
-                <td class="numcell">
-                    @(BO.BAS.Num2StringNull( Model.Rec.p56Plan_Hours))
-                </td>
-                <td class="numcell">
-                </td>
-                <td class="numcell">
-                </td>
-                <td class="numcell">
-                </td>
-                <td>
-                    @if (Model.Rec.p56IsPlan_Hours_Ceiling)
-                    {
-                        @_f.tra("Zákaz překročit")
-                    }
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @_f.tra("Výdaje"):
-                </td>
+            <td class="numcell">
+                @(BO.BAS.Num2StringNull( Model.Rec.p56Plan_Hours))
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td>
+                @if (Model.Rec.p56IsPlan_Hours_Ceiling)
+                {
+                    @_f.tra("Zákaz překročit")
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @_f.tra("Hodiny NeFa"):
+            </td>
 
-                <td class="numcell">
-                    @(BO.BAS.Num2StringNull( Model.Rec.p56Plan_Expenses))
-                </td>
-                <td class="numcell">
-                </td>
-                <td class="numcell">
-                </td>
-                <td class="numcell">
-                </td>
-                <td>
-                    @if (Model.Rec.p56IsPlan_Expenses_Ceiling)
-                    {
-                        @_f.tra("Zákaz překročit")
-                    }
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @_f.tra("Pevné odměny"):
-                </td>
-                <td class="numcell">
-                </td>
-                <td class="numcell">
-                </td>
-                <td class="numcell">
-                </td>
-                <td class="numcell">
-                </td>
-                <td>
-                </td>
-            </tr>
-        </table>
+            <td class="numcell">
+                @(BO.BAS.Num2StringNull( Model.Rec.p56Plan_Hours))
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td>
+                @if (Model.Rec.p56IsPlan_Hours_Ceiling)
+                {
+                    @_f.tra("Zákaz překročit")
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @_f.tra("Výdaje"):
+            </td>
+
+            <td class="numcell">
+                @(BO.BAS.Num2StringNull( Model.Rec.p56Plan_Expenses))
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td>
+                @if (Model.Rec.p56IsPlan_Expenses_Ceiling)
+                {
+                    @_f.tra("Zákaz překročit")
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @_f.tra("Pevné odměny"):
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td class="numcell">
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
 
 
 
