@@ -91,7 +91,7 @@
 
         function reload() {
             //_showloading();
-            location.replace("/TheGrid/FlatView?prefix=" + _pageprefix);
+            _redirect("/TheGrid/FlatView?prefix=" + _pageprefix);
 
         }
 
@@ -105,18 +105,18 @@
         }
 
         function report_nocontext(x31id) {
-            _window_open(_ep("/x31/ReportNoContext?x31id=" + x31id), 2);
+            _window_open("/x31/ReportNoContext?x31id=" + x31id, 2);
         }
 
 
         function reload() {
             //_showloading();
-            location.replace(_ep("/TheGrid/FlatView?prefix=" + _pageprefix));
+            _redirect("/TheGrid/FlatView?prefix=" + _pageprefix);
         }
 
         function switch_to_masterview() {    //zapnout spodní panel
             $.post(_ep("/Common/SetUserParam"), { key: "grid-" + _pageprefix + "-show11", value: "1" }, function (data) {
-                location.replace(_ep("/TheGrid/MasterView?prefix=" + _pageprefix));
+                _redirect("/TheGrid/MasterView?prefix=" + _pageprefix);
 
             });
 
@@ -130,7 +130,7 @@
         var s = "@Model.dblClickSetting";
 
         if (s == "recpage") {
-            location.replace(_ep("/" + _pageprefix + "/RecPage?pid=" + pid));
+            _redirect("/" + _pageprefix + "/RecPage?pid=" + pid);
         } else {
             _edit(_pageprefix, pid);
         }

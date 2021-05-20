@@ -100,7 +100,7 @@
             var url = "/TheGrid/SlaveView?prefix=@Model.prefix&master_entity=@Model.gridinput.master_entity&master_pid=@Model.master_pid";
             url += "&myqueryinline=@Model.myqueryinline";
 
-            location.replace(url);
+            _redirect(url);
 
         }
 
@@ -120,12 +120,12 @@
 
             var strDblSetting = "@Model.dblClickSetting";
             if (strDblSetting == "recpage") {
-                location.replace(_ep("/" + _pageprefix + "/RecPage?pid=" + pid));
+                _redirect("/" + _pageprefix + "/RecPage?pid=" + pid);
                 return;
             }
             switch (_pagemasterprefix) {
                 case "p91":
-                    _window_open(_ep("/p91oper/p31edit?p31id=" + pid));
+                    _window_open("/p91oper/p31edit?p31id=" + pid);
                     break;
                 default:
                     _edit(_pageprefix, pid);
@@ -141,7 +141,7 @@
                 return;
             }
 
-            _window_open(_ep("/p91oper/p31operbatch?baseoper=" + baseoper + "&p31ids=" + pids + "&p91id=" + _tg_master_pid));
+            _window_open("/p91oper/p31operbatch?baseoper=" + baseoper + "&p31ids=" + pids + "&p91id=" + _tg_master_pid);
 
         }
 

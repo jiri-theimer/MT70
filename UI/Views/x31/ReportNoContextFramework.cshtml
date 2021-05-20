@@ -150,7 +150,7 @@
 
 
             @:$("#cmdRecord").on("click", function() {
-                @:_window_open(_ep("/x31/Record?pid=@Model.SelectedReport.pid"), 1);
+                @:_window_open("/x31/Record?pid=@Model.SelectedReport.pid", 1);
             @:});
         }
         _mainmenu_highlight_current("cmdReports");
@@ -178,11 +178,11 @@
         $("#cmdSendByMail").css("display", "block");
 
         $("#cmdRecord").on("click", function () {
-            _window_open(_ep("/x31/Record?pid=" + x31id), 1);
+            _window_open("/x31/Record?pid=" + x31id, 1);
         });
 
         $("#cmdSendByMail").on("click", function () {
-            _window_open(_ep("/Mail/SendMail?x31id=" + x31id), 1);
+            _window_open("/Mail/SendMail?x31id=" + x31id, 1);
         });
     }
 

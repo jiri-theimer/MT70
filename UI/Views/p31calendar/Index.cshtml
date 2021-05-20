@@ -194,7 +194,7 @@ else
             $(".dc").dblclick(function () {
                 var j02id = "@Model.j02ID";
                         var d = $(this).attr("data-d");
-                        _window_open(_ep("/p31/Record?j02id=" + j02id + "&d=" + d));
+                        _window_open("/p31/Record?j02id=" + j02id + "&d=" + d);
                     });
 
 
@@ -265,17 +265,17 @@ else
             } else {
                 url = url + "&cv=" + _cv;
             }
-            location.replace(_ep(url));
+            _redirect(url);
         }
 
         function re(ctl, j02id, d) {
-            var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&d=" + d);
+            var url = "/p31dayline/Zoom?j02id=" + j02id + "&d=" + d;
             zoom_open(ctl, url);
 
     }
 
     function zoom_allmonth(ctl) {
-        var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)");
+        var url = "/p31dayline/Zoom?j02id=@(Model.j02ID)&m=@(Model.m0)&y=@(Model.y0)";
         zoom_open(ctl, url);
     }
     function zoom_alldays(ctl) {
@@ -283,7 +283,7 @@ else
             zoom_allmonth(ctl);
             return;
         }
-        var url = _ep("/p31dayline/Zoom?j02id=@(Model.j02ID)&d1=@(BO.BAS.ObjectDate2String(Model.d1,"dd.MM.yyyy"))&d2=@(BO.BAS.ObjectDate2String(Model.d2,"dd.MM.yyyy"))");
+        var url = "/p31dayline/Zoom?j02id=@(Model.j02ID)&d1=@(BO.BAS.ObjectDate2String(Model.d1,"dd.MM.yyyy"))&d2=@(BO.BAS.ObjectDate2String(Model.d2,"dd.MM.yyyy"))";
         zoom_open(ctl, url);
     }
     function zoom_stat(ctl, p32isbillable, iswip, p70id, isapproved_and_wait4invoice,p28id,p41id,p32id) {
@@ -315,7 +315,7 @@ else
             url = url + "&p32id=" + p32id;
         }
 
-        zoom_open(ctl, _ep(url));
+        zoom_open(ctl, url);
     }
 
         function month_prev() {
@@ -366,6 +366,7 @@ else
             zoom_close();
             return;
         }
+        url = _ep(url);
         _lasturl = url;
         _lastctl = ctl;
 

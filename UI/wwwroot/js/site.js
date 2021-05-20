@@ -26,6 +26,9 @@ function _ep(url)   //vrací relativní cestu z url výrazu
     }
     return _relpath + url;
 }
+function _redirect(url) {
+    location.replace(_ep(url));
+}
 
 function _format_number(val) {
     if (val === null) {
@@ -62,6 +65,10 @@ function _format_date(d, is_include_time) {
 function _edit(controller, pid, header) {
     var url = "";
     var winflag = 1;
+    if (controller.substring(0, 2) === "le") {
+        controller = "p41";
+    }
+
     switch (controller) {
         case "x40":
             url = "/Mail/Record?pid=" + pid;
@@ -79,17 +86,17 @@ function _edit(controller, pid, header) {
         winflag = 2;
     }
    
-    _window_open(_ep(url), winflag, header);
+    _window_open(url, winflag, header);
 
 }
 
 function _clone(controller, pid, header) {
-    _window_open(_ep("/" + controller + "/Record?isclone=true&pid=" + pid), 1, header);
+    _window_open("/" + controller + "/Record?isclone=true&pid=" + pid, 1, header);
 
 }
 
 function _edit_code(prefix, pid) {
-    _window_open(_ep("/Record/RecordCode?prefix=" + prefix + "&pid=" + pid, 1));
+    _window_open("/Record/RecordCode?prefix=" + prefix + "&pid=" + pid, 1);
 }
 
 function _get_request_param(name) {

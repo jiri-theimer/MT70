@@ -113,7 +113,7 @@
             if (dic != "") {
                 $(this).text("Processing...");
                 $(this).attr("disabled", true);
-                location.replace(_ep("/p28/VatInfo?dic=" + dic));
+                _redirect("/p28/VatInfo?dic=" + dic);
             }
             
 

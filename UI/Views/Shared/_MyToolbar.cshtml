@@ -136,7 +136,7 @@
         var strEntity = "@(Model.RecordEntity)";
         var intPID = @(Model.RecordPID);
         if (strEntity == "p91") {
-            location.replace("/p91oper/p91delete?p91id=" + intPID);
+            _redirect("/p91oper/p91delete?p91id=" + intPID);
             return;
         }
         if (confirm("@_f.tra("Opravdu chcete nenávratně odstranit tento záznam?")")) {

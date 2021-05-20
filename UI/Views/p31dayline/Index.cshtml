@@ -394,7 +394,7 @@
         $(".dc").dblclick(function () {
             var j02id = $(this).attr("data-j02id");
             var d = $(this).attr("data-d");
-            _window_open(_ep("/p31/Record?j02id="+j02id+"&d="+d));
+            _window_open("/p31/Record?j02id="+j02id+"&d="+d);
         });
 
 
@@ -444,11 +444,11 @@
 
     function _save_param_and_reload(url, mykey, myval) {
         if (mykey == undefined || myval == undefined) {
-            location.replace(url);
+            _redirect(url);
             return;
         }
         $.post("/Common/SetUserParam", { key: mykey, value: myval }, function (data) {
-            location.replace(url);
+            _redirect(url);
         });
 
         alert("save_param_and_reload: ERROR");
@@ -477,7 +477,7 @@
 
     function reload() {
         var d = $("#d0helper").val();
-        location.replace(_ep("/p31dayline/Index?d=" + d));
+        _redirect("/p31dayline/Index?d=" + d);
     }
 
     function reload_setting(opg) {

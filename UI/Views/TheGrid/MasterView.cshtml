@@ -215,7 +215,7 @@
 
         function reload() {
 
-            location.replace(_ep("/TheGrid/MasterView?prefix=" + _pageprefix));
+            _redirect("/TheGrid/MasterView?prefix=" + _pageprefix);
         }
 
 
@@ -232,7 +232,7 @@
 
     function switch_to_flatview() {    //vypnout spodní panel
             $.post("/Common/SetUserParam", { key: "grid-" + _pageprefix + "-show11", value: "0" }, function (data) {
-                location.replace(_ep("/TheGrid/FlatView?prefix=" + _pageprefix));
+                _redirect("/TheGrid/FlatView?prefix=" + _pageprefix);
             });
 
     }
@@ -242,7 +242,7 @@
         var s = "@Model.dblClickSetting";
 
         if (s == "recpage") {
-            location.replace(_ep("/" + _pageprefix + "/RecPage?pid=" + pid));
+            _redirect("/" + _pageprefix + "/RecPage?pid=" + pid);
         } else {
             _edit(_pageprefix, pid);
         }

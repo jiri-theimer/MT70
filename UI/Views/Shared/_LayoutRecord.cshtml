@@ -243,6 +243,7 @@
             $(fra).css("height", h - 30 - 10);    //10 padding dole, 30 div header
 
             if (url !== "") {
+                url = _ep(url);
                 $(fra).attr("src", url);
             }
 

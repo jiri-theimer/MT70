@@ -207,11 +207,11 @@
     }
 
     function reload() {
-        location.replace(_ep("/Record/RecPage?prefix="+_prefix+"&pid=@Model.pid"));
+        _redirect("/Record/RecPage?prefix="+_prefix+"&pid=@Model.pid");
     }
 
     function on_search(pid) {
-        location.replace(_ep("/Record/RecPage?prefix="+_prefix+"&pid=" + pid));
+        _redirect("/Record/RecPage?prefix="+_prefix+"&pid=" + pid);
     }
 
     function save_page_setting(key,val) {

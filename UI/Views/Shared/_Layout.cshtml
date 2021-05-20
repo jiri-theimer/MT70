@@ -208,7 +208,7 @@
 
                     if (!response.responseText || 0 === response.responseText.length) {
                         alert("@_f.tra("Z důvodu neaktivity pravděpodobně vypršel čas přihlášení v systému. Musíte se znovu přihlásit.")");
-                        location.replace("/Login/UserLogin");
+                        _redirect("/Login/UserLogin");
                     }
 
                 });
@@ -238,7 +238,7 @@
                 }
 
             }
-            location.replace(url);
+            _redirect(url);
 
         }
 
@@ -271,7 +271,7 @@
         }
 
         function _window_open(url, flag, header,layout) {
-            if (url != "") {
+            if (url != "") {                
                 $("#myModalFrame").css("visibility", "hidden");
             }
             _modal_current_layout = layout;
@@ -325,6 +325,7 @@
             $(fra).css("height", h - 30 - 10);    //10 padding dole, 30 div header
 
             if (url !== "") {
+                url = _ep(url);
                 $(fra).attr("src", url);
             }
 

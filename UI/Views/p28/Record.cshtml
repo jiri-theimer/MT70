@@ -523,10 +523,10 @@
     }
 
     function j02_create() {
-        _window_open(_ep("/j02/Record?isintraperson=false&pid=0&tempguid=@Model.TempGuid"));
+        _window_open("/j02/Record?isintraperson=false&pid=0&tempguid=@Model.TempGuid");
     }
     function j02_record(j02id) {
-        _window_open(_ep("/j02/Record?pid="+j02id+"&tempguid=@Model.TempGuid"));
+        _window_open("/j02/Record?pid="+j02id+"&tempguid=@Model.TempGuid");
     }
     function handle_delete_j02(j02id) {
         form1.action = _ep("/p28/Record?oper=delete_j02&j02id=" + j02id);

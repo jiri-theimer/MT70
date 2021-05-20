@@ -154,7 +154,7 @@
 
     function change_grid(j72id) {
             $.post("/Common/SetUserParam", { key: "Admin/@(Model.area+"/"+Model.prefix)-j72id",value:j72id  }, function (data) {
-                location.replace("/Admin/Page?area=@(Model.area)&prefix=@(Model.prefix)");
+                _redirect("/Admin/Page?area=@(Model.area)&prefix=@(Model.prefix)");
 
             });
     }

@@ -72,7 +72,7 @@
 
     function change_grid(j72id) {
             $.post("/Common/SetUserParam", { key: "GridMultiSelect-j72id-@(Model.prefix)",value:j72id  }, function (data) {
-                location.replace(location.href);
+                _redirect(location.href);
 
             });
         }
