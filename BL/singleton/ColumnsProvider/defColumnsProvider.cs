@@ -149,7 +149,7 @@ namespace BL
 
             this.EntityName = "p42ProjectType";
             AA( "p42Name", "Typ", gdc1, null, "string", false, true);
-            AA("p42Code", "Kód");
+            AA("p42Code", "Kód");            
             AFNUM0("p42Ordinary", "#");
             AppendTimestamp();
 
@@ -404,8 +404,7 @@ namespace BL
             this.EntityName = "x15VatRateType";
             AA("x15Name", "Druh DPH", gdc1, null, "string", false, true);
 
-            this.EntityName = "le4";
-            AA("p41Name", "Název L4", gdc1, null, "string", false, true);
+            
             
         }
 

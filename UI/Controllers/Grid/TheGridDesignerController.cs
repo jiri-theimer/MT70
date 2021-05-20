@@ -258,19 +258,17 @@ namespace UI.Controllers
         private void Index_RefreshState(Models.TheGridDesignerViewModel v)
         {
             var mq = new BO.myQuery(v.Rec.j72Entity);
-            var ce = Factory.EProvider.ByPrefix(mq.Prefix);
+            var ce = Factory.EProvider.ByPrefix(mq.PrefixDb);
             v.Relations = Factory.EProvider.getApplicableRelations(mq.Prefix); //návazné relace
             v.Relations.Insert(0, new BO.EntityRelation() { TableName = ce.TableName, AliasSingular = ce.AliasSingular, SqlFrom = ce.SqlFromGrid, RelName = "a",Translate1=ce.TranslateLang1,Translate2=ce.TranslateLang2 });   //primární tabulka a
 
             v.AllColumns=new List<BO.TheGridColumn>();
             v.AllColumns.InsertRange(0, _colsProvider.AllColumns());
 
-            //v.AllColumns = _colsProvider.AllColumns();   //.ToList();
-
+            
             v.AllColumns.InsertRange(v.AllColumns.Count-1, new BL.ffColumnsProvider(Factory,null).getColumns());    //katalog uživatelských polí
 
-            //v.AllColumns.RemoveAll(p => p.VisibleWithinEntityOnly != null && p.VisibleWithinEntityOnly.Contains(v.Rec.j72Entity.Substring(0, 3)) == false);    //nepatřičné kategorie/štítky
-
+            
             v.SelectedColumns = _colsProvider.ParseTheGridColumns(mq.Prefix, v.Rec.j72Columns, Factory.CurrentUser.j03LangIndex);
            
             v.lisQueryFields = new BL.TheQueryFieldProvider(v.Rec.j72Entity.Substring(0, 3)).getPallete();

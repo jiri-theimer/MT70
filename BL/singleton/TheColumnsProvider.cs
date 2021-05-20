@@ -70,6 +70,8 @@ namespace BL
             _lis.InsertRange(0, new o23ColumnsProvider().getColumns());
             _lis.InsertRange(0, new b07ColumnsProvider().getColumns());
 
+            //_lis.InsertRange(0, new le4ColumnsProvider().getColumns());
+            
 
             string strLastEntity = "";
             string strLastEntityAlias = "";
@@ -152,12 +154,12 @@ namespace BL
             IEnumerable<BO.TheGridColumn> qry = null;
             if (bolComboColumns)
             {
-                qry = _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag == BO.TheGridDefColFlag.ComboOnly));
+                qry = _lis.Where(p => p.Prefix == mq.PrefixDb && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag == BO.TheGridDefColFlag.ComboOnly));
 
             }
             else
             {
-                qry = _lis.Where(p => p.Prefix == mq.Prefix && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag == BO.TheGridDefColFlag.GridOnly));
+                qry = _lis.Where(p => p.Prefix == mq.PrefixDb && (p.DefaultColumnFlag == BO.TheGridDefColFlag.GridAndCombo || p.DefaultColumnFlag == BO.TheGridDefColFlag.GridOnly));
             }
 
             foreach (BO.TheGridColumn c in qry)
