@@ -348,6 +348,7 @@ namespace DL
 
         public string GetSQL1_Ocas(string strPrefix, bool isthegrid = false, bool isvalidity = true,bool istimestamp=true)
         {
+            
             string s = null;
             if (isvalidity)
             {

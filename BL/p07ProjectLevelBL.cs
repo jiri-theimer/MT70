@@ -72,17 +72,34 @@ namespace BL
 
         private bool ValidateBeforeSave(BO.p07ProjectLevel rec)
         {
-           
-            if (string.IsNullOrEmpty(rec.p07NameSingular) || string.IsNullOrEmpty(rec.p07NamePlural))
+            if (rec.ValidUntil<DateTime.Now && string.IsNullOrEmpty(rec.p07NameSingular))
             {
-                this.AddMessage("Názvy úrovně pro jednotné a množné číslo jsou povinná pole."); return false;
+                rec.p07NameSingular = "level"+rec.p07Level.ToString();
+            }
+            if (rec.ValidUntil < DateTime.Now && string.IsNullOrEmpty(rec.p07NamePlural))
+            {
+                rec.p07NamePlural = "l" + rec.p07Level.ToString();
             }
 
-            if (rec.p07Level<1 || rec.p07Level > 3)
+            if (string.IsNullOrEmpty(rec.p07NameSingular) || string.IsNullOrEmpty(rec.p07NamePlural))
             {
-                this.AddMessage("Index úrovně musí být v rozsahu 1-3.");return false;
+                this.AddMessage("Chybí vyplnit název úrovně."); return false;
+            }
+
+            if (rec.p07Level<1 || rec.p07Level > 5)
+            {
+                this.AddMessage("Index úrovně musí být v rozsahu 1-5.");return false;
             }
             var lis = GetList(new BO.myQuery("p07"));
+
+            if (rec.ValidUntil > DateTime.Now)
+            {                
+                if (lis.Where(p => p.pid != rec.pid).Any(p => p.p07NameSingular.ToLower() == rec.p07NameSingular.ToLower() || p.p07NamePlural.ToLower() == rec.p07NamePlural.ToLower()))
+                {
+                    this.AddMessageTranslated(string.Format("Název úrovně #{0} je duplicitní s jinou úrovní.", rec.p07Level)); return false;
+                }
+            }
+            
             if (lis.Where(p => p.p07Level == rec.p07Level && p.pid != rec.pid).Any())
             {
                 var s = lis.Where(p => p.p07Level == rec.p07Level && p.pid != rec.pid).First().p07NameSingular;

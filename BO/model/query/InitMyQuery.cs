@@ -123,6 +123,8 @@ namespace BO
             //filtr podle master_prefix+master_pid
             if (_master_pid > 0 && _master_prefix != null)
             {
+                _master_prefix = BO.BASX29.GetPrefixDb(_master_prefix);
+
                 BO.Reflexe.SetPropertyValue(mq, _master_prefix + "id", _master_pid);
             }
 

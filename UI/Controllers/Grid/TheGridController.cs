@@ -102,7 +102,7 @@ namespace UI.Controllers
 
           
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);
-            var deftab = v.NavTabs[0];
+            NavTab deftab = v.NavTabs[0];
             
             foreach (var tab in v.NavTabs)
             {
@@ -214,7 +214,7 @@ namespace UI.Controllers
                 AddMessage("Grid entita nebyla nalezena.");
             }
 
-
+            
             v.gridinput.query = new BO.InitMyQuery().Load(prefix, masterentity, master_pid, myqueryinline);
             v.gridinput.query.IsRecordValid = null;
             

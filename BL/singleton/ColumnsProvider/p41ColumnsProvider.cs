@@ -13,7 +13,7 @@ namespace BL
             this.EntityName = "p41Project";
 
             this.CurrentFieldGroup = "Root";
-            oc = AF("p41Name", "Projekt"); oc.NotShowRelInHeader = true; oc.DefaultColumnFlag = gdc1;
+            oc = AF("p41Name", "Název projektu"); oc.NotShowRelInHeader = true; oc.DefaultColumnFlag = gdc1;
             oc = AF("PrefferedName", "Projekt+", "isnull(a.p41NameShort,a.p41Name)"); oc.NotShowRelInHeader = true;            
             AF("p41NameShort", "Zkrácený název");
             oc = AF("p41Code", "Kód projektu"); oc.FixedWidth = 100;

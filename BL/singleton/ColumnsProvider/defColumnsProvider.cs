@@ -403,6 +403,10 @@ namespace BL
 
             this.EntityName = "x15VatRateType";
             AA("x15Name", "Druh DPH", gdc1, null, "string", false, true);
+
+            this.EntityName = "le4";
+            AA("p41Name", "Název L4", gdc1, null, "string", false, true);
+            
         }
 
 

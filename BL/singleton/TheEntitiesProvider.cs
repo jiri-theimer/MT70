@@ -99,8 +99,10 @@ namespace BL
             AE("p87BillingLanguage", "Fakturační jazyk", "Fakturační jazyk", "p87BillingLanguage a", "a.p87LangIndex");
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura cenového rozpisu faktury", "p80InvoiceAmountStructure a", "a.p80Name");
+            AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");
+            AE("le4", "L4", "L4", "p41Project a INNER JOIN p42ProjectType e2 ON a.p42ID=e2.p42ID INNER JOIN p07ProjectLevel e3 ON e2.p07ID=e3.p07ID AND e3.p07Level=4", "a.p41ID DESC","a.p41ID DESC");
+            AE("le5", "L5", "L5", "p41Project a INNER JOIN p42ProjectType e2 ON a.p42ID=e2.p42ID INNER JOIN p07ProjectLevel e3 ON e2.p07ID=e3.p07ID AND e3.p07Level=5", "a.p41ID DESC","a.p41ID DESC");            
 
-            AE("p41Project", "Projekty", "Projekt", "p41Project a", "a.p41ID DESC");            
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
             AE("p56Task", "Úkoly", "Úkol", "p56Task a INNER JOIN p41Project p41x ON a.p41ID=p41x.p41ID", "a.p56ID DESC");
 

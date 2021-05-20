@@ -148,12 +148,12 @@ namespace BL
             
             if (bolGetTotalsRow == true)
             {
-                sb.Append(string.Format(",COUNT(a.{0}ID) as RowsCount", mq.Prefix));     //sumační dotaz gridu
+                sb.Append($",COUNT(a.{mq.PrefixDb}ID) as RowsCount");     //sumační dotaz gridu
             }
             else
             {
                 sb.Append(",");                
-                sb.Append(_db.GetSQL1_Ocas(mq.Prefix, true, !ce.IsWithoutValidity));    //select dotaz gridu
+                sb.Append(_db.GetSQL1_Ocas(mq.PrefixDb, true, !ce.IsWithoutValidity));    //select dotaz gridu
 
             }
             

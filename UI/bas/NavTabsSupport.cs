@@ -54,6 +54,8 @@ namespace UI
                     _tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23",true, Badge1(cp28.o23_Count)));
                     break;
                 case "p41":
+                case "le4":
+                case "le5":
                     var cp41 = _f.p41ProjectBL.LoadSumRow(pid);
                     _tabs.Add(AddTab("Tab1", "tab1", "/p41/Tab1?pid=" + AppendPid2Url(pid), false));
                     _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31",true, Badge3(cp41.p31_Wip_Time_Count, cp41.p31_Wip_Expense_Count, cp41.p31_Wip_Fee_Count, "badge bg-warning text-dark")));

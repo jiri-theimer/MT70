@@ -47,7 +47,8 @@ namespace BO
     public abstract class baseQuery
     {
         private string _pkfield;
-        private string _prefix;
+        private string _prefixdb;   //prefix, který pasuje na fyzický datový model tabulky
+        private string _prefix; //prefix podle Entity singletonu
         private List<QRow> _lis;
        
         public string Prefix
@@ -59,7 +60,9 @@ namespace BO
             set
             {
                 _prefix = value;
-                _pkfield = "a." + _prefix + "ID";
+                _prefixdb = BO.BASX29.GetPrefixDb(_prefix);
+                _pkfield = "a." + _prefixdb + "ID";
+                                
             }
         }
         public string PkField
@@ -67,6 +70,14 @@ namespace BO
             get
             {
                 return _pkfield;
+            }
+        }
+
+        public string PrefixDb
+        {
+            get
+            {
+                return _prefixdb;
             }
         }
         public List<int> pids { get; set; }

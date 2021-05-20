@@ -8,6 +8,12 @@ namespace BO
 {
     public static class BASX29
     {
+        public static string GetPrefixDb(string prefix)
+        {
+            if (prefix == "le5" || prefix == "le4" || prefix == "le3" || prefix == "le2" || prefix == "le1") return "p41";
+
+            return prefix;
+        }
         public static string GetPrefix(BO.x29IdEnum x29id)
         {
             //return x29id.ToString().Substring(0, 3);
@@ -31,7 +37,10 @@ namespace BO
         {
             switch (prefix.Substring(0, 3))
             {
-                case "p41": return BO.x29IdEnum.p41Project;
+                case "p41":
+                case "le5":
+                case "le4":
+                    return BO.x29IdEnum.p41Project;
                 case "p91": return BO.x29IdEnum.p91Invoice;
                 case "p90": return BO.x29IdEnum.p90Proforma;
                 case "p82": return BO.x29IdEnum.p82Proforma_Payment;

@@ -2,7 +2,7 @@
 @inject BL.Factory _f
 
 @{
-    Model.PageTitle = _f.tra("Stromové úrovně projektů");
+    Model.PageTitle = _f.tra("Vertikální úrovně projektů");
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
 }
 
@@ -21,11 +21,13 @@
     <input type="hidden" asp-for="@Model.RecL1.pid" />
     <input type="hidden" asp-for="@Model.RecL2.pid" />
     <input type="hidden" asp-for="@Model.RecL3.pid" />
+    <input type="hidden" asp-for="@Model.RecL4.pid" />
+    <input type="hidden" asp-for="@Model.RecL5.pid" />
 
     <div class="modal_record_container">
 
         <table class="table table-hover">
-            
+
             <tr class="bg-light">
                 <th></th>
                 <th>
@@ -88,12 +90,48 @@
                 <td>
                     <input class="form-control" asp-for="@Model.RecL3.p07NameInflection" />
                 </td>
-               
                 <td>
-                    <input type="checkbox" id="chkUseL3" asp-for="@Model.UseL3" disabled="disabled" checked="checked" />
+                    <input type="checkbox" id="chkUseL3" asp-for="@Model.UseL3" onchange="postback()" />
                     <label for="chkUseL3">@_f.tra("Využívat úroveň") #3</label>
                 </td>
-                
+            </tr>
+            <tr>
+                <td>
+                    ------@_f.tra("Úroveň") #4:
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.RecL4.p07NameSingular" />
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.RecL4.p07NamePlural" />
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.RecL4.p07NameInflection" />
+                </td>
+                <td>
+                    <input type="checkbox" id="chkUseL4" asp-for="@Model.UseL4" onchange="postback()" />
+                    <label for="chkUseL4">@_f.tra("Využívat úroveň") #4</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    --------@_f.tra("Úroveň") #5:
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.RecL5.p07NameSingular" />
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.RecL5.p07NamePlural" />
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.RecL5.p07NameInflection" />
+                </td>
+
+                <td>
+                    <input type="checkbox" id="chkUseL5" asp-for="@Model.UseL5" disabled="disabled" checked="checked" />
+                    <label for="chkUseL5">@_f.tra("Využívat úroveň") #5</label>
+                </td>
+
             </tr>
         </table>
 
@@ -118,6 +156,18 @@
             @:$("#RecL2_p07NameSingular").css("visibility", "hidden");
             @:$("#RecL2_p07NamePlural").css("visibility", "hidden");
             @:$("#RecL2_p07NameInflection").css("visibility", "hidden");
+        }
+        @if (!Model.UseL3)
+        {
+            @:$("#RecL3_p07NameSingular").css("visibility", "hidden");
+            @:$("#RecL3_p07NamePlural").css("visibility", "hidden");
+            @:$("#RecL3_p07NameInflection").css("visibility", "hidden");
+        }
+        @if (!Model.UseL4)
+        {
+            @:$("#RecL4_p07NameSingular").css("visibility", "hidden");
+            @:$("#RecL4_p07NamePlural").css("visibility", "hidden");
+            @:$("#RecL4_p07NameInflection").css("visibility", "hidden");
         }
 
         $("#cmdSave").click(function () {
