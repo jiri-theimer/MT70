@@ -408,16 +408,22 @@ namespace BL
                     }
                     break;
                 case "p28":
-                    s = "a__p28Contact__p28Name,a__p28Contact__p28RegID,a__p28Contact__p28VatID,p28_address_primary__view_PrimaryAddress__FullAddress";
+                    s = "a__p28Contact__p28Name,a__p28Contact__p28RegID,a__p28Contact__p28VatID,p28_address_primary__view_PrimaryAddress__FullAddress,a__p28Contact__AllFreeTags_p28";
                     break;
                 case "p41":
-                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name";                
+                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name,a__p41Project__AllFreeTags_p41";                
+                    break;
+                case "p56":
+                    s = "p56_b02__b02WorkflowStatus__b02Name,a__p56Task__p56Name,p56_p28__p28Contact__p28Name,p56_p41__p41Project__p41Name,a__p56Task__p56PlanUntil,a__p56Task__DnuDoTerminu";
                     break;
                 case "p90":
                     s = "a__p90Proforma__p90Code,a__p90Proforma__p90Date,p90_p28__p28Contact__p28Name,a__p90Proforma__p90Amount,p90_j27__j27Currency__j27Code,a__p90Proforma__p90Amount_Billed,a__p90Proforma__p90DateMaturity,a__p90Proforma__p91codes,a__p90Proforma__ChybiSparovat,a__p90Proforma__p90Text1";
                     break;
                 case "p91":
                     s = "a__p91Invoice__p91Code,a__p91Invoice__p91Client,a__p91Invoice__p91DateSupply,a__p91Invoice__p91Amount_WithoutVat,p91_j27__j27Currency__j27Code,a__p91Invoice__p91Amount_Debt,a__p91Invoice__p91DateMaturity,a__p91Invoice__VomKdyOdeslano";
+                    break;
+                case "o23":
+                    s = "a__o23Doc__o23Name,a__o23Doc__DocType,o23_p28__p28Contact__p28Name,o23_p41__p41Project__p41Name,a__o23Doc__AllFreeTags_o23,a__o23Doc__DateInsert_o23Doc,a__o23Doc__UserInsert_o23Doc";
                     break;
                 case "b07":
                     s = "a__b07Comment__b07Date,a__b07Comment__b07Value,b07_p28__p28Contact__p28Name,b07_p41__p41Project__p41Name,a__b07Comment__b07LinkUrl,a__b07Comment__DateInsert_b07Comment,a__b07Comment__UserInsert_b07Comment";

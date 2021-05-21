@@ -76,11 +76,27 @@ namespace BL
 
 
         }
-
+        private void Handle_Stitky_All(int x29id,string entity,string prefix)
+        {            
+            oc = AF($"AllFreeTags_{prefix}", "Štítky", $"{prefix}_o54.o54InlineHtml");
+            oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {prefix}_o54 ON a.{prefix}ID = {prefix}_o54.o54RecordPid AND {prefix}_o54.x29ID={x29id}";
+            oc.Entity = entity;
+            oc = AF($"AllFreeTags_{prefix}text", "Štítky pouze text", $"{prefix}_o54.o54InlineText");
+            oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {prefix}_o54 ON a.{prefix}ID = {prefix}_o54.o54RecordPid AND {prefix}_o54.x29ID={x29id}";
+            oc.Entity = entity;
+        }
         private void Handle_Stitky(BL.Factory f)
         {
             //štítky
             this.CurrentFieldGroup = "Štítky";
+
+            Handle_Stitky_All(328, "p28Contact","p28");
+            Handle_Stitky_All(141, "p41Project", "p41");
+            Handle_Stitky_All(223, "o23Doc", "o23");
+            Handle_Stitky_All(331, "p31Worksheet", "p31");
+            Handle_Stitky_All(356, "p56Task", "p56");
+            Handle_Stitky_All(102, "j02Person", "j02");
+
             var lisO53 = f.o53TagGroupBL.GetList(new BO.myQuery("o53")).Where(p => p.o53Field != null && p.x29IDs != null);
             foreach (var c in lisO53)
             {
