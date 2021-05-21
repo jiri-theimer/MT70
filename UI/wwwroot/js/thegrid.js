@@ -431,7 +431,7 @@ function tg_select(records_count) {     //označí prvních X (records_count) z�
         $("#chk" + pid).prop("checked", true);
     }
     tg_save_selected_pids(arr.join(","));
-
+    tg_div_close_synthetic_divs();
 
 }
 

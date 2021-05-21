@@ -393,19 +393,23 @@ namespace BL
         public string getDefaultPalletePreSaved(string entity, string master_entity, BO.baseQuery mq)  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
         {
             string s = null;
-            switch (mq.Prefix)
+            switch (mq.PrefixDb)
             {
                 case "j02":
                     s = "a__j02Person__fullname_desc,a__j02Person__j02Email,j02_j07__j07PersonPosition__j07Name,j02_j03__j03User__j03Login,j02_j03__j03User__j04Name,j02_j03__j03User__j03Ping_TimeStamp";
                     break;
                 case "p31":
                     s = "a__p31Worksheet__p31Date,p31_j02__j02Person__fullname_desc,p31_p41_p28__p28Contact__p28Name,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,a__p31Worksheet__p31Hours_Orig,a__p31Worksheet__p31Rate_Billing_Orig,a__p31Worksheet__p31Amount_WithoutVat_Orig,a__p31Worksheet__p31Text";
-                    switch (master_entity.Substring(0,3))
+                    if (master_entity != null)
                     {
-                        case "p91":
-                            s = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Hours_Invoiced,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
-                            break;
+                        switch (master_entity.Substring(0, 3))
+                        {
+                            case "p91":
+                                s = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Hours_Invoiced,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
+                                break;
+                        }
                     }
+                    
                     break;
                 case "p28":
                     s = "a__p28Contact__p28Name,a__p28Contact__p28RegID,a__p28Contact__p28VatID,p28_address_primary__view_PrimaryAddress__FullAddress,a__p28Contact__AllFreeTags_p28";

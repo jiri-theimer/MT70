@@ -517,6 +517,7 @@ function _zoom(e, entity, pid, dialog_width, header, url) {     //wtype: small (
         var el = document.createElement("DIV");
         el.id = menuid;
         el.style.display = "none";
+        el.style.zIndex = "99999";
         document.body.appendChild(el);
     }
 
@@ -524,7 +525,7 @@ function _zoom(e, entity, pid, dialog_width, header, url) {     //wtype: small (
     $("#" + menuid).height(h);
 
 
-    var s = "<div id='divZoomContainer' style='border:solid 1px silver;width:" + w + "px;' orig_w='" + w + "' orig_h='" + h + "'>";
+    var s = "<div id='divZoomContainer' style=';border:solid 1px silver;width:" + w + "px;' orig_w='" + w + "' orig_h='" + h + "'>";
     s += "<div id='divZoomHeader' style='cursor: move;height:30px;background-color:lightsteelblue;padding:3px;' ondblclick='_zoom_toggle()'>" + header + "</div>";
     s += "<div id='divZoomFrame'>";
     s += "<iframe id='frazoom' src = '" + url + "' style = 'width:100%;height: " + (h - 31) + "px;' frameborder=0></iframe >";
