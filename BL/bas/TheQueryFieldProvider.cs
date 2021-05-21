@@ -33,6 +33,14 @@ namespace BL
                 
                 case "j02":
                     of = AF("j02Person", "j02IsIntraPerson", "a.j02IsIntraPerson", "Interní osoba", null, null, "bool");
+                    of = AF("j02Person", "Pozice", "a.j07ID", "Pozice", "j07PersonPosition", null, "multi");
+                    of = AF("j02Person", "Stredisko", "a.j18ID", "Středisko", "j18Region", null, "multi");
+                    of = AF("j02Person", "Fond", "a.c21ID", "Pracovní fond", "c21FondCalendar", null, "multi");
+                    of = AF("j02Person", "Role", "j04ID","Aplikační role", "j04UserRole",null, "multi");
+                    of.SqlWrapper = "a.j02ID IN (select j02ID FROM j03User WHERE j02ID IS NOT NULL AND #filter#)";
+
+                    
+
                     AF("j02Person", "a03Email", "a.j02Email", "E-mail");
                     AF("j02Person", "j02Code", "a.j02Code", "Osobní kód");
                     AF("j02Person", "j02JobTitle", "a.j02JobTitle", "Funkce na vizitce");

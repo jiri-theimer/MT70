@@ -324,7 +324,7 @@ namespace UI
                         }
                         break;
                     case "j02":
-                        if (Convert.ToBoolean(dbRow["j02IsIntraPerson"]))
+                        if (!Convert.ToBoolean(dbRow["j02IsIntraPerson"]))
                         {
                             strRowClass += " trcperson";    //kontaktní osoba
                         }
