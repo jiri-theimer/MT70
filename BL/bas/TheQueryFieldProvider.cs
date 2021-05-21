@@ -39,11 +39,17 @@ namespace BL
                     of = AF("j02Person", "Role", "j04ID","Aplikační role", "j04UserRole",null, "multi");
                     of.SqlWrapper = "a.j02ID IN (select j02ID FROM j03User WHERE j02ID IS NOT NULL AND #filter#)";
 
-                    //of=AF("j02Person", "ExistRozpracovane", "case when exists(select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date BETWEEN @gd1 AND @gd2 AND p31ValidUntil>GETDATE()) then 1 else 0 end", "Má rozpracované úkony", null, null, "bool");
+                    
                     of = AF("j02Person", "ExistRozpracovane","a.j02ID", "Existují rozpracované úkony", null, null, "bool");
                     of.SqlWrapper = "select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("j02Person", "ExistNevyuctovane", "a.j02ID", "Existují nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select j02ID FROM p31Worksheet WHERE p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("j02Person", "ExistCekajici", "a.j02ID", "Existují schválené a dosud nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select j02ID FROM p31Worksheet WHERE p71ID=1 AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("j02Person", "ExistVyuctovane", "a.j02ID", "Existují vyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select j02ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
 
-                    of=AF("j02Person", "ExistsJ03", "a.j02ID", "Má uživatelský účet", null, null, "bool");
+                    of = AF("j02Person", "ExistsJ03", "a.j02ID", "Má uživatelský účet", null, null, "bool");
                     of.SqlWrapper = "select j02ID FROM j03User WHERE j02ID IS NOT NULL";
 
 
@@ -55,6 +61,37 @@ namespace BL
                     AF("j02Person", "j02Phone", "a.j02Phone", "Pevný tel");
                     
                     
+                    break;
+                case "p28":
+                    of = AF("p28Contact", "ExistRozpracovane", "a.p28ID", "Existují rozpracované úkony", null, null, "bool");
+                    of.SqlWrapper = "select xb.p28ID_Client FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xb.p28ID_Client IS NOT NULL AND xa.p71ID IS NULL AND xa.p91ID IS NULL AND xa.p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p28Contact", "ExistNevyuctovane", "a.p28ID", "Existují nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select xb.p28ID_Client FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xb.p28ID_Client IS NOT NULL AND xa.p91ID IS NULL AND xa.p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p28Contact", "ExistCekajici", "a.p28ID", "Existují schválené a dosud nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select xb.p28ID_Client FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xb.p28ID_Client IS NOT NULL AND xa.p71ID=1 AND xa.p91ID IS NULL AND xa.p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p28Contact", "ExistVyuctovane", "a.p28ID", "Existují vyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select xb.p28ID_Client FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xb.p28ID_Client IS NOT NULL AND xa.p91ID IS NOT NULL AND xa.p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    break;
+                case "p41":
+                case "le5":
+                    of = AF("p41Project", "ExistRozpracovane", "a.p41ID", "Existují rozpracované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p41ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p41Project", "ExistNevyuctovane", "a.p41ID", "Existují nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p41ID FROM p31Worksheet WHERE p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p41Project", "ExistCekajici", "a.p41ID", "Existují schválené a dosud nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p41ID FROM p31Worksheet WHERE p71ID=1 AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p41Project", "ExistVyuctovane", "a.p41ID", "Existují vyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p41ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    break;
+                case "p56":
+                    of = AF("p56Task", "ExistRozpracovane", "a.p56ID", "Existují rozpracované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p56ID FROM p31Worksheet WHERE p56ID IS NOT NULL AND p71ID IS NULL AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p56Task", "ExistNevyuctovane", "a.p56ID", "Existují nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p56ID FROM p31Worksheet WHERE p56ID IS NOT NULL AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p56Task", "ExistCekajici", "a.p56ID", "Existují schválené a dosud nevyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p56ID FROM p31Worksheet WHERE p56ID IS NOT NULL AND p71ID=1 AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+                    of = AF("p56Task", "ExistVyuctovane", "a.p56ID", "Existují vyúčtované úkony", null, null, "bool");
+                    of.SqlWrapper = "select p56ID FROM p31Worksheet WHERE p56ID IS NOT NULL AND p91ID IS NOT NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
                     break;
                 default:
                     break;

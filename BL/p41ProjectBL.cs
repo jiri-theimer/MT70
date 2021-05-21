@@ -12,8 +12,9 @@ namespace BL
         public BO.p41Project LoadByCode(string strCode, int pid_exclude);
         public BO.p41Project LoadByExternalPID(string externalpid);
         public IEnumerable<BO.p41Project> GetList(BO.myQueryP41 mq);
-        public int Save(BO.p41Project rec);
+        public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI);
         public BO.p41ProjectSum LoadSumRow(int pid);
+        public BO.p41RecDisposition InhaleRecDisposition(BO.p41Project rec);
 
 
     }
@@ -33,7 +34,7 @@ namespace BL
             sb(",p42.p42Name,p92.p92Name,b02.b02Name,j18.j18Name,a.p41ExternalPID,a.p41ParentID,a.p41BillingMemo");
             sb(",j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,p28client.p87ID as p87ID_Client,p42.b01ID,a.p41IsNoNotify,a.p72ID_NonBillable,a.p72ID_BillableHours,a.j02ID_ContactPerson_DefaultInWorksheet,a.j02ID_ContactPerson_DefaultInInvoice");
             sb(",a.p41BillingFlag,a.p41ReportingFlag");
-            
+            sb(",p42.x38ID");
             sb(","+_db.GetSQL1_Ocas("p41"));
 
             sb(" FROM p41Project a INNER JOIN p42ProjectType p42 ON a.p42ID=p42.p42ID");
@@ -82,7 +83,7 @@ namespace BL
 
 
 
-        public int Save(BO.p41Project rec)
+        public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI)
         {
             if (!ValidateBeforeSave(rec))
             {
@@ -133,6 +134,11 @@ namespace BL
                 int intPID = _db.SaveRecord("p41Project", p, rec);
                 if (intPID > 0)
                 {
+                    if (!DL.BAS.SaveFreeFields(_db, intPID, lisFFI))
+                    {
+                        return 0;
+                    }
+
                     var pars = new Dapper.DynamicParameters();
                     {
 
@@ -177,5 +183,22 @@ namespace BL
             return _db.Load<BO.p41ProjectSum>("EXEC dbo.p41_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
         }
 
+        public BO.p41RecDisposition InhaleRecDisposition(BO.p41Project rec)
+        {
+            var c = new BO.p41RecDisposition();
+
+            if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P41_Owner))
+            {
+                c.OwnerAccess = true; c.ReadAccess = true;
+                return c;
+            }
+            if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P41_Reader))
+            {
+                c.ReadAccess = true;
+                return c;
+            }
+
+            return c;
+        }
     }
 }

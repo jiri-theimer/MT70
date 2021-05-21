@@ -1,0 +1,256 @@
+﻿@model UI.Models.Record.p41Record
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+    if (Model.Rec == null) return;
+    Model.PageTitle = _f.tra("Karta projektu");
+    Model.PageSymbol = BO.Symbol.p41();
+
+}
+@addTagHelper *, UI
+
+
+<div class="tabs_container_record">
+    <!-- Tab panes -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab1" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab1">@_f.tra("Karta projektu")</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Fakturační nastavení")</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Rozpočet")</a>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab4" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab4">@_f.tra("Uživatelská pole") (@Model.ff1.VisibleInputsCount)</a>
+        </li>
+
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab5" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab5">@_f.tra("Ostatní")</a>
+        </li>
+
+
+    </ul>
+</div>
+
+@Html.Raw("<div class='modal_record_container'>")
+@Html.Raw("<div class='tab-content'>")
+
+<div class="tab-pane" id="tab1" role="tabpanel">
+    <!-- Tab1 -->
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název projektu"):</label>
+        <div class="col-sm-7 col-md-6">
+            <input class="form-control" asp-for="Rec.p41Name" />
+        </div>
+
+        <div class="col-sm-4 col-md-4">
+            <input class="form-control" asp-for="Rec.p41NameShort" placeholder="@_f.tra("Zkrácený (preferovaný) název projektu")" />
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Typ projektu"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mycombo entity="p42ProjectType" asp-for="Rec.p42ID" selectedtext="@Model.SelectedComboP42Name"></mycombo>
+        </div>
+        <div class="col-sm-1 col-md-2">@_f.tra("Kód projektu"):</div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.CanEditRecordCode)
+            {
+                <myval value="@Model.Rec.p41Code" hoversymol="@_f.tra("Upravit kód")" hoverurl="javascript:_edit_code('p41',@Model.rec_pid)"></myval>
+            }
+            else
+            {
+                <myval value="@Model.Rec.p41Code"></myval>
+            }
+
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient projektu"):</label>
+        <div class="col-sm-7 col-md-6">
+            <mycombo entity="p28Contact" asp-for="Rec.p28ID_Client" selectedtext="@Model.SelectedComboClient" filter-flag="1" search-result-width="700"></mycombo>
+        </div>
+        <div class="col-sm-1 col-md-2">@_f.tra("Středisko"):</div>
+        <div class="col-sm-3 col-md-2">
+            <mycombo entity="j18Region" asp-for="Rec.j18ID" selectedtext="@Model.SelectedComboJ18Name"></mycombo>
+
+        </div>
+    </div>
+
+    <mystitky entity="p41Project" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+
+</div>
+
+
+
+<div class="tab-pane" id="tab2" role="tabpanel">
+    <!-- Tab2 -->
+    <div class="row">
+        <div class="col-sm-7 col-md-7">
+            <div class="card">
+                <div class="card-header">
+                    ₠
+                    @_f.tra("Ceník fakturačních hodinových sazeb")
+                </div>
+                <div class="card-body">
+                    <input type="radio" id="Radiop51Flag1" asp-for="@Model.p51Flag" value="1" onchange="postback('postback')">
+                    <label for="Radiop51Flag1">@_f.tra("Hodinové sazby dědit z klienta projektu nebo z kořenového ceníku")</label>
+                    <br />
+                    <input type="radio" id="Radiop51Flag2" asp-for="@Model.p51Flag" value="2" onchange="postback('postback')">
+                    <label for="Radiop51Flag2">@_f.tra("Svázat projekt s jedním ze zavedených (a sdílených) ceníků")</label>
+                    <br />
+                    <input type="radio" id="Radiop51Flag3" asp-for="@Model.p51Flag" value="3" onchange="postback('postback')">
+                    <label for="Radiop51Flag3">@_f.tra("Projekt má individuální hodinové sazby na míru")</label>
+                </div>
+                @if (Model.p51Flag == 2)
+                {
+                    <div>
+                        @_f.tra("Přiřazený ceník hodinových sazeb")
+                        <button type="button" onclick="p51_record_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Upravit ceník")</button>
+                        <button type="button" onclick="p51_create_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Založit ceník")</button>
+                    </div>
+                    <mycombo entity="p51PriceList" asp-for="@Model.SelectedP51ID_Flag2" selectedtext="@Model.SelectedComboP51Name" myqueryinline="typeflag|int|1|iscustomtailor|bool|false"></mycombo>
+
+                }
+                @if (Model.p51Flag == 3)
+                {
+
+
+                    <button type="button" onclick="p51_record_flag3()" class="btn btn-sm btn-outline-secondary">@_f.tra("Sazby na míru")</button>
+                    <input type="hidden" asp-for="@Model.SelectedP51ID_Flag3" value="@Model.SelectedP51ID_Flag3" />
+                }
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Fakturační jazyk projektu"):</label>
+        <div class="col-sm-10 col-md-9">
+            <mycombo entity="p87BillingLanguage" asp-for="Rec.p87ID" selectedtext="@Model.SelectedComboP87Name"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Výchozí typ faktury"):</label>
+        <div class="col-sm-10 col-md-9">
+            <mycombo entity="p92InvoiceType" asp-for="Rec.p92ID" selectedtext="@Model.SelectedComboP92Name"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Odběratel faktury"):</label>
+        <div class="col-sm-10 col-md-9">
+            <mycombo entity="p28Contact" asp-for="Rec.p28ID_Client" selectedtext="@Model.SelectedComboOdberatel" view-flag="1" placeholder="Vyplnit, pokud se liší od klienta projektu"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Výchozí splatnost faktury (dny)"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.p41InvoiceMaturityDays" decimal-digits="0"></mynumber>
+        </div>
+    </div>
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" style="background-color:#F0FFF0 !important;" asp-for="Rec.p41BillingMemo"></textarea>
+        <label for="Rec_p41BillingMemo">@_f.tra("Interní fakturační poznámka")</label>
+    </div>
+
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p41InvoiceDefaultText1"></textarea>
+        <label for="Rec_p41InvoiceDefaultText1">@_f.tra("Výchozí hlavní text faktury")</label>
+    </div>
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p41InvoiceDefaultText2"></textarea>
+        <label for="Rec_p41InvoiceDefaultText2">@_f.tra("Výchozí technický text faktury")</label>
+    </div>
+</div>
+
+<div class="tab-pane" id="tab3" role="tabpanel">
+    <!-- Tab3 Rozpočet -->
+    
+</div>
+
+<div class="tab-pane" id="tab4" role="tabpanel">
+    <!-- Tab4 -->
+    @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
+</div>
+
+<div class="tab-pane" id="tab5" role="tabpanel">
+    <!-- Tab5 -->
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <div class="col-sm-1 col-md-2">@_f.tra("Externí kód"):</div>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.p41ExternalPID" />
+        </div>
+    </div>
+
+</div>
+
+
+
+@Html.Raw("</div>")
+@Html.Raw("</div>")
+
+
+<input type="hidden" asp-for="@Model.TempGuid" />
+
+<input type="hidden" asp-for="@Model.Rec.p41Code" value="@Model.Rec.p41Code" />
+<input type="hidden" asp-for="@Model.CanEditRecordCode" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+
+    });
+
+    function postback(oper) {
+
+        form1.action = _ep("/p41/Record?oper=" + oper);
+        form1.submit();
+    }
+
+    function hardrefresh(pid, flag) {
+        if (flag != undefined) {
+            if (flag.includes("recordcode")) {
+                $("#Rec_p41Code").val(flag.split("|")[1]);
+            }
+
+        }
+
+
+        postback("postback");
+    }
+
+    function p51_record_flag3() {
+        var p51id = $("#SelectedP51ID_Flag3").val();
+        alert(p51id);
+        _window_open("/p51/Record?pid="+p51id+"&iscustom=true&tempguid=@(Model.TempGuid)", 2, "Hodinové sazby na míru");
+    }
+    function p51_record_flag2() {
+        var p51id = $("#SelectedP51ID_Flag2").val();
+        if (p51id == "0") {
+            alert("Musíte vybrat ceník.");
+            return;
+        }
+        _window_open("/p51/Record?pid=" + p51id, 2);
+    }
+    function p51_create_flag2() {
+        _window_open("/p51/Record?pid=0", 2);
+    }
+</script>

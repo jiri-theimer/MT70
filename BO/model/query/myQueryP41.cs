@@ -17,7 +17,7 @@ namespace BO
         public int j18id { get; set; }
         public int p61id { get; set; }
         public int p91id { get; set; }
-       
+       public int p28id { get; set; }
         public myQueryP41()
         {
             this.Prefix = "p41";
@@ -93,6 +93,10 @@ namespace BO
             if (this.p91id > 0)
             {
                 AQ("a.p41ID IN (select p41ID FROM p31Worksheet WHERE p91ID=@p91id)", "p91id", this.p91id);
+            }
+            if (this.p28id > 0)
+            {
+                AQ("(a.p28ID_Client=@p28id OR a.p28ID_Billing=@p28id)", "p28id", this.p28id);
             }
             return this.InhaleRows();
 

@@ -177,7 +177,7 @@ namespace UI.Controllers
                 v.MakeClone();
             }
 
-            return ViewTup(v, BO.x53PermValEnum.GR_Admin);
+            return View(v);
         }
 
         private void RefreshState(p28Record v)

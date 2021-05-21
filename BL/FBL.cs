@@ -12,6 +12,7 @@ namespace BL
         public void GenerateCreateUpdateScript(IEnumerable<BO.SysDbObject> lis);
         public IEnumerable<BO.x53Permission> GetListX53();
         public IEnumerable<BO.p87BillingLanguage> GetListP87();
+        public BO.p87BillingLanguage LoadP87(int p87id);
         public BO.j27Currency LoadCurrencyByCode(string j27code);
         public BO.j27Currency LoadCurrencyByID(int j27id);
         public IEnumerable<BO.j27Currency> GetListCurrency();
@@ -40,6 +41,10 @@ namespace BL
         public IEnumerable<BO.p87BillingLanguage> GetListP87()
         {
             return _db.GetList<BO.p87BillingLanguage>("SELECT "+ _db.GetSQL1_Ocas("p87")+ ",a.* FROM p87BillingLanguage a");
+        }
+        public BO.p87BillingLanguage LoadP87(int p87id)
+        {
+            return _db.Load<BO.p87BillingLanguage>("SELECT " + _db.GetSQL1_Ocas("p87") + ",a.* FROM p87BillingLanguage a WHERE a.p87ID=@pid", new { pid = p87id });
         }
         public int SaveP87(BO.p87BillingLanguage rec)
         {

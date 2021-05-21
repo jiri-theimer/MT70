@@ -150,7 +150,7 @@
                     <div class="row my-2">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Typ klienta"):</label>
                         <div class="col-sm-11 col-md-10">
-                            <mycombo entity="p29ContactType" asp-for="Rec.p29ID" selectedtext="@Model.SelectedComboP29Name" view-flag="2"></mycombo>
+                            <mycombo entity="p29ContactType" asp-for="Rec.p29ID" selectedtext="@Model.SelectedComboP29Name"></mycombo>
                         </div>
                     </div>
 
@@ -335,7 +335,7 @@
                             <button type="button" onclick="p51_record_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Upravit ceník")</button>
                             <button type="button" onclick="p51_create_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Založit ceník")</button>
                         </div>
-                        <mycombo entity="p51PriceList" asp-for="@Model.SelectedP51ID_Flag2" selectedtext="@Model.SelectedComboP51Name" view-flag="2" myqueryinline="typeflag|int|1|iscustomtailor|bool|false"></mycombo>
+                        <mycombo entity="p51PriceList" asp-for="@Model.SelectedP51ID_Flag2" selectedtext="@Model.SelectedComboP51Name" myqueryinline="typeflag|int|1|iscustomtailor|bool|false"></mycombo>
 
                         }
                         @if (Model.p51Flag == 3)
@@ -381,13 +381,13 @@
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Fakturační jazyk klienta"):</label>
                 <div class="col-sm-10 col-md-9">
-                    <mycombo entity="p87BillingLanguage" asp-for="Rec.p87ID" selectedtext="@Model.SelectedComboP87Name" view-flag="2"></mycombo>
+                    <mycombo entity="p87BillingLanguage" asp-for="Rec.p87ID" selectedtext="@Model.SelectedComboP87Name"></mycombo>
                 </div>
             </div>
             <div class="row my-2">
                 <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Výchozí typ faktury"):</label>
                 <div class="col-sm-10 col-md-9">
-                    <mycombo entity="p92InvoiceType" asp-for="Rec.p92ID" selectedtext="@Model.SelectedComboP92Name" view-flag="2"></mycombo>
+                    <mycombo entity="p92InvoiceType" asp-for="Rec.p92ID" selectedtext="@Model.SelectedComboP92Name"></mycombo>
                 </div>
             </div>
             <div class="row my-2">
@@ -413,7 +413,7 @@
                 </div>
                 <div class="col-auto">@_f.tra("Režijní přirážka k ceně faktury"):</div>
                 <div class="col-sm-3 col-md-2">
-                    <mycombo entity="p63Overhead" asp-for="Rec.p63ID" selectedtext="@Model.SelectedComboP63Name" view-flag="2"></mycombo>
+                    <mycombo entity="p63Overhead" asp-for="Rec.p63ID" selectedtext="@Model.SelectedComboP63Name"></mycombo>
                 </div>
             </div>
 
