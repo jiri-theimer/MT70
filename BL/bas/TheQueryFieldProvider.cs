@@ -39,15 +39,21 @@ namespace BL
                     of = AF("j02Person", "Role", "j04ID","Aplikační role", "j04UserRole",null, "multi");
                     of.SqlWrapper = "a.j02ID IN (select j02ID FROM j03User WHERE j02ID IS NOT NULL AND #filter#)";
 
-                    
+                    //of=AF("j02Person", "ExistRozpracovane", "case when exists(select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date BETWEEN @gd1 AND @gd2 AND p31ValidUntil>GETDATE()) then 1 else 0 end", "Má rozpracované úkony", null, null, "bool");
+                    of = AF("j02Person", "ExistRozpracovane","a.j02ID", "Existují rozpracované úkony", null, null, "bool");
+                    of.SqlWrapper = "select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+
+                    of=AF("j02Person", "ExistsJ03", "a.j02ID", "Má uživatelský účet", null, null, "bool");
+                    of.SqlWrapper = "select j02ID FROM j03User WHERE j02ID IS NOT NULL";
+
+
 
                     AF("j02Person", "a03Email", "a.j02Email", "E-mail");
                     AF("j02Person", "j02Code", "a.j02Code", "Osobní kód");
                     AF("j02Person", "j02JobTitle", "a.j02JobTitle", "Funkce na vizitce");
-                    AF("j02Person", "j02Office", "a.j02Office", "Kancelář");
-                    
+                    AF("j02Person", "j02Office", "a.j02Office", "Kancelář");                    
                     AF("j02Person", "j02Phone", "a.j02Phone", "Pevný tel");
-                    AF("j02Person", "ExistsJ03", "(case when exists(select j03ID FROM j03User WHERE j02ID=a.j02ID) then 1 else 0 end)", "Má uživatelský účet", null, null, "bool");
+                    
                     
                     break;
                 default:

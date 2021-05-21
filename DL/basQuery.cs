@@ -46,18 +46,31 @@ namespace DL
                 strPrimarySql += " ORDER BY " + mq.explicit_orderby;
             }
 
-            if (strPrimarySql.Contains("@gd1"))
-            {   //view s napevno navrženou podmínkou časového filtru                            
-                if (mq.global_d1 == null) mq.global_d1 = new DateTime(2000, 1, 1);
-                if (mq.global_d2 == null)
-                {
-                    mq.global_d2 = new DateTime(3000, 1, 1);
-                }
-
+            if (strPrimarySql.Contains("@p31date1"))
+            {   //view s napevno navrženou podmínkou časového filtru podle datumu úkonu p31Date                            
                 
+                switch (mq.period_field)
+                {
+                    case "p31Date":
+                        if (mq.global_d1 == null) mq.global_d1 = new DateTime(2000, 1, 1);
+                        if (mq.global_d2 == null)
+                        {
+                            mq.global_d2 = new DateTime(3000, 1, 1);
+                        }
+                        ret.Parameters4DT.Add(new DL.Param4DT() { ParName = "p31date1", ParValue = mq.global_d1, ParamType = "datetime" });
+                        ret.Parameters4DT.Add(new DL.Param4DT() { ParName = "p31date2", ParValue = mq.global_d2, ParamType = "datetime" });
+                        break;
+                    default:
+                        ret.Parameters4DT.Add(new DL.Param4DT() { ParName = "p31date1", ParValue = new DateTime(1900,1,1), ParamType = "datetime" });
+                        ret.Parameters4DT.Add(new DL.Param4DT() { ParName = "p31date2", ParValue = new DateTime(3000,1,1), ParamType = "datetime" });
+                        break;
+                }
+                
+
+
             }
 
-
+           
             //System.IO.File.WriteAllText("c:\\temp\\hovado"+mq.Prefix+".txt", strPrimarySql);
             ret.FinalSql = strPrimarySql;
             return ret;

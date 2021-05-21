@@ -59,6 +59,7 @@ namespace BO
             }
             else
             {
+                
                 return this.SqlWrapper.Replace("#filter#", strWhere);
                 
                 

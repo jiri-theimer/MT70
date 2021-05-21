@@ -434,7 +434,23 @@ namespace BO
                         }
                         if (c.FieldType == "bool" || c.FieldType == "bool1")
                         {
-                            AQ( c.WrapFilter(strField + " " + strOper + " " + c.j73Value), "", null, strAndOrZleva, c.j73BracketLeft, c.j73BracketRight);
+                            if (c.SqlWrapper == null)
+                            {
+                                AQ(c.WrapFilter(strField + " " + strOper + " " + c.j73Value), "", null, strAndOrZleva, c.j73BracketLeft, c.j73BracketRight);
+                            }
+                            else
+                            {
+                                if (c.j73Value == "1")
+                                {
+                                    AQ(c.FieldSqlSyntax + " IN (" + c.SqlWrapper + ")", null, null);
+                                }
+                                else
+                                {
+                                    AQ(c.FieldSqlSyntax + " NOT IN (" + c.SqlWrapper + ")", null, null);
+                                }
+                            }
+                            
+                           
                         }
                         if (c.FieldType == "string")
                         {                            
