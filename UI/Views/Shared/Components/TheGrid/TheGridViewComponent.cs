@@ -37,12 +37,13 @@ namespace UI.Views.Shared.Components.TheGrid
             }
             if (gridState == null)
             {
-                gridState = _f.j72TheGridTemplateBL.LoadState(input.entity, _f.CurrentUser.pid, input.master_entity);  //výchozí, systémový grid: j72IsSystem=1
+                gridState = _f.j72TheGridTemplateBL.LoadState(input.entity, _f.CurrentUser.pid, input.master_entity);  //výchozí, systémový grid: j72IsSystem=1, pokud tedy již existuje
             }
 
-            if (gridState == null)   //pro uživatele zatím nebyl vygenerován záznam v j72 -> vygenerovat
+            if (gridState == null)   //pro uživatele zatím nebyl vygenerován záznam v j72 -> vygenerovat první uživatelovo grid pro daný prefix a masterprefix
             {
-                string strJ72Columns = _colsProvider.getDefaultPalletePreSaved(input.entity, input.master_entity, input.query);
+                //string strJ72Columns = _colsProvider.getDefaultPalletePreSaved(input.entity, input.master_entity, input.query);
+                string strJ72Columns = _f.j72TheGridTemplateBL.getDefaultPalletePreSaved(input.entity, input.master_entity, input.query);
                 if (strJ72Columns == null)
                 {
                     var cols = _colsProvider.getDefaultPallete(false, input.query);    //výchozí paleta sloupců

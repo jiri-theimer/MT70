@@ -302,29 +302,35 @@ namespace UI
                 {
                     strRowClass += " trbin";
                 }
-                if (mq.Prefix == "p31")
+                switch (mq.Prefix)
                 {
-                    switch (Convert.ToInt32(dbRow["p33ID"]))
-                    {
-                        case 2:
-                        case 5:
-                            if (Convert.ToInt32(dbRow["p34IncomeStatementFlag"]) == 2)
-                            {
-                                strRowClass += " trfee";    //peněžní/paušální odměna
-                            }
-                            else
-                            {
-                                strRowClass += " trexp";     //peněžní výdaj
-                            }
-                            break;
-                        case 3:
-                            strRowClass += " trpc";         //kusovník
-                            break;
-                    }
-                    
-                    
+                    case "p31":
+                        switch (Convert.ToInt32(dbRow["p33ID"]))
+                        {
+                            case 2:
+                            case 5:
+                                if (Convert.ToInt32(dbRow["p34IncomeStatementFlag"]) == 2)
+                                {
+                                    strRowClass += " trfee";    //peněžní/paušální odměna
+                                }
+                                else
+                                {
+                                    strRowClass += " trexp";     //peněžní výdaj
+                                }
+                                break;
+                            case 3:
+                                strRowClass += " trpc";         //kusovník
+                                break;
+                        }
+                        break;
+                    case "j02":
+                        if (Convert.ToBoolean(dbRow["j02IsIntraPerson"]))
+                        {
+                            strRowClass += " trcperson";    //kontaktní osoba
+                        }
+                        break;
                 }
-             
+               
                 if (string.IsNullOrEmpty(this.gridinput.ondblclick))
                 {
                     _s.Append($"<tr id='r{dbRow["pid"]}' class='{strRowClass}'>");

@@ -14,7 +14,7 @@ namespace BL
             AA("j03Login", "Login", gdc1, null, "string", false, true);
             AA("j04Name", "Role",gdc1, "j03_j04.j04Name", "string", false, true);
             AA("Lang", "Jazyk",gdc0, "case isnull(a.j03LangIndex,0) when 0 then 'Česky' when 1 then 'English' when 4 then 'Slovenčina' end");
-            AA("j03Ping_TimeStamp", "Last ping", gdc0, "a.j03PingTimestamp", "datetime");
+            AA("j03Ping_TimeStamp", "Last ping", gdc0, "a.j03Ping_TimeStamp", "datetime",false,true);
             AFBOOL("j03IsDebugLog", "Debug log");
             AppendTimestamp();
 

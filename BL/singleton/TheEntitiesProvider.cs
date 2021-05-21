@@ -241,6 +241,7 @@ namespace BL
                     lis.Add(getREL("p28Contact", "p41_p28billing", "Odběratel faktury", "LEFT OUTER JOIN p28Contact p41_p28billing ON a.p28ID_Billing=p41_p28billing.p28ID"));
                     lis.Add(getREL("p42ProjectType", "p41_p42", "Typ projektu", "LEFT OUTER JOIN p42ProjectType p41_p42 ON a.p42ID=p41_p42.p42ID"));
                     lis.Add(getREL("p07ProjectLevel", "p41_p07", "Úroveň projektu", "LEFT OUTER JOIN p07ProjectLevel p41_p07 ON p41_p42.p07ID=p41_p07.p07ID", "p41_p42"));
+                    lis.Add(getREL("b02WorkflowStatus", "p41_b02", "Workflow stav", "LEFT OUTER JOIN b02WorkflowStatus p41_b02 ON a.b02ID=p41_b02.b02ID"));
 
                     break;
                 case "p51":

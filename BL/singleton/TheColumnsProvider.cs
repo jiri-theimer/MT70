@@ -94,59 +94,59 @@ namespace BL
 
         }
 
-        public string getDefaultPalletePreSaved(string entity,string master_entity,BO.baseQuery mq)  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
-        {
-            string s = null;     
-            switch (mq.Prefix)
-                {                
-                case "p31":
-                    s= "a__p31Worksheet__p31Date,p31_j02__j02Person__fullname_desc,p31_p41_p28__p28Contact__p28Name,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,a__p31Worksheet__p31Hours_Orig,a__p31Worksheet__p31Rate_Billing_Orig,a__p31Worksheet__p31Amount_WithoutVat_Orig,a__p31Worksheet__p31Text";
-                    switch (master_entity)
-                    {
-                        case "p91Invoice":
-                            s = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Hours_Invoiced,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
-                            break;
-                    }
-                    break;
-                case "p28":
+        //public string getDefaultPalletePreSaved(string entity,string master_entity,BO.baseQuery mq)  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
+        //{
+        //    string s = null;     
+        //    switch (mq.Prefix)
+        //        {                
+        //        case "p31":
+        //            s= "a__p31Worksheet__p31Date,p31_j02__j02Person__fullname_desc,p31_p41_p28__p28Contact__p28Name,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,a__p31Worksheet__p31Hours_Orig,a__p31Worksheet__p31Rate_Billing_Orig,a__p31Worksheet__p31Amount_WithoutVat_Orig,a__p31Worksheet__p31Text";
+        //            switch (master_entity)
+        //            {
+        //                case "p91Invoice":
+        //                    s = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Hours_Invoiced,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
+        //                    break;
+        //            }
+        //            break;
+        //        case "p28":
 
-                    break;
-                default:
-                    return null;
-            }
+        //            break;
+        //        default:
+        //            return null;
+        //    }
             
-            if (s !=null)
-            {
-                List<string> lis = new List<string>();
-                var arr = s.Split(",");
-                for (int i = 0; i < arr.Count(); i++)   //pokud v definici sloupce chybí určení entity, pak doplnit:
-                {
-                    if (arr[i].Contains("__"))
-                    {
-                        lis.Add(arr[i]);
-                    }
-                    else
-                    {
-                        lis.Add("a__" + entity + "__" + arr[i]);
-                    }
-                }
+        //    if (s !=null)
+        //    {
+        //        List<string> lis = new List<string>();
+        //        var arr = s.Split(",");
+        //        for (int i = 0; i < arr.Count(); i++)   //pokud v definici sloupce chybí určení entity, pak doplnit:
+        //        {
+        //            if (arr[i].Contains("__"))
+        //            {
+        //                lis.Add(arr[i]);
+        //            }
+        //            else
+        //            {
+        //                lis.Add("a__" + entity + "__" + arr[i]);
+        //            }
+        //        }
 
-                if (!string.IsNullOrEmpty(master_entity))
-                {
-                    lis = lis.Where(p => !p.Contains(master_entity)).ToList();  //aby se v podřízeném gridu nezobrazovali duplicitní sloupce z nadřízeného gridu
-                    if (master_entity == "p41Project")
-                    {
-                        lis = lis.Where(p => !p.Contains("p28Contact")).ToList();   //eliminivat klientské sloupce, pokud je nadřízená entita: Projekt
-                    }
-                }
+        //        if (!string.IsNullOrEmpty(master_entity))
+        //        {
+        //            lis = lis.Where(p => !p.Contains(master_entity)).ToList();  //aby se v podřízeném gridu nezobrazovali duplicitní sloupce z nadřízeného gridu
+        //            if (master_entity == "p41Project")
+        //            {
+        //                lis = lis.Where(p => !p.Contains("p28Contact")).ToList();   //eliminivat klientské sloupce, pokud je nadřízená entita: Projekt
+        //            }
+        //        }
 
 
-                s = string.Join(",", lis);
-            }
+        //        s = string.Join(",", lis);
+        //    }
 
-            return s;
+        //    return s;
 
-        }
+        //}
         public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
         {
            

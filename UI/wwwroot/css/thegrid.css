@@ -260,7 +260,9 @@ td.td_nowrap {
 }
 
 
-
+#tabgrid1 tr.trcperson {
+    color: darkviolet; /*záznam kontaktní osoby*/
+}
 
 #tabgrid1 a.grid_context_menu {
     cursor: pointer;

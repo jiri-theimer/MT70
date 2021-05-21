@@ -16,6 +16,7 @@ namespace BL
         public IEnumerable<BO.j72TheGridTemplate> GetList(string strEntity, int intJ03ID, string strMasterEntity);
         public IEnumerable<BO.j73TheGridQuery> GetList_j73(int j72id,string prefix);
         public string getFiltrAlias(string prefix, BO.baseQuery mq);
+        public string getDefaultPalletePreSaved(string entity, string master_entity, BO.baseQuery mq);  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
 
     }
 
@@ -386,6 +387,79 @@ namespace BL
             }
 
             return string.Join("; ", lis);
+        }
+
+
+        public string getDefaultPalletePreSaved(string entity, string master_entity, BO.baseQuery mq)  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
+        {
+            string s = null;
+            switch (mq.Prefix)
+            {
+                case "j02":
+                    s = "a__j02Person__fullname_desc,a__j02Person__j02Email,j02_j07__j07PersonPosition__j07Name,j02_j03__j03User__j03Login,j02_j03__j03User__j04Name,j02_j03__j03User__j03Ping_TimeStamp";
+                    break;
+                case "p31":
+                    s = "a__p31Worksheet__p31Date,p31_j02__j02Person__fullname_desc,p31_p41_p28__p28Contact__p28Name,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,a__p31Worksheet__p31Hours_Orig,a__p31Worksheet__p31Rate_Billing_Orig,a__p31Worksheet__p31Amount_WithoutVat_Orig,a__p31Worksheet__p31Text";
+                    switch (master_entity.Substring(0,3))
+                    {
+                        case "p91":
+                            s = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Hours_Invoiced,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
+                            break;
+                    }
+                    break;
+                case "p28":
+                    s = "a__p28Contact__p28Name,a__p28Contact__p28RegID,a__p28Contact__p28VatID,p28_address_primary__view_PrimaryAddress__FullAddress";
+                    break;
+                case "p41":
+                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name";                
+                    break;
+                case "p90":
+                    s = "a__p90Proforma__p90Code,a__p90Proforma__p90Date,p90_p28__p28Contact__p28Name,a__p90Proforma__p90Amount,p90_j27__j27Currency__j27Code,a__p90Proforma__p90Amount_Billed,a__p90Proforma__p90DateMaturity,a__p90Proforma__p91codes,a__p90Proforma__ChybiSparovat,a__p90Proforma__p90Text1";
+                    break;
+                case "p91":
+                    s = "a__p91Invoice__p91Code,a__p91Invoice__p91Client,a__p91Invoice__p91DateSupply,a__p91Invoice__p91Amount_WithoutVat,p91_j27__j27Currency__j27Code,a__p91Invoice__p91Amount_Debt,a__p91Invoice__p91DateMaturity,a__p91Invoice__VomKdyOdeslano";
+                    break;
+                case "b07":
+                    s = "a__b07Comment__b07Date,a__b07Comment__b07Value,b07_p28__p28Contact__p28Name,b07_p41__p41Project__p41Name,a__b07Comment__b07LinkUrl,a__b07Comment__DateInsert_b07Comment,a__b07Comment__UserInsert_b07Comment";
+                    break;
+                default:
+                    return null;
+            }
+
+            if (s == null)
+            {
+                return s;
+            }
+
+
+            List<string> lis = new List<string>();
+            var arr = s.Split(",");
+            for (int i = 0; i < arr.Count(); i++)   //pokud v definici sloupce chybí určení entity, pak doplnit:
+            {
+                if (arr[i].Contains("__"))
+                {
+                    lis.Add(arr[i]);
+                }
+                else
+                {
+                    lis.Add("a__" + entity + "__" + arr[i]);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(master_entity))
+            {
+                lis = lis.Where(p => !p.Contains(master_entity)).ToList();  //aby se v podřízeném gridu nezobrazovali duplicitní sloupce z nadřízeného gridu
+                if (master_entity == "p41Project")
+                {
+                    lis = lis.Where(p => !p.Contains("p28Contact")).ToList();   //eliminivat klientské sloupce, pokud je nadřízená entita: Projekt
+                }
+            }
+
+
+            s = string.Join(",", lis);
+
+            return s;
+
         }
 
 

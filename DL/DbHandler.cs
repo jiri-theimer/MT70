@@ -396,6 +396,9 @@ namespace DL
                     case "p28":
                         s += ",a.p28TreePrev as treeprev,a.p28TreeNext as treenext";
                         break;
+                    case "j02":
+                        s += ",a.j02IsIntraPerson";
+                            break;
                 }
             }
 
