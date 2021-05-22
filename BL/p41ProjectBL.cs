@@ -104,6 +104,7 @@ namespace BL
                 p.AddInt("p51ID_Internal", rec.p51ID_Internal, true);
                 p.AddInt("j18ID", rec.j18ID, true);
                 p.AddInt("p61ID", rec.p61ID, true);
+                p.AddEnumInt("p41WorksheetOperFlag", rec.p41WorksheetOperFlag);
                 p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable);
                 p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable);
                 p.AddInt("j02ID_ContactPerson_DefaultInWorksheet", rec.j02ID_ContactPerson_DefaultInWorksheet, true);

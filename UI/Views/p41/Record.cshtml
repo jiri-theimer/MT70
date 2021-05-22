@@ -82,31 +82,31 @@
         </div>
     </div>
 
-    @if (Model.RecP42 != null)
+    @if (Model.RecP42 != null && Model.lisParentLevels.Count()>0)
     {
-<div class="row my-2">
-    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nadřízená úroveň"):</label>
-    <div class="col-sm-2 col-md-2">
-        <mydropdown asp-for="@Model.SelectedParentLevelIndex" datasource="@Model.lisParentLevels" isfirstemptyrow="true" firstemptyrowtext="--@_f.tra("Vybrat úroveň")--" firstemptyrowvalue="0" textfield="TreeName" valuefield="p07Level" event_after_changevalue="parentlevel_change"></mydropdown>
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nadřízená úroveň"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mydropdown asp-for="@Model.SelectedParentLevelIndex" datasource="@Model.lisParentLevels" isfirstemptyrow="true" firstemptyrowtext="--@_f.tra("Vybrat úroveň")--" firstemptyrowvalue="0" textfield="TreeName" valuefield="p07Level" event_after_changevalue="parentlevel_change"></mydropdown>
 
-    </div>
-    @if (Model.SelectedParentLevelIndex > 0)
-    {
-        <div class="col-sm-9 col-md-8">
-            @if (Model.lisParentLevels.Count() > 0)
+            </div>
+            @if (Model.SelectedParentLevelIndex > 0)
             {
-                <mycombo entity="p41Project" asp-for="Rec.p41ParentID" selectedtext="@Model.SelectedComboParent" filter-flag="1" myqueryinline="p07level|int|@Model.SelectedParentLevelIndex"></mycombo>
+                <div class="col-sm-9 col-md-8">
+                    @if (Model.lisParentLevels.Count() > 0)
+                    {
+                        <mycombo entity="p41Project" asp-for="Rec.p41ParentID" selectedtext="@Model.SelectedComboParent" filter-flag="1" myqueryinline="p07level|int|@Model.SelectedParentLevelIndex"></mycombo>
+                    }
+                    else
+                    {
+                        <i>@_f.tra("Pro vybraný typ projektu není k dispozici nadřízená úroveň.")</i>
+                    }
+
+                </div>
             }
-            else
-            {
-                <i>@_f.tra("Pro vybraný typ projektu není k dispozici nadřízená úroveň.")</i>
-            }
+
 
         </div>
-    }
-
-
-</div>
     }
 
 
@@ -229,6 +229,23 @@
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
         <div class="col-sm-11 col-md-10">
             <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klastr aktivit"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="p61ActivityCluster" asp-for="Rec.p61ID" selectedtext="@Model.SelectedComboP61Name"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Dodatečné omezení vykazování úkonů"):</label>
+        <div class="col-sm-11 col-md-10">
+            <select asp-for="Rec.p41WorksheetOperFlag" class="form-select">
+                <option value="NoLimit"></option>
+                <option value="NoEntryData">@_f.tra("V projektu není povoleno vykazovat úkony")</option>
+                <option value="WithTaskOnly">@_f.tra("V projektu lze vykazovat úkony pouze přes úkol")</option>
+                <option value="WithTaskHoursOnly">@_f.tra("V projektu lze vykazovat hodiny pouze přes úkol")</option>
+            </select>
         </div>
     </div>
 
