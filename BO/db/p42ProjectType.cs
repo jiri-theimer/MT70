@@ -21,6 +21,7 @@ namespace BO
         public string b01Name { get; }
         public string x38Name { get; }
         public string p07Name { get; }
+        public int p07Level { get; }
 
         public p42ArchiveFlagENUM p42ArchiveFlag  { get; set; }
         public p42ArchiveFlagP31ENUM p42ArchiveFlagP31 { get; set; }

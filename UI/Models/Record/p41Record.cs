@@ -8,10 +8,16 @@ namespace UI.Models.Record
     public class p41Record:BaseRecordViewModel
     {
         public BO.p41Project Rec { get; set; }
+        public BO.p42ProjectType RecP42 { get; set; }
+        public BO.p41Project RecParent { get; set; }
         public string TempGuid { get; set; }
         public int p51Flag { get; set; }    //1 - nemá ceník, 2 - přiřazený ceník, 3 - ceník na míru
         public FreeFieldsViewModel ff1 { get; set; }
+        public IEnumerable<BO.p07ProjectLevel> lisParentLevels { get; set; }
+        public int SelectedParentLevelIndex { get; set; }
+        
         public bool CanEditRecordCode { get; set; }
+        public string SelectedComboParent { get; set; }
         public string SelectedComboJ18Name { get; set; }
         public string SelectedComboP42Name { get; set; }
         public string SelectedComboP92Name { get; set; }

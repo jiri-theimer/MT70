@@ -92,7 +92,7 @@ namespace UI.Controllers
 
             if (isuse)    //uložení úrovně levelindex
             {
-                rec2save.p07NameSingular = recsource.p07NameSingular;
+                rec2save.p07Name = recsource.p07Name;
                 rec2save.p07NamePlural = recsource.p07NamePlural;
                 rec2save.p07NameInflection = recsource.p07NameInflection;
                 rec2save.ValidUntil = new DateTime(3000, 1, 1);

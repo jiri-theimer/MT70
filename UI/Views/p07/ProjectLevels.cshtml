@@ -46,7 +46,7 @@
                     @_f.tra("Úroveň") #1:
                 </td>
                 <td>
-                    <input class="form-control" asp-for="@Model.RecL1.p07NameSingular" />
+                    <input class="form-control" asp-for="@Model.RecL1.p07Name" />
                 </td>
                 <td>
                     <input class="form-control" asp-for="@Model.RecL1.p07NamePlural" />
@@ -64,7 +64,7 @@
                     --@_f.tra("Úroveň") #2:
                 </td>
                 <td>
-                    <input class="form-control" asp-for="@Model.RecL2.p07NameSingular" />
+                    <input class="form-control" asp-for="@Model.RecL2.p07Name" />
                 </td>
                 <td>
                     <input class="form-control" asp-for="@Model.RecL2.p07NamePlural" />
@@ -82,7 +82,7 @@
                     ----@_f.tra("Úroveň") #3:
                 </td>
                 <td>
-                    <input class="form-control" asp-for="@Model.RecL3.p07NameSingular" />
+                    <input class="form-control" asp-for="@Model.RecL3.p07Name" />
                 </td>
                 <td>
                     <input class="form-control" asp-for="@Model.RecL3.p07NamePlural" />
@@ -100,7 +100,7 @@
                     ------@_f.tra("Úroveň") #4:
                 </td>
                 <td>
-                    <input class="form-control" asp-for="@Model.RecL4.p07NameSingular" />
+                    <input class="form-control" asp-for="@Model.RecL4.p07Name" />
                 </td>
                 <td>
                     <input class="form-control" asp-for="@Model.RecL4.p07NamePlural" />
@@ -118,7 +118,7 @@
                     --------@_f.tra("Úroveň") #5:
                 </td>
                 <td>
-                    <input class="form-control" asp-for="@Model.RecL5.p07NameSingular" />
+                    <input class="form-control" asp-for="@Model.RecL5.p07Name" />
                 </td>
                 <td>
                     <input class="form-control" asp-for="@Model.RecL5.p07NamePlural" />
@@ -147,25 +147,25 @@
 
         @if (!Model.UseL1)
         {
-            @:$("#RecL1_p07NameSingular").css("visibility", "hidden");
+            @:$("#RecL1_p07Name").css("visibility", "hidden");
             @:$("#RecL1_p07NamePlural").css("visibility", "hidden");
             @:$("#RecL1_p07NameInflection").css("visibility", "hidden");
         }
         @if (!Model.UseL2)
         {
-            @:$("#RecL2_p07NameSingular").css("visibility", "hidden");
+            @:$("#RecL2_p07Name").css("visibility", "hidden");
             @:$("#RecL2_p07NamePlural").css("visibility", "hidden");
             @:$("#RecL2_p07NameInflection").css("visibility", "hidden");
         }
         @if (!Model.UseL3)
         {
-            @:$("#RecL3_p07NameSingular").css("visibility", "hidden");
+            @:$("#RecL3_p07Name").css("visibility", "hidden");
             @:$("#RecL3_p07NamePlural").css("visibility", "hidden");
             @:$("#RecL3_p07NameInflection").css("visibility", "hidden");
         }
         @if (!Model.UseL4)
         {
-            @:$("#RecL4_p07NameSingular").css("visibility", "hidden");
+            @:$("#RecL4_p07Name").css("visibility", "hidden");
             @:$("#RecL4_p07NamePlural").css("visibility", "hidden");
             @:$("#RecL4_p07NameInflection").css("visibility", "hidden");
         }

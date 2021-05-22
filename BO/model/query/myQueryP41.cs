@@ -10,6 +10,7 @@ namespace BO
     {
         public int p42id { get; set; }
         public int p51id { get; set; }
+        public int p07level { get; set; }
         public int j02id_owner { get; set; }
         public int j02id_contactperson { get; set; }
         public int p41parentid { get; set; }
@@ -53,6 +54,10 @@ namespace BO
                             break;
                     }
                 }
+            }
+            if (this.p07level > 0)
+            {
+                AQ("p07x.p07Level=@p07level", "p07level", this.p07level);
             }
             if (this.p42id > 0)
             {
@@ -98,6 +103,36 @@ namespace BO
             {
                 AQ("(a.p28ID_Client=@p28id OR a.p28ID_Billing=@p28id)", "p28id", this.p28id);
             }
+
+
+
+            if (!string.IsNullOrEmpty(_searchstring))
+            {
+                string s = null;
+                if (_searchstring.Length == 1)
+                {
+                    //hledat pouze podle počátečních písmen
+                    s = "a.p41Name LIKE @expr+'%' OR a.p41Code LIKE '%'+@expr+'%' OR a.p41NameShort LIKE @expr+'%'";
+                    s += " OR a.p28ID_Client IN (select p28ID FROM p28Contact WHERE p28client.p28Name LIKE @expr+'%' OR p28CompanyName LIKE @expr+'%')";
+                }
+                else
+                {
+                    //něco jako fulltext
+                    s = "a.p41Name LIKE '%'+@expr+'%' OR a.p41Code LIKE '%'+@expr+'%' OR a.p41NameShort LIKE '%'+@expr+'%'";
+                    s += " OR a.p28ID_Client IN (select p28ID FROM p28Contact WHERE p28Name LIKE '%'+@expr+'%' OR p28CompanyName LIKE '%'+@expr+'%')";
+                }
+                AQ(s, "expr", _searchstring);
+
+            }
+
+
+
+
+
+
+
+
+
             return this.InhaleRows();
 
         }

@@ -24,7 +24,7 @@ namespace BL
 
         private string GetSQL1(string strAppend = null)
         {
-            sb("SELECT a.*,b01.b01Name,p07.p07NameSingular as p07Name,x38.x38Name," + _db.GetSQL1_Ocas("p42") + " FROM p42ProjectType a");
+            sb("SELECT a.*,b01.b01Name,p07.p07Level,p07.p07Name,x38.x38Name," + _db.GetSQL1_Ocas("p42") + " FROM p42ProjectType a");
             sb(" LEFT OUTER JOIN b01WorkflowTemplate b01 ON a.b01ID=b01.b01ID");
             sb(" LEFT OUTER JOIN p07ProjectLevel p07 ON a.p07ID=p07.p07ID");
             sb(" LEFT OUTER JOIN x38CodeLogic x38 ON a.x38ID=x38.x38ID");

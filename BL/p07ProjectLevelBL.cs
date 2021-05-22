@@ -56,7 +56,7 @@ namespace BL
 
             p.AddInt("pid", rec.pid);
             p.AddInt("p07Level", rec.p07Level);
-            p.AddString("p07NameSingular", rec.p07NameSingular);
+            p.AddString("p07Name", rec.p07Name);
             p.AddString("p07NamePlural", rec.p07NamePlural);
             p.AddString("p07NameInflection", rec.p07NameInflection);
 
@@ -72,16 +72,16 @@ namespace BL
 
         private bool ValidateBeforeSave(BO.p07ProjectLevel rec)
         {
-            if (rec.ValidUntil<DateTime.Now && string.IsNullOrEmpty(rec.p07NameSingular))
+            if (rec.ValidUntil<DateTime.Now && string.IsNullOrEmpty(rec.p07Name))
             {
-                rec.p07NameSingular = "level"+rec.p07Level.ToString();
+                rec.p07Name = "level"+rec.p07Level.ToString();
             }
             if (rec.ValidUntil < DateTime.Now && string.IsNullOrEmpty(rec.p07NamePlural))
             {
                 rec.p07NamePlural = "l" + rec.p07Level.ToString();
             }
 
-            if (string.IsNullOrEmpty(rec.p07NameSingular) || string.IsNullOrEmpty(rec.p07NamePlural))
+            if (string.IsNullOrEmpty(rec.p07Name) || string.IsNullOrEmpty(rec.p07Name))
             {
                 this.AddMessage("Chybí vyplnit název úrovně."); return false;
             }
@@ -94,7 +94,7 @@ namespace BL
 
             if (rec.ValidUntil > DateTime.Now)
             {                
-                if (lis.Where(p => p.pid != rec.pid).Any(p => p.p07NameSingular.ToLower() == rec.p07NameSingular.ToLower() || p.p07NamePlural.ToLower() == rec.p07NamePlural.ToLower()))
+                if (lis.Where(p => p.pid != rec.pid).Any(p => p.p07Name.ToLower() == rec.p07Name.ToLower() || p.p07NamePlural.ToLower() == rec.p07NamePlural.ToLower()))
                 {
                     this.AddMessageTranslated(string.Format("Název úrovně #{0} je duplicitní s jinou úrovní.", rec.p07Level)); return false;
                 }
@@ -102,7 +102,7 @@ namespace BL
             
             if (lis.Where(p => p.p07Level == rec.p07Level && p.pid != rec.pid).Any())
             {
-                var s = lis.Where(p => p.p07Level == rec.p07Level && p.pid != rec.pid).First().p07NameSingular;
+                var s = lis.Where(p => p.p07Level == rec.p07Level && p.pid != rec.pid).First().p07Name;
                 this.AddMessageTranslated(string.Format(_mother.tra("Pro index úrovně {0} již je založený záznam [{1}]."), rec.p07Level,s));
                 return false;
             }

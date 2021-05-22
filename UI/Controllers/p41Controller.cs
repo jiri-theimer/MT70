@@ -56,7 +56,13 @@ namespace UI.Controllers
                 {
                     v.SelectedComboP87Name = Factory.FBL.LoadP87(v.Rec.p87ID).p87Name ;
                 }
-                
+                if (v.Rec.p41ParentID > 0)
+                {
+                    v.RecParent = Factory.p41ProjectBL.Load(v.Rec.p41ParentID);
+                    v.SelectedComboParent = v.RecParent.FullName;
+                    v.SelectedParentLevelIndex = v.RecParent.p07Level;
+                }
+               
                 v.SelectedComboOwner = v.Rec.Owner;
 
                 if (!InhalePermissions(v))
@@ -96,6 +102,18 @@ namespace UI.Controllers
 
         private void RefreshState(p41Record v)
         {
+            if (v.RecParent==null && v.Rec.p41ParentID > 0)
+            {
+                v.RecParent = Factory.p41ProjectBL.Load(v.Rec.p41ParentID);
+            }
+            if (v.Rec.p42ID > 0)
+            {
+                v.RecP42 = Factory.p42ProjectTypeBL.Load(v.Rec.p42ID);
+                v.lisParentLevels = Factory.p07ProjectLevelBL.GetList(new BO.myQuery("p07")).Where(p => p.p07Level<v.RecP42.p07Level);
+
+            }
+
+
             if (v.ff1 == null)
             {
                 v.ff1 = new FreeFieldsViewModel();
@@ -126,8 +144,13 @@ namespace UI.Controllers
             {
                 BO.p41Project c = new BO.p41Project();
                 if (v.rec_pid > 0) c = Factory.p41ProjectBL.Load(v.rec_pid);
+                c.p41Name = v.Rec.p41Name;
+                c.p41NameShort = v.Rec.p41NameShort;
+                c.p41ParentID = v.Rec.p41ParentID;
                 c.p28ID_Client = v.Rec.p28ID_Client;
                 c.p28ID_Billing = v.Rec.p28ID_Billing;
+                c.p41PlanFrom = v.Rec.p41PlanFrom;
+                c.p41PlanUntil = v.Rec.p41PlanUntil;
                 c.p42ID = v.Rec.p42ID;
                 c.p87ID = v.Rec.p87ID;
                 c.p41InvoiceMaturityDays = v.Rec.p41InvoiceMaturityDays;

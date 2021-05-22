@@ -98,7 +98,8 @@ namespace BO
         public string Client { get; }
        public int x38ID { get; }
 
-
+        public int p07Level { get; }
+        public string p07Name { get; set; }
         public int p41TreeLevel { get; set; }
        
         public int p41TreeIndex { get; set; }

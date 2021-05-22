@@ -44,21 +44,21 @@
 
     <div class="row">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Název projektu"):</label>
-        <div class="col-sm-7 col-md-6">
+        <div class="col-sm-8 col-md-7">
             <input class="form-control" asp-for="Rec.p41Name" />
         </div>
 
-        <div class="col-sm-4 col-md-4">
+        <div class="col-sm-3 col-md-3">
             <input class="form-control" asp-for="Rec.p41NameShort" placeholder="@_f.tra("Zkrácený (preferovaný) název projektu")" />
         </div>
     </div>
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Typ projektu"):</label>
-        <div class="col-sm-7 col-md-6">
-            <mycombo entity="p42ProjectType" asp-for="Rec.p42ID" selectedtext="@Model.SelectedComboP42Name"></mycombo>
+        <div class="col-sm-8 col-md-7">
+            <mycombo entity="p42ProjectType" asp-for="Rec.p42ID" selectedtext="@Model.SelectedComboP42Name" event_after_changevalue="p42id_change"></mycombo>
         </div>
-        <div class="col-sm-1 col-md-2">@_f.tra("Kód projektu"):</div>
-        <div class="col-sm-3 col-md-2">
+        <div class="col-sm-1 col-md-1">@_f.tra("Kód projektu"):</div>
+        <div class="col-sm-2 col-md-2">
             @if (Model.CanEditRecordCode)
             {
                 <myval value="@Model.Rec.p41Code" hoversymol="@_f.tra("Upravit kód")" hoverurl="javascript:_edit_code('p41',@Model.rec_pid)"></myval>
@@ -71,17 +71,42 @@
         </div>
     </div>
     <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient projektu"):</label>
-        <div class="col-sm-7 col-md-6">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient"):</label>
+        <div class="col-sm-7 col-md-7">
             <mycombo entity="p28Contact" asp-for="Rec.p28ID_Client" selectedtext="@Model.SelectedComboClient" filter-flag="1" search-result-width="700"></mycombo>
         </div>
-        <div class="col-sm-1 col-md-2">@_f.tra("Středisko"):</div>
+        <div class="col-sm-1 col-md-1">@_f.tra("Středisko"):</div>
         <div class="col-sm-3 col-md-2">
             <mycombo entity="j18Region" asp-for="Rec.j18ID" selectedtext="@Model.SelectedComboJ18Name"></mycombo>
 
         </div>
     </div>
 
+    @if (Model.RecP42 != null)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nadřízená úroveň"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mydropdown asp-for="@Model.SelectedParentLevelIndex" datasource="@Model.lisParentLevels" textfield="p07Name" valuefield="p07Level" event_after_changevalue="parentlevel_change"></mydropdown>
+
+            </div>
+            <div class="col-sm-9 col-md-8">
+                @if (Model.lisParentLevels.Count() > 0)
+                {
+                    <mycombo entity="p41Project" asp-for="Rec.p41ParentID" selectedtext="@Model.SelectedComboParent" filter-flag="1" myqueryinline="p07level|int|@Model.SelectedParentLevelIndex"></mycombo>
+                }
+                else
+                {
+                    <i>@_f.tra("Pro vybraný typ projektu není k dispozici nadřízená úroveň.")</i>
+                }
+
+            </div>
+
+        </div>
+    }
+
+
+    <hr />
     <mystitky entity="p41Project" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
 
 </div>
@@ -173,7 +198,20 @@
 
 <div class="tab-pane" id="tab3" role="tabpanel">
     <!-- Tab3 Rozpočet -->
-    
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label recpagelabel">@(_f.tra("Plánované zahájení")):</label>
+        <div class="col-sm-3 col-md-3">
+            <mydate asp-for="@Model.Rec.p41PlanFrom" include-time="false"></mydate>
+
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label recpagelabel">@(_f.tra("Plánované dokončení")):</label>
+        <div class="col-sm-3 col-md-3">
+            <mydate asp-for="@Model.Rec.p41PlanUntil" include-time="false"></mydate>
+
+        </div>
+    </div>
 </div>
 
 <div class="tab-pane" id="tab4" role="tabpanel">
@@ -252,5 +290,12 @@
     }
     function p51_create_flag2() {
         _window_open("/p51/Record?pid=0", 2);
+    }
+
+    function parentlevel_change(cbx) {
+        postback("parentlevel");
+    }
+    function p42id_change(p42id) {
+        postback("p42id");
     }
 </script>

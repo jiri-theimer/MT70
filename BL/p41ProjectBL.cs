@@ -29,7 +29,7 @@ namespace BL
         private string GetSQL1(string strAppend = null)
         {
             sb("SELECT a.p42ID,a.j02ID_Owner,a.p41Name,a.p41NameShort,a.p41Code,a.p41IsDraft,a.p28ID_Client,a.p28ID_Billing,a.p87ID,a.p51ID_Billing,a.p51ID_Internal,a.p92ID,a.b02ID,a.j18ID,a.p61ID,a.p41InvoiceDefaultText1,a.p41InvoiceDefaultText2,a.p41InvoiceMaturityDays,a.p41WorksheetOperFlag,a.p41PlanFrom,a.p41PlanUntil,a.p41LimitHours_Notification,a.p41LimitFee_Notification");
-            sb(",p28client.p28Name as Client,p51billing.p51Name as p51Name_Billing,a.p41LimitWipFlag");
+            sb(",p28client.p28Name as Client,p51billing.p51Name as p51Name_Billing,a.p41LimitWipFlag,p07.p07Level,p07.p07Name");
             sb(",a.p41TreeLevel,a.p41TreeIndex,a.p41TreePrev,a.p41TreeNext,a.p41TreePath,a.p41TreeOrdinary");
             sb(",p42.p42Name,p92.p92Name,b02.b02Name,j18.j18Name,a.p41ExternalPID,a.p41ParentID,a.p41BillingMemo");
             sb(",j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,p28client.p87ID as p87ID_Client,p42.b01ID,a.p41IsNoNotify,a.p72ID_NonBillable,a.p72ID_BillableHours,a.j02ID_ContactPerson_DefaultInWorksheet,a.j02ID_ContactPerson_DefaultInInvoice");
@@ -38,16 +38,15 @@ namespace BL
             sb(","+_db.GetSQL1_Ocas("p41"));
 
             sb(" FROM p41Project a INNER JOIN p42ProjectType p42 ON a.p42ID=p42.p42ID");
+            sb(" LEFT OUTER JOIN p07ProjectLevel p07 ON p42.p07ID=p07.p07ID");
             sb(" LEFT OUTER JOIN p28Contact p28client ON a.p28ID_Client=p28client.p28ID");
             sb(" LEFT OUTER JOIN p51PriceList p51billing ON a.p51ID_Billing=p51billing.p51ID");
             sb(" LEFT OUTER JOIN p92InvoiceType p92 ON a.p92ID=p92.p92ID");
             sb(" LEFT OUTER JOIN b02WorkflowStatus b02 ON a.b02ID=b02.b02ID");
 
-           
-            sb(" LEFT OUTER JOIN p87BillingLanguage p87 ON a.p87ID=p87.p87ID");
             
             sb(" LEFT OUTER JOIN j18Region j18 ON a.j18ID=j18.j18ID");
-            sb(" LEFT OUTER JOIN p41Project_FreeField p41free ON a.p41ID=p41free.p41ID");
+            //sb(" LEFT OUTER JOIN p41Project_FreeField p41free ON a.p41ID=p41free.p41ID");
             sb(" LEFT OUTER JOIN j02Person j02owner ON a.j02ID_Owner=j02owner.j02ID");
 
             sb(strAppend);

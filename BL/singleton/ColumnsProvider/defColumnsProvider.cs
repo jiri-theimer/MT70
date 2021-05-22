@@ -128,7 +128,7 @@ namespace BL
             oc=AFNUM0("o15Ordinary", "#");oc.DefaultColumnFlag = gdc2;
 
             this.EntityName = "p07ProjectLevel";
-            AA("p07NameSingular", "Úroveň", gdc1, null, "string", false, true);
+            AA("p07Name", "Úroveň", gdc1, null, "string", false, true);
             oc=AFNUM0("p07Level", "Index úrovně");oc.DefaultColumnFlag = gdc1;
             AA("p07NamePlural", "Množné číslo", gdc2);
             AA("p07NameInflection", "Koho čeho");
