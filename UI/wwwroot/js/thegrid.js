@@ -1089,9 +1089,22 @@ function tg_select_all_toggle() {
     }
 }
 
-function tg_dblclick_save_setting(val) {
+function tg_dblclick_save_setting(val) {    //nastavení dvojkliku na grid záznamu
     var prefix = _tg_entity.substr(0, 3);
     $.post(_ep("/Common/SetUserParam"), { key: "grid-" + prefix + "-dblclick", value: val }, function (data) {
+        location.reload(location.href);
+    });
+}
+
+function tg_p31statequery_change(val) {     //filtrování podle stavu úkonu
+    var prefix = _tg_entity.substr(0, 3);
+    var k = "grid-" + prefix;
+    if (_tg_master_entity !== "") {
+        k += "-" + _tg_master_entity;
+    }
+    k += "-p31statequery";
+    
+    $.post(_ep("/Common/SetUserParam"), { key: k, value: val }, function (data) {
         location.reload(location.href);
     });
 }

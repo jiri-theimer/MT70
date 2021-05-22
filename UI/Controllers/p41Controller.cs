@@ -110,6 +110,7 @@ namespace UI.Controllers
             if (isclone)
             {
                 v.MakeClone();
+                
             }
 
             return View(v);
@@ -176,10 +177,12 @@ namespace UI.Controllers
                 c.p41PlanUntil = v.Rec.p41PlanUntil;
                 c.p42ID = v.Rec.p42ID;
                 c.p87ID = v.Rec.p87ID;
+                c.j18ID = v.Rec.j18ID;
                 c.p41InvoiceMaturityDays = v.Rec.p41InvoiceMaturityDays;
                 c.p61ID = v.Rec.p61ID;
                 c.p41WorksheetOperFlag = v.Rec.p41WorksheetOperFlag;
-
+                c.p41IsNoNotify = v.Rec.p41IsNoNotify;
+                c.p72ID_NonBillable = v.Rec.p72ID_NonBillable;
                 if (v.p51Flag == 2)
                 {
                     c.p51ID_Billing = v.SelectedP51ID_Flag2;

@@ -8,6 +8,7 @@
     }
     string _PeriodFieldAlias = null;
     string _PeriodAlias = null;
+    
     if (Model.PeriodValue > 0)
     {
         switch (Model.PeriodField)
@@ -90,12 +91,13 @@
             per = _pp.ByPid(Model.PeriodValue);
             _PeriodAlias = _f.tra(per.PeriodName) + " ** " + BO.BAS.ObjectDate2String(per.d1) + " - " + BO.BAS.ObjectDate2String(per.d2);
         }
-
+        
 
     }
     if (Model.PeriodValue == 1)
     {
         _PeriodAlias = BO.BAS.ObjectDate2String(Model.d1) + " - " + BO.BAS.ObjectDate2String(Model.d2);
+        
     }
 
 
@@ -104,6 +106,7 @@
 @addTagHelper *, UI
 
 <button type="button" class="btn btn-light dropdown-toggle" id="cmdPeriodMore">
+    <span class="k-icon k-i-filter-sm" style="color:silver;"></span>
     <span id="span1">@_PeriodFieldAlias</span>
     <span id="span2">@(_PeriodAlias)</span>
 </button>

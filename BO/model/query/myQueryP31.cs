@@ -23,6 +23,7 @@ namespace BO
         public int p71id { get; set; }
         public string tabquery { get; set; }
         
+        
 
         public myQueryP31()
         {
@@ -31,6 +32,19 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
+            switch (this.p31statequery)
+            {
+                case 1: //Rozpracované
+                    this.iswip = true;break;
+                case 2://Schválené a nevyúčtované
+                    this.isapproved_and_wait4invoice = true;break;
+                case 3://nevyúčtované
+                    AQ("a.p91ID IS NULL", null, null);break;
+                case 4://vyúčtované
+                    this.isinvoiced = true;break;
+                case 5: //v archivu
+                    AQ("a.p31ValidUntil<GETDATE()", null, null); break;
+            }
 
             if (this.global_d1 != null && this.global_d2 != null)
             {
@@ -154,6 +168,8 @@ namespace BO
                         AQ("p34x.p33ID=3", null, null); break;
                 }
             }
+
+            
 
 
             return this.InhaleRows();

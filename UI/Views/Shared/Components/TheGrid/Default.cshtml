@@ -190,7 +190,8 @@
 
 <script type="text/javascript">
     var _gridMenuFilled = false;
-    var _gridSelMenuFilled = false;
+    var _gridSelMenuFilled = false;    
+
     $(document).ready(function () {
         var _thegrid={
             entity: "@Model.GridInput.entity",
@@ -234,8 +235,8 @@
 
             $("#TheGridRows").text($("#tabgrid1_rows").text());
 
-            var cmdGridDropdown = document.getElementById("cmdGridMenu");
-            cmdGridDropdown.addEventListener("show.bs.dropdown", function () {
+            
+            document.getElementById("cmdGridMenu").addEventListener("show.bs.dropdown", function () {
 
                 if (_gridMenuFilled == true) return;
 
@@ -257,9 +258,8 @@
             });
         }
 
-        if (document.getElementById("cmdGridSelMenu")) {
-            var cmdGridSelDropdown = document.getElementById("cmdGridSelMenu");
-            cmdGridSelDropdown.addEventListener("show.bs.dropdown", function () {
+        if (document.getElementById("cmdGridSelMenu")) {            
+            document.getElementById("cmdGridSelMenu").addEventListener("show.bs.dropdown", function () {
 
 
                 if (_gridSelMenuFilled == true) return;
@@ -283,23 +283,26 @@
 
 
 
-        if (document.getElementById("cmdGridDblclickSetting")) {
-            var cmdGridSelDropdown = document.getElementById("cmdGridDblclickSetting");
-            cmdGridSelDropdown.addEventListener("show.bs.dropdown", function () {
+        if (document.getElementById("cmdGridDblclickSetting")) {            
+            document.getElementById("cmdGridDblclickSetting").addEventListener("show.bs.dropdown", function () {
                 
                 $.post("/Menu/TheGridDblclickSetting", { tgi: get_all_tgi_params() }, function (data) {
                     $("#ulGridDblclickSetting").css("margin-left", "-50px");
                     $("#ulGridDblclickSetting").html(data);
-
                     
                 });
-
             });
-
-
         }
 
+        if (document.getElementById("cmdP31StateQuery")) {            
+            document.getElementById("cmdP31StateQuery").addEventListener("show.bs.dropdown", function () {
 
+                $.post("/Menu/TheGridP31StateQuery", { tgi: get_all_tgi_params() }, function (data) {                    
+                    $("#ulP31StateQuery").html(data);
+
+                });
+            });
+        }
 
     });
 

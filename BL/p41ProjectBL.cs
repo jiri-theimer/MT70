@@ -15,7 +15,8 @@ namespace BL
         public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI);
         public BO.p41ProjectSum LoadSumRow(int pid);
         public BO.p41RecDisposition InhaleRecDisposition(BO.p41Project rec);
-
+        public bool ExistWaitingWorksheetForInvoicing(int p41id);
+        public bool ExistWaitingWorksheetForApproving(int p41id);
 
     }
     class p41ProjectBL : BaseBL, Ip41ProjectBL
@@ -84,7 +85,13 @@ namespace BL
 
         public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI)
         {
-            if (!ValidateBeforeSave(rec))
+            if (rec.p42ID == 0)
+            {
+                return this.ZeroMessage("Chybí typ projektu.");
+            }
+            var recP42 = _mother.p42ProjectTypeBL.Load(rec.p42ID);
+
+            if (!ValidateBeforeSave(rec, recP42))
             {
                 return 0;
             }
@@ -105,8 +112,8 @@ namespace BL
                 p.AddInt("j18ID", rec.j18ID, true);
                 p.AddInt("p61ID", rec.p61ID, true);
                 p.AddEnumInt("p41WorksheetOperFlag", rec.p41WorksheetOperFlag);
-                p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable);
-                p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable);
+                p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable,true);
+                p.AddEnumInt("p72ID_NonBillable", rec.p72ID_NonBillable,true);
                 p.AddInt("j02ID_ContactPerson_DefaultInWorksheet", rec.j02ID_ContactPerson_DefaultInWorksheet, true);
 
                 p.AddString("p41Name", rec.p41Name);
@@ -159,19 +166,83 @@ namespace BL
             
         }
 
-        public bool ValidateBeforeSave(BO.p41Project rec)
+        public bool ValidateBeforeSave(BO.p41Project rec,BO.p42ProjectType recP42)
         {
-
-            if (string.IsNullOrEmpty(rec.p41Name) || string.IsNullOrEmpty(rec.p41Code))
+            if (rec.pid == 0)
             {
-                this.AddMessage("[Název] a [Kód] jsou povinná pole."); return false;
+                if (!_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P41_Creator))
+                {
+                    //ověřit, jakým způsobem může zakládat nové projekty
+                    if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P41_Draft_Creator))
+                    {
+                        rec.p41IsDraft = true;
+                    }
+                    else
+                    {
+                        //oprávnění zakládat pod-projekty?
+                    }
+                }
+            }
+            
+            if (string.IsNullOrEmpty(rec.p41Name))
+            {
+                return this.FalsehMessage("Chybí vyplnit [Název].");
+            }
+            if (rec.p41PlanFrom != null && rec.p41PlanUntil==null)
+            {
+                return this.FalsehMessage("Pokud je plán zahájení vyplněný, musíte vyplnit i datum plánu dokončení.");
+            }
+            if (rec.p41PlanFrom != null && rec.p41PlanUntil != null)
+            {
+                if (rec.p41PlanFrom > rec.p41PlanUntil)
+                {
+                    return this.FalsehMessage("Datum plánovaného zahájení je větší než datum plánovaného dokončení.");
+                }
+                if ((Convert.ToDateTime(rec.p41PlanUntil) - Convert.ToDateTime(rec.p41PlanFrom)).TotalDays>1000)
+                {
+                    return this.FalsehMessage("Doba časového plánu projektu musí být menší než 1000 dní.");
+                }
+                
             }
 
-            if (LoadByCode(rec.p41Code, rec.pid) != null)
+            if (rec.ValidUntil < DateTime.Now && rec.pid>0)
             {
-                this.AddMessageTranslated(string.Format(_mother.tra("Kód [{0}] již je obsazen jiným polem."), rec.p41Code));
-                return false;
+                //pokus o přesun projektu do archivu
+                switch (recP42.p42ArchiveFlag)
+                {
+                    case BO.p42ArchiveFlagENUM.NoArchive_Waiting_Approve:
+                        if (ExistWaitingWorksheetForInvoicing(rec.pid))
+                        {
+                            return this.FalsehMessage("Projekt nelze přesunout do achivu, dokud v něm existují nevyfakturované úkony. Tuto ochranu může změnit administrátor v nastavení typu projektu.");
+                        }
+                        break;
+                    case BO.p42ArchiveFlagENUM.NoArchive_Waiting_Invoice:
+                        if (ExistWaitingWorksheetForInvoicing(rec.pid))
+                        {
+                            return this.FalsehMessage("Projekt nelze přesunout do achivu, dokud v něm existují rozpracované úkony. Rozpracované úkony lze přesunout do archivu nebo tuto ochranu může změnit administrátor v nastavení typu projektu.");
+                        }
+                        break;
+                }
             }
+
+            switch (rec.p41BillingFlag)
+            {
+                case BO.p41BillingFlagEnum.FixedPrice:
+                    if (rec.p72ID_BillableHours == BO.p72IdENUM._NotSpecified)
+                    {
+                        return this.FalsehMessage("V projektu s fakturačním režimem [Pevná cena] musíte vyplnit volbu: [Výchozí status fakturovatelných hodin pro schvalování].");
+                    }
+                    break;
+                case BO.p41BillingFlagEnum.WithoutBilling:
+                    rec.p51ID_Billing = 0;
+                    rec.p72ID_BillableHours = BO.p72IdENUM._NotSpecified;
+                    break;
+                default:
+                    rec.p72ID_BillableHours = BO.p72IdENUM._NotSpecified;
+                    break;
+            }
+
+            
 
             return true;
         }
@@ -197,6 +268,23 @@ namespace BL
             }
 
             return c;
+        }
+
+        public bool ExistWaitingWorksheetForInvoicing(int p41id)
+        {            
+            if (_db.Load<BO.GetInteger>("select top 1 p31ID as Value FROM p31worksheet WHERE p41ID=@pid AND p91ID IS NULL AND getdate() BETWEEN p31ValidFrom AND p31ValidUntil", new { pid = p41id }) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool ExistWaitingWorksheetForApproving(int p41id)
+        {
+            if (_db.Load<BO.GetInteger>("select top 1 p31ID FROM p31worksheet WHERE p41ID=@pid AND p71ID IS NULL AND p91ID IS NULL AND getdate() BETWEEN p31ValidFrom AND p31ValidUntil", new { pid = p41id }) != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

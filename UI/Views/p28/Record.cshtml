@@ -34,445 +34,449 @@
 </div>
 
 
-<div class="modal_record_container">
-    <div class="tab-content">
-        <div class="tab-pane" id="tab1" role="tabpanel">
-            <!-- Tab1 -->
-            <div class="row">
-                <div class="col-auto">
-                    <input type="radio" id="RadioIsIntraPerson1" asp-for="@Model.IsCompany" value="1" onchange="postback('postback')">
-                    <label for="RadioIsIntraPerson1">@_f.tra("Klient je společnost/právnická osoba")</label>
-                    <br />
-                    <input type="radio" id="RadioIsIntraPerson0" asp-for="@Model.IsCompany" value="0" onchange="postback('postback')">
-                    <label for="RadioIsIntraPerson0">@_f.tra("Klient je fyzická osoba")</label>
-                </div>
-                <div class="col-auto">
-                    <div class="dropdown float-end">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuRejstriky" data-bs-toggle="dropdown" aria-expanded="false">
-                            @_f.tra("Rejstříky")
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuRejstriky">
-                            <li><a class="dropdown-item" href="javascript:justice()">JUSTICE.cz, Výpis z obchodního rejstříku podle IČ</a></li>
-                            <li><a class="dropdown-item" href="javascript:aresinfo()">ARES Info podle IČ</a></li>
-                            <li><a class="dropdown-item" href="javascript:insolvence()">INSOLVENCE podle IČ</a></li>
-                            <li><a class="dropdown-item" href="javascript:vatinfo()">@_f.tra("Ověření v DPH registrech")</a></li>
-                            <li><a class="dropdown-item" href="javascript:ares()">@_f.tra("ARES Import podle IČ")</a></li>
-                            <li><a class="dropdown-item" href="javascript:vies()">@_f.tra("VIES Import podle DIČ")</a></li>
-                        </ul>
+@Html.Raw("<div class='modal_record_container'>")
+@Html.Raw("<div class='tab-content'>")
+
+
+<div class="tab-pane" id="tab1" role="tabpanel">
+    <!-- Tab1 -->
+    <div class="row">
+        <div class="col-auto">
+            <input type="radio" id="RadioIsIntraPerson1" asp-for="@Model.IsCompany" value="1" onchange="postback('postback')">
+            <label for="RadioIsIntraPerson1">@_f.tra("Klient je společnost/právnická osoba")</label>
+            <br />
+            <input type="radio" id="RadioIsIntraPerson0" asp-for="@Model.IsCompany" value="0" onchange="postback('postback')">
+            <label for="RadioIsIntraPerson0">@_f.tra("Klient je fyzická osoba")</label>
+        </div>
+        <div class="col-auto">
+            <div class="dropdown float-end">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuRejstriky" data-bs-toggle="dropdown" aria-expanded="false">
+                    @_f.tra("Rejstříky")
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuRejstriky">
+                    <li><a class="dropdown-item" href="javascript:justice()">JUSTICE.cz, Výpis z obchodního rejstříku podle IČ</a></li>
+                    <li><a class="dropdown-item" href="javascript:aresinfo()">ARES Info podle IČ</a></li>
+                    <li><a class="dropdown-item" href="javascript:insolvence()">INSOLVENCE podle IČ</a></li>
+                    <li><a class="dropdown-item" href="javascript:vatinfo()">@_f.tra("Ověření v DPH registrech")</a></li>
+                    <li><a class="dropdown-item" href="javascript:ares()">@_f.tra("ARES Import podle IČ")</a></li>
+                    <li><a class="dropdown-item" href="javascript:vies()">@_f.tra("VIES Import podle DIČ")</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-auto">
+            <mystitky entity="p28Contact" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div id="divCompany1">
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Společnost"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <input class="form-control" asp-for="Rec.p28CompanyName" value="@Model.Rec.p28CompanyName" />
                     </div>
                 </div>
-                <div class="col-auto">
-                    <mystitky entity="p28Contact" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+            </div>
+            <div id="divCompany0">
+                <div class="row my-2">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
+                    <div class="col-sm-11 col-md-10">
+                        <myautocomplete asp-for="Rec.p28TitleBeforeName" o15flag="1" placeholder="@_f.tra("Titul")"></myautocomplete>
+                    </div>
+
+                </div>
+                <div class="row my-2">
+                    <div class="col-sm-1 col-md-2"></div>
+                    <div class="col-sm-11 col-md-10">
+                        <input class="form-control" asp-for="Rec.p28FirstName" placeholder="@_f.tra("Křestní jméno")" />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-sm-1 col-md-2"></div>
+                    <div class="col-sm-11 col-md-10">
+                        <input class="form-control" asp-for="Rec.p28LastName" placeholder="@_f.tra("Příjmení")" />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-sm-1 col-md-2"></div>
+                    <div class="col-sm-11 col-md-10">
+                        <myautocomplete asp-for="Rec.p28TitleAfterName" o15flag="2" placeholder="@_f.tra("Za jménem")"></myautocomplete>
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
+
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
+                <div class="col-sm-5 col-md-4">
+                    <div class="input-group">
+                        <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
+                        <button type="button" id="cmdAresImport" onclick="ares()" class="btn btn-outline-secondary">ARES</button>
+                    </div>
+
+                </div>
+                <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DIČ"):</label>
+                <div class="col-sm-5 col-md-5">
+                    <div class="input-group">
+                        <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
+                        <button type="button" id="cmdViesImport" onclick="vies()" class="btn btn-outline-secondary">VIES</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-2">
+
+
+
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="row my-2">
+                <div class="col-sm-1 col-md-2">@_f.tra("Kód klienta"):</div>
+                <div class="col-sm-5 col-md-4">
+                    @if (Model.CanEditRecordCode)
+                    {
+                        <myval value="@Model.Rec.p28Code" hoversymol="@_f.tra("Upravit kód")" hoverurl="javascript:_edit_code('p28',@Model.rec_pid)"></myval>
+                    }
+                    else
+                    {
+                        <myval value="@Model.Rec.p28Code"></myval>
+                    }
+
+                </div>
                 <div class="col-sm-6 col-md-6">
-                    <div id="divCompany1">
-                        <div class="row my-2">
-                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Společnost"):</label>
-                            <div class="col-sm-11 col-md-10">
-                                <input class="form-control" asp-for="Rec.p28CompanyName" value="@Model.Rec.p28CompanyName" />
-                            </div>
-                        </div>
-                    </div>
-                    <div id="divCompany0">
-                        <div class="row my-2">
-                            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
-                            <div class="col-sm-11 col-md-10">
-                                <myautocomplete asp-for="Rec.p28TitleBeforeName" o15flag="1" placeholder="@_f.tra("Titul")"></myautocomplete>
-                            </div>
-
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-sm-1 col-md-2"></div>
-                            <div class="col-sm-11 col-md-10">
-                                <input class="form-control" asp-for="Rec.p28FirstName" placeholder="@_f.tra("Křestní jméno")" />
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-sm-1 col-md-2"></div>
-                            <div class="col-sm-11 col-md-10">
-                                <input class="form-control" asp-for="Rec.p28LastName" placeholder="@_f.tra("Příjmení")" />
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-sm-1 col-md-2"></div>
-                            <div class="col-sm-11 col-md-10">
-                                <myautocomplete asp-for="Rec.p28TitleAfterName" o15flag="2" placeholder="@_f.tra("Za jménem")"></myautocomplete>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("IČ"):</label>
-                        <div class="col-sm-5 col-md-4">
-                            <div class="input-group">
-                                <input class="form-control" asp-for="Rec.p28RegID" value="@Model.Rec.p28RegID" />
-                                <button type="button" id="cmdAresImport" onclick="ares()" class="btn btn-outline-secondary">ARES</button>
-                            </div>
-
-                        </div>
-                        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DIČ"):</label>
-                        <div class="col-sm-5 col-md-5">
-                            <div class="input-group">
-                                <input class="form-control" asp-for="Rec.p28VatID" value="@Model.Rec.p28VatID" />
-                                <button type="button" id="cmdViesImport" onclick="vies()" class="btn btn-outline-secondary">VIES</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-
-
-
-                    </div>
+                    <input class="form-control" asp-for="Rec.p28CompanyShortName" placeholder="@_f.tra("Zkrácený (preferovaný) název klienta")" />
                 </div>
-                <div class="col-sm-6 col-md-6">
-                    <div class="row my-2">
-                        <div class="col-sm-1 col-md-2">@_f.tra("Kód klienta"):</div>
-                        <div class="col-sm-5 col-md-4">
-                            @if (Model.CanEditRecordCode)
-                            {
-                            <myval value="@Model.Rec.p28Code" hoversymol="@_f.tra("Upravit kód")" hoverurl="javascript:_edit_code('p28',@Model.rec_pid)"></myval>
-                            }
-                            else
-                            {
-                            <myval value="@Model.Rec.p28Code"></myval>
-                            }
-
-                        </div>
-                        <div class="col-sm-6 col-md-6">
-                            <input class="form-control" asp-for="Rec.p28CompanyShortName" placeholder="@_f.tra("Zkrácený (preferovaný) název klienta")" />
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Typ klienta"):</label>
-                        <div class="col-sm-11 col-md-10">
-                            <mycombo entity="p29ContactType" asp-for="Rec.p29ID" selectedtext="@Model.SelectedComboP29Name"></mycombo>
-                        </div>
-                    </div>
-
+            </div>
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Typ klienta"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <mycombo entity="p29ContactType" asp-for="Rec.p29ID" selectedtext="@Model.SelectedComboP29Name"></mycombo>
                 </div>
             </div>
 
-
-            <div class="card">
-                <div class="card-header">
-                    @Html.Raw(BO.Symbol.o38())
-                    @_f.tra("Adresy")
-                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o37()">@_f.tra("Přidat")</button>
-                </div>
-                <div class="card-body">
-                    <table class="table table-hover" style="table-layout: fixed;">
-                        @for (int i = 0; i < Model.lisO37.Count; i++)
-                        {
-                        <tr style="@(Model.lisO37[i].CssTempDisplay)">
-                            <td>
-                                <input type="hidden" asp-for="lisO37[i].IsTempDeleted" value="@Model.lisO37[i].IsTempDeleted" />
-                                <input type="hidden" asp-for="lisO37[i].TempGuid" value="@Model.lisO37[i].TempGuid" />
-                                <input type="hidden" asp-for="lisO37[i].pid" value="@Model.lisO37[i].pid" />
-                                <input type="hidden" asp-for="lisO37[i].o38ID" value="@Model.lisO37[i].o38ID" />
-                                <select asp-for="@Model.lisO37[i].o36ID">
-                                    <option value="InvoiceAddress">@_f.tra("Fakturační adresa")</option>
-                                    <option value="PostalAddress">@_f.tra("Poštovní adresa")</option>
-                                    <option value="Other">@_f.tra("Jiné")</option>
-                                </select>
-                                <br />
-                                <input asp-for="@Model.lisO37[i].o38Name" placeholder="@_f.tra("Nadpis adresy")" />
-                            </td>
-                            <td>
-                                <textarea asp-for="@Model.lisO37[i].o38Street" class="form-control" placeholder="@_f.tra("Ulice")"></textarea>
-
-                            </td>
-                            <td>
-                                <textarea asp-for="@Model.lisO37[i].o38City" class="form-control" placeholder="@_f.tra("Město")"></textarea>
-                            </td>
-                            <td style="width:80px;">
-                                <input class="form-control" asp-for="@Model.lisO37[i].o38ZIP" style="width:70px;" placeholder="@_f.tra("PSČ")" />
+        </div>
+    </div>
 
 
-                            </td>
-                            <td>
-                                <myautocomplete asp-for="@Model.lisO37[i].o38Country" o15flag="328" placeholder="@_f.tra("Stát")"></myautocomplete>
-                            </td>
-                            <td style="width:70px;">
-                                <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o37('@(Model.lisO37[i].TempGuid)')">x</button>
-                            </td>
+    <div class="card">
+        <div class="card-header">
+            @Html.Raw(BO.Symbol.o38())
+            @_f.tra("Adresy")
+            <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o37()">@_f.tra("Přidat")</button>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover" style="table-layout: fixed;">
+                @for (int i = 0; i < Model.lisO37.Count; i++)
+                {
+                    <tr style="@(Model.lisO37[i].CssTempDisplay)">
+                        <td>
+                            <input type="hidden" asp-for="lisO37[i].IsTempDeleted" value="@Model.lisO37[i].IsTempDeleted" />
+                            <input type="hidden" asp-for="lisO37[i].TempGuid" value="@Model.lisO37[i].TempGuid" />
+                            <input type="hidden" asp-for="lisO37[i].pid" value="@Model.lisO37[i].pid" />
+                            <input type="hidden" asp-for="lisO37[i].o38ID" value="@Model.lisO37[i].o38ID" />
+                            <select asp-for="@Model.lisO37[i].o36ID">
+                                <option value="InvoiceAddress">@_f.tra("Fakturační adresa")</option>
+                                <option value="PostalAddress">@_f.tra("Poštovní adresa")</option>
+                                <option value="Other">@_f.tra("Jiné")</option>
+                            </select>
+                            <br />
+                            <input asp-for="@Model.lisO37[i].o38Name" placeholder="@_f.tra("Nadpis adresy")" />
+                        </td>
+                        <td>
+                            <textarea asp-for="@Model.lisO37[i].o38Street" class="form-control" placeholder="@_f.tra("Ulice")"></textarea>
 
-                        </tr>
-                        }
-                    </table>
+                        </td>
+                        <td>
+                            <textarea asp-for="@Model.lisO37[i].o38City" class="form-control" placeholder="@_f.tra("Město")"></textarea>
+                        </td>
+                        <td style="width:80px;">
+                            <input class="form-control" asp-for="@Model.lisO37[i].o38ZIP" style="width:70px;" placeholder="@_f.tra("PSČ")" />
 
-                </div>
-            </div>
 
-            <div class="card my-2">
-                <div class="card-header">
-                    <span class="k-icon k-i-email"></span>
-                    @_f.tra("Kontaktní média")
-                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o32()">@_f.tra("Přidat")</button>
-                </div>
-                <div class="card-body">
-                    <table class="table table-hover" style="table-layout: fixed;">
-                        @for (int i = 0; i < Model.lisO32.Count; i++)
-                        {
-                        <tr style="@(Model.lisO32[i].CssTempDisplay)">
-                            <td style="width:130px;">
-                                <input type="hidden" asp-for="lisO32[i].IsTempDeleted" value="@Model.lisO32[i].IsTempDeleted" />
-                                <input type="hidden" asp-for="lisO32[i].TempGuid" value="@Model.lisO32[i].TempGuid" />
-                                <input type="hidden" asp-for="lisO32[i].pid" value="@Model.lisO32[i].pid" />
+                        </td>
+                        <td>
+                            <myautocomplete asp-for="@Model.lisO37[i].o38Country" o15flag="328" placeholder="@_f.tra("Stát")"></myautocomplete>
+                        </td>
+                        <td style="width:70px;">
+                            <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o37('@(Model.lisO37[i].TempGuid)')">x</button>
+                        </td>
 
-                                <select class="form-select" asp-for="@Model.lisO32[i].o33ID" onchange="postback('postback')">
-                                    <option value="Email">E-MAIL</option>
-                                    <option value="EmailCC">E-MAIL CC</option>
-                                    <option value="EmailBCC">E-MAIL BCC</option>
-                                    <option value="Tel">TEL</option>
-                                    <option value="URL">URL</option>
-                                    <option value="Other">@_f.tra("Jiné")</option>
-                                </select>
+                    </tr>
+                }
+            </table>
 
-                            </td>
-                            <td>
-                                <input class="form-control" asp-for="@Model.lisO32[i].o32Value" placeholder="@_f.tra("Číslo/Adresa")" />
-                            </td>
-                            <td>
-                                <input class="form-control" asp-for="@Model.lisO32[i].o32Description" placeholder="@_f.tra("Poznámka")" />
-                            </td>
-                            <td>
-                                @if (Model.lisO32[i].o33ID == BO.o33FlagEnum.Email || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailBCC || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailCC)
-                                    {
+        </div>
+    </div>
+
+    <div class="card my-2">
+        <div class="card-header">
+            <span class="k-icon k-i-email"></span>
+            @_f.tra("Kontaktní média")
+            <button type="button" class="btn btn-sm btn-outline-secondary float-end" tabindex="-1" onclick="handle_add_o32()">@_f.tra("Přidat")</button>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover" style="table-layout: fixed;">
+                @for (int i = 0; i < Model.lisO32.Count; i++)
+                {
+                    <tr style="@(Model.lisO32[i].CssTempDisplay)">
+                        <td style="width:130px;">
+                            <input type="hidden" asp-for="lisO32[i].IsTempDeleted" value="@Model.lisO32[i].IsTempDeleted" />
+                            <input type="hidden" asp-for="lisO32[i].TempGuid" value="@Model.lisO32[i].TempGuid" />
+                            <input type="hidden" asp-for="lisO32[i].pid" value="@Model.lisO32[i].pid" />
+
+                            <select class="form-select" asp-for="@Model.lisO32[i].o33ID" onchange="postback('postback')">
+                                <option value="Email">E-MAIL</option>
+                                <option value="EmailCC">E-MAIL CC</option>
+                                <option value="EmailBCC">E-MAIL BCC</option>
+                                <option value="Tel">TEL</option>
+                                <option value="URL">URL</option>
+                                <option value="Other">@_f.tra("Jiné")</option>
+                            </select>
+
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.lisO32[i].o32Value" placeholder="@_f.tra("Číslo/Adresa")" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.lisO32[i].o32Description" placeholder="@_f.tra("Poznámka")" />
+                        </td>
+                        <td>
+                            @if (Model.lisO32[i].o33ID == BO.o33FlagEnum.Email || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailBCC || Model.lisO32[i].o33ID == BO.o33FlagEnum.EmailCC)
+                            {
                                 <input type="checkbox" asp-for="@Model.lisO32[i].o32IsDefaultInInvoice" />
                                 <label for="lisO32_@(i)__o32IsDefaultInInvoice">Fakturační e-mail</label>
-                                    }
+                            }
 
-                            </td>
+                        </td>
 
-                            <td style="width:70px;">
-                                <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisO32[i].TempGuid)')">x</button>
-                            </td>
-                        </tr>
-                        }
-                    </table>
-                </div>
+                        <td style="width:70px;">
+                            <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_o32('@(Model.lisO32[i].TempGuid)')">x</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <div class="card my-2">
+        <div class="card-header">
+            @Html.Raw(BO.Symbol.j02())
+            @_f.tra("Kontaktní osoby")
+            <div class="dropdown float-end">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    @_f.tra("Přidat")
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="javascript:j02_create()">@_f.tra("Založit novou osobu")</a></li>
+                    <li><a class="dropdown-item" href="javascript:j02_append()">@_f.tra("Vazba na již založenou osobu")</a></li>
+                </ul>
             </div>
 
-            <div class="card my-2">
-                <div class="card-header">
-                    @Html.Raw(BO.Symbol.j02())
-                    @_f.tra("Kontaktní osoby")
-                    <div class="dropdown float-end">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            @_f.tra("Přidat")
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="javascript:j02_create()">@_f.tra("Založit novou osobu")</a></li>
-                            <li><a class="dropdown-item" href="javascript:j02_append()">@_f.tra("Vazba na již založenou osobu")</a></li>
-                        </ul>
-                    </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm table-hover" style="table-layout: fixed;">
+                @foreach (var c in Model.lisJ02)
+                {
+                    <tr>
+                        <td>
+                            <a href="javascript:j02_record(@(c.pid))">@c.FullNameAsc</a>
+                        </td>
+                        <td>
+                            @c.j02Email
+                        </td>
 
+                        <td>
+                            @c.j02Mobile
+                        </td>
+                        <td>
+                            @c.j02JobTitle
+                        </td>
+                        <td style="width:70px;">
+                            <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_j02(@(c.pid))">x</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+</div>
+
+<div class="tab-pane" id="tab2" role="tabpanel">
+    <!-- Tab2 -->
+    <div class="row">
+        <div class="col-sm-7 col-md-7">
+            <div class="card">
+                <div class="card-header">
+                    ₠
+                    @_f.tra("Ceník fakturačních hodinových sazeb")
                 </div>
                 <div class="card-body">
-                    <table class="table table-sm table-hover" style="table-layout: fixed;">
-                        @foreach (var c in Model.lisJ02)
-                        {
+                    <input type="radio" id="Radiop51Flag1" asp-for="@Model.p51Flag" value="1" onchange="postback('postback')">
+                    <label for="Radiop51Flag1">@_f.tra("Klient nemá přímo přiřazený ceník fakturačních sazeb")</label>
+                    <br />
+                    <input type="radio" id="Radiop51Flag2" asp-for="@Model.p51Flag" value="2" onchange="postback('postback')">
+                    <label for="Radiop51Flag2">@_f.tra("Svázat klienta s jedním ze zavedených (a sdílených) ceníků")</label>
+                    <br />
+                    <input type="radio" id="Radiop51Flag3" asp-for="@Model.p51Flag" value="3" onchange="postback('postback')">
+                    <label for="Radiop51Flag3">@_f.tra("Klient má individuální hodinové sazby na míru")</label>
+                </div>
+                @if (Model.p51Flag == 2)
+                {
+                    <div>
+                        @_f.tra("Přiřazený ceník hodinových sazeb")
+                        <button type="button" onclick="p51_record_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Upravit ceník")</button>
+                        <button type="button" onclick="p51_create_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Založit ceník")</button>
+                    </div>
+                    <mycombo entity="p51PriceList" asp-for="@Model.SelectedP51ID_Flag2" selectedtext="@Model.SelectedComboP51Name" myqueryinline="typeflag|int|1|iscustomtailor|bool|false"></mycombo>
+
+                }
+                @if (Model.p51Flag == 3)
+                {
+
+
+                    <button type="button" onclick="p51_record_flag3()" class="btn btn-sm btn-outline-secondary">@_f.tra("Sazby na míru")</button>
+                    <input type="hidden" asp-for="@Model.SelectedP51ID_Flag3" value="@Model.SelectedP51ID_Flag3" />
+                }
+            </div>
+
+        </div>
+        <div class="col-sm-5 col-md-5">
+            <div class="card my-2">
+                <div class="card-header">@_f.tra("WIP limit k upozornění")</div>
+                <div class="card-body">
+                    <table>
                         <tr>
                             <td>
-                                <a href="javascript:j02_record(@(c.pid))">@c.FullNameAsc</a>
+                                @_f.tra("Limit rozpracovaných hodin v projektech klienta"):
                             </td>
-                            <td>
-                                @c.j02Email
-                            </td>
-
-                            <td>
-                                @c.j02Mobile
-                            </td>
-                            <td>
-                                @c.j02JobTitle
-                            </td>
-                            <td style="width:70px;">
-                                <button type="button" class="btn btn-sm btn-danger" title="@_f.tra("Odstranit řádek")" onclick="handle_delete_j02(@(c.pid))">x</button>
+                            <td width="80px">
+                                <mynumber asp-for="Rec.p28LimitHours_Notification" decimal-digits="2"></mynumber>
                             </td>
                         </tr>
-                        }
+                        <tr>
+                            <td>
+                                @_f.tra("Limitní honorář z rozpracovaných hodin projektů klienta"):
+                            </td>
+                            <td width="80px">
+                                <mynumber asp-for="Rec.p28LimitFee_Notification" decimal-digits="2"></mynumber>
+                            </td>
+                        </tr>
                     </table>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-        </div>
-
-        <div class="tab-pane" id="tab2" role="tabpanel">
-            <!-- Tab2 -->
-            <div class="row">
-                <div class="col-sm-7 col-md-7">
-                    <div class="card">           
-                        <div class="card-header">
-                            ₠
-                            @_f.tra("Ceník fakturačních hodinových sazeb")
-                        </div>
-                        <div class="card-body">
-                            <input type="radio" id="Radiop51Flag1" asp-for="@Model.p51Flag" value="1" onchange="postback('postback')">
-                            <label for="Radiop51Flag1">@_f.tra("Klient nemá přímo přiřazený ceník fakturačních sazeb")</label>
-                            <br />
-                            <input type="radio" id="Radiop51Flag2" asp-for="@Model.p51Flag" value="2" onchange="postback('postback')">
-                            <label for="Radiop51Flag2">@_f.tra("Svázat klienta s jedním ze zavedených (a sdílených) ceníků")</label>
-                            <br />
-                            <input type="radio" id="Radiop51Flag3" asp-for="@Model.p51Flag" value="3" onchange="postback('postback')">
-                            <label for="Radiop51Flag3">@_f.tra("Klient má individuální hodinové sazby na míru")</label>
-                        </div>
-                        @if (Model.p51Flag == 2)
-                        {
-                        <div>
-                            @_f.tra("Přiřazený ceník hodinových sazeb")
-                            <button type="button" onclick="p51_record_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Upravit ceník")</button>
-                            <button type="button" onclick="p51_create_flag2()" class="btn btn-sm btn-outline-secondary">@_f.tra("Založit ceník")</button>
-                        </div>
-                        <mycombo entity="p51PriceList" asp-for="@Model.SelectedP51ID_Flag2" selectedtext="@Model.SelectedComboP51Name" myqueryinline="typeflag|int|1|iscustomtailor|bool|false"></mycombo>
-
-                        }
-                        @if (Model.p51Flag == 3)
-                        {
-                       
-
-                        <button type="button" onclick="p51_record_flag3()" class="btn btn-sm btn-outline-secondary">@_f.tra("Sazby na míru")</button>
-                        <input type="hidden" asp-for="@Model.SelectedP51ID_Flag3" value="@Model.SelectedP51ID_Flag3" />
-                        }
-                    </div>
 
                 </div>
-                <div class="col-sm-5 col-md-5">
-                    <div class="card my-2">
-                        <div class="card-header">@_f.tra("WIP limit k upozornění")</div>
-                        <div class="card-body">
-                            <table>
-                                <tr>
-                                    <td>
-                                        @_f.tra("Limit rozpracovaných hodin v projektech klienta"):
-                                    </td>
-                                    <td width="80px">
-                                        <mynumber asp-for="Rec.p28LimitHours_Notification" decimal-digits="2"></mynumber>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        @_f.tra("Limitní honorář z rozpracovaných hodin projektů klienta"):
-                                    </td>
-                                    <td width="80px">
-                                        <mynumber asp-for="Rec.p28LimitFee_Notification" decimal-digits="2"></mynumber>
-                                    </td>
-                                </tr>
-                            </table>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="row my-2">
-                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Fakturační jazyk klienta"):</label>
-                <div class="col-sm-10 col-md-9">
-                    <mycombo entity="p87BillingLanguage" asp-for="Rec.p87ID" selectedtext="@Model.SelectedComboP87Name"></mycombo>
-                </div>
-            </div>
-            <div class="row my-2">
-                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Výchozí typ faktury"):</label>
-                <div class="col-sm-10 col-md-9">
-                    <mycombo entity="p92InvoiceType" asp-for="Rec.p92ID" selectedtext="@Model.SelectedComboP92Name"></mycombo>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-sm-2 col-md-3">@_f.tra("ISDOC kód státu"):</div>
-                <div class="col-sm-1 col-md-1">
-                    <input class="form-control" asp-for="Rec.p28Pohoda_VatCode" />
-                </div>
-                <div class="col-auto">@_f.tra("IČ DPH SK (Slovensko)"):</div>
-                <div class="col-sm-2 col-md-2">
-                    <input class="form-control" asp-for="Rec.p28ICDPH_SK" />
-                </div>
-                <div class="col-auto">@_f.tra("Výchozí splatnost faktury (dny)"):</div>
-                <div class="col-sm-1 col-md-1">
-                    <mynumber asp-for="Rec.p28InvoiceMaturityDays" decimal-digits="0"></mynumber>
-                </div>
-            </div>
-
-
-            <div class="row my-2">
-                <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Šablona zprávy pro elektronickou fakturaci"):</label>
-                <div class="col-sm-5 col-md-5">
-                    <mycombo entity="j61TextTemplate" asp-for="Rec.j61ID_Invoice" selectedtext="@Model.SelectedComboJ61Name" myqueryinline="x29id|int|391"></mycombo>
-                </div>
-                <div class="col-auto">@_f.tra("Režijní přirážka k ceně faktury"):</div>
-                <div class="col-sm-3 col-md-2">
-                    <mycombo entity="p63Overhead" asp-for="Rec.p63ID" selectedtext="@Model.SelectedComboP63Name"></mycombo>
-                </div>
-            </div>
-
-            <div class="form-floating my-2">
-                <textarea class="form-control" style="background-color:#F0FFF0 !important;" asp-for="Rec.p28BillingMemo"></textarea>
-                <label for="Rec_p28BillingMemo">@_f.tra("Interní fakturační poznámka klienta")</label>
-            </div>
-
-
-            <div class="form-floating my-2">
-                <textarea class="form-control" asp-for="Rec.p28InvoiceDefaultText1"></textarea>
-                <label for="Rec_p28InvoiceDefaultText1">@_f.tra("Výchozí hlavní text faktury")</label>
-            </div>
-
-            <div class="form-floating my-2">
-                <textarea class="form-control" asp-for="Rec.p28InvoiceDefaultText2"></textarea>
-                <label for="Rec_p28InvoiceDefaultText2">@_f.tra("Výchozí technický text faktury")</label>
             </div>
         </div>
-
-        <div class="tab-pane" id="tab3" role="tabpanel">
-            <!-- Tab3 -->
+    </div>
 
 
-            @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
 
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Fakturační jazyk klienta"):</label>
+        <div class="col-sm-10 col-md-9">
+            <mycombo entity="p87BillingLanguage" asp-for="Rec.p87ID" selectedtext="@Model.SelectedComboP87Name"></mycombo>
         </div>
-
-        <div class="tab-pane" id="tab4" role="tabpanel">
-            <!-- Tab4 -->
-            <div class="row">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
-                <div class="col-sm-11 col-md-10">
-                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
-                </div>
-            </div>
-            <div class="row my-2">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Stromově nadřízený klient"):</label>
-                <div class="col-sm-11 col-md-10">
-                    <mycombo entity="p28Contact" asp-for="Rec.p28ParentID" selectedtext="@Model.SelectedComboParentP28Name" view-flag="1"></mycombo>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-sm-1 col-md-2">@_f.tra("Rodné číslo"):</div>
-                <div class="col-sm-11 col-md-10">
-                    <input class="form-control" asp-for="Rec.p28Person_BirthRegID" />
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-sm-1 col-md-2">@_f.tra("Externí kód"):</div>
-                <div class="col-sm-11 col-md-10">
-                    <input class="form-control" asp-for="Rec.p28ExternalPID" />
-                </div>
-            </div>
-
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Výchozí typ faktury"):</label>
+        <div class="col-sm-10 col-md-9">
+            <mycombo entity="p92InvoiceType" asp-for="Rec.p92ID" selectedtext="@Model.SelectedComboP92Name"></mycombo>
         </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-sm-2 col-md-3">@_f.tra("ISDOC kód státu"):</div>
+        <div class="col-sm-1 col-md-1">
+            <input class="form-control" asp-for="Rec.p28Pohoda_VatCode" />
+        </div>
+        <div class="col-auto">@_f.tra("IČ DPH SK (Slovensko)"):</div>
+        <div class="col-sm-2 col-md-2">
+            <input class="form-control" asp-for="Rec.p28ICDPH_SK" />
+        </div>
+        <div class="col-auto">@_f.tra("Výchozí splatnost faktury (dny)"):</div>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.p28InvoiceMaturityDays" decimal-digits="0"></mynumber>
+        </div>
+    </div>
 
+
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-3 col-form-label">@_f.tra("Šablona zprávy pro elektronickou fakturaci"):</label>
+        <div class="col-sm-5 col-md-5">
+            <mycombo entity="j61TextTemplate" asp-for="Rec.j61ID_Invoice" selectedtext="@Model.SelectedComboJ61Name" myqueryinline="x29id|int|391"></mycombo>
+        </div>
+        <div class="col-auto">@_f.tra("Režijní přirážka k ceně faktury"):</div>
+        <div class="col-sm-3 col-md-2">
+            <mycombo entity="p63Overhead" asp-for="Rec.p63ID" selectedtext="@Model.SelectedComboP63Name"></mycombo>
+        </div>
+    </div>
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" style="background-color:#F0FFF0 !important;" asp-for="Rec.p28BillingMemo"></textarea>
+        <label for="Rec_p28BillingMemo">@_f.tra("Interní fakturační poznámka klienta")</label>
+    </div>
+
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p28InvoiceDefaultText1"></textarea>
+        <label for="Rec_p28InvoiceDefaultText1">@_f.tra("Výchozí hlavní text faktury")</label>
+    </div>
+
+    <div class="form-floating my-2">
+        <textarea class="form-control" asp-for="Rec.p28InvoiceDefaultText2"></textarea>
+        <label for="Rec_p28InvoiceDefaultText2">@_f.tra("Výchozí technický text faktury")</label>
     </div>
 </div>
+
+<div class="tab-pane" id="tab3" role="tabpanel">
+    <!-- Tab3 -->
+
+
+    @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
+
+</div>
+
+<div class="tab-pane" id="tab4" role="tabpanel">
+    <!-- Tab4 -->
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Stromově nadřízený klient"):</label>
+        <div class="col-sm-11 col-md-10">
+            <mycombo entity="p28Contact" asp-for="Rec.p28ParentID" selectedtext="@Model.SelectedComboParentP28Name" view-flag="1"></mycombo>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-sm-1 col-md-2">@_f.tra("Rodné číslo"):</div>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.p28Person_BirthRegID" />
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-sm-1 col-md-2">@_f.tra("Externí kód"):</div>
+        <div class="col-sm-11 col-md-10">
+            <input class="form-control" asp-for="Rec.p28ExternalPID" />
+        </div>
+    </div>
+
+</div>
+
+
+
+@Html.Raw("</div>")
+@Html.Raw("</div>")
 
 
 <input type="hidden" asp-for="@Model.TempGuid" />
@@ -545,7 +549,7 @@
                 return;
             }
         }
-        
+
 
         postback("postback");
     }

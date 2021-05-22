@@ -101,28 +101,11 @@ namespace BO
         public bool? IsRecordValid { get; set; } = true;
         public List<int> o51ids { get; set; }
 
+        public int p31statequery { get; set; }  //filtrování podle stavu úkonu v p31/p41/p28/p56
         public string period_field { get; set; }
         public DateTime? global_d1 { get; set; }
         public DateTime? global_d2 { get; set; }
-        //private DateTime? _global_d2 { get; set; }
-        //public DateTime? global_d2
-        //{
-        //    get
-        //    {
-        //        return _global_d2;
-        //    }
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            _global_d2 = BO.BAS.ConvertDateTo235959(Convert.ToDateTime(value));     //převést datum-do na čas 23:59:59
-        //        }
-        //        else
-        //        {
-        //            _global_d2 = value;
-        //        }
-        //    }
-        //}
+       
 
         public DateTime global_d2_235959
         {

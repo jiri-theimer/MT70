@@ -38,18 +38,28 @@
         <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
     </div>
 
-    @if (Model.period !=null)
+    @if (Model.period != null)
     {
         <div>
             @Html.EditorFor(m => m.period, "~/Views/Shared/_Period.cshtml")
         </div>
 
     }
+    @if (Model.IsP31StateQuery)
+    {
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="cmdP31StateQuery" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="k-icon k-i-filter-sm" style="color:silver;"></span>
+                @_f.tra("Stav úkonů")
+            </button>
+            <ul id="ulP31StateQuery" class="dropdown-menu" aria-labelledby="cmdP31StateQuery"></ul>
+        </div>
+    }
 
     @if (Model.IsCanbeMasterView)
     {
         <div style="margin-left:auto;margin-right:2px;" class="nonmobile btn-group">
-            
+
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridDblclickSetting" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="k-icon k-i-gears"></span>

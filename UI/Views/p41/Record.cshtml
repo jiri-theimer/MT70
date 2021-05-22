@@ -198,6 +198,18 @@
         <textarea class="form-control" asp-for="Rec.p41InvoiceDefaultText2"></textarea>
         <label for="Rec_p41InvoiceDefaultText2">@_f.tra("Výchozí technický text faktury")</label>
     </div>
+
+    <div class="row my-2">
+        <label class="col-sm-4 col-md-4 col-form-label">@_f.tra("Nefakturovalným úkonům nahazovat ve vyúčtování status"):</label>
+        <div class="col-sm-8 col-md-8">
+            <select asp-for="@Model.Rec.p72ID_NonBillable" class="form-select">
+                <option value="_NotSpecified">--@(_f.tra("Rozhodne systém"))--</option>
+                <option value="ZahrnoutDoPausalu">@_f.tra("Zahrnout do paušálu")</option>
+                <option value="ViditelnyOdpis">@_f.tra("Viditelný odpis")</option>
+                <option value="SkrytyOdpis">@_f.tra("Skrytý odpis")</option>
+            </select>
+        </div>
+    </div>
 </div>
 
 <div class="tab-pane" id="tab3" role="tabpanel">
@@ -230,6 +242,10 @@
         <div class="col-sm-11 col-md-10">
             <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
         </div>
+    </div>
+    <div class="my-2">
+        <input type="checkbox" id="chkp41IsNoNotify" asp-for="@Model.Rec.p41IsNoNotify" />
+        <label for="chkp41IsNoNotify">@_f.tra("V projektu vypnout automatické e-mail notifikace")</label>
     </div>
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klastr aktivit"):</label>

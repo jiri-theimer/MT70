@@ -200,12 +200,16 @@ namespace UI.Controllers
         private FsmViewModel LoadFsmViewModel(string prefix,int go2pid,string pagename,string masterentity,int master_pid,string myqueryinline,bool isperiodovergrid)
         {
             var v = new FsmViewModel() { prefix = prefix,master_pid=master_pid, myqueryinline = myqueryinline };
-
+            
             BO.TheEntity c = Factory.EProvider.ByPrefix(prefix);
             v.entity = c.TableName;
             v.entityTitle = c.AliasPlural;
-            
-            
+
+            bool bolMasterEntity = false;
+            if (!string.IsNullOrEmpty(masterentity)) bolMasterEntity = true;
+
+
+
             v.gridinput = new TheGridInput() {entity=v.entity, go2pid = go2pid, master_entity = masterentity,master_pid=master_pid,myqueryinline=v.myqueryinline,ondblclick= "grid_dblclick",isperiodovergrid= isperiodovergrid };
             
 
@@ -229,7 +233,7 @@ namespace UI.Controllers
             if (isperiodovergrid)
             {
                 v.period = new PeriodViewModel() { prefix = v.prefix, IsShowButtonRefresh=true };
-                if (string.IsNullOrEmpty(masterentity))
+                if (!bolMasterEntity)
                 {
                     v.period.UserParamKey = $"grid-period-{v.prefix}";
                 }
@@ -242,13 +246,25 @@ namespace UI.Controllers
                 
                 v.gridinput.query.period_field = v.period.PeriodField;
                 v.gridinput.query.global_d1 = v.period.d1;
-                v.gridinput.query.global_d2 = v.period.d2;                
+                v.gridinput.query.global_d2 = v.period.d2;            
             }
 
             if (v.prefix=="p41" || v.prefix=="p28" || v.prefix == "j02" || v.prefix == "p91" || v.prefix=="o23" || v.prefix=="p90" || v.prefix=="p56")
             {
                 v.IsCanbeMasterView = true;
-                v.dblClickSetting = Factory.CBL.LoadUserParam("grid-" + v.prefix + "-dblclick", "edit");
+                v.dblClickSetting = Factory.CBL.LoadUserParam("grid-" + v.prefix + "-dblclick", "edit");                
+            }
+            if (v.prefix == "p31" || v.prefix == "p41" || v.prefix=="p28" || v.prefix=="j02" || v.prefix == "p56")
+            {
+                v.IsP31StateQuery = true;
+                if (!bolMasterEntity)
+                {
+                    v.gridinput.query.p31statequery = Factory.CBL.LoadUserParamInt("grid-" + v.prefix + "-p31statequery", 0);
+                }
+                else
+                {
+                    v.gridinput.query.p31statequery = Factory.CBL.LoadUserParamInt("grid-" + v.prefix + "-"+masterentity+"-p31statequery", 0);
+                }
                 
             }
 

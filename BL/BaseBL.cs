@@ -41,6 +41,16 @@ namespace BL
             _mother.CurrentUser.AddMessage(_mother.tra(strMessage), template);  //automaticky podléhá překladu do ostatních jazyků
 
         }
+        public bool FalsehMessage(string strMessage)
+        {
+            AddMessage(strMessage);
+            return false;
+        }
+        public int ZeroMessage(string strMessage)
+        {
+            AddMessage(strMessage);
+            return 0;
+        }
         public void AddMessageTranslated(string strMessage, string template = "error")
         {
             _mother.CurrentUser.AddMessage(strMessage, template);  //nepodléhá překladu do ostatních jazyků

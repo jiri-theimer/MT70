@@ -386,8 +386,31 @@ namespace UI.Controllers
 
             return basMenu.FlushResult_UL(_lis,true, false);
         }
-        
-       
+
+        public string TheGridP31StateQuery(TheGridUIContext tgi)  //menu pro zobrazení filtrování stavu úkonů
+        {
+            string s0 = "k-i-radiobutton"; string s1 = "k-i-radiobutton-checked";
+            string strKey = "grid-" + tgi.prefix;
+            if (!string.IsNullOrEmpty(tgi.master_entity))
+            {
+                strKey += "-" + tgi.master_entity;
+            }
+            strKey += "-p31statequery";
+
+            int val = Factory.CBL.LoadUserParamInt(strKey, 0);            
+            
+            AMI("Nefiltrovat", "javascript:tg_p31statequery_change('0')", BO.BAS.IIFS(val==0,s1,s0));
+            AMI("Rozpracované -> Čeká na schvalování", "javascript:tg_p31statequery_change('1')", BO.BAS.IIFS(val == 1, s1, s0));
+            AMI("Schválené a nevyúčtované -> Čeká na vyúčtování", "javascript:tg_p31statequery_change('2')", BO.BAS.IIFS(val == 2, s1, s0));
+            
+            AMI("Nevyúčtované -> Rozpracované nebo Schválené", "javascript:tg_p31statequery_change('3')", BO.BAS.IIFS(val == 3, s1, s0));
+            AMI("Již vyúčtované", "javascript:tg_p31statequery_change('4')", BO.BAS.IIFS(val == 4, s1, s0));
+            AMI("Úkony přesunuté do archivu", "javascript:tg_p31statequery_change('5')", BO.BAS.IIFS(val == 5, s1, s0));
+
+
+            return basMenu.FlushResult_UL(_lis, true, false);
+        }
+
         public string TheGridDblclickSetting(TheGridUIContext tgi)  //menu pro nastavení doubleclick grid záznamu
         {
             string strIconEdit = "k-i-radiobutton";string strIconPage = "k-i-radiobutton-checked";
