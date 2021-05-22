@@ -129,9 +129,17 @@ namespace BL
 
             this.EntityName = "p07ProjectLevel";
             AA("p07Name", "Úroveň", gdc1, null, "string", false, true);
-            oc=AFNUM0("p07Level", "Index úrovně");oc.DefaultColumnFlag = gdc1;
+            oc = AA("LevelIndex", "Stupeň úrovně", gdc1, "'#'+convert(varchar(10),a.p07Level)","string",false,true);
             AA("p07NamePlural", "Množné číslo", gdc2);
             AA("p07NameInflection", "Koho čeho");
+            AppendTimestamp();
+
+            this.EntityName = "p42ProjectType";
+            AA("p42Name", "Typ projektu", gdc1, null, "string", false, true);
+            AA("p42Code", "Kód");
+            AA("LevelName", "Vertikální úroveň", gdc1,"p07x.p07Name", "string", false, true);
+            oc = AA("LevelIndex", "Stupeň úrovně", gdc1, "'#'+convert(varchar(10),p07x.p07Level)","string",false,true);
+            AFNUM0("p42Ordinary", "#");
             AppendTimestamp();
 
             this.EntityName = "o38Address";
@@ -147,11 +155,7 @@ namespace BL
             AFNUM0("p29Ordinary", "#");
             AppendTimestamp();
 
-            this.EntityName = "p42ProjectType";
-            AA( "p42Name", "Typ", gdc1, null, "string", false, true);
-            AA("p42Code", "Kód");            
-            AFNUM0("p42Ordinary", "#");
-            AppendTimestamp();
+            
 
             this.EntityName = "p51PriceList";
             AA("p51TypeFlag", "Typ ceníku", gdc2, "case a.p51TypeFlag when 1 then 'Fakturační sazby' when 2 then 'Nákladové sazby' when 3 then 'Režijní sazby' when 5 then 'Kořenový (ROOT) ceník' when 4 then 'Efektivní sazby' end", "string", false, true);

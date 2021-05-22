@@ -40,6 +40,7 @@ namespace BL
         }
         public IEnumerable<BO.p07ProjectLevel> GetList(BO.myQuery mq)
         {
+            if (mq.explicit_orderby == null) mq.explicit_orderby = "a.p07Level";
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p07ProjectLevel>(fq.FinalSql, fq.Parameters);
         }

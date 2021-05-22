@@ -112,7 +112,7 @@ namespace UI.Controllers
                 v.lisParentLevels = Factory.p07ProjectLevelBL.GetList(new BO.myQuery("p07")).Where(p => p.p07Level<v.RecP42.p07Level);
 
             }
-
+            
 
             if (v.ff1 == null)
             {
@@ -134,7 +134,15 @@ namespace UI.Controllers
         public IActionResult Record(p41Record v, string oper)
         {
             RefreshState(v);
-
+            if (oper== "parentlevel")
+            {
+                v.SelectedComboParent = null;
+                v.Rec.p41ParentID = 0;
+            }
+            if (oper == "p42id" && v.rec_pid==0 && v.RecP42 !=null)
+            {
+                v.SelectedParentLevelIndex = v.RecP42.p07Level - 1;
+            }
          
             if (oper != null)
             {

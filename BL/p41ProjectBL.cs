@@ -140,10 +140,8 @@ namespace BL
 
                     var pars = new Dapper.DynamicParameters();
                     {
-
                         pars.Add("p41id", intPID, System.Data.DbType.Int32);
-                        pars.Add("j03id_sys", _mother.CurrentUser.pid, System.Data.DbType.Int32);
-                        pars.Add("x45ids", null, System.Data.DbType.String, System.Data.ParameterDirection.Output, 50);
+                        pars.Add("j03id_sys", _mother.CurrentUser.pid, System.Data.DbType.Int32);                        
                     }
 
                     if (_db.RunSp("p41_aftersave", ref pars, false) == "1")

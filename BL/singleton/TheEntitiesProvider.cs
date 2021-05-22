@@ -115,8 +115,8 @@ namespace BL
             AE("p91Invoice", "Vyúčtování", "Vyúčtování", "p91Invoice a", "a.p91ID DESC");
             AE("p90Proforma","Zálohy", "Záloha", "p90Proforma a", "a.p90ID DESC");
 
-            AE("p07ProjectLevel", "Úrovně projektů", "Úroveň projektu", "p07ProjectLevel a", "a.p07Level");
-            AE("p42ProjectType", "Typy projektů", "Typ projektu", "p42ProjectType a", "a.p42Ordinary");
+            AE("p07ProjectLevel", "Úrovně projektů", "Úroveň projektu", "p07ProjectLevel a", "a.p07Level", "a.p07Level");
+            AE("p42ProjectType", "Typy projektů", "Typ projektu", "p42ProjectType a LEFT OUTER JOIN p07ProjectLevel p07x ON a.p07ID=p07x.p07ID", "p07x.p07Level,a.p42Ordinary", "p07x.p07Level,a.p42Ordinary");
             AE("p51PriceList", "Ceníky sazeb", "Ceník sazeb", "p51PriceList a", "a.p51Ordinary");
             AE("c21FondCalendar", "Pracovní fondy", "Pracovní fond", "c21FondCalendar a", "a.c21Ordinary");
             AE("c26Holiday", "Dny svátků", "Svátek", "c26Holiday a", "a.c26Date");
@@ -265,9 +265,7 @@ namespace BL
                 case "j18":
                     lis.Add(getREL("j17Country", "j18_j17", "Region", "LEFT OUTER JOIN j17Country j18_j17 ON a.j17ID=j18_j17.j17ID"));
                     break;
-                case "p42":
-                    lis.Add(getREL("p07ProjectLevel", "p42_p07", "Úroveň", "INNER JOIN p07ProjectLevel p42_p07 ON a.p07ID=p42_p07.p07ID"));
-                    break;
+                
                 case "p90":
                     lis.Add(getREL("j27Currency", "p90_j27", "Měna", "LEFT OUTER JOIN j27Currency p90_j27 ON a.j27ID=p90_j27.j27ID"));
                     lis.Add(getREL("p28Contact", "p90_p28", "Klient zálohy", "LEFT OUTER JOIN p28Contact p90_p28 ON a.p28ID=p90_p28.p28ID"));

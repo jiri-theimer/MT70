@@ -210,10 +210,10 @@ namespace BL
                     ret.Add(InhaleColumn4Relation("p36_j02", "j02Person", "fullname_desc", rels, bolComboColumns));
                     ret.Add(InhaleColumn4Relation("p36_j11", "j11Team", "j11Name", rels, bolComboColumns));
                     break;
-                case "p42":
-                    ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07NameSingular", rels, bolComboColumns));
-                    ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07Level", rels, bolComboColumns));
-                    break;
+                //case "p42":
+                //    ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "p07Name", rels, bolComboColumns));
+                //    ret.Add(InhaleColumn4Relation("p42_p07", "p07ProjectLevel", "LevelIndex", rels, bolComboColumns));
+                //    break;
                 case "p51":
                     ret.Add(InhaleColumn4Relation("p51_j27", "j27Currency", "j27Code", rels, bolComboColumns));
                     break;
