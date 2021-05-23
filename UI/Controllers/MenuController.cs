@@ -150,6 +150,8 @@ namespace UI.Controllers
             c.CssClass = tmclass("projects", area);
             c =AMI("Klienti", aurl("clients"), "k-i-wrench");
             c.CssClass = tmclass("clients", area);
+            c = AMI("Dokumenty", aurl("docs"), "k-i-wrench");
+            c.CssClass = tmclass("docs", area);
             c =AMI("Různé", aurl("misc"), "k-i-fields-more");
             c.CssClass = tmclass("misc", area);
 
@@ -167,6 +169,8 @@ namespace UI.Controllers
                     Handle_AdminWorksheet(prefix);break;
                 case "billing":
                     Handle_AdminBilling(prefix);break;
+                case "docs":
+                    Handle_AdminDocss(prefix);break;
                 case "misc":
                     Handle_AdminMisc(prefix);break;
 
@@ -292,6 +296,16 @@ namespace UI.Controllers
             handle_selected_item(prefix);
 
         }
+        private void Handle_AdminDocss(string prefix)
+        {
+            AMI("Typy dokumentů", aurl("docs", "x18"));            
+            AMI("Role pro oprávnění k dokumentu", aurl("docs", "x67", "myqueryinline=x29id|int|223"));
+
+            AMI("Uživatelská pole", aurl("clients", "x28", "myqueryinline=x29id|int|223"));
+
+            handle_selected_item(prefix);
+
+        }
         private void Handle_AdminMisc(string prefix)
         {
             DIV_TRANS("Štítky");
@@ -309,7 +323,7 @@ namespace UI.Controllers
             
 
             DIV_TRANS("Ostatní");
-            AMI("Typy dokumentů", aurl("misc", "x18"));
+            
             AMI("Číselné řady", aurl("misc","x38"));
             AMI("Střediska", aurl("misc","j18"));
             AMI("Autocomplete položky", aurl("misc", "o15"));
