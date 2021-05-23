@@ -150,9 +150,9 @@ namespace UI.Controllers
                     return RedirectToAction("Index");
 
             }
-            handle_default_link(v, area, defprefix);
-
-            inhale_entity(ref v, v.prefix);
+            handle_default_link(v, area, defprefix,ref myqueryinline);
+            
+            inhale_entity(v, v.prefix);
             v.gridinput = GetGridInput(v.entity, v.prefix, go2pid, null, myqueryinline);
 
             return View(v);
@@ -218,21 +218,23 @@ namespace UI.Controllers
             return View(v);
         }
 
-        private void handle_default_link(AdminPage v,string module,string defprefix)
+        private void handle_default_link(AdminPage v,string module,string defprefix,ref string myqueryinline)
         {
             if (v.prefix == null)
             {
-                v.prefix = Factory.CBL.LoadUserParam("Admin/"+ module +"-prefix", defprefix);
+                v.prefix = Factory.CBL.LoadUserParam($"Admin/{module}-prefix", defprefix);
+                myqueryinline= Factory.CBL.LoadUserParam($"Admin/{module}-{v.prefix}-myqueryinline");
             }
             else
             {
-                if (Factory.CBL.LoadUserParam("Admin/"+ module +"-prefix") != v.prefix)
+                if (Factory.CBL.LoadUserParam($"Admin/{module}-prefix") != v.prefix)
                 {
-                    Factory.CBL.SetUserParam("Admin/"+ module +"-prefix", v.prefix);
+                    Factory.CBL.SetUserParam($"Admin/{module}-prefix", v.prefix);
+                    Factory.CBL.SetUserParam($"Admin/{module}-{v.prefix}-myqueryinline", myqueryinline);
                 }
             }
         }
-        private void inhale_entity(ref AdminPage v, string prefix)
+        private void inhale_entity(AdminPage v, string prefix)
         {
             if (prefix != null)
             {

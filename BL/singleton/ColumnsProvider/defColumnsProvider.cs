@@ -301,7 +301,7 @@ namespace BL
 
             //o53 = štítky
             this.EntityName = "o53TagGroup";
-            AA("o53Name", "Název štítku", gdc1, null, "string", false, true);
+            AA("o53Name", "Skupina štítku", gdc1, null, "string", false, true);
             AFNUM0("o53Ordinary", "#").DefaultColumnFlag = gdc2;
             AppendTimestamp();
 

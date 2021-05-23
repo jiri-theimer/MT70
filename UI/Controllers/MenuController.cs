@@ -273,13 +273,16 @@ namespace UI.Controllers
             AMI("Zaokrouhlovací pravidla faktury", aurl("billing","p98"));
             AMI("Struktury rozpisu částky faktury", aurl("billing","p80"));
             AMI("Režijní přirážky k fakturaci", aurl("billing","p63"));
-            DIV();
-            AMI("Typy záloh", aurl("billing","p89"));
-            DIV_TRANS("Hodinové sazby");
-            AMI("Ceníky sazeb", aurl("billing","p51"));
 
-            AMI("Uživatelská pole", aurl("billing","x28","myqueryinline=x29id|int|391"));
+            DIV();
+            
+            AMI("Ceníky sazeb", aurl("billing", "p51"));
+
             AMI("Šablony poštovních zpráv", aurl("billing", "j61", "myqueryinline=x29id|int|391"));
+            DIV();
+            AMI("Role uživatelů ve vyúčtování", aurl("billing", "x67", "myqueryinline=x29id|int|391"));
+            AMI("Uživatelská pole", aurl("billing","x28","myqueryinline=x29id|int|391"));
+            
 
             handle_selected_item(prefix);
 
@@ -288,7 +291,7 @@ namespace UI.Controllers
         {
             AMI("Typy záloh", aurl("proforma", "p89"));
 
-            AMI("Role uživatelů v zálohách", aurl("proforma", "x67", "myqueryinline=x29id|int|390"));
+            AMI("Role uživatelů v zálohách", aurl("proforma", "x67", "myqueryinline=x29id|int|390"));            
             AMI("Uživatelská pole", aurl("proforma", "x28", "myqueryinline=x29id|int|390"));
             AMI("Šablony poštovních zpráv", aurl("proforma", "j61", "myqueryinline=x29id|int|390"));
 

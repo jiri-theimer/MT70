@@ -91,3 +91,21 @@
     </div>
 
 </div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        document.addEventListener("form1_beforesave", function (e) {    //událost před uložením formuláře
+            e.detail.cancel = false;
+
+            $("input:disabled, select:disabled").each(function () {
+                $(this).prop("disabled", false);
+            });
+
+        });
+
+
+    });
+
+</script>
