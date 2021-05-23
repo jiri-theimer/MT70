@@ -258,16 +258,17 @@ function mystitky_multiselect(event, entity) {
 
 /*taghelper mycombochecklist*/
 function mycombochecklist_init(c) {    
-
+    
     $("#divDropdown" + c.controlid).on("click.bs.dropdown", function (e) {
         e.stopPropagation();                                    //click na dropdown oblast nemá zavírat dropdown div
     });
 
 
-    if ($("#value_alias_" + c.controlid).val() !== "") {
+    if ($("#" + c.aliasid).val() !== "") {
 
-        var deftext = $("#value_alias_" + c.controlid).val();
-        deftext = deftext.replace(/,/g, "♣");       
+        var deftext = $("#" + c.aliasid).val();
+        deftext = deftext.replace(/,/g, "♣");
+        
         $("#cmdCombo" + c.controlid).text(deftext);
         $("#cmdCombo" + c.controlid).attr("title", deftext);
 
@@ -313,11 +314,11 @@ function mycombochecklist_init(c) {
                 if (s === "") {
                     $("#cmdCombo" + c.controlid).text(c.placeholder);
                     $("#cmdCombo" + c.controlid).attr("title", "");
-                    $("#value_alias_" + c.controlid).val("");
+                    $("#" + c.aliasid).val("");
                 } else {
                     s = lbls.join(",");
                     s = s.replace(/,/g, "★");
-                    $("#value_alias_" + c.controlid).val(s);
+                    $("#" + c.aliasid).val(s);
                     $("#cmdCombo" + c.controlid).text(s);
                     $("#cmdCombo" + c.controlid).attr("title", s);
                 }
@@ -344,7 +345,7 @@ function mycombochecklist_init(c) {
                 $("#" + c.controlid).val(s);
                 s = lbls.join(",");
                 s = s.replace(/,/g, "★");
-                $("#value_alias_" + c.controlid).val(s);                
+                $("#" + c.aliasid).val(s);                
                 $("#cmdCombo" + c.controlid).text(s);
                 $("#cmdCombo" + c.controlid).attr("title", s);
           
@@ -360,7 +361,7 @@ function mycombochecklist_init(c) {
 
                 });
                 $("#" + c.controlid).val("");
-                $("#value_alias_" + c.controlid).val("");
+                $("#" + c.aliasid).val("");
                 $("#cmdCombo" + c.controlid).text(c.placeholder);
                 $("#cmdCombo" + c.controlid).attr("title", "");
 

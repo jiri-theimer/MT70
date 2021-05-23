@@ -40,6 +40,10 @@ namespace UI.Views.Shared.TagHelpers
         [HtmlAttributeName("event_after_changevalue")]
         public string Event_After_ChangeValue { get; set; }
 
+        [HtmlAttributeName("elementid-prefix")]
+        public string elementidprefix { get; set; } //použitelné v situaci taghelperu v listu, který je umístěn v partial view komponentě
+
+
 
         private System.Text.StringBuilder _sb;
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -53,26 +57,36 @@ namespace UI.Views.Shared.TagHelpers
             {
                 this.dropdown_height = "220px";
             }
-
-            var strControlID = this.For.Name.Replace(".", "_").Replace("[", "_").Replace("]", "_");
-
-
-            sb(string.Format("<div id='divDropdownContainer{0}' class='dropdown'>", strControlID));
-
-
-            string strTitle = "";
-            if (this.SelectedText.Model != null)
-            {
-                strTitle=Convert.ToString(this.SelectedText.Model).Replace(",", "★");
-            }
-
             
 
+            string strControlID = this.For.Name;
+            string strControlName = this.For.Name;
+            if (this.elementidprefix != null)
+            {
+                strControlID = this.elementidprefix + strControlID;
+                strControlName = this.elementidprefix + this.For.Name;
+            }
+            strControlID = strControlID.Replace(".", "_").Replace("[", "_").Replace("]", "_");
+
+
+
+            sb($"<div id='divDropdownContainer{strControlID}' class='dropdown'>");
+
+
+            //string strTitle = "";
+            //if (this.SelectedText.Model != null)
+            //{
+            //    strTitle=Convert.ToString(this.SelectedText.Model).Replace(",", "★");
+            //}
+
+
+            
             //sb("<div class='input-group-append'>");
             sb(string.Format("<button type='button' id='cmdCombo{0}' class='btn dropdown-toggle form-control' data-bs-toggle='dropdown' aria-expanded='false' style='border: solid 1px #C8C8C8; border-radius: 3px;width:100%;text-align:left;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>", strControlID));
             if (this.PlaceHolder != null)
             {
                 sb(this.PlaceHolder);
+
             }
             sb("</button>");
 
@@ -87,25 +101,37 @@ namespace UI.Views.Shared.TagHelpers
             
             sb("</div>");
 
-            sb(string.Format("<input type='hidden' id='value_alias_{0}' name='{1}' value='{2}'/>", strControlID, this.SelectedText.Name, this.SelectedText.Model));
+            string aliasid = this.SelectedText.Name;
+            string aliasname = this.SelectedText.Name;
+            if (this.elementidprefix != null)
+            {
+                aliasid = this.elementidprefix + aliasid;
+                aliasname = this.elementidprefix + aliasname;
+            }
+            aliasid = aliasid.Replace(".", "_").Replace("[", "_").Replace("]", "_");
+           
+            sb($"<input type='hidden' id='{aliasid}' name='{aliasname}' value='{this.SelectedText.Model}'/>");
 
+            
 
             sb("<script type='text/javascript'>");
             sb("");
-            _sb.Append(string.Format("var c{0}=", strControlID));
+            _sb.Append($"var c{strControlID}=");
             _sb.Append("{");
-            _sb.Append(string.Format("controlid: '{0}',posturl: '/TheCombo/GetHtml4Checkboxlist',entity:'{1}',masterprefix:'{2}',masterpid:{3},selectedvalues:'{4}',myqueryinline:'{5}',on_after_change:'{6}',placeholder:'{7}'", strControlID, this.Entity,this.masterprefix,this.masterpid,strSelectedValues,this.myqueryinline, this.Event_After_ChangeValue,this.PlaceHolder));
+            //_sb.Append(string.Format("controlid: '{0}',posturl: '/TheCombo/GetHtml4Checkboxlist',entity:'{1}',masterprefix:'{2}',masterpid:{3},selectedvalues:'{4}',myqueryinline:'{5}',on_after_change:'{6}',placeholder:'{7}',aliasid:'{8}'", strControlID, this.Entity,this.masterprefix,this.masterpid,strSelectedValues,this.myqueryinline, this.Event_After_ChangeValue,this.PlaceHolder, aliasid));
+            _sb.Append($"controlid: '{strControlID}',posturl: '/TheCombo/GetHtml4Checkboxlist',entity:'{this.Entity}',masterprefix:'{this.masterprefix}',masterpid:{this.masterpid},selectedvalues:'{strSelectedValues}',myqueryinline:'{this.myqueryinline}',on_after_change:'{this.Event_After_ChangeValue}',placeholder:'{this.PlaceHolder}',aliasid:'{aliasid}'");
+
             _sb.Append("};");
 
             sb("");
-            sb(string.Format("mycombochecklist_init(c{0});", strControlID));
+            sb($"mycombochecklist_init(c{strControlID});");
 
             
             sb("");
             sb("</script>");
 
 
-            sb(string.Format("<input type='hidden' id='{0}' name='{1}' value=\"{2}\" />",strControlID, this.For.Name, strSelectedValues));
+            sb($"<input type='hidden' id='{strControlID}' name='{strControlName}' value=\"{strSelectedValues}\" />");
 
 
 

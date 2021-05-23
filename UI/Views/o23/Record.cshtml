@@ -253,10 +253,16 @@
             </div>
         }
 
-        <div class="tab-pane" id="tab2" role="tabpanel">
-            <!-- Tab2 -->
+    <div class="tab-pane" id="tab2" role="tabpanel">
+        <!-- Tab2 -->
 
-        </div>
+        <mycombochecklist asp-for="@Model.Rec.o23Password" entity="j02Person" selectedtext="@Model.Rec.o23Code" placeholder="hovado" myqueryinline="j02isintraperson|bool|1"></mycombochecklist>
+
+        
+
+
+        @Html.EditorFor(m => m.roles, "~/Views/Shared/_RoleAssign.cshtml")
+    </div>
     </div>
 
 

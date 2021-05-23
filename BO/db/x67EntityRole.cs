@@ -14,7 +14,7 @@ namespace BO
         public string x67RoleValue { get; set; }
         public int x67Ordinary { get; set; }
 
-
+        
         
     }
 }

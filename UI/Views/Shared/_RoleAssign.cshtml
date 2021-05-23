@@ -1,5 +1,58 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model UI.Models.RoleAssignViewModel
+@inject BL.Factory _f
+
 @{
+    if (Model.RecPrefix == null)
+    {
+        return;
+    }
+    int _x29ID = BO.BASX29.GetInt(Model.RecPrefix);
+    string _lang_tymy = _f.tra("Týmy") + "...";
+    string _lang_osoby = _f.tra("Osoby/Jednotlivci") + "...";
+
+    if (Model.lisRepeator == null)
+    {
+        Model.lisRepeator = new List<RoleAssignRepeator>();
+        var lisX67 = _f.x67EntityRoleBL.GetList(new BO.myQuery("x67") { x29id = _x29ID });
+        foreach (var c in lisX67)
+        {
+            var cc = new RoleAssignRepeator() { x67ID = c.pid, x67Name = c.x67Name };            
+            Model.lisRepeator.Add(cc);
+        }
+    }
+
+
+
+
 }
+
+@addTagHelper *, UI
+
+<input type="hidden" asp-for="@Model.RecPrefix" />
+<input type="hidden" asp-for="@Model.RecPid" />
+
+<div class="card">
+    <div class="card-header">
+        Obsazení role
+    </div>
+    <div class="card-body">
+        @for (int i = 0; i < Model.lisRepeator.Count(); i++)
+        {
+            <div class="row my-1 divhover">
+                <div class="col-sm-3 col-md-3">
+                    @(Model.lisRepeator[i].x67Name):
+                    <input type="hidden" asp-for="@Model.lisRepeator[i].x67ID" />
+                    <input type="hidden" asp-for="@Model.lisRepeator[i].x67Name" />
+                </div>
+                <div class="col-sm-4 col-md-4">
+                    <mycombochecklist asp-for="@Model.lisRepeator[i].j02IDs" elementid-prefix="@(Model.elementidprefix)" entity="j02Person" selectedtext="@Model.lisRepeator[i].Persons" placeholder="@(_lang_osoby)" myqueryinline="j02isintraperson|bool|1"></mycombochecklist>
+                    
+                </div>
+                <div class="col-sm-3 col-md-3">                                        
+                    <mycombochecklist asp-for="@Model.lisRepeator[i].j11IDs" entity="j11Team" elementid-prefix="@(Model.elementidprefix)" selectedtext="@Model.lisRepeator[i].Teams" placeholder="@(_lang_tymy)"></mycombochecklist>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

@@ -1298,3 +1298,10 @@ td.tdnum{
 .kusovnik {
     color: #9400D3 !important; /*záznam kusovníku*/
 }
+
+div.divhover{
+    background-color:transparent;
+}
+div.divhover:hover {
+    background-color: #F5F5F5;
+}

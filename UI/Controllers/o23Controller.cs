@@ -61,7 +61,19 @@ namespace UI.Controllers
             {
                 return RedirectToAction("SelectDocType",new { prefix = prefix, recpid = recpid });
             }
-            v.Rec = new BO.o23Doc();
+            v.Rec = new BO.o23Doc();            
+
+            v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "o23" };
+
+            //v.roles.lisRepeator = new List<RoleAssignRepeator>();
+            //var lisX67 = Factory.x67EntityRoleBL.GetList(new BO.myQuery("x67") { x29id = 223 });
+            //foreach (var c in lisX67)
+            //{
+            //    var cc = new RoleAssignRepeator() { x67ID = c.pid, x67Name = c.x67Name };                
+            //    v.roles.lisRepeator.Add(cc);
+            //}
+
+
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.o23DocBL.Load(v.rec_pid);                
@@ -208,7 +220,7 @@ namespace UI.Controllers
         public IActionResult Record(Models.Record.o23Record v,string oper,string guid)
         {
             RefreshState(v);
-
+            
             if (oper == "x20id")
             {
                 var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
