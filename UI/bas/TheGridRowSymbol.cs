@@ -45,6 +45,8 @@ namespace UI
                                 return "<span class='k-icon k-i-check-outline' style='color:brown;'></span>";
                             case 2:
                                 return "<span class='k-icon k-i-check-outline' style='color:red;'></span>";
+                            case 7:
+                                return "<span class='k-icon k-i-question' style='color:gold;'></span>";
 
                         }
 

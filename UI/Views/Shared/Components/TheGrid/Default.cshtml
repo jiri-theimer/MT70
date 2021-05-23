@@ -297,8 +297,15 @@
         if (document.getElementById("cmdP31StateQuery")) {            
             document.getElementById("cmdP31StateQuery").addEventListener("show.bs.dropdown", function () {
 
-                $.post("/Menu/TheGridP31StateQuery", { tgi: get_all_tgi_params() }, function (data) {                    
+                $.post("/Menu/TheGridP31StateQuery", { tgi: get_all_tgi_params() }, function (data) {
                     $("#ulP31StateQuery").html(data);
+                    
+                    if (_device.innerHeight <= 400) {                        
+                        $("#ulP31StateQuery").css("column-count", "2");
+                    }
+                    if (_device.innerHeight <= 300) {
+                        $("#ulP31StateQuery").css("column-count", "3");
+                    }
 
                 });
             });

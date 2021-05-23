@@ -23,6 +23,8 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
+            if (this.p31statequery > 0) this.Handle_p31StateQuery();
+
             if (this.global_d1 != null && this.global_d2 != null)
             {
                 DateTime d1 = Convert.ToDateTime(this.global_d1); DateTime d2 = Convert.ToDateTime(this.global_d2);

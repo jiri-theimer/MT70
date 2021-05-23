@@ -8,10 +8,9 @@ namespace UI.Menu
 {
     public static class basMenu
     {
+        
         //vrátí HTML post menu
-
-
-        public static string FlushResult_UL(List<MenuItem> menuitems, bool bolSupportIcons, bool bolRenderUlContainer,string source=null)
+        public static string FlushResult_ULx(List<MenuItem> menuitems, bool bolSupportIcons, bool bolRenderUlContainer,string source=null)
         {
             var sb = new System.Text.StringBuilder();
 

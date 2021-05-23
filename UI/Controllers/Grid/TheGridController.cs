@@ -254,21 +254,10 @@ namespace UI.Controllers
                 v.IsCanbeMasterView = true;
                 v.dblClickSetting = Factory.CBL.LoadUserParam("grid-" + v.prefix + "-dblclick", "edit");                
             }
-            if (v.prefix == "p31" || v.prefix == "p41" || v.prefix=="p28" || v.prefix=="j02" || v.prefix == "p56")
-            {
-                v.IsP31StateQuery = true;
-                if (!bolMasterEntity)
-                {
-                    v.gridinput.query.p31statequery = Factory.CBL.LoadUserParamInt("grid-" + v.prefix + "-p31statequery", 0);
-                }
-                else
-                {
-                    v.gridinput.query.p31statequery = Factory.CBL.LoadUserParamInt("grid-" + v.prefix + "-"+masterentity+"-p31statequery", 0);
-                }
-                
-            }
 
-            
+            Handle_P31StateQuery(v, bolMasterEntity, masterentity);
+
+
 
             return v;
 
@@ -285,6 +274,34 @@ namespace UI.Controllers
         {
             var cTabs = new NavTabsSupport(Factory);
             return cTabs.getTabs(prefix, pid);
+        }
+
+        private void Handle_P31StateQuery(FsmViewModel v, bool bolMasterEntity, string masterentity)
+        {
+            if (v.prefix == "p31" || v.prefix == "p41" || v.prefix == "p28" || v.prefix == "j02" || v.prefix == "p56")
+            {
+                v.IsP31StateQuery = true;
+                if (!bolMasterEntity)
+                {
+                    v.gridinput.query.p31statequery = Factory.CBL.LoadUserParamInt("grid-" + v.prefix + "-p31statequery", 0);
+                }
+                else
+                {
+                    v.gridinput.query.p31statequery = Factory.CBL.LoadUserParamInt("grid-" + v.prefix + "-" + masterentity + "-p31statequery", 0);
+                }
+
+                v.P31StateQueryAlias = Factory.tra("Stav úkonů");
+                v.P31StateQueryCssClass = "btn btn-light dropdown-toggle";
+                if (v.gridinput.query.p31statequery > 0)
+                {
+                    v.P31StateQueryCssClass = "btn btn-light dropdown-toggle filtered";
+                    v.P31StateQueryAlias = new UI.Menu.TheMenuSupport(Factory).getP31StateQueryAlias(v.gridinput.query.p31statequery);
+                }
+
+
+
+
+            }
         }
 
     }

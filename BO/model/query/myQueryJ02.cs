@@ -29,6 +29,9 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
+            if (this.p31statequery>0) this.Handle_p31StateQuery();
+            Handle_Wip();
+
             if (this.global_d1 != null && this.global_d2 != null)
             {
                 DateTime d1 = Convert.ToDateTime(this.global_d1); DateTime d2 = Convert.ToDateTime(this.global_d2);
@@ -150,10 +153,51 @@ namespace BO
             {
                 AQ("a.j02ID IN (select j02ID FROM p30Contact_Person WHERE p28ID=@p28id OR p41ID IN (SELECT p41ID FROM p41Project WHERE p28ID_Client=@p28id))", "p28id", this.p28id);
             }
-           
+
+            if (this.iswip != null)
+            {
+                if (this.iswip == true)
+                {
+                    AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+                else
+                {
+                    AQ("a.j02ID NOT IN (select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+            }
 
             return this.InhaleRows();
 
         }
+
+        private void Handle_Wip()
+        {
+            if (this.iswip != null)
+            {
+                if (this.iswip == true)
+                {
+                    AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE())", null, null);
+                }
+                else
+                {
+                    AQ("a.j02ID NOT IN (select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+            }
+
+            if (this.isapproved_and_wait4invoice != null)
+            {
+                if (this.isapproved_and_wait4invoice == true)
+                {
+                    AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p71ID=1 AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+                else
+                {
+                    AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+            }
+        }
+
+
+        
     }
 }

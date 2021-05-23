@@ -15,11 +15,15 @@ namespace UI.Controllers
         
 
         private List<MenuItem> _lis;
+        private TheMenuSupport _menusup;
 
         public MenuController()
         {
             _lis = new List<MenuItem>();
+            _menusup = new TheMenuSupport(null);
         }
+
+
 
 
         public IActionResult Index()
@@ -55,7 +59,7 @@ namespace UI.Controllers
                     
             }
 
-            return basMenu.FlushResult_UL(lis, true, true, source);
+            return _menusup.FlushResult_UL(lis, true, true, source);
         }
         public string CurrentUserMyProfile()
         {                
@@ -85,7 +89,7 @@ namespace UI.Controllers
 
 
 
-            return basMenu.FlushResult_UL(_lis,true,false);
+            return _menusup.FlushResult_UL(_lis,true,false);
         }
         public string CurrentUserLangIndex()
         {
@@ -102,7 +106,7 @@ namespace UI.Controllers
                 }
                 
             }
-            return basMenu.FlushResult_UL(_lis,true,false);            
+            return _menusup.FlushResult_UL(_lis,true,false);            
         }
         public string CurrentUserFontSize()
         {            
@@ -118,7 +122,7 @@ namespace UI.Controllers
 
             }
           
-            return basMenu.FlushResult_UL(_lis,true,false);
+            return _menusup.FlushResult_UL(_lis,true,false);
         }
         
         private string tmclass(string area,string curarea)
@@ -169,7 +173,7 @@ namespace UI.Controllers
             }
             
             
-            return basMenu.FlushResult_UL(_lis,true,true);
+            return _menusup.FlushResult_UL(_lis,true,true);
         }
        
         private void Handle_AdminUsers(string prefix)
@@ -333,7 +337,7 @@ namespace UI.Controllers
             
             
             var s = "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
-            s += basMenu.FlushResult_UL(_lis,true, false);
+            s += _menusup.FlushResult_UL(_lis,true, false);
             s += "</ul>";
             s += "<hr>";
             s += "<div><button type='button' class='btn btn-sm btn-outline-primary' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='k-icon k-i-gear'></span>MENU</button></div>";
@@ -353,7 +357,7 @@ namespace UI.Controllers
             DIV();
             AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
             AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)");
-            return basMenu.FlushResult_UL(_lis,true, false);
+            return _menusup.FlushResult_UL(_lis,true, false);
         }
 
         public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
@@ -384,11 +388,12 @@ namespace UI.Controllers
 
             
 
-            return basMenu.FlushResult_UL(_lis,true, false);
+            return _menusup.FlushResult_UL(_lis,true, false);
         }
 
         public string TheGridP31StateQuery(TheGridUIContext tgi)  //menu pro zobrazení filtrování stavu úkonů
         {
+            _menusup = new TheMenuSupport(Factory);
             string s0 = "k-i-radiobutton"; string s1 = "k-i-radiobutton-checked";
             string strKey = "grid-" + tgi.prefix;
             if (!string.IsNullOrEmpty(tgi.master_entity))
@@ -397,18 +402,21 @@ namespace UI.Controllers
             }
             strKey += "-p31statequery";
 
-            int val = Factory.CBL.LoadUserParamInt(strKey, 0);            
-            
-            AMI("Nefiltrovat", "javascript:tg_p31statequery_change('0')", BO.BAS.IIFS(val==0,s1,s0));
-            AMI("Rozpracované -> Čeká na schvalování", "javascript:tg_p31statequery_change('1')", BO.BAS.IIFS(val == 1, s1, s0));
-            AMI("Schválené a nevyúčtované -> Čeká na vyúčtování", "javascript:tg_p31statequery_change('2')", BO.BAS.IIFS(val == 2, s1, s0));
-            
-            AMI("Nevyúčtované -> Rozpracované nebo Schválené", "javascript:tg_p31statequery_change('3')", BO.BAS.IIFS(val == 3, s1, s0));
-            AMI("Již vyúčtované", "javascript:tg_p31statequery_change('4')", BO.BAS.IIFS(val == 4, s1, s0));
-            AMI("Úkony přesunuté do archivu", "javascript:tg_p31statequery_change('5')", BO.BAS.IIFS(val == 5, s1, s0));
+            int val = Factory.CBL.LoadUserParamInt(strKey, 0);
 
+            AMI("Nefiltrovat", "javascript:tg_p31statequery_change('0')", BO.BAS.IIFS(val == 0, s1, s0));
+            var arr = new List<int> { 1, 2,16,17, 3,4,5,6,7,8,9,10,11,12,13,14,15 };
+            foreach(int x in arr)
+            {
+                MenuItem mi=AMI(_menusup.getP31StateQueryAlias(x), $"javascript:tg_p31statequery_change('{x}')", BO.BAS.IIFS(val == x, s1, s0));
+                if (x == val) mi.IsActive = true;
 
-            return basMenu.FlushResult_UL(_lis, true, false);
+                //if (x == 1 || x == 3 || x == 4) mi.CssClass = "dropdown-item";
+                
+            }
+            
+            return _menusup.FlushResult_UL(_lis, true, false);      
+            
         }
 
         public string TheGridDblclickSetting(TheGridUIContext tgi)  //menu pro nastavení doubleclick grid záznamu
@@ -424,7 +432,7 @@ namespace UI.Controllers
             AMI("Otevřít stránku záznamu", "javascript:tg_dblclick_save_setting('recpage')", strIconPage);
 
 
-            return basMenu.FlushResult_UL(_lis, true, false);
+            return _menusup.FlushResult_UL(_lis, true, false);
         }
 
         public string RecPageSetting(string prefix)  //menu pro nastavení stránky záznamu
@@ -452,7 +460,7 @@ namespace UI.Controllers
                 AMI("Zobrazovat vlevo kontextové menu", $"javascript:save_page_setting('{skey}','1')", icon0);
             }
 
-            return basMenu.FlushResult_UL(_lis, true, false);
+            return _menusup.FlushResult_UL(_lis, true, false);
         }
 
 

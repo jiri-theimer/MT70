@@ -16,9 +16,7 @@ namespace BO
         public int p91id { get; set; }
         public int p56id { get; set; }
         public int p70id { get; set; }
-        public bool? iswip { get;set; }
-        public bool? isinvoiced { get; set; }
-        public bool? isapproved_and_wait4invoice { get; set; }
+        
         public bool? p32isbillable { get; set; }
         public int p71id { get; set; }
         public string tabquery { get; set; }
@@ -32,19 +30,7 @@ namespace BO
 
         public override List<QRow> GetRows()
         {
-            switch (this.p31statequery)
-            {
-                case 1: //Rozpracované
-                    this.iswip = true;break;
-                case 2://Schválené a nevyúčtované
-                    this.isapproved_and_wait4invoice = true;break;
-                case 3://nevyúčtované
-                    AQ("a.p91ID IS NULL", null, null);break;
-                case 4://vyúčtované
-                    this.isinvoiced = true;break;
-                case 5: //v archivu
-                    AQ("a.p31ValidUntil<GETDATE()", null, null); break;
-            }
+            if (this.p31statequery > 0) Handle_p31StateQuery_p31();
 
             if (this.global_d1 != null && this.global_d2 != null)
             {
@@ -174,6 +160,47 @@ namespace BO
 
             return this.InhaleRows();
 
+        }
+
+        private void Handle_p31StateQuery_p31()
+        {
+            switch (this.p31statequery)
+            {
+                case 1: //Rozpracované
+                    this.iswip = true; break;
+                case 2://rozpracované s korekcí
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND a.p72ID_AfterTrimming IS NOT NULL", null, null); break;
+                case 3://nevyúčtované
+                    AQ("a.p91ID IS NULL AND GETDATE()<a.p31ValidUntil", null, null); break;
+                case 4://schválené
+                    this.isapproved_and_wait4invoice = true; break;  //AQ("a.p71ID=1 AND a.p91ID IS NULL", null, null); break;
+                case 5://schválené jako fakturovat
+                    AQ("a.p71ID=1 AND a.p72ID_AfterApprove=4 AND a.p91ID IS NULL", null, null); break;
+                case 6://schválené jako paušál
+                    AQ("a.p71ID=1 AND a.p72ID_AfterApprove=6 AND a.p91ID IS NULL", null, null); break;
+                case 7://schválené jako odpis
+                    AQ("a.p71ID=1 AND a.p72ID_AfterApprove IN (2,3) AND a.p91ID IS NULL", null, null); break;
+                case 8://schválené jako fakturovat později
+                    AQ("a.p71ID=1 AND a.p72ID_AfterApprove=7 AND a.p91ID IS NULL", null, null); break;
+                case 9://neschválené
+                    AQ("a.p71ID=2 AND a.p91ID IS NULL", null, null); break;
+                case 10://vyúčtované
+                    this.isinvoiced = true; break;
+                case 11://DRAFT vyúčtování
+                    AQ("a.p91ID IS NOT NULL AND p91x.p91IsDraft=1", null, null); break;
+                case 12://vyúčtované jako fakturovat
+                    AQ("a.p70ID=4 AND a.p91ID IS NOT NULL", null, null); break;
+                case 13://vyúčtované jako paušál
+                    AQ("a.p70ID=6 AND a.p91ID IS NOT NULL", null, null); break;
+                case 14://vyúčtované jako odpis
+                    AQ("a.p70ID IN (2,3) AND a.p91ID IS NOT NULL", null, null); break;
+                case 15: //v archivu
+                    AQ("a.p31ValidUntil<GETDATE()", null, null); break;
+                case 16://rozpracované Fa aktivita
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=1", null, null); break;
+                case 17://rozpracované Fa aktivita
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=0", null, null); break;
+            }
         }
     }
 }

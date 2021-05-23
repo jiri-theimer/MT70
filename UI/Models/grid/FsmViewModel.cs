@@ -24,6 +24,8 @@ namespace UI.Models
         public PeriodViewModel period { get; set; } //fixní filtr v horním pruhu
 
         public bool IsP31StateQuery { get; set; }
+        public string P31StateQueryAlias { get; set; }
+        public string P31StateQueryCssClass { get; set; }
         public bool IsCanbeMasterView { get; set; }
         public string dblClickSetting { get; set; }
 

@@ -101,7 +101,11 @@ namespace BO
         public bool? IsRecordValid { get; set; } = true;
         public List<int> o51ids { get; set; }
 
-        public int p31statequery { get; set; }  //filtrování podle stavu úkonu v p31/p41/p28/p56
+        public int p31statequery { get; set; }  //filtrování podle stavu úkonu v p31/p41/p28/p56/j02, paleta 1 - 17
+        public bool? iswip { get; set; }        //rozpracované úkony
+        public bool? isinvoiced { get; set; }   //vyúčtované úkony
+        public bool? isapproved_and_wait4invoice { get; set; }  //schváleno a čeká na vyúčtování
+
         public string period_field { get; set; }
         public DateTime? global_d1 { get; set; }
         public DateTime? global_d2 { get; set; }
@@ -492,7 +496,78 @@ namespace BO
         }
 
 
-        
+
+        public void Handle_p31StateQuery()
+        {
+            string s = null; string sf = null;
+            switch (this.p31statequery)
+            {
+                case 1: //Rozpracované
+                    this.iswip = true; break;
+                case 2://rozpracované s korekcí
+                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND za.p72ID_AfterTrimming IS NOT NULL AND za.p31ValidUntil>GETDATE()"; break;
+                case 3://nevyúčtované
+                    s = "za.p91ID IS NULL AND za.p31ValidUntil>GETDATE()"; break;
+                case 4://schválené
+                    this.isapproved_and_wait4invoice = true; break;  //AQ("a.p71ID=1 AND a.p91ID IS NULL", null, null); break;
+                case 5://schválené jako fakturovat
+                    s = "za.p71ID=1 AND za.p72ID_AfterApprove=4 AND za.p91ID IS NULL"; break;
+                case 6://schválené jako paušál
+                    s = "za.p71ID=1 AND za.p72ID_AfterApprove=6 AND za.p91ID IS NULL"; break;
+                case 7://schválené jako odpis
+                    s = "za.p71ID=1 AND za.p72ID_AfterApprove IN (2,3) AND za.p91ID IS NULL";
+                    break;
+                case 8://schválené jako fakturovat později
+                    s = "za.p71ID=1 AND za.p72ID_AfterApprove=7 AND za.p91ID IS NULL";
+                    break;
+                case 9://neschválené
+                    s = "za.p71ID=2 AND za.p91ID IS NULL";
+                    break;
+                case 10://vyúčtované
+                    this.isinvoiced = true; break;
+                case 11://DRAFT vyúčtování
+                    s = "zb.p91IsDraft=1"; sf = " INNER JOIN p91Invoice zb ON za.p91ID=zb.p91ID";
+                    break;
+                case 12://vyúčtované jako fakturovat
+                    s = "za.p70ID=4"; sf = " INNER JOIN p91Invoice zb ON za.p91ID=zb.p91ID";
+                    break;
+                case 13://vyúčtované jako paušál
+                    s = "za.p70ID=6"; sf = " INNER JOIN p91Invoice zb ON za.p91ID = zb.p91ID";
+                    break;
+                case 14://vyúčtované jako odpis
+                    s = "za.p70ID IN (2,3)"; sf = " INNER JOIN p91Invoice zb ON za.p91ID=zb.p91ID";
+                    break;
+                case 15: //v archivu
+                    s = "za.p31ValidUntil<GETDATE()"; break;
+                case 16://rozpracované Fa aktivita
+                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND zb.p32IsBillable=1"; sf = " INNER JOIN p32Activity zb ON za.p32ID=zb.p32ID";
+                    break;
+                case 17://rozpracované Fa aktivita
+                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND zb.p32IsBillable=0"; sf = " INNER JOIN p32Activity zb ON za.p32ID=zb.p32ID";
+                    break;
+            }
+
+            if (s != null)
+            {
+                switch (this.Prefix)
+                {
+                    case "j02":
+                        AQ($"a.j02ID IN (SELECT za.j02ID FROM p31Worksheet za{sf} WHERE {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        break;
+                    case "p41":
+                        AQ($"a.p41ID IN (SELECT za.p41ID FROM p31Worksheet za{sf} WHERE {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        break;
+                    case "p28":
+                        AQ($"a.p28ID IN (SELECT za.p41ID FROM p31Worksheet za{sf} INNER JOIN p41Project zx ON za.p41ID=zx.p41ID WHERE {s} AND zx.p28ID_Client IS NOT NULL AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        break;
+                    case "p56":
+                        AQ($"a.p56ID IN (SELECT za.p56ID FROM p31Worksheet za{sf} WHERE {s} AND za.p56ID IS NOT NULL AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        break;
+                }
+                
+            }
+        }
+
 
     }
 }
