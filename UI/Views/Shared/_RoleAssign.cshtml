@@ -9,6 +9,20 @@
     int _x29ID = BO.BASX29.GetInt(Model.RecPrefix);
     string _lang_tymy = _f.tra("Týmy") + "...";
     string _lang_osoby = _f.tra("Osoby/Jednotlivci") + "...";
+    string _lang_header = null;
+    switch (Model.RecPrefix)
+    {
+        case "p41":
+            _lang_header = _f.tra("Obsazení rolí v projektu");break;
+        case "p28":
+            _lang_header = _f.tra("Obsazení rolí v klientovi"); break;
+        case "o23":
+            _lang_header = _f.tra("Obsazení rolí v dokumentu"); break;
+        case "p91":
+            _lang_header = _f.tra("Obsazení rolí ve vyúčtování"); break;
+        case "p56":
+            _lang_header = _f.tra("Obsazení rolí v úkolu"); break;
+    }
 
     if (Model.lisRepeator == null)
     {
@@ -16,7 +30,7 @@
         var lisX67 = _f.x67EntityRoleBL.GetList(new BO.myQuery("x67") { x29id = _x29ID });
         foreach (var c in lisX67)
         {
-            var cc = new RoleAssignRepeator() { x67ID = c.pid, x67Name = c.x67Name };            
+            var cc = new RoleAssignRepeator() { x67ID = c.pid, x67Name = c.x67Name };
             Model.lisRepeator.Add(cc);
         }
     }
@@ -24,16 +38,16 @@
 
 
 
-}
+    }
 
-@addTagHelper *, UI
+    @addTagHelper *, UI
 
-<input type="hidden" asp-for="@Model.RecPrefix" />
+    <input type="hidden" asp-for="@Model.RecPrefix" />
 <input type="hidden" asp-for="@Model.RecPid" />
 
 <div class="card">
     <div class="card-header">
-        Obsazení role
+        @(_lang_header)
     </div>
     <div class="card-body">
         @for (int i = 0; i < Model.lisRepeator.Count(); i++)
