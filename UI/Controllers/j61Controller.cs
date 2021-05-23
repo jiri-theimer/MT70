@@ -10,10 +10,14 @@ namespace UI.Controllers
 {
     public class j61Controller : BaseController
     {
-        public IActionResult Record(int pid, bool isclone)
+        public IActionResult Record(int pid, bool isclone,string prefix)
         {
             var v = new j61Record() { rec_pid = pid, rec_entity = "j61" };
             v.Rec = new BO.j61TextTemplate();
+            if (prefix != null)
+            {
+                v.Rec.x29ID = BO.BASX29.GetEnum(prefix);
+            }
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.j61TextTemplateBL.Load(v.rec_pid);

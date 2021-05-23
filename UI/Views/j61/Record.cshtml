@@ -35,6 +35,7 @@
                     <select asp-for="Rec.x29ID" class="form-select">
                         <option value="p41Project">@_f.tra("Projekt")</option>
                         <option value="p28Contact">@_f.tra("Klient")</option>
+                        <option value="p56Task">@_f.tra("Úkol")</option>
                         <option value="p91Invoice">@_f.tra("Vyúčtování (faktura)")</option>
                         <option value="p90Proforma">@_f.tra("Záloha")</option>
                         <option value="p31Worksheet">@_f.tra("Úkon")</option>
@@ -56,7 +57,7 @@
             </div>
 
             <div class="row my-2">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Předmět zprávy"):</label>
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Předmět poštovní zprávy"):</label>
                 <div class="col-sm-11 col-md-10">
                     <input class="form-control" asp-for="Rec.j61MailSubject" />
                 </div>

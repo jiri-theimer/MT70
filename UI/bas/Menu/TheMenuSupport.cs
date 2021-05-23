@@ -119,7 +119,7 @@ namespace UI.Menu
             ret.Add(new MenuItem() { Name = "Stránka vyúčtování", Url = "/Record/RecPage?prefix=p91", ID = "recpagep91" });
             ret.Add(new MenuItem() { Name = "Stránka osoby", Url = "/Record/RecPage?prefix=j02", ID = "recpagej02" });
             ret.Add(new MenuItem() { Name = "Stránka úkolu", Url = "/Record/RecPage?prefix=p56", ID = "recpagep56" });
-
+           
 
             return ret;
         }

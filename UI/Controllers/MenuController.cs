@@ -144,14 +144,20 @@ namespace UI.Controllers
             c.CssClass = tmclass("users", area);
             c =AMI("Vykazování úkonů", aurl("worksheet"), "k-i-clock");
             c.CssClass = tmclass("worksheet", area);
+            c = AMI("Projekty", aurl("projects"), "k-i-wrench");
+            c.CssClass = tmclass("projects", area);
+            c = AMI("Klienti", aurl("clients"), "k-i-wrench");
+            c.CssClass = tmclass("clients", area);
             c =AMI("Vyúčtování", aurl("billing"), "k-i-dollar");
             c.CssClass = tmclass("billing", area);
-            c =AMI("Projekty", aurl("projects"), "k-i-wrench");
-            c.CssClass = tmclass("projects", area);
-            c =AMI("Klienti", aurl("clients"), "k-i-wrench");
-            c.CssClass = tmclass("clients", area);
+            c = AMI("Zálohy", aurl("proforma"), "k-i-dollar");
+            c.CssClass = tmclass("proforma", area);            
+            c = AMI("Štítky", aurl("tags"), "k-i-wrench");
+            c.CssClass = tmclass("tags", area);
             c = AMI("Dokumenty", aurl("docs"), "k-i-wrench");
             c.CssClass = tmclass("docs", area);
+            c = AMI("Úkoly", aurl("tasks"), "k-i-wrench");
+            c.CssClass = tmclass("tasks", area);
             c =AMI("Různé", aurl("misc"), "k-i-fields-more");
             c.CssClass = tmclass("misc", area);
 
@@ -169,8 +175,14 @@ namespace UI.Controllers
                     Handle_AdminWorksheet(prefix);break;
                 case "billing":
                     Handle_AdminBilling(prefix);break;
+                case "proforma":
+                    Handle_AdminProforma(prefix); break;
                 case "docs":
-                    Handle_AdminDocss(prefix);break;
+                    Handle_AdminDocs(prefix);break;
+                case "tasks":
+                    Handle_AdminTasks(prefix); break;
+                case "tags":
+                    Handle_AdminTags(prefix); break;
                 case "misc":
                     Handle_AdminMisc(prefix);break;
 
@@ -207,7 +219,7 @@ namespace UI.Controllers
             
             DIV_TRANS("Pošta");
             AMI("Poštovní účty", aurl("users","o40"));
-            AMI("Šablony poštovních zpráv", aurl("users", "j61"));
+            AMI("Šablony poštovních zpráv", aurl("users", "j61", "myqueryinline=x29id|int|j02"));
             AMI("OUTBOX", aurl("users","x40"));
             
                        
@@ -267,17 +279,41 @@ namespace UI.Controllers
             AMI("Ceníky sazeb", aurl("billing","p51"));
 
             AMI("Uživatelská pole", aurl("billing","x28","myqueryinline=x29id|int|391"));
-            AMI("Šablony poštovních zpráv", aurl("billing", "j61"));
+            AMI("Šablony poštovních zpráv", aurl("billing", "j61", "myqueryinline=x29id|int|391"));
 
             handle_selected_item(prefix);
 
         }
+        public void Handle_AdminProforma(string prefix)
+        {
+            AMI("Typy záloh", aurl("proforma", "p89"));
+
+            AMI("Role uživatelů v zálohách", aurl("proforma", "x67", "myqueryinline=x29id|int|390"));
+            AMI("Uživatelská pole", aurl("proforma", "x28", "myqueryinline=x29id|int|390"));
+            AMI("Šablony poštovních zpráv", aurl("proforma", "j61", "myqueryinline=x29id|int|390"));
+
+            handle_selected_item(prefix);
+
+        }
+
+        public void Handle_AdminTasks(string prefix)
+        {
+            AMI("Typy úkolů", aurl("tasks", "p57"));
+
+            AMI("Role uživatelů v úkolech", aurl("tasks", "x67", "myqueryinline=x29id|int|356"));
+            AMI("Uživatelská pole", aurl("tasks", "x28", "myqueryinline=x29id|int|356"));
+            AMI("Šablony poštovních zpráv", aurl("tasks", "j61", "myqueryinline=x29id|int|356"));
+
+            handle_selected_item(prefix);
+
+        }
+        
         public void Handle_AdminProjects(string prefix)
         {            
             AMI("Vertikální úrovně projektů", "javascript:_window_open('/p07/ProjectLevels')");
             DIV();
             AMI("Typy projektů", aurl("projects","p42"));
-            AMI("Role osob v projektech", aurl("projects","x67","myqueryinline=x29id|int|141"));
+            AMI("Role uživatelů v projektech", aurl("projects","x67","myqueryinline=x29id|int|141"));
 
 
             AMI("Uživatelská pole", aurl("projects","x28","myqueryinline=x29id|int|141"));
@@ -289,48 +325,48 @@ namespace UI.Controllers
         {
             
             AMI("Typy klientů", aurl("clients","p29"));
-            AMI("Role osob v klientech", aurl("clients","x67","myqueryinline=x29id|int|328"));
+            AMI("Role uživatelů v klientech", aurl("clients","x67","myqueryinline=x29id|int|328"));
 
             AMI("Uživatelská pole", aurl("clients","x28","myqueryinline=x29id|int|328"));
 
             handle_selected_item(prefix);
 
         }
-        private void Handle_AdminDocss(string prefix)
+        private void Handle_AdminDocs(string prefix)
         {
             AMI("Typy dokumentů", aurl("docs", "x18"));            
-            AMI("Role pro oprávnění k dokumentu", aurl("docs", "x67", "myqueryinline=x29id|int|223"));
-
-            AMI("Uživatelská pole", aurl("clients", "x28", "myqueryinline=x29id|int|223"));
+            AMI("Role uživatelů v dokumentu", aurl("docs", "x67", "myqueryinline=x29id|int|223"));
+            AMI("Uživatelská pole", aurl("docs", "x28", "myqueryinline=x29id|int|223"));
 
             handle_selected_item(prefix);
-
+        }
+        private void Handle_AdminTags(string prefix)
+        {
+            AMI("Skupiny štítků", aurl("tags", "o53"));
+            AMI("Položky štítků", aurl("tags", "o51"));
+            
+            handle_selected_item(prefix);
         }
         private void Handle_AdminMisc(string prefix)
         {
-            DIV_TRANS("Štítky");
-            AMI("Štítky (skupiny)", aurl("misc", "o53"));
-            AMI("Položky štítků", aurl("misc", "o51"));
-
-            DIV_TRANS("Uživatelská pole");
-            AMI("Katalog uživatelských polí", aurl("misc","x28"));
-            AMI("Skupiny uživatelských polí", aurl("misc","x27"));
-
-            DIV_TRANS("Pevné tiskové sestavy");
-            AMI("Report šablony", aurl("misc","x31"));
-            AMI("Report kategorie", aurl("misc","j25"));
-
-            
-
-            DIV_TRANS("Ostatní");
             
             AMI("Číselné řady", aurl("misc","x38"));
             AMI("Střediska", aurl("misc","j18"));
             AMI("Autocomplete položky", aurl("misc", "o15"));
-            AMI("Dashboard Widgety", aurl("misc", "x55"));
+            
             AMI("Daňové regiony", aurl("misc","j17"));
-            AMI("Notifikace událostí", aurl("misc","x46"));
+            
+            DIV_TRANS("Uživatelská pole");
+            AMI("Katalog uživatelských polí", aurl("misc", "x28"));
+            AMI("Skupiny uživatelských polí", aurl("misc", "x27"));
 
+            DIV_TRANS("Technologie");
+            AMI("Dashboard Widgety", aurl("misc", "x55"));
+            AMI("Notifikace událostí", aurl("misc", "x46"));
+            AMI("Report šablony", aurl("misc", "x31"));
+            AMI("Report kategorie", aurl("misc", "j25"));
+
+           
             AMI("Uživatelská nápověda", aurl("misc","x51"));
             AMI("Aplikační překlad", aurl("misc","x97"));
 

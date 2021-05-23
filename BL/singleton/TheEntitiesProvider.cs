@@ -105,6 +105,7 @@ namespace BL
 
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
             AE("p56Task", "Úkoly", "Úkol", "p56Task a INNER JOIN p41Project p41x ON a.p41ID=p41x.p41ID", "a.p56ID DESC");
+            AE("p57TaskType", "Typy úkolů", "Typ úkolu", "p57TaskType a", "a.p57Ordinary,a.p57Name");
 
             AE("view_PrimaryAddress", "Adresy", "Adresa", "view_PrimaryAddress a",null);
             
@@ -120,7 +121,7 @@ namespace BL
             AE("p51PriceList", "Ceníky sazeb", "Ceník sazeb", "p51PriceList a", "a.p51Ordinary");
             AE("c21FondCalendar", "Pracovní fondy", "Pracovní fond", "c21FondCalendar a", "a.c21Ordinary");
             AE("c26Holiday", "Dny svátků", "Svátek", "c26Holiday a", "a.c26Date");
-            AE("x67EntityRole", "Role osob", "Role", "x67EntityRole a", "a.x67Ordinary,a.x67Name");
+            AE("x67EntityRole", "Role", "Role", "x67EntityRole a", "a.x67Ordinary,a.x67Name");
 
 
             AE("p92InvoiceType", "Typy faktur", "Typ faktury", "p92InvoiceType a", "a.p92Ordinary");

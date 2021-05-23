@@ -117,24 +117,16 @@
 
         $("#cmdCreate").click(function () {
             var url = "/" + _prefix + "/Record?pid=0";
-            if (_prefix == "x67" && _area=="projects") {
-                url = url + "&prefix=p41";
-            }
-            if (_prefix == "x67" && _area == "clients") {
-                url = url + "&prefix=p28";
-            }
-            if (_prefix == "x67" && _area == "billing") {
-                url = url + "&prefix=p91";
-            }
-
-            if (_prefix == "x28")
-            {
+            if (_prefix == "x67" || _prefix == "x28" || _prefix == "j61") {
                 if (_area == "billing") url = url + "&prefix=p91";
                 if (_area == "worksheet") url = url + "&prefix=p31";
                 if (_area == "clients") url = url + "&prefix=p28";
-                if (_area == "users") url = url + "&prefix=j02";                
+                if (_area == "users") url = url + "&prefix=j02";
+                if (_area == "tasks") url = url + "&prefix=p56";
+                if (_area == "proforma") url = url + "&prefix=p90";
+                if (_area == "docs") url = url + "&prefix=o23";
             }
-           
+            
 
             _window_open(url,1,"@Model.entityTitle");
         });

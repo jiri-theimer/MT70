@@ -139,8 +139,12 @@ namespace UI.Controllers
                 case "users":defprefix = "j03";break;
                 case "projects": defprefix = "p42"; break;
                 case "billing": defprefix = "p92"; break;
+                case "proforma": defprefix = "p89"; break;
                 case "clients": defprefix = "p29"; break;
                 case "worksheet": defprefix = "p32"; break;
+                case "docs": defprefix = "x18"; break;
+                case "tasks": defprefix = "p57"; break;
+                case "tags": defprefix = "o53"; break;
                 case "misc": defprefix = "x38"; break;
                 case "index":
                     return RedirectToAction("Index");
