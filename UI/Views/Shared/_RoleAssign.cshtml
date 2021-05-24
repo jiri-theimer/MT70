@@ -53,13 +53,13 @@
                         if (qry.Any(p => p.j11ID > 0))
                         {
                             cc.j11IDs = string.Join(",", qry.Select(p => p.j11ID));
-                            cc.Teams = string.Join(",", qry.Select(p => p.j11Name));                            
+                            cc.Teams = string.Join(",", qry.Select(p => p.j11Name));
                         }
 
                         if (qry.Any(p => p.j02ID > 0))
                         {
                             cc.j02IDs = string.Join(",", qry.Select(p => p.j02ID));
-                            cc.Persons = string.Join(",", qry.Select(p => p.Person));                            
+                            cc.Persons = string.Join(",", qry.Select(p => p.Person));
                         }
                     }
 
@@ -67,11 +67,26 @@
             }
             Model.lisRepeator.Add(cc);
         }
-
-
     }
 
+    foreach (var c in Model.lisRepeator)
+    {
+        if (c.IsNone)
+        {
+            c.CssVisibility_j02 = "hidden";
+            c.CssVisibility_j11 = "hidden";
+            c.CssVisibility_all = "hidden";
+        }
+        else
+        {
+            if (c.IsAllPersons)
+            {
+                c.CssVisibility_j02 = "hidden";
+                c.CssVisibility_j11 = "hidden";
+            }
+        }
 
+    }
 
 
 }
@@ -88,20 +103,20 @@
     <div class="card-body">
         @for (int i = 0; i < Model.lisRepeator.Count(); i++)
         {
-        <div class="row my-1 divhover">
+        <div class="row my-1 divhover" style="border-bottom:solid 1px #F5F5F5;">
             <div class="col-sm-2 col-md-2" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">
                 @(Model.lisRepeator[i].x67Name):
                 <input type="hidden" asp-for="@Model.lisRepeator[i].x67ID" />
                 <input type="hidden" asp-for="@Model.lisRepeator[i].x67Name" />
             </div>
-            <div id="divJ02@(i)" class="col-sm-3 col-md-3">
+            <div id="divJ02@(i)" class="col-sm-3 col-md-3" style="visibility:@(Model.lisRepeator[i].CssVisibility_j02);">
                 <mycombochecklist asp-for="@Model.lisRepeator[i].j02IDs" elementid-prefix="@(Model.elementidprefix)" entity="j02Person" selectedtext="@Model.lisRepeator[i].Persons" myqueryinline="j02isintraperson|bool|1"></mycombochecklist>
 
             </div>
-            <div id="divJ11@(i)" class="col-sm-3 col-md-3">
+            <div id="divJ11@(i)" class="col-sm-3 col-md-3" style="visibility: @(Model.lisRepeator[i].CssVisibility_j11);">
                 <mycombochecklist asp-for="@Model.lisRepeator[i].j11IDs" entity="j11Team" elementid-prefix="@(Model.elementidprefix)" selectedtext="@Model.lisRepeator[i].Teams" myqueryinline="notall|bool|1"></mycombochecklist>
             </div>
-            <div id="divAll@(i)" class="col-sm-2 col-md-2">
+            <div id="divAll@(i)" class="col-sm-2 col-md-2" style="visibility: @(Model.lisRepeator[i].CssVisibility_all);">
                 <input type="checkbox" id="chkAll@(i)" asp-for="@Model.lisRepeator[i].IsAllPersons" onchange="allpersons_change(this,@(i))" />
                 <label for="chkAll@(i)">@(_lang_vsichni)</label>
             </div>

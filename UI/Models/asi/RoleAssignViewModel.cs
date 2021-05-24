@@ -26,6 +26,10 @@ namespace UI.Models
 
         public bool IsAllPersons { get; set; }
         public bool IsNone { get; set; } = true;
-      
+
+        public string CssVisibility_j11 { get; set; } = "visible";
+        public string CssVisibility_j02 { get; set; } = "visible";
+        public string CssVisibility_all { get; set; } = "visible";
+
     }
 }
