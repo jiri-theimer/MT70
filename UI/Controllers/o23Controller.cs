@@ -65,15 +65,6 @@ namespace UI.Controllers
 
             v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "o23" };
 
-            //v.roles.lisRepeator = new List<RoleAssignRepeator>();
-            //var lisX67 = Factory.x67EntityRoleBL.GetList(new BO.myQuery("x67") { x29id = 223 });
-            //foreach (var c in lisX67)
-            //{
-            //    var cc = new RoleAssignRepeator() { x67ID = c.pid, x67Name = c.x67Name };                
-            //    v.roles.lisRepeator.Add(cc);
-            //}
-
-
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.o23DocBL.Load(v.rec_pid);                
@@ -102,7 +93,7 @@ namespace UI.Controllers
                         });
                     }
                 }
-
+                v.SelectedComboOwner = v.Rec.Owner;                
                 v.SetTagging(Factory.o51TagBL.GetTagging("o23", v.rec_pid));
             }
             v.Toolbar = new MyToolbarViewModel(v.Rec);
@@ -211,6 +202,11 @@ namespace UI.Controllers
             {
                 v.lisFields = new List<DocFieldInput>();
             }
+            if (v.Rec.j02ID_Owner == 0)
+            {
+                v.Rec.j02ID_Owner = Factory.CurrentUser.j02ID;
+                v.SelectedComboOwner = Factory.CurrentUser.PersonDesc;
+            }
         }
 
         
@@ -273,6 +269,7 @@ namespace UI.Controllers
                 if (v.rec_pid > 0) c = Factory.o23DocBL.Load(v.rec_pid);
                 c.o23Name = v.Rec.o23Name;
                 c.o23Code = v.Rec.o23Code;
+                c.j02ID_Owner = v.Rec.j02ID_Owner;
 
                 foreach(var cc in v.lisFields)
                 {

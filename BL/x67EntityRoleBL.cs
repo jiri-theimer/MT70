@@ -12,6 +12,7 @@ namespace BL
         public void SaveO28(int x67id, List<BO.o28ProjectRole_Workload> lisO28);
 
         public IEnumerable<BO.o28ProjectRole_Workload> GetListO28(int x67id);
+        public IEnumerable<BO.x69EntityRole_Assign> GetList_X69(int x29id, int recpid);
 
     }
     class x67EntityRoleBL:BaseBL, Ix67EntityRoleBL
@@ -110,6 +111,17 @@ namespace BL
         public IEnumerable<BO.o28ProjectRole_Workload> GetListO28(int x67id)
         {
             return _db.GetList<BO.o28ProjectRole_Workload>("select a.*,p34.p34Name from o28ProjectRole_Workload a INNER JOIN p34ActivityGroup p34 ON a.p34ID=p34.p34ID WHERE a.x67ID=@pid" , new { pid = x67id });
+        }
+
+        public IEnumerable<BO.x69EntityRole_Assign> GetList_X69(int x29id,int recpid)
+        {
+            sb("SELECT a.*,j02.j02LastName+' '+j02.j02FirstName as Person,j11.j11IsAllPersons as IsAllPersons,x67.x67Name,j11.j11Name,x67.x67ParentID,x67.x29ID");
+            sb(" FROM x69EntityRole_Assign a INNER JOIN x67EntityRole x67 ON a.x67ID=x67.x67ID");
+            sb(" LEFT OUTER JOIN j02Person j02 ON a.j02ID=j02.j02ID LEFT OUTER JOIN j11Team j11 ON a.j11ID=j11.j11ID");
+            sb(" WHERE a.x69RecordPID=@recpid AND x67.x29ID=@x29id");
+            sb(" ORDER BY x67.x67Ordinary,a.x67ID");
+
+            return _db.GetList<BO.x69EntityRole_Assign>(sbret(), new { recpid = recpid,x29id=x29id });
         }
     }
 }

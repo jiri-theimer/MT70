@@ -24,6 +24,8 @@ namespace UI.Models
         public string j11IDs { get; set; }
         public string Teams { get; set; }
 
+        public bool IsAllPersons { get; set; }
+        public bool IsNone { get; set; } = true;
       
     }
 }

@@ -7,13 +7,15 @@
         return;
     }
     int _x29ID = BO.BASX29.GetInt(Model.RecPrefix);
-    string _lang_tymy = _f.tra("Týmy") + "...";
-    string _lang_osoby = _f.tra("Osoby/Jednotlivci") + "...";
+    //string _lang_tymy = _f.tra("Týmy") + "...";
+    //string _lang_osoby = _f.tra("Osoby/Jednotlivci") + "...";
+    string _lang_vsichni = _f.tra("Všichni");
+    string _lang_neobsazeno = _f.tra("Role neobsazena");
     string _lang_header = null;
     switch (Model.RecPrefix)
     {
         case "p41":
-            _lang_header = _f.tra("Obsazení rolí v projektu");break;
+            _lang_header = _f.tra("Obsazení rolí v projektu"); break;
         case "p28":
             _lang_header = _f.tra("Obsazení rolí v klientovi"); break;
         case "o23":
@@ -26,23 +28,57 @@
 
     if (Model.lisRepeator == null)
     {
+        IEnumerable<BO.x69EntityRole_Assign> lisX69 = null;
+        if (Model.RecPid > 0)
+        {
+            lisX69 = _f.x67EntityRoleBL.GetList_X69(_x29ID, Model.RecPid);
+        }
         Model.lisRepeator = new List<RoleAssignRepeator>();
         var lisX67 = _f.x67EntityRoleBL.GetList(new BO.myQuery("x67") { x29id = _x29ID });
         foreach (var c in lisX67)
         {
-            var cc = new RoleAssignRepeator() { x67ID = c.pid, x67Name = c.x67Name };
+            var cc = new RoleAssignRepeator() { x67ID = c.pid, x67Name = c.x67Name,IsNone=true };
+            if (lisX69 != null)
+            {
+                var qry = lisX69.Where(p => p.x67ID == c.pid);
+                if (qry.Count() > 0)
+                {
+                    cc.IsNone = false;
+                    if (qry.Any(p => p.IsAllPersons))
+                    {
+                        cc.IsAllPersons = true;
+                    }
+                    else
+                    {
+                        if (qry.Any(p => p.j11ID > 0))
+                        {
+                            cc.j11IDs = string.Join(",", qry.Select(p => p.j11ID));
+                            cc.Teams = string.Join(",", qry.Select(p => p.j11Name));                            
+                        }
+
+                        if (qry.Any(p => p.j02ID > 0))
+                        {
+                            cc.j02IDs = string.Join(",", qry.Select(p => p.j02ID));
+                            cc.Persons = string.Join(",", qry.Select(p => p.Person));                            
+                        }
+                    }
+
+                }
+            }
             Model.lisRepeator.Add(cc);
         }
-    }
-
-
 
 
     }
 
-    @addTagHelper *, UI
 
-    <input type="hidden" asp-for="@Model.RecPrefix" />
+
+
+}
+
+@addTagHelper *, UI
+
+<input type="hidden" asp-for="@Model.RecPrefix" />
 <input type="hidden" asp-for="@Model.RecPid" />
 
 <div class="card">
@@ -52,21 +88,54 @@
     <div class="card-body">
         @for (int i = 0; i < Model.lisRepeator.Count(); i++)
         {
-            <div class="row my-1 divhover">
-                <div class="col-sm-3 col-md-3">
-                    @(Model.lisRepeator[i].x67Name):
-                    <input type="hidden" asp-for="@Model.lisRepeator[i].x67ID" />
-                    <input type="hidden" asp-for="@Model.lisRepeator[i].x67Name" />
-                </div>
-                <div class="col-sm-4 col-md-4">
-                    <mycombochecklist asp-for="@Model.lisRepeator[i].j02IDs" elementid-prefix="@(Model.elementidprefix)" entity="j02Person" selectedtext="@Model.lisRepeator[i].Persons" placeholder="@(_lang_osoby)" myqueryinline="j02isintraperson|bool|1"></mycombochecklist>
-                    
-                </div>
-                <div class="col-sm-3 col-md-3">                                        
-                    <mycombochecklist asp-for="@Model.lisRepeator[i].j11IDs" entity="j11Team" elementid-prefix="@(Model.elementidprefix)" selectedtext="@Model.lisRepeator[i].Teams" placeholder="@(_lang_tymy)"></mycombochecklist>
-                </div>
+        <div class="row my-1 divhover">
+            <div class="col-sm-2 col-md-2" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">
+                @(Model.lisRepeator[i].x67Name):
+                <input type="hidden" asp-for="@Model.lisRepeator[i].x67ID" />
+                <input type="hidden" asp-for="@Model.lisRepeator[i].x67Name" />
+            </div>
+            <div id="divJ02@(i)" class="col-sm-3 col-md-3">
+                <mycombochecklist asp-for="@Model.lisRepeator[i].j02IDs" elementid-prefix="@(Model.elementidprefix)" entity="j02Person" selectedtext="@Model.lisRepeator[i].Persons" myqueryinline="j02isintraperson|bool|1"></mycombochecklist>
 
             </div>
+            <div id="divJ11@(i)" class="col-sm-3 col-md-3">
+                <mycombochecklist asp-for="@Model.lisRepeator[i].j11IDs" entity="j11Team" elementid-prefix="@(Model.elementidprefix)" selectedtext="@Model.lisRepeator[i].Teams" myqueryinline="notall|bool|1"></mycombochecklist>
+            </div>
+            <div id="divAll@(i)" class="col-sm-2 col-md-2">
+                <input type="checkbox" id="chkAll@(i)" asp-for="@Model.lisRepeator[i].IsAllPersons" onchange="allpersons_change(this,@(i))" />
+                <label for="chkAll@(i)">@(_lang_vsichni)</label>
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <input type="checkbox" id="chkNone@(i)" asp-for="@Model.lisRepeator[i].IsNone" onchange="isnone_change(this,@(i))" />
+                <label for="chkNone@(i)">@(_lang_neobsazeno)</label>
+            </div>
+        </div>
         }
     </div>
 </div>
+
+<script type="text/javascript">
+
+    function allpersons_change(chk, index) {
+        var s = "visible";
+        if ($(chk).prop("checked") == true) {
+            s = "hidden";
+        }
+        $("#divJ02" + index).css("visibility", s);
+        $("#divJ11" + index).css("visibility", s);
+    }
+
+    function isnone_change(chk, index) {
+        var s = "visible";
+        if ($(chk).prop("checked") == true) {
+            $("#divJ02" + index).css("visibility", "hidden");
+            $("#divJ11" + index).css("visibility", "hidden");
+            $("#divAll" + index).css("visibility", "hidden");
+        } else {
+            $("#divAll" + index).css("visibility", "visible");
+            allpersons_change($("#chkAll" + index), index);            
+        }
+        
+        
+    }
+</script>

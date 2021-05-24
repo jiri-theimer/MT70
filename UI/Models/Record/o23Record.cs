@@ -31,6 +31,7 @@ namespace UI.Models.Record
         public bool IsHtmlEditor{get;set;}
         public string HtmlName { get; set; }
         public string HtmlContent { get; set; }
+        public string SelectedComboOwner { get; set; }
 
         public RoleAssignViewModel roles { get; set; }
     }
