@@ -14,6 +14,7 @@ namespace UI.Controllers
         {
             var v = new j18Record() { rec_pid = pid, rec_entity = "j18" };
             v.Rec = new BO.j18Region();
+            v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "j18" };
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.j18RegionBL.Load(v.rec_pid);
@@ -57,7 +58,7 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.j18RegionBL.Save(c);
+                c.pid = Factory.j18RegionBL.Save(c, v.roles.getList4Save(Factory));
                 if (c.pid > 0)
                 {
 

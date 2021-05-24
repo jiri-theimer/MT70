@@ -11,7 +11,7 @@ namespace BL
         public BO.j18Region Load(int pid);
         public BO.j18Region LoadByCode(string strCode, int pid_exclude);
         public IEnumerable<BO.j18Region> GetList(BO.myQuery mq);
-        public int Save(BO.j18Region rec);
+        public int Save(BO.j18Region rec, List<BO.x69EntityRole_Assign> lisX69);
 
     }
     class j18RegionBL : BaseBL, Ij18RegionBL
@@ -54,7 +54,7 @@ namespace BL
 
 
 
-        public int Save(BO.j18Region rec)
+        public int Save(BO.j18Region rec, List<BO.x69EntityRole_Assign> lisX69)
         {
             if (!ValidateBeforeSave(rec))
             {
@@ -72,6 +72,12 @@ namespace BL
                 int intPID = _db.SaveRecord("j18Region", p, rec);
                 if (intPID > 0)
                 {
+                    if (lisX69 != null && !DL.BAS.SaveX69(_db, "j18", intPID, lisX69))
+                    {
+                        this.AddMessageTranslated("Error: DL.BAS.SaveX69");
+                        return 0;
+                    }
+
                     var pars = new Dapper.DynamicParameters();
                     {
                         pars.Add("j18id", intPID, System.Data.DbType.Int32);

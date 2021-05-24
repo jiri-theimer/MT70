@@ -56,7 +56,7 @@ namespace UI.Controllers
         {
 
             var cTabs = new NavTabsSupport(Factory);
-            v.NavTabs = cTabs.getTabs(v.prefix, v.pid);
+            v.NavTabs = cTabs.getTabs(v.prefix, v.pid,true);
             switch (v.prefix)
             {
                 case "j02":

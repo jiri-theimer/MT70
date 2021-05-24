@@ -9,5 +9,7 @@ namespace UI.Models.Record
     {
         public BO.j18Region Rec { get; set; }
         public string ComboJ17Name { get; set; }
+
+        public RoleAssignViewModel roles { get; set; }
     }
 }

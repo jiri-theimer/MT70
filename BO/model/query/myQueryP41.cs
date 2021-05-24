@@ -128,9 +128,22 @@ namespace BO
             }
 
 
+            if (!(this.CurrentUser.IsAdmin || this.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Owner) || this.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Reader)))
+            {
+                //string s = "a.j02ID_Owner=@j02id_query";
+                //string sw = "x69.j02ID=@j02id_query";
+                //if (!string.IsNullOrEmpty(this.CurrentUser.j11IDs))
+                //{
+                //    sw = "("+sw + $" OR x69.j11ID IN ({this.CurrentUser.j11IDs}))";
+                //}
 
+                //s += " OR a.p41ID IN (SELECT x69.x69RecordPID FROM x69EntityRole_Assign x69 INNER JOIN x67EntityRole x67 ON x69.x67ID=x67.x67ID WHERE x67.x29ID=141 AND "+sw;
+                //s += ")";
+                //s+=" OR a.p41ID IN (SELECT p41.p41ID FROM p41Project p41 INNER JOIN j18Region j18 ON p41.j18ID=j18.j18ID
+                
+            }
 
-
+           
 
 
 

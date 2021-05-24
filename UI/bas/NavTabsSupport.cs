@@ -15,7 +15,7 @@ namespace UI
             _f = f;            
         }
         
-        public List<NavTab> getTabs(string prefix,int pid)
+        public List<NavTab> getTabs(string prefix,int pid,bool loadsums)
         {
             _tabs = new List<NavTab>();
             
@@ -41,9 +41,12 @@ namespace UI
                     break;
 
                 case "p28":                    
-                    _tabs.Add(AddTab("Tab1", "tab1", "/p28/Tab1?pid=" + AppendPid2Url(pid), false));
-                    var cp28 = _f.p28ContactBL.LoadSumRow(pid);
-
+                    _tabs.Add(AddTab("Tab1", "tab1", "/p28/Tab1?pid=" + AppendPid2Url(pid), false));                    
+                    var cp28 = new BO.p28ContactSum();
+                    if (loadsums)
+                    {
+                        cp28 = _f.p28ContactBL.LoadSumRow(pid);
+                    }
                     _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31",true,Badge3(cp28.p31_Wip_Time_Count,cp28.p31_Wip_Expense_Count,cp28.p31_Wip_Fee_Count,"badge bg-warning text-dark")));
                     _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time",true, Badge2(cp28.p31_Wip_Time_Count,cp28.p31_Approved_Time_Count)));
                     _tabs.Add(AddTab("Výdaje", "p31expense", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|expense",true, Badge2(cp28.p31_Wip_Expense_Count, cp28.p31_Approved_Expense_Count)));

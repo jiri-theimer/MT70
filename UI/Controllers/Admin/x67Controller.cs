@@ -65,6 +65,9 @@ namespace UI.Controllers
                 case 141:
                     v.lisDisponibleSlaves = v.lisDisponibleSlaves.Where(p => p.x29ID == BO.x29IdEnum.p56Task || p.x29ID == BO.x29IdEnum.p91Invoice || p.x29ID == BO.x29IdEnum.o23Doc);
                     break;
+                case 118:
+                    v.lisDisponibleSlaves = v.lisDisponibleSlaves.Where(p => p.x29ID == BO.x29IdEnum.p41Project || p.x29ID == BO.x29IdEnum.p91Invoice);
+                    break;
                 default:
                     v.lisDisponibleSlaves = v.lisDisponibleSlaves.Where(p => p.pid==-1);    //nic nenabízet
                     break;

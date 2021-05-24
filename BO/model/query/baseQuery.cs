@@ -552,16 +552,20 @@ namespace BO
                 switch (this.Prefix)
                 {
                     case "j02":
-                        AQ($"a.j02ID IN (SELECT za.j02ID FROM p31Worksheet za{sf} WHERE {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        //AQ($"a.j02ID IN (SELECT za.j02ID FROM p31Worksheet za{sf} WHERE {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        AQ($"EXISTS (SELECT 1 FROM p31Worksheet za{sf} WHERE za.j02ID=a.j02ID AND {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
                         break;
                     case "p41":
-                        AQ($"a.p41ID IN (SELECT za.p41ID FROM p31Worksheet za{sf} WHERE {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        //AQ($"a.p41ID IN (SELECT za.p41ID FROM p31Worksheet za{sf} WHERE {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        AQ($"EXISTS (SELECT 1 FROM p31Worksheet za{sf} WHERE za.p41ID=a.p41ID AND {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
                         break;
                     case "p28":
-                        AQ($"a.p28ID IN (SELECT za.p41ID FROM p31Worksheet za{sf} INNER JOIN p41Project zx ON za.p41ID=zx.p41ID WHERE {s} AND zx.p28ID_Client IS NOT NULL AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        //AQ($"a.p28ID IN (SELECT za.p41ID FROM p31Worksheet za{sf} INNER JOIN p41Project zx ON za.p41ID=zx.p41ID WHERE {s} AND zx.p28ID_Client IS NOT NULL AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        AQ($"EXISTS (SELECT 1 FROM p31Worksheet za{sf} INNER JOIN p41Project zx ON za.p41ID=zx.p41ID WHERE zx.p28ID_Client=a.p28ID AND {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
                         break;
                     case "p56":
-                        AQ($"a.p56ID IN (SELECT za.p56ID FROM p31Worksheet za{sf} WHERE {s} AND za.p56ID IS NOT NULL AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        //AQ($"a.p56ID IN (SELECT za.p56ID FROM p31Worksheet za{sf} WHERE {s} AND za.p56ID IS NOT NULL AND za.p31Date between @p31date1 AND @p31date2)", null, null);
+                        AQ($"EXISTS (SELECT 1 FROM p31Worksheet za{sf} WHERE za.p56ID=a.p56ID AND {s} AND za.p56ID IS NOT NULL AND za.p31Date between @p31date1 AND @p31date2)", null, null);
                         break;
                 }
                 

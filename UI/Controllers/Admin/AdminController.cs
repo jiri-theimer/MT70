@@ -145,6 +145,7 @@ namespace UI.Controllers
                 case "docs": defprefix = "x18"; break;
                 case "tasks": defprefix = "p57"; break;
                 case "tags": defprefix = "o53"; break;
+                case "centres": defprefix = "j18"; break;
                 case "misc": defprefix = "x38"; break;
                 case "index":
                     return RedirectToAction("Index");

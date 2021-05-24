@@ -296,7 +296,7 @@ namespace BL
 
         public BO.p28ContactSum LoadSumRow(int pid)
         {
-            return _db.Load<BO.p28ContactSum>("EXEC dbo.p28_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
+            return _db.Load<BO.p28ContactSum>("EXEC dbo._core_p28_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
         }
     }
 }

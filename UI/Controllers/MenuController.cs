@@ -158,6 +158,8 @@ namespace UI.Controllers
             c.CssClass = tmclass("docs", area);
             c = AMI("Úkoly", aurl("tasks"), "k-i-wrench");
             c.CssClass = tmclass("tasks", area);
+            c = AMI("Střediska", aurl("centres"), "k-i-wrench");
+            c.CssClass = tmclass("centres", area);
             c =AMI("Různé", aurl("misc"), "k-i-fields-more");
             c.CssClass = tmclass("misc", area);
 
@@ -183,6 +185,8 @@ namespace UI.Controllers
                     Handle_AdminTasks(prefix); break;
                 case "tags":
                     Handle_AdminTags(prefix); break;
+                case "centres":
+                    Handle_AdminCentres(prefix); break;
                 case "misc":
                     Handle_AdminMisc(prefix);break;
 
@@ -343,6 +347,14 @@ namespace UI.Controllers
 
             handle_selected_item(prefix);
         }
+        private void Handle_AdminCentres(string prefix)
+        {
+            AMI("Střediska", aurl("centres", "j18"));
+            AMI("Role uživatelů ve středisku", aurl("centres", "x67", "myqueryinline=x29id|int|118"));
+            
+
+            handle_selected_item(prefix);
+        }
         private void Handle_AdminTags(string prefix)
         {
             AMI("Skupiny štítků", aurl("tags", "o53"));
@@ -354,7 +366,7 @@ namespace UI.Controllers
         {
             
             AMI("Číselné řady", aurl("misc","x38"));
-            AMI("Střediska", aurl("misc","j18"));
+            
             AMI("Autocomplete položky", aurl("misc", "o15"));
             
             AMI("Daňové regiony", aurl("misc","j17"));

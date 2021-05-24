@@ -44,7 +44,8 @@ namespace BO
                             break;
                         case "p31Date":
                         default:
-                            AQ("a.p28ID IN (select xb.p28ID_Client FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xb.p28ID_Client IS NOT NULL AND xa.p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            //AQ("a.p28ID IN (select xb.p28ID_Client FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xb.p28ID_Client IS NOT NULL AND xa.p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            AQ("EXISTS (select 1 FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID INNER JOIN p28Contact xc ON xb.p28ID_Client=xc.p28ID WHERE xc.p28ID = a.p28ID AND xa.p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
                             break;
                     }
                 }

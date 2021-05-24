@@ -703,3 +703,51 @@ function _showloading() {
     }
 
 }
+
+
+function load_ajax_async(strHandlerUrl, params, callback) {
+    load_ajax_data(strHandlerUrl, params, callback, true, "json");
+}
+
+///vrací ajax výsledek
+function load_ajax_data(strHandlerUrl, params,callback, is_async, data_type) {
+    var is_success = false;
+    var ret = null;
+    var is_done = false;
+    if (is_async === undefined || is_async===null) is_async = false;
+    if (data_type===undefined || data_type === null) data_type = "json";
+     
+    $.ajax({
+        url: strHandlerUrl,
+        type: "POST",
+        dataType: data_type,
+        async: is_async,
+        cache: false,
+        data: params,
+        complete: function (result) {
+            is_success = true;           
+            if (callback !== undefined) {                
+                callback(ret);
+            } else {
+                return (ret);
+            }
+            
+        },
+        success: function (result) {
+            is_done = true;
+            is_success = true;
+            
+            ret = result;
+
+        },
+        error: function (e, b, error) {
+            is_done = true;
+            alert("load_ajax_data: " + error + "/" + strHandlerUrl);
+        }
+    });
+
+    if (is_async === false) {
+        return (ret);
+    }
+
+}

@@ -98,7 +98,7 @@ namespace UI.Controllers
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("masterview-j72id-" + prefix);
 
             var cTabs = new NavTabsSupport(Factory);
-            v.NavTabs = cTabs.getTabs(v.prefix, go2pid);
+            v.NavTabs = cTabs.getTabs(v.prefix, go2pid,false);
 
           
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);
@@ -273,7 +273,7 @@ namespace UI.Controllers
         public List<NavTab> getTabs(string prefix,int pid)  //volá se z javascriptu při změně řádky v gridu
         {
             var cTabs = new NavTabsSupport(Factory);
-            return cTabs.getTabs(prefix, pid);
+            return cTabs.getTabs(prefix, pid,true);
         }
 
         private void Handle_P31StateQuery(FsmViewModel v, bool bolMasterEntity, string masterentity)

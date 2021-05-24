@@ -51,12 +51,16 @@ namespace BL
             {
                 return 0;
             }
-            var x53values = _db.GetList<BO.GetInteger>("select x53Value as Value FROM x53Permission WHERE x53ID IN (" + string.Join(",", x53ids)+ ") ORDER BY x53Ordinary");
             var strRoleValue = new String('0', 40);
-            foreach (BO.GetInteger c in x53values)
+            if (x53ids !=null && x53ids.Count > 0)
             {
-                strRoleValue = strRoleValue.Substring(0, c.Value - 1) + "1" + strRoleValue.Substring(c.Value, strRoleValue.Length - c.Value);
+                var x53values = _db.GetList<BO.GetInteger>("select x53Value as Value FROM x53Permission WHERE x53ID IN (" + string.Join(",", x53ids) + ") ORDER BY x53Ordinary");
+                foreach (BO.GetInteger c in x53values)
+                {
+                    strRoleValue = strRoleValue.Substring(0, c.Value - 1) + "1" + strRoleValue.Substring(c.Value, strRoleValue.Length - c.Value);
+                }
             }
+            
 
             using (var sc = new System.Transactions.TransactionScope())
             {
@@ -74,7 +78,11 @@ namespace BL
                     {
                         _db.RunSql("DELETE FROM x68EntityRole_Permission WHERE x67ID=@pid", new { pid = intPID });
                     }
-                    _db.RunSql("INSERT INTO x68EntityRole_Permission(x67ID,x53ID) SELECT @pid,x53ID FROM x53Permission WHERE x53ID IN (" + string.Join(",", x53ids) + ")", new { pid = intPID });
+                    if (x53ids !=null && x53ids.Count > 0)
+                    {
+                        _db.RunSql("INSERT INTO x68EntityRole_Permission(x67ID,x53ID) SELECT @pid,x53ID FROM x53Permission WHERE x53ID IN (" + string.Join(",", x53ids) + ")", new { pid = intPID });
+                    }
+                    
 
                     if (x67ids_slave != null)
                     {
@@ -96,10 +104,10 @@ namespace BL
         }
         public bool ValidateBeforeSave(BO.x67EntityRole rec, List<int> x53ids)
         {
-            if (x53ids==null || x53ids.Count == 0)
-            {
-                this.AddMessage("K roli musí být přiřazeno minimálně jedno oprávnění!"); return false;
-            }
+            //if (x53ids==null || x53ids.Count == 0)
+            //{
+            //    this.AddMessage("K roli musí být přiřazeno minimálně jedno oprávnění!"); return false;
+            //}
             if (string.IsNullOrEmpty(rec.x67Name))
             {
                 this.AddMessage("Chybí vyplnit [Název role]."); return false;

@@ -121,6 +121,7 @@
 
 <script type="text/javascript">
     var _pageprefix = "@Model.prefix";
+    var _currentloadingtabs = false;
 
     $(document.body).css("overflow", "hidden");
 
@@ -143,6 +144,7 @@
 
         if (_tg_go2pid !== null && _tg_go2pid !== 0) {  //masterview potřebuje odscrollovat vybraný záznam. FlatView to nepotřebuje
             tg_go2pid(_tg_go2pid);
+            handle_render_tabs(_tg_go2pid);
         }
 
         if ($("#FilterMyInvolvement").val() != "") {
@@ -153,7 +155,7 @@
             thegrid_handle_rowselect(e.detail.pid);
         });
 
-
+        
 
     });
 
@@ -192,25 +194,42 @@
 
             tabUrl = $(selectedtab).attr("href");
             document.getElementById("fra_subgrid").src = tabUrl;
+           
+            handle_render_tabs(pid);                
             
-            //Aktualizovat čísla součtů v záložkách
-            $.post("/TheGrid/getTabs", { prefix: _pageprefix, pid: pid }, function (data) {
-                
-                for (var i = 1; i < data.length; i++) {
-                    if (document.getElementById("tab" + data[i].entity)) {
-                        if (data[i].badge != null) {
-                            $("#tab" + data[i].entity).html(data[i].name + data[i].badge);
-                        } else {
-                            $("#tab" + data[i].entity).html(data[i].name);
-                        }
-                    }
-                                        
+            
+            
+
+    }
+
+    function handle_render_tabs(pid) {
+        //Aktualizovat záložky
+        if (_currentloadingtabs) {
+            $("#tabtab1").html("Wait");
+        } else {
+            _currentloadingtabs = true;
+            $("#tabtab1").html("-----");
+            load_ajax_async("/TheGrid/getTabs", { prefix: _pageprefix, pid: pid }, callback_render_tabs);
+        }        
+    }
+
+    function callback_render_tabs(data) {  
+        //vykreslení obsahu záložek načtených přes load_ajax_async
+        _currentloadingtabs = false;
+        $("#tabtab1").html("Tab1");
+        for (var i = 1; i < data.length; i++) {
+            if (document.getElementById("tab" + data[i].entity)) {
+                if (data[i].badge != null) {
+                    $("#tab" + data[i].entity).html(data[i].name + data[i].badge);
+                } else {
+                    $("#tab" + data[i].entity).html(data[i].name);
                 }
+            }
 
-            });
-            
+        }
+    }
 
-     }
+    
 
 
         function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
