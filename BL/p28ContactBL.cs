@@ -11,7 +11,7 @@ namespace BL
         public BO.p28Contact Load(int pid);
         public IEnumerable<BO.p28Contact> GetList(BO.myQueryP28 mq);
         public IEnumerable<BO.o32Contact_Medium> GetList_o32(int p28id);
-        public int Save(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,List<int> j02ids);
+        public int Save(BO.p28Contact rec, List<BO.o37Contact_Address> lisO37, List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI,List<int> j02ids, List<BO.x69EntityRole_Assign> lisX69);
         public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id);
         public BO.p28RecDisposition InhaleRecDisposition(BO.p28Contact rec);
         public BO.p28ContactSum LoadSumRow(int pid);
@@ -65,7 +65,7 @@ namespace BL
 
             return _db.GetList<BO.o37Contact_Address>(sbret(), new { p28id = p28id });
         }
-        public int Save(BO.p28Contact rec,List<BO.o37Contact_Address> lisO37,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, List<int> j02ids)
+        public int Save(BO.p28Contact rec,List<BO.o37Contact_Address> lisO37,List<BO.o32Contact_Medium> lisO32, List<BO.FreeFieldInput> lisFFI, List<int> j02ids, List<BO.x69EntityRole_Assign> lisX69)
         {
             if (!ValidateBeforeSave(rec, lisO37,lisO32))
             {
@@ -134,7 +134,12 @@ namespace BL
                     if (!DL.BAS.SaveFreeFields(_db, intPID, lisFFI))
                     {
                         return 0;
-                    }                    
+                    }
+                    if (lisX69 != null && !DL.BAS.SaveX69(_db, "p28", intPID, lisX69))
+                    {
+                        this.AddMessageTranslated("Error: DL.BAS.SaveX69");
+                        return 0;
+                    }
 
                     if (lisO37 != null)
                     {

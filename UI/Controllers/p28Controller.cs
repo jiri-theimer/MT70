@@ -98,6 +98,8 @@ namespace UI.Controllers
         {
             var v = new p28Record() { rec_pid = pid, rec_entity = "p28",IsCompany=1,p51Flag=1,TempGuid=BO.BAS.GetGuid() };
             v.Rec = new BO.p28Contact();
+            v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "p28" };
+
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.p28ContactBL.Load(v.rec_pid);
@@ -372,7 +374,7 @@ namespace UI.Controllers
                     });
                 }
 
-                c.pid = Factory.p28ContactBL.Save(c,lisO37,lisO32,v.ff1.inputs,v.lisJ02.Select(p=>p.pid).ToList());
+                c.pid = Factory.p28ContactBL.Save(c,lisO37,lisO32,v.ff1.inputs,v.lisJ02.Select(p=>p.pid).ToList(),v.roles.getList4Save(Factory));
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p28", c.pid, v.TagPids);

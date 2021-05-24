@@ -25,6 +25,10 @@ namespace BO
                 AQ("a.x29ID=@x29id", "x29id", this.x29id);
             }
 
+            if (this.Prefix == "x67")
+            {
+                AQ("a.x67ParentID IS NULL", null, null);
+            }
 
             return this.InhaleRows();
 

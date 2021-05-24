@@ -16,5 +16,8 @@ namespace UI.Models.Record
         public int x29ID { get; set; }
 
         public List<BO.o28ProjectRole_Workload> lisO28 { get; set; }
+
+        public IEnumerable<BO.x67EntityRole> lisDisponibleSlaves { get; set; }
+        public List<int> SelectedSlaves { get; set; }
     }
 }

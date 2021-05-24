@@ -55,7 +55,7 @@ namespace BL
             {
                 recX67 = _mother.x67EntityRoleBL.Load(rec.x67ID);
             }
-            rec.x67ID = _mother.x67EntityRoleBL.Save(recX67, x53ids);
+            rec.x67ID = _mother.x67EntityRoleBL.Save(recX67, x53ids,null);
 
             var p = new DL.Params4Dapper();
 

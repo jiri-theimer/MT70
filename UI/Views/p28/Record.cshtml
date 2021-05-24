@@ -24,9 +24,11 @@
         <li class="nav-item onetab" role="presentation">
             <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Uživatelská pole") (@Model.ff1.VisibleInputsCount)</a>
         </li>
-
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab4" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab4">@_f.tra("Ostatní")</a>
+            <button class="nav-link" id="link_tab4" data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab">@_f.tra("Oprávnění")</button>
+        </li>
+        <li class="nav-item onetab" role="presentation">
+            <a id="link_tab5" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab5">@_f.tra("Ostatní")</a>
         </li>
 
 
@@ -446,12 +448,22 @@
 
 <div class="tab-pane" id="tab4" role="tabpanel">
     <!-- Tab4 -->
+
     <div class="row">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
         <div class="col-sm-11 col-md-10">
             <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
         </div>
     </div>
+
+
+
+    @Html.EditorFor(m => m.roles, "~/Views/Shared/_RoleAssign.cshtml")
+</div>
+
+<div class="tab-pane" id="tab5" role="tabpanel">
+    <!-- Tab5 -->
+    
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Stromově nadřízený klient"):</label>
         <div class="col-sm-11 col-md-10">

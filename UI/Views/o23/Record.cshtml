@@ -118,7 +118,7 @@
                 </div>
             </div>
 
-            @for (int i = 0; i < Model.lisFields.Where(p=>p.x16Field != "o23HtmlContent").Count(); i++)
+            @for (int i = 0; i < Model.lisFields.Where(p => p.x16Field != "o23HtmlContent").Count(); i++)
             {
                 <div class="row my-2">
                     @if (Model.lisFields[i].FieldType == BO.x24IdENUM.tBoolean)
@@ -253,20 +253,20 @@
             </div>
         }
 
-    <div class="tab-pane" id="tab2" role="tabpanel">
-        <!-- Tab2 -->
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <!-- Tab2 -->
 
-        <div class="row">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
-            <div class="col-sm-11 col-md-10">
-                <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+            <div class="row">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
+                <div class="col-sm-11 col-md-10">
+                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.SelectedComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+                </div>
             </div>
+
+
+
+            @Html.EditorFor(m => m.roles, "~/Views/Shared/_RoleAssign.cshtml")
         </div>
-        
-
-
-        @Html.EditorFor(m => m.roles, "~/Views/Shared/_RoleAssign.cshtml")
-    </div>
     </div>
 
 
@@ -297,7 +297,7 @@
     @if (Model.IsHtmlEditor)
         {
         <text>
-        $("#editor1").summernote({                        
+        $("#editor1").summernote({
             tabsize: 2,
             height: 400
         });
@@ -307,7 +307,7 @@
         $("#editor1").summernote("code", firstdata);
 
         $("#editor1").on("summernote.change", function (e) {   // callback as jquery custom event
-            var s = $("#editor1").summernote("code");            
+            var s = $("#editor1").summernote("code");
             $("#hidHtmlContent").val(s);
         });
 

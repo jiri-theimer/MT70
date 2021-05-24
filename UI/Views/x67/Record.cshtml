@@ -80,15 +80,36 @@
         </div>
     }
 
-
-    <div class="card">
-        <div class="card-header">
-            @_f.tra("Výčet možných oprávnění role")
+    <div class="row">
+        <div class="col-auto">
+            <div class="card">
+                <div class="card-header">
+                    @_f.tra("Výčet možných oprávnění role")
+                </div>
+                <div class="card-body">
+                    <mycheckboxlist asp-for="@Model.SelectedX53IDs" datasource="@Model.lisAllX53" valuefield="x53ID" textfield="x53Name"></mycheckboxlist>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <mycheckboxlist asp-for="@Model.SelectedX53IDs" datasource="@Model.lisAllX53" valuefield="x53ID" textfield="x53Name"></mycheckboxlist>
+        <div class="col-auto">
+            @if (Model.lisDisponibleSlaves.Count() > 0)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        @_f.tra("Nositel role může automaticky disponovat oprávněním ve svázaných entitách:")
+                    </div>
+                    <div class="card-body">
+                        <mycheckboxlist asp-for="@Model.SelectedSlaves" datasource="@Model.lisDisponibleSlaves" valuefield="pid" textfield="NameWithEntity"></mycheckboxlist>
+                    </div>
+                </div>
+            }
         </div>
     </div>
+    
+
+
+    
+
 
 </div>
 

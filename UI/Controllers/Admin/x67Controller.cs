@@ -25,6 +25,8 @@ namespace UI.Controllers
                 
                 v.SelectedX53IDs = Factory.x67EntityRoleBL.GetList_BoundX53(v.rec_pid).Select(p => p.x53ID).ToList();
                 prefix = BO.BASX29.GetPrefix(v.Rec.x29ID);
+
+                v.SelectedSlaves = Factory.x67EntityRoleBL.GetList_BoundSlaves(v.rec_pid).Select(p => p.pid).ToList();
                 
             }
             if (prefix == null)
@@ -52,6 +54,21 @@ namespace UI.Controllers
         private void RefreshState(x67Record v)
         {
             v.lisAllX53 = Factory.FBL.GetListX53().Where(p => p.x29ID == v.Rec.x29ID);
+            var mq = new BO.myQuery("x67");
+            mq.explicit_orderby = "a.x29ID,a.x67Ordinary";
+            v.lisDisponibleSlaves = Factory.x67EntityRoleBL.GetList(mq);
+            switch (v.x29ID)
+            {
+                case 328:
+                    v.lisDisponibleSlaves = v.lisDisponibleSlaves.Where(p => p.x29ID == BO.x29IdEnum.p41Project || p.x29ID == BO.x29IdEnum.p91Invoice || p.x29ID == BO.x29IdEnum.p90Proforma || p.x29ID == BO.x29IdEnum.o23Doc);
+                    break;
+                case 141:
+                    v.lisDisponibleSlaves = v.lisDisponibleSlaves.Where(p => p.x29ID == BO.x29IdEnum.p56Task || p.x29ID == BO.x29IdEnum.p91Invoice || p.x29ID == BO.x29IdEnum.o23Doc);
+                    break;
+                default:
+                    v.lisDisponibleSlaves = v.lisDisponibleSlaves.Where(p => p.pid==-1);    //nic nenabízet
+                    break;
+            }
         }
         
         [HttpPost]
@@ -72,7 +89,7 @@ namespace UI.Controllers
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
 
-                c.pid = Factory.x67EntityRoleBL.Save(c,v.SelectedX53IDs);
+                c.pid = Factory.x67EntityRoleBL.Save(c,v.SelectedX53IDs,v.SelectedSlaves);
                 if (c.pid > 0)
                 {
                     if (c.x29ID == BO.x29IdEnum.p41Project)

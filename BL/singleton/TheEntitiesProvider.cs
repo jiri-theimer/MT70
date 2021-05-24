@@ -121,6 +121,7 @@ namespace BL
             AE("p51PriceList", "Ceníky sazeb", "Ceník sazeb", "p51PriceList a", "a.p51Ordinary");
             AE("c21FondCalendar", "Pracovní fondy", "Pracovní fond", "c21FondCalendar a", "a.c21Ordinary");
             AE("c26Holiday", "Dny svátků", "Svátek", "c26Holiday a", "a.c26Date");
+            //AE("x67EntityRole", "Role", "Role", "(select * from x67EntityRole where x67ParentID IS NULL) a", "a.x67Ordinary,a.x67Name");
             AE("x67EntityRole", "Role", "Role", "x67EntityRole a", "a.x67Ordinary,a.x67Name");
 
 

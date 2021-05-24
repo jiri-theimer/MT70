@@ -33,6 +33,8 @@ namespace UI.Models.Record
         public IEnumerable<BO.j02Person> lisJ02 { get; set; }
 
         public bool CanEditRecordCode { get; set; }
+
+        public RoleAssignViewModel roles { get; set; }
     }
 
     public class o37Repeater : BO.o37Contact_Address
