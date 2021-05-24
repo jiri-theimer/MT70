@@ -10,7 +10,7 @@ namespace BL
     {
         public BO.o23Doc Load(int pid);
         public IEnumerable<BO.o23Doc> GetList(BO.myQueryO23 mq);
-        public int Save(BO.o23Doc rec, int intX18ID, List<BO.x19EntityCategory_Binding> lisX19, string uploadguid,List<int>o27ids_delete);
+        public int Save(BO.o23Doc rec, int intX18ID, List<BO.x19EntityCategory_Binding> lisX19, string uploadguid,List<int>o27ids_delete,List<BO.x69EntityRole_Assign> lisX69);
         public IEnumerable<BO.x19EntityCategory_Binding> GetList_x19(int o23id);
         public BO.o23RecDisposition InhaleRecDisposition(BO.o23Doc rec);
         public bool SaveHtmlEditor(int o23id, string s);
@@ -60,7 +60,7 @@ namespace BL
             return _db.GetList<BO.x19EntityCategory_Binding>(GetSQL1_X19(" WHERE a.o23ID=@o23id"),new { o23id = o23id });
         }
 
-        public int Save(BO.o23Doc rec,int intX18ID,List<BO.x19EntityCategory_Binding> lisX19,string uploadguid, List<int> o27ids_delete)
+        public int Save(BO.o23Doc rec,int intX18ID,List<BO.x19EntityCategory_Binding> lisX19,string uploadguid, List<int> o27ids_delete, List<BO.x69EntityRole_Assign> lisX69)
         {
             var recX18 = _mother.x18EntityCategoryBL.Load(intX18ID);
             var lisX20 = _mother.x18EntityCategoryBL.GetList_x20(intX18ID);
@@ -129,6 +129,12 @@ namespace BL
                 if (intPID > 0)
                 {
                     SaveX19Binding(intPID, lisX19, lisX20);
+
+                    if (lisX69 != null && !DL.BAS.SaveX69(_db, "o23", intPID, lisX69))
+                    {
+                        this.AddMessageTranslated("Error: DL.BAS.SaveX69");
+                        return 0;
+                    }
                    
                     if (!string.IsNullOrEmpty(uploadguid))
                     {
@@ -156,7 +162,7 @@ namespace BL
                         return intPID;
                     }
 
-                        
+                     
                 }
             }
 

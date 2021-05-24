@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
 
 namespace DL
 {
@@ -24,6 +25,31 @@ namespace DL
             strSQL = strSQL.Replace("delete ", "", StringComparison.OrdinalIgnoreCase);
 
             return BO.BAS.OcistitSQL(strSQL);
+        }
+
+        public static bool SaveX69(DL.DbHandler db,string recprefix,int recpid, List<BO.x69EntityRole_Assign> lisX69)
+        {
+            string guid = BO.BAS.GetGuid();
+            foreach(var c in lisX69)
+            {
+                db.RunSql("INSERT INTO p85TempBox(p85GUID,p85DataPID,p85OtherKey1,p85OtherKey2,p85prefix) VALUES(@guid,@x67id,@j02id,@j11id,@prefix)", new { guid = guid, x67id=c.x67ID,j02id=BO.BAS.TestIntAsDbKey(c.j02ID),j11id=BO.BAS.TestIntAsDbKey(c.j11ID),prefix=recprefix });
+            }
+
+            var pars = new Dapper.DynamicParameters();
+
+            pars.Add("recordpid", recpid, DbType.Int32);
+            pars.Add("x29id", BO.BASX29.GetInt(recprefix), DbType.Int32);
+            pars.Add("guid", guid, DbType.String);
+            pars.Add("x67id_only_onerole_update", 0, DbType.Int32);
+
+
+            if (db.RunSp("x69_save_one_record", ref pars,false) == "1")
+            {
+                return true;
+            }
+
+            return false;
+            
         }
 
         public static bool SaveFreeFields(DL.DbHandler db, int intSourcePID,List<BO.FreeFieldInput> lisFFI)

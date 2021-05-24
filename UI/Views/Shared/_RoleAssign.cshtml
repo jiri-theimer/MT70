@@ -52,14 +52,14 @@
                     {
                         if (qry.Any(p => p.j11ID > 0))
                         {
-                            cc.j11IDs = string.Join(",", qry.Select(p => p.j11ID));
-                            cc.Teams = string.Join(",", qry.Select(p => p.j11Name));
+                            cc.j11IDs = string.Join(",", qry.Where(p => p.j11ID > 0).Select(p => p.j11ID));
+                            cc.Teams = string.Join(",", qry.Where(p=>p.j11ID>0).Select(p => p.j11Name));
                         }
 
                         if (qry.Any(p => p.j02ID > 0))
                         {
-                            cc.j02IDs = string.Join(",", qry.Select(p => p.j02ID));
-                            cc.Persons = string.Join(",", qry.Select(p => p.Person));
+                            cc.j02IDs = string.Join(",", qry.Where(p => p.j02ID > 0).Select(p => p.j02ID));
+                            cc.Persons = string.Join(",", qry.Where(p => p.j02ID > 0).Select(p => p.Person));
                         }
                     }
 

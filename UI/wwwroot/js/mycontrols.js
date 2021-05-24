@@ -266,8 +266,8 @@ function mycombochecklist_init(c) {
 
     if ($("#" + c.aliasid).val() !== "") {
 
-        var deftext = $("#" + c.aliasid).val();
-        deftext = deftext.replace(/,/g, "♣");
+        var deftext = $("#" + c.aliasid).val();        
+        deftext = deftext.replace(/,/g, "★");
         
         $("#cmdCombo" + c.controlid).text(deftext);
         $("#cmdCombo" + c.controlid).attr("title", deftext);

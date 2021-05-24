@@ -7,6 +7,7 @@ namespace BL
     public interface Ij11TeamBL
     {
         public BO.j11Team Load(int pid);
+        public BO.j11Team LoadTeamOfAllPersons();
         public IEnumerable<BO.j11Team> GetList(BO.myQueryJ11 mq);
         public int Save(BO.j11Team rec, List<int> j02ids);
 
@@ -30,6 +31,11 @@ namespace BL
         public BO.j11Team Load(int pid)
         {
             return _db.Load<BO.j11Team>(GetSQL1(" WHERE a.j11ID=@pid"), new { pid = pid });
+        }
+
+        public BO.j11Team LoadTeamOfAllPersons()
+        {
+            return _db.Load<BO.j11Team>(GetSQL1(" WHERE a.j11IsAllPersons=1"));
         }
 
         public IEnumerable<BO.j11Team> GetList(BO.myQueryJ11 mq)

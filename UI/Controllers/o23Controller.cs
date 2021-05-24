@@ -328,7 +328,7 @@ namespace UI.Controllers
                 }
                 
 
-                c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19,v.UploadGuid, v.lisO27.Where(p => p.IsTempDeleted).Select(p => p.pid).ToList());
+                c.pid = Factory.o23DocBL.Save(c,v.x18ID, lisX19,v.UploadGuid, v.lisO27.Where(p => p.IsTempDeleted).Select(p => p.pid).ToList(),v.roles.getList4Save(Factory));
                 if (c.pid > 0)
                 {
                     if (v.IsHtmlEditor)

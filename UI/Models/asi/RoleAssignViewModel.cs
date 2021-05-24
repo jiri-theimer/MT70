@@ -12,6 +12,43 @@ namespace UI.Models
         public int RecPid { get; set; }
 
         public List<RoleAssignRepeator> lisRepeator { get; set; }
+
+        public List<BO.x69EntityRole_Assign> getList4Save(BL.Factory f)
+        {
+            var lis = new List<BO.x69EntityRole_Assign>();
+            foreach(var c in lisRepeator.Where(p=>!p.IsNone))
+            {
+                var cc = new BO.x69EntityRole_Assign() { x67ID = c.x67ID };
+                if (c.IsAllPersons)
+                {
+                    cc.j11ID = f.j11TeamBL.LoadTeamOfAllPersons().pid;
+                    lis.Add(cc);
+                }
+                else
+                {
+                   if (c.j02IDs != null)
+                    {
+                        foreach(int intJ02ID in BO.BAS.ConvertString2ListInt(c.j02IDs))
+                        {
+                            cc = new BO.x69EntityRole_Assign() { x67ID = c.x67ID,j02ID=intJ02ID };
+                            lis.Add(cc);
+                        }
+                    }
+                    if (c.j11IDs != null)
+                    {
+                        foreach (int intJ11ID in BO.BAS.ConvertString2ListInt(c.j11IDs))
+                        {
+                            cc = new BO.x69EntityRole_Assign() { x67ID = c.x67ID, j11ID = intJ11ID };
+                            lis.Add(cc);
+                        }
+                    }
+                }
+
+                
+            }
+
+            return lis;
+        }
     }
 
     public class RoleAssignRepeator
