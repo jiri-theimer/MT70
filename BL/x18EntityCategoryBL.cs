@@ -14,7 +14,7 @@ namespace BL
         public BO.x20EntiyToCategory LoadX20(int x20id);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16(int x18id);
         public IEnumerable<BO.x16EntityCategory_FieldSetting> GetList_x16();
-        public int Save(BO.x18EntityCategory rec, List<BO.x20EntiyToCategory> lisX20, List<BO.x16EntityCategory_FieldSetting> lisX16);
+        public int Save(BO.x18EntityCategory rec, List<BO.x20EntiyToCategory> lisX20, List<BO.x16EntityCategory_FieldSetting> lisX16, List<BO.x69EntityRole_Assign> lisX69);
 
     }
     class x18EntityCategoryBL : BaseBL, Ix18EntityCategoryBL
@@ -68,7 +68,7 @@ namespace BL
         {
             return _db.GetList<BO.x16EntityCategory_FieldSetting>("SELECT * FROM x16EntityCategory_FieldSetting ORDER BY x16Ordinary");
         }
-        public int Save(BO.x18EntityCategory rec,List<BO.x20EntiyToCategory> lisX20,List<BO.x16EntityCategory_FieldSetting> lisX16)
+        public int Save(BO.x18EntityCategory rec,List<BO.x20EntiyToCategory> lisX20,List<BO.x16EntityCategory_FieldSetting> lisX16, List<BO.x69EntityRole_Assign> lisX69)
         {
             if (!ValidateBeforeSave(rec,lisX16))
             {
@@ -180,6 +180,13 @@ namespace BL
                         }
                         _db.RunSql("DELETE FROM x16EntityCategory_FieldSetting WHERE x16FieldGroup IS NULL AND x18ID=@pid", new { pid = intX18ID });
                     }
+
+                    if (lisX69 != null && !DL.BAS.SaveX69(_db, "x18", intX18ID, lisX69))
+                    {
+                        this.AddMessageTranslated("Error: DL.BAS.SaveX69");
+                        return 0;
+                    }
+
                     sc.Complete();  //potvrzení transakce
                 }
 

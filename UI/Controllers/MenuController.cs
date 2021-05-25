@@ -343,7 +343,7 @@ namespace UI.Controllers
         {
             AMI("Typy dokumentů", aurl("docs", "x18"));            
             AMI("Role uživatelů v dokumentu", aurl("docs", "x67", "myqueryinline=x29id|int|223"));
-            AMI("Uživatelská pole", aurl("docs", "x28", "myqueryinline=x29id|int|223"));
+            AMI("Role uživatelů v typu dokumentu", aurl("docs", "x67", "myqueryinline=x29id|int|918"));
 
             handle_selected_item(prefix);
         }

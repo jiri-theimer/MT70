@@ -14,6 +14,7 @@ namespace UI.Controllers
         {
             var v = new x18Record() { rec_pid = pid, rec_entity = "x18" };
             v.Rec = new BO.x18EntityCategory();
+            v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "x18" };
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.x18EntityCategoryBL.Load(v.rec_pid);
@@ -160,7 +161,7 @@ namespace UI.Controllers
                     lisX20.Add(cc);
                 }
                 
-                c.pid = Factory.x18EntityCategoryBL.Save(c,lisX20,lisX16);
+                c.pid = Factory.x18EntityCategoryBL.Save(c,lisX20,lisX16, v.roles.getList4Save(Factory));
                 if (c.pid > 0)
                 {
 

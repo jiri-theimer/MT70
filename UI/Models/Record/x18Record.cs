@@ -9,7 +9,8 @@ namespace UI.Models.Record
     {
         public BO.x18EntityCategory Rec { get; set; }
         public BO.x29IdEnum SelectedX29ID { get; set; }
-        
+
+        public RoleAssignViewModel roles { get; set; }
 
         public List<x16Repeater> lisX16 { get; set; }
         public List<x20Repeater> lisX20 { get; set; }
