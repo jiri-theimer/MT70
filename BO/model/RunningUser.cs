@@ -22,7 +22,8 @@ namespace BO
         public bool IsApprovingPerson { get; }    // detekce, zda uživatel může potenciálně schvalovat nějaký worksheet
         private string RoleValue { get; }
         private string PersonalPage { get; }
-        public string p07LevelsInline { get; }
+        public string p07NamesInline { get; }
+        public string p07PluralsInline { get; }
         
         
         public string AppName { get; }
@@ -101,12 +102,22 @@ namespace BO
 
         
 
-        private string[] _p07LevelsArr { get; set; }
+        private string[] _p07NamesArr { get; set; }
+        private string[] _p07PluralsArr { get; set; }
         private int _p07LevelsCount { get; set; }
         public string getP07Level(int levelindex,bool singular)
         {
             Handle_ParseP07Levels();
-            return _p07LevelsArr[levelindex-1];
+            if (singular)
+            {
+                return _p07NamesArr[levelindex - 1];
+
+            }
+            else
+            {
+                return _p07PluralsArr[levelindex - 1];
+            }
+            
         }
         
         public int p07LevelsCount
@@ -120,18 +131,20 @@ namespace BO
 
         private void Handle_ParseP07Levels()
         {
-            if (_p07LevelsArr == null)
+            if (_p07NamesArr == null)
             {
-                _p07LevelsArr = this.p07LevelsInline.Split("|");
+                _p07NamesArr = this.p07NamesInline.Split("|");
+                _p07PluralsArr = this.p07PluralsInline.Split("|");
                 _p07LevelsCount = 0;
                 for (int x = 0; x <= 4; x++)
                 {
-                    if (!string.IsNullOrEmpty(_p07LevelsArr[x])){
+                    if (!string.IsNullOrEmpty(_p07NamesArr[x])){
                         _p07LevelsCount += 1;
                     }
                     else
                     {
-                        _p07LevelsArr[x] = null;
+                        _p07NamesArr[x] = null;
+                        _p07PluralsArr[x] = null;
                     }
                 }
             }

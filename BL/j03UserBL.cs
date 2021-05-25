@@ -14,6 +14,7 @@ namespace BL
         public int SaveWithNewPersonalProfile(BO.j03User rec, BO.j02Person recJ02);
         public void UpdateCurrentUserPing(BO.j92PingLog c);
         public void RecoveryUserCache(int j03id,int j02id);
+        public void ClearAllUsersCache();
         public void TruncateUserParams(int j03id);
 
     }
@@ -171,6 +172,11 @@ namespace BL
             return true;
         }
 
+        public void ClearAllUsersCache()
+        {
+            _db.RunSql("update j03User set j03Cache_TimeStamp=null");
+            
+        }
         public void RecoveryUserCache(int j03id,int j02id)
         {
             if (j02id > 0)

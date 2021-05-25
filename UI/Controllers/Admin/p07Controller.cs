@@ -68,10 +68,12 @@ namespace UI.Controllers
                 {
                     b = false;
                 }
-
+                
 
                 if (b)
                 {
+                    Factory.j03UserBL.ClearAllUsersCache();
+
                     v.SetJavascript_CallOnLoad(0);
                     return View(v);
                 }
