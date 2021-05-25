@@ -248,10 +248,8 @@ function _update_user_ping() {
         j92RequestURL: location.href.replace(location.host, "").replace(location.protocol, "").replace("///", "")
     }
 
-
-    $.post("/Home/UpdateCurrentUserPing", { c: log }, function (data) {
-        //ping aktualizován
-    });
+    load_ajax_async("/Home/UpdateCurrentUserPing", { c: log });
+    
 
 }
 

@@ -12,7 +12,7 @@ namespace BL
         public BO.p41Project LoadByCode(string strCode, int pid_exclude);
         public BO.p41Project LoadByExternalPID(string externalpid);
         public IEnumerable<BO.p41Project> GetList(BO.myQueryP41 mq);
-        public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI);
+        public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI, List<BO.x69EntityRole_Assign> lisX69);
         public BO.p41ProjectSum LoadSumRow(int pid);
         public BO.p41RecDisposition InhaleRecDisposition(BO.p41Project rec);
         public bool ExistWaitingWorksheetForInvoicing(int p41id);
@@ -83,7 +83,7 @@ namespace BL
 
 
 
-        public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI)
+        public int Save(BO.p41Project rec, List<BO.FreeFieldInput> lisFFI, List<BO.x69EntityRole_Assign> lisX69)
         {
             if (rec.p42ID == 0)
             {
@@ -145,7 +145,11 @@ namespace BL
                     {
                         return 0;
                     }
-
+                    if (lisX69 != null && !DL.BAS.SaveX69(_db, "p41", intPID, lisX69))
+                    {
+                        this.AddMessageTranslated("Error: DL.BAS.SaveX69");
+                        return 0;
+                    }
                     var pars = new Dapper.DynamicParameters();
                     {
                         pars.Add("p41id", intPID, System.Data.DbType.Int32);

@@ -12,6 +12,7 @@ namespace UI.Models.Record
         public BO.p41Project RecParent { get; set; }
         public string TempGuid { get; set; }
         public int p51Flag { get; set; }    //1 - nemá ceník, 2 - přiřazený ceník, 3 - ceník na míru
+        public RoleAssignViewModel roles { get; set; }
         public FreeFieldsViewModel ff1 { get; set; }
         public IEnumerable<BO.p07ProjectLevel> lisParentLevels { get; set; }
         public int SelectedParentLevelIndex { get; set; }

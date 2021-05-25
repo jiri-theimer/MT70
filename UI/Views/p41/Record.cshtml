@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    @if (Model.RecP42 != null && Model.lisParentLevels.Count()>0)
+    @if (Model.RecP42 != null && Model.lisParentLevels.Count() > 0)
     {
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nadřízená úroveň"):</label>
@@ -109,6 +109,7 @@
         </div>
     }
 
+    @Html.EditorFor(m => m.roles, "~/Views/Shared/_RoleAssign.cshtml")
 
     <hr />
     <mystitky entity="p41Project" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>

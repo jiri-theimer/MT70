@@ -40,6 +40,7 @@ namespace UI.Controllers
         {
             var v = new p41Record() { rec_pid = pid, rec_entity = "p41", p51Flag = 1, TempGuid = BO.BAS.GetGuid() };
             v.Rec = new BO.p41Project();
+            v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "p41" };
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.p41ProjectBL.Load(v.rec_pid);
@@ -218,7 +219,7 @@ namespace UI.Controllers
                 c.j02ID_Owner = v.Rec.j02ID_Owner;
                 c.p41ExternalPID = v.Rec.p41ExternalPID;
 
-                c.pid = Factory.p41ProjectBL.Save(c, v.ff1.inputs);
+                c.pid = Factory.p41ProjectBL.Save(c, v.ff1.inputs, v.roles.getList4Save(Factory));
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p41", c.pid, v.TagPids);

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    public class myQueryP41:baseQuery
+    public class myQueryP41 : baseQuery
     {
-        public int p42id { get; set; }
+        public int p42id { get; set; }        
         public int p51id { get; set; }
         public int p07level { get; set; }
         public int j02id_owner { get; set; }
@@ -18,7 +18,7 @@ namespace BO
         public int j18id { get; set; }
         public int p61id { get; set; }
         public int p91id { get; set; }
-       public int p28id { get; set; }
+        public int p28id { get; set; }
         public myQueryP41()
         {
             this.Prefix = "p41";
@@ -45,14 +45,14 @@ namespace BO
                             AQ("a.p41PlanUntil BETWEEN @d1 AND @d2", "d1", d1, "AND", null, null, "d2", this.global_d2_235959);
                             break;
                         case "p91Date":
-                            AQ("a.p41ID IN (select xa.p41ID FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xb.p91Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            AQ("EXISTS (select 1 FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xa.p41ID=a.p41ID AND xb.p91Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
                             break;
                         case "p91DateSupply":
-                            AQ("a.p41ID IN (select xa.p41ID FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xb.p91DateSupply BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            AQ("EXISTS (select 1 FROM p31Worksheet xa INNER JOIN p91Invoice xb ON xa.p91ID=xb.p91ID WHERE xa.p41ID=a.p41ID AND xb.p91DateSupply BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
                             break;
-                        case "p31Date":                            
+                        case "p31Date":
                         default:
-                            AQ("a.p41ID IN (select p41ID FROM p31Worksheet WHERE p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
+                            AQ("EXISTS (select 1 FROM p31Worksheet WHERE p41ID=a.p41ID AND p31Date BETWEEN @d1 AND @d2)", "d1", d1, "AND", null, null, "d2", d2);
                             break;
                     }
                 }
@@ -128,28 +128,47 @@ namespace BO
             }
 
 
-            if (!(this.CurrentUser.IsAdmin || this.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Owner) || this.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Reader)))
-            {
-                //string s = "a.j02ID_Owner=@j02id_query";
-                //string sw = "x69.j02ID=@j02id_query";
-                //if (!string.IsNullOrEmpty(this.CurrentUser.j11IDs))
-                //{
-                //    sw = "("+sw + $" OR x69.j11ID IN ({this.CurrentUser.j11IDs}))";
-                //}
-
-                //s += " OR a.p41ID IN (SELECT x69.x69RecordPID FROM x69EntityRole_Assign x69 INNER JOIN x67EntityRole x67 ON x69.x67ID=x67.x67ID WHERE x67.x29ID=141 AND "+sw;
-                //s += ")";
-                //s+=" OR a.p41ID IN (SELECT p41.p41ID FROM p41Project p41 INNER JOIN j18Region j18 ON p41.j18ID=j18.j18ID
-                
-            }
-
-           
-
-
+            Handle_MyDisponible();
 
 
             return this.InhaleRows();
 
+        }
+
+        private void Handle_MyDisponible()
+        {
+            if ((this.CurrentUser.IsAdmin || this.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Owner) || this.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Reader)))
+            {
+                return; //přístup ke všem projektům v systému
+            }
+            
+            string s = "EXISTS (SELECT 1 FROM x73EntityRole_DelegationCache xa INNER JOIN x69EntityRole_Assign xb ON xa.x67ID_Master=xb.x67ID AND xa.x73MasterPid=xb.x69RecordPID INNER JOIN p41Project xc ON xa.x73SlavePid=xc.p41ID";
+            s += " WHERE xa.x73SlavePrefix='p41'";
+            if (this.p07level>0 || this.p42id > 0)
+            {
+                s += " AND xa.x73SlavePid=a.p41ID"; //projekty z pouze jedné vertikální úrovně
+            }
+            else
+            {
+                s += " AND (xc.p41ID=a.p41ID OR xc.p41TreeIndex BETWEEN a.p41TreePrev AND a.p41TreeNext)"; //v jednom přehledu projekty z více vertikálních úrovní
+            }
+            
+            if (string.IsNullOrEmpty(this.CurrentUser.j11IDs))
+            {
+                s += " AND (xb.j02ID=@j02id_query";
+            }
+            else
+            {
+                s += $" AND (xb.j02ID=@j02id_query OR xb.j11ID IN ({this.CurrentUser.j11IDs})"; //přihlášený uživatel je také členem týmů
+            }
+            if (this.CurrentUser.IsMasterPerson)    //přihlášený uživatel má pod sebou podřízené uživatele
+            {
+                s += " OR xb.j02ID IN (select j02ID_Slave FROM j05MasterSlave WHERE j02ID_Slave IS NOT NULL AND j02ID_Master=@j02id_query)";
+            }
+            s += ")";
+            s += ")";
+            
+            AQ(s, "j02id_query", this.CurrentUser.j02ID);
         }
     }
 }
