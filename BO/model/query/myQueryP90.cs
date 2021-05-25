@@ -70,7 +70,7 @@ namespace BO
             }
             s += ")";
             s += ")";
-
+            
             AQ(s, "j02id_query", this.CurrentUser.j02ID);
         }
     }

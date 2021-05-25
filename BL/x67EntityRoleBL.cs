@@ -94,6 +94,8 @@ namespace BL
                     }
 
                     sc.Complete();
+                    _db.RunSql("exec dbo.x73_recovery_all");
+
                     return intPID;
                 }
             }

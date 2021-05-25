@@ -81,7 +81,22 @@ namespace UI.Menu
             }
             if (_f.CurrentUser.j04IsMenu_Project)
             {
-                ret.Add(GRD("p41",true));
+                if (_f.CurrentUser.p07LevelsCount <= 1)
+                {
+                    ret.Add(GRD("p41", true));
+                }
+                else
+                {
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        if (_f.CurrentUser.getP07Level(i,false) != null)
+                        {
+                            ret.Add(GRD("le"+i.ToString(), true));
+                        }
+                    }
+                        
+                }
+                
             }
             if (_f.CurrentUser.j04IsMenu_Task)
             {
@@ -114,11 +129,11 @@ namespace UI.Menu
             ret.Add(GRD("b07",false));
 
 
-            ret.Add(new MenuItem() { Name = "Stránka projektu", Url = "/Record/RecPage?prefix=p41", ID = "recpagep41" });
-            ret.Add(new MenuItem() { Name = "Stránka klienta", Url = "/Record/RecPage?prefix=p28", ID = "recpagep28" });
-            ret.Add(new MenuItem() { Name = "Stránka vyúčtování", Url = "/Record/RecPage?prefix=p91", ID = "recpagep91" });
-            ret.Add(new MenuItem() { Name = "Stránka osoby", Url = "/Record/RecPage?prefix=j02", ID = "recpagej02" });
-            ret.Add(new MenuItem() { Name = "Stránka úkolu", Url = "/Record/RecPage?prefix=p56", ID = "recpagep56" });
+            //ret.Add(new MenuItem() { Name = "Stránka projektu", Url = "/Record/RecPage?prefix=p41", ID = "recpagep41" });
+            //ret.Add(new MenuItem() { Name = "Stránka klienta", Url = "/Record/RecPage?prefix=p28", ID = "recpagep28" });
+            //ret.Add(new MenuItem() { Name = "Stránka vyúčtování", Url = "/Record/RecPage?prefix=p91", ID = "recpagep91" });
+            //ret.Add(new MenuItem() { Name = "Stránka osoby", Url = "/Record/RecPage?prefix=j02", ID = "recpagej02" });
+            //ret.Add(new MenuItem() { Name = "Stránka úkolu", Url = "/Record/RecPage?prefix=p56", ID = "recpagep56" });
            
 
             return ret;
@@ -146,6 +161,17 @@ namespace UI.Menu
                     c.Url = "/TheGrid/FlatView?prefix=" + prefix;                   
                     break;
                 case "p41":
+                    c.Name = _f.CurrentUser.getP07Level(5,false);
+                    c.Url = "/TheGrid/FlatView?prefix="+prefix;
+                    break;
+                case "le5":
+                case "le4":
+                case "le3":
+                case "le2":
+                case "le1":
+                    c.Name = _f.CurrentUser.getP07Level(Convert.ToInt32(prefix.Substring(2,1)),false);
+                    c.Url = "/TheGrid/FlatView?prefix="+prefix;
+                    break;                
                 case "p28":
                 case "p91":                
                     c.Url = "/TheGrid/FlatView?prefix=" + prefix;

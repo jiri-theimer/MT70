@@ -100,6 +100,9 @@ namespace BL
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura cenového rozpisu faktury", "p80InvoiceAmountStructure a", "a.p80Name");
             AE("p41Project", "Projekty", "Projekt", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID LEFT OUTER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID", "a.p41ID DESC");
+            AE("le1", "L1", "L1", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=1", "a.p41ID DESC", "a.p41ID DESC");
+            AE("le2", "L2", "L2", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=2", "a.p41ID DESC", "a.p41ID DESC");
+            AE("le3", "L3", "L3", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=3", "a.p41ID DESC", "a.p41ID DESC");
             AE("le4", "L4", "L4", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=4", "a.p41ID DESC","a.p41ID DESC");
             AE("le5", "L5", "L5", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=5", "a.p41ID DESC","a.p41ID DESC");            
 

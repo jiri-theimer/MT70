@@ -48,11 +48,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="cmdMainMenuNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
                             <ul id="ulNew" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdMainMenuNew"><li>Loading....</li></ul>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/TheGrid/MasterView?prefix=j02">Master grid J02</a>
-                        </li>
+                        </li>                       
 
                         @foreach (MenuItem recMenu in lisMenuItems)
                         {
@@ -198,8 +194,12 @@
             if ($("#" + cmd_id).attr("nacteno") == "1") {
                 return;
             }
-
-            $.post("/Menu/" + method + "?userdevice=" + _device.type, function (data) {
+            var url = "/Menu/" + method + "?userdevice=" + _device.type;
+            
+            if (method == "MainMenu") {
+                url = url + "&currenturl=" + encodeURI(location.href);
+            }
+            $.post(url, function (data) {
 
                 $("#" + ul_id).html(data);
                 $("#" + cmd_id).attr("nacteno", "1");

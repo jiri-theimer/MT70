@@ -57,6 +57,9 @@ namespace UI
                     _tabs.Add(AddTab("Dokumenty", "o23Doc", "SlaveView?prefix=o23",true, Badge1(cp28.o23_Count)));
                     break;
                 case "p41":
+                case "le1":
+                case "le2":
+                case "le3":
                 case "le4":
                 case "le5":
                     var cp41 = _f.p41ProjectBL.LoadSumRow(pid);

@@ -20,13 +20,14 @@ namespace BO
         
         public bool IsMasterPerson { get; }         //detekce, zda je nadřízený jiným osobám
         public bool IsApprovingPerson { get; }    // detekce, zda uživatel může potenciálně schvalovat nějaký worksheet
-        private string _RoleValue { get; set; }
-        private string _PersonalPage { get; set; }
+        private string RoleValue { get; }
+        private string PersonalPage { get; }
+        public string p07LevelsInline { get; }
         
-
+        
         public string AppName { get; }
 
-        private int _MessagesCount { get; set; }  // počet zpráv, na které systém upozorňuje uživatele
+        private int MessagesCount { get; }  // počet zpráv, na které systém upozorňuje uživatele
         public string j11IDs { get; }          // seznam týmů osoby
 
         
@@ -35,43 +36,22 @@ namespace BO
 
         
         
-        
-
-        
-        
-        public string PersonalPage
-        {
-            get
-            {
-                return _PersonalPage;
-            }
-        }
-
-
-        public string RoleValue
-        {
-            get
-            {
-                return _RoleValue;
-            }
-        }
-
         public bool TestPermission(BO.x53PermValEnum oneperm)
         {
-            if (_RoleValue.Substring((int)oneperm - 1, 1) == "1")
+            if (this.RoleValue.Substring((int)oneperm - 1, 1) == "1")
                 return true;
             else
                 return false;
         }
         public bool TestPermission(BO.x53PermValEnum oneperm, BO.x53PermValEnum orperm)
         {
-            if (_RoleValue.Substring((int)oneperm - 1, 1) == "1")
+            if (this.RoleValue.Substring((int)oneperm - 1, 1) == "1")
             {
                 return true;
             }
             else
             {
-                if (_RoleValue.Substring((int)orperm - 1, 1) == "1")
+                if (this.RoleValue.Substring((int)orperm - 1, 1) == "1")
                 {
                     return true;
                 }
@@ -90,7 +70,7 @@ namespace BO
                 {
                     return Convert.ToBoolean(_IsAdmin);
                 }
-                if (_RoleValue.Substring((int)BO.x53PermValEnum.GR_Admin - 1, 1) == "1")
+                if (this.RoleValue.Substring((int)BO.x53PermValEnum.GR_Admin - 1, 1) == "1")
                     _IsAdmin = true;
                 else
                     _IsAdmin = false;
@@ -109,7 +89,7 @@ namespace BO
                 {
                     return Convert.ToBoolean(_IsRatesAccess);
                 }
-                if (_RoleValue.Substring((int)BO.x53PermValEnum.GR_P31_AllowRates - 1, 1) == "1")
+                if (this.RoleValue.Substring((int)BO.x53PermValEnum.GR_P31_AllowRates - 1, 1) == "1")
                     _IsRatesAccess = true;
                 else
                     _IsRatesAccess = false;
@@ -119,15 +99,43 @@ namespace BO
             }
         }
 
-        public int MessagesCount
+        
+
+        private string[] _p07LevelsArr { get; set; }
+        private int _p07LevelsCount { get; set; }
+        public string getP07Level(int levelindex,bool singular)
+        {
+            Handle_ParseP07Levels();
+            return _p07LevelsArr[levelindex-1];
+        }
+        
+        public int p07LevelsCount
         {
             get
             {
-                return _MessagesCount;
+                Handle_ParseP07Levels();
+                return _p07LevelsCount;
             }
         }
-        
 
+        private void Handle_ParseP07Levels()
+        {
+            if (_p07LevelsArr == null)
+            {
+                _p07LevelsArr = this.p07LevelsInline.Split("|");
+                _p07LevelsCount = 0;
+                for (int x = 0; x <= 4; x++)
+                {
+                    if (!string.IsNullOrEmpty(_p07LevelsArr[x])){
+                        _p07LevelsCount += 1;
+                    }
+                    else
+                    {
+                        _p07LevelsArr[x] = null;
+                    }
+                }
+            }
+        }
         
         
 

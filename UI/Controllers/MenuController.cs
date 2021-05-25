@@ -389,17 +389,26 @@ namespace UI.Controllers
 
         }
 
-        public string MainMenu(string prefix)
+        public string MainMenu(string currenturl)
         {
             var cMenu = new UI.Menu.TheMenuSupport(Factory);
             var lis = cMenu.getAllMainMenuLinks();
+            if (!string.IsNullOrEmpty(currenturl))
+            {
+                currenturl = System.Web.HttpUtility.UrlDecode(currenturl);
+            }
+            
             cMenu.HandleUrlOfGridLinks(lis);
             foreach (var c in lis)
             {
-                AMI(c.Name, c.Url);
+                var mi=AMI(c.Name, c.Url);
+                if (currenturl !=null && currenturl.Contains(c.Url))
+                {
+                    mi.IsActive = true; //aktuální url, na kterém stojí uživatel
+                }
+                
             }
-           
-            
+                       
             
             var s = "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
             s += _menusup.FlushResult_UL(_lis,true, false);
