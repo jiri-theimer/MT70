@@ -8,7 +8,7 @@ namespace UI.Models.Record
     public class p90Record: BaseRecordViewModel
     {
         public BO.p90Proforma Rec { get; set; }
-
+        public RoleAssignViewModel roles { get; set; }
         public string ComboJ27Code { get; set; }
         public string ComboP28Name { get; set; }
         public string ComboOwner { get; set; }

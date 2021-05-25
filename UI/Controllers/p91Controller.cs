@@ -61,6 +61,7 @@ namespace UI.Controllers
             {
                 return this.StopPage(true, "Na vstupu chybí ID faktury.");
             }
+            v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "p91" };
             v.Rec = Factory.p91InvoiceBL.Load(v.rec_pid);
             if (v.Rec == null)
             {
@@ -186,7 +187,7 @@ namespace UI.Controllers
                 c.p91ClientAddress1_Country = v.Rec.p91ClientAddress1_Country;
                 c.p91ClientPerson = v.Rec.p91ClientPerson;
 
-                c.pid = Factory.p91InvoiceBL.Update(c, v.ff1.inputs);
+                c.pid = Factory.p91InvoiceBL.Update(c, v.ff1.inputs, v.roles.getList4Save(Factory));
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p91", c.pid, v.TagPids);

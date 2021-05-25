@@ -19,7 +19,9 @@
         <li class="nav-item onetab" role="presentation">
             <a id="link_tab2" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab2">@_f.tra("Uživatelská pole") (@Model.ff1.VisibleInputsCount)</a>
         </li>
-
+        <li class="nav-item onetab" role="presentation">
+            <button class="nav-link" id="link_tab3" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab">@_f.tra("Oprávnění")</button>
+        </li>
 
     </ul>
 </div>
@@ -112,13 +114,7 @@
 
             <mystitky entity="p28Contact" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
 
-            <div class="row my-2">
-                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
-                <div class="col-sm-7 col-md-6">
-                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.ComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
-                </div>
-
-            </div>
+            
         </div>
 
 
@@ -128,6 +124,22 @@
             <!-- Tab2 -->
             @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
 
+        </div>
+
+        <div class="tab-pane" id="tab3" role="tabpanel">
+            <!-- Tab3 -->
+
+            <div class="row my-2">
+                <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vlastník záznamu"):</label>
+                <div class="col-sm-7 col-md-6">
+                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.ComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+                </div>
+
+            </div>
+
+
+
+            @Html.EditorFor(m => m.roles, "~/Views/Shared/_RoleAssign.cshtml")
         </div>
 
     </div>

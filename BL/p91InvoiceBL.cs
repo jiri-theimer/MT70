@@ -17,7 +17,7 @@ namespace BL
         public BO.p91Invoice LoadLastOfClient(int p28id);
         public BO.p91RecDisposition InhaleRecDisposition(BO.p91Invoice rec);
         public IEnumerable<BO.p91Invoice> GetList(BO.myQueryP91 mq);
-        public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI);
+        public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI, List<BO.x69EntityRole_Assign> lisX69);
         public int Create(BO.p91Create rec);
         public bool ChangeVat(int p91id, int x15id, double newvatrate);        
         public int CreateCreditNote(int p91id, int p92id_creditnote, bool bolJistota);
@@ -166,7 +166,7 @@ namespace BL
                
         }
 
-        public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI)
+        public int Update(BO.p91Invoice rec, List<BO.FreeFieldInput> lisFFI, List<BO.x69EntityRole_Assign> lisX69)
         {
             if (!ValidateBeforeUpdate(rec))
             {
@@ -223,7 +223,12 @@ namespace BL
                     {
                         return 0;
                     }
-                                       
+                    if (lisX69 != null && !DL.BAS.SaveX69(_db, "p91", intPID, lisX69))
+                    {
+                        this.AddMessageTranslated("Error: DL.BAS.SaveX69");
+                        return 0;
+                    }
+
                     if (_db.RunSql("exec dbo.p91_aftersave @p91id,@j03id_sys,@recalc_amount", new { p91id = intPID, j03id_sys = _mother.CurrentUser.pid, recalc_amount = true }))
                     {
                         sc.Complete();

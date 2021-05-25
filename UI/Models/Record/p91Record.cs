@@ -8,6 +8,7 @@ namespace UI.Models.Record
     public class p91Record: BaseRecordViewModel
     {
         public BO.p91Invoice Rec { get; set; }
+        public RoleAssignViewModel roles { get; set; }
         public BO.p92InvoiceT RecP92 { get; set; }
         public string ComboP28Name { get; set; }
         public string ComboOwner { get; set; }

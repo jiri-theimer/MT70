@@ -42,6 +42,7 @@ namespace UI.Controllers
         {
             var v = new p90Record() { rec_pid = pid, rec_entity = "p90" };
             v.Rec = new BO.p90Proforma();
+            v.roles = new RoleAssignViewModel() { RecPid = v.rec_pid, RecPrefix = "p90" };
             if (v.rec_pid > 0)
             {
                 v.Rec = Factory.p90ProformaBL.Load(v.rec_pid);
@@ -141,7 +142,7 @@ namespace UI.Controllers
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
                 c.j02ID_Owner = v.Rec.j02ID_Owner;
 
-                c.pid = Factory.p90ProformaBL.Save(c, v.ff1.inputs);
+                c.pid = Factory.p90ProformaBL.Save(c, v.ff1.inputs, v.roles.getList4Save(Factory));
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p90", c.pid, v.TagPids);

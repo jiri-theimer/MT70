@@ -22,7 +22,7 @@
             <a id="link_tab3" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab3">@_f.tra("Uživatelská pole") (@Model.ff1.VisibleInputsCount)</a>
         </li>
         <li class="nav-item onetab" role="presentation">
-            <a id="link_tab4" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab4">@_f.tra("Ostatní")</a>
+            <a id="link_tab4" class="nav-link" data-bs-toggle="tab" role="tab" href="#tab4">@_f.tra("Oprávnění")</a>
         </li>
 
     </ul>
@@ -114,10 +114,7 @@
                 <div class="col-sm-3 col-md-2">
                     <mydate asp-for="Rec.p91Datep31_Until"></mydate>
                 </div>
-                <label class="col-auto col-form-label">@_f.tra("Vlastník záznamu"):</label>
-                <div class="col-sm-4 col-md-4">
-                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.ComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
-                </div>
+                
             </div>
 
             <div class="card">
@@ -225,8 +222,13 @@
         </div>
         <div class="tab-pane" id="tab4" role="tabpanel">
             <!-- Tab4 -->
-
-
+            <div class="row">
+                <label class="col-auto col-form-label">@_f.tra("Vlastník záznamu"):</label>
+                <div class="col-sm-4 col-md-4">
+                    <mycombo entity="j02Person" asp-for="Rec.j02ID_Owner" selectedtext="@Model.ComboOwner" view-flag="1" myqueryinline="isintranonvirtualperson|bool|1"></mycombo>
+                </div>
+            </div>
+            @Html.EditorFor(m => m.roles, "~/Views/Shared/_RoleAssign.cshtml")
         </div>
     </div>
 </div>

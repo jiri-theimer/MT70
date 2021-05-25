@@ -11,7 +11,7 @@ namespace BL
         public BO.p90Proforma Load(int pid);
         public BO.p90Proforma LoadMyLastCreated();
         public IEnumerable<BO.p90Proforma> GetList(BO.myQuery mq);
-        public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI);
+        public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI, List<BO.x69EntityRole_Assign> lisX69);
         public BO.p90RecDisposition InhaleRecDisposition(BO.p90Proforma rec);
         public BO.p90ProformaSum LoadSumRow(int pid);
 
@@ -83,7 +83,7 @@ namespace BL
 
         
 
-        public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI)
+        public int Save(BO.p90Proforma rec, List<BO.FreeFieldInput> lisFFI, List<BO.x69EntityRole_Assign> lisX69)
         {
             if (!ValidateBeforeSave(rec))
             {
@@ -123,8 +123,13 @@ namespace BL
                     {
                         return 0;
                     }
-                   
-                   
+                    if (lisX69 != null && !DL.BAS.SaveX69(_db, "p90", intPID, lisX69))
+                    {
+                        this.AddMessageTranslated("Error: DL.BAS.SaveX69");
+                        return 0;
+                    }
+
+
                     if (_db.RunSql("exec dbo.p90_aftersave @p90id,@j03id_sys", new { p90id = intPID, j03id_sys = _mother.CurrentUser.pid }))
                     {
                         sc.Complete();
