@@ -33,15 +33,19 @@ namespace UI.Controllers
                     v.p61Name = Factory.p61ActivityClusterBL.Load(v.Rec.p61ID).p61Name;
                 }
                 v.RecSum = Factory.p41ProjectBL.LoadSumRow(v.Rec.pid);
+                if (v.Rec.p28ID_Client > 0)
+                {
+                    v.RecClient = Factory.p28ContactBL.Load(v.Rec.p28ID_Client);
+                }
                 if (v.Rec.p87ID > 0)
                 {
                     v.p87Name = Factory.FBL.LoadP87(v.Rec.p87ID).p87Name;
                 }
                 else
                 {
-                    if (v.Rec.p87ID_Client > 0)
+                    if (v.RecClient !=null)
                     {
-                        v.p87Name = Factory.FBL.LoadP87(v.Rec.p87ID_Client).p87Name;
+                        v.p87Name = v.RecClient.p87Name;
                     }
                 }
                 v.SetTagging();

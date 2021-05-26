@@ -17,7 +17,7 @@
 
 <div class="card recpagebox400">
     <div class="card-body">
-        <h6 class="card-title recpagetitle bgp28">
+        <h6 class="card-title recpagetitle bgp41">
             @(Model.Rec.p07Name)
         </h6>
         <div class="row">
@@ -30,7 +30,7 @@
         @if (_f.CurrentUser.p07LevelsCount > 1)
         {
             <div class="row my-1">
-                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Vertikální úroveň")):</label>
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Vertikální úroveň")):</label>
                 <div class="col-sm-10 col-md-9">
                     <myval value="@Model.Rec.p07Name"></myval>
 
@@ -54,19 +54,19 @@
         @if (Model.Rec.b01ID > 0)
         {
             <div class="row my-1">
-                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Aktuální stav")):</label>
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Aktuální stav")):</label>
                 <div class="col-sm-10 col-md-9">
-                    <myval value="@Model.Rec.b02Name" hoverprefix="p42" hoverpid="@Model.Rec.p42ID"></myval>
+                    <myval value="@Model.Rec.b02Name" hoverprefix="p42" hoverpid="@Model.Rec.b02ID"></myval>
 
                 </div>
             </div>
         }
-        @if (Model.Rec.p28ID_Client > 0)
+        @if (Model.RecClient != null)
         {
             <div class="row my-1">
-                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Klient projektu")):</label>
+                <label class="col-sm-2 col-md-3 col-form-label recpagelabel">@(_f.tra("Klient projektu")):</label>
                 <div class="col-sm-10 col-md-9">
-                    <myval value="@Model.Rec.Client" hoverprefix="p28" hoverpid="@Model.Rec.p28ID_Client"></myval>
+                    <myval value="@Model.RecClient.p28name" hoverprefix="p28" hoverpid="@Model.Rec.p28ID_Client"></myval>
 
                 </div>
             </div>
@@ -117,18 +117,37 @@
 {
     <div class="card recpagebox400">
         <div class="card-body">
-            <div class="card-title recpagetitle bgp28">
+            <div class="card-title recpagetitle bgp41">
                 @_f.tra("Fakturační nastavení")
             </div>
             @if (Model.Rec.p51ID_Billing > 0)
             {
                 <div class="row my-1">
                     <label class="col-sm-3 col-md-4 col-form-label">@_f.tra("Hodinové sazby"):</label>
-                    <div class="col-sm-9 col-md-8">
+                    <div class="col-sm-7 col-md-6">
                         <myval value="@Model.Rec.p51Name_Billing" hoverprefix="p51" hoverpid="@Model.Rec.p51ID_Billing"></myval>
 
                     </div>
+                    <div class="col-sm-2 col-md-2">
+                        <small>@_f.tra("Ceník projektu")</small>
+                    </div>
                 </div>
+            }
+            else
+            {
+                @if (Model.RecClient != null && Model.RecClient.p51ID_Billing > 0)
+                {
+                    <div class="row my-1">
+                        <label class="col-sm-3 col-md-4 col-form-label">@_f.tra("Hodinové sazby"):</label>
+                        <div class="col-sm-7 col-md-6">
+                            <myval value="@Model.RecClient.p51Name_Billing" hoverprefix="p51" hoverpid="@Model.RecClient.p51ID_Billing"></myval>
+
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <small>@_f.tra("Ceník klienta")</small>
+                        </div>
+                    </div>
+                }
             }
             @if (Model.Rec.p92ID > 0)
             {
@@ -140,7 +159,7 @@
                     </div>
                 </div>
             }
-            @if (Model.p87Name !=null)
+            @if (Model.p87Name != null)
             {
                 <div class="row my-1">
                     <label class="col-sm-3 col-md-4 col-form-label">@_f.tra("Fakturační jazyk"):</label>
@@ -165,17 +184,23 @@
     </div>
 }
 
-@if (Model.Rec.p41BillingMemo != null)
+@if (Model.Rec.p41BillingMemo != null || (Model.RecClient != null && Model.RecClient.p28BillingMemo != null))
 {
     <div class="card recpageboxauto">
         <div class="card-body">
-            <div class="card-title recpagetitle bgp28">
+            <div class="card-title recpagetitle bgp41">
                 @_f.tra("Fakturační poznámka")
             </div>
             <div style="background-color:#F0FFF0;padding:4px;">
                 @Html.Raw(@BO.BAS.Text2Html(Model.Rec.p41BillingMemo))
             </div>
+            @if (Model.RecClient != null && Model.RecClient.p28BillingMemo != null)
+            {
+                <div style="background-color:#F0FFF0;padding:4px;border-top:solid 1px silver;">
+                    @Html.Raw(@BO.BAS.Text2Html(Model.RecClient.p28BillingMemo))
+                </div>
 
+            }
 
         </div>
     </div>
@@ -186,7 +211,7 @@
 {
     <div class="card recpageboxauto">
         <div class="card-body">
-            <div class="card-title recpagetitle bgp28">
+            <div class="card-title recpagetitle bgp41">
                 @_f.tra("Štítky")
             </div>
             @Html.Raw(Model.TagHtml)

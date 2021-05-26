@@ -246,6 +246,7 @@ namespace BL
                     
                 }
                 SetUserParam($"recpage-{prefix}-pid", pid.ToString());  //uložit info o návštěvě záznamu
+               
             }
 
         }

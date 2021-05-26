@@ -24,7 +24,15 @@ namespace UI.Models.Tab1
             if (this.pid == 0) return;
             if (this.caller != null)
             {
-                Factory.CBL.SaveLastCallingRecPid(this.prefix, this.pid, this.caller, false, false);    //zapsat informaci o naposledy navštíveném záznamu
+                if (this.prefix == "le5")
+                {
+                    Factory.CBL.SaveLastCallingRecPid("p41", this.pid, this.caller, false, false);    //úroveň le5 zapisovat jako p41
+                }
+                else
+                {
+                    Factory.CBL.SaveLastCallingRecPid(this.prefix, this.pid, this.caller, false, false);    //zapsat informaci o naposledy navštíveném záznamu
+                }
+                
             }
             
             var tg = Factory.o51TagBL.GetTagging(this.prefix, this.pid);

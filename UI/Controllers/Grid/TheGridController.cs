@@ -266,7 +266,15 @@ namespace UI.Controllers
 
         private int LoadLastUsedPid(string prefix)
         {
-            return Factory.CBL.LoadUserParamInt($"recpage-{prefix}-pid",0,12);
+            if (prefix == "le5")
+            {
+                return Factory.CBL.LoadUserParamInt($"recpage-p41-pid", 0, 12);
+            }
+            else
+            {
+                return Factory.CBL.LoadUserParamInt($"recpage-{prefix}-pid", 0, 12);
+            }
+            
             
         }
 

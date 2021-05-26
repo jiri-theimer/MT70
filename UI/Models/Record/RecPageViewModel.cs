@@ -37,9 +37,9 @@ namespace UI.Models
 
 
         }
-        public int LoadLastUsedPid()
+        public int LoadLastUsedPid(string prefix)
         {
-            this.pid_loaded = Factory.CBL.LoadUserParamInt($"recpage-{this.prefix}-pid");
+            this.pid_loaded = Factory.CBL.LoadUserParamInt($"recpage-{prefix}-pid");
             return this.pid_loaded;
         }
 

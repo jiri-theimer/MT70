@@ -12,13 +12,14 @@ namespace UI.Controllers
     {
         public IActionResult RecPage(string prefix, int pid)
         {
-            var v = new RecPageViewModel() { Factory = this.Factory, pid = pid, prefix = prefix };
+            if (prefix == "le5") prefix = "p41";
+            var v = new RecPageViewModel() { Factory = this.Factory, pid = pid, prefix = BO.BASX29.GetPrefixDb(prefix) };
 
             
 
             if (v.pid == 0)
             {
-                v.pid = v.LoadLastUsedPid();
+                v.pid = v.LoadLastUsedPid(prefix);  //kvůli le1-le4 pracujeme s původním prefixem
             }
             if (v.pid > 0)
             {
@@ -31,8 +32,8 @@ namespace UI.Controllers
                 else
                 {
                     v.SetGridUrl();
-                    Factory.CBL.SaveLastCallingRecPid(v.prefix, v.pid, "recpage", true, true);  //uložit info o naposledy navštíveném záznamu
-                    
+                    Factory.CBL.SaveLastCallingRecPid(prefix, v.pid, "recpage", true, true);  //uložit info o naposledy navštíveném záznamu, kvůli le1-le4 pracujeme s původním prefixem
+
                     RefreshState_RecPage(v);
 
                 }
