@@ -9,5 +9,8 @@ namespace UI.Models.Tab1
     {
         public BO.p41Project Rec { get; set; }
         public BO.p41ProjectSum RecSum { get; set; }
+
+        public string p61Name { get; set; }
+        public string p87Name { get; set; }
     }
 }

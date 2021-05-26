@@ -1,0 +1,196 @@
+﻿@model UI.Models.Tab1.p41Tab1
+@inject BL.Factory _f
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutSubform.cshtml";
+    if (Model.Rec == null) return;
+
+
+}
+
+@addTagHelper *, UI
+
+
+@Html.Raw("<div class='info_record_container'>")
+
+
+<div class="card recpagebox400">
+    <div class="card-body">
+        <h6 class="card-title recpagetitle bgp28">
+            @(Model.Rec.p07Name)
+        </h6>
+        <div class="row">
+            <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Název")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.PrefferedName"></myval>
+
+            </div>
+        </div>
+        @if (_f.CurrentUser.p07LevelsCount > 1)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Vertikální úroveň")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.p07Name"></myval>
+
+                </div>
+            </div>
+        }
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Typ")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p42name" hoverprefix="p42" hoverpid="@Model.Rec.p42ID"></myval>
+
+            </div>
+        </div>
+        <div class="row my-1">
+            <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Kód")):</label>
+            <div class="col-sm-10 col-md-9">
+                <myval value="@Model.Rec.p41Code"></myval>
+
+            </div>
+        </div>
+        @if (Model.Rec.b01ID > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Aktuální stav")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.b02Name" hoverprefix="p42" hoverpid="@Model.Rec.p42ID"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.Rec.p28ID_Client > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Klient projektu")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.Client" hoverprefix="p28" hoverpid="@Model.Rec.p28ID_Client"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.Rec.j18ID > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Středisko")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.Rec.j18Name" hoverprefix="j18" hoverpid="@Model.Rec.j18ID"></myval>
+
+                </div>
+            </div>
+        }
+        @if (Model.Rec.p61ID > 0)
+        {
+            <div class="row my-1">
+                <label class="col-sm-2 col-md-3 col-form-label">@(_f.tra("Klastr aktivit")):</label>
+                <div class="col-sm-10 col-md-9">
+                    <myval value="@Model.p61Name"></myval>
+
+                </div>
+            </div>
+        }
+
+        @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFieldsRO.cshtml")
+
+        <div>
+            <small class="text-secondary" title="@_f.tra("Založení záznamu")">
+                @(Model.Rec.UserInsert+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateInsert,"dd.MM.yyyy HH:mm ddd"))
+            </small>
+            @if (Model.Rec.DateUpdate > Model.Rec.DateInsert)
+            {
+                <small class="text-success float-end" title="@_f.tra("Poslední aktualizace záznamu")">
+                    @(Model.Rec.UserUpdate+"/"+BO.BAS.ObjectDateTime2String(Model.Rec.DateUpdate,"dd.MM.yyyy HH:mm ddd"))
+
+                </small>
+
+            }
+        </div>
+    </div>
+
+
+</div>
+
+
+@if (Model.Rec.p51ID_Billing > 0 || Model.Rec.p92ID > 0 || Model.Rec.p87ID > 0)
+{
+    <div class="card recpagebox400">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp28">
+                @_f.tra("Fakturační nastavení")
+            </div>
+            @if (Model.Rec.p51ID_Billing > 0)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-3 col-md-4 col-form-label">@_f.tra("Hodinové sazby"):</label>
+                    <div class="col-sm-9 col-md-8">
+                        <myval value="@Model.Rec.p51Name_Billing" hoverprefix="p51" hoverpid="@Model.Rec.p51ID_Billing"></myval>
+
+                    </div>
+                </div>
+            }
+            @if (Model.Rec.p92ID > 0)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-3 col-md-4 col-form-label">@_f.tra("Typ faktury"):</label>
+                    <div class="col-sm-9 col-md-8">
+                        <myval value="@Model.Rec.p92Name" hoverprefix="p92" hoverpid="@Model.Rec.p92ID"></myval>
+
+                    </div>
+                </div>
+            }
+            @if (Model.p87Name !=null)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-3 col-md-4 col-form-label">@_f.tra("Fakturační jazyk"):</label>
+                    <div class="col-sm-9 col-md-8">
+                        <myval value="@Model.p87Name"></myval>
+                    </div>
+                </div>
+            }
+
+            @if (Model.Rec.p41InvoiceMaturityDays > 0)
+            {
+                <div class="row my-1">
+                    <label class="col-sm-3 col-md-4 col-form-label">@_f.tra("Splatnost faktury"):</label>
+                    <div class="col-sm-9 col-md-8">
+                        <myval value="@Model.Rec.p41InvoiceMaturityDays"></myval>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+}
+
+@if (Model.Rec.p41BillingMemo != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp28">
+                @_f.tra("Fakturační poznámka")
+            </div>
+            <div style="background-color:#F0FFF0;padding:4px;">
+                @Html.Raw(@BO.BAS.Text2Html(Model.Rec.p41BillingMemo))
+            </div>
+
+
+        </div>
+    </div>
+}
+
+
+@if (Model.TagHtml != null)
+{
+    <div class="card recpageboxauto">
+        <div class="card-body">
+            <div class="card-title recpagetitle bgp28">
+                @_f.tra("Štítky")
+            </div>
+            @Html.Raw(Model.TagHtml)
+
+        </div>
+    </div>
+}
