@@ -48,6 +48,10 @@ namespace BO
         public string p41RobotAddress { get; set; }
         public string p41ExternalPID { get; set; }
         public int p41ParentID { get; set; }
+        public int p41ID_P07Level1 { get; set; }
+        public int p41ID_P07Level2 { get; set; }
+        public int p41ID_P07Level3 { get; set; }
+        public int p41ID_P07Level4 { get; set; }
         public string p41BillingMemo { get; set; }
         public BO.p72IdENUM p72ID_NonBillable { get; set; }
         public BO.p72IdENUM p72ID_BillableHours { get; set; }

@@ -36,10 +36,18 @@ namespace BO
         public static BO.x29IdEnum GetEnum(string prefix)
         {
             switch (prefix.Substring(0, 3))
-            {
-                case "p41":
-                case "le5":
+            {                
+                case "le1":
+                    return BO.x29IdEnum.le1;
+                case "le2":
+                    return BO.x29IdEnum.le2;
+                case "le3":
+                    return BO.x29IdEnum.le3;
                 case "le4":
+                    return BO.x29IdEnum.le4;
+                case "le5":
+                    return BO.x29IdEnum.le5;
+                case "p41":
                     return BO.x29IdEnum.p41Project;
                 case "p91": return BO.x29IdEnum.p91Invoice;
                 case "p90": return BO.x29IdEnum.p90Proforma;

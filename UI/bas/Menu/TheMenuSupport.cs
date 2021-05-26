@@ -303,7 +303,7 @@ namespace UI.Menu
                         if (c.ID != null && menuitems.Where(p => p.ParentID == c.ID).Count() > 0)
                         {
                             bolHasChilds = true;
-                            c.Name += "<span class='k-icon k-i-arrow-60-right' style='float:right;'></span>";
+                            c.Name += " ("+menuitems.Where(p => p.ParentID == c.ID).Count().ToString()+ ")<span class='k-icon k-i-arrow-60-right' style='float:right;'></span>";
                         }
 
 
@@ -311,11 +311,11 @@ namespace UI.Menu
                         {
                             if (bolHasChilds)
                             {
-                                sb.Append(string.Format("<li{0}><a><span class='k-icon' style='width:20px;'></span>{1}</a>", strStyle, c.Name));
+                                sb.Append($"<li{strStyle}><a><span class='k-icon' style='width:20px;'></span>{c.Name}</a>");
                             }
                             else
                             {
-                                sb.Append(string.Format("<li{0}><a>{1}</a>", strStyle, c.Name));
+                                sb.Append($"<li{strStyle}><a>{c.Name}</a>");
                             }
 
                         }

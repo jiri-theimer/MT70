@@ -13,17 +13,20 @@ namespace UI.Controllers
         public IActionResult RecPage(string prefix, int pid)
         {
             if (prefix == "le5") prefix = "p41";
-            var v = new RecPageViewModel() { Factory = this.Factory, pid = pid, prefix = BO.BASX29.GetPrefixDb(prefix) };
-
+            var v = new RecPageViewModel() { Factory = this.Factory, pid = pid, prefix = prefix };
             
-
             if (v.pid == 0)
             {
-                v.pid = v.LoadLastUsedPid(prefix);  //kvůli le1-le4 pracujeme s původním prefixem
+                v.pid = v.LoadLastUsedPid(v.prefix);  //kvůli le1-le4 pracujeme s původním prefixem
             }
             if (v.pid > 0)
             {
-                v.MenuCode = Factory.CBL.GetObjectAlias(v.prefix, v.pid);
+                if (prefix == "p41" && Factory.CurrentUser.p07LevelsCount > 1)
+                {
+                    v.prefix = "le" + Factory.p41ProjectBL.Load(v.pid).p07Level.ToString();
+                }
+
+                v.MenuCode = Factory.CBL.GetObjectAlias(BO.BASX29.GetPrefixDb(v.prefix), v.pid);
                 if (v.MenuCode == null)
                 {
                     this.Notify_RecNotFound();
@@ -31,8 +34,10 @@ namespace UI.Controllers
                 }
                 else
                 {
+                                        
                     v.SetGridUrl();
-                    Factory.CBL.SaveLastCallingRecPid(prefix, v.pid, "recpage", true, true);  //uložit info o naposledy navštíveném záznamu, kvůli le1-le4 pracujeme s původním prefixem
+
+                    Factory.CBL.SaveLastCallingRecPid(v.prefix, v.pid, "recpage", true, true);  //uložit info o naposledy navštíveném záznamu, kvůli le1-le4 pracujeme s původním prefixem
 
                     RefreshState_RecPage(v);
 
@@ -40,7 +45,7 @@ namespace UI.Controllers
 
                 v.gridinput = new TheGridInput() { entity = v.entity, myqueryinline = "pids|list_int|" + v.pid.ToString(), ondblclick = "grid_dblclick", isrecpagegrid = true };
                 v.gridinput.query = new BO.InitMyQuery().Load(v.prefix, null, 0, "pids|list_int|" + v.pid.ToString());
-                v.gridinput.j72id = Factory.CBL.LoadUserParamInt($"masterview-j72id-{v.prefix}");
+                v.gridinput.j72id = Factory.CBL.LoadUserParamInt($"masterview-j72id-{BO.BASX29.GetPrefixDb(v.prefix)}");
 
             }
 
@@ -72,6 +77,12 @@ namespace UI.Controllers
                 case "p41":
                     v.TabName = Factory.tra("Stránka projektu");
                     break;
+                case "le1":
+                case "le2":
+                case "le3":
+                case "le4":
+                    v.TabName = Factory.CurrentUser.getP07Level(Convert.ToInt32(v.prefix.Substring(2, 1)),true);
+                    break;
                 case "p56":
                     v.TabName = Factory.tra("Stránka úkolu");
                     break;
@@ -83,7 +94,7 @@ namespace UI.Controllers
                     break;
             }
 
-            string strDefTab = Factory.CBL.LoadUserParam($"recpage-tab-{v.prefix}");
+            string strDefTab = Factory.CBL.LoadUserParam($"recpage-tab-{BO.BASX29.GetPrefixDb(v.prefix)}");
             var deftab = v.NavTabs[0];
 
             foreach (var tab in v.NavTabs)

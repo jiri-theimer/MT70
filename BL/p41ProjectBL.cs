@@ -33,6 +33,7 @@ namespace BL
             sb(",p28client.p28Name as Client,p51billing.p51Name as p51Name_Billing,a.p41LimitWipFlag,p07.p07Level,p07.p07Name");
             sb(",a.p41TreeLevel,a.p41TreeIndex,a.p41TreePrev,a.p41TreeNext,a.p41TreePath,a.p41TreeOrdinary");
             sb(",p42.p42Name,p92.p92Name,b02.b02Name,j18.j18Name,a.p41ExternalPID,a.p41ParentID,a.p41BillingMemo");
+            sb(",a.p41ID_P07Level1,a.p41ID_P07Level2,a.p41ID_P07Level3,a.p41ID_P07Level4");
             sb(",j02owner.j02LastName+' '+j02owner.j02FirstName as Owner,p28client.p87ID as p87ID_Client,p42.b01ID,a.p41IsNoNotify,a.p72ID_NonBillable,a.p72ID_BillableHours,a.j02ID_ContactPerson_DefaultInWorksheet,a.j02ID_ContactPerson_DefaultInInvoice");
             sb(",a.p41BillingFlag,a.p41ReportingFlag");
             sb(",p42.x38ID");

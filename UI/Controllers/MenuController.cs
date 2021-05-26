@@ -35,7 +35,7 @@ namespace UI.Controllers
         {
             string prefix = entity.Substring(0, 3);
             var lis = new List<MenuItem>();
-            switch (prefix)
+            switch (BO.BASX29.GetPrefixDb(prefix))
             {
                 case "j02":
                     lis = new j02ContextMenu(Factory,pid,source).GetItems();break;
@@ -43,6 +43,8 @@ namespace UI.Controllers
                     lis = new p28ContextMenu(Factory, pid,source).GetItems(); break;
                 case "p56":
                     lis = new p56ContextMenu(Factory, pid, source).GetItems(); break;
+                case "p41":                
+                    lis = new p41ContextMenu(Factory, pid, source).GetItems(); break;
                 case "p31":
                     lis = new p31ContextMenu(Factory, pid, source,master_entity).GetItems(); break;
                 case "o23":

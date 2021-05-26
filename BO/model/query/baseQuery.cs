@@ -163,18 +163,18 @@ namespace BO
             {
                 if (this.IsRecordValid==true)
                 {
-                    AQ("a." + _prefix + "ValidUntil>GETDATE()", "", null);
+                    AQ("a." + _prefixdb + "ValidUntil>GETDATE()", "", null);
 
                 }
                 if (this.IsRecordValid==false)
                 {
-                    AQ("GETDATE() NOT BETWEEN a." + _prefix + "ValidFrom AND a." + _prefix + "ValidUntil", "", null);
+                    AQ("GETDATE() NOT BETWEEN a." + _prefixdb + "ValidFrom AND a." + _prefixdb + "ValidUntil", "", null);
                 }
             }
             
             if (this.o51ids != null && this.o51ids.Count > 0)
             {
-                AQ("a." + _prefix + "ID IN (select o52RecordPid FROM o52TagBinding WHERE o51ID IN (" + string.Join(",", this.o51ids) + "))", null, null);
+                AQ("a." + _prefixdb + "ID IN (select o52RecordPid FROM o52TagBinding WHERE o51ID IN (" + string.Join(",", this.o51ids) + "))", null, null);
             }
             if (this.explicit_sqlwhere != null)
             {
