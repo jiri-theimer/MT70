@@ -19,25 +19,31 @@
 
 <div class="row my-2">
     <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Jméno"):</label>
-    <div class="col-sm-9 col-md-8">
-        <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.SelectedComboPerson" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1" event_after_changevalue="j02id_change"></mycombo>
+    <div class="col-sm-2 col-md-3">
+        <mycombo entity="j02Person" search-result-width="800" asp-for="Rec.j02ID" selectedtext="@Model.SelectedComboPerson" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1" event_after_changevalue="j02id_change"></mycombo>
     </div>
+    @if (Model.lisLevelIndex.Count > 1)
+    {
+        
+        <div class="col-sm-2 col-md-3">
+            <mydropdown asp-for="@Model.SelectedLevelIndex" datasource="@Model.lisLevelIndex" textfield="Text" valuefield="Value" event_after_changevalue="levelindex_change"></mydropdown>
+
+        </div>
+    }
 
 </div>
-<div class="row my-2">
-    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Projekt"):</label>
-    <div class="col-sm-1 col-md-2">
-        <mydropdown asp-for="@Model.SelectedLevelIndex" datasource="@Model.lisLevelIndex" textfield="Text" valuefield="Value" event_after_changevalue="levelindex_change"></mydropdown>
 
-    </div>
-    <div class="col-sm-9 col-md-8">
+
+<div class="row my-2">
+    <label class="col-sm-1 col-md-1 col-form-label recpagelabel">@(_f.CurrentUser.getP07Level(Model.SelectedLevelIndex,true)):</label>
+
+    <div class="col-sm-11 col-md-11">
         <mycombo entity="@(Model.ProjectEntity)" asp-for="Rec.p41ID" selectedtext="@Model.SelectedComboProject" view-flag="1" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)"></mycombo>
     </div>
-
 </div>
 <div class="row my-2">
-    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Aktivita"):</label>
-    <div class="col-sm-1 col-md-2">
+    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Sešit+Aktivita"):</label>
+    <div class="col-sm-2 col-md-3">
         <mycombo entity="p34ActivityGroup" asp-for="Rec.p34ID" selectedtext="@Model.SelectedComboP34Name" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)" event_after_changevalue="p34id_change" placeholder="@_f.tra("Sešit")"></mycombo>
     </div>
     <div class="col-sm-9 col-md-8">
@@ -56,7 +62,7 @@
 
 <div class="row my-2">
     <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Datum"):</label>
-    <div class="col-sm-2 col-md-2">
+    <div class="col-sm-2 col-md-3">
         <mydate asp-for="@Model.p31Date"></mydate>
     </div>
 </div>
@@ -76,7 +82,7 @@
     {
         <div class="row my-2">
             <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Počet"):</label>
-            <div class="col-sm-2 col-md-2">
+            <div class="col-sm-2 col-md-3">
                 <mynumber asp-for="Rec.Value_Orig"></mynumber>
             </div>
         </div>
@@ -89,7 +95,7 @@
             <div class="col-sm-2 col-md-2">
                 <mynumber asp-for="Rec.Amount_WithoutVat_Orig"></mynumber>
             </div>
-            <div class="col-sm-1 col-md-1 p-0">
+            <div class="col-sm-1 col-md-1">
                 <mycombo entity="j27Currency" asp-for="Rec.j27ID_Billing_Orig" selectedtext="@Model.SelectedComboJ27Code" placeholder="@_f.tra("Měna")"></mycombo>
 
             </div>
@@ -98,11 +104,11 @@
                 <div class="col-sm-2 col-md-2">
 
                 </div>
-                <div class="col-sm-1 col-md-1 p-0">
+                <div class="col-sm-2 col-md-2">
                     <input type="text" class="form-control" asp-for="Rec.p31Code" placeholder="@_f.tra("Kód dokladu")" />
                 </div>
                 <div class="col-sm-1 col-md-2">
-                    <mycombo entity="j19PaymentType" asp-for="Rec.j19ID" selectedtext="@Model.SelectedComboJ27Code" placeholder="@_f.tra("Druh úhrady")"></mycombo>
+                    <mycombo entity="j19PaymentType" asp-for="Rec.j19ID" selectedtext="@Model.SelectedComboJ19Name" placeholder="@_f.tra("Druh úhrady")"></mycombo>
 
                 </div>
             }
@@ -113,7 +119,7 @@
     {
         <div class="row my-2">
             <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DPH%"):</label>
-            <div class="col-sm-2 col-md-2">
+            <div class="col-sm-1 col-md-1">
                 <mynumber asp-for="Rec.VatRate_Orig" decimal-digits="0"></mynumber>
             </div>
             <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Vč.DPH"):</label>
@@ -127,28 +133,7 @@
         </div>
     }
 
-    if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
-    {
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Počet"):</label>
-            <div class="col-sm-2 col-md-2">
-                <mynumber asp-for="Rec.p31Calc_Pieces"></mynumber>
-            </div>
-            <div class="col-sm-1 col-md-1 p-0">
-                <mynumber asp-for="Rec.p31Calc_PieceAmount" placeholder="@_f.tra("Cena 1 kus")"></mynumber>
-            </div>
-            <div class="col-sm-1 col-md-1 p-0">
-                <mycombo entity="p35Unit" asp-for="Rec.p35ID" selectedtext="@Model.SelectedComboP35Code" placeholder="@_f.tra("Jednotka")"></mycombo>
 
-            </div>
-            <div class="col-sm-2 col-md-2">
-                <select class="form-select" asp-for="@Model.PiecePriceFlag">
-                    <option value="1">@_f.tra("Kusová cena bez DPH")</option>
-                    <option value="2">@_f.tra("Kusová cena vč. DPH")</option>
-                </select>
-            </div>
-        </div>
-    }
 }
 
 <div class="form-floating my-2">
@@ -156,6 +141,29 @@
     <label for="Rec_p31Text">@_f.tra("Podrobný popis úkonu")</label>
 </div>
 
+
+@if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+{
+    <div class="row my-2">
+        <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@_f.tra("Spočítat jako kusy x počet"):</label>
+        <div class="col-sm-1 col-md-1">
+            <mynumber asp-for="Rec.p31Calc_Pieces" placeholder="@_f.tra("Počet")"></mynumber>
+        </div>
+        <div class="col-sm-1 col-md-1 p-0">
+            <mynumber asp-for="Rec.p31Calc_PieceAmount" placeholder="@_f.tra("Cena 1 kus")"></mynumber>
+        </div>
+        <div class="col-sm-1 col-md-1 p-0">
+            <mycombo entity="p35Unit" asp-for="Rec.p35ID" selectedtext="@Model.SelectedComboP35Code" placeholder="@_f.tra("Jednotka")"></mycombo>
+
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <select class="form-select" asp-for="@Model.PiecePriceFlag">
+                <option value="1">@_f.tra("Kusová cena bez DPH")</option>
+                <option value="2">@_f.tra("Kusová cena vč. DPH")</option>
+            </select>
+        </div>
+    </div>
+}
 
 
 
