@@ -31,11 +31,13 @@ namespace UI.Controllers
             {
                 var recP31 = Factory.p31WorksheetBL.Load(v.rec_pid);
                 v.Rec = Factory.p31WorksheetBL.CovertRec2Input(recP31);
+                v.p31Date = v.Rec.p31Date;
                 v.SelectedComboP32Name = recP31.p32Name;
                 v.SelectedComboP34Name = recP31.p34Name;
                 v.SelectedComboPerson = recP31.Person;
                 v.SelectedComboProject = recP31.Project;
                 v.SelectedComboTask = recP31.p56Name;
+                v.SelectedComboJ27Code = recP31.j27Code_Billing_Orig;
 
                 v.SetTagging(Factory.o51TagBL.GetTagging("p31", v.rec_pid));
 
@@ -45,7 +47,11 @@ namespace UI.Controllers
                 }
             }
 
-
+            v.Toolbar = new MyToolbarViewModel(v.Rec);
+            if (isclone)
+            {
+                v.MakeClone();
+            }
             RefreshState(v);
 
 
@@ -54,7 +60,8 @@ namespace UI.Controllers
         }
 
         private void Handle_Defaults(p31Record v)
-        {      
+        {
+            v.p31Date = DateTime.Today;v.SelectedLevelIndex = 5;
             if (v.rec_pid == 0)
             {
                 if (v.Rec.j02ID == 0)
@@ -69,6 +76,16 @@ namespace UI.Controllers
                 {
                     v.SelectedComboPerson = Factory.j02PersonBL.Load(v.Rec.j02ID).FullNameDesc;
                 }
+                if (v.Rec.p41ID==0 && v.Rec.p34ID == 0)
+                {
+                    var recLast = Factory.p31WorksheetBL.LoadMyLastCreated(true, v.Rec.p41ID, v.Rec.p34ID);
+                    if (recLast != null)
+                    {
+                        v.Rec.p41ID = recLast.p41ID;v.Rec.p34ID = recLast.p34ID;v.SelectedComboP34Name = recLast.p34Name;
+                        v.Rec.j27ID_Billing_Orig = recLast.j27ID_Billing_Orig;v.SelectedComboJ27Code = recLast.j27Code_Billing_Orig;
+                    }
+                }
+                
             }
             
 
@@ -137,7 +154,16 @@ namespace UI.Controllers
         public IActionResult Record(p31Record v, string oper)
         {
             RefreshState(v);
-
+           
+            switch (oper)
+            {
+                case "p34id":
+                    v.Rec.p32ID = 0; v.SelectedComboP32Name = null;
+                    break;
+                case "levelindex":
+                    v.Rec.p41ID = 0;v.SelectedComboProject = null;
+                    break;
+            }
             if (!string.IsNullOrEmpty(oper))
             {
                 return View(v);

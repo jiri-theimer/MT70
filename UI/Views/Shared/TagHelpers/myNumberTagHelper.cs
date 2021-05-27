@@ -30,6 +30,8 @@ namespace UI.Views.Shared.TagHelpers
         [HtmlAttributeName("elementid-prefix")]
         public string elementidprefix { get; set; } //použitelné v situaci taghelperu v listu, který je umístěn v partial view komponentě
 
+        [HtmlAttributeName("placeholder")]
+        public string PlaceHolder { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -96,10 +98,10 @@ namespace UI.Views.Shared.TagHelpers
             }
             strControlID=strControlID.Replace(".", "_").Replace("[", "_").Replace("]", "_");
 
+            if (this.PlaceHolder != null) strPlaceHolder = this.PlaceHolder;
 
-
-            sb.Append(string.Format("<input type='text' for-id='{0}' class='form-control' step='{1}' placeholder='{2}' onfocus='mynumber_focus(this)' onblur='mynumber_blur(this,{3})' value='{4}'/>", strControlID, strStep,strPlaceHolder,DecimalDigits, strFormatted));
-            sb.Append(string.Format("<input type='hidden' value ='{0}' id ='{1}' name ='{2}'/>", _StringValue, strControlID, strControlName));
+            sb.Append($"<input type='text' for-id='{strControlID}' class='form-control' step='{strStep}' placeholder='{strPlaceHolder}' onfocus='mynumber_focus(this)' onblur='mynumber_blur(this,{DecimalDigits})' value='{strFormatted}'/>");
+            sb.Append($"<input type='hidden' value ='{_StringValue}' id ='{strControlID}' name ='{strControlName}'/>");
 
             //output.Content.AppendHtml(sb.ToString());
             output.Content.SetHtmlContent(sb.ToString());

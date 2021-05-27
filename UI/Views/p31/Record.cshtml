@@ -16,33 +16,147 @@
 @Html.Raw("<div class='modal_record_container'>")
 
 
-    <div class="row">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
-        <div class="col-sm-9 col-md-8">
-            <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.SelectedComboPerson" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1" event_after_changevalue="j02id_change"></mycombo>
-        </div>
+
+<div class="row my-2">
+    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Jméno"):</label>
+    <div class="col-sm-9 col-md-8">
+        <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.SelectedComboPerson" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1" event_after_changevalue="j02id_change"></mycombo>
+    </div>
+
+</div>
+<div class="row my-2">
+    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Projekt"):</label>
+    <div class="col-sm-1 col-md-2">
+        <mydropdown asp-for="@Model.SelectedLevelIndex" datasource="@Model.lisLevelIndex" textfield="Text" valuefield="Value" event_after_changevalue="levelindex_change"></mydropdown>
 
     </div>
-    <div class="row my-2">
-        <div class="col-sm-1 col-md-2">
-            <mydropdown asp-for="@Model.SelectedLevelIndex" datasource="@Model.lisLevelIndex" textfield="Text" valuefield="Value" event_after_changevalue="levelindex_change"></mydropdown>
+    <div class="col-sm-9 col-md-8">
+        <mycombo entity="@(Model.ProjectEntity)" asp-for="Rec.p41ID" selectedtext="@Model.SelectedComboProject" view-flag="1" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)"></mycombo>
+    </div>
 
-        </div>
-        <div class="col-sm-9 col-md-8">
-            <mycombo entity="@(Model.ProjectEntity)" asp-for="Rec.p41ID" selectedtext="@Model.SelectedComboProject" view-flag="1" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)"></mycombo>
-        </div>
+</div>
+<div class="row my-2">
+    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Aktivita"):</label>
+    <div class="col-sm-1 col-md-2">
+        <mycombo entity="p34ActivityGroup" asp-for="Rec.p34ID" selectedtext="@Model.SelectedComboP34Name" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)" event_after_changevalue="p34id_change" placeholder="@_f.tra("Sešit")"></mycombo>
+    </div>
+    <div class="col-sm-9 col-md-8">
+        @if (Model.RecP34 != null)
+        {
+            <mycombo entity="p32Activity" asp-for="Rec.p32ID" selectedtext="@Model.SelectedComboP32Name" myqueryinline="p34id|int|@(Model.RecP34.pid)" placeholder="@_f.tra("Aktivita")"></mycombo>
+        }
+        else
+        {
+            <i>@_f.tra("Pro vyplnění aktivity je třeba vybrat sešit.")</i>
+        }
 
     </div>
-    <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Aktivita"):</label>
-        <div class="col-sm-9 col-md-8">
-            <mycombo entity="b01WorkflowTemplate" asp-for="Rec.p32ID" selectedtext="@Model.SelectedComboP32Name" myqueryinline="p34id|int|@(Model.RecP34.pid)"></mycombo>
-        </div>
-        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Sešit"):</label>
-        <div class="col-sm-9 col-md-8">
-            <mycombo entity="p34ActivityGroup" asp-for="Rec.p34ID" selectedtext="@Model.SelectedComboP34Name" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)"></mycombo>
-        </div>
+
+</div>
+
+<div class="row my-2">
+    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Datum"):</label>
+    <div class="col-sm-2 col-md-2">
+        <mydate asp-for="@Model.p31Date"></mydate>
     </div>
+</div>
+
+@if (Model.RecP34 != null)
+{
+    if (Model.RecP34.p33ID == BO.p33IdENUM.Cas)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Hodiny"):</label>
+            <div class="col-sm-2 col-md-2">
+                <myhours asp-for="Rec.Value_Orig" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
+            </div>
+        </div>
+    }
+    if (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Počet"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mynumber asp-for="Rec.Value_Orig"></mynumber>
+            </div>
+        </div>
+    }
+
+    if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Bez DPH"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mynumber asp-for="Rec.Amount_WithoutVat_Orig"></mynumber>
+            </div>
+            <div class="col-sm-1 col-md-1 p-0">
+                <mycombo entity="j27Currency" asp-for="Rec.j27ID_Billing_Orig" selectedtext="@Model.SelectedComboJ27Code" placeholder="@_f.tra("Měna")"></mycombo>
+
+            </div>
+            @if (Model.RecP34.p34IncomeStatementFlag == BO.p34IncomeStatementFlagENUM.Vydaj)
+            {
+                <div class="col-sm-2 col-md-2">
+
+                </div>
+                <div class="col-sm-1 col-md-1 p-0">
+                    <input type="text" class="form-control" asp-for="Rec.p31Code" placeholder="@_f.tra("Kód dokladu")" />
+                </div>
+                <div class="col-sm-1 col-md-2">
+                    <mycombo entity="j19PaymentType" asp-for="Rec.j19ID" selectedtext="@Model.SelectedComboJ27Code" placeholder="@_f.tra("Druh úhrady")"></mycombo>
+
+                </div>
+            }
+
+        </div>
+    }
+    if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("DPH%"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mynumber asp-for="Rec.VatRate_Orig" decimal-digits="0"></mynumber>
+            </div>
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Vč.DPH"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mynumber asp-for="Rec.Amount_WithVat_Orig"></mynumber>
+            </div>
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Částka DPH"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mynumber asp-for="Rec.Amount_Vat_Orig"></mynumber>
+            </div>
+        </div>
+    }
+
+    if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Počet"):</label>
+            <div class="col-sm-2 col-md-2">
+                <mynumber asp-for="Rec.p31Calc_Pieces"></mynumber>
+            </div>
+            <div class="col-sm-1 col-md-1 p-0">
+                <mynumber asp-for="Rec.p31Calc_PieceAmount" placeholder="@_f.tra("Cena 1 kus")"></mynumber>
+            </div>
+            <div class="col-sm-1 col-md-1 p-0">
+                <mycombo entity="p35Unit" asp-for="Rec.p35ID" selectedtext="@Model.SelectedComboP35Code" placeholder="@_f.tra("Jednotka")"></mycombo>
+
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <select class="form-select" asp-for="@Model.PiecePriceFlag">
+                    <option value="1">@_f.tra("Kusová cena bez DPH")</option>
+                    <option value="2">@_f.tra("Kusová cena vč. DPH")</option>
+                </select>
+            </div>
+        </div>
+    }
+}
+
+<div class="form-floating my-2">
+    <textarea class="form-control" asp-for="Rec.p31Text"></textarea>
+    <label for="Rec_p31Text">@_f.tra("Podrobný popis úkonu")</label>
+</div>
+
+
 
 
 @Html.Raw("</div>")
@@ -64,11 +178,11 @@
     }
 
     function hardrefresh(pid, flag) {
-        
+
         postback("postback");
     }
 
-   
+
 
     function levelindex_change(cbx) {
         postback("levelindex");

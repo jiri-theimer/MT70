@@ -9,6 +9,7 @@ namespace BL
         public BO.p31Worksheet Load(int pid);
         public BO.p31Worksheet LoadByExternalPID(string externalpid);
         public BO.p31Worksheet LoadTempRecord(int pid, string guidTempData);
+        public BO.p31Worksheet LoadMyLastCreated(bool bolLoadTheSameProjectTypeIfNoData, int intP41ID = 0, int intP34ID = 0);
         public BO.p31WorksheetEntryInput CovertRec2Input(BO.p31Worksheet rec);
         public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF);
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
@@ -77,6 +78,7 @@ namespace BL
         {
             return _db.Load<BO.p31Worksheet>(GetSQL1(" WHERE a.p31ID=@pid"), new { pid = pid });
         }
+       
         public BO.p31Worksheet LoadByExternalPID(string externalpid)
         {
             return _db.Load<BO.p31Worksheet>(GetSQL1(" WHERE a.p31ExternalPID=@externalpid"), new { externalpid = externalpid });
@@ -474,7 +476,8 @@ namespace BL
             c.p31Date = rec.p31Date; c.p31Text = rec.p31Text;
             c.Value_Orig = rec.p31Value_Orig.ToString();c.p31HoursEntryflag = rec.p31HoursEntryFlag;
             c.TimeFrom = rec.TimeFrom; c.TimeUntil = rec.TimeUntil;
-            
+
+            c.j27ID_Billing_Orig = rec.j27ID_Billing_Orig;
             c.Amount_Vat_Orig = rec.p31Amount_Vat_Orig;c.Amount_WithoutVat_Orig = rec.p31Amount_WithoutVat_Orig;c.Amount_WithVat_Orig = rec.p31Amount_WithVat_Orig;
             c.VatRate_Orig = rec.p31VatRate_Orig;
             c.Value_OffBilling = rec.p31Value_Off;
