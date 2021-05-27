@@ -20,12 +20,7 @@ namespace UI.Controllers
                 v.pid = v.LoadLastUsedPid(v.prefix);  //kvůli le1-le4 pracujeme s původním prefixem
             }
             if (v.pid > 0)
-            {
-                if (prefix == "p41" && Factory.CurrentUser.p07LevelsCount > 1)
-                {
-                    v.prefix = "le" + Factory.p41ProjectBL.Load(v.pid).p07Level.ToString();
-                }
-
+            {                
                 v.MenuCode = Factory.CBL.GetObjectAlias(BO.BASX29.GetPrefixDb(v.prefix), v.pid);
                 if (v.MenuCode == null)
                 {
@@ -81,6 +76,7 @@ namespace UI.Controllers
                 case "le2":
                 case "le3":
                 case "le4":
+                case "le5":
                     v.TabName = Factory.CurrentUser.getP07Level(Convert.ToInt32(v.prefix.Substring(2, 1)),true);
                     break;
                 case "p56":

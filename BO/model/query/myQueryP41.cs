@@ -19,9 +19,9 @@ namespace BO
         public int p61id { get; set; }
         public int p91id { get; set; }
         public int p28id { get; set; }
-        public myQueryP41()
+        public myQueryP41(string prefix)
         {
-            this.Prefix = "p41";
+            this.Prefix = prefix;
         }
 
         public override List<QRow> GetRows()

@@ -54,7 +54,7 @@ namespace UI.Controllers
             }
         }
 
-        public IActionResult Record(int pid, bool isclone)
+        public IActionResult Record(int pid, bool isclone,string levelprefix)
         {
             var v = new p41Record() { rec_pid = pid, rec_entity = "p41", p51Flag = 1, TempGuid = BO.BAS.GetGuid() };
             v.Rec = new BO.p41Project();
@@ -124,6 +124,28 @@ namespace UI.Controllers
                 }
 
             }
+            else
+            {
+                //nový projekt
+                int levelindex = 0;
+                if (!string.IsNullOrEmpty(levelprefix))
+                {
+                    levelindex = Convert.ToInt32(levelprefix.Substring(2, 1));
+                }
+                var recLast = Factory.p41ProjectBL.LoadLastCreated(levelindex);
+                if (recLast != null)
+                {
+                    v.Rec.p42ID = recLast.p42ID;
+                    v.SelectedComboP42Name = recLast.p42name;
+
+                    if (recLast.p41ParentID > 0)
+                    {
+                        var recParent = Factory.p41ProjectBL.Load(recLast.p41ParentID);
+                        v.SelectedParentLevelIndex = recParent.p07Level;
+                    }
+                }
+            }
+           
             RefreshState(v);
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)

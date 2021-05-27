@@ -424,10 +424,32 @@ namespace UI.Controllers
         public string MenuNewRecord(string prefix)
         {
             DIV();
-            AMI("Klient", "javascript:_edit('p28',0)");
-            AMI("Projekt", "javascript:_edit('p41',0)");            
+            if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Creator) || Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Draft_Creator))
+            {
+                if (Factory.CurrentUser.p07LevelsCount == 1)
+                {
+                    AMI(Factory.CurrentUser.getP07Level(5, true), "javascript:_edit('p41',0)"); //nový projekt, pouze jedna vertikální úroveň
+                }
+                else
+                {
+                    for (int i = 1; i <= 5; i++)   //v systému více vertikálních úrovní
+                    {
+                        if (Factory.CurrentUser.getP07Level(i, true) != null)
+                        {
+                            AMI(Factory.CurrentUser.getP07Level(i, true), $"javascript:_edit('le{i}',0)");
+                        }
+                    }
+                    DIV();
+                }                                
+            }
+            if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P28_Creator) || Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P28_Draft_Creator))
+            {
+                AMI("Klient", "javascript:_edit('p28',0)");
+            }
+            AMI("Úkol", "javascript:_edit('p56',0)");            
+            if (Factory.CurrentUser.p07LevelsCount == 1) DIV();           
             AMI("Dokument", "javascript:_window_open('/o23/SelectDocType')");
-            DIV();
+            
             AMI("Záloha", "javascript:_edit('p90',0)");
             //AMI("Poznámka", "javascript:_edit('b07',0)");
             DIV();

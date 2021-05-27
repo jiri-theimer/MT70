@@ -66,7 +66,8 @@ function _edit(controller, pid, header) {
     var url = "";
     var winflag = 1;
     if (controller.substring(0, 2) === "le") {
-        controller = "p41";
+        _window_open("/p41/Record?pid=" + pid + "&levelprefix=" + controller, winflag, header);
+        return;
     }
 
     switch (controller) {

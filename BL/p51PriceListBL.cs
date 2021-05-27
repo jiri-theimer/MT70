@@ -166,7 +166,7 @@ namespace BL
 
             if (rec.pid > 0 && rec.p51TypeFlag==BO.p51TypeFlagENUM.RootBillingRates)
             {
-                var lisP41 = _mother.p41ProjectBL.GetList(new BO.myQueryP41() { p51id = rec.pid });
+                var lisP41 = _mother.p41ProjectBL.GetList(new BO.myQueryP41("p41") { p51id = rec.pid });
                 if (lisP41.Count() > 0)
                 {
                     this.AddMessage(String.Format("Minimálně jeden projekt ({0}) je svázán s tímto ceníkem. Kořenový (ROOT) ceník nemůže být přímo svázán s projektem!", lisP41.First().FullName));

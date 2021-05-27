@@ -9,6 +9,7 @@ namespace BL
     public interface Ip41ProjectBL
     {
         public BO.p41Project Load(int pid);
+        public BO.p41Project LoadLastCreated(int levelindex);
         public BO.p41Project LoadByCode(string strCode, int pid_exclude);
         public BO.p41Project LoadByExternalPID(string externalpid);
         public IEnumerable<BO.p41Project> GetList(BO.myQueryP41 mq);
@@ -27,9 +28,11 @@ namespace BL
         }
 
 
-        private string GetSQL1(string strAppend = null)
+        private string GetSQL1(string strAppend = null,int intTopRecs=0)
         {
-            sb("SELECT a.p42ID,a.j02ID_Owner,a.p41Name,a.p41NameShort,a.p41Code,a.p41IsDraft,a.p28ID_Client,a.p28ID_Billing,a.p87ID,a.p51ID_Billing,a.p51ID_Internal,a.p92ID,a.b02ID,a.j18ID,a.p61ID,a.p41InvoiceDefaultText1,a.p41InvoiceDefaultText2,a.p41InvoiceMaturityDays,a.p41WorksheetOperFlag,a.p41PlanFrom,a.p41PlanUntil,a.p41LimitHours_Notification,a.p41LimitFee_Notification");
+            sb("SELECT");
+            if (intTopRecs > 0) sb($" TOP {intTopRecs}");
+            sb(" a.p42ID,a.j02ID_Owner,a.p41Name,a.p41NameShort,a.p41Code,a.p41IsDraft,a.p28ID_Client,a.p28ID_Billing,a.p87ID,a.p51ID_Billing,a.p51ID_Internal,a.p92ID,a.b02ID,a.j18ID,a.p61ID,a.p41InvoiceDefaultText1,a.p41InvoiceDefaultText2,a.p41InvoiceMaturityDays,a.p41WorksheetOperFlag,a.p41PlanFrom,a.p41PlanUntil,a.p41LimitHours_Notification,a.p41LimitFee_Notification");
             sb(",p28client.p28Name as Client,p51billing.p51Name as p51Name_Billing,a.p41LimitWipFlag,p07.p07Level,p07.p07Name");
             sb(",a.p41TreeLevel,a.p41TreeIndex,a.p41TreePrev,a.p41TreeNext,a.p41TreePath,a.p41TreeOrdinary");
             sb(",p42.p42Name,p92.p92Name,b02.b02Name,j18.j18Name,a.p41ExternalPID,a.p41ParentID,a.p41BillingMemo");
@@ -59,6 +62,18 @@ namespace BL
         public BO.p41Project Load(int pid)
         {
             return _db.Load<BO.p41Project>(GetSQL1(" WHERE a.p41ID=@pid"), new { pid = pid });
+        }
+        public BO.p41Project LoadLastCreated(int levelindex)
+        {
+            if (levelindex == 0)
+            {
+                return _db.Load<BO.p41Project>(GetSQL1(" WHERE a.p41UserInsert=@login ORDER BY a.p41ID DESC",1), new { login = _mother.CurrentUser.j03Login });
+            }
+            else
+            {
+                return _db.Load<BO.p41Project>(GetSQL1(" WHERE a.p41UserInsert=@login AND p07.p07Level=@level ORDER BY a.p41ID DESC",1), new { login = _mother.CurrentUser.j03Login,level=levelindex });
+            }
+            
         }
         public BO.p41Project LoadByCode(string strCode, int pid_exclude)
         {
