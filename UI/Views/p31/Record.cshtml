@@ -142,7 +142,7 @@
 </div>
 
 
-@if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+@if (Model.RecP34 !=null && (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu))
 {
     <div class="row my-2">
         <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@_f.tra("Spočítat jako kusy x počet"):</label>
