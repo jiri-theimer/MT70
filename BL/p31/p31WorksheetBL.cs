@@ -9,7 +9,7 @@ namespace BL
         public BO.p31Worksheet Load(int pid);
         public BO.p31Worksheet LoadByExternalPID(string externalpid);
         public BO.p31Worksheet LoadTempRecord(int pid, string guidTempData);
-
+        public BO.p31WorksheetEntryInput CovertRec2Input(BO.p31Worksheet rec);
         public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF);
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq);
@@ -464,6 +464,24 @@ namespace BL
             sb(" ORDER BY min(j02.j02LastName),min(j02.j02FirstName)");
 
             return _db.GetList<BO.p31WorksheetTimelineDay>(sbret(), new { d1 = d1, d2 = d2 });
+        }
+
+        public BO.p31WorksheetEntryInput CovertRec2Input(BO.p31Worksheet rec)
+        {
+            if (rec == null) return null;           
+
+            var c = new BO.p31WorksheetEntryInput() { pid = rec.pid, j02ID = rec.j02ID, j02ID_ContactPerson = rec.j02ID_ContactPerson,p41ID=rec.p41ID,p34ID=rec.p34ID,p32ID=rec.p32ID,p56ID=rec.p56ID };
+            c.p31Date = rec.p31Date; c.p31Text = rec.p31Text;
+            c.Value_Orig = rec.p31Value_Orig.ToString();c.p31HoursEntryflag = rec.p31HoursEntryFlag;
+            c.TimeFrom = rec.TimeFrom; c.TimeUntil = rec.TimeUntil;
+            
+            c.Amount_Vat_Orig = rec.p31Amount_Vat_Orig;c.Amount_WithoutVat_Orig = rec.p31Amount_WithoutVat_Orig;c.Amount_WithVat_Orig = rec.p31Amount_WithVat_Orig;
+            c.VatRate_Orig = rec.p31VatRate_Orig;
+            c.Value_OffBilling = rec.p31Value_Off;
+            c.ValidUntil = rec.ValidUntil;c.ValidFrom = rec.ValidFrom;
+            
+            return c;
+
         }
 
     }

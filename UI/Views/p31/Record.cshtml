@@ -1,0 +1,82 @@
+﻿@model UI.Models.Record.p31Record
+@inject BL.Factory _f
+
+@{
+    Model.PageTitle = _f.tra("Úkon");
+    Layout = "~/Views/Shared/_LayoutRecord.cshtml";
+
+    if (Model.RecP34 != null)
+    {
+        Model.PageTitle += ": " + Model.RecP34.p34Name;
+    }
+}
+
+@addTagHelper *, UI
+
+@Html.Raw("<div class='modal_record_container'>")
+
+
+    <div class="row">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
+        <div class="col-sm-9 col-md-8">
+            <mycombo entity="j02Person" asp-for="Rec.j02ID" selectedtext="@Model.SelectedComboPerson" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1" event_after_changevalue="j02id_change"></mycombo>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <div class="col-sm-1 col-md-2">
+            <mydropdown asp-for="@Model.SelectedLevelIndex" datasource="@Model.lisLevelIndex" textfield="Text" valuefield="Value" event_after_changevalue="levelindex_change"></mydropdown>
+
+        </div>
+        <div class="col-sm-9 col-md-8">
+            <mycombo entity="@(Model.ProjectEntity)" asp-for="Rec.p41ID" selectedtext="@Model.SelectedComboProject" view-flag="1" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)"></mycombo>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Aktivita"):</label>
+        <div class="col-sm-9 col-md-8">
+            <mycombo entity="b01WorkflowTemplate" asp-for="Rec.p32ID" selectedtext="@Model.SelectedComboP32Name" myqueryinline="p34id|int|@(Model.RecP34.pid)"></mycombo>
+        </div>
+        <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Sešit"):</label>
+        <div class="col-sm-9 col-md-8">
+            <mycombo entity="p34ActivityGroup" asp-for="Rec.p34ID" selectedtext="@Model.SelectedComboP34Name" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)"></mycombo>
+        </div>
+    </div>
+
+
+@Html.Raw("</div>")
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+
+    });
+
+    function postback(oper) {
+
+        form1.action = _ep("/p31/Record?oper=" + oper);
+        form1.submit();
+    }
+
+    function hardrefresh(pid, flag) {
+        
+        postback("postback");
+    }
+
+   
+
+    function levelindex_change(cbx) {
+        postback("levelindex");
+    }
+    function j02id_change(j02id) {
+        postback("j02id");
+    }
+    function p34id_change(p34id) {
+        postback("p34id");
+    }
+</script>

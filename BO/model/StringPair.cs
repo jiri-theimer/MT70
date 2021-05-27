@@ -17,4 +17,10 @@ namespace BO
         public string Value { get; set; }
         public DateTime DateUpdate { get; set; }
     }
+
+    public class ListItemValue
+    {
+        public int Value { get; set; }
+        public string Text { get; set; }
+    }
 }

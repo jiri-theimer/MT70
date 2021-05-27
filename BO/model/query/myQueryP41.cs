@@ -19,6 +19,7 @@ namespace BO
         public int p61id { get; set; }
         public int p91id { get; set; }
         public int p28id { get; set; }
+        public int j02id_for_p31_entry { get; set; }    //projekty, které jsou k dispozici pro zapisování úkonů pro uživatele j02id_for_p31_entry
         public myQueryP41(string prefix)
         {
             this.Prefix = prefix;

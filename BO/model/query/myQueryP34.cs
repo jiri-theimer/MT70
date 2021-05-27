@@ -11,6 +11,7 @@ namespace BO
         public int p42id { get; set; }
         public int p36id { get; set; }  //sešity z uzamčeného období
         public bool? ismoneyinput { get; set; }
+        public int j02id_for_p31_entry { get; set; }    //sešity, které jsou k dispozici pro zapisování úkonů pro uživatele j02id_for_p31_entry
         public myQueryP34()
         {
             this.Prefix = "p34";
