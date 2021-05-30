@@ -33,6 +33,8 @@ namespace UI.Views.Shared.TagHelpers
         [HtmlAttributeName("placeholder")]
         public string PlaceHolder { get; set; }
 
+      
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -100,7 +102,8 @@ namespace UI.Views.Shared.TagHelpers
 
             if (this.PlaceHolder != null) strPlaceHolder = this.PlaceHolder;
 
-            sb.Append($"<input type='text' for-id='{strControlID}' class='form-control' step='{strStep}' placeholder='{strPlaceHolder}' onfocus='mynumber_focus(this)' onblur='mynumber_blur(this,{DecimalDigits})' value='{strFormatted}'/>");
+            sb.Append($"<input type='text' for-id='{strControlID}' id='num{strControlID}' class='form-control' step='{strStep}' placeholder='{strPlaceHolder}' onfocus='mynumber_focus(this)' onblur='mynumber_blur(this,{DecimalDigits})' value='{strFormatted}'/>");
+       
             sb.Append($"<input type='hidden' value ='{_StringValue}' id ='{strControlID}' name ='{strControlName}'/>");
 
             //output.Content.AppendHtml(sb.ToString());

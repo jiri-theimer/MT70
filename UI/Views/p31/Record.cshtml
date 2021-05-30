@@ -24,7 +24,7 @@
     </div>
     @if (Model.lisLevelIndex.Count > 1)
     {
-        
+
         <div class="col-sm-2 col-md-3">
             <mydropdown asp-for="@Model.SelectedLevelIndex" datasource="@Model.lisLevelIndex" textfield="Text" valuefield="Value" event_after_changevalue="levelindex_change"></mydropdown>
 
@@ -142,7 +142,7 @@
 </div>
 
 
-@if (Model.RecP34 !=null && (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu))
+@if (Model.RecP34 != null && (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu))
 {
     <div class="row my-2">
         <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@_f.tra("Spočítat jako kusy x počet"):</label>
@@ -173,7 +173,59 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+    @if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+    {
+    <text>
 
+
+        $("#numRec_Amount_WithoutVat_Orig").on("input", function () {
+            var bezdph = _string2number($(this).val());
+            var dphsazba = _string2number($("#Rec_VatRate_Orig").val());
+            var vcdph = _roundnum(bezdph + (bezdph * dphsazba / 100), 2);
+
+            var dphcastka = _roundnum(vcdph - bezdph, 2);
+
+            $("#numRec_Amount_WithVat_Orig").val(vcdph);
+            $("#numRec_Amount_Vat_Orig").val(dphcastka);
+
+        });
+
+
+
+        $("#numRec_Amount_WithVat_Orig").on("input", function () {
+            var vcdph = _string2number($(this).val());
+            var dphsazba = _string2number($("#Rec_VatRate_Orig").val());
+            var bezdph = _roundnum(vcdph / (1 + dphsazba / 100), 2);
+
+            var dphcastka = _roundnum((vcdph - bezdph), 2);
+            $("#numRec_Amount_WithoutVat_Orig").val(bezdph);
+            $("#numRec_Amount_Vat_Orig").val(dphcastka);
+        });
+
+
+        $("#numRec_VatRate_Orig").on("input", function () {
+            var dphsazba = _string2number($(this).val());
+            var bezdph = _string2number($("#Rec_Amount_WithoutVat_Orig").val());
+            var vcdph = 0;
+            if (bezdph != 0) {
+                var vcdph = _roundnum(bezdph + (bezdph * dphsazba / 100), 2);
+                var dphcastka = _roundnum(vcdph - bezdph, 2);
+                $("#numRec_Amount_WithVat_Orig").val(vcdph);
+                $("#numRec_Amount_Vat_Orig").val(dphcastka);
+                return;
+            }
+
+            vcdph = _string2number($("#numRec_Amount_WithVat_Orig").val());
+            bezdph = _roundnum(vcdph / (1 + dphsazba / 100), 2);
+            var dphcastka = _roundnum((vcdph - bezdph), 2);
+
+            $("#numRec_Amount_WithoutVat_Orig").val(vcdph);
+            $("#numRec_Amount_Vat_Orig").val(dphcastka);
+
+        });
+
+      </text>
+      }
 
 
 
@@ -201,4 +253,7 @@
     function p34id_change(p34id) {
         postback("p34id");
     }
+
+
+
 </script>

@@ -30,6 +30,19 @@ function _redirect(url) {
     location.replace(_ep(url));
 }
 
+///vrací číslo
+function _string2number(s) {   
+    s = s.replace(/\s/g, '');
+    s = s.replace(/[,]/g, '.');
+    var num = 0;
+    num = Number(s);
+    return (num);
+}
+function _roundnum(n,decimals) {
+    
+    return (n.toFixed(decimals));
+}
+
 function _format_number(val) {
     if (val === null) {
         return ("");
