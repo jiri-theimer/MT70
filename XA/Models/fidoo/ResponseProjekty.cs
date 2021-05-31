@@ -18,4 +18,14 @@ namespace XA.Models.fidoo
         public string name { get; set; }
         public string state { get; set; }
     }
+
+    public class ResponseUpdateProject
+    {
+        public string info { get; set; }
+    }
+
+    public class ResponseAddProject
+    {
+        public string projectId { get; set; }
+    }
 }

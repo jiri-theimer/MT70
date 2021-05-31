@@ -82,11 +82,17 @@ namespace XA.Controllers
             {
                 return "no job launched"; //nebyl spuštěn žádný job -> odchod
             }
+            foreach (var onejob in lisLaunched.Where(p => p.ExportProjects == true))
+            {
+                SynchroProjekty(onejob);    //export projektů do fidoo
+            }
 
             foreach (var onejob in lisLaunched.Where(p => p.ImportExpenses == true))
             {
                 Handle_Import_Vydaje_OneJob(onejob);    //import fidoo výdajů pro joby s ImportExpenses=true
             }
+
+            
 
 
             //aktualizovat čas posledního jetí jobu v konfiguračním souboru FidooJobs.json
@@ -245,6 +251,167 @@ namespace XA.Controllers
 
         }
 
+
+        
+
+        public List<string> SynchroProjekty(FidooJob onejob)
+        {
+            var ru = new BO.RunningUser() { j03Login = onejob.RobotUser };    //robot login
+            var f = new BL.Factory(ru, _app, _ep, _tt);
+
+            var lisFidooProjekty = ListProjekty(onejob.ApiKey);
+            var lisP41 = f.p41ProjectBL.GetList(new BO.myQueryP41("p41") { IsRecordValid = null });
+            var ret = new List<string>();
+            foreach(var recP41 in lisP41)
+            {
+                string strProjectName = recP41.p41Name;
+                if (recP41.p28ID_Client > 0)
+                {
+                    strProjectName = recP41.Client + " - " + strProjectName;
+                }
+                if (strProjectName.Length > 50) strProjectName = strProjectName.Substring(0, 49);
+                string strState = "active";
+                if (recP41.isclosed)
+                {
+                    strState = "deleted";
+                }
+
+                var qry = lisFidooProjekty.Where(p => p.code == recP41.p41Code);
+                if (qry.Count() > 0)
+                {
+                    //projekt již existuje ve fidoo db
+                    string strProjectId = qry.First().id;
+                    
+                    if (recP41.isclosed)
+                    {
+                        if (qry.First().state != "deleted")
+                        {
+                            //nahodit projekt jako deleted
+                            var strRet = DeleteOneProject(onejob.ApiKey, strProjectId).Result.info;
+                            ret.Add("DELETE: " + recP41.p41Code + "/" + recP41.FullName + ": " + strRet);
+                        }
+                            
+                    }
+                    else
+                    {
+                        if (qry.First().name != strProjectName)
+                        {
+                            var strRet = UpdateOneProject(onejob.ApiKey, strProjectId, recP41.p41Code, strProjectName, strState).Result.info;
+                            ret.Add("UPDATE: " + recP41.p41Code + "/" + recP41.FullName + ": " + strRet);
+                        }
+                        
+                    }
+                    
+                }
+                else
+                {
+                    //projekt ještě neexistuje ve fidoo db
+                    if (!recP41.isclosed)
+                    {
+                        var strRet = InsertOneProject(onejob.ApiKey, recP41.p41Code, strProjectName, strState).Result.projectId;
+                        ret.Add("INSERT: " + recP41.p41Code + "/" + recP41.FullName + ": " + strRet);
+                    }
+                }
+            }
+
+            return ret;
+        }
+        private async Task<ResponseUpdateProject> DeleteOneProject(string apikey, string strProjectId)
+        {
+            var httpclient = _httpclientfactory.CreateClient();
+
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/settings/delete-project"))
+            {
+                request.Headers.TryAddWithoutValidation("Accept", "application/json");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
+
+                var req = new DeleteOneProject();
+                req.id = strProjectId;
+                
+
+                var s = JsonSerializer.Serialize(req);
+
+                request.Content = new StringContent(s);
+
+                request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+
+                var response = await httpclient.SendAsync(request);
+
+                var strJson = await response.Content.ReadAsStringAsync();
+
+                var xx = JsonSerializer.Deserialize<ResponseUpdateProject>(strJson);
+
+                return xx;
+
+            }
+        }
+        private async Task<ResponseAddProject> InsertOneProject(string apikey, string strCode, string strName, string strState)
+        {
+            var httpclient = _httpclientfactory.CreateClient();
+
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/settings/add-project"))
+            {
+                request.Headers.TryAddWithoutValidation("Accept", "application/json");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
+
+                var req = new Project();               
+                req.code = strCode;
+                req.name = strName;
+                req.state = strState;
+
+
+                var s = JsonSerializer.Serialize(req);
+
+                request.Content = new StringContent(s);
+
+                request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+
+                var response = await httpclient.SendAsync(request);
+
+                var strJson = await response.Content.ReadAsStringAsync();
+
+                var xx = JsonSerializer.Deserialize<ResponseAddProject>(strJson);
+
+                return xx;
+
+            }
+        }
+        private async Task<ResponseUpdateProject> UpdateOneProject(string apikey,string strProjectId,string strCode,string strName,string strState)
+        {
+            var httpclient = _httpclientfactory.CreateClient();
+            
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/settings/update-project"))
+            {
+                request.Headers.TryAddWithoutValidation("Accept", "application/json");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
+
+                var req = new Project();
+                req.id = strProjectId;
+                req.code = strCode;
+                req.name = strName;
+                req.state = strState;
+
+                
+                var s = JsonSerializer.Serialize(req);
+
+                request.Content = new StringContent(s);
+
+                request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+
+                var response = await httpclient.SendAsync(request);
+
+                var strJson = await response.Content.ReadAsStringAsync();
+
+                var xx = JsonSerializer.Deserialize<ResponseUpdateProject>(strJson);
+
+                return xx;
+
+            }
+        }
+
         public List<Project> ListProjekty(string apikey, string projectId = null)
         {
             bool bolCompleted = false;
@@ -253,8 +420,7 @@ namespace XA.Controllers
 
             while (!bolCompleted)
             {
-                var c = LoadProjekty(apikey, intOffset, projectId);
-                //ret.InsertRange(0, c.Result.projects.Where(p => p.state == "active"));
+                var c = LoadProjekty(apikey, intOffset, projectId);                
                 ret.InsertRange(0, c.Result.projects);
 
                 bolCompleted = c.Result.complete;

@@ -178,7 +178,7 @@
     <text>
 
 
-        $("#numRec_Amount_WithoutVat_Orig").on("input", function () {
+        $("#numRec_Amount_WithoutVat_Orig").on("input", function () {   //změna částky bez dph
             var bezdph = _string2number($(this).val());
             var dphsazba = _string2number($("#Rec_VatRate_Orig").val());
             var vcdph = _roundnum(bezdph + (bezdph * dphsazba / 100), 2);
@@ -192,7 +192,7 @@
 
 
 
-        $("#numRec_Amount_WithVat_Orig").on("input", function () {
+        $("#numRec_Amount_WithVat_Orig").on("input", function () {  //změna částky vč. dph
             var vcdph = _string2number($(this).val());
             var dphsazba = _string2number($("#Rec_VatRate_Orig").val());
             var bezdph = _roundnum(vcdph / (1 + dphsazba / 100), 2);
@@ -203,7 +203,7 @@
         });
 
 
-        $("#numRec_VatRate_Orig").on("input", function () {
+        $("#numRec_VatRate_Orig").on("input", function () {     //změna dph sazby
             var dphsazba = _string2number($(this).val());
             var bezdph = _string2number($("#Rec_Amount_WithoutVat_Orig").val());
             var vcdph = 0;
