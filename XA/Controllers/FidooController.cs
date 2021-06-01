@@ -252,7 +252,11 @@ namespace XA.Controllers
         }
 
 
-        
+        public List<string> SynchroProjektyManual(string apikey,string login)
+        {
+            var onejob = new FidooJob() { ApiKey = apikey, RobotUser = login };
+            return SynchroProjekty(onejob);
+        }
 
         public List<string> SynchroProjekty(FidooJob onejob)
         {

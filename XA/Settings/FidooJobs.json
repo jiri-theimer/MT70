@@ -2,7 +2,7 @@
   "jobs": [
     {
       "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
-      "LastRun": "2021-05-31T18:49:42.5048356+02:00",
+      "LastRun": "2021-06-01T08:36:49.6933744+02:00",
       "RepeatMinuteInterval": 5,
       "ExpenseImportClassState": "approved",
       "ExpenseImportClosedOnly": true,
