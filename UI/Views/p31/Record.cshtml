@@ -38,7 +38,7 @@
     <label class="col-sm-1 col-md-1 col-form-label recpagelabel">@(_f.CurrentUser.getP07Level(Model.SelectedLevelIndex,true)):</label>
 
     <div class="col-sm-11 col-md-11">
-        <mycombo entity="@(Model.ProjectEntity)" asp-for="Rec.p41ID" selectedtext="@Model.SelectedComboProject" view-flag="1" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)"></mycombo>
+        <mycombo entity="@(Model.ProjectEntity)" asp-for="Rec.p41ID" selectedtext="@Model.SelectedComboProject" view-flag="1" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)" event_after_changevalue="p41id_change"></mycombo>
     </div>
 </div>
 <div class="row my-2">
@@ -49,7 +49,17 @@
     <div class="col-sm-9 col-md-8">
         @if (Model.RecP34 != null)
         {
-            <mycombo entity="p32Activity" asp-for="Rec.p32ID" selectedtext="@Model.SelectedComboP32Name" myqueryinline="p34id|int|@(Model.RecP34.pid)" placeholder="@_f.tra("Aktivita")"></mycombo>
+            @if (Model.RecP34.p34ActivityEntryFlag == BO.p34ActivityEntryFlagENUM.AktivitaSeNezadava)
+            {
+                <input type="hidden" asp-for="Rec.p32ID" />
+                <i>@(Model.SelectedComboP32Name)</i>
+                
+            }
+            else
+            {
+                <mycombo entity="p32Activity" asp-for="Rec.p32ID" selectedtext="@Model.SelectedComboP32Name" myqueryinline="p34id|int|@(Model.RecP34.pid)" placeholder="@_f.tra("Aktivita")" event_after_changevalue="p32id_change"></mycombo>
+            }
+
         }
         else
         {
@@ -141,29 +151,83 @@
     <label for="Rec_p31Text">@_f.tra("Podrobný popis úkonu")</label>
 </div>
 
+@Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
 
-@if (Model.RecP34 != null && (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu))
+@if (Model.RecP34 != null)
 {
-    <div class="row my-2">
-        <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@_f.tra("Spočítat jako kusy x počet"):</label>
-        <div class="col-sm-1 col-md-1">
-            <mynumber asp-for="Rec.p31Calc_Pieces" placeholder="@_f.tra("Počet")"></mynumber>
-        </div>
-        <div class="col-sm-1 col-md-1 p-0">
-            <mynumber asp-for="Rec.p31Calc_PieceAmount" placeholder="@_f.tra("Cena 1 kus")"></mynumber>
-        </div>
-        <div class="col-sm-1 col-md-1 p-0">
-            <mycombo entity="p35Unit" asp-for="Rec.p35ID" selectedtext="@Model.SelectedComboP35Code" placeholder="@_f.tra("Jednotka")"></mycombo>
+    @if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+    {
+        <div class="row my-2">
+            <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@_f.tra("Spočítat jako kusy x počet"):</label>
+            <div class="col-sm-1 col-md-1">
+                <mynumber asp-for="Rec.p31Calc_Pieces" placeholder="@_f.tra("Počet")"></mynumber>
+            </div>
+            <div class="col-sm-1 col-md-1 p-0">
+                <mynumber asp-for="Rec.p31Calc_PieceAmount" placeholder="@_f.tra("Cena 1 kus")"></mynumber>
+            </div>
+            <div class="col-sm-1 col-md-1 p-0">
+                <mycombo entity="p35Unit" asp-for="Rec.p35ID" selectedtext="@Model.SelectedComboP35Code" placeholder="@_f.tra("Jednotka")"></mycombo>
 
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <select class="form-select" asp-for="@Model.PiecePriceFlag">
+                    <option value="1">@_f.tra("Kusová cena bez DPH")</option>
+                    <option value="2">@_f.tra("Kusová cena vč. DPH")</option>
+                </select>
+            </div>
         </div>
-        <div class="col-sm-2 col-md-2">
-            <select class="form-select" asp-for="@Model.PiecePriceFlag">
-                <option value="1">@_f.tra("Kusová cena bez DPH")</option>
-                <option value="2">@_f.tra("Kusová cena vč. DPH")</option>
-            </select>
+    }
+
+    @if (Model.RecP32 != null && Model.RecP32.p32IsSupplier)
+    {
+        <div class="row my-2">
+            <label class="col-sm-2 col-md-2 col-form-label">@(_f.tra("Dodavatel")):</label>
+            <div class="col-sm-10 col-md-10">
+                <mycombo entity="p28Contact" asp-for="Rec.p28ID_Supplier" selectedtext="@Model.SelectedComboSupplier" view-flag="1" myqueryinline="canbe_supplier|bool|1"></mycombo>
+            </div>
         </div>
-    </div>
+    }
+    @if (Model.RecP32 != null && Model.RecP32.p32IsCP)
+    {
+        <hr />
+        <div class="form-floating my-2">
+            <textarea class="form-control" asp-for="Rec.p31PostRecipient"></textarea>
+            <label for="Rec_p31Text">@_f.tra("Adresát zásilky (Česká pošta)")</label>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-2 col-md-2 col-form-label">@(_f.tra("Podací číslo zásilky")):</label>
+            <div class="col-sm-10 col-md-10">
+                <input type="text" class="form-control" asp-for="@Model.Rec.p31PostCode" />
+            </div>
+        </div>
+        <div class="row my-2">
+            <label class="col-sm-2 col-md-2 col-form-label">@(_f.tra("Typ psaní")):</label>
+            <div class="col-sm-10 col-md-10">
+                <select asp-for="@Model.Rec.p31PostFlag" class="form-select">
+                    <option value="0"></option>
+                    <option value="1">@_f.tra("Doporučené psaní")</option>
+                    <option value="2">@_f.tra("Doporučený balík")</option>
+                </select>
+            </div>
+        </div>
+    }
+
+    @if (Model.RecP32 != null && (Model.RecP32.p32MarginHidden != 0 || Model.RecP32.p32MarginTransparent != 0))
+    {
+        <hr />
+        <div class="row my-2">
+            <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@_f.tra("Skrytá marže") (%):</label>
+            <div class="col-sm-1 col-md-1">
+                <mynumber asp-for="Rec.p31MarginHidden"></mynumber>
+            </div>
+            <label class="col-sm-2 col-md-2 col-form-label recpagelabel">@_f.tra("Přiznaná marže") (%):</label>
+            <div class="col-sm-1 col-md-1">
+                <mynumber asp-for="Rec.p31MarginTransparent"></mynumber>
+            </div>
+        </div>
+    }
 }
+
 
 
 
@@ -176,7 +240,14 @@
     {
         @:_p33id = "@((int) Model.RecP34.p33ID)";
     }
+
+
     $(document).ready(function () {
+
+        @if(Model.rec_pid==0 && Model.RecP32 !=null && Model.RecP32.p32DefaultWorksheetText != null)
+            {
+            @:$("#Rec_p31Text").text("@(Model.RecP32.p32DefaultWorksheetText)");
+            }
 
 
     @if(Model.RecP34 !=null && (Model.RecP34.p33ID==BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu))
@@ -233,6 +304,9 @@
 
 
 
+        $("#Rec_p31Text").on("paste", function (e) {            
+            handle_clipboard_textarea(document.getElementById("Rec_p31Text"), e);
+        });
     });
 
     function postback(oper) {
@@ -255,12 +329,19 @@
         postback("j02id");
     }
     function p34id_change(p34id) {
+        $("#Rec_p32ID").val("0");
         postback("p34id");
+    }
+    function p32id_change(p32id) {
+        postback("p32id");
+    }
+    function p41id_change(p41id) {
+        postback("p41id");
     }
 
 
     function handle_recalc_after_bezdph() {
-        if (_p33id == "1" || _p33id == "3") return;
+        if (_p33id != "5") return;
 
         bezdph = _string2number($("#numRec_Amount_WithoutVat_Orig").val());
         var dphsazba = _string2number($("#numRec_VatRate_Orig").val());
@@ -272,7 +353,7 @@
         $("#numRec_Amount_Vat_Orig").val(dphcastka);
     }
     function handle_recalc_after_vcdph() {
-        if (_p33id == "1" || _p33id == "3") return;
+        if (_p33id != "5") return;
 
         var vcdph = _string2number($("#numRec_Amount_WithVat_Orig").val());
         var dphsazba = _string2number($("#numRec_VatRate_Orig").val());
@@ -293,7 +374,7 @@
             $("#numRec_Amount_WithoutVat_Orig").val(celkem);
             handle_recalc_after_bezdph();
         }
-        if ($("#PiecePriceFlag").val() == "2" && (_p33id=="2" || _p33id=="5")) {
+        if ($("#PiecePriceFlag").val() == "2" && _p33id=="5") {
             //kusová cena vč DPH
             $("#numRec_Amount_WithVat_Orig").val(celkem);
             handle_recalc_after_vcdph();

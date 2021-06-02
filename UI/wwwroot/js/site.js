@@ -763,3 +763,27 @@ function _load_ajax_data(strHandlerUrl, params,callback, is_async, data_type) {
     }
 
 }
+
+
+
+function handle_clipboard_textarea(ctl, e) { //očištění html znaků z clipboard schránky u textarea kontrolů    
+
+    var s_source = "";
+    if (window.clipboardData && window.clipboardData.getData) { // IE        
+        s_source = window.clipboardData.getData("Text");
+    }
+    else if (e.originalEvent.clipboardData && e.originalEvent.clipboardData.getData) { // other browsers
+        s_source = e.originalEvent.clipboardData.getData("text/plain");
+    }
+
+    var s_dest = $("<div>").html(s_source).text();
+
+    if (s_source.length - s_dest.length > 3) {
+        e.preventDefault();    // cancel paste   
+        _notify_message("Text vložený ze schránky byl očištěn o několik nepovolených HTML znaků, které by MARKTIME odmítl uložit.", "info");
+    } else {
+        return; //nechat fungovat standardní paste funkcionalitu
+    }
+
+    $(ctl).val($(ctl).val() + s_dest);
+}

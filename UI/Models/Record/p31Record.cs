@@ -12,6 +12,7 @@ namespace UI.Models.Record
         
         public BO.p41Project RecP41 { get; set; }
         public BO.p34ActivityGroup RecP34 { get; set; }
+        public BO.p32Activity RecP32 { get; set; }
 
         public FreeFieldsViewModel ff1 { get; set; }
         
@@ -28,6 +29,7 @@ namespace UI.Models.Record
         public string SelectedComboJ27Code { get; set; }
         public string SelectedComboJ19Name { get; set; }
         public string SelectedComboP35Code { get; set; }
+        public string SelectedComboSupplier { get; set; }
 
         public int PiecePriceFlag { get; set; }
     }

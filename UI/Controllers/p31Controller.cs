@@ -38,6 +38,7 @@ namespace UI.Controllers
                 v.SelectedComboProject = recP31.Project;
                 v.SelectedComboTask = recP31.p56Name;
                 v.SelectedComboJ27Code = recP31.j27Code_Billing_Orig;
+                v.SelectedComboSupplier = recP31.SupplierName;
 
                 v.SetTagging(Factory.o51TagBL.GetTagging("p31", v.rec_pid));
 
@@ -64,6 +65,7 @@ namespace UI.Controllers
             v.p31Date = DateTime.Today;v.SelectedLevelIndex = 5;
             if (v.rec_pid == 0)
             {
+                //vykázat nový úkon
                 if (v.Rec.j02ID == 0)
                 {
                     v.Rec.j02ID = Factory.CurrentUser.j02ID;
@@ -84,6 +86,12 @@ namespace UI.Controllers
                         v.Rec.p41ID = recLast.p41ID;v.Rec.p34ID = recLast.p34ID;v.SelectedComboP34Name = recLast.p34Name;
                         v.Rec.j27ID_Billing_Orig = recLast.j27ID_Billing_Orig;v.SelectedComboJ27Code = recLast.j27Code_Billing_Orig;
                     }
+                }
+                if (v.Rec.p32ID > 0)
+                {
+                    v.RecP32 = Factory.p32ActivityBL.Load(v.Rec.p32ID);
+                    v.Rec.p31MarginHidden = v.RecP32.p32MarginHidden;
+                    v.Rec.p31MarginTransparent = v.RecP32.p32MarginTransparent;
                 }
                 
             }
@@ -129,20 +137,43 @@ namespace UI.Controllers
                     v.SelectedComboProject = v.RecP41.FullName;
                 }
             }
-            if (v.Rec.p34ID > 0)
+            if (v.Rec.p34ID > 0 && v.RecP34==null)
             {                
-                v.RecP34 = Factory.p34ActivityGroupBL.Load(v.Rec.p34ID);
+                v.RecP34 = Factory.p34ActivityGroupBL.Load(v.Rec.p34ID);                
+            }
+            if (v.RecP34 != null)
+            {
                 if (string.IsNullOrEmpty(v.SelectedComboP34Name))
                 {
                     v.SelectedComboP34Name = v.RecP34.p34Name;
-                }                
-                if ((v.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || v.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu) && v.PiecePriceFlag==0)
+                }
+                if ((v.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || v.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu) && v.PiecePriceFlag == 0)
                 {
                     v.PiecePriceFlag = Factory.CBL.LoadUserParamInt("p31/record-PiecePriceFlag", 1);
-                    
+
+                }
+                if (v.RecP34.p34ActivityEntryFlag == BO.p34ActivityEntryFlagENUM.AktivitaSeNezadava && v.Rec.p32ID==0)
+                {
+                    //výchozí aktivita (skrytá uživateli)
+                    var lisP32 = Factory.p32ActivityBL.GetList(new BO.myQueryP32() { p34id = v.RecP34.pid }).Where(p=>p.p32IsSystemDefault);
+                    if (lisP32.Count() > 0)
+                    {
+                        v.RecP32 = lisP32.First();
+                        v.Rec.p32ID = v.RecP32.pid;
+                        v.SelectedComboP32Name = v.RecP32.p32Name;
+                        
+                    }
                 }
             }
-            
+            if (v.Rec.p32ID > 0 && v.RecP32==null)
+            {
+                v.RecP32 = Factory.p32ActivityBL.Load(v.Rec.p32ID);                
+            }
+            if (v.RecP32 !=null && string.IsNullOrEmpty(v.SelectedComboP32Name))
+            {
+                v.SelectedComboP32Name = v.RecP32.p32Name;
+            }
+
 
             if (v.ff1 == null)
             {
@@ -150,7 +181,7 @@ namespace UI.Controllers
                 v.ff1.InhaleFreeFieldsView(Factory, v.rec_pid, "p31");
             }
             v.ff1.RefreshInputsVisibility(Factory, v.rec_pid, "p31", v.Rec.p34ID);
-
+            v.ff1.caller = "p31record";
 
         }
 
@@ -159,16 +190,31 @@ namespace UI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Record(p31Record v, string oper)
         {
+            switch (oper)
+            {
+                case "p34id":
+                    v.Rec.p32ID = 0; v.RecP32 = null; v.SelectedComboP32Name = null;    //musí být před RefreshState(v)
+                    break;
+                case "levelindex":
+                    v.Rec.p41ID = 0; v.SelectedComboProject = null;
+                    break;
+            }
+
+
             RefreshState(v);
            
             switch (oper)
             {
-                case "p34id":
-                    v.Rec.p32ID = 0; v.SelectedComboP32Name = null;                    
+                case "p41id":
+                    break;                
+                case "p32id":
+                    if (v.rec_pid==0 && v.RecP32 != null)
+                    {
+                        v.Rec.p31MarginHidden = v.RecP32.p32MarginHidden;
+                        v.Rec.p31MarginTransparent = v.RecP32.p32MarginTransparent;
+                    }
                     break;
-                case "levelindex":
-                    v.Rec.p41ID = 0;v.SelectedComboProject = null;
-                    break;
+                
             }
             if (!string.IsNullOrEmpty(oper))
             {

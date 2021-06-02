@@ -482,7 +482,17 @@ namespace BL
             c.VatRate_Orig = rec.p31VatRate_Orig;
             c.Value_OffBilling = rec.p31Value_Off;
             c.ValidUntil = rec.ValidUntil;c.ValidFrom = rec.ValidFrom;
+
+            if (rec.p33ID==BO.p33IdENUM.PenizeBezDPH || rec.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+            {
+                c.p31MarginHidden = rec.p31MarginHidden; c.p31MarginTransparent = rec.p31MarginTransparent;
+                c.p28ID_Supplier = rec.p28ID_Supplier;
+                c.p31PostCode = rec.p31PostCode;
+                c.p31PostRecipient = rec.p31PostRecipient;
+                c.p31PostFlag = rec.p31PostFlag;
+            }
             
+
             return c;
 
         }

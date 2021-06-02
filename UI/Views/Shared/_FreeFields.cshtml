@@ -5,6 +5,11 @@
     {
         return;
     }
+    string _labelclassname = "col-sm-2 col-md-3 col-form-label recpagelabel";
+    if (Model.caller == "p31record")
+    {
+        _labelclassname = "col-sm-2 col-md-2 col-form-label recpagelabel";
+    }
 
 }
 
@@ -14,7 +19,7 @@
 {
     <div class="row my-2" style="@Model.inputs[i].CssDisplay">
 
-        <label class="col-sm-2 col-md-3 col-form-label">
+        <label class="@(_labelclassname)">
 
             @if (Model.inputs[i].TypeName != "boolean")
             {
