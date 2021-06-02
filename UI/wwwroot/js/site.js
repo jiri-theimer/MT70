@@ -262,7 +262,7 @@ function _update_user_ping() {
         j92RequestURL: location.href.replace(location.host, "").replace(location.protocol, "").replace("///", "")
     }
 
-    load_ajax_async("/Home/UpdateCurrentUserPing", { c: log });
+    _load_ajax_async("/Home/UpdateCurrentUserPing", { c: log });
     
 
 }
@@ -717,12 +717,12 @@ function _showloading() {
 }
 
 
-function load_ajax_async(strHandlerUrl, params, callback) {
-    load_ajax_data(strHandlerUrl, params, callback, true, "json");
+function _load_ajax_async(strHandlerUrl, params, callback) {
+    _load_ajax_data(strHandlerUrl, params, callback, true, "json");
 }
 
 ///vrací ajax výsledek
-function load_ajax_data(strHandlerUrl, params,callback, is_async, data_type) {
+function _load_ajax_data(strHandlerUrl, params,callback, is_async, data_type) {
     var is_success = false;
     var ret = null;
     var is_done = false;

@@ -29,6 +29,6 @@ namespace UI.Models.Record
         public string SelectedComboJ19Name { get; set; }
         public string SelectedComboP35Code { get; set; }
 
-        public int PiecePriceFlag { get; set; } = 1;
+        public int PiecePriceFlag { get; set; }
     }
 }

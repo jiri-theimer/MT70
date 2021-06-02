@@ -130,13 +130,19 @@ namespace UI.Controllers
                 }
             }
             if (v.Rec.p34ID > 0)
-            {
+            {                
                 v.RecP34 = Factory.p34ActivityGroupBL.Load(v.Rec.p34ID);
                 if (string.IsNullOrEmpty(v.SelectedComboP34Name))
                 {
                     v.SelectedComboP34Name = v.RecP34.p34Name;
+                }                
+                if ((v.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || v.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu) && v.PiecePriceFlag==0)
+                {
+                    v.PiecePriceFlag = Factory.CBL.LoadUserParamInt("p31/record-PiecePriceFlag", 1);
+                    
                 }
             }
+            
 
             if (v.ff1 == null)
             {
@@ -158,7 +164,7 @@ namespace UI.Controllers
             switch (oper)
             {
                 case "p34id":
-                    v.Rec.p32ID = 0; v.SelectedComboP32Name = null;
+                    v.Rec.p32ID = 0; v.SelectedComboP32Name = null;                    
                     break;
                 case "levelindex":
                     v.Rec.p41ID = 0;v.SelectedComboProject = null;

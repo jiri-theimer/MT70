@@ -209,7 +209,7 @@
         } else {
             _currentloadingtabs = true;
             $("#tabtab1").html("-----");
-            load_ajax_async("/TheGrid/getTabs", { prefix: _pageprefix, pid: pid }, callback_render_tabs);
+            _load_ajax_async("/TheGrid/getTabs", { prefix: _pageprefix, pid: pid }, callback_render_tabs);
         }        
     }
 

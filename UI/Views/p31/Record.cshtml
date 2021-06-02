@@ -25,7 +25,7 @@
     @if (Model.lisLevelIndex.Count > 1)
     {
 
-        <div class="col-sm-2 col-md-3">
+        <div class="col-sm-2 col-md-3" title="@_f.tra("Vertikální úroveň projektu")">
             <mydropdown asp-for="@Model.SelectedLevelIndex" datasource="@Model.lisLevelIndex" textfield="Text" valuefield="Value" event_after_changevalue="levelindex_change"></mydropdown>
 
         </div>
@@ -171,56 +171,60 @@
 
 
 <script type="text/javascript">
+    var _p33id = "";
+    @if(Model.RecP34 != null)
+    {
+        @:_p33id = "@((int) Model.RecP34.p33ID)";
+    }
     $(document).ready(function () {
 
-    @if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+
+    @if(Model.RecP34 !=null && (Model.RecP34.p33ID==BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu))
+    {
+        <text>
+
+        $("#numRec_p31Calc_Pieces").on("input", function () {  //změna počtu kusů
+            handle_recalc_after_pieces();
+        });
+        $("#numRec_p31Calc_PieceAmount").on("input", function () {  //změna počtu kusů
+            handle_recalc_after_pieces();
+        });
+        $("#PiecePriceFlag").on("change", function () {
+            var pocet = _string2number($("#numRec_p31Calc_Pieces").val());
+            var cenaks = _string2number($("#numRec_p31Calc_PieceAmount").val());
+            if (pocet * cenaks != 0) {
+                handle_recalc_after_pieces();
+            }
+
+            _load_ajax_async("/Common/SetUserParam", { key: "p31/record-PiecePriceFlag", value: $(this).val() });
+        })
+
+        </text>
+    }
+
+    @if (Model.RecP34 !=null && Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
     {
     <text>
 
 
         $("#numRec_Amount_WithoutVat_Orig").on("input", function () {   //změna částky bez dph
-            var bezdph = _string2number($(this).val());
-            var dphsazba = _string2number($("#Rec_VatRate_Orig").val());
-            var vcdph = _roundnum(bezdph + (bezdph * dphsazba / 100), 2);
-
-            var dphcastka = _roundnum(vcdph - bezdph, 2);
-
-            $("#numRec_Amount_WithVat_Orig").val(vcdph);
-            $("#numRec_Amount_Vat_Orig").val(dphcastka);
-
+            handle_recalc_after_bezdph();
         });
 
 
 
         $("#numRec_Amount_WithVat_Orig").on("input", function () {  //změna částky vč. dph
-            var vcdph = _string2number($(this).val());
-            var dphsazba = _string2number($("#Rec_VatRate_Orig").val());
-            var bezdph = _roundnum(vcdph / (1 + dphsazba / 100), 2);
-
-            var dphcastka = _roundnum((vcdph - bezdph), 2);
-            $("#numRec_Amount_WithoutVat_Orig").val(bezdph);
-            $("#numRec_Amount_Vat_Orig").val(dphcastka);
+            handle_recalc_after_vcdph();
         });
 
 
         $("#numRec_VatRate_Orig").on("input", function () {     //změna dph sazby
-            var dphsazba = _string2number($(this).val());
             var bezdph = _string2number($("#Rec_Amount_WithoutVat_Orig").val());
-            var vcdph = 0;
             if (bezdph != 0) {
-                var vcdph = _roundnum(bezdph + (bezdph * dphsazba / 100), 2);
-                var dphcastka = _roundnum(vcdph - bezdph, 2);
-                $("#numRec_Amount_WithVat_Orig").val(vcdph);
-                $("#numRec_Amount_Vat_Orig").val(dphcastka);
+                handle_recalc_after_bezdph();
                 return;
             }
-
-            vcdph = _string2number($("#numRec_Amount_WithVat_Orig").val());
-            bezdph = _roundnum(vcdph / (1 + dphsazba / 100), 2);
-            var dphcastka = _roundnum((vcdph - bezdph), 2);
-
-            $("#numRec_Amount_WithoutVat_Orig").val(vcdph);
-            $("#numRec_Amount_Vat_Orig").val(dphcastka);
+            handle_recalc_after_vcdph();
 
         });
 
@@ -255,5 +259,45 @@
     }
 
 
+    function handle_recalc_after_bezdph() {
+        if (_p33id == "1" || _p33id == "3") return;
 
+        bezdph = _string2number($("#numRec_Amount_WithoutVat_Orig").val());
+        var dphsazba = _string2number($("#numRec_VatRate_Orig").val());
+        var vcdph = _roundnum(bezdph + (bezdph * dphsazba / 100), 2);
+
+        var dphcastka = _roundnum(vcdph - bezdph, 2);
+
+        $("#numRec_Amount_WithVat_Orig").val(vcdph);
+        $("#numRec_Amount_Vat_Orig").val(dphcastka);
+    }
+    function handle_recalc_after_vcdph() {
+        if (_p33id == "1" || _p33id == "3") return;
+
+        var vcdph = _string2number($("#numRec_Amount_WithVat_Orig").val());
+        var dphsazba = _string2number($("#numRec_VatRate_Orig").val());
+        var bezdph = _roundnum(vcdph / (1 + dphsazba / 100), 2);
+
+        var dphcastka = _roundnum((vcdph - bezdph), 2);
+        $("#numRec_Amount_WithoutVat_Orig").val(bezdph);
+        $("#numRec_Amount_Vat_Orig").val(dphcastka);
+    }
+
+    function handle_recalc_after_pieces() {
+        var pocet = _string2number($("#numRec_p31Calc_Pieces").val());
+        var cenaks = _string2number($("#numRec_p31Calc_PieceAmount").val());
+        var celkem = _roundnum(pocet * cenaks, 2);
+
+        if ($("#PiecePriceFlag").val() == "1") {
+            //kusová cena bez DPH
+            $("#numRec_Amount_WithoutVat_Orig").val(celkem);
+            handle_recalc_after_bezdph();
+        }
+        if ($("#PiecePriceFlag").val() == "2" && (_p33id=="2" || _p33id=="5")) {
+            //kusová cena vč DPH
+            $("#numRec_Amount_WithVat_Orig").val(celkem);
+            handle_recalc_after_vcdph();
+        }
+
+    }
 </script>
