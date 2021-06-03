@@ -72,7 +72,7 @@ namespace UI.Views.Shared.TagHelpers
 
             if (this.ShowSettingButton)
             {
-                sb("<button type='button' tabindex='-1' class='btn btn-sm btn-outline-secondary' onclick='myhours_setting()'><span class='k-icon k-i-clock'></span></button>");
+                sb("<button type='button' tabindex='-1' class='btn btn-sm btn-outline-secondary' style='padding-left:3px;padding-right:3px;' onclick='myhours_setting()'><span class='k-icon k-i-clock'></span></button>");
                 sb("</div>");
             }
             

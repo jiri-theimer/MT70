@@ -22,6 +22,8 @@
     <div class="col-sm-2 col-md-3">
         <mycombo entity="j02Person" search-result-width="800" asp-for="Rec.j02ID" selectedtext="@Model.SelectedComboPerson" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1" event_after_changevalue="j02id_change"></mycombo>
     </div>
+    <div class="col-sm-7 col-md-5"></div>
+
     @if (Model.lisLevelIndex.Count > 1)
     {
 
@@ -41,19 +43,26 @@
         <mycombo entity="@(Model.ProjectEntity)" asp-for="Rec.p41ID" selectedtext="@Model.SelectedComboProject" view-flag="1" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)" event_after_changevalue="p41id_change"></mycombo>
     </div>
 </div>
-<div class="row my-2">
-    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Sešit+Aktivita"):</label>
-    <div class="col-sm-2 col-md-3">
-        <mycombo entity="p34ActivityGroup" asp-for="Rec.p34ID" selectedtext="@Model.SelectedComboP34Name" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)" event_after_changevalue="p34id_change" placeholder="@_f.tra("Sešit")"></mycombo>
+@if (Model.ShowTaskComboFlag == 1)
+{
+    <div class="row my-2">
+        <label class="col-sm-1 col-md-1 col-form-label">@(_f.tra("Úkol")):</label>
+
+        <div class="col-sm-11 col-md-11">
+            <mycombo entity="p56Task" asp-for="Rec.p56ID" selectedtext="@Model.SelectedComboTask" myqueryinline="p41id|int|@(Model.Rec.p41ID)|j02id|int|@(Model.Rec.j02ID)"></mycombo>
+        </div>
     </div>
+}
+<div class="row my-2">
+    <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Aktivita"):</label>
     <div class="col-sm-9 col-md-8">
         @if (Model.RecP34 != null)
         {
             @if (Model.RecP34.p34ActivityEntryFlag == BO.p34ActivityEntryFlagENUM.AktivitaSeNezadava)
             {
                 <input type="hidden" asp-for="Rec.p32ID" />
-                <i>@(Model.SelectedComboP32Name)</i>
-                
+                <span class="val-readonly">@(Model.SelectedComboP32Name)</span>
+
             }
             else
             {
@@ -63,16 +72,18 @@
         }
         else
         {
-            <i>@_f.tra("Pro vyplnění aktivity je třeba vybrat sešit.")</i>
+            <span class="val-readonly">@_f.tra("Pro vyplnění aktivity je třeba vybrat sešit.")</span>
         }
 
     </div>
-
+    <div class="col-sm-2 col-md-3">
+        <mycombo entity="p34ActivityGroup" asp-for="Rec.p34ID" selectedtext="@Model.SelectedComboP34Name" myqueryinline="j02id_for_p31_entry|int|@(Model.Rec.j02ID)" event_after_changevalue="p34id_change" placeholder="@_f.tra("Sešit")"></mycombo>
+    </div>
 </div>
 
 <div class="row my-2">
     <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Datum"):</label>
-    <div class="col-sm-2 col-md-3">
+    <div class="col-sm-2 col-md-2">
         <mydate asp-for="@Model.p31Date"></mydate>
     </div>
 </div>
@@ -228,11 +239,12 @@
     }
 }
 
-
+<mystitky entity="p31Worksheet" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
 
 
 @Html.Raw("</div>")
 
+<input type="hidden" asp-for="@Model.ShowTaskComboFlag" value="@Model.ShowTaskComboFlag" />
 
 <script type="text/javascript">
     var _p33id = "";
@@ -304,7 +316,7 @@
 
 
 
-        $("#Rec_p31Text").on("paste", function (e) {            
+        $("#Rec_p31Text").on("paste", function (e) {
             handle_clipboard_textarea(document.getElementById("Rec_p31Text"), e);
         });
     });

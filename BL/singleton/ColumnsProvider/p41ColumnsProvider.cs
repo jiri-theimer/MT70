@@ -16,7 +16,7 @@ namespace BL
             oc = AF("p41Name", "Název projektu"); oc.NotShowRelInHeader = true; oc.DefaultColumnFlag = gdc1;
             oc = AF("PrefferedName", "Projekt+", "isnull(a.p41NameShort,a.p41Name)"); oc.NotShowRelInHeader = true;            
             AF("p41NameShort", "Zkrácený název");
-            oc = AF("p41Code", "Kód projektu"); oc.FixedWidth = 100;
+            oc = AF("p41Code", "Kód projektu"); oc.FixedWidth = 100;oc.DefaultColumnFlag = gdc1;
             AF("ProjectPid", "PID", "a.p41ID", "int");
             AF("p41PlanFrom", "Plánované zahájení", "a.p41PlanFrom","datetime");
             AF("p41PlanUntil", "Plánované dokončení", "a.p41PlanUntil","datetime");

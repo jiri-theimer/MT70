@@ -399,6 +399,9 @@ namespace DL
                     case "j02":
                         s += ",a.j02IsIntraPerson";
                             break;
+                    case "p32":
+                        s += ",a.p32IsBillable";
+                        break;
                 }
             }
 

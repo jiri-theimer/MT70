@@ -9,7 +9,7 @@ namespace BL
     public interface Ip56TaskBL
     {
         public BO.p56Task Load(int pid);
-        public IEnumerable<BO.p56Task> GetList(BO.myQuery mq);
+        public IEnumerable<BO.p56Task> GetList(BO.myQueryP56 mq);
         public int Save(BO.p56Task rec);
         public BO.p56TaskSum LoadSumRow(int pid);
         public BO.p56RecDisposition InhaleRecDisposition(BO.p56Task rec);
@@ -43,7 +43,7 @@ namespace BL
             return _db.Load<BO.p56Task>(GetSQL1(" WHERE a.p56ID=@pid"), new { pid = pid });
         }
 
-        public IEnumerable<BO.p56Task> GetList(BO.myQuery mq)
+        public IEnumerable<BO.p56Task> GetList(BO.myQueryP56 mq)
         {
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p56Task>(fq.FinalSql, fq.Parameters);

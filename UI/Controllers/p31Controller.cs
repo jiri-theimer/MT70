@@ -22,7 +22,7 @@ namespace UI.Controllers
             return View(v);
         }
 
-        public IActionResult Record(int pid, bool isclone,int p41id, int j02id, int p34id)
+        public IActionResult Record(int pid, bool isclone,int p41id, int j02id, int p34id,int p56id)
         {
             var v = new p31Record() { rec_pid = pid, rec_entity = "p31"};
             v.Rec = new BO.p31WorksheetEntryInput() {pid=pid, p41ID = p41id, p34ID = p34id, j02ID = j02id };
@@ -136,6 +136,18 @@ namespace UI.Controllers
                 {
                     v.SelectedComboProject = v.RecP41.FullName;
                 }
+                if (v.ShowTaskComboFlag == 0)
+                {
+                    var lisP56 = Factory.p56TaskBL.GetList(new BO.myQueryP56() { p41id = v.Rec.p41ID,j02id=v.Rec.j02ID });
+                    if (lisP56.Count() > 0)
+                    {
+                        v.ShowTaskComboFlag = 1;    //zobrazovat nabídku úkolů k projektu
+                    }
+                    else
+                    {
+                        v.ShowTaskComboFlag = 2;    //nezobrazovat nabídku úkolů k projektu
+                    }
+                }
             }
             if (v.Rec.p34ID > 0 && v.RecP34==null)
             {                
@@ -196,7 +208,10 @@ namespace UI.Controllers
                     v.Rec.p32ID = 0; v.RecP32 = null; v.SelectedComboP32Name = null;    //musí být před RefreshState(v)
                     break;
                 case "levelindex":
-                    v.Rec.p41ID = 0; v.SelectedComboProject = null;
+                    v.Rec.p41ID = 0; v.SelectedComboProject = null; v.ShowTaskComboFlag = 0; v.Rec.p56ID = 0; v.SelectedComboTask = null;
+                    break;
+                case "p41id":
+                    v.ShowTaskComboFlag = 0;v.Rec.p56ID = 0;v.SelectedComboTask = null;
                     break;
             }
 
@@ -205,8 +220,7 @@ namespace UI.Controllers
            
             switch (oper)
             {
-                case "p41id":
-                    break;                
+                     
                 case "p32id":
                     if (v.rec_pid==0 && v.RecP32 != null)
                     {

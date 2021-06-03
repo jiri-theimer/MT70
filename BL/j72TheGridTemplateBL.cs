@@ -17,7 +17,7 @@ namespace BL
         public IEnumerable<BO.j73TheGridQuery> GetList_j73(int j72id,string prefix);
         public string getFiltrAlias(string prefix, BO.baseQuery mq);
         public string getDefaultPalletePreSaved(string entity, string master_entity, BO.baseQuery mq);  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
-
+        
     }
 
     class j72TheGridTemplateBL : BaseBL, Ij72TheGridTemplateBL
@@ -471,6 +471,8 @@ namespace BL
             return s;
 
         }
+
+        
 
 
     }

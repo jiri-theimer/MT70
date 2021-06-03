@@ -30,6 +30,7 @@ namespace UI.Models.Record
         public string SelectedComboJ19Name { get; set; }
         public string SelectedComboP35Code { get; set; }
         public string SelectedComboSupplier { get; set; }
+        public int ShowTaskComboFlag { get; set; }  //0-default, 1-ano, 2-ne
 
         public int PiecePriceFlag { get; set; }
     }

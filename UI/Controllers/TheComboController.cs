@@ -31,7 +31,6 @@ namespace UI.Controllers
             var mq = new BO.InitMyQuery().Load(entity,masterprefix,masterpid,myqueryinline);
             mq.SetPids(pids);
             
-
             var ce = Factory.EProvider.ByPrefix(mq.Prefix);
             if (ce.IsWithoutValidity == false)
             {
@@ -44,27 +43,34 @@ namespace UI.Controllers
                 mq.SearchString = searchstring; //filtrování na straně serveru
                 mq.TopRecordsOnly = 50; //maximálně prvních 50 záznamů, které vyhovují podmínce
             }
-
-            var cols = _colsProvider.getDefaultPallete(true, mq);
-            bool bolZrizovatel = false;
-            switch (mq.Prefix)
+            List<BO.TheGridColumn> cols = null;            
+            string strJ72Columns = getComboPalleteFixed(entity,mq); //vrací sloupce pro významnější entity
+            if (strJ72Columns != null)
             {
-                case "a03":
-                    if (masterprefix == "a06" && (masterpid == 2 || masterpid==3 || masterpid==4))      //combo zřizovatele nebo dohledového orgánu-> vyndat redizo sloupec
-                    {
-                        if (cols.Where(p => p.Field == "a03REDIZO").Count() > 0)
-                        {
-                            cols.Remove(cols.Where(p => p.Field == "a03REDIZO").First());
-                            bolZrizovatel = true;
-                        }
-                    }
-                    break;
-                case "a01":
-                    //mq.a01IsTemporary = false;  //vyloučit temp akce
-                    break;
-                
-
+                cols = _colsProvider.ParseTheGridColumns(mq.PrefixDb, strJ72Columns, Factory.CurrentUser.j03LangIndex);                
             }
+            else
+            {
+                cols = _colsProvider.getDefaultPallete(true, mq);   //výchozí paleta sloupců
+            }
+          
+            
+            //switch (mq.Prefix)
+            //{
+            //    case "a03":
+            //        if (masterprefix == "a06" && (masterpid == 2 || masterpid==3 || masterpid==4))      //combo zřizovatele nebo dohledového orgánu-> vyndat redizo sloupec
+            //        {
+            //            if (cols.Where(p => p.Field == "a03REDIZO").Count() > 0)
+            //            {
+            //                cols.Remove(cols.Where(p => p.Field == "a03REDIZO").First());
+            //                bolZrizovatel = true;
+            //            }
+            //        }
+            //        break;
+            //    case "a01":
+            //        //mq.a01IsTemporary = false;  //vyloučit temp akce
+            //        break;                
+            //}
             mq.explicit_columns = cols;
 
             mq.explicit_orderby = ce.SqlOrderByCombo;
@@ -118,25 +124,20 @@ namespace UI.Controllers
 
                     strTrClass += " isclosed";
                 }
+                if (mq.Prefix == "p32")
+                {
+                    if (Convert.ToBoolean(dt.Rows[i]["p32IsBillable"]))
+                    {
+                        strTrClass += " fa";
+                    }
+                    else
+                    {
+                        strTrClass += " nefa";
+                    }                    
+                }
                 s.Append(string.Format("<tr class='{0}' data-v='{1}'", strTrClass, dt.Rows[i]["pid"]));
-                if (mq.Prefix == "a03" && bolZrizovatel == false)
-                {
-                    //po výběru hodnoty z comba bude název a nikoliv pouze hodnota prvního sloupce
-                    s.Append(string.Format(" data-t='{0} - {1}'", dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "REDIZO"], dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "Name"]));
-                    //s.Append(string.Format(" data-t='{0} - {1}'", dt.Rows[i]["a__" + mq.Entity + "__" + mq.Prefix + "REDIZO"], dt.Rows[i]["a__" + mq.Entity + "__" + mq.Prefix + "Name"]));
-                }
-                if (mq.Prefix == "a18")
-                {
-                    s.Append(string.Format(" data-t='{0} - {1}'", dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "Code"], dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "Name"]));
-                }
-                if (mq.Prefix == "a37")
-                {
-                    s.Append(string.Format(" data-t='{0} - {1}'", dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "IZO"], dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "Name"]));
-                }
-                if (mq.Prefix == "j23")
-                {
-                    s.Append(string.Format(" data-t='{0} ({1})'", dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "Name"], dt.Rows[i]["a__" + ce.TableName + "__" + mq.Prefix + "Code"]));
-                }
+                
+                
 
                 s.Append(">");
                 foreach (var col in cols)
@@ -420,6 +421,79 @@ namespace UI.Controllers
             
 
             return sb.ToString();
+        }
+
+
+
+        private string getComboPalleteFixed(string entity, BO.baseQuery mq)  //vrací paletu sloupců pro COMBO: pouze pro významné entity
+        {
+            string s = null;
+            switch (mq.Prefix)
+            {
+                case "j02":
+                    s = "a__j02Person__fullname_desc,a__j02Person__j02Email,j02_j07__j07PersonPosition__j07Name";
+                    break;
+                case "p31":
+                    s = "a__p31Worksheet__p31Date,p31_j02__j02Person__fullname_desc,p31_p41_p28__p28Contact__p28Name,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,a__p31Worksheet__p31Hours_Orig,a__p31Worksheet__p31Rate_Billing_Orig,a__p31Worksheet__p31Amount_WithoutVat_Orig,a__p31Worksheet__p31Text";
+                    break;
+                case "p28":
+                    s = "a__p28Contact__p28Name,a__p28Contact__p28RegID,p28_address_primary__view_PrimaryAddress__FullAddress";
+                    break;
+                case "le1":
+                case "le2":
+                case "le3":
+                case "le4":
+                case "le5":                
+                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name,a__p41Project__AllFreeTags_p41";
+                    break;
+                case "p41":
+                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name,a__p41Project__AllFreeTags_p41";
+                    break;
+                case "p56":
+                    s = "p56_b02__b02WorkflowStatus__b02Name,a__p56Task__p56Name,p56_p28__p28Contact__p28Name,p56_p41__p41Project__p41Name,a__p56Task__p56PlanUntil";
+                    break;
+                case "p90":
+                    s = "a__p90Proforma__p90Code,a__p90Proforma__p90Date,p90_p28__p28Contact__p28Name,a__p90Proforma__p90Amount,p90_j27__j27Currency__j27Code,a__p90Proforma__p90Amount_Billed,a__p90Proforma__p90DateMaturity,a__p90Proforma__p91codes,a__p90Proforma__ChybiSparovat,a__p90Proforma__p90Text1";
+                    break;
+                case "p91":
+                    s = "a__p91Invoice__p91Code,a__p91Invoice__p91Client,a__p91Invoice__p91DateSupply,a__p91Invoice__p91Amount_WithoutVat,p91_j27__j27Currency__j27Code,a__p91Invoice__p91Amount_Debt,a__p91Invoice__p91DateMaturity,a__p91Invoice__VomKdyOdeslano";
+                    break;
+                case "o23":
+                    s = "a__o23Doc__o23Name,a__o23Doc__DocType,o23_p28__p28Contact__p28Name,o23_p41__p41Project__p41Name,a__o23Doc__AllFreeTags_o23,a__o23Doc__DateInsert_o23Doc,a__o23Doc__UserInsert_o23Doc";
+                    break;
+                case "b07":
+                    s = "a__b07Comment__b07Date,a__b07Comment__b07Value,b07_p28__p28Contact__p28Name,b07_p41__p41Project__p41Name,a__b07Comment__b07LinkUrl,a__b07Comment__DateInsert_b07Comment,a__b07Comment__UserInsert_b07Comment";
+                    break;
+                default:
+                    return null;
+            }
+
+            if (s == null)
+            {
+                return s;
+            }
+
+
+            List<string> lis = new List<string>();
+            var arr = s.Split(",");
+            for (int i = 0; i < arr.Count(); i++)   //pokud v definici sloupce chybí určení entity, pak doplnit:
+            {
+                if (arr[i].Contains("__"))
+                {
+                    lis.Add(arr[i]);
+                }
+                else
+                {
+                    lis.Add("a__" + entity + "__" + arr[i]);
+                }
+            }
+
+
+
+            s = string.Join(",", lis);
+
+            return s;
+
         }
 
     }
