@@ -46,8 +46,16 @@ namespace UI.Controllers
             List<BO.TheGridColumn> cols = null;            
             string strJ72Columns = getComboPalleteFixed(entity,mq); //vrací sloupce pro významnější entity
             if (strJ72Columns != null)
-            {
-                cols = _colsProvider.ParseTheGridColumns(mq.PrefixDb, strJ72Columns, Factory.CurrentUser.j03LangIndex);                
+            {                
+                if (strJ72Columns.Contains("Free"))
+                {   //volná pole a štítky
+                    var lisFF = new BL.ffColumnsProvider(Factory,mq.PrefixDb);
+                    cols = _colsProvider.ParseTheGridColumns(mq.PrefixDb, strJ72Columns, Factory.CurrentUser.j03LangIndex, lisFF.getColumns());
+                }
+                else
+                {
+                    cols = _colsProvider.ParseTheGridColumns(mq.PrefixDb, strJ72Columns, Factory.CurrentUser.j03LangIndex);
+                }
             }
             else
             {
@@ -444,7 +452,7 @@ namespace UI.Controllers
                 case "le3":
                 case "le4":
                 case "le5":                
-                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name,a__p41Project__AllFreeTags_p41";
+                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,a__p41Project__p41Code,p41_p42__p42ProjectType__p42Name";
                     break;
                 case "p41":
                     s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name,a__p41Project__AllFreeTags_p41";

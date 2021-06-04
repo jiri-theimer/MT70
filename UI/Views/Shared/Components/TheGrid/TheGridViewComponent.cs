@@ -64,7 +64,7 @@ namespace UI.Views.Shared.Components.TheGrid
             gridState.j75CurrentPagerIndex = 0; //na úvodní zobrazení vždy začínat grid na první stránce!
 
 
-
+            
 
             var cSup = new UI.TheGridSupport(input, _f, _colsProvider);
 
@@ -88,7 +88,25 @@ namespace UI.Views.Shared.Components.TheGrid
                 ret.AdhocFilter = _colsProvider.ParseAdhocFilterFromString(gridState.j75Filter, ret.Columns);
             }
             
-
+            if (_f.CurrentUser.p07LevelsCount > 0)
+            {               
+                foreach(var c in ret.Columns)
+                {
+                    if (c.Header == "L1") c.Header = _f.CurrentUser.getP07Level(1, true);
+                    if (c.Header == "L2") c.Header = _f.CurrentUser.getP07Level(2, true);
+                    if (c.Header == "L3") c.Header = _f.CurrentUser.getP07Level(3, true);
+                    if (c.Header == "L4") c.Header = _f.CurrentUser.getP07Level(4, true);
+                    if (c.Header == "L5") c.Header = _f.CurrentUser.getP07Level(5, true);
+                }
+            }
+            else
+            {
+                foreach (var c in ret.Columns)
+                {                    
+                    if (c.Header == "L5") c.Header = _f.CurrentUser.getP07Level(5, true);
+                }
+            }
+            
 
             return View("Default", ret);
 

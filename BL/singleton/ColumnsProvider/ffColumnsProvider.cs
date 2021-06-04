@@ -32,7 +32,9 @@ namespace BL
                 }
                 
                 this.EntityName = rec.x29TableName;
+                
                 this.CurrentFieldGroup = "Uživatelská pole";
+                
                 
                 switch (rec.x24ID)
                 {
@@ -67,22 +69,41 @@ namespace BL
                     oc.SqlSyntax = "ff_relname_" + strPrefix + "." + rec.x28Field;                   
                     oc.RelSqlInCol = "LEFT OUTER JOIN " + rec.SourceTableName + " ff_relname_" + strPrefix + " ON a." + strPrefix + "ID = ff_relname_" + strPrefix + "." + strPrefix + "ID";
                 }
-               
+
                 
+
+                if (strPrefix == "p41" && f.CurrentUser.p07LevelsCount>1 && (prefix==null || prefix.Substring(0,2)=="le"))
+                {
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        if (f.CurrentUser.getP07Level(i, true) != null)
+                        {
+                            this.EntityName = "le"+i.ToString();
+                            var ocx = AF($"gridFreefield_le{i}_" + rec.pid.ToString(), oc.Header, oc.SqlSyntax, oc.FieldType, oc.IsShowTotals);
+                            ocx.SqlSyntax = ocx.SqlSyntax.Replace("_p41", $"_le{i}");
+                            ocx.RelSqlInCol = $"LEFT OUTER JOIN p41Project_FreeField ff_relname_le{i} ON a.p41ID = ff_relname_le{i}.p41ID";
+                        }
+                    }                    
+                }
+
             }
 
 
             Handle_Stitky(f);
 
+            
+
 
         }
-        private void Handle_Stitky_All(int x29id,string entity,string prefix)
+
+        
+        private void Handle_Stitky_All(int x29id,string entity,string prefix,string prefixdb)
         {            
             oc = AF($"AllFreeTags_{prefix}", "Štítky", $"{prefix}_o54.o54InlineHtml");
-            oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {prefix}_o54 ON a.{prefix}ID = {prefix}_o54.o54RecordPid AND {prefix}_o54.x29ID={x29id}";
+            oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {prefix}_o54 ON a.{prefixdb}ID = {prefix}_o54.o54RecordPid AND {prefix}_o54.x29ID={x29id}";
             oc.Entity = entity;
             oc = AF($"AllFreeTags_{prefix}text", "Štítky pouze text", $"{prefix}_o54.o54InlineText");
-            oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {prefix}_o54 ON a.{prefix}ID = {prefix}_o54.o54RecordPid AND {prefix}_o54.x29ID={x29id}";
+            oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {prefix}_o54 ON a.{prefixdb}ID = {prefix}_o54.o54RecordPid AND {prefix}_o54.x29ID={x29id}";
             oc.Entity = entity;
         }
         private void Handle_Stitky(BL.Factory f)
@@ -90,25 +111,59 @@ namespace BL
             //štítky
             this.CurrentFieldGroup = "Štítky";
 
-            Handle_Stitky_All(328, "p28Contact","p28");
-            Handle_Stitky_All(141, "p41Project", "p41");
-            Handle_Stitky_All(223, "o23Doc", "o23");
-            Handle_Stitky_All(331, "p31Worksheet", "p31");
-            Handle_Stitky_All(356, "p56Task", "p56");
-            Handle_Stitky_All(102, "j02Person", "j02");
+            Handle_Stitky_All(328, "p28Contact","p28","p28");
+            
+            Handle_Stitky_All(223, "o23Doc", "o23", "o23");
+            Handle_Stitky_All(331, "p31Worksheet", "p31", "p31");
+            Handle_Stitky_All(356, "p56Task", "p56", "p56");
+            Handle_Stitky_All(102, "j02Person", "j02", "j02");
 
+            if (f.CurrentUser.p07LevelsCount > 1)
+            {
+                for (int i = 1; i <= 5; i++)
+                {
+                    if (f.CurrentUser.getP07Level(i, true) != null)
+                    {
+                        Handle_Stitky_All(141, "le" + i.ToString(), "le" + i.ToString(), "p41");
+                    }
+
+                }
+            }
+            else
+            {
+                Handle_Stitky_All(141, "p41Project", "p41", "p41");
+            }
+            
+            
             var lisO53 = f.o53TagGroupBL.GetList(new BO.myQuery("o53")).Where(p => p.o53Field != null && p.x29IDs != null);
             foreach (var c in lisO53)
             {
                 var x29ids = BO.BAS.ConvertString2ListInt(c.x29IDs);
+                
                 foreach (int x29id in x29ids)
                 {
                     var cc = (BO.x29IdEnum)x29id;
                     this.EntityName = BO.BASX29.GetEntity(cc);
                     string strTagPrefix = this.EntityName.Substring(0, 3);
-
+                    
                     oc = AF("FreeTag"+c.o53Field, c.o53Name, strTagPrefix+"_o54."+c.o53Field);  //důležité je, aby obsahoval výraz "Free"
                     oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {strTagPrefix}_o54 ON a.{strTagPrefix}ID = {strTagPrefix}_o54.o54RecordPid AND {strTagPrefix}_o54.x29ID={x29id}";
+                    if (x29id == 141 && f.CurrentUser.p07LevelsCount>1)
+                    {
+                        for(int i = 1; i <= 5; i++)
+                        {
+                            if (f.CurrentUser.getP07Level(i, true) != null)
+                            {
+                                strTagPrefix = "le" + i.ToString();
+                                string strDbPrefix = "p41";
+                                oc = AF("FreeTag" + c.o53Field, c.o53Name, strTagPrefix + "_o54." + c.o53Field);  //důležité je, aby obsahoval výraz "Free"
+                                oc.Entity = "le" + i.ToString();
+                                oc.RelSqlInCol = $"LEFT OUTER JOIN o54TagBindingInline {strTagPrefix}_o54 ON a.{strDbPrefix}ID = {strTagPrefix}_o54.o54RecordPid AND {strTagPrefix}_o54.x29ID={x29id}";
+
+                            }
+
+                        }
+                    }
                 }
 
 

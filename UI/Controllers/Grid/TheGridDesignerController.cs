@@ -179,6 +179,7 @@ namespace UI.Controllers
             {
                 var grp = new kendoTreeItem() { id = "group__" + rel.RelName + "__" + rel.TableName, text = rel.AliasSingular, expanded = false };
 
+                
                 switch (Factory.CurrentUser.j03LangIndex)
                 {
                     case 1:
@@ -188,7 +189,16 @@ namespace UI.Controllers
                     default:
                         grp.text = rel.AliasSingular;break;
                 }
-               
+                if (Factory.CurrentUser.p07LevelsCount > 1)
+                {
+                    for(int i = 1; i <= 5; i++)
+                    {
+                        if (grp.text == "L"+i.ToString()) grp.text = Factory.CurrentUser.getP07Level(i, true);  //doplnit skutečný název úrovně projektu - p07Name
+                    }
+                }
+                
+                
+
                 if (v.Relations.Count()==1 && v.treeNodes.Count() == 0)
                 {
                     grp.expanded = true;
@@ -221,6 +231,18 @@ namespace UI.Controllers
                         default:
                             cc.text = col.Header; break;
                     }
+
+                    if (Factory.CurrentUser.p07LevelsCount > 1)
+                    {
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            if (cc.text == "L" + i.ToString()) cc.text = Factory.CurrentUser.getP07Level(i, true);
+                        }
+                    }
+                    else
+                    {
+                        if (cc.text == "L5") cc.text = Factory.CurrentUser.getP07Level(5, true);
+                    }         
                     
                     cc.customvalue2 = "/images/" + col.getImage();
                     cc.customvalue3 = "tree_item";
@@ -258,7 +280,7 @@ namespace UI.Controllers
         private void Index_RefreshState(Models.TheGridDesignerViewModel v)
         {
             var mq = new BO.myQuery(v.Rec.j72Entity);
-            var ce = Factory.EProvider.ByPrefix(mq.PrefixDb);
+            var ce = Factory.EProvider.ByPrefix(mq.Prefix);
             v.Relations = Factory.EProvider.getApplicableRelations(mq.Prefix); //návazné relace
             v.Relations.Insert(0, new BO.EntityRelation() { TableName = ce.TableName, AliasSingular = ce.AliasSingular, SqlFrom = ce.SqlFromGrid, RelName = "a",Translate1=ce.TranslateLang1,Translate2=ce.TranslateLang2 });   //primární tabulka a
 
@@ -266,7 +288,9 @@ namespace UI.Controllers
             v.AllColumns.InsertRange(0, _colsProvider.AllColumns());
 
             
-            v.AllColumns.InsertRange(v.AllColumns.Count-1, new BL.ffColumnsProvider(Factory,null).getColumns());    //katalog uživatelských polí
+            v.AllColumns.InsertRange(v.AllColumns.Count-1, new BL.ffColumnsProvider(Factory,null).getColumns());    //katalog uživatelských polí a štítků
+
+            
 
             
             v.SelectedColumns = _colsProvider.ParseTheGridColumns(mq.Prefix, v.Rec.j72Columns, Factory.CurrentUser.j03LangIndex);

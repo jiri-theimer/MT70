@@ -103,7 +103,7 @@ namespace BL
             AE("le1", "L1", "L1", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=1", "a.p41ID DESC", "a.p41ID DESC");
             AE("le2", "L2", "L2", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=2", "a.p41ID DESC", "a.p41ID DESC");
             AE("le3", "L3", "L3", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=3", "a.p41ID DESC", "a.p41ID DESC");
-            AE("le4", "L4", "L4", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=4", "a.p41ID DESC","a.p41ID DESC");
+            AE("le4","L4", "L4", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=4", "a.p41ID DESC","a.p41ID DESC");
             AE("le5", "L5", "L5", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=5", "a.p41ID DESC","a.p41ID DESC");            
 
             AE("p28Contact", "Klienti", "Klient", "p28Contact a", "a.p28ID DESC");
@@ -243,7 +243,7 @@ namespace BL
                 case "le4":
                 case "le5":
                     lis.Add(getREL("p28Contact", "p41_p28client", "Klient", "LEFT OUTER JOIN p28Contact p41_p28client ON a.p28ID_Client=p41_p28client.p28ID"));
-                    lis.Add(getREL("p28Contact", "p41_p28billing", "Odběratel faktury", "LEFT OUTER JOIN p28Contact p41_p28billing ON a.p28ID_Billing=p41_p28billing.p28ID"));
+                    //lis.Add(getREL("p28Contact", "p41_p28billing", "Odběratel faktury", "LEFT OUTER JOIN p28Contact p41_p28billing ON a.p28ID_Billing=p41_p28billing.p28ID"));
                     lis.Add(getREL("p42ProjectType", "p41_p42", "Typ projektu", "LEFT OUTER JOIN p42ProjectType p41_p42 ON a.p42ID=p41_p42.p42ID"));
                     lis.Add(getREL("p07ProjectLevel", "p41_p07", "Úroveň projektu", "LEFT OUTER JOIN p07ProjectLevel p41_p07 ON p41_p42.p07ID=p41_p07.p07ID", "p41_p42"));
                     lis.Add(getREL("b02WorkflowStatus", "p41_b02", "Workflow stav", "LEFT OUTER JOIN b02WorkflowStatus p41_b02 ON a.b02ID=p41_b02.b02ID"));
@@ -326,6 +326,17 @@ namespace BL
                     break;
                 default:
                     break;
+            }
+
+            if (strPrimaryPrefix == "le5")
+            {
+                lis.Add(getREL("p41Project", "p41_le1", "LE1", "LEFT OUTER JOIN p41Project p41_le1 ON a.p41ID_P07Level1=p41_le1.p41ID"));
+                lis.Add(getREL("p41Project", "p41_le4", "LE4", "LEFT OUTER JOIN p41Project p41_le4 ON a.p41ID_P07Level4=p41_le4.p41ID"));
+            }
+            
+            if (strPrimaryPrefix == "p31")
+            {
+                lis.Add(getREL("p41Project", "p31_p41_le1", "LE1", "LEFT OUTER JOIN p41Project p31_p41_le1 ON p41x.p41ID_P07Level1=p31_p41_le1.p41ID"));
             }
 
             return lis;

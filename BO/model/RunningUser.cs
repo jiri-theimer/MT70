@@ -216,6 +216,7 @@ namespace BO
         public void AddMessage(string strMessage, string strTemplate = "error")
         {
             if (Messages4Notify == null) { Messages4Notify = new List<BO.StringPair>(); };
+            strMessage = strMessage.Replace("\"", "").Replace("\r\n","<hr>");
             Messages4Notify.Add(new BO.StringPair() { Key = strTemplate, Value = strMessage }); ;
         }
 
