@@ -393,7 +393,7 @@ namespace BL
         public string getDefaultPalletePreSaved(string entity, string master_entity, BO.baseQuery mq)  //vrací seznam výchozí palety sloupců pro grid: pouze pro významné entity
         {
             string s = null;
-            switch (mq.PrefixDb)
+            switch (mq.Prefix)
             {
                 case "j02":
                     s = "a__j02Person__fullname_desc,a__j02Person__j02Email,j02_j07__j07PersonPosition__j07Name,j02_j03__j03User__j03Login,j02_j03__j03User__j04Name,j02_j03__j03User__j03Ping_TimeStamp";
@@ -415,7 +415,13 @@ namespace BL
                     s = "a__p28Contact__p28Name,a__p28Contact__p28RegID,a__p28Contact__p28VatID,p28_address_primary__view_PrimaryAddress__FullAddress,a__p28Contact__AllFreeTags_p28";
                     break;
                 case "p41":
-                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name,a__p41Project__AllFreeTags_p41";                
+                    s = "p41_p28client__p28Contact__p28Name,a__p41Project__p41Name,p41_p42__p42ProjectType__p42Name,a__p41Project__AllFreeTags_p41";           
+                    break;
+                case "le4":
+                    s = "p41_p28client__p28Contact__p28Name,a__le4__p41Name,p41_p42__p42ProjectType__p42Name,a__le4__p41Code";
+                    break;
+                case "le5":
+                    s = "p41_p28client__p28Contact__p28Name,a__le5__p41Name,a__le5__p41Code,p41_p42__p42ProjectType__p42Name,a__le5__Nadrizeny";
                     break;
                 case "p56":
                     s = "p56_b02__b02WorkflowStatus__b02Name,a__p56Task__p56Name,p56_p28__p28Contact__p28Name,p56_p41__p41Project__p41Name,a__p56Task__p56PlanUntil,a__p56Task__DnuDoTerminu";

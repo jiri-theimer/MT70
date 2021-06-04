@@ -74,7 +74,8 @@ namespace BL
             _lis.InsertRange(0, new le2ColumnsProvider().getColumns());
             _lis.InsertRange(0, new le3ColumnsProvider().getColumns());
             _lis.InsertRange(0, new le4ColumnsProvider().getColumns());
-            
+            _lis.InsertRange(0, new le5ColumnsProvider().getColumns());
+
 
             string strLastEntity = "";
             string strLastEntityAlias = "";
