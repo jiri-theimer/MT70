@@ -191,13 +191,13 @@ namespace UI.Controllers
                 }
                 if (Factory.CurrentUser.p07LevelsCount > 1)
                 {
-                    for(int i = 1; i <= 5; i++)
+                    for (int i = 1; i <= 5; i++)
                     {
-                        if (grp.text == "L"+i.ToString()) grp.text = Factory.CurrentUser.getP07Level(i, true);  //doplnit skutečný název úrovně projektu - p07Name
+                        if (grp.text == "L" + i.ToString()) grp.text = Factory.CurrentUser.getP07Level(i, true);  //doplnit skutečný název úrovně projektu - p07Name
                     }
                 }
-                
-                
+
+
 
                 if (v.Relations.Count()==1 && v.treeNodes.Count() == 0)
                 {

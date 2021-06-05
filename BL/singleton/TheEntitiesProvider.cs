@@ -328,31 +328,45 @@ namespace BL
                     break;
             }
 
-           
-            if (strPrimaryPrefix == "le4")
+            if (f.CurrentUser.p07LevelsCount > 1)
             {
-                lis.Add(getREL("le1", "p41_le1", "L1", "LEFT OUTER JOIN p41Project p41_le1 ON a.p41ID_P07Level1=p41_le1.p41ID"));                
-            }
-            if (strPrimaryPrefix == "le5")
-            {
-                lis.Add(getREL("le1", "p41_le1", "L1", "LEFT OUTER JOIN p41Project p41_le1 ON a.p41ID_P07Level1=p41_le1.p41ID"));
-                lis.Add(getREL("le4", "p41_le4", "L4", "LEFT OUTER JOIN p41Project p41_le4 ON a.p41ID_P07Level4=p41_le4.p41ID"));
-            }
-
-            if (strPrimaryPrefix == "p31" && f.CurrentUser.p07LevelsCount>1)
-            {
-                for(int i = 1; i <= 5; i++)
+                switch (strPrimaryPrefix)
                 {
-                    if (f.CurrentUser.getP07Level(i,true) != null)
-                    {
-                        lis.Add(getREL($"le{i}", $"p31_p41_le{i}", f.CurrentUser.getP07Level(i, true), $"LEFT OUTER JOIN p41Project p31_p41_le{i} ON p41x.p41ID_P07Level{i}=p31_p41_le{i}.p41ID"));
-                    }
+                    case "le2":
+                    case "le3":
+                    case "le4":
+                    case "le5":
+                        int intLevelIndex = Convert.ToInt32(strPrimaryPrefix.Substring(2, 1));
+                        for(int i = 1; i < intLevelIndex; i++)
+                        {
+                            if (f.CurrentUser.getP07Level(i, true) != null)
+                            {
+                                lis.Add(getREL($"le{i}", $"p41_le{i}", f.CurrentUser.getP07Level(i, true), $"LEFT OUTER JOIN p41Project p41_le{i} ON a.p41ID_P07Level{i}=p41_le{i}.p41ID"));
+                            }
+                        }
+                        break;
+                    case "p31":
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            if (f.CurrentUser.getP07Level(i, true) != null)
+                            {
+                                lis.Add(getREL($"le{i}", $"p31_p41_le{i}", f.CurrentUser.getP07Level(i, true), $"LEFT OUTER JOIN p41Project p31_p41_le{i} ON p41x.p41ID_P07Level{i}=p31_p41_le{i}.p41ID"));
+                            }
+                        }
+                        break;
                 }
-                
-                //lis.Add(getREL("le2", "p31_p41_le2", "L2", "LEFT OUTER JOIN p41Project p31_p41_le2 ON p41x.p41ID_P07Level2=p31_p41_le2.p41ID"));
-                //lis.Add(getREL("le3", "p31_p41_le3", "L3", "LEFT OUTER JOIN p41Project p31_p41_le3 ON p41x.p41ID_P07Level3=p31_p41_le3.p41ID"));
-                //lis.Add(getREL("le4", "p31_p41_le4", "L4", "LEFT OUTER JOIN p41Project p31_p41_le4 ON p41x.p41ID_P07Level4=p31_p41_le4.p41ID"));
             }
+            //if (strPrimaryPrefix == "le4")
+            //{
+            //    lis.Add(getREL("le1", "p41_le1", "L1", "LEFT OUTER JOIN p41Project p41_le1 ON a.p41ID_P07Level1=p41_le1.p41ID"));
+            //}
+            //if (strPrimaryPrefix == "le5")
+            //{
+            //    lis.Add(getREL("le1", "p41_le1", "L1", "LEFT OUTER JOIN p41Project p41_le1 ON a.p41ID_P07Level1=p41_le1.p41ID"));
+            //    lis.Add(getREL("le4", "p41_le4", "L4", "LEFT OUTER JOIN p41Project p41_le4 ON a.p41ID_P07Level4=p41_le4.p41ID"));
+            //}
+
+            
 
             return lis;
         }
