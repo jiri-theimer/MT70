@@ -13,7 +13,7 @@ namespace BL
             this.EntityName = "p41Project";
 
             this.CurrentFieldGroup = "Root";
-            oc = AF("p41Name", "L5"); oc.NotShowRelInHeader = true; oc.DefaultColumnFlag = gdc1;
+            oc = AF("p41Name", "Název projektu"); oc.NotShowRelInHeader = true; oc.DefaultColumnFlag = gdc1;
             this.AppendProjectColumns("p41");
 
             AppendTimestamp();
