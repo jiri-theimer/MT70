@@ -196,7 +196,11 @@ namespace UI.Controllers
                         if (grp.text == "L" + i.ToString()) grp.text = Factory.CurrentUser.getP07Level(i, true);  //doplnit skutečný název úrovně projektu - p07Name
                     }
                 }
-
+                else
+                {
+                    if (grp.text == "L5") grp.text = Factory.CurrentUser.getP07Level(5, true);
+                }
+                
 
 
                 if (v.Relations.Count()==1 && v.treeNodes.Count() == 0)

@@ -227,7 +227,7 @@ namespace BL
                     lis.Add(getREL("j02Person", "p31_j02contact", "Kontaktní osoba úkonu", "LEFT OUTER JOIN j02Person p31_j02contact ON a.j02ID_ContactPerson=p31_j02contact.j02ID"));                    
                     lis.Add(getREL("p32Activity", "p31_p32", "Aktivita", "INNER JOIN p32Activity p31_p32 ON a.p32ID=p31_p32.p32ID"));
                     lis.Add(getREL("p34ActivityGroup", "p32_p34", "Sešit", "INNER JOIN p32Activity aktivita1 ON a.p32ID=aktivita1.p32ID INNER JOIN p34ActivityGroup p32_p34 ON aktivita1.p34ID=p32_p34.p34ID"));
-                    lis.Add(getREL("p41Project", "p31_p41", "Projekt", "LEFT OUTER JOIN p41Project p31_p41 ON a.p41ID=p31_p41.p41ID"));
+                    lis.Add(getREL("p41Project", "p31_p41", "L5", "LEFT OUTER JOIN p41Project p31_p41 ON a.p41ID=p31_p41.p41ID"));
                     lis.Add(getREL("p28Contact", "p31_p41_p28", "Klient projektu", "LEFT OUTER JOIN p28Contact p31_p41_p28 ON p31_p41.p28ID_Client=p31_p41_p28.p28ID", "p31_p41"));
                     lis.Add(getREL("p91Invoice", "p31_p91", "Vyúčtování", "LEFT OUTER JOIN p91Invoice p31_p91 ON a.p91ID=p31_p91.p91ID"));
 
@@ -257,7 +257,7 @@ namespace BL
                     lis.Add(getREL("x15VatRateType", "p53_x15", "Hladina DPH", "LEFT OUTER JOIN x15VatRateType p53_x15 ON a.x15ID=p53_x15.x15ID"));
                     break;
                 case "p56":
-                    lis.Add(getREL("p41Project", "p56_p41", "Projekt", "INNER JOIN p41Project p56_p41 ON a.p41ID=p56_p41.p41ID"));
+                    lis.Add(getREL("p41Project", "p56_p41", "L5", "INNER JOIN p41Project p56_p41 ON a.p41ID=p56_p41.p41ID"));
                     lis.Add(getREL("p28Contact", "p56_p28", "Klient projektu", "LEFT OUTER JOIN p28Contact p56_p28 ON p56_p41.p28ID_Client=p56_p28.p28ID", "p56_p41"));
                     lis.Add(getREL("p57TaskType", "p56_p57", "Typ úkolu", "INNER JOIN p57TaskType p56_p57 ON a.p57ID=p56_p57.p57ID"));
                     lis.Add(getREL("b02WorkflowStatus", "p56_b02", "Workflow stav", "LEFT OUTER JOIN b02WorkflowStatus p56_b02 ON a.b02ID=p56_b02.b02ID"));
@@ -346,7 +346,7 @@ namespace BL
                         }
                         break;
                     case "p31":
-                        for (int i = 1; i <= 5; i++)
+                        for (int i = 1; i <= 4; i++)
                         {
                             if (f.CurrentUser.getP07Level(i, true) != null)
                             {
