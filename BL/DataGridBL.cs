@@ -83,7 +83,7 @@ namespace BL
             if (mq.explicit_columns == null || mq.explicit_columns.Count()==0)
             {
                 
-                mq.explicit_columns = new BL.TheColumnsProvider(_mother.EProvider,_mother.Translator).getDefaultPallete(false,mq);    //na vstupu není přesný výčet sloupců -> pracovat s default sadou
+                mq.explicit_columns = new BL.TheColumnsProvider(_mother.EProvider,_mother.Translator).getDefaultPallete(false,mq,_mother);    //na vstupu není přesný výčet sloupců -> pracovat s default sadou
             }
             if (bolGetTotalsRow)
             {

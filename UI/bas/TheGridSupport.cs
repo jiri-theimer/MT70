@@ -144,15 +144,7 @@ namespace UI
             ret.sortfield = gridState.j75SortDataField;
             ret.sortdir = gridState.j75SortOrder;
 
-            if (gridState.j72Columns.Contains("Free"))
-            {
-                var lisFF = new BL.ffColumnsProvider(_Factory, mq.Prefix);
-                _grid.Columns = _colsProvider.ParseTheGridColumns(mq.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex, lisFF.getColumns());
-            }
-            else
-            {
-                _grid.Columns = _colsProvider.ParseTheGridColumns(mq.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex);
-            }
+            _grid.Columns = _colsProvider.ParseTheGridColumns(mq.Prefix, gridState.j72Columns, _Factory);
 
             
 
@@ -709,15 +701,9 @@ namespace UI
 
         private System.Data.DataTable prepare_datatable_4export(BO.TheGridState gridState)
         {
-            if (gridState.j72Columns.Contains("Free"))
-            {
-                var lisFF = new BL.ffColumnsProvider(this._Factory, this.gridinput.query.Prefix);
-                this.gridinput.query.explicit_columns = _colsProvider.ParseTheGridColumns(this.gridinput.query.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex, lisFF.getColumns());
-            }
-            else
-            {
-                this.gridinput.query.explicit_columns = _colsProvider.ParseTheGridColumns(this.gridinput.query.Prefix, gridState.j72Columns, _Factory.CurrentUser.j03LangIndex);
-            }
+            this.gridinput.query.explicit_columns = _colsProvider.ParseTheGridColumns(this.gridinput.query.Prefix, gridState.j72Columns, _Factory);
+
+           
 
 
             if (!string.IsNullOrEmpty(gridState.j75SortDataField))

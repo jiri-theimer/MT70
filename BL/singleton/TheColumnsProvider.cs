@@ -151,9 +151,9 @@ namespace BL
         //    return s;
 
         //}
-        public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq)
+        public List<BO.TheGridColumn> getDefaultPallete(bool bolComboColumns, BO.baseQuery mq,BL.Factory f)
         {
-           
+          
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
             IEnumerable<BO.TheGridColumn> qry = null;
             if (bolComboColumns)
@@ -170,8 +170,8 @@ namespace BL
             {
                 ret.Add(Clone2NewInstance(c));
             }
-
-            List<BO.EntityRelation> rels = _ep.getApplicableRelations(mq.Prefix);   //všechny dostupné relace pro entitu mq.prefix
+            
+            List<BO.EntityRelation> rels = _ep.getApplicableRelations(mq.Prefix,f);   //všechny dostupné relace pro entitu mq.prefix
 
             switch (mq.Prefix)
             {
@@ -345,41 +345,24 @@ namespace BL
         }
 
         
-        public List<BO.TheGridColumn> ParseTheGridColumns(string strPrimaryPrefix, string strJ72Columns, int intLangIndex)
-        {
-            //v strJ72Columns je čárkou oddělený seznam sloupců z pole j72Columns: název relace+__+entita+__+field
-            List<BO.EntityRelation> applicable_rels = _ep.getApplicableRelations(strPrimaryPrefix);
-            List<string> sels = BO.BAS.ConvertString2List(strJ72Columns, ",");
-            List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
+        
 
-            string[] arr;
-
-            for (int i = 0; i < sels.Count; i++)
-            {
-                arr = sels[i].Split("__");
-                if (_lis.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
-                {
-                    BO.TheGridColumn c = CreateNewInstanceColumn(_lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First(), arr, intLangIndex, applicable_rels);
-
-                    if ((i == sels.Count - 1) && (c.FieldType == "num" || c.FieldType == "num0" || c.FieldType == "num3"))
-                    {
-                        c.CssClass = "tdn_lastcol";
-                    }
-                    ret.Add(c);
-
-                }
-
-            }
-
-            return ret;
-
-        }
-
-        public List<BO.TheGridColumn> ParseTheGridColumns(string strPrimaryPrefix, string strJ72Columns, int intLangIndex, List<BO.TheGridColumn> lisFFs)
+        public List<BO.TheGridColumn> ParseTheGridColumns(string strPrimaryPrefix, string strJ72Columns, BL.Factory f)
         {
             //v strJ72Columns je čárkou oddělený seznam sloupců z pole j72Columns: název relace+__+entita+__+field
             //v lisFFs se předávají další sloupce
-            List<BO.EntityRelation> applicable_rels = _ep.getApplicableRelations(strPrimaryPrefix);
+            
+            List<BO.TheGridColumn> lisFFs = null;                        
+            List<BO.EntityRelation> applicable_rels = _ep.getApplicableRelations(strPrimaryPrefix,f);
+            if (strJ72Columns.Contains("Free"))
+            {
+                lisFFs = new BL.ffColumnsProvider(f, strPrimaryPrefix).getColumns();
+            }
+            else
+            {
+                return Handle_ParseTheGridColumns_WithoutFFs(strPrimaryPrefix, strJ72Columns, f, applicable_rels);  //na vstupu nejsou uživatelsky definované sloupce
+            }
+            
             List<string> sels = BO.BAS.ConvertString2List(strJ72Columns, ",");
             List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
 
@@ -405,7 +388,7 @@ namespace BL
 
                 if (colSource != null)
                 {
-                    BO.TheGridColumn c = CreateNewInstanceColumn(colSource, arr, intLangIndex, applicable_rels);
+                    BO.TheGridColumn c = CreateNewInstanceColumn(colSource, arr, f.CurrentUser.j03LangIndex, applicable_rels);
 
                     if ((i == sels.Count - 1) && (c.FieldType == "num" || c.FieldType == "num0" || c.FieldType == "num3"))
                     {
@@ -418,6 +401,33 @@ namespace BL
 
             return ret;
 
+        }
+
+        private List<BO.TheGridColumn> Handle_ParseTheGridColumns_WithoutFFs(string strPrimaryPrefix, string strJ72Columns, BL.Factory f, List<BO.EntityRelation> applicable_rels)
+        {
+            //rychlejší práce
+            List<string> sels = BO.BAS.ConvertString2List(strJ72Columns, ",");
+            List<BO.TheGridColumn> ret = new List<BO.TheGridColumn>();
+
+            string[] arr;
+
+            for (int i = 0; i < sels.Count; i++)
+            {
+                arr = sels[i].Split("__");
+                if (_lis.Exists(p => p.Entity == arr[1] && p.Field == arr[2]))
+                {
+                    BO.TheGridColumn c = CreateNewInstanceColumn(_lis.Where(p => p.Entity == arr[1] && p.Field == arr[2]).First(), arr, f.CurrentUser.j03LangIndex, applicable_rels);
+
+                    if ((i == sels.Count - 1) && (c.FieldType == "num" || c.FieldType == "num0" || c.FieldType == "num3"))
+                    {
+                        c.CssClass = "tdn_lastcol";
+                    }
+                    ret.Add(c);
+                }
+
+            }
+
+            return ret;
         }
 
         private BO.TheGridColumn CreateNewInstanceColumn(BO.TheGridColumn colSource, string[] arr, int intLangIndex, List<BO.EntityRelation> applicable_rels)

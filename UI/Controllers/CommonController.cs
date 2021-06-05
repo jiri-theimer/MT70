@@ -71,20 +71,13 @@ namespace UI.Controllers
             
             if (grid == null)
             {
-                mq.explicit_columns = _colsProvider.getDefaultPallete(false, mq);
+                mq.explicit_columns = _colsProvider.getDefaultPallete(false, mq,Factory);
             }
             else
             {
-                if (grid.j72Columns.Contains("Free"))
-                {
-                    var lisFF = new BL.ffColumnsProvider(Factory,mq.Prefix);
-                    mq.explicit_columns = _colsProvider.ParseTheGridColumns(mq.Prefix, grid.j72Columns, Factory.CurrentUser.j03LangIndex, lisFF.getColumns());                    
-                }
-                else
-                {
-                    mq.explicit_columns = _colsProvider.ParseTheGridColumns(mq.Prefix, grid.j72Columns, Factory.CurrentUser.j03LangIndex);
-                }
+                mq.explicit_columns = _colsProvider.ParseTheGridColumns(mq.Prefix, grid.j72Columns, Factory);
 
+                
                 
                 mq.explicit_orderby = grid.j75SortDataField;
                 if (grid.j75SortDataField !=null && grid.j75SortOrder != null)

@@ -179,7 +179,7 @@ namespace UI.Controllers
             {
                 var grp = new kendoTreeItem() { id = "group__" + rel.RelName + "__" + rel.TableName, text = rel.AliasSingular, expanded = false };
 
-                
+               
                 switch (Factory.CurrentUser.j03LangIndex)
                 {
                     case 1:
@@ -281,8 +281,9 @@ namespace UI.Controllers
         {
             var mq = new BO.myQuery(v.Rec.j72Entity);
             var ce = Factory.EProvider.ByPrefix(mq.Prefix);
-            v.Relations = Factory.EProvider.getApplicableRelations(mq.Prefix); //návazné relace
+            v.Relations = Factory.EProvider.getApplicableRelations(mq.Prefix,Factory); //návazné relace
             v.Relations.Insert(0, new BO.EntityRelation() { TableName = ce.TableName, AliasSingular = ce.AliasSingular, SqlFrom = ce.SqlFromGrid, RelName = "a",Translate1=ce.TranslateLang1,Translate2=ce.TranslateLang2 });   //primární tabulka a
+
 
             v.AllColumns=new List<BO.TheGridColumn>();
             v.AllColumns.InsertRange(0, _colsProvider.AllColumns());
@@ -291,9 +292,7 @@ namespace UI.Controllers
             v.AllColumns.InsertRange(v.AllColumns.Count-1, new BL.ffColumnsProvider(Factory,null).getColumns());    //katalog uživatelských polí a štítků
 
             
-
-            
-            v.SelectedColumns = _colsProvider.ParseTheGridColumns(mq.Prefix, v.Rec.j72Columns, Factory.CurrentUser.j03LangIndex);
+            v.SelectedColumns = _colsProvider.ParseTheGridColumns(mq.Prefix, v.Rec.j72Columns, Factory);
            
             v.lisQueryFields = new BL.TheQueryFieldProvider(v.Rec.j72Entity.Substring(0, 3)).getPallete();
             if (Factory.CurrentUser.j03LangIndex > 0)

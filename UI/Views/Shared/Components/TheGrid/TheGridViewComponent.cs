@@ -46,7 +46,7 @@ namespace UI.Views.Shared.Components.TheGrid
                 string strJ72Columns = _f.j72TheGridTemplateBL.getDefaultPalletePreSaved(input.entity, input.master_entity, input.query);
                 if (strJ72Columns == null)
                 {
-                    var cols = _colsProvider.getDefaultPallete(false, input.query);    //výchozí paleta sloupců
+                    var cols = _colsProvider.getDefaultPallete(false, input.query,_f);    //výchozí paleta sloupců
                     strJ72Columns = String.Join(",", cols.Select(p => p.UniqueName));
                 }
 
@@ -73,15 +73,9 @@ namespace UI.Views.Shared.Components.TheGrid
             ret.firstdata = cSup.GetFirstData(gridState);
 
             ret.GridState = gridState;
-            if (gridState.j72Columns.Contains("Free"))
-            {
-                var lisFF = new BL.ffColumnsProvider(_f, input.entity.Substring(0, 3));
-                ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex, lisFF.getColumns());
-            }
-            else
-            {
-                ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f.CurrentUser.j03LangIndex);
-            }
+            ret.Columns = _colsProvider.ParseTheGridColumns(input.entity.Substring(0, 3), gridState.j72Columns, _f);
+
+           
 
             if (!input.isrecpagegrid)    //pokud není vypnutý sloupcový filtr
             {

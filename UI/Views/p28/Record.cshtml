@@ -43,14 +43,14 @@
 <div class="tab-pane" id="tab1" role="tabpanel">
     <!-- Tab1 -->
     <div class="row">
-        <div class="col-auto">
+        <div class="col-sm-5 col-md-5">
             <input type="radio" id="RadioIsIntraPerson1" asp-for="@Model.IsCompany" value="1" onchange="postback('postback')">
             <label for="RadioIsIntraPerson1">@_f.tra("Klient je společnost/právnická osoba")</label>
             <br />
             <input type="radio" id="RadioIsIntraPerson0" asp-for="@Model.IsCompany" value="0" onchange="postback('postback')">
             <label for="RadioIsIntraPerson0">@_f.tra("Klient je fyzická osoba")</label>
         </div>
-        <div class="col-auto">
+        <div class="col-sm-2 col-md-2">
             <div class="dropdown float-end">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuRejstriky" data-bs-toggle="dropdown" aria-expanded="false">
                     @_f.tra("Rejstříky")
@@ -65,8 +65,17 @@
                 </ul>
             </div>
         </div>
-        <div class="col-auto">
-            <mystitky entity="p28Contact" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+        <div class="col-sm-2 col-md-2">
+
+        </div>
+        <div class="col-sm-3 col-md-3">
+            <select asp-for="@Model.Rec.p28SupplierFlag" class="form-select">
+                <option value="All">@_f.tra("Standardní záznam v adresáři klientů")</option>
+                <option value="ProjectClientOnly">@_f.tra("Pouze klient projektů")</option>
+                <option value="InvoiceReceiverOnly">@_f.tra("Pouze odběratel faktury")</option>
+                <option value="SupplierOnly">@_f.tra("Pouze dodavatel výdajů")</option>
+                <option value="NotClientNotSupplier">@_f.tra("Pouze v modulu [KLIENTI]")</option>
+            </select>
         </div>
     </div>
 
@@ -303,6 +312,8 @@
             </table>
         </div>
     </div>
+    
+    <mystitky entity="p28Contact" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
 
 
 

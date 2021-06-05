@@ -121,5 +121,29 @@ namespace BL
 
             this.CurrentFieldGroup = null;
         }
+
+
+        public void AppendProjectColumns(string prefix)
+        {
+            oc = AF("PrefferedName", "Projekt+", "isnull(a.p41NameShort,a.p41Name)"); oc.NotShowRelInHeader = true;
+            AF("p41NameShort", "Zkrácený název");
+            oc = AF("p41Code", "Kód projektu"); oc.FixedWidth = 100; oc.DefaultColumnFlag = gdc1;
+            AF("p41PlanFrom", "Plánované zahájení", "a.p41PlanFrom", "datetime");
+            AF("p41PlanUntil", "Plánované dokončení", "a.p41PlanUntil", "datetime");
+
+            if (prefix == "le5" || prefix=="le4" || prefix=="le3" || prefix=="le2")
+            {
+                oc = AF("Nadrizeny", "Nadřízená úroveň", $"{prefix}parent.p41Name"); oc.RelSqlInCol = $"LEFT OUTER JOIN p41Project {prefix}parent On a.p41ParentID={prefix}parent.p41ID";
+            }
+            
+            this.CurrentFieldGroup = "Fakturační nastavení";
+            AF("p41BillingMemo", "Fakturační poznámka");
+            oc = AF("Odberatel", "Odběratel faktury", $"{prefix}_odberatel.p28Name"); oc.RelSqlInCol = $"LEFT OUTER JOIN p28Contact {prefix}_odberatel On a.p28ID_Billing={prefix}_odberatel.p28ID";
+            oc = AF("PrirazenyCenik", "Přiřazený fakturační ceník", $"{prefix}p51billing.p51Name"); oc.RelSqlInCol = $"LEFT OUTER JOIN p51PriceList {prefix}p51billing ON a.p51ID_Billing={prefix}p51billing.p51ID";
+            oc = AF("SkutecnyCenik", "Skutečný fakturační ceník", "dbo.get_billing_pricelist_name(a.p41ID,a.p28ID_Client)");
+            oc = AF("FakturacniJazyk", "Fakturační jazyk", $"p87{prefix}.p87Name"); oc.RelSqlInCol = $"LEFT OUTER JOIN p87BillingLanguage p87{prefix} On a.p87ID=p87{prefix}.p87ID";
+            AF("p41LimitHours_Notification", "WIP limit Fa hodin", "a.p41LimitHours_Notification", "num", true);
+            AF("p41LimitFee_Notification", "WIP limitní honorář", "a.p41LimitFee_Notification", "num", true);
+        }
     }
 }

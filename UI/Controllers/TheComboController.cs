@@ -46,23 +46,16 @@ namespace UI.Controllers
             List<BO.TheGridColumn> cols = null;            
             string strJ72Columns = getComboPalleteFixed(entity,mq); //vrací sloupce pro významnější entity
             if (strJ72Columns != null)
-            {                
-                if (strJ72Columns.Contains("Free"))
-                {   //volná pole a štítky
-                    var lisFF = new BL.ffColumnsProvider(Factory,mq.PrefixDb);
-                    cols = _colsProvider.ParseTheGridColumns(mq.PrefixDb, strJ72Columns, Factory.CurrentUser.j03LangIndex, lisFF.getColumns());
-                }
-                else
-                {
-                    cols = _colsProvider.ParseTheGridColumns(mq.PrefixDb, strJ72Columns, Factory.CurrentUser.j03LangIndex);
-                }
+            {
+                cols = _colsProvider.ParseTheGridColumns(mq.PrefixDb, strJ72Columns, Factory);
             }
             else
             {
-                cols = _colsProvider.getDefaultPallete(true, mq);   //výchozí paleta sloupců
+                cols = _colsProvider.getDefaultPallete(true, mq,Factory);   //výchozí paleta sloupců
             }
-          
             
+
+
             //switch (mq.Prefix)
             //{
             //    case "a03":
@@ -175,7 +168,7 @@ namespace UI.Controllers
         {            
             var mq = new BO.InitMyQuery().Load(entity,masterprefix,masterpid,myqueryinline);
             
-            mq.explicit_columns = _colsProvider.getDefaultPallete(false, mq);
+            mq.explicit_columns = _colsProvider.getDefaultPallete(false, mq,Factory);
             var ce = Factory.EProvider.ByPrefix(mq.Prefix);
             if (ce.IsWithoutValidity == false)
             {
