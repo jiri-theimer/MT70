@@ -13,13 +13,18 @@ namespace BO
         public int p07level { get; set; }
         public int j02id_owner { get; set; }
         public int j02id_contactperson { get; set; }
-        public int p41parentid { get; set; }
+        public int p41parentid { get; set; }                
         public int b02id { get; set; }
         public int j18id { get; set; }
         public int p61id { get; set; }
         public int p91id { get; set; }
         public int p28id { get; set; }
         public int j02id_for_p31_entry { get; set; }    //projekty, které jsou k dispozici pro zapisování úkonů pro uživatele j02id_for_p31_entry
+        public int le1id { get; set; }  //nadřízená vertikální úrověň #1
+        public int le2id { get; set; }  //nadřízená vertikální úrověň #2
+        public int le3id { get; set; }  //nadřízená vertikální úrověň #3
+        public int le4id { get; set; }  //nadřízená vertikální úrověň #4
+
         public myQueryP41(string prefix)
         {
             this.Prefix = prefix;
@@ -81,6 +86,22 @@ namespace BO
             if (this.p41parentid > 0)
             {
                 AQ("a.p41ParentID=@parentpid", "parentpid", this.p41parentid);
+            }
+            if (this.le1id > 0)
+            {
+                AQ("a.p41ID_P07Level1=@le1id", "le1id", this.le1id);
+            }
+            if (this.le2id > 0)
+            {
+                AQ("a.p41ID_P07Level2=@le2id", "le2id", this.le2id);
+            }
+            if (this.le3id > 0)
+            {
+                AQ("a.p41ID_P07Level3=@le3id", "le3id", this.le3id);
+            }
+            if (this.le4id > 0)
+            {
+                AQ("a.p41ID_P07Level4=@le4id", "le4id", this.le4id);
             }
             if (this.p61id > 0)
             {

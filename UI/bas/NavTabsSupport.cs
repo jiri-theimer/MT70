@@ -111,6 +111,18 @@ namespace UI
 
             }
 
+            if (_f.CurrentUser.p07LevelsCount > 1 && (prefix=="le4" || prefix=="le3" || prefix=="le2" || prefix=="le1"))
+            {
+                int intLevelIndex = Convert.ToInt32(prefix.Substring(2, 1));
+                for(int i = intLevelIndex+1; i <= 5; i++)
+                {
+                    if (_f.CurrentUser.getP07Level(i,true) != null)
+                    {
+                        _tabs.Add(AddTab(_f.CurrentUser.getP07Level(i, false), "le"+i.ToString(), "/TheGrid/SlaveView?prefix=le"+i.ToString(), true));
+                    }
+                }
+            }
+
             return _tabs;
             
         }
