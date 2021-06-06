@@ -16,7 +16,12 @@ namespace BO
         public int p91id { get; set; }
         public int p56id { get; set; }
         public int p70id { get; set; }
-        
+
+        public int le1id { get; set; }  //nadřízená vertikální úrověň #1
+        public int le2id { get; set; }  //nadřízená vertikální úrověň #2
+        public int le3id { get; set; }  //nadřízená vertikální úrověň #3
+        public int le4id { get; set; }  //nadřízená vertikální úrověň #4
+
         public bool? p32isbillable { get; set; }
         public int p71id { get; set; }
         public string tabquery { get; set; }
@@ -155,7 +160,23 @@ namespace BO
                 }
             }
 
-            
+
+            if (this.le1id > 0)
+            {
+                AQ("p41x.p41ID_P07Level1=@le1id", "le1id", this.le1id);
+            }
+            if (this.le2id > 0)
+            {
+                AQ("p41x.p41ID_P07Level2=@le2id", "le2id", this.le2id);
+            }
+            if (this.le3id > 0)
+            {
+                AQ("p41x.p41ID_P07Level3=@le3id", "le3id", this.le3id);
+            }
+            if (this.le4id > 0)
+            {
+                AQ("p41x.p41ID_P07Level4=@le4id", "le4id", this.le4id);
+            }
 
 
             return this.InhaleRows();
