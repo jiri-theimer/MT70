@@ -18,6 +18,8 @@ namespace BO
         public int j27id { get; set; }
         public int o38id { get; set; }
         public int p90id { get; set; }
+        public int leindex { get; set; }   //nadřízená vertikální úrověň #1 - #4
+        public int lepid { get; set; }     //nadřízená vertikální úrověň, hodnota p41id
 
         public myQueryP91()
         {
@@ -111,6 +113,11 @@ namespace BO
             {
                 AQ("(a.p91Code Like '%'+@expr+'%' OR a.p91Text1 LIKE '%'+@expr+'%' OR a.p91Client_RegID LIKE '%'+@expr+'%' OR a.p91Client_VatID LIKE @expr+'%' OR a.p41ID_First IN (select xa.p41ID FROM p41Project xa LEFT OUTER JOIN p28Contact xb ON xa.p28ID_Client=xb.p28ID WHERE xa.p41Name LIKE '%'+@expr+'%' OR xa.p41Code LIKE '%'+@expr+'%' OR xb.p28Name LIKE '%'+@expr+'%') OR a.p91Client LIKE '%'+@expr+'%' OR a.p28ID IN (select p28ID FROM p28Contact WHERE p28CompanyShortName LIKE '%'+@expr+'%' OR p28Name LIKE '%'+@expr+'%'))", "expr", _searchstring);
 
+            }
+
+            if (this.leindex > 0 && this.lepid>0)
+            {
+                AQ($"a.p91ID IN (SELECT xa.p91ID FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.p91ID IS NOT NULL AND (xb.p41ID=@lepid OR xb.p41ID_P07Level{this.leindex}=@lepid))", "lepid", this.lepid);
             }
 
             return this.InhaleRows();

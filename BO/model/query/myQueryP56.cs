@@ -14,7 +14,8 @@ namespace BO
         public int p91id { get; set; }
         public int j02id { get; set; }
         public int b02id { get; set; }
-
+        public int leindex { get; set; }   //nadřízená vertikální úrověň projektu #1 - #4
+        public int lepid { get; set; }     //nadřízená vertikální úrověň projektu, hodnota p41id
 
         public myQueryP56()
         {
@@ -62,6 +63,12 @@ namespace BO
             {
                 AQ("(a.p41ID=@p41id)", "p41id", this.p41id);
             }
+
+            if (this.leindex > 0 && this.lepid > 0)
+            {
+                AQ($"p41x.p41ID_P07Level{this.leindex}=@lepid OR a.p41ID=@lepid", "lepid", this.lepid);
+            }
+
             if (this.j02id_owner > 0)
             {
                 AQ("a.j02ID_Owner=@ownerid)", "ownerid", this.j02id_owner);

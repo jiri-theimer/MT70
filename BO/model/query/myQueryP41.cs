@@ -20,10 +20,10 @@ namespace BO
         public int p91id { get; set; }
         public int p28id { get; set; }
         public int j02id_for_p31_entry { get; set; }    //projekty, které jsou k dispozici pro zapisování úkonů pro uživatele j02id_for_p31_entry
-        public int le1id { get; set; }  //nadřízená vertikální úrověň #1
-        public int le2id { get; set; }  //nadřízená vertikální úrověň #2
-        public int le3id { get; set; }  //nadřízená vertikální úrověň #3
-        public int le4id { get; set; }  //nadřízená vertikální úrověň #4
+
+        public int leindex { get; set; }   //nadřízená vertikální úrověň #1 - #4
+        public int lepid { get; set; }     //nadřízená vertikální úrověň, hodnota p41id
+        
 
         public myQueryP41(string prefix)
         {
@@ -87,22 +87,11 @@ namespace BO
             {
                 AQ("a.p41ParentID=@parentpid", "parentpid", this.p41parentid);
             }
-            if (this.le1id > 0)
+            if (this.leindex>0 && this.lepid > 0)
             {
-                AQ("a.p41ID_P07Level1=@le1id", "le1id", this.le1id);
+                AQ($"a.p41ID_P07Level{this.leindex}=@lepid", "lepid", this.lepid);
             }
-            if (this.le2id > 0)
-            {
-                AQ("a.p41ID_P07Level2=@le2id", "le2id", this.le2id);
-            }
-            if (this.le3id > 0)
-            {
-                AQ("a.p41ID_P07Level3=@le3id", "le3id", this.le3id);
-            }
-            if (this.le4id > 0)
-            {
-                AQ("a.p41ID_P07Level4=@le4id", "le4id", this.le4id);
-            }
+            
             if (this.p61id > 0)
             {
                 AQ("a.p32ID IN (SELECT p32ID FROM p62ActivityCluster_Item WHERE p61ID=@p61id)", "p61id", this.p61id);

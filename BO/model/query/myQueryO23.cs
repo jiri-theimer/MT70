@@ -14,6 +14,8 @@ namespace BO
         public int j02id { get; set; }
         public int p41id { get; set; }
         public int p91id { get; set; }
+        public int leindex { get; set; }   //nadřízená vertikální úrověň projektu #1 - #4
+        public int lepid { get; set; }     //nadřízená vertikální úrověň projektu, hodnota p41id
 
         public myQueryO23()
         {
@@ -44,9 +46,12 @@ namespace BO
             {
                 AQ("a.o23ID IN (select xa.o23ID FROM x19EntityCategory_Binding xa INNER JOIN x20EntiyToCategory xb ON xa.x20ID=xb.x20ID WHERE xb.x29ID=@x29id AND xa.x19RecordPID=@recpid)", "x29id", this.x29id,"AND",null,null,"recpid",this.recpid);
             }
-            
-            
 
+
+            if (this.leindex > 0 && this.lepid > 0)
+            {
+                AQ($"a.o23ID IN (select xa.o23ID FROM x19EntityCategory_Binding xa INNER JOIN x20EntiyToCategory xb ON xa.x20ID=xb.x20ID AND xb.x29ID=141 INNER JOIN p41Project xc ON xa.x19RecordPID=xc.p41ID WHERE xc.p41ID=@lepid OR xc.p41ID_P07Level{this.leindex}=@lepid)", "lepid", this.lepid);
+            }
 
             return this.InhaleRows();
 

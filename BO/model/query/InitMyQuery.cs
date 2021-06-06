@@ -127,8 +127,30 @@ namespace BO
             //filtr podle master_prefix+master_pid
             if (_master_pid > 0 && _master_prefix != null)
             {
-               
-                BO.Reflexe.SetPropertyValue(mq, _master_prefix + "id", _master_pid);
+                switch (_master_prefix)
+                {
+                    case "le4":
+                        BO.Reflexe.SetPropertyValue(mq, "leindex", 4);
+                        BO.Reflexe.SetPropertyValue(mq, "lepid", _master_pid);
+                        break;
+                    case "le3":
+                        BO.Reflexe.SetPropertyValue(mq, "leindex", 3);
+                        BO.Reflexe.SetPropertyValue(mq, "lepid", _master_pid);
+                        break;
+                    case "le2":
+                        BO.Reflexe.SetPropertyValue(mq, "leindex", 2);
+                        BO.Reflexe.SetPropertyValue(mq, "lepid", _master_pid);
+                        break;
+                    case "le1":
+                        BO.Reflexe.SetPropertyValue(mq, "leindex", 1);
+                        BO.Reflexe.SetPropertyValue(mq, "lepid", _master_pid);
+                        break;
+                    default:
+                        BO.Reflexe.SetPropertyValue(mq, _master_prefix + "id", _master_pid);
+                        break;
+                }
+              
+                
             }
 
             return mq;

@@ -14,6 +14,8 @@ namespace BO
         public int p28id { get; set; }
         public int p41id { get; set; }
         public int o23id { get; set; }
+        public int leindex { get; set; }   //nadřízená vertikální úrověň projektu #1 - #4
+        public int lepid { get; set; }     //nadřízená vertikální úrověň projektu, hodnota p41id
 
         public myQueryB07()
         {
@@ -51,7 +53,11 @@ namespace BO
             {
                 AQ("a.b07RecordPID=@recpid", "recpid", this.recpid);
             }
-            
+
+            if (this.leindex > 0 && this.lepid > 0)
+            {
+                AQ($"a.x29ID=141 AND (a.b07Value NOT LIKE 'upload' OR a.b07Value IS NULL) AND a.b07RecordPID IN (select p41ID FROM p41Project WHERE p41ID=@lepid OR p41ID_P07Level{this.leindex}=@lepid)", "lepid", this.lepid);
+            }
 
             return this.InhaleRows();
 
