@@ -14,6 +14,10 @@
         <h5>@Model.ObjectAlias</h5>
     </div>
 
+    <div class="my-2">
+        <textarea asp-for="Rec.b07Value" class="form-control" placeholder="Poznámka/Komentář s neomezenou délkou"></textarea>
+    </div>
+
     <div class="row">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum"):</label>
         <div class="col-sm-4 col-md-3">
@@ -28,9 +32,7 @@
         </div>
     </div>
 
-    <div class="my-2">
-        <textarea asp-for="Rec.b07Value" class="form-control" placeholder="Poznámka/Komentář s neomezenou délkou"></textarea>
-    </div>
+
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="cmdLink">
         @_f.tra("URL adresa/odkaz")
     </button>
@@ -87,7 +89,7 @@
 
 
 <input type="hidden" asp-for="@Model.ObjectAlias" />
-<input type="hidden" asp-for="@Model.prefix" />
+<input type="hidden" asp-for="@Model.recprefix" />
 <input type="hidden" asp-for="@Model.recpid" />
 <input type="hidden" asp-for="@Model.UploadGuid" />
 

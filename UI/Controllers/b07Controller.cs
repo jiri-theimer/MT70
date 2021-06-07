@@ -17,14 +17,25 @@ namespace UI.Controllers
                 return this.StopPageSubform("master_entity or master_pid missing");
             }
             var v = new b07list() { master_entity = master_entity, master_pid = master_pid };
-            v.lisB07 = Factory.b07CommentBL.GetList(new BO.myQueryB07() { x29id = BO.BASX29.GetInt(v.master_entity.Substring(0, 3)), recpid = v.master_pid }).Where(p => p.b07WorkflowInfo == null && p.b07Value !="upload");
+            var mq = new BO.myQueryB07();
+            if (master_entity.Substring(0, 2) == "le")
+            {
+                mq.leindex = Convert.ToInt32(master_entity.Substring(2, 1));
+                mq.lepid = v.master_pid;
+            }
+            else
+            {
+                mq.x29id = BO.BASX29.GetInt(v.master_entity.Substring(0, 3));
+                mq.recpid = v.master_pid;
+            }
+            v.lisB07 = Factory.b07CommentBL.GetList(mq).Where(p => p.b07WorkflowInfo == null && p.b07Value !="upload");
 
             v.lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07ids = v.lisB07.Select(p => p.pid).ToList() });
             return View(v);
         }
         public IActionResult Record(int pid, bool isclone,string prefix,int recpid)
         {
-            var v = new b07Record() { rec_pid = pid, rec_entity = "b07",prefix=prefix,recpid=recpid, UploadGuid=BO.BAS.GetGuid() };
+            var v = new b07Record() { rec_pid = pid, rec_entity = "b07",recprefix=BO.BASX29.GetPrefixDb(prefix),recpid=recpid, UploadGuid=BO.BAS.GetGuid() };
             v.Rec = new BO.b07Comment();
             if (v.rec_pid > 0)
             {
@@ -33,7 +44,7 @@ namespace UI.Controllers
                 {
                     return RecNotFound(v);
                 }
-                v.prefix = BO.BASX29.GetPrefix(v.Rec.x29ID);
+                v.recprefix = BO.BASX29.GetPrefix(v.Rec.x29ID);
                 v.recpid = v.Rec.b07RecordPID;
 
                 var lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07id = v.rec_pid });
@@ -51,11 +62,12 @@ namespace UI.Controllers
                 }
 
             }
-            if (v.Rec.pid==0 && (string.IsNullOrEmpty(v.prefix) || v.recpid == 0))
+            if (v.Rec.pid==0 && (string.IsNullOrEmpty(v.recprefix) || v.recpid == 0))
             {
                 return this.StopPage(true, "Na vstupu chybí záznam entity.");
             }
-            v.ObjectAlias = Factory.CBL.GetObjectAlias(v.prefix, v.recpid);
+            v.ObjectAlias = Factory.CBL.GetObjectAlias(v.recprefix, v.recpid);
+            
 
             v.Toolbar = new MyToolbarViewModel(v.Rec);
             if (isclone)
@@ -63,7 +75,7 @@ namespace UI.Controllers
                 v.MakeClone();
             }
             RefreshState(v);
-            return ViewTup(v, BO.x53PermValEnum.GR_Admin);
+            return View(v);
         }
 
         private void RefreshState(b07Record v)
@@ -72,6 +84,7 @@ namespace UI.Controllers
             {
                 v.lisO27 = new List<o27Repeator>();
             }
+            
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -84,10 +97,10 @@ namespace UI.Controllers
                 return View(v);
             }
             if (ModelState.IsValid)
-            {
+            {                
                 BO.b07Comment c = new BO.b07Comment();
                 if (v.rec_pid > 0) c = Factory.b07CommentBL.Load(v.rec_pid);
-                c.x29ID = BO.BASX29.GetEnum(v.prefix);
+                c.x29ID = BO.BASX29.GetEnum(v.recprefix);
                 c.b07RecordPID = v.recpid;
                 c.b07Value = v.Rec.b07Value;
                 c.b07Date = v.Rec.b07Date;

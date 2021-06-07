@@ -10,7 +10,7 @@ namespace UI.Models.Record
         public BO.b07Comment Rec { get; set; }
         public string UploadGuid { get; set; }
         public int recpid { get; set; }
-        public string  prefix { get; set; }
+        public string  recprefix { get; set; }
         public string ObjectAlias { get; set; }
 
         public List<o27Repeator> lisO27 { get; set; }

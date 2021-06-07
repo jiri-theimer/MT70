@@ -156,7 +156,10 @@ namespace UI.Controllers
                 v.MakeClone();
             }
 
-           
+           if (v.rec_pid == 0)
+            {
+                v.IsAutoCollapseX20 = true;
+            }
             if (v.Rec.pid==0 && prefix != null && recpid > 0)
             {
                 //Založení nového dokumentu z konkrétního záznamu entity

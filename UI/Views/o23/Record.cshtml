@@ -49,8 +49,8 @@
             <table>
                 <tr valign="top">
                     <td>
-                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="cmdCollapseX20">
-                            @_f.tra("Přidat/Upravit vazby dokumentu")
+                        <button class="btn btn-light dropdown-toggle" type="button" id="cmdCollapseX20" style="background-color: #f3f3d6;border:solid 1px silver;">
+                            @_f.tra("Vazby dokumentu")
                         </button>
                     </td>
                     <td>
@@ -59,22 +59,20 @@
                 </tr>
             </table>
 
-            <div class="alert alert-primary" id="divCollapseX20" style="display:none;">
+            <div id="divCollapseX20" style="display:none;border:solid 1px silver;background-color:#f3f3d6;border-radius:4px;">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-3 col-md-3">
-                            <myradiolist asp-for="@Model.SelectedX20ID" datasource="@Model.lisX20" textfield="BindName" valuefield="pid" event_after_changevalue="x20id_onchange"></myradiolist>
-                        </div>
-                        <div class="col-sm-9 col-md-9" style="background-color:white;border-radius:5px;padding:5px;">
-                            @if (Model.SelectedX20ID > 0)
-                            {
-                                <div>
-                                    <code>@(Model.SelectedBindName):</code>
-                                </div>
-                                <mycombo entity="@Model.SelectedBindEntity" asp-for="@Model.SelectedBindPid" selectedtext="@Model.SelectedBindText" view-flag="1" event_after_changevalue="bindrec_onchange"></mycombo>
-                            }
-                        </div>
+                    <div>
+                        <myradiolist asp-for="@Model.SelectedX20ID" repeat-horizontal="true" datasource="@Model.lisX20" textfield="BindName" valuefield="pid" event_after_changevalue="x20id_onchange"></myradiolist>
                     </div>
+                    
+                    <div style="background-color:white;">
+                        @if (Model.SelectedX20ID > 0)
+                        {
+
+                            <mycombo entity="@Model.SelectedBindEntity" asp-for="@Model.SelectedBindPid" placeholder="@Model.SelectedBindName" selectedtext="@Model.SelectedBindText" filter-flag="1" event_after_changevalue="bindrec_onchange"></mycombo>
+                        }
+                    </div>
+                    
 
                 </div>
                 <input type="hidden" asp-for="@Model.SelectedBindEntity" value="@Model.SelectedBindEntity" />

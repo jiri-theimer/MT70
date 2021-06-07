@@ -20,13 +20,16 @@ namespace UI.Views.Shared.TagHelpers
 
         [HtmlAttributeName("valuefield")]
         public string ValueField { get; set; }  //musí být integer
+        
         [HtmlAttributeName("textfield")]
         public string TextField { get; set; }
 
         [HtmlAttributeName("event_after_changevalue")]
         public string Event_After_ChangeValue { get; set; }
 
-
+        [HtmlAttributeName("repeat-horizontal")]
+        public bool RepeatHorizontal { get; set; }  //vodorovně
+        
         [HtmlAttributeName("datasource")]
         public ModelExpression DataSource { get; set; }
 
@@ -57,8 +60,15 @@ namespace UI.Views.Shared.TagHelpers
                 }
                
 
-
-                sb.AppendLine("<li>");
+                if (this.RepeatHorizontal)
+                {
+                    sb.AppendLine("<li style='display: inline-block;'>");
+                }
+                else
+                {
+                    sb.AppendLine("<li>");
+                }
+                
                 sb.Append(string.Format("<input type='radio' id='chk{0}_{1}' name='my{0}' onclick='myradiolist_checked(\"{0}\",\"{1}\",\"{3}\")' {2} />", this.For.Name, strValue, strChecked,this.Event_After_ChangeValue));
                 sb.Append(string.Format("<label  for='chk{0}_{1}'>{2}</label>", this.For.Name, strValue, strText));
                 

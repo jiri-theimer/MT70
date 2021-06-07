@@ -27,6 +27,12 @@
             }
         </div>
         <div class="card-body">
+            @if (Model.master_pid !=c.b07RecordPID && Model.master_entity.Substring(0,2) == "le")
+            {
+                <div class="bgp41">
+                    @(_f.CBL.GetObjectAlias("p41",c.b07RecordPID))
+                </div>
+            }
             @if (c.b07Date != null)
             {
                 <div style="color:royalblue;">
