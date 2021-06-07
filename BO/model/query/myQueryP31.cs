@@ -163,7 +163,16 @@ namespace BO
             {
                 AQ($"p41x.p41ID_P07Level{this.leindex}=@lepid OR a.p41ID=@lepid", "lepid", this.lepid);
             }
-            
+
+
+            if (!string.IsNullOrEmpty(_searchstring) && _searchstring.Length>=3)
+            {                
+                string s = "p41x.p41Code LIKE '%'+@expr+'%' OR p41x.p41Name LIKE '%'+@expr+'%' OR a.p31Text COLLATE Latin1_general_CI_AI LIKE '%'+@expr+'%' COLLATE Latin1_general_CI_AI OR p32x.p32Name like '%'+@expr+'%'";
+                s += " OR p41x.p28ID_Client IN (select p28ID FROM p28Contact WHERE p28Name LIKE '%'+@expr+'%' OR p28CompanyName LIKE '%'+@expr+'%')";
+                s += " OR a.j02ID IN (select j02ID FROM j02Person WHERE j02LastName LIKE '%'+@expr+'%')";
+                AQ(s, "expr", _searchstring);
+
+            }
 
 
             return this.InhaleRows();

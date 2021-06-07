@@ -234,7 +234,8 @@ namespace UI.Controllers
                 {
                     this.AddMessage("Tato vazba již existuje.");return View(v);
                 }                
-                var c = new x19Repeator() { x20ID = v.SelectedX20ID, TempGuid = BO.BAS.GetGuid(), x19RecordPID = v.SelectedBindPid, SelectedBindText = v.SelectedBindText, SelectedX20Name = v.SelectedBindName };
+                var c = new x19Repeator() { x20ID = v.SelectedX20ID, TempGuid = BO.BAS.GetGuid(), x19RecordPID = v.SelectedBindPid, SelectedX20Name = v.SelectedBindName };
+                c.SelectedBindText = Factory.CBL.GetObjectAlias(v.SelectedBindEntity.Substring(0, 3), v.SelectedBindPid);
                 var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
                 if (!cx20.x20IsMultiSelect)
                 {
@@ -243,10 +244,12 @@ namespace UI.Controllers
                     {
                         c = v.lisX19.First(p => p.x20ID == v.SelectedX20ID && !p.IsTempDeleted);
                         c.x19RecordPID = v.SelectedBindPid;
-                        c.SelectedBindText = v.SelectedBindText;
+                        //c.SelectedBindText = v.SelectedBindText;
+                        c.SelectedBindText = Factory.CBL.GetObjectAlias(cx20.BindPrefix, v.SelectedBindPid);
                         return View(v);
                     }
                 }
+                
                 v.lisX19.Add(c);                
                 return View(v);
             }
