@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using Dapper;
 
 namespace DL
@@ -42,7 +43,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strProcName, pars);
+                    log_error(e, strProcName, pars).GetAwaiter().GetResult();
                     return e.Message;
 
                 }
@@ -62,7 +63,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL);
+                    log_error(e, strSQL).GetAwaiter().GetResult();
                     return default(T);
                 }
 
@@ -79,7 +80,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL, param);
+                    log_error(e, strSQL, param).GetAwaiter().GetResult();
                     return default(T);
                 }
 
@@ -95,7 +96,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL, pars);
+                    log_error(e, strSQL, pars).GetAwaiter().GetResult();
                     return default(T);
                 }
                 
@@ -110,13 +111,13 @@ namespace DL
                 {
                     if (CurrentUser.j03IsDebugLog)
                     {
-                        log_debug(strSQL, "GetList strSQL", null);
+                        log_debug(strSQL, "GetList strSQL", null).GetAwaiter().GetResult();
                     }
                     return con.Query<T>(strSQL);
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL);
+                    log_error(e, strSQL).GetAwaiter().GetResult();
                     return null;
                 }
 
@@ -131,13 +132,13 @@ namespace DL
                 {
                     if (CurrentUser.j03IsDebugLog)
                     {
-                        log_debug(strSQL, "GetList param", param);
+                        log_debug(strSQL, "GetList param", param).GetAwaiter().GetResult();
                     }
                     return con.Query<T>(strSQL, param);
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL, param);
+                    log_error(e, strSQL, param).GetAwaiter().GetResult();
                     return null;
                 }
 
@@ -152,14 +153,14 @@ namespace DL
                 {
                     if (CurrentUser.j03IsDebugLog)
                     {
-                        log_debug(strSQL, "GetList Dapper.DynamicParameters pars", pars);
+                        log_debug(strSQL, "GetList Dapper.DynamicParameters pars", pars).GetAwaiter().GetResult();
                     }
                     return con.Query<T>(strSQL, pars);
                    
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL, pars);
+                    log_error(e, strSQL, pars).GetAwaiter().GetResult();
                     return null;
                 }
 
@@ -190,13 +191,13 @@ namespace DL
                 {
                     if (CurrentUser.j03IsDebugLog)
                     {
-                        log_debug(strSQL, "GetDataTable", null);
+                        log_debug(strSQL, "GetDataTable", null).GetAwaiter().GetResult();
                     }
                     adapter.Fill(dt);
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL);
+                    log_error(e, strSQL).GetAwaiter().GetResult();
                 }
 
 
@@ -307,7 +308,7 @@ namespace DL
                 catch (Exception e)
                 {
 
-                    log_error(e, s.ToString(), pars);
+                    log_error(e, s.ToString(), pars).GetAwaiter().GetResult();
                 }
 
 
@@ -331,14 +332,14 @@ namespace DL
                         
                         if (CurrentUser.j03IsDebugLog)
                         {
-                            log_debug(strSQL, "RunSql", param);
+                            log_debug(strSQL, "RunSql", param).GetAwaiter().GetResult();
                         }                        
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    log_error(e, strSQL, param);
+                    log_error(e, strSQL, param).GetAwaiter().GetResult();
                     return false;
                 }
 
@@ -410,90 +411,131 @@ namespace DL
 
         }
 
-
-        private void log_debug(string strSQL,string strProc, object param=null)
+        private async Task log_debug(string strSQL, string strProc, object param = null)
         {
-            var strPath = string.Format("{0}\\sql-debug-{1}-{2}.log", _logDir,CurrentUser.j03Login, DateTime.Now.ToString("yyyy.MM.dd"));
-            System.IO.File.AppendAllLines(strPath, new List<string>() { "", "", "------------------------------", DateTime.Now.ToString() + ", proc: " + strProc });
+            
+            var filePath = $"{_logDir}\\sql-debug-{CurrentUser.j03Login}-{DateTime.Now.ToString("yyyy.MM.dd")}.log";
 
-            //TimeSpan dur = t1 - t0;
-            //System.IO.File.AppendAllLines(strPath, new List<string>() { "dur: "+dur.TotalSeconds.ToString()+ ", t0: " + t0.ToString() + ", t1: " + t1.ToString() });
-            System.IO.File.AppendAllLines(strPath, new List<string>() { "sql: " + strSQL });
-            if (param != null)
+            using (System.IO.FileStream stream = new System.IO.FileStream(filePath, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Write, 4096, true))
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
             {
-                System.IO.File.AppendAllLines(strPath, new List<string>() { "PARAMs: " + param.ToString() });
+
+                await sw.WriteLineAsync("------------------------------"+Environment.NewLine);
+                await sw.WriteLineAsync(DateTime.Now.ToString() + ", proc: " + strProc+ Environment.NewLine);
+                await sw.WriteLineAsync("sql: " + strSQL+ Environment.NewLine);
+                if (param != null)
+                {
+                    await sw.WriteLineAsync("PARAMs: " + param.ToString());
+                }
             }
+
             
         }
-        private void log_debug(string strSQL, string strProc, DynamicParameters pars)
+
+        private async Task log_debug(string strSQL, string strProc, DynamicParameters pars)
         {
-            var strPath = string.Format("{0}\\sql-debug-{1}-{2}.log", _logDir, CurrentUser.j03Login, DateTime.Now.ToString("yyyy.MM.dd"));
-            System.IO.File.AppendAllLines(strPath, new List<string>() { "", "", "------------------------------", DateTime.Now.ToString() + ", proc: " + strProc });
+            
+            var filePath = $"{_logDir}\\sql-debug-{CurrentUser.j03Login}-{DateTime.Now.ToString("yyyy.MM.dd")}.log";
 
-            System.IO.File.AppendAllLines(strPath, new List<string>() { "sql: " + strSQL });
-            if (pars != null)
+            using (System.IO.FileStream stream = new System.IO.FileStream(filePath, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Write, 4096,true))
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
             {
-                string strVal = "";
-                foreach (var strP in pars.ParameterNames)
+
+                await sw.WriteLineAsync("------------------------------" + Environment.NewLine);
+                await sw.WriteLineAsync(DateTime.Now.ToString() + ", proc: " + strProc + Environment.NewLine);
+                await sw.WriteLineAsync("sql: " + strSQL + Environment.NewLine);
+                if (pars != null)
                 {
-                    if (pars.Get<dynamic>(strP) != null)
+                    string strVal = "";
+                    foreach (var strP in pars.ParameterNames)
                     {
-                        strVal = pars.Get<dynamic>(strP).ToString();
+                        if (pars.Get<dynamic>(strP) != null)
+                        {
+                            strVal = pars.Get<dynamic>(strP).ToString();
+                        }
+                        else
+                        {
+                            strVal = "NULL";
+                        }
+                        await sw.WriteLineAsync("PARAM: " + strP + ", VALUE: " + strVal+Environment.NewLine);
+                        
                     }
-                    else
-                    {
-                        strVal = "NULL";
-                    }
-                    System.IO.File.AppendAllLines(strPath, new List<string>() { "PARAM: " + strP + ", VALUE: " + strVal });
-                }
-            }
-        }
-        private void log_error(Exception e, string strSQL, DynamicParameters pars)
-        {
-            CurrentUser.AddMessage(e.Message);
-            var strPath = string.Format("{0}\\sql-error-{1}.log", _logDir, DateTime.Now.ToString("yyyy.MM.dd"));
-
-            System.IO.File.AppendAllLines(strPath, new List<string>() { "", "", "------------------------------", DateTime.Now.ToString(), "CURRENT USER-login: " + CurrentUser.j03Login, "CURRENT USER-name:" + CurrentUser.PersonAsc, "SQL:", strSQL });
-
-            if (pars != null)
-            {
-                string strVal = "";
-                foreach (var strP in pars.ParameterNames)
-                {
-
-                    if (pars.Get<dynamic>(strP) != null)
-                    {
-                        strVal = pars.Get<dynamic>(strP).ToString();
-                    }
-                    else
-                    {
-                        strVal = "NULL";
-                    }
-                    System.IO.File.AppendAllLines(strPath, new List<string>() { "PARAM: " + strP + ", VALUE: " + strVal });
-
                 }
             }
 
-            System.IO.File.AppendAllLines(strPath, new List<string>() { "", "ERROR: ", e.Message });
+            
         }
-
-        private void log_error(Exception e, string strSQL, object param = null)
+        private async Task log_error(Exception e, string strSQL, DynamicParameters pars)
         {
             if (CurrentUser != null) CurrentUser.AddMessage(e.Message);
-            var strPath = string.Format("{0}\\sql-error-{1}.log", _logDir, DateTime.Now.ToString("yyyy.MM.dd"));
 
-            var strParams = "";
-            if (param != null)
+            var filePath = string.Format("{0}\\sql-error-{1}.log", _logDir, DateTime.Now.ToString("yyyy.MM.dd"));
+
+            using (System.IO.FileStream stream = new System.IO.FileStream(filePath, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Write, 4096, true))
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
             {
-                strParams = param.ToString();
+                await sw.WriteLineAsync("------------------------------" + Environment.NewLine);
+                await sw.WriteLineAsync(DateTime.Now.ToString() + Environment.NewLine);
+
+                if (CurrentUser != null)
+                {
+                    await sw.WriteLineAsync("CURRENT USER-login: " + CurrentUser.j03Login + ", USER-name:" + CurrentUser.PersonAsc + Environment.NewLine);
+                }
+
+                await sw.WriteLineAsync("SQL:" + strSQL + Environment.NewLine);                
+
+                if (pars != null)
+                {
+                    string strVal = "";
+                    foreach (var strP in pars.ParameterNames)
+                    {
+
+                        if (pars.Get<dynamic>(strP) != null)
+                        {
+                            strVal = pars.Get<dynamic>(strP).ToString();
+                        }
+                        else
+                        {
+                            strVal = "NULL";
+                        }
+                        await sw.WriteLineAsync("PARAM: " + strP + ", VALUE: " + strVal + Environment.NewLine);                        
+
+                    }
+                }
+
+                await sw.WriteLineAsync("ERROR:" + e.Message + Environment.NewLine);
+
+
             }
-            if (CurrentUser != null)
+
+
+        }
+
+        private async Task log_error(Exception e, string strSQL, object param = null)
+        {
+            if (CurrentUser != null) CurrentUser.AddMessage(e.Message);
+            var filePath = string.Format("{0}\\sql-error-{1}.log", _logDir, DateTime.Now.ToString("yyyy.MM.dd"));
+
+            using (System.IO.FileStream stream = new System.IO.FileStream(filePath, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Write, 4096, true))
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
             {
-                System.IO.File.AppendAllLines(strPath, new List<string>() { "", "", "------------------------------", DateTime.Now.ToString(), "CURRENT USER-login: " + CurrentUser.j03Login, "CURRENT USER-name:" + CurrentUser.PersonAsc, "SQL:", strSQL, "", "PARAMs:", strParams, "", "ERROR:", e.Message });
-            }
-            else
-            {
-                System.IO.File.AppendAllLines(strPath, new List<string>() { "", "", "------------------------------", DateTime.Now.ToString(), "SQL:", strSQL, "", "PARAMs:", strParams, "", "ERROR:", e.Message });
+                await sw.WriteLineAsync("------------------------------" + Environment.NewLine);
+                await sw.WriteLineAsync(DateTime.Now.ToString() + Environment.NewLine);
+
+                if (CurrentUser != null)
+                {                    
+                    await sw.WriteLineAsync("CURRENT USER-login: " + CurrentUser.j03Login+ ", USER-name:" + CurrentUser.PersonAsc + Environment.NewLine);                    
+                }
+
+                await sw.WriteLineAsync("SQL:" + strSQL + Environment.NewLine);
+                if (param != null)
+                {
+                    await sw.WriteLineAsync("PARAMS:" + param.ToString() + Environment.NewLine);
+                }
+                
+                await sw.WriteLineAsync("ERROR:" + e.Message + Environment.NewLine);
+
+                
             }
 
 
