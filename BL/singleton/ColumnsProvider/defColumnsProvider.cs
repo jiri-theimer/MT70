@@ -269,6 +269,11 @@ namespace BL
             AA("p86BankAddress", "Adresa banky");
             AppendTimestamp();
 
+            this.EntityName = "p70BillingStatus";
+            AA("p70Name", "Fakturační status", gdc1, null, "string", false, true);
+            this.EntityName = "p72PreBillingStatus";
+            AA("p72Name", "Fakturační status schvalovatele", gdc1, null, "string", false, true);
+
             this.EntityName = "p95InvoiceRow";
             AA("p95Name", "Fakturační oddíl", gdc1, null, "string", false, true);
             AA("p95Code", "Kód");

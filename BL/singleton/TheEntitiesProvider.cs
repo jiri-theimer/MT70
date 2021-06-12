@@ -98,6 +98,8 @@ namespace BL
             AE("p63Overhead", "Režijní přirážka k fakturaci", "Režijní přirážka", "p63Overhead a","a.p63Name");
             AE("p87BillingLanguage", "Fakturační jazyk", "Fakturační jazyk", "p87BillingLanguage a", "a.p87LangIndex");
             AE("p95InvoiceRow", "Fakturační oddíly", "Fakturační oddíl", "p95InvoiceRow a", "a.p95Ordinary");
+            AE("p70BillingStatus", "Fakturační status", "Fakturační status", "p70BillingStatus a", "a.p70ID");
+            AE("p72PreBillingStatus", "Fakturační status schvalovatelem", "Fakturační status schvalovatelem", "p72PreBillingStatus a", "a.p72ID");
             AE("p80InvoiceAmountStructure", "Struktury rozpisu částky faktury", "Struktura cenového rozpisu faktury", "p80InvoiceAmountStructure a", "a.p80Name");
             AE("p41Project", "Projekty", "Projekt", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID LEFT OUTER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID", "a.p41ID DESC");
             AE("le1", "L1", "L1", "p41Project a INNER JOIN p42ProjectType p42x ON a.p42ID=p42x.p42ID INNER JOIN p07ProjectLevel p07x ON p42x.p07ID=p07x.p07ID AND p07x.p07Level=1", "a.p41ID DESC", "a.p41ID DESC");

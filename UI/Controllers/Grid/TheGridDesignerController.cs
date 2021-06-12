@@ -89,12 +89,13 @@ namespace UI.Controllers
             {
                 if (v.lisJ73.Where(p => p.TempGuid == guid).Count() > 0)
                 {
-                    var c = v.lisJ73.Where(p => p.TempGuid == guid).First();
-                    c.j73Value = null; c.j73ValueAlias = null;
-                    c.j73ComboValue = 0;
+                    var c = v.lisJ73.Where(p => p.TempGuid == guid).First();                    
+                    c.j73Value = null; c.j73ValueAlias = null;                    
+                    c.j73ComboValue = 0;                    
                     c.j73Date1 = null; c.j73Date2 = null;
                     c.j73Num1 = 0; c.j73Num2 = 0;
                 }
+                
                 return View(v);
             }
 

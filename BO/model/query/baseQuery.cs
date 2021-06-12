@@ -439,6 +439,10 @@ namespace BO
                             
                            
                         }
+                        if (c.FieldType == "bool1x")
+                        {
+                            AQ(c.FieldSqlSyntax, null, null);
+                        }
                         if (c.FieldType == "string")
                         {                            
                             AQ( strField + " " + strOper + " '" + BO.BAS.GSS(c.j73Value) + "'", null, null, strAndOrZleva, c.j73BracketLeft, c.j73BracketRight);

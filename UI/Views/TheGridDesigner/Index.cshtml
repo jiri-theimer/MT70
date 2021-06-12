@@ -154,7 +154,7 @@
     {
         <div class="card" style="min-width:1200px;">
             <div class="card-header">
-                <span class="k-icon k-i-filter"></span> @_f.tra("GRID vnitřní filtrovací podmínka")
+                <span class="k-icon k-i-filter"></span> @_f.tra("Vnitřní filtrovací podmínka")
             </div>
             <div class="card-body">
                 <button type="button" class="btn btn-primary" onclick="handle_j73_append()">@_f.tra("Přidat řádek")</button>
@@ -200,12 +200,12 @@
                                     {
                                         <option value="EQUAL">@_f.tra("Je rovno")</option>
                                     }
-                                    @if (Model.lisJ73[i].FieldType != "bool" && Model.lisJ73[i].FieldType != "number" && Model.lisJ73[i].FieldType != "date" && Model.lisJ73[i].FieldType != "bool1")
+                                    @if (Model.lisJ73[i].FieldType != "bool" && Model.lisJ73[i].FieldType != "number" && Model.lisJ73[i].FieldType != "date" && Model.lisJ73[i].FieldType != "bool1" && Model.lisJ73[i].FieldType != "bool1x")
                                     {
                                         <option value="NOT-EQUAL">@_f.tra("Není rovno")</option>
                                     }
 
-                                    @if (Model.lisJ73[i].FieldType != "bool" && Model.lisJ73[i].FieldType != "bool1")
+                                    @if (Model.lisJ73[i].FieldType != "bool" && Model.lisJ73[i].FieldType != "bool1" && Model.lisJ73[i].FieldType != "bool1x")
                                     {
                                         <option value="ISNULL">@_f.tra("Je prázdné")</option>
                                         <option value="NOT-ISNULL">@_f.tra("Není prázdné")</option>
@@ -283,7 +283,8 @@
                                         </select>
 
                                     }
-                                    @if (Model.lisJ73[i].FieldType == "bool1")
+                                   
+                                    @if (Model.lisJ73[i].FieldType == "bool1" || Model.lisJ73[i].FieldType == "bool1x")
                                     {
                                         <select asp-for="@Model.lisJ73[i].j73Value" class="form-select">
                                             <option value="1">@_f.tra("ANO")</option>
@@ -557,6 +558,7 @@
     }
     function handle_queryfield_change(cbx) {
         var guid = $(cbx).attr("data-value");
+        
         form1.action = "/TheGridDesigner/Index?oper=changefield&guid=" + guid;
         form1.submit();
     }

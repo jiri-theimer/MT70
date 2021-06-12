@@ -79,7 +79,7 @@ namespace UI.Views.Shared.TagHelpers
             }
             if (this.DataValue != null)
             {
-                sb.Append(" data-value='{this.DataValue}'");
+                sb.Append($" data-value='{this.DataValue}'");
             }
             sb.Append(">");
             if (this.IsFirstEmptyRow)
