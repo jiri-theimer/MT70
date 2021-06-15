@@ -94,6 +94,10 @@ namespace UI.Controllers
                     c.j73ComboValue = 0;                    
                     c.j73Date1 = null; c.j73Date2 = null;
                     c.j73Num1 = 0; c.j73Num2 = 0;
+
+                    c.MyQueryInline = v.lisQueryFields.Where(p => p.Field == c.j73Column).First().MyQueryInline;
+                    
+
                 }
                 
                 return View(v);
@@ -104,8 +108,9 @@ namespace UI.Controllers
                 var c = new BO.j73TheGridQuery() { TempGuid = BO.BAS.GetGuid(), j73Column = v.lisQueryFields.First().Field };
                 c.FieldType = v.lisQueryFields.Where(p => p.Field == c.j73Column).First().FieldType;
                 c.FieldEntity = v.lisQueryFields.Where(p => p.Field == c.j73Column).First().SourceEntity;
+                c.MyQueryInline = v.lisQueryFields.Where(p => p.Field == c.j73Column).First().MyQueryInline;
                 v.lisJ73.Add(c);
-
+                
                 return View(v);
             }
             if (oper == "delete_j73")

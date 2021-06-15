@@ -16,10 +16,25 @@
 
 @addTagHelper *,UI
 
-<div class="input-group m-0" style="padding-top:1px;">
-    <div class="tabovergrid nonmobile" style="margin-left:1px;">
-        KLIENTI?
-        <span id="TheGridRows" class="badge bg-primary"></span>
+<div class="input-group m-0" style="padding-top:1px;">    
+    <div>
+        <ul id="navtabs" class="nav nav-tabs">            
+            @foreach (var tab in Model.NavTabs)
+            {
+                <li class="nav-item onetab">
+                    <a class="@tab.CssClass" id="@tab.ClientID" href="@tab.Url" onclick="tabclick(this)" style="padding-bottom:2px;">
+                        @{
+                            @Html.Raw(tab.Name)
+                            if (tab.Badge != null)
+                            {
+                                @Html.Raw(tab.Badge)
+                            }
+                        }
+                    </a>
+                </li>
+
+            }
+        </ul>
     </div>
 
     <div class="dropdown">
@@ -145,6 +160,12 @@
         } else {
             _edit(_pageprefix, pid);
         }
+    }
+
+    function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
+       
+        _load_ajax_async("/Common/SetUserParam", { key: "overgrid-tab-" + _pageprefix, value: tab.id.replace("tab", "") })
+
     }
 
 </script>

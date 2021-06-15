@@ -20,11 +20,11 @@ namespace BO
         
         public int p41id { get; set; }
         public int p91id { get; set; }
-        
+        public string tabquery { get; set; }
 
         public myQueryJ02()
         {
-            this.Prefix = "j02";
+            this.Prefix = "j02";            
         }
 
         public override List<QRow> GetRows()
@@ -58,6 +58,17 @@ namespace BO
                     }
                 }
             }
+            if (this.tabquery != null)
+            {
+                switch (this.tabquery)
+                {
+                    case "internal":
+                        this.j02isintraperson=true; break;
+                    case "contact":
+                        this.j02isintraperson = false; break;                    
+                }
+            }
+
             if (this.j02isintraperson != null)
             {
                 AQ("a.j02IsIntraPerson=@isintra", "isintra", this.j02isintraperson);
@@ -161,13 +172,26 @@ namespace BO
             {
                 if (this.iswip == true)
                 {
-                    AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                    AQ("EXISTS (select 1 FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.j02ID=a.j02ID AND xa.p71ID IS NULL AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
                 }
                 else
                 {
-                    AQ("a.j02ID NOT IN (select j02ID FROM p31Worksheet WHERE p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                    AQ("NOT EXISTS (select 1 FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.j02ID=a.j02ID AND xa.p71ID IS NULL AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
                 }
             }
+            if (this.isapproved_and_wait4invoice != null)
+            {
+                if (this.isapproved_and_wait4invoice == true)
+                {
+                    AQ("EXISTS (select 1 FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.j02ID=a.j02ID AND xa.p71ID=1 AND xa.p72ID_AfterApprove=4 AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
+                }
+                else
+                {
+                    AQ("NOT EXISTS (select 1 FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.j02ID=a.j02ID AND xa.p71ID=1 AND xa.p72ID_AfterApprove=4 AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
+                }
+            }
+
+            
 
             return this.InhaleRows();
 
@@ -191,7 +215,7 @@ namespace BO
             {
                 if (this.isapproved_and_wait4invoice == true)
                 {
-                    AQ("a.j02ID IN (select j02ID FROM p31Worksheet WHERE p71ID=1 AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                    AQ("a.j02ID IN (select za.j02ID FROM p31Worksheet za INNER JOIN p41Project zb ON za.p41ID=zb.p41ID WHERE za.p71ID=1 AND za.p91ID IS NULL AND za.p31Date between @p31date1 AND @p31date2 AND zb.p41BillingFlag<99)", null, null);
                 }
                 else
                 {

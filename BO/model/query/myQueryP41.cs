@@ -63,6 +63,30 @@ namespace BO
                     }
                 }
             }
+
+            if (this.iswip != null)
+            {
+                if (this.iswip == true)
+                {
+                    AQ("a.p41BillingFlag<99 AND EXISTS (select 1 FROM p31Worksheet WHERE p41ID=a.p41ID AND p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+                else
+                {
+                    AQ("a.p41BillingFlag<99 AND NOT EXISTS (select 1 FROM p31Worksheet WHERE p41ID=a.p41ID AND p71ID IS NULL AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+            }
+            if (this.isapproved_and_wait4invoice != null)
+            {
+                if (this.isapproved_and_wait4invoice == true)
+                {
+                    AQ("a.p41BillingFlag<99 AND EXISTS (select 1 FROM p31Worksheet WHERE p41ID=a.p41ID AND p71ID=1 AND p72ID_AfterApprove=4 AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+                else
+                {
+                    AQ("a.p41BillingFlag<99 AND NOT EXISTS (select 1 FROM p31Worksheet WHERE p41ID=a.p41ID AND p71ID = 1 AND p72ID_AfterApprove=4 AND p91ID IS NULL AND p31Date between @p31date1 AND @p31date2)", null, null);
+                }
+            }
+
             if (this.p07level > 0)
             {
                 AQ("p07x.p07Level=@p07level", "p07level", this.p07level);

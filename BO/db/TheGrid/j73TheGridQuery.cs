@@ -32,6 +32,7 @@ namespace BO
         public string FieldSqlSyntax { get; set; }
         public string MasterPrefix { get; set; }
         public int MasterPid { get; set; }
+        public string MyQueryInline { get; set; }
         public string SqlWrapper { get; set; }
 
         public bool IsTempDeleted { get; set; }

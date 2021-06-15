@@ -1154,3 +1154,13 @@ function tg_div_close_synthetic_divs() {
 
 
 }
+
+function update_flattab_badge(badgeid, val) {
+    //aktualizace hodnoty záložky ve Flatview gridu
+    $("#" + badgeid).text(val);
+    if (val === "" || val==="0") {
+        $("#" + badgeid).css("visibility", "hidden");
+    } else {
+        $("#" + badgeid).css("visibility", "visible");
+    }
+}

@@ -507,11 +507,16 @@ namespace BO
             switch (this.p31statequery)
             {
                 case 1: //Rozpracované
-                    this.iswip = true; break;
+                    this.iswip = true;
+                    break;
                 case 2://rozpracované s korekcí
-                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND za.p72ID_AfterTrimming IS NOT NULL AND za.p31ValidUntil>GETDATE()"; break;
-                case 3://nevyúčtované
-                    s = "za.p91ID IS NULL AND za.p31ValidUntil>GETDATE()"; break;
+                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND za.p72ID_AfterTrimming IS NOT NULL AND za.p31ValidUntil>GETDATE() AND zb.p41BillingFlag<99";
+                    sf = " INNER JOIN p41Project zb ON za.p41ID=zb.p41ID";
+                    break;
+                case 3://nevyúčtované                    
+                    s = "za.p91ID IS NULL AND za.p31ValidUntil>GETDATE() AND zb.p41BillingFlag<99";
+                    sf = " INNER JOIN p41Project zb ON za.p41ID=zb.p41ID";
+                    break;
                 case 4://schválené
                     this.isapproved_and_wait4invoice = true; break;  //AQ("a.p71ID=1 AND a.p91ID IS NULL", null, null); break;
                 case 5://schválené jako fakturovat
@@ -544,10 +549,10 @@ namespace BO
                 case 15: //v archivu
                     s = "za.p31ValidUntil<GETDATE()"; break;
                 case 16://rozpracované Fa aktivita
-                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND zb.p32IsBillable=1"; sf = " INNER JOIN p32Activity zb ON za.p32ID=zb.p32ID";
+                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND zb.p32IsBillable=1 AND zc.p41BillingFlag<99"; sf = " INNER JOIN p32Activity zb ON za.p32ID=zb.p32ID INNER JOIN p41Project zc ON za.p41ID=zc.p41ID";
                     break;
                 case 17://rozpracované Fa aktivita
-                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND zb.p32IsBillable=0"; sf = " INNER JOIN p32Activity zb ON za.p32ID=zb.p32ID";
+                    s = "za.p71ID IS NULL AND za.p91ID IS NULL AND zb.p32IsBillable=0 AND zc.p41BillingFlag<99"; sf = " INNER JOIN p32Activity zb ON za.p32ID=zb.p32ID INNER JOIN p41Project zc ON za.p41ID=zc.p41ID";
                     break;
             }
 
@@ -560,6 +565,11 @@ namespace BO
                         AQ($"EXISTS (SELECT 1 FROM p31Worksheet za{sf} WHERE za.j02ID=a.j02ID AND {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
                         break;
                     case "p41":
+                    case "le5":
+                    case "le4":
+                    case "le3":
+                    case "le2":
+                    case "le1":
                         //AQ($"a.p41ID IN (SELECT za.p41ID FROM p31Worksheet za{sf} WHERE {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
                         AQ($"EXISTS (SELECT 1 FROM p31Worksheet za{sf} WHERE za.p41ID=a.p41ID AND {s} AND za.p31Date between @p31date1 AND @p31date2)", null, null);
                         break;

@@ -68,6 +68,7 @@ namespace BO
                 case "o43": return BO.x29IdEnum.o43ImapRobotHistory;
                 case "j23": return BO.x29IdEnum.j23NonPerson;
                 case "j24": return BO.x29IdEnum.j24NonPersonType;
+                case "j27": return BO.x29IdEnum.j27Currency;
                 case "x31": return BO.x29IdEnum.x31Report;
                 case "b07": return BO.x29IdEnum.b07Comment;
                 case "app": return BO.x29IdEnum.Approving;

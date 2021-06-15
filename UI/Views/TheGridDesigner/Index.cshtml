@@ -166,6 +166,7 @@
                             <td style="width:140px;">
                                 <input type="hidden" asp-for="lisJ73[i].IsTempDeleted" value="@Model.lisJ73[i].IsTempDeleted" />
                                 <input type="hidden" asp-for="lisJ73[i].j73ID" value="@Model.lisJ73[i].j73ID" />
+                                <input type="hidden" asp-for="lisJ73[i].MyQueryInline" value="@Model.lisJ73[i].MyQueryInline" />
 
                                 <input type="hidden" asp-for="lisJ73[i].TempGuid" value="@Model.lisJ73[i].TempGuid" />
 
@@ -225,14 +226,14 @@
                                     @if (Model.lisJ73[i].FieldType == "combo")
                                     {
 
-                                        <mycombo asp-for="@Model.lisJ73[i].j73ComboValue" entity="@Model.lisJ73[i].FieldEntity" selectedtext="@Model.lisJ73[i].j73ValueAlias" filter-flag="1" masterprefix="@Model.lisJ73[i].MasterPrefix" masterpid="@Model.lisJ73[i].MasterPid"></mycombo>
+                                        <mycombo asp-for="@Model.lisJ73[i].j73ComboValue" entity="@Model.lisJ73[i].FieldEntity" selectedtext="@Model.lisJ73[i].j73ValueAlias" filter-flag="1" masterprefix="@Model.lisJ73[i].MasterPrefix" masterpid="@Model.lisJ73[i].MasterPid" myqueryinline="@Model.lisJ73[i].MyQueryInline"></mycombo>
 
 
                                     }
                                     @if (Model.lisJ73[i].FieldType == "multi")
                                     {
 
-                                        <mycombochecklist asp-for="@Model.lisJ73[i].j73Value" selectedtext="@Model.lisJ73[i].j73ValueAlias" entity="@Model.lisJ73[i].FieldEntity" masterprefix="@Model.lisJ73[i].MasterPrefix" masterpid="@Model.lisJ73[i].MasterPid"></mycombochecklist>
+                                        <mycombochecklist asp-for="@Model.lisJ73[i].j73Value" selectedtext="@Model.lisJ73[i].j73ValueAlias" entity="@Model.lisJ73[i].FieldEntity" masterprefix="@Model.lisJ73[i].MasterPrefix" masterpid="@Model.lisJ73[i].MasterPid" myqueryinline="@Model.lisJ73[i].MyQueryInline"></mycombochecklist>
 
 
                                     }

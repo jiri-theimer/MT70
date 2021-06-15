@@ -19,6 +19,7 @@ namespace BL
             AF("p31RecordSourceFlag_Alias", "Zdrojová aplikace", "case a.p31RecordSourceFlag when 1 then 'Mobil' else 'MT' end");
             AF("p31DateTimeUntil_Orig", "Čas zapnutí stopek", null, "datetime");
 
+            oc = AF("KontaktniOsoba", "Kóntaktní osoba úkonu", "p31_contactcontact.j02LastName+' '+p31_contactcontact.j02FirstName"); oc.RelSqlInCol = "LEFT OUTER JOIN j02Person p31_contactcontact ON a.j02ID_ContactPerson=p31_contactcontact.j02ID";
 
             this.CurrentFieldGroup = "Datum a čas úkonu";//-----------Datum a čas úkonu---------------------
             oc =AFDATE("p31Date", "Datum");oc.DefaultColumnFlag = gdc1;

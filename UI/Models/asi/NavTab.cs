@@ -11,5 +11,7 @@ namespace UI.Models
 
 
         public string Badge { get; set; }
+
+        public string ClientID { get; set; }
     }
 }

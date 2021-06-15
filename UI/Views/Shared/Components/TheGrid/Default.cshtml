@@ -190,7 +190,7 @@
 
 <script type="text/javascript">
     var _gridMenuFilled = false;
-    var _gridSelMenuFilled = false;    
+    var _gridSelMenuFilled = false;
 
     $(document).ready(function () {
         var _thegrid={
@@ -209,11 +209,11 @@
             myqueryinline:"@Model.GridInput.myqueryinline",
             viewstate: "@Model.GridInput.viewstate",
             isperiodovergrid: "@Model.GridInput.isperiodovergrid"
-            
+
 
 
         };
-        
+
         tg_init(_thegrid);
 
         tg_refresh_sorter("@Model.firstdata.sortfield", "@Model.firstdata.sortdir");
@@ -234,8 +234,23 @@
             }
 
             $("#TheGridRows").text($("#tabgrid1_rows").text());
+            @if (Model.GridInput.entity == "p31Worksheet")
+            {
+                <text>
+            update_flattab_badge("TheGridRowsTime", $("#tabgrid1_rows_time").val());
+            update_flattab_badge("TheGridRowsExpense", $("#tabgrid1_rows_expense").val());
+            update_flattab_badge("TheGridRowsFee", $("#tabgrid1_rows_fee").val());
+            update_flattab_badge("TheGridRowsKusovnik", $("#tabgrid1_rows_kusovnik").val());
+                </text>
+            }
+            @if (Model.GridInput.entity == "j02Person")
+            {
+                <text>
+            update_flattab_badge("TheGridRowsInternal", $("#tabgrid1_rows_internal").val());
+            update_flattab_badge("TheGridRowsContact", $("#tabgrid1_rows_contact").val());           
+                </text>
+            }
 
-            
             document.getElementById("cmdGridMenu").addEventListener("show.bs.dropdown", function () {
 
                 if (_gridMenuFilled == true) return;
@@ -258,7 +273,7 @@
             });
         }
 
-        if (document.getElementById("cmdGridSelMenu")) {            
+        if (document.getElementById("cmdGridSelMenu")) {
             document.getElementById("cmdGridSelMenu").addEventListener("show.bs.dropdown", function () {
 
 
@@ -270,7 +285,7 @@
                     if (($("#ulGridSelMenu").height() + $("#ulGridSelMenu").offset().top+40) > $(document).height()) {
                         $("#ulGridSelMenu").css("columns", "2");
                     }
-                    
+
 
                     _gridSelMenuFilled = true;
                 });
@@ -283,24 +298,24 @@
 
 
 
-        if (document.getElementById("cmdGridDblclickSetting")) {            
+        if (document.getElementById("cmdGridDblclickSetting")) {
             document.getElementById("cmdGridDblclickSetting").addEventListener("show.bs.dropdown", function () {
-                
+
                 $.post("/Menu/TheGridDblclickSetting", { tgi: get_all_tgi_params() }, function (data) {
                     $("#ulGridDblclickSetting").css("margin-left", "-50px");
                     $("#ulGridDblclickSetting").html(data);
-                    
+
                 });
             });
         }
 
-        if (document.getElementById("cmdP31StateQuery")) {            
+        if (document.getElementById("cmdP31StateQuery")) {
             document.getElementById("cmdP31StateQuery").addEventListener("show.bs.dropdown", function () {
 
                 $.post("/Menu/TheGridP31StateQuery", { tgi: get_all_tgi_params() }, function (data) {
                     $("#ulP31StateQuery").html(data);
-                    
-                    if (_device.innerHeight <= 400) {                        
+
+                    if (_device.innerHeight <= 400) {
                         $("#ulP31StateQuery").css("column-count", "2");
                     }
                     if (_device.innerHeight <= 300) {

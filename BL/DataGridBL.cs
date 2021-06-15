@@ -95,9 +95,22 @@ namespace BL
             }
             BO.TheEntity ce = _mother.EProvider.ByPrefix(mq.Prefix);
             
-            if (bolGetTotalsRow == true)
+            if (bolGetTotalsRow)
             {
                 sb.Append($",COUNT(a.{mq.PrefixDb}ID) as RowsCount");     //sumační dotaz gridu
+                switch (mq.Prefix)
+                {
+                    case "p31": //součty pro záložky hodiny/výdaje/odměny                        
+                        sb.Append(",SUM(case when p34x.p33ID=1 then 1 end) as RowsTime");
+                        sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=1 then 1 end) as RowsExpense");
+                        sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=2 then 1 end) as RowsFee");
+                        sb.Append(",SUM(case when p34x.p33ID=3 then 1 end) as RowsKusovnik");
+                        break;
+                    case "j02":
+                        sb.Append(",SUM(case when a.j02IsIntraPerson=1 then 1 end) as RowsInternal");
+                        sb.Append(",SUM(case when a.j02IsIntraPerson=0 then 1 end) as RowsContact");
+                        break;
+                }                
             }
             else
             {

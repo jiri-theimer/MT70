@@ -30,6 +30,7 @@ namespace BO
 
         public string SourceEntity { get; set; }
         public string SourceSql { get; set; }
+        public string MyQueryInline { get; set; }
         public string SqlWrapper { get; set; }
 
         public string TranslateLang1 { get; set; }

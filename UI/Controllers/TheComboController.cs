@@ -189,6 +189,9 @@ namespace UI.Controllers
                 case "j02":
                     strTextField = "a__j02Person__fullname_desc";
                     break;
+                case "j27":
+                    strTextField = "a__j27Currency__j27code";
+                    break;
             }
             
             string strGroupField = null;

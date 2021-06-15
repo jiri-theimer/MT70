@@ -64,7 +64,7 @@ namespace UI.Controllers
         }        
         //-----------Konec GRID událostí-------------
 
-        public IActionResult FlatView(string prefix, int go2pid)    //pouze grid bez subform
+        public IActionResult FlatView(string prefix, int go2pid, string myqueryinline,string tab)    //pouze grid bez subform
         {
             if (!TestGridPermissions(prefix))
             {
@@ -74,9 +74,23 @@ namespace UI.Controllers
             {
                 go2pid = LoadLastUsedPid(prefix);
             }
-            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"flatview",null,0,null,TestIfPeriodOverGrid(prefix));
+            
+            if (tab==null && (prefix == "p31" || prefix == "j02"))
+            {
+                tab = Factory.CBL.LoadUserParam("overgrid-tab-" + prefix,"tab1",1);
+                if (tab != null && tab !="tab1")
+                {
+                    myqueryinline = "tabquery|string|" + tab;
+                }
+            }
+            
+            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"flatview",null,0, myqueryinline, TestIfPeriodOverGrid(prefix));
             
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("flatview-j72id-" + prefix);
+
+            var cTabs = new NavTabsSupport(Factory);
+            v.NavTabs = cTabs.getOverGridTabs(v.prefix, tab);    
+            
 
             return View(v);
         }
@@ -98,7 +112,7 @@ namespace UI.Controllers
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("masterview-j72id-" + prefix);
 
             var cTabs = new NavTabsSupport(Factory);
-            v.NavTabs = cTabs.getTabs(v.prefix, go2pid,false);
+            v.NavTabs = cTabs.getMasterTabs(v.prefix, go2pid,false);
 
           
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);
@@ -281,12 +295,12 @@ namespace UI.Controllers
         public List<NavTab> getTabs(string prefix,int pid)  //volá se z javascriptu při změně řádky v gridu
         {
             var cTabs = new NavTabsSupport(Factory);
-            return cTabs.getTabs(prefix, pid,true);
+            return cTabs.getMasterTabs(prefix, pid,true);
         }
 
         private void Handle_P31StateQuery(FsmViewModel v, bool bolMasterEntity, string masterentity)
         {
-            if (v.prefix == "p31" || v.prefix == "p41" || v.prefix == "p28" || v.prefix == "j02" || v.prefix == "p56")
+            if (v.prefix == "p31" || v.prefix == "p41" || v.prefix == "p28" || v.prefix == "j02" || v.prefix == "p56" || v.prefix == "le5" || v.prefix=="le4" || v.prefix == "le3" || v.prefix == "le2" || v.prefix == "le1")
             {
                 v.IsP31StateQuery = true;
                 if (!bolMasterEntity)

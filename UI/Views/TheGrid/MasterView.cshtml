@@ -91,7 +91,7 @@
             @foreach (var tab in Model.NavTabs)
             {
                 <li class="nav-item onetab">
-                    <a class="@tab.CssClass" id="tab@(tab.Entity)" href="@tab.Url" target="fra_subgrid" onclick="tabclick(this)">
+                    <a class="@tab.CssClass" id="@tab.ClientID" href="@tab.Url" target="fra_subgrid" onclick="tabclick(this)">
                         @{
                             @Html.Raw(tab.Name)
                             if (tab.Badge != null)

@@ -55,6 +55,28 @@ namespace BO
                     }
                 }
             }
+            if (this.iswip != null)
+            {
+                if (this.iswip == true)
+                {
+                    AQ("a.p56ID IN (select xa.p56ID FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.p56ID IS NOT NULL AND xa.p71ID IS NULL AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
+                }
+                else
+                {
+                    AQ("a.p56ID NOT IN (select xa.p56ID FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.p56ID IS NOT NULL AND xa.p71ID IS NULL AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
+                }
+            }
+            if (this.isapproved_and_wait4invoice != null)
+            {
+                if (this.isapproved_and_wait4invoice == true)
+                {
+                    AQ("a.p56ID IN (select xa.p56ID FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.p56ID IS NOT NULL AND xa.p71ID=1 AND xa.p72ID_AfterApprove=4 AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
+                }
+                else
+                {
+                    AQ("a.p56ID NOT IN (select xa.p56ID FROM p31Worksheet xa INNER JOIN p41Project xb ON xa.p41ID=xb.p41ID WHERE xa.p56ID IS NOT NULL AND xa.p71ID=1 AND xa.p72ID_AfterApprove=4 AND xa.p91ID IS NULL AND xa.p31Date between @p31date1 AND @p31date2 AND xb.p41BillingFlag<99)", null, null);
+                }
+            }
             if (this.p57id > 0)
             {
                 AQ("a.p57ID=@p57id)", "p57id", this.p57id);

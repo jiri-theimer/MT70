@@ -30,7 +30,6 @@
 
 .dynamicmenu_container {
     min-width: 200px;
-    
 }
 
 
@@ -141,25 +140,25 @@ input[type="checkbox"] {
 
 
 
-input[type="checkbox"] + label:hover {
-    color: cornflowerblue;
-    cursor:pointer;
-}
+    input[type="checkbox"] + label:hover {
+        color: cornflowerblue;
+        cursor: pointer;
+    }
 
-input[type="checkbox"]:checked + label {
-    color: blue;
-}
+    input[type="checkbox"]:checked + label {
+        color: blue;
+    }
 
 
-/*asp.net core doplňuje k checkboxům hidden element navíc!!!*/
-input[type="checkbox"]:checked + input[type="hidden"] + label {
-    color: blue;
-}
+    /*asp.net core doplňuje k checkboxům hidden element navíc!!!*/
+    input[type="checkbox"]:checked + input[type="hidden"] + label {
+        color: blue;
+    }
 
-input[type="checkbox"] + input[type="hidden"] + label:hover {
-    cursor: pointer;
-    color:cornflowerblue;
-}
+    input[type="checkbox"] + input[type="hidden"] + label:hover {
+        cursor: pointer;
+        color: cornflowerblue;
+    }
 
 
 
@@ -627,8 +626,7 @@ a.cm {
 .cm_submenu {
     background-color: #F8F9FA !important; /* #90EE90 */
     padding: 6px;
-    position:absolute;
-    
+    position: absolute;
 }
 /*SPLITTER*/
 /* splitter zleva doprava - horizontální*/
@@ -807,7 +805,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     vertical-align: middle;
     border-radius: 4px;
     color: black;
-    background-color:white;
+    background-color: white;
     margin-left: 2px;
 }
 
@@ -856,7 +854,7 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     display: inline-block;
     width: 100px;
     text-align: right;
-    margin-right:4px;
+    margin-right: 4px;
 }
 
 
@@ -896,7 +894,6 @@ hr.hr-mini { /*používá se v kontextovém menu*/
     padding: 0px;
     margin-left: 200px;
     display: block;
-    
 }
 
 #layout_sidebar_contextmenu {
@@ -1020,15 +1017,14 @@ div.tabs_container {
     margin-right: 4px;
     background-color: white;
     padding-top: 4px;
-    padding-right:4px;
+    padding-right: 4px;
     padding-bottom: 6px;
     min-width: 100px;
     text-align: center;
     cursor: default;
-    
 }
 
-    
+
 
 
 
@@ -1157,7 +1153,6 @@ div.info_record_container {
     padding-top: 6px;
     padding-left: 6px;
     width: 98%;
-    
 }
 
 div.recpagebox400 {
@@ -1183,7 +1178,7 @@ div.recpageboxauto {
     background-color: aliceblue;
     padding: 5px;
     border-radius: 6px;
-    cursor:default;
+    cursor: default;
 }
 
 label.recpagelabel {
@@ -1195,38 +1190,44 @@ label.recpagelabel {
 .bgp28 {
     background-color: #eefdec;
 }
+
 .bgp41 {
     background-color: aliceblue;
 }
+
 .bgj02 {
     background-color: #FCFAE8;
 }
+
 .bgp91 {
     background-color: #C3E6CB;
 }
+
 .bgo23 {
-    background-color:lightpink;
+    background-color: lightpink;
 }
+
 .bgp56 {
     background-color: orange;
 }
 
-td.tdnum{
-    text-align:right;
-    width:120px;
-    padding-right:20px;
+td.tdnum {
+    text-align: right;
+    width: 120px;
+    padding-right: 20px;
 }
 
 .numcell {
-    text-align: right;    
+    text-align: right;
     padding-right: 10px;
 }
 
-.fa{
-    color:green;
+.fa {
+    color: green;
 }
-.nefa{
-    color:red;
+
+.nefa {
+    color: red;
 }
 
 /* Stavy worksheet úkonů
@@ -1252,7 +1253,7 @@ td.tdnum{
     color: gold;
 }
 
-.a0 {    
+.a0 {
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -1299,9 +1300,19 @@ td.tdnum{
     color: #9400D3 !important; /*záznam kusovníku*/
 }
 
-div.divhover{
-    background-color:transparent;
+div.divhover {
+    background-color: transparent;
 }
-div.divhover:hover {
-    background-color: #F5F5F5;
+
+    div.divhover:hover {
+        background-color: #F5F5F5;
+    }
+
+span.flat_tab_sum {
+    color: blue;
+    background-color: white;    
+    font-size: 80%;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius:3px;
 }

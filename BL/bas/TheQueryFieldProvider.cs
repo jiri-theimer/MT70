@@ -95,8 +95,13 @@ namespace BL
                     of = AF("p31Worksheet", "TypProjektu", "p41x.p42ID", "Typ projektu", "p42ProjectType", null, "multi");
                     of = AF("p31Worksheet", "Osoba", "a.j02ID", "Osoba", "j02Person", null, "multi");
                     of = AF("p31Worksheet", "StrediskoProjektu", "p41x.j18ID", "Středisko projektu", "j18Region", null, "multi");
-                    of = AF("p31Worksheet", "KlientProjektu", "p41x.p28ID_Client", "Klient projektu", "p28Contact", null, "multi");
-                    of = AF("p31Worksheet", "Dodavatel", "a.p28ID_Supplier", "Dodavatel výdaje", "p28Contact", null, "multi");
+                    of = AF("p31Worksheet", "KlientProjektu", "p41x.p28ID_Client", "Klient projektu", "p28Contact", "canbe_client|bool|1", "multi");
+                    of = AF("p31Worksheet", "Dodavatel", "a.p28ID_Supplier", "Dodavatel výdaje", "p28Contact", "canbe_supplier|bool|1", "multi");
+                    of = AF("p31Worksheet", "MenaUkonu","a.j27ID_Billing_Orig", "Měna úkonu", "j27Currency", null, "multi");
+
+                    of = AF("p31Worksheet", "PouzeHodiny", "p34x.p33ID=1", "Pouze hodiny", null, null, "bool1x");
+                    of = AF("p31Worksheet", "PouzeHodiny", "p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=1", "Pouze výdaje", null, null, "bool1x");
+                    of = AF("p31Worksheet", "PouzeOdmeny", "p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=2", "Pouze peněžní odměny", null, null, "bool1x");
 
                     of = AF("p31Worksheet", "Rozpracovane", "a.p71ID IS NULL AND a.p91ID IS NULL AND p41x.p41BillingFlag<99", "Rozpracované úkony", null, null, "bool1x");
                     of = AF("p31Worksheet", "Schvalene", "a.p71ID=1 AND a.p91ID IS NULL AND p41x.p41BillingFlag<99", "Schváleno, čeká na vyúčtování", null, null, "bool1x");                    
@@ -104,7 +109,7 @@ namespace BL
                     of = AF("p31Worksheet", "Nevyuctovane", "a.p91ID IS NULL AND a.p31ValidUntil>GETDATE() AND p41x.p41BillingFlag<99", "Nevyúčtováno", null, null, "bool1x");
                     of = AF("p31Worksheet", "VyplnenaKorekce", "a.p72ID_AfterTrimming IS NOT NULL", "Vyplněná korekce úkonu", null, null, "bool1x");
                     of = AF("p31Worksheet", "SUkolem", "a.p56ID IS NOT NULL", "Vykázáno s úkolem", null, null, "bool1x");
-                    of = AF("p31Worksheet", "SDodavatelem", "a.p28ID_Supplier IS NOT NULL", "Přiřazen dodavatel výdaje", null, null, "bool1x");
+                    of = AF("p31Worksheet", "SDodavatelem", "a.p28ID_Supplier IS NOT NULL", "Přiřazen dodavatel výdaje", "p28Contact",null, "bool1x");
                     of = AF("p31Worksheet", "SKodem", "a.p31Code IS NOT NULL", "Vyplněn kód dokladu", null, null, "bool1x");
                     of = AF("p31Worksheet", "SDokumentem", "a.p31ID IN (SELECT xa.x19RecordPID FROM x19EntityCategory_Binding xa INNER JOIN x20EntiyToCategory xb ON xa.x20ID=xb.x20ID WHERE xb.x29ID=331)", "Přiřazen dokument", null, null, "bool1x");
                     of = AF("p31Worksheet", "VArchivu", "a.p31ValidUntil<GETDATE()", "Přesunuto do archivu", null, null, "bool1x");
@@ -129,14 +134,14 @@ namespace BL
         }
 
 
-        private BO.TheQueryField AF(string strEntity, string strField,string strSqlSyntax, string strHeader, string strSourceEntity = null, string strSourceSql = null, string strFieldType = "string")
+        private BO.TheQueryField AF(string strEntity, string strField,string strSqlSyntax, string strHeader, string strSourceEntity = null, string strMyQueryInline = null, string strFieldType = "string")
         {
             if (strEntity != _lastEntity)
             {
                 //zatím nic
             }
 
-            _lis.Add(new BO.TheQueryField() { Field = strField,FieldSqlSyntax=strSqlSyntax, Entity = strEntity, Header = strHeader, FieldType = strFieldType, SourceEntity = strSourceEntity, SourceSql = strSourceSql, TranslateLang1 = strHeader, TranslateLang2 = strHeader, TranslateLang3 = strHeader });
+            _lis.Add(new BO.TheQueryField() { Field = strField,FieldSqlSyntax=strSqlSyntax, Entity = strEntity, Header = strHeader, FieldType = strFieldType, SourceEntity = strSourceEntity, MyQueryInline = strMyQueryInline, TranslateLang1 = strHeader, TranslateLang2 = strHeader, TranslateLang3 = strHeader });
             _lastEntity = strEntity;
             return _lis[_lis.Count - 1];
         }

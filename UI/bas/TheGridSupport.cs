@@ -32,7 +32,7 @@ namespace UI
             {
                 return render_thegrid_error("gridState is null!");
             }
-            
+
             if (!string.IsNullOrEmpty(this.gridinput.fixedcolumns))
             {
                 gridState.j72Columns = this.gridinput.fixedcolumns;
@@ -53,7 +53,7 @@ namespace UI
                 gridState.j72Columns = this.gridinput.fixedcolumns;
             }
             switch (tgi.key)
-            {                
+            {
                 case "pagerindex":
                     gridState.j75CurrentPagerIndex = BO.BAS.InInt(tgi.value);
                     break;
@@ -105,7 +105,7 @@ namespace UI
         {
 
             var gridState = _Factory.j72TheGridTemplateBL.LoadState(tgi.j72id, _Factory.CurrentUser.pid);
-           
+
 
             if (string.IsNullOrEmpty(this.gridinput.fixedcolumns) == false)
             {
@@ -134,8 +134,8 @@ namespace UI
 
 
         private TheGridOutput render_thegrid_html(BO.TheGridState gridState) //vrací kompletní html gridu: header+body+footer+message
-        {            
-             var ret = new TheGridOutput();
+        {
+            var ret = new TheGridOutput();
             _grid = new TheGridViewModel();
             _grid.GridState = gridState;
 
@@ -146,10 +146,10 @@ namespace UI
 
             _grid.Columns = _colsProvider.ParseTheGridColumns(mq.Prefix, gridState.j72Columns, _Factory);
 
-            
+
 
             mq.explicit_columns = _grid.Columns.ToList();
-            
+
             if (!this.gridinput.isrecpagegrid)    //v gridu je vypnuté filtrování
             {
                 if (!String.IsNullOrEmpty(gridState.j75Filter))
@@ -169,12 +169,12 @@ namespace UI
             int intVirtualRowsCount = 0;
 
             if (this.gridinput.isrecpagegrid)
-            {                
+            {
                 intVirtualRowsCount = 1;    //u recpage gridu není třeba součtová řádka
             }
             else
             {
-                dtFooter=_Factory.gridBL.GetList(mq, true);
+                dtFooter = _Factory.gridBL.GetList(mq, true);
                 if (dtFooter.Columns.Count > 0)
                 {
                     intVirtualRowsCount = Convert.ToInt32(dtFooter.Rows[0]["RowsCount"]);
@@ -184,8 +184,8 @@ namespace UI
                     _Factory.CurrentUser.AddMessage("GRID Error: Dynamic SQL failed.");
                 }
             }
-            
-            
+
+
 
             if (intVirtualRowsCount > 500)
             {   //dotazy nad 500 záznamů budou mít zapnutý OFFSET režim stránkování
@@ -202,10 +202,10 @@ namespace UI
                     mq.explicit_orderby = c.getFinalSqlSyntax_ORDERBY() + " " + gridState.j75SortOrder;
                 }
             }
-            
-            
+
+
             var dt = _Factory.gridBL.GetList(mq);
-            
+
             if (_grid.GridState.j75CurrentRecordPid > 0 && intVirtualRowsCount > gridState.j75PageSize) //má se skočit na konkrétní záznam a záznamů je více než na 1 stránku
             {
                 System.Data.DataRow[] recs = dt.Select("pid=" + _grid.GridState.j75CurrentRecordPid.ToString());
@@ -232,27 +232,17 @@ namespace UI
 
                     }
                 }
-                
+
             }
 
 
-            //if (_grid.GridState.j75CurrentRecordPid > 0 && intVirtualRowsCount > gridState.j75PageSize)
-            //{
-            //    //aby se mohlo skočit na cílový záznam, je třeba najít stránku, na které se záznam nachází
-            //    System.Data.DataRow[] recs = dt.Select("pid=" + _grid.GridState.j75CurrentRecordPid.ToString());
-            //    if (recs.Count() > 0)
-            //    {
-            //        var intIndex = dt.Rows.IndexOf(recs[0]);
-            //        _grid.GridState.j75CurrentPagerIndex = intIndex - (intIndex % _grid.GridState.j75PageSize);
 
-            //    }
-            //}
 
             _s = new System.Text.StringBuilder();
 
             Render_DATAROWS(dt, mq);
             ret.body = _s.ToString();
-            
+
 
             if (!this.gridinput.isrecpagegrid)
             {
@@ -263,7 +253,7 @@ namespace UI
                 _s = new System.Text.StringBuilder();
                 RENDER_PAGER(intVirtualRowsCount);
                 ret.pager = _s.ToString();
-                
+
             }
             return ret;
         }
@@ -322,7 +312,7 @@ namespace UI
                         }
                         break;
                 }
-               
+
                 if (string.IsNullOrEmpty(this.gridinput.ondblclick))
                 {
                     _s.Append($"<tr id='r{dbRow["pid"]}' class='{strRowClass}'>");
@@ -343,7 +333,7 @@ namespace UI
                     _s.Append("<td class='td0' style='width:20px;'></td>");
                 }
 
-                
+
                 _s.Append("<td class='td1'");
 
                 switch (mq.Prefix)
@@ -357,15 +347,15 @@ namespace UI
                         }
                         break;
                     case "p91":
-                        _s.Append(" style='width:20px;"+UI.TheGridRowSymbol.p91_td_style(dbRow)+"'>");                       
+                        _s.Append(" style='width:20px;" + UI.TheGridRowSymbol.p91_td_style(dbRow) + "'>");
                         _s.Append(UI.TheGridRowSymbol.p91_td_inner(dbRow));
                         break;
                     default:
                         _s.Append(" style='width:20px;'>");
                         break;
                 }
-                
-                
+
+
                 _s.Append("</td>");
 
                 strRowClass = "td2";
@@ -377,11 +367,11 @@ namespace UI
                     }
                     else
                     {
-                        if (Convert.ToInt32(dbRow["p33ID"]) == 1 && dbRow["p71ID"]==System.DBNull.Value && Convert.ToDouble(dbRow["p31Rate_Billing_Orig"]) == 0)
+                        if (Convert.ToInt32(dbRow["p33ID"]) == 1 && dbRow["p71ID"] == System.DBNull.Value && Convert.ToDouble(dbRow["p31Rate_Billing_Orig"]) == 0)
                         {
                             strRowClass += " nusa"; //fakturovatelný čas s nulovou hodinovou sazbou
                         }
-                        
+
                     }
                 }
                 if (!string.IsNullOrEmpty(this.gridinput.oncmclick))
@@ -422,8 +412,21 @@ namespace UI
                 return;
             }
             _s.Append("<tr id='tabgrid1_tr_totals'>");
-            _s.Append(string.Format("<th class='th0' title='{0}' colspan=3 style='width:60px;'><span id='tabgrid1_rows' class='badge bg-primary'>{1}</span></th>", _Factory.tra("Celkový počet záznamů"), string.Format("{0:#,0}", dt.Rows[0]["RowsCount"])));
-
+            _s.Append($"<th class='th0' title='{_Factory.tra("Celkový počet záznamů")}' colspan=3 style='width:60px;'><span id='tabgrid1_rows' class='badge bg-primary'>{string.Format("{0:#,0}", dt.Rows[0]["RowsCount"])}</span></th>");
+            switch (this.gridinput.query.Prefix)
+            {
+                case "p31":
+                    _s.Append($"<input type='hidden' id='tabgrid1_rows_time' value='{dt.Rows[0]["RowsTime"]}'/>");
+                    _s.Append($"<input type='hidden' id='tabgrid1_rows_expense' value='{dt.Rows[0]["RowsExpense"]}'/>");
+                    _s.Append($"<input type='hidden' id='tabgrid1_rows_fee' value='{dt.Rows[0]["RowsFee"]}'/>");
+                    _s.Append($"<input type='hidden' id='tabgrid1_rows_kusovnik' value='{dt.Rows[0]["RowsKusovnik"]}'/>");
+                    break;
+                case "j02":
+                    _s.Append($"<input type='hidden' id='tabgrid1_rows_internal' value='{dt.Rows[0]["RowsInternal"]}'/>");
+                    _s.Append($"<input type='hidden' id='tabgrid1_rows_contact' value='{dt.Rows[0]["RowsContact"]}'/>");
+                    break;
+            }
+            
             string strVal = "";
             foreach (var col in _grid.Columns)
             {
@@ -478,7 +481,7 @@ namespace UI
             {
                 RenderButtonMore();
                 Render_ExtendPagerHtml();
-                RenderGridMessage();                
+                RenderGridMessage();
                 return;
             }
 
@@ -643,13 +646,13 @@ namespace UI
 
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='k-icon k-i-file-excel' style='width:30px;'></span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='k-icon k-i-file-csv' style='width:30px;'></span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
-       
+
             //sb.AppendLine("<li><hr class='hr-mini' /></li>");
             //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(20)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 20)) + "</a></li>");
             //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(50)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 50)) + "</a></li>");
             //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(100)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 100)) + "</a></li>");
             //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(1000)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra("Zaškrtnout všechny záznamy na stránce") + "</a></li>");
-            
+
 
             sb.AppendLine("</ul>");
 
@@ -703,7 +706,7 @@ namespace UI
         {
             this.gridinput.query.explicit_columns = _colsProvider.ParseTheGridColumns(this.gridinput.query.Prefix, gridState.j72Columns, _Factory);
 
-           
+
 
 
             if (!string.IsNullOrEmpty(gridState.j75SortDataField))
@@ -725,7 +728,7 @@ namespace UI
                     this.gridinput.query.lisJ73 = _Factory.j72TheGridTemplateBL.GetList_j73(gridState.j72ID, gridState.j72Entity.Substring(0, 3));
                 }
             }
-                
+
 
             return _Factory.gridBL.GetList(this.gridinput.query);
         }

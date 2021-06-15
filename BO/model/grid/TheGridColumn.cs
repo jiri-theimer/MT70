@@ -208,7 +208,8 @@ namespace BO
 
         public string getFinalSqlSyntax_SUM()
         {
-            if (this.IsShowTotals == false) return "NULL as " + this.UniqueName;
+            
+            if (!this.IsShowTotals) return "NULL as " + this.UniqueName;
             if (this.SqlSyntax == null)
             {
                 if (this.RelName == null)
