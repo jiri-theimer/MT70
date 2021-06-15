@@ -19,10 +19,10 @@
 <div class="input-group m-0" style="padding-top:1px;">    
     <div>
         <ul id="navtabs" class="nav nav-tabs">            
-            @foreach (var tab in Model.NavTabs)
+            @foreach (var tab in Model.OverGridTabs)
             {
                 <li class="nav-item onetab">
-                    <a class="@tab.CssClass" id="@tab.ClientID" href="@tab.Url" onclick="tabclick(this)" style="padding-bottom:2px;">
+                    <a class="@tab.CssClass" id="@tab.ClientID" href="@tab.Url" onclick="tab_overgrid_click(this)" style="padding-bottom:2px;">
                         @{
                             @Html.Raw(tab.Name)
                             if (tab.Badge != null)
@@ -162,8 +162,10 @@
         }
     }
 
-    function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
-       
+    function tab_overgrid_click(tab) {    //uložit aktuální záložku do profilu uživatele
+        if (_pageprefix != "p31" && _pageprefix != "j02") {
+            return;
+        }
         _load_ajax_async("/Common/SetUserParam", { key: "overgrid-tab-" + _pageprefix, value: tab.id.replace("tab", "") })
 
     }

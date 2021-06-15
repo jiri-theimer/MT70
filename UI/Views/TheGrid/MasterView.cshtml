@@ -16,9 +16,25 @@
 
 
 <div class="input-group m-0" style="padding-top:1px;">
-    <div class="tabovergrid nonmobile" style="margin-left:1px;">
-        KLIENTI
-        <span id="TheGridRows" class="badge bg-primary"></span>
+    
+    <div>
+        <ul id="navtabs" class="nav nav-tabs">
+            @foreach (var tab in Model.OverGridTabs)
+            {
+                <li class="nav-item onetab">
+                    <a class="@tab.CssClass" id="@tab.ClientID" href="@(tab.Url)" onclick="tab_overgrid_click(this)" style="padding-bottom:2px;">
+                        @{
+                            @Html.Raw(tab.Name)
+                            if (tab.Badge != null)
+                            {
+                                @Html.Raw(tab.Badge)
+                            }
+                        }
+                    </a>
+                </li>
+
+            }
+        </ul>
     </div>
 
     <div class="dropdown">
@@ -155,7 +171,7 @@
             thegrid_handle_rowselect(e.detail.pid);
         });
 
-        
+
 
     });
 
@@ -164,7 +180,7 @@
         function thegrid_handle_rowselect(pid) {
             $("#cur_pid").val(pid);
             var tabUrl = "";
-            
+
          @foreach (var tab in Model.NavTabs)
          {
 
@@ -185,7 +201,7 @@
                 }
             }
 
-            
+
 
             $("#tab@(@tab.Entity)").attr("href", tabUrl);
             </text>
@@ -194,11 +210,11 @@
 
             tabUrl = $(selectedtab).attr("href");
             document.getElementById("fra_subgrid").src = tabUrl;
-           
-            handle_render_tabs(pid);                
-            
-            
-            
+
+            handle_render_tabs(pid);
+
+
+
 
     }
 
@@ -210,10 +226,10 @@
             _currentloadingtabs = true;
             $("#tabtab1").html("-----");
             _load_ajax_async("/TheGrid/getTabs", { prefix: _pageprefix, pid: pid }, callback_render_tabs);
-        }        
+        }
     }
 
-    function callback_render_tabs(data) {  
+    function callback_render_tabs(data) {
         //vykreslení obsahu záložek načtených přes load_ajax_async
         _currentloadingtabs = false;
         $("#tabtab1").html("Tab1");
@@ -229,19 +245,23 @@
         }
     }
 
-    
 
 
-        function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
-            $("#navtabs .nav-link").removeClass("active");
-            $(tab).addClass("active");
-            $.post("/Common/SetUserParam", { key: "masterview-tab-" + _pageprefix,value:tab.id.replace("tab","")  }, function (data) {
 
+    function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
+        $("#navtabs .nav-link").removeClass("active");
+        $(tab).addClass("active");
+        _load_ajax_async("/Common/SetUserParam", { key: "masterview-tab-" + _pageprefix, value: tab.id.replace("tab", "") })            
 
-            });
+    }
 
-
+    function tab_overgrid_click(tab) {    //uložit aktuální záložku do profilu uživatele
+        if (_pageprefix != "j02") {
+            return;
         }
+        _load_ajax_async("/Common/SetUserParam", { key: "overgrid-tab-" + _pageprefix, value: tab.id.replace("tab", "") })
+
+    }
 
         function reload() {
 
@@ -280,14 +300,14 @@
 
     function rcm_from_tabs(e) {
         var pid = $("#cur_pid").val();
-        
+
         if (pid == "" || pid=="0") {
             _notify_message("Musíte vybrat záznam z nadřízeného panelu.");
             return;
         }
-        
+
         e.target.setAttribute("menu_je_inicializovano", null);  //vyčistit paměť o inicializaci menu v rámci tohoto tlačítka
-        
+
         _cm(e, _pageprefix, pid, "grid");
     }
 </script>

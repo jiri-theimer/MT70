@@ -17,7 +17,8 @@ namespace UI.Models
         public int master_pid { get; set; }        
         public string myqueryinline { get; set; } //explicitní myquery ve tvaru název@typ@hodnota, lze předávat více parametrů najednou
 
-        public List<NavTab> NavTabs;
+        public List<NavTab> NavTabs { get; set; }
+        public List<NavTab> OverGridTabs { get; set; }
 
         public string go2pid_url_in_iframe { get; set; }
 

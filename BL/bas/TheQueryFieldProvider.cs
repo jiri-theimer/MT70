@@ -100,7 +100,7 @@ namespace BL
                     of = AF("p31Worksheet", "MenaUkonu","a.j27ID_Billing_Orig", "Měna úkonu", "j27Currency", null, "multi");
 
                     of = AF("p31Worksheet", "PouzeHodiny", "p34x.p33ID=1", "Pouze hodiny", null, null, "bool1x");
-                    of = AF("p31Worksheet", "PouzeHodiny", "p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=1", "Pouze výdaje", null, null, "bool1x");
+                    of = AF("p31Worksheet", "PouzeVydaje", "p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=1", "Pouze výdaje", null, null, "bool1x");
                     of = AF("p31Worksheet", "PouzeOdmeny", "p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=2", "Pouze peněžní odměny", null, null, "bool1x");
 
                     of = AF("p31Worksheet", "Rozpracovane", "a.p71ID IS NULL AND a.p91ID IS NULL AND p41x.p41BillingFlag<99", "Rozpracované úkony", null, null, "bool1x");

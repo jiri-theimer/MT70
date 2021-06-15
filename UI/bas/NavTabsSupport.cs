@@ -15,27 +15,29 @@ namespace UI
             _f = f;            
         }
 
-        public List<NavTab> getOverGridTabs(string prefix,string deftab)
+        public List<NavTab> getOverGridTabs(string prefix,string deftab,bool flatview)
         {
             _tabs = new List<NavTab>();
-            
+            string strUrl = "MasterView";
+            if (flatview) strUrl = "FlatView";
+
             switch (prefix)
             {
                 case "p31":
-                    _tabs.Add(AddTab("<span class='k-icon k-i-sum'></span>", "tab1", "/TheGrid/FlatView?prefix=p31&tab=tab1",false, Badge1Flat(0, "TheGridRows")));
+                    _tabs.Add(AddTab("<span class='k-icon k-i-sum'></span>", "zero", "/TheGrid/FlatView?prefix=p31&tab=tab1",false, Badge1Flat(0, "TheGridRows")));
                     _tabs.Add(AddTab("Hodiny", "time", "/TheGrid/FlatView?prefix=p31&myqueryinline=tabquery|string|time&tab=time", true, Badge1Flat(0, "TheGridRowsTime", "flat_tab_sum")));
                     _tabs.Add(AddTab("Výdaje", "expense", "/TheGrid/FlatView?prefix=p31&myqueryinline=tabquery|string|expense&tab=expense",true, Badge1Flat(0, "TheGridRowsExpense", "flat_tab_sum")));
                     _tabs.Add(AddTab("Odměny", "fee", "/TheGrid/FlatView?prefix=p31&myqueryinline=tabquery|string|fee&tab=fee",true, Badge1Flat(0, "TheGridRowsFee", "flat_tab_sum")));
                     _tabs.Add(AddTab("Ks", "kusovnik", "/TheGrid/FlatView?prefix=p31&myqueryinline=tabquery|string|kusovnik&tab=kusovnik", false, Badge1Flat(0, "TheGridRowsKusovnik", "flat_tab_sum")));
                     break;
                 case "j02":
-                    _tabs.Add(AddTab("<span class='k-icon k-i-sum'></span>", "tab1", "/TheGrid/FlatView?prefix=j02&tab=tab1",true, Badge1Flat(0, "TheGridRows")));
-                    _tabs.Add(AddTab("Interní osoby", "internal", "/TheGrid/FlatView?prefix=j02&myqueryinline=tabquery|string|internal&tab=internal", true, Badge1Flat(0, "TheGridRowsInternal", "flat_tab_sum")));
-                    _tabs.Add(AddTab("Kontaktní osoby", "contact", "/TheGrid/FlatView?prefix=j02&myqueryinline=tabquery|string|contact&tab=contact", true, Badge1Flat(0, "TheGridRowsContact", "flat_tab_sum")));
+                    _tabs.Add(AddTab("<span class='k-icon k-i-sum'></span>", "zero", $"/TheGrid/{strUrl}?prefix=j02&tab=tab1",true, Badge1Flat(0, "TheGridRows")));
+                    _tabs.Add(AddTab("Interní osoby", "internal", $"/TheGrid/{strUrl}?prefix=j02&myqueryinline=tabquery|string|internal&tab=internal", true, Badge1Flat(0, "TheGridRowsInternal", "flat_tab_sum")));
+                    _tabs.Add(AddTab("Kontaktní osoby", "contact", $"/TheGrid/{strUrl}?prefix=j02&myqueryinline=tabquery|string|contact&tab=contact", true, Badge1Flat(0, "TheGridRowsContact", "flat_tab_sum")));
                     break;
                 default:
                    
-                    _tabs.Add(AddTab(_f.EProvider.ByPrefix(prefix).AliasPlural, "tab1", $"/TheGrid/FlatView?prefix={prefix}",false, Badge1Flat(0, "TheGridRows")));
+                    _tabs.Add(AddTab(_f.EProvider.ByPrefix(prefix).AliasPlural, "zero", $"/TheGrid/{strUrl}?prefix={prefix}",false, Badge1Flat(0, "TheGridRows")));
                     break;
             }
             if (deftab == null || deftab=="tab1")

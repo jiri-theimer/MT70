@@ -77,8 +77,8 @@ namespace UI.Controllers
             
             if (tab==null && (prefix == "p31" || prefix == "j02"))
             {
-                tab = Factory.CBL.LoadUserParam("overgrid-tab-" + prefix,"tab1",1);
-                if (tab != null && tab !="tab1")
+                tab = Factory.CBL.LoadUserParam("overgrid-tab-" + prefix,"zero",1);
+                if (tab != null && tab != "zero")
                 {
                     myqueryinline = "tabquery|string|" + tab;
                 }
@@ -89,7 +89,7 @@ namespace UI.Controllers
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("flatview-j72id-" + prefix);
 
             var cTabs = new NavTabsSupport(Factory);
-            v.NavTabs = cTabs.getOverGridTabs(v.prefix, tab);    
+            v.OverGridTabs = cTabs.getOverGridTabs(v.prefix, tab,true);
             
 
             return View(v);
@@ -97,7 +97,7 @@ namespace UI.Controllers
 
         
 
-        public IActionResult MasterView(string prefix,int go2pid)    //grid horní + spodní panel, není zde filtrovací pruh s fixním filtrem
+        public IActionResult MasterView(string prefix,int go2pid,string myqueryinline, string tab)    //grid horní + spodní panel, není zde filtrovací pruh s fixním filtrem
         {            
             if (!TestGridPermissions(prefix))
             {
@@ -107,29 +107,38 @@ namespace UI.Controllers
             {
                 go2pid = LoadLastUsedPid(prefix);
             }
-            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"masterview",null,0,null,TestIfPeriodOverGrid(prefix));
+            if (tab == null && (prefix == "j02"))
+            {
+                tab = Factory.CBL.LoadUserParam("overgrid-tab-" + prefix, "zero", 1);
+                if (tab != null && tab != "zero")
+                {
+                    myqueryinline = "tabquery|string|" + tab;
+                }
+            }
+            FsmViewModel v = LoadFsmViewModel(prefix, go2pid,"masterview",null,0, myqueryinline, TestIfPeriodOverGrid(prefix));
                       
             v.gridinput.j72id = Factory.CBL.LoadUserParamInt("masterview-j72id-" + prefix);
 
             var cTabs = new NavTabsSupport(Factory);
+            v.OverGridTabs = cTabs.getOverGridTabs(v.prefix, tab,false);
             v.NavTabs = cTabs.getMasterTabs(v.prefix, go2pid,false);
 
           
             string strDefTab = Factory.CBL.LoadUserParam("masterview-tab-" + prefix);
             NavTab deftab = v.NavTabs[0];
             
-            foreach (var tab in v.NavTabs)
+            foreach (var ntab in v.NavTabs)
             {
-               if (!tab.Url.Contains("?pid"))
+               if (!ntab.Url.Contains("?pid"))
                 {
-                    tab.Url += "&master_entity=" + v.entity + "&master_pid=" + AppendPid2Url(v.gridinput.go2pid);
+                    ntab.Url += "&master_entity=" + v.entity + "&master_pid=" + AppendPid2Url(v.gridinput.go2pid);
                    
                 }
-                tab.Url += "&caller=grid";
+                ntab.Url += "&caller=grid";
              
-                if (strDefTab !="" && tab.Entity== strDefTab)
+                if (strDefTab !="" && ntab.Entity== strDefTab)
                 {
-                    deftab = tab;  //uživatelem naposledy vybraná záložka
+                    deftab = ntab;  //uživatelem naposledy vybraná záložka
                 }
             }
             deftab.CssClass += " active";
