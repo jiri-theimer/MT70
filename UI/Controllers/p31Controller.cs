@@ -238,12 +238,16 @@ namespace UI.Controllers
 
             if (ModelState.IsValid)
             {
+                if (!ValidateBeforeSave(v))
+                {
+                    return View(v);
+                }
                 BO.p31WorksheetEntryInput c = new BO.p31WorksheetEntryInput();
                 if (v.rec_pid > 0)
                 {
                     c.SetPID(v.rec_pid);                    
                 }
-                c.p31Date = v.Rec.p31Date;
+                c.p31Date = Convert.ToDateTime(v.p31Date);
                 c.j02ID = v.Rec.j02ID;
                 c.p41ID = v.Rec.p41ID;
                 c.p56ID = v.Rec.p56ID;
@@ -251,6 +255,12 @@ namespace UI.Controllers
                 c.p32ID = v.Rec.p32ID;
 
                 c.Value_Orig = v.Rec.Value_Orig;
+                if (v.RecP34.p33ID == BO.p33IdENUM.Cas)
+                {
+                    c.p31HoursEntryflag = BO.p31HoursEntryFlagENUM.Hodiny;
+
+                }
+                
 
                 c.Amount_WithoutVat_Orig = v.Rec.Amount_WithoutVat_Orig;
                 c.VatRate_Orig = v.Rec.VatRate_Orig;
@@ -261,7 +271,7 @@ namespace UI.Controllers
                 c.TimeFrom = v.Rec.TimeFrom;
                 c.TimeUntil = v.Rec.TimeUntil;
 
-                
+              
                 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);
@@ -280,6 +290,15 @@ namespace UI.Controllers
 
             this.Notify_RecNotSaved();
             return View(v);
+        }
+
+        private bool ValidateBeforeSave(p31Record v)
+        {
+            if (v.p31Date == null)
+            {
+                this.AddMessage("Chybí vyplnit datum.");return false;
+            }
+            return true;
         }
 
         private bool InhalePermissions(p31Record v,BO.p31Worksheet recP31)

@@ -272,7 +272,7 @@ namespace UI.Controllers
                 v.gridinput.query.global_d2 = v.period.d2;            
             }
 
-            if (v.prefix=="p41" || v.prefix=="p28" || v.prefix == "j02" || v.prefix == "p91" || v.prefix=="o23" || v.prefix=="p90" || v.prefix=="p56")
+            if (v.prefix=="p28" || v.prefix == "j02" || v.prefix == "p91" || v.prefix=="o23" || v.prefix=="p90" || v.prefix=="p56" || v.gridinput.query.PrefixDb=="p41")
             {
                 v.IsCanbeMasterView = true;
                 v.dblClickSetting = Factory.CBL.LoadUserParam("grid-" + v.prefix + "-dblclick", "edit");                

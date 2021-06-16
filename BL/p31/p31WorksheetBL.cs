@@ -126,6 +126,7 @@ namespace BL
         }
         public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF)
         {
+
             if (rec.p41ID==0 && rec.p56ID > 0)  //dohledat projekt podle úkolu
             {
                 
@@ -252,7 +253,10 @@ namespace BL
             }
 
             
-            return BL.bas.p31Support.SaveOrigRecord(_mother,_db,rec, p33ID, lisFF);
+            int intPID = BL.bas.p31Support.SaveOrigRecord(_mother,_db,rec, p33ID, lisFF);
+            
+
+            return intPID;
         }
 
 

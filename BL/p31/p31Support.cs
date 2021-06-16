@@ -101,8 +101,10 @@ namespace BL.bas
                 if (intSavedP31ID > 0)
                 {
 
-                    //if (!lisFF == null)
-                    //    bas.SaveFreeFields(_cDB, lisFF, "p31Worksheet_FreeField", intSavedP31ID);
+                    if (!DL.BAS.SaveFreeFields(_db, intSavedP31ID, lisFF))
+                    {
+                        return 0;
+                    }
 
 
                     var pars = new Dapper.DynamicParameters();

@@ -35,6 +35,17 @@ namespace UI
                     _tabs.Add(AddTab("Interní osoby", "internal", $"/TheGrid/{strUrl}?prefix=j02&myqueryinline=tabquery|string|internal&tab=internal", true, Badge1Flat(0, "TheGridRowsInternal", "flat_tab_sum")));
                     _tabs.Add(AddTab("Kontaktní osoby", "contact", $"/TheGrid/{strUrl}?prefix=j02&myqueryinline=tabquery|string|contact&tab=contact", true, Badge1Flat(0, "TheGridRowsContact", "flat_tab_sum")));
                     break;
+                case "p41":                   
+                case "le5":
+                    _tabs.Add(AddTab(_f.CurrentUser.getP07Level(5, false), "zero", $"/TheGrid/{strUrl}?prefix={prefix}", false, Badge1Flat(0, "TheGridRows")));
+                    break;
+                case "le4":
+                case "le3":
+                case "le2":
+                case "le1":
+                    int intLevelIndex = Convert.ToInt32(prefix.Substring(2, 1));
+                    _tabs.Add(AddTab(_f.CurrentUser.getP07Level(intLevelIndex, false), "zero", $"/TheGrid/{strUrl}?prefix={prefix}", false, Badge1Flat(0, "TheGridRows")));
+                    break;                    
                 default:
                    
                     _tabs.Add(AddTab(_f.EProvider.ByPrefix(prefix).AliasPlural, "zero", $"/TheGrid/{strUrl}?prefix={prefix}",false, Badge1Flat(0, "TheGridRows")));
