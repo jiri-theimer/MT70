@@ -20,8 +20,8 @@ namespace BL.bas
             {
                 var p = new DL.Params4Dapper();
 
-                p.Add("pid", rec.PID);
-                if (rec.PID == 0)
+                p.Add("pid", rec.pid);
+                if (rec.pid == 0)
                 {
                     p.AddInt("j02ID_Owner", _f.CurrentUser.j02ID, true);
                     p.AddDouble("p31ExchangeRate_Fixed", 1);
@@ -61,7 +61,7 @@ namespace BL.bas
                 p.AddString("p31PostCode", rec.p31PostCode);
                 p.AddInt("p31PostFlag", rec.p31PostFlag, true);
 
-                if (rec.PID == 0 && rec.p31RecordSourceFlag == 0)
+                if (rec.pid == 0 && rec.p31RecordSourceFlag == 0)
                 {
                     p.AddInt("p31RecordSourceFlag", rec.p31RecordSourceFlag);
                 }
@@ -140,7 +140,7 @@ namespace BL.bas
         public static BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BL.Factory _f, DL.DbHandler _db,BO.p31WorksheetEntryInput rec)
         {
             var p = new DL.Params4Dapper();
-            p.AddInt("p31id", rec.PID, true);
+            p.AddInt("p31id", rec.pid, true);
             p.AddInt("j03id_sys", _f.CurrentUser.pid, true);
             p.AddInt("j02id_rec", rec.j02ID, true);
             p.AddInt("p41id", rec.p41ID, true);

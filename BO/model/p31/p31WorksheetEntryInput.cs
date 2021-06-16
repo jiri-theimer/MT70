@@ -154,18 +154,12 @@ namespace BO
             }
         }
 
-        private int _pid { get; set; }
-        public int PID
-        {
-            get
-            {
-                return _pid;
-            }
-        }
+        
 
         public void SetPID(int intPID)
         {
-            _pid = intPID;
+            
+            this.pid = intPID;
         }
 
         public bool ValidateEntryKusovnik()
