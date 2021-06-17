@@ -59,6 +59,14 @@ namespace UI.Controllers
                 {
                     v.SelectedComboSupplier = recP31.SupplierName;
                 }
+                if (v.Rec.p35ID > 0)
+                {
+                    v.SelectedComboP35Code = Factory.p35UnitBL.Load(v.Rec.p35ID).p35Code;
+                }
+                if (v.Rec.j19ID > 0)
+                {
+                    v.SelectedComboJ19Name = Factory.FBL.LoadJ19(v.Rec.j19ID).j19Name;
+                }
                 v.SetTagging(Factory.o51TagBL.GetTagging("p31", v.rec_pid));
 
                 
@@ -280,6 +288,8 @@ namespace UI.Controllers
                     case BO.p33IdENUM.PenizeVcDPHRozpisu:
                         c.j27ID_Billing_Orig = v.Rec.j27ID_Billing_Orig;
                         c.p31Code = v.Rec.p31Code;
+                        c.j19ID = v.Rec.j19ID;
+                        c.p35ID = v.Rec.p35ID;
 
                         c.p31Calc_PieceAmount = v.Rec.p31Calc_PieceAmount;
                         c.p31Calc_Pieces = v.Rec.p31Calc_Pieces;
@@ -291,7 +301,7 @@ namespace UI.Controllers
 
                         break;
                     case BO.p33IdENUM.Kusovnik:
-                        
+                        c.p35ID = v.Rec.p35ID;
                         break;
                 }
               

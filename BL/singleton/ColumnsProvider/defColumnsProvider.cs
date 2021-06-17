@@ -293,7 +293,7 @@ namespace BL
 
             this.EntityName = "p35Unit";
             AA("p35Name", "Kusovníková jednotka", gdc1, null, "string", false, true);
-            AA("p35Code", "Kód");
+            AA("p35Code", "Kód",gdc1);
             AppendTimestamp();
 
             //o40 = smtp poštovní účty   
