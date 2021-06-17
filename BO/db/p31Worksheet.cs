@@ -27,6 +27,8 @@ namespace BO
         public int p41ID { get; set; }
         public string p41Name { get; }
         public string p41NameShort { get; }
+        public string p42Name { get; }
+        public int p42ID { get; }
         public int p28ID_Client { get; }
         public string ClientName { get; }
         public string p28CompanyShortName { get; }

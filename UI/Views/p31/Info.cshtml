@@ -17,7 +17,7 @@
 
         <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
 
-        <span class="badge rounded-pill bg-primary fs-5" >
+        <span class="badge rounded-pill bg-primary fs-5">
             @(_disp.LockedReasonMessage)
         </span>
     </div>
@@ -40,7 +40,8 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Jméno"):</label>
         <div class="col-sm-5 col-md-4">
-            <myval value="@Model.Rec.Person"></myval>
+            <myval datatype="link" linktarget="_top" linkurl="/Record/RecPage?prefix=j02&pid=@Model.Rec.j02ID" value="@Model.Rec.Person"></myval>
+
         </div>
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Aktivita"):</label>
         <div class="col-sm-5 col-md-4">
@@ -48,15 +49,31 @@
         </div>
     </div>
     <div class="row my-2">
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient"):</label>
+        @if (Model.Rec.p28ID_Client > 0)
+        {
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient"):</label>
+            <div class="col-sm-5 col-md-4">
+                <myval datatype="link" linktarget="_top" linkurl="/Record/RecPage?prefix=p28&pid=@Model.Rec.p28ID_Client" value="@Model.Rec.ClientName"></myval>
+            </div>
+        }
+
+        <label class="col-sm-1 col-md-2 col-form-label recpagelabel">@(Model.Rec.p42Name):</label>
         <div class="col-sm-5 col-md-4">
-            <myval value="@Model.Rec.ClientName"></myval>
-        </div>
-        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Projekt"):</label>
-        <div class="col-sm-5 col-md-4">
-            <myval value="@Model.Rec.p41Name"></myval>
+            <myval datatype="link" linktarget="_top" linkurl="/Record/RecPage?prefix=p41&pid=@Model.Rec.p41ID" value="@Model.Rec.p41Name"></myval>
+
         </div>
     </div>
+    @if (Model.Rec.p56ID > 0)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Úkol"):</label>
+            <div class="col-sm-5 col-md-4">
+                <myval datatype="link" linktarget="_top" linkurl="/Record/RecPage?prefix=p56&pid=@Model.Rec.p56ID" value="@Model.Rec.p56Name"></myval>
+
+            </div>
+        </div>
+
+    }
     <div style="background-color:#FFFFCC;border-radius:6px;margin-bottom:6px;">
         <i>
             @Html.Raw(BO.BAS.Text2Html(Model.Rec.p31Text))
@@ -77,11 +94,10 @@
             {
                 <div class="row">
                     <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Hodiny"):</label>
-                    <div class="col-sm-5 col-md-4">
+                    <div class="col-sm-3 col-md-2">
                         <myval datatype="num" value="@Model.Rec.p31Hours_Orig"></myval>
                     </div>
-                    <label class="col-sm-1 col-md-2 col-form-label">HH:MM:</label>
-                    <div class="col-sm-5 col-md-4">
+                    <div class="col-sm-2 col-md-2">
                         <myval value="@Model.Rec.p31HHMM_Orig"></myval>
                     </div>
                 </div>
@@ -146,6 +162,24 @@
         </div>
     </div>
 
+    @if (Model.Rec.p71ID == BO.p71IdENUM.Neschvaleno)
+    {
+        <div class="card my-2">
+            <div class="card-body">
+                <div class="card-title">
+                    <strong class="text-primary">@_f.tra("Neschváleno")</strong>
+                    <span class="badge-a@((int)Model.Rec.p72ID_AfterApprove)">@Model.Rec.approve_p72Name</span>
+
+
+                    <small class="float-end">
+                        <code>@_f.tra("Schvalovatel"):</code>
+                        @(_f.j02PersonBL.Load(Model.Rec.j02ID_ApprovedBy).FullNameAsc+" / "+Model.Rec.p31Approved_When.ToString())
+                    </small>
+                </div>
+            </div>
+        </div>
+    }
+
     @if (Model.Rec.p71ID == BO.p71IdENUM.Schvaleno)
     {
         <div class="card my-2">
@@ -153,14 +187,8 @@
             <div class="card-body">
                 <div class="card-title">
                     <strong class="text-primary">@_f.tra("Schváleno")</strong>
-                    @if (Model.Rec.p72ID_AfterApprove == BO.p72IdENUM.Fakturovat)
-                    {
-                        <span class="badge-a4">@Model.Rec.approve_p72Name</span>
-                    }
-                    @if (Model.Rec.p72ID_AfterApprove == BO.p72IdENUM.ZahrnoutDoPausalu)
-                    {
-                        <span class="badge-a6">@Model.Rec.approve_p72Name</span>
-                    }
+                    <span class="badge-a@((int)Model.Rec.p72ID_AfterApprove)">@Model.Rec.approve_p72Name</span>
+
 
                     <small class="float-end">
                         <code>@_f.tra("Schvalovatel"):</code>
@@ -174,7 +202,7 @@
                         <div class="col-sm-5 col-md-4">
                             <myval datatype="num" value="@Model.Rec.p31Hours_Approved_Billing"></myval>
                         </div>
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Schváleno interně"):</label>
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Schváleno nákladově"):</label>
                         <div class="col-sm-5 col-md-4">
                             <myval datatype="num" value="@Model.Rec.p31Hours_Approved_Internal"></myval>
                         </div>
@@ -184,7 +212,7 @@
                         <div class="col-sm-5 col-md-4">
                             <myval datatype="num" value="@Model.Rec.p31Rate_Billing_Approved" valueafter="@Model.Rec.j27Code_Billing_Orig"></myval>
                         </div>
-                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Interní sazba"):</label>
+                        <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nákladová sazba"):</label>
                         <div class="col-sm-5 col-md-4">
                             <myval datatype="num" value="@Model.Rec.p31Rate_Internal_Approved"></myval>
                         </div>
@@ -246,31 +274,42 @@
 
             <div class="card-body">
                 <div class="card-title">
-                    <strong class="text-info">@_f.tra("Vyúčtováno")</strong>
-                    <kbd>@Model.Rec.p70Name</kbd>
-                    <small class="float-end">
+                    <strong class="text-primary">@_f.tra("Vyúčtováno")</strong>
 
+                    <span class="badge-a@((int)Model.Rec.p70ID)">@Model.Rec.p70Name</span>
+                    <small class="float-end">
+                        <code>@_f.tra("Vygenerováno"):</code>
+                        @(Model.RecP91.Owner+" / "+BO.BAS.ObjectDateTime2String(Model.RecP91.DateInsert))
                     </small>
                 </div>
                 <div class="row">
                     <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vyúčtování/Faktura"):</label>
                     <div class="col-sm-5 col-md-4">
-                        <myval datatype="link" linkurl="/p91/RecPage?pid=@Model.RecP91.pid" linktarget="_top" value="@(Model.RecP91.p92Name+": "+Model.RecP91.p91Code)"></myval>
+                        <myval datatype="link" linkurl="/Record/RecPage?prefix=p91&pid=@Model.RecP91.pid" linktarget="_top" value="@(Model.RecP91.p92Name+": "+Model.RecP91.p91Code)"></myval>
                     </div>
                     <label class="col-sm-1 col-md-2 col-form-label">Klient:</label>
                     <div class="col-sm-5 col-md-4">
-                        <myval datatype="link" linktarget="_top" linkurl="/p28/RecPage?pid=@Model.RecP91.p28ID" value="@Model.RecP91.p91Client"></myval>
+                        <myval datatype="link" linktarget="_top" linkurl="/Record/RecPage?prefix=p28&pid=@Model.RecP91.p28ID" value="@Model.RecP91.p91Client"></myval>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum plnění/vystavení"):</label>
+                    <div class="col-sm-2 col-md-2">
+                        <myval datatype="date" value="@Model.RecP91.p91DateSupply"></myval>
+                    </div>                    
+                    <div class="col-sm-2 col-md-2">
+                        <myval tooltip="@_f.tra("Vystaveno")" datatype="date" value="@Model.RecP91.p91Date"></myval>
                     </div>
                 </div>
                 @if (Model.Rec.p33ID == BO.p33IdENUM.Cas && Model.Rec.p70ID == BO.p70IdENUM.Vyfakturovano)
                 {
                     <div class="row">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vyúčtované hodiny"):</label>
-                        <div class="col-sm-5 col-md-4">
+                        <div class="col-sm-3 col-md-2">
                             <myval datatype="num" value="@Model.Rec.p31Hours_Invoiced"></myval>
                         </div>
-                        <label class="col-sm-1 col-md-2 col-form-label">HH:MM:</label>
-                        <div class="col-sm-5 col-md-4">
+
+                        <div class="col-sm-2 col-md-2">
                             <myval value="@Model.Rec.p31HHMM_Invoiced"></myval>
                         </div>
                     </div>
