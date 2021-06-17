@@ -30,8 +30,7 @@ namespace UI.Controllers
             v.Rec = new BO.p31WorksheetEntryInput() {pid=pid, p41ID = p41id, p34ID = p34id, j02ID = j02id };
             Handle_Defaults(v);
             if (v.rec_pid > 0)            
-            {
-                return RedirectToAction("Info", new { pid = pid,isrecord=true });
+            {                
                 var recP31 = Factory.p31WorksheetBL.Load(v.rec_pid);
                 if (recP31 == null)
                 {
@@ -44,8 +43,8 @@ namespace UI.Controllers
                 }
                 if (disp.RecordState != BO.p31RecordState.Editing)
                 {
-                    
-                    return RedirectToAction("Info",new { pid = pid,isrecord=true });
+
+                    return RedirectToAction("Info", new { pid = pid, isrecord = true });
                 }
                 v.Rec = Factory.p31WorksheetBL.CovertRec2Input(recP31);
                 v.p31Date = v.Rec.p31Date;
@@ -55,8 +54,11 @@ namespace UI.Controllers
                 v.SelectedComboProject = recP31.Project;
                 v.SelectedComboTask = recP31.p56Name;
                 v.SelectedComboJ27Code = recP31.j27Code_Billing_Orig;
-                v.SelectedComboSupplier = recP31.SupplierName;
-
+                
+                if (v.Rec.p28ID_Supplier > 0)
+                {
+                    v.SelectedComboSupplier = recP31.SupplierName;
+                }
                 v.SetTagging(Factory.o51TagBL.GetTagging("p31", v.rec_pid));
 
                 
@@ -277,6 +279,16 @@ namespace UI.Controllers
                     case BO.p33IdENUM.PenizeBezDPH:
                     case BO.p33IdENUM.PenizeVcDPHRozpisu:
                         c.j27ID_Billing_Orig = v.Rec.j27ID_Billing_Orig;
+                        c.p31Code = v.Rec.p31Code;
+
+                        c.p31Calc_PieceAmount = v.Rec.p31Calc_PieceAmount;
+                        c.p31Calc_Pieces = v.Rec.p31Calc_Pieces;
+                        c.p28ID_Supplier = v.Rec.p28ID_Supplier;
+
+                        c.p31PostCode = v.Rec.p31PostCode;
+                        c.p31PostFlag = v.Rec.p31PostFlag;
+                        c.p31PostRecipient = v.Rec.p31PostRecipient;
+
                         break;
                     case BO.p33IdENUM.Kusovnik:
                         
@@ -295,6 +307,7 @@ namespace UI.Controllers
                 c.TimeUntil = v.Rec.TimeUntil;
 
               
+                
                 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);

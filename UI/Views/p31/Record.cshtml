@@ -361,8 +361,9 @@
 
         var dphcastka = _roundnum(vcdph - bezdph, 2);
 
-        $("#numRec_Amount_WithVat_Orig").val(vcdph);
-        $("#numRec_Amount_Vat_Orig").val(dphcastka);
+        mynumber_changevalue("Rec_Amount_WithVat_Orig", vcdph, 2);
+        mynumber_changevalue("Rec_Amount_Vat_Orig", dphcastka, 2);
+        
     }
     function handle_recalc_after_vcdph() {
         if (_p33id != "5") return;
@@ -372,8 +373,10 @@
         var bezdph = _roundnum(vcdph / (1 + dphsazba / 100), 2);
 
         var dphcastka = _roundnum((vcdph - bezdph), 2);
-        $("#numRec_Amount_WithoutVat_Orig").val(bezdph);
-        $("#numRec_Amount_Vat_Orig").val(dphcastka);
+
+        mynumber_changevalue("Rec_Amount_WithoutVat_Orig", bezdph, 2);
+        mynumber_changevalue("Rec_Amount_Vat_Orig", dphcastka, 2);        
+        
     }
 
     function handle_recalc_after_pieces() {
@@ -382,13 +385,13 @@
         var celkem = _roundnum(pocet * cenaks, 2);
 
         if ($("#PiecePriceFlag").val() == "1") {
-            //kusová cena bez DPH
-            $("#numRec_Amount_WithoutVat_Orig").val(celkem);
+            //kusová cena bez DPH            
+            mynumber_changevalue("Rec_Amount_WithoutVat_Orig", celkem, 2);
             handle_recalc_after_bezdph();
         }
         if ($("#PiecePriceFlag").val() == "2" && _p33id=="5") {
             //kusová cena vč DPH
-            $("#numRec_Amount_WithVat_Orig").val(celkem);
+            mynumber_changevalue("Rec_Amount_WithVat_Orig", celkem, 2);
             handle_recalc_after_vcdph();
         }
 

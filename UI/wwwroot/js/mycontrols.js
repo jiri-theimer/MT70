@@ -18,6 +18,13 @@ function myradiolist_checked(hidden_id, value, event_after_changevalue) {
         eval(event_after_changevalue + "('" + value + "')");
     }
 }
+function mynumber_changevalue(ctlid,newval, decimaldigits) {
+    //ruční změna hodnoty čísla
+    $("#num" + ctlid).val(newval);
+   
+    mynumber_blur(document.getElementById("num" + ctlid), decimaldigits);
+    
+}
 function mynumber_blur(ctl, decimaldigits) {
     var num = 0;
     if (ctl.getAttribute("type") === "text") {
