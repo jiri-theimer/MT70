@@ -39,11 +39,11 @@
         </div>
 
         <div class="row my-2">
-            <label class="col-sm-3 col-md-3 col-form-label">@_f.tra("Vykázané hodiny zaokrouhlovat na"):</label>
-            <div class="col-sm-5 col-md-5">
+            <label class="col-sm-1 col-md-2 col-form-label recpagelabel">@_f.tra("Vykázané hodiny zaokrouhlovat na"):</label>
+            <div class="col-sm-7 col-md-6">
                 <mynumber asp-for="@Model.Round2Minutes" decimal-digits="0"></mynumber>
             </div>
-            <div class="col-sm-3 col-md-3">
+            <div class="col-sm-3 col-md-4">
                 @_f.tra("Minuty směrem nahoru")
             </div>
         </div>

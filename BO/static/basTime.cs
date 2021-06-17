@@ -56,10 +56,9 @@ namespace BO
             int lng;
             double dbl = System.Convert.ToDouble(lngSeconds) / System.Convert.ToDouble(lngMinTimeSecUnit);
 
-            if (System.Convert.ToDouble(dbl) != dbl | dbl == 0)
+            if (System.Convert.ToInt32(dbl) != dbl || dbl == 0)
             {
                 // je třeba zaokrouhlovat
-
                 lng = Convert.ToInt32(Math.Round(dbl + 0.5, 0));
                 ret = lng * lngMinTimeSecUnit;
 
@@ -69,6 +68,7 @@ namespace BO
             }
             else
                 ret = lngSeconds;
+
 
             return ret;
         }

@@ -11,6 +11,18 @@
 
 @addTagHelper *, UI
 
+@if (Model.IsRecord)
+{
+    <div class="bg-light" style="padding:10px;">
+
+        <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+        <span class="badge rounded-pill bg-primary fs-5" >
+            @(_disp.LockedReasonMessage)
+        </span>
+    </div>
+}
+
 
 <div class="info_record_container">
 
@@ -52,10 +64,10 @@
     </div>
 
     <div class="card">
-        
+
         <div class="card-body">
             <div class="card-title">
-                <strong class="text-info">@_f.tra("Vykázáno")</strong>
+                <strong class="text-primary">@_f.tra("Vykázáno")</strong>
                 <small class="float-end">
                     <code>@_f.tra("Autor"):</code>
                     @(Model.Rec.UserInsert+" / "+Model.Rec.DateInsert.ToString())
@@ -137,11 +149,19 @@
     @if (Model.Rec.p71ID == BO.p71IdENUM.Schvaleno)
     {
         <div class="card my-2">
-            
+
             <div class="card-body">
                 <div class="card-title">
-                    <strong class="text-info">@_f.tra("Schváleno")</strong>
-                    <kbd>@Model.Rec.approve_p72Name</kbd>
+                    <strong class="text-primary">@_f.tra("Schváleno")</strong>
+                    @if (Model.Rec.p72ID_AfterApprove == BO.p72IdENUM.Fakturovat)
+                    {
+                        <span class="badge-a4">@Model.Rec.approve_p72Name</span>
+                    }
+                    @if (Model.Rec.p72ID_AfterApprove == BO.p72IdENUM.ZahrnoutDoPausalu)
+                    {
+                        <span class="badge-a6">@Model.Rec.approve_p72Name</span>
+                    }
+
                     <small class="float-end">
                         <code>@_f.tra("Schvalovatel"):</code>
                         @(_f.j02PersonBL.Load(Model.Rec.j02ID_ApprovedBy).FullNameAsc+" / "+Model.Rec.p31Approved_When.ToString())
@@ -220,10 +240,10 @@
     }
 
 
-    @if (Model.Rec.p91ID>0)
+    @if (Model.Rec.p91ID > 0)
     {
         <div class="card my-2">
-            
+
             <div class="card-body">
                 <div class="card-title">
                     <strong class="text-info">@_f.tra("Vyúčtováno")</strong>
@@ -242,7 +262,7 @@
                         <myval datatype="link" linktarget="_top" linkurl="/p28/RecPage?pid=@Model.RecP91.p28ID" value="@Model.RecP91.p91Client"></myval>
                     </div>
                 </div>
-                @if (Model.Rec.p33ID == BO.p33IdENUM.Cas && Model.Rec.p70ID==BO.p70IdENUM.Vyfakturovano)
+                @if (Model.Rec.p33ID == BO.p33IdENUM.Cas && Model.Rec.p70ID == BO.p70IdENUM.Vyfakturovano)
                 {
                     <div class="row">
                         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Vyúčtované hodiny"):</label>

@@ -18,14 +18,11 @@ namespace UI.Menu
                 AMI("Upravit položku vyúčtování", $"javascript: _window_open('/p91oper/p31edit?p31id={pid}')", "k-i-edit");
                 AMI("Vyjmout položku z vyúčtování", $"javascript: _window_open('/p91oper/p31remove?p31id={pid}')", "k-i-cut");
                 AMI("Přesunout do jiného vyúčtování", $"javascript: _window_open('/p91oper/p31move2invoice?p31id={pid}')", "k-i-insert-up");
-                if (disp.OwnerAccess)
-                {                                     
-                    AMI_Clone("p31", pid);
-                }
+                
             }
             else
             {
-                if (disp.OwnerAccess && rec.p71ID==BO.p71IdENUM.Nic)
+                if (disp.OwnerAccess && disp.RecordState==BO.p31RecordState.Editing)
                 {
                     AMI("Upravit", $"javascript:_edit('p31',{pid})", "k-i-edit");
 
@@ -35,9 +32,12 @@ namespace UI.Menu
                     AMI("Detail", $"javascript:_edit('p31',{pid})", "k-i-edit");
                 }
             }
-            
 
-            
+            if (disp.OwnerAccess || disp.CanApproveAndEdit)
+            {
+                AMI_Clone("p31", pid);
+            }
+
 
 
             AMI("Další", null, null, null, "more");

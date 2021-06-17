@@ -11,9 +11,9 @@ namespace UI.Controllers
 {
     public class p31Controller : BaseController
     {
-        public IActionResult Info(int pid)
+        public IActionResult Info(int pid,bool isrecord)
         {
-            var v = new p31Info() { pid = pid };
+            var v = new p31Info() { pid = pid,IsRecord= isrecord };
             v.Rec = Factory.p31WorksheetBL.Load(v.pid);
             if (v.Rec.p91ID > 0)
             {
@@ -22,14 +22,31 @@ namespace UI.Controllers
             return View(v);
         }
 
+        
+
         public IActionResult Record(int pid, bool isclone,int p41id, int j02id, int p34id,int p56id)
-        {
+        {            
             var v = new p31Record() { rec_pid = pid, rec_entity = "p31"};
             v.Rec = new BO.p31WorksheetEntryInput() {pid=pid, p41ID = p41id, p34ID = p34id, j02ID = j02id };
             Handle_Defaults(v);
             if (v.rec_pid > 0)            
             {
+                return RedirectToAction("Info", new { pid = pid,isrecord=true });
                 var recP31 = Factory.p31WorksheetBL.Load(v.rec_pid);
+                if (recP31 == null)
+                {
+                    return this.StopPage(true, "Záznam nebyl nalezen.");
+                }
+                var disp = InhalePermissions(v, recP31);
+                if (!disp.ReadAccess)
+                {
+                    return this.StopPage(true, "Nemáte oprávnění k záznamu.");
+                }
+                if (disp.RecordState != BO.p31RecordState.Editing)
+                {
+                    
+                    return RedirectToAction("Info",new { pid = pid,isrecord=true });
+                }
                 v.Rec = Factory.p31WorksheetBL.CovertRec2Input(recP31);
                 v.p31Date = v.Rec.p31Date;
                 v.SelectedComboP32Name = recP31.p32Name;
@@ -42,10 +59,7 @@ namespace UI.Controllers
 
                 v.SetTagging(Factory.o51TagBL.GetTagging("p31", v.rec_pid));
 
-                if (!InhalePermissions(v,recP31))
-                {
-                    return this.StopPage(true, "Nemáte oprávnění k záznamu.");
-                }
+                
             }
 
             v.Toolbar = new MyToolbarViewModel(v.Rec);
@@ -255,11 +269,20 @@ namespace UI.Controllers
                 c.p32ID = v.Rec.p32ID;
 
                 c.Value_Orig = v.Rec.Value_Orig;
-                if (v.RecP34.p33ID == BO.p33IdENUM.Cas)
+                switch (v.RecP34.p33ID)
                 {
-                    c.p31HoursEntryflag = BO.p31HoursEntryFlagENUM.Hodiny;
-
+                    case BO.p33IdENUM.Cas:
+                        c.p31HoursEntryflag = BO.p31HoursEntryFlagENUM.Hodiny;                        
+                        break;
+                    case BO.p33IdENUM.PenizeBezDPH:
+                    case BO.p33IdENUM.PenizeVcDPHRozpisu:
+                        c.j27ID_Billing_Orig = v.Rec.j27ID_Billing_Orig;
+                        break;
+                    case BO.p33IdENUM.Kusovnik:
+                        
+                        break;
                 }
+              
                 
 
                 c.Amount_WithoutVat_Orig = v.Rec.Amount_WithoutVat_Orig;
@@ -301,15 +324,11 @@ namespace UI.Controllers
             return true;
         }
 
-        private bool InhalePermissions(p31Record v,BO.p31Worksheet recP31)
+        private BO.p31RecDisposition InhalePermissions(p31Record v,BO.p31Worksheet recP31)
         {
-            var mydisp = Factory.p31WorksheetBL.InhaleRecDisposition(recP31);
-            if (!mydisp.ReadAccess)
-            {
-                return false;
-            }
+            return Factory.p31WorksheetBL.InhaleRecDisposition(recP31);
             
-            return true;
+            
         }
     }
 }

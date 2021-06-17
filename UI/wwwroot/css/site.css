@@ -1288,6 +1288,48 @@ td.tdnum {
 }
 
 
+
+.badge-a2 {
+    background-color: red;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 4px;
+}
+
+.badge-a3 {
+    background-color: brown;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 4px;
+}
+
+.badge-a4 {
+    background-color: green;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 4px;
+}
+
+.badge-a6 {
+    background-color: pink;
+    color: black;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 4px;
+}
+
+.badge-a7 {
+    background-color: gold;
+    color: black;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 4px;
+}
+
+
 .vydaj {
     color: #A52A2A !important; /*záznam peněžního výdaje*/
 }

@@ -429,19 +429,43 @@ namespace BL
 
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec)
         {
-            var c = new BO.p31RecDisposition();
+            var c = new BO.p31RecDisposition();            
+
+            var pars = new Dapper.DynamicParameters();                        
+            pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);
+            pars.Add("pid", rec.pid, System.Data.DbType.Int32);
+            pars.Add("record_disposition",null,System.Data.DbType.Int32,System.Data.ParameterDirection.Output);
+            pars.Add("record_state", null, System.Data.DbType.Int32, System.Data.ParameterDirection.Output);
+            pars.Add("msg_locked", null, System.Data.DbType.String, System.Data.ParameterDirection.Output,1000);
+
+            if (_db.RunSp("p31_inhale_disposition", ref pars,false) == "1")
+            {
+                c.RecordState = (BO.p31RecordState) pars.Get<Int32>("record_state");
+                c.LockedReasonMessage = pars.Get<string>("msg_locked");
+                switch (pars.Get<Int32>("record_disposition"))
+                {
+                    case 1:
+                        c.ReadAccess = true;break;
+                    case 2:
+                        c.OwnerAccess = true;c.ReadAccess = true; break;
+                    case 3:
+                        c.CanApprove = true; c.ReadAccess = true; break;
+                    case 4:
+                        c.CanApproveAndEdit = true; c.ReadAccess = true; c.OwnerAccess = true; break;
+                }
+                
+            }
             if (_mother.CurrentUser.IsAdmin)
             {
                 c.OwnerAccess = true; c.ReadAccess = true;
-                
-            }
-            if (rec.j02ID==_mother.CurrentUser.j02ID || rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P31_Owner)) //je vlastník nebo má globální roli vlastit všechny úkony
-            {
-                c.OwnerAccess = true; c.ReadAccess = true;
-                
             }
 
-           
+            if (c.RecordState==BO.p31RecordState.Editing && !c.OwnerAccess){
+                c.OwnerAccess = _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P31_Owner); //uživatel má právo vlastníka všech worksheet záznamů v db
+            }
+            
+
+
 
             return c;
         }
