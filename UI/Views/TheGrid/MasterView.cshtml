@@ -18,7 +18,7 @@
 <div class="input-group m-0" style="padding-top:1px;">
     
     <div>
-        <ul id="navtabs" class="nav nav-tabs">
+        <ul id="overgridtabs" class="nav nav-tabs">
             @foreach (var tab in Model.OverGridTabs)
             {
                 <li class="nav-item onetab">
@@ -206,9 +206,10 @@
             $("#tab@(@tab.Entity)").attr("href", tabUrl);
             </text>
          }
-            var selectedtab = $("#navtabs").find(".active");
 
+            var selectedtab = $("#navtabs").find(".active");
             tabUrl = $(selectedtab).attr("href");
+            
             document.getElementById("fra_subgrid").src = tabUrl;
 
             handle_render_tabs(pid);
