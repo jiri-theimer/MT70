@@ -1166,7 +1166,11 @@ function update_flattab_badge(badgeid, val) {
 }
 
 function tg_gridreport() {
-    var url = "/TheGridReport/Index?j72id=" + _j72id;    
+    var url = "/TheGridReport/Index?j72id=" + _j72id;
+    if (_tg_master_entity !== "" && _tg_master_pid > 0) {
+        url = url + "&master_prefix=" + _tg_master_entity.substr(0, 3) + "&master_pid=" + _tg_master_pid;
+    }
+    
     _window_open(url, 2);
 
 }
@@ -1178,7 +1182,12 @@ function tg_gridreport_selected() {
 
         return;
     }
+    
     url = url + "&pids=" + pids;
+    if (_tg_master_entity !== "" && _tg_master_pid > 0) {
+        url = url + "&master_prefix=" + _tg_master_entity.substr(0, 3) + "&master_pid=" + _tg_master_pid;
+    }
+    
     _window_open(url, 2);
 
 }

@@ -9,6 +9,8 @@ namespace UI.Models
     {
         public int j72id { get; set; }
         public string prefix { get; set; }
+        public string master_prefix { get; set; }
+        public int master_pid { get; set; }
         public List<int> pids { get; set; }
 
         public string Header { get; set; }
