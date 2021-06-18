@@ -643,7 +643,7 @@ namespace UI
 
             sb.AppendLine("<ul style='border:0px;list-style-type: none;border-top:solid 1px silver;'>");
 
-
+            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_gridreport()'><span class='k-icon k-i-subreport' style='width:30px;'></span>GRID-REPORT</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='k-icon k-i-file-excel' style='width:30px;'></span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='k-icon k-i-file-csv' style='width:30px;'></span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
 

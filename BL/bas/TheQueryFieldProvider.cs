@@ -85,6 +85,9 @@ namespace BL
                     of.SqlWrapper = "select p41ID FROM p31Worksheet WHERE p71ID=1 AND p91ID IS NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
                     of = AF("p41Project", "ExistVyuctovane", "a.p41ID", "Existují vyúčtované úkony", null, null, "bool");
                     of.SqlWrapper = "select p41ID FROM p31Worksheet WHERE p91ID IS NOT NULL AND p31Date BETWEEN @p31date1 AND @p31date2 AND p31ValidUntil>GETDATE()";
+
+                    of = AF("p41Project", "VArchivu", "a.p41ValidUntil<GETDATE()", "Přesunuto do archivu", null, null, "bool1x");
+                    of = AF("p41Project", "MimoArchiv", "a.p41ValidUntil>GETDATE()", "Pouze otevřené záznamy", null, null, "bool1x");
                     break;
                 case "p31":
                     of = AF("p31Worksheet", "FStatus", "a.p70ID", "Fakturační status", "p70BillingStatus", null, "multi");
@@ -112,7 +115,9 @@ namespace BL
                     of = AF("p31Worksheet", "SDodavatelem", "a.p28ID_Supplier IS NOT NULL", "Přiřazen dodavatel výdaje", "p28Contact",null, "bool1x");
                     of = AF("p31Worksheet", "SKodem", "a.p31Code IS NOT NULL", "Vyplněn kód dokladu", null, null, "bool1x");
                     of = AF("p31Worksheet", "SDokumentem", "a.p31ID IN (SELECT xa.x19RecordPID FROM x19EntityCategory_Binding xa INNER JOIN x20EntiyToCategory xb ON xa.x20ID=xb.x20ID WHERE xb.x29ID=331)", "Přiřazen dokument", null, null, "bool1x");
+
                     of = AF("p31Worksheet", "VArchivu", "a.p31ValidUntil<GETDATE()", "Přesunuto do archivu", null, null, "bool1x");
+                    of = AF("p31Worksheet", "MimoArchiv", "a.p31ValidUntil>GETDATE()", "Pouze otevřené záznamy", null, null, "bool1x");
                     break;
                 case "p56":
                     of = AF("p56Task", "ExistRozpracovane", "p41x.p41BillingFlag<99 AND a.p56ID", "Existují rozpracované úkony", null, null, "bool");

@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_LayoutSubform.cshtml";
     if (Model.Rec == null) return;
 
+    var _recSymbol = new BO.p31Worksheet() { p71ID = Model.Rec.p71ID, p72ID_AfterApprove = Model.Rec.p72ID_AfterApprove, p72ID_AfterTrimming=Model.Rec.p72ID_AfterTrimming };
+
     var _disp = _f.p31WorksheetBL.InhaleRecDisposition(Model.Rec);
 }
 
@@ -13,14 +15,20 @@
 
 @if (Model.IsRecord)
 {
-    <div class="bg-light" style="padding:10px;">
+<div class="bg-light" style="padding:10px;">
 
-        <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+    <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
 
-        <span class="badge rounded-pill bg-primary fs-5">
-            @(_disp.LockedReasonMessage)
-        </span>
-    </div>
+
+    <span class="badge rounded-pill bg-primary fs-5">
+        @(_disp.LockedReasonMessage)
+        
+    </span>
+    <span class="fs-5">
+        
+        @Html.Raw(TheGridRowSymbol.p31_symbol(Model.Rec))
+    </span>
+</div>
 }
 
 
@@ -84,6 +92,7 @@
 
         <div class="card-body">
             <div class="card-title">
+                <img src="/images/worksheet.png" />
                 <strong class="text-primary">@_f.tra("Vykázáno")</strong>
                 <small class="float-end">
                     <code>@_f.tra("Autor"):</code>
@@ -167,6 +176,7 @@
         <div class="card my-2">
             <div class="card-body">
                 <div class="card-title">
+                    @Html.Raw(TheGridRowSymbol.p31_symbol(_recSymbol))
                     <strong class="text-primary">@_f.tra("Neschváleno")</strong>
                     <span class="badge-a@((int)Model.Rec.p72ID_AfterApprove)">@Model.Rec.approve_p72Name</span>
 
@@ -186,6 +196,9 @@
 
             <div class="card-body">
                 <div class="card-title">
+                   
+                    @Html.Raw(TheGridRowSymbol.p31_symbol(_recSymbol))
+                    
                     <strong class="text-primary">@_f.tra("Schváleno")</strong>
                     <span class="badge-a@((int)Model.Rec.p72ID_AfterApprove)">@Model.Rec.approve_p72Name</span>
 
@@ -274,6 +287,7 @@
 
             <div class="card-body">
                 <div class="card-title">
+                    @Html.Raw(TheGridRowSymbol.p31_symbol(Model.Rec))
                     <strong class="text-primary">@_f.tra("Vyúčtováno")</strong>
 
                     <span class="badge-a@((int)Model.Rec.p70ID)">@Model.Rec.p70Name</span>

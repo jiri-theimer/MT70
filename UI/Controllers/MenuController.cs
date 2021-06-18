@@ -480,6 +480,7 @@ namespace UI.Controllers
             }
 
             DIV();
+            AMI("GRID-REPORT", "javascript:tg_gridreport_selected()", "k-i-subreport");
             AMI("MS EXCEL Export", "javascript:tg_export('xlsx','selected')", "k-i-file-excel");
             AMI("CSV Export", "javascript:tg_export('csv','selected')", "k-i-file-csv");
 

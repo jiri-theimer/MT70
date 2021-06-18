@@ -1164,3 +1164,21 @@ function update_flattab_badge(badgeid, val) {
         $("#" + badgeid).css("visibility", "visible");
     }
 }
+
+function tg_gridreport() {
+    var url = "/TheGridReport/Index?j72id=" + _j72id;    
+    _window_open(url, 2);
+
+}
+function tg_gridreport_selected() {
+    var url = "/TheGridReport/Index?j72id=" + _j72id;
+    var pids = $("#tg_selected_pids").val();
+    if (pids === "") {
+        _notify_message(_tg_musite_vybrat_zaznam);
+
+        return;
+    }
+    url = url + "&pids=" + pids;
+    _window_open(url, 2);
+
+}
