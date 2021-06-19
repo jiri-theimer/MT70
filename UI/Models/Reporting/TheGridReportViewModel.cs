@@ -13,6 +13,8 @@ namespace UI.Models
         public int master_pid { get; set; }
         public List<int> pids { get; set; }
 
+        public string TrdxRepFileName { get; set; }
+
         public string Header { get; set; }
         public int MarginLeft { get; set; }
         public int MarginTop { get; set; }
@@ -20,6 +22,22 @@ namespace UI.Models
         public int MarginBottom { get; set; }
 
         public int PageOrientation { get; set; }    //1:portrait, 2: landscape
+
+        public bool IsLandScape
+        {
+            get
+            {
+                if (this.PageOrientation == 1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+           
+        }
 
         public string GroupByColumn { get; set; }   //sloupec pro souhrny
         public string PageBreakColumn { get; set; } //sloupec pro odstránkování

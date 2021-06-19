@@ -9,14 +9,18 @@ namespace BL
 {
     public interface IDataGridBL
     {
-        public DataTable GetList(BO.baseQuery mq, bool bolGetTotalsRow = false);
+        public DataTable GetList(BO.baseQuery mq, bool bolGetTotalsRow = false);        
         public IEnumerable<BO.GetListOfPids> GetListOfFindPid(BO.baseQuery mq, int topscoperecs);
         public DataTable GetList4MailMerge(string prefix, int pid);
         public DataTable GetList4MailMerge(int pid, string individual_sql_source);
         public DataTable GetListFromPureSql(string sql);
+        public string GetLastFinalSql();
+
+
     }
     class DataGridBL:BaseBL,IDataGridBL
-    {        
+    {
+        private DL.FinalSqlCommand _q { get; set; }
         public DataGridBL(BL.Factory mother):base(mother)
         {
             
@@ -37,7 +41,7 @@ namespace BL
             sql = BO.BAS.OcistitSQL(sql);            
             return _db.GetDataTable(sql);
         }
-        public IEnumerable<BO.GetListOfPids> GetListOfFindPid(BO.baseQuery mq,int topscoperecs)
+        public IEnumerable<BO.GetListOfPids> GetListOfFindPid(BO.baseQuery mq,int topscoperecs)     //pro hledání záznamu v grid stránkách
         {
             BO.TheEntity ce = _mother.EProvider.ByPrefix(mq.Prefix);
             var sb = new System.Text.StringBuilder();
@@ -65,10 +69,15 @@ namespace BL
             }
 
 
-            DL.FinalSqlCommand q = DL.basQuery.GetFinalSql(sb.ToString(), mq, _mother.CurrentUser, true);
-            BO.BASFILE.AppendText2File("c:\\temp\\hovado2.txt", q.FinalSql);
-            return _db.GetList<BO.GetListOfPids>(q.FinalSql, q.Parameters);
+            _q = DL.basQuery.GetFinalSql(sb.ToString(), mq, _mother.CurrentUser, true);
+            
+            return _db.GetList<BO.GetListOfPids>(_q.FinalSql, _q.Parameters);
           
+        }
+        public string GetLastFinalSql()
+        {
+            if (_q == null) return null;
+            return _q.FinalSql;
         }
         public DataTable GetList(BO.baseQuery mq,bool bolGetTotalsRow=false)
         {          
@@ -100,7 +109,7 @@ namespace BL
                 sb.Append($",COUNT(a.{mq.PrefixDb}ID) as RowsCount");     //sumační dotaz gridu
                 switch (mq.Prefix)
                 {
-                    case "p31": //součty pro záložky hodiny/výdaje/odměny                        
+                    case "p31": //součty pro hodnoty záložek hodiny/výdaje/odměny                        
                         sb.Append(",SUM(case when p34x.p33ID=1 then 1 end) as RowsTime");
                         sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=1 then 1 end) as RowsExpense");
                         sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=2 then 1 end) as RowsFee");
@@ -183,19 +192,20 @@ namespace BL
 
 
             //parametrický dotaz s WHERE klauzulí
-            
-            DL.FinalSqlCommand q = DL.basQuery.GetFinalSql(sb.ToString(), mq, _mother.CurrentUser, true);    //závěrečné vygenerování WHERE a ORDERBY klauzule
 
+            _q = DL.basQuery.GetFinalSql(sb.ToString(), mq, _mother.CurrentUser, true);    //závěrečné vygenerování WHERE a ORDERBY klauzule
+            
             if (bolGetTotalsRow == false && mq.OFFSET_PageSize > 0)
             {
-                q.FinalSql += " OFFSET @pagesize*@pagenum ROWS FETCH NEXT @pagesize ROWS ONLY";
-                if (q.Parameters4DT == null) q.Parameters4DT = new List<DL.Param4DT>();
-                q.Parameters4DT.Add(new DL.Param4DT() { ParamType = "int", ParName = "pagesize", ParValue = mq.OFFSET_PageSize });
-                q.Parameters4DT.Add(new DL.Param4DT() { ParamType = "int", ParName = "pagenum", ParValue = mq.OFFSET_PageNum });
+                _q.FinalSql += " OFFSET @pagesize*@pagenum ROWS FETCH NEXT @pagesize ROWS ONLY";
+                if (_q.Parameters4DT == null) _q.Parameters4DT = new List<DL.Param4DT>();
+                _q.Parameters4DT.Add(new DL.Param4DT() { ParamType = "int", ParName = "pagesize", ParValue = mq.OFFSET_PageSize });
+                _q.Parameters4DT.Add(new DL.Param4DT() { ParamType = "int", ParName = "pagenum", ParValue = mq.OFFSET_PageNum });
 
             }
-            
-            return _db.GetDataTable(q.FinalSql, q.Parameters4DT);
+            //BO.BASFILE.LogInfo(q.FinalSql);
+
+            return _db.GetDataTable(_q.FinalSql, _q.Parameters4DT);
             
         }
 
