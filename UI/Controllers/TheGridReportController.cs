@@ -43,14 +43,42 @@ namespace UI.Controllers
             }
             InhaleDefaults(v);
 
-            var gridState = Factory.j72TheGridTemplateBL.LoadState(j72id, Factory.CurrentUser.pid);
+            RefreshState(v);
+
+            return View(v);
+        }
+
+        [HttpPost]
+        public IActionResult Index(Models.TheGridReportViewModel v, string oper)
+        {
+            RefreshState(v);
+            if (!string.IsNullOrEmpty(oper))
+            {
+                switch (oper)
+                {
+                    case "orientation":
+                        Factory.CBL.SetUserParam("thegridreport-orientation", v.PageOrientation.ToString());
+                        break;
+                }
+                return View(v);
+            }
+
+            if (ModelState.IsValid)
+            {
+
+
+                v.SetJavascript_CallOnLoad(0);
+                
+            }
+
+            return View(v);
+        }
+
+        private void RefreshState(Models.TheGridReportViewModel v)
+        {
+            var gridState = Factory.j72TheGridTemplateBL.LoadState(v.j72id, Factory.CurrentUser.pid);
 
             v.prefix = gridState.j72Entity.Substring(0, 3);
-
-            if (!string.IsNullOrEmpty(pids))
-            {
-                v.pids = BO.BAS.ConvertString2ListInt(pids);
-            }
 
             v.TrdxRepDestFileName = v.guid + ".trdx";
 
@@ -58,45 +86,49 @@ namespace UI.Controllers
             if (string.IsNullOrEmpty(v.TrdxRepSourceFileName))
             {
                 this.AddMessage("V systému nelze najít template rep soubor.");
-                return View(v);
+                return;
             }
             if (!System.IO.File.Exists(Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName))
             {
                 this.AddMessageTranslated(string.Format("V systému chybí template rep soubor {0}.", Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName));
-                return View(v);
+                return;
             }
 
-            
-            var mq = InhaleMyQuery(v, gridState, pids);
+
+            var mq = InhaleMyQuery(v, gridState, v.pids);
 
             var dt = Factory.gridBL.GetList(mq, false);
 
-            
+
             string strSQL = Factory.gridBL.GetLastFinalSql();
             if (strSQL.Contains("@d1"))
             {
-                strSQL = strSQL.Replace("@d1", $"convert(datetime,'{BO.BAS.ObjectDate2String(mq.global_d1,"dd.MM.yyyy")}',104)");
+                strSQL = strSQL.Replace("@d1", $"convert(datetime,'{BO.BAS.ObjectDate2String(mq.global_d1, "dd.MM.yyyy")}',104)");
                 strSQL = strSQL.Replace("@d2", $"convert(datetime,'{BO.BAS.ObjectDate2String(mq.global_d2, "dd.MM.yyyy")}',104)");
+            }
+            if (strSQL.Contains("o54InlineHtml"))
+            {
+                strSQL = strSQL.Replace("o54InlineHtml", "o54InlineText");
             }
 
             double dblDPI = 96; double dblWidthComplete_CM = 0; int intColIndex = 0;
             double dblRatio = v.ZoomPercentage / 100.00;
 
-            string strXmlContent = System.IO.File.ReadAllText(Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName);            
+            string strXmlContent = System.IO.File.ReadAllText(Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName);
 
             var blocks = new List<BO.StringPair>();
 
             foreach (var col in mq.explicit_columns)
             {
-                
-                if ((col.Prefix=="p41" || col.Prefix.Substring(0,1)=="l") && col.Header.Substring(0,1) == "L" && col.Header.Length==2)
+
+                if ((col.Prefix == "p41" || col.Prefix.Substring(0, 1) == "l") && col.Header.Substring(0, 1) == "L" && col.Header.Length == 2)
                 {
-                    col.Header = Factory.CurrentUser.getP07Level(Convert.ToInt32(col.Header.Substring(1,1)), true);
+                    col.Header = Factory.CurrentUser.getP07Level(Convert.ToInt32(col.Header.Substring(1, 1)), true);
                 }
                 double dblWidth_CM = 3.00;
                 string strBlock = GenerateTrdx_getTableCell(col, intColIndex, dblWidth_CM, v);
 
-                
+
                 blocks.Add(new BO.StringPair() { Key = "TableCell", Value = strBlock });
 
                 strBlock = $"<Column Width='{dblWidth_CM.ToString()}cm' />";
@@ -106,13 +138,13 @@ namespace UI.Controllers
 
 
                 blocks.Add(new BO.StringPair() { Key = "TableGroup", Value = strBlock });
-                
+
 
                 dblWidthComplete_CM += dblWidth_CM;
                 intColIndex += 1;
             }
 
-            
+
 
             string strFind = GenerateTrdx_FindBlock(ref strXmlContent, "<Cells>", "</Cells>");
             string strReplace = "<Cells>" + string.Join("", blocks.Where(p => p.Key == "TableCell").Select(p => p.Value)).Replace("'", "\"") + "</Cells>";
@@ -127,12 +159,12 @@ namespace UI.Controllers
             GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
 
             strFind = ("<MarginsU Left='10mm' Right='5mm' Top='5mm' Bottom='5mm' />").Replace("'", "\"");
-            strReplace=$"<MarginsU Left='{v.MarginLeft}mm' Right='{v.MarginRight}mm' Top='{v.MarginTop}mm' Bottom='{v.MarginBottom}mm' />";
+            strReplace = $"<MarginsU Left='{v.MarginLeft}mm' Right='{v.MarginRight}mm' Top='{v.MarginTop}mm' Bottom='{v.MarginBottom}mm' />";
             GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
 
             GenerateTrdx_ParseResult(ref strXmlContent, "#sql#", HtmlEncoder.Default.Encode(strSQL)); //pro telerik report je třeba sql zahešovat
 
-            
+
 
             if (v.PageBreakColumn != null)
             {
@@ -147,7 +179,7 @@ namespace UI.Controllers
             {
                 v.Header = v.Header.Replace("&", "#");
             }
-            
+
             GenerateTrdx_ParseResult(ref strXmlContent, "#header#", v.Header);
 
             if (v.GroupByColumn != null)
@@ -162,15 +194,9 @@ namespace UI.Controllers
                 strXmlContent = strXmlContent.Replace("groupby_field_alias", colGroupBy.Header);
             }
 
-            
+
 
             System.IO.File.WriteAllText(Factory.x35GlobalParamBL.ReportFolder() + "\\" + v.TrdxRepDestFileName, strXmlContent);
-
-            //TheGridInput input = new TheGridInput() { j72id = v.j72id, entity = gridState.j72Entity };
-
-            //var cSup = new UI.TheGridSupport(input, Factory, _colsProvider);
-
-            return View(v);
         }
 
         private string GenerateTrdx_FindBlock(ref string strContent, string strStartElement, string strEndElement)

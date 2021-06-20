@@ -11,7 +11,7 @@ namespace UI.Models
         public string prefix { get; set; }
         public string master_prefix { get; set; }
         public int master_pid { get; set; }
-        public List<int> pids { get; set; }
+        public string pids { get; set; }
 
         public string TrdxRepSourceFileName { get; set; }
         public string TrdxRepDestFileName { get; set; }

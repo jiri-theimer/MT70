@@ -26,60 +26,67 @@
 
 </div>
 
-<div class="row">
-    <div class="col-auto card">
-        <div class="card-header py-0">
-            @_f.tra("Souhrny/Odstránkování/Nadpis")
+<form id="form1" asp-controller="TheGridReport" asp-action="Index" method="POST">
+    <input type="hidden" asp-for="@Model.j72id" />
+    <input type="hidden" asp-for="@Model.master_prefix" />
+    <input type="hidden" asp-for="@Model.master_pid" />
+    <input type="hidden" asp-for="@Model.pids" />
+    
+    <div class="row">
+        <div class="col-auto card">
+            <div class="card-header py-0">
+                @_f.tra("Souhrny/Odstránkování/Nadpis")
+            </div>
+            <div class="card-body py-0">
+                <select asp-for="@Model.GroupByColumn">
+                </select>
+                <br />
+                <select asp-for="@Model.PageBreakColumn">
+                </select>
+                <br />
+                <input type="text" class="form-control" asp-for="@Model.Header" placeholder="@_f.tra("Nadpis sestavy")" />
+            </div>
+
         </div>
-        <div class="card-body py-0">
-            <select asp-for="@Model.GroupByColumn">
-            </select>
-            <br />
-            <select asp-for="@Model.PageBreakColumn">
-            </select>
-            <br />
-            <input type="text" class="form-control" asp-for="@Model.Header" placeholder="@_f.tra("Nadpis sestavy")" />
+
+        <div class="col-auto card">
+            <div class="card-header py-0">
+                @_f.tra("Nastavení stránky")
+            </div>
+            <div class="card-body py-0">
+                <input id="opgNaVysku" asp-for="@Model.PageOrientation" type="radio" value="1" onchange="postback('orientation')" /><label for="opgNaVysku">@_f.tra("A4 na výšku")</label>
+                <input id="opgNaSirku" asp-for="@Model.PageOrientation" type="radio" value="2" onchange="postback('orientation')" /><label for="opgNaSirku">@_f.tra("A4 na šířku")</label>
+                <select asp-for="@Model.ZoomPercentage" title="% poměr šířky sloupců sestavy oproti GRID sloupcům">
+                    <option value="100">100%</option>
+                    <option value="90">90%</option>
+                    <option value="80">80%</option>
+                    <option value="70">70%</option>
+                    <option value="60">60%</option>
+                    <option value="50">50%</option>
+                </select>
+                <select asp-for="@Model.MaxTopRecs" title="Maximální počet řádků sestavy">
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="2000">2000</option>
+                    <option value="5000">5000</option>
+
+                </select>
+                <br />
+                <span>@_f.tra("Okraje (v milimetrech)"):</span>
+                <br />
+                <input asp-for="@Model.MarginLeft" title="Vlevo" placeholder="vlevo" type="number" style="width:60px;" />
+                <input asp-for="@Model.MarginRight" title="Vpravo" placeholder="vpravo" type="number" style="width:60px;" />
+                <input asp-for="@Model.MarginTop" title="Nahoře" placeholder="nahoře" type="number" style="width:60px;" />
+                <input asp-for="@Model.MarginBottom" title="Dole" placeholder="dole" type="number" style="width:60px;" />
+            </div>
         </div>
-        
     </div>
+</form>
 
-    <div class="col-auto card">
-        <div class="card-header py-0">
-            @_f.tra("Nastavení stránky")
-        </div>
-        <div class="card-body py-0">
-            <input id="opgNaVysku" asp-for="@Model.PageOrientation" type="radio" value="1" /><label for="opgNaVysku">@_f.tra("A4 na výšku")</label>
-            <input id="opgNaSirku" asp-for="@Model.PageOrientation" type="radio" value="2" /><label for="opgNaSirku">@_f.tra("A4 na šířku")</label>
-            <select asp-for="@Model.ZoomPercentage" title="% poměr šířky sloupců sestavy oproti GRID sloupcům">
-                <option value="100">100%</option>
-                <option value="90">90%</option>
-                <option value="80">80%</option>
-                <option value="70">70%</option>
-                <option value="60">60%</option>
-                <option value="50">50%</option>
-            </select>
-            <select asp-for="@Model.MaxTopRecs" title="Maximální počet řádků sestavy">
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-                <option value="2000">2000</option>
-                <option value="5000">5000</option>
-
-            </select>
-            <br />
-            <span>@_f.tra("Okraje (v milimetrech)"):</span>
-            <br />
-            <input asp-for="@Model.MarginLeft" title="Vlevo" placeholder="vlevo" type="number" style="width:60px;" />
-            <input asp-for="@Model.MarginRight" title="Vpravo" placeholder="vpravo" type="number" style="width:60px;" />
-            <input asp-for="@Model.MarginTop" title="Nahoře" placeholder="nahoře" type="number" style="width:60px;" />
-            <input asp-for="@Model.MarginBottom" title="Dole" placeholder="dole" type="number" style="width:60px;" />
-        </div>
-    </div>
-</div>
-
-<iframe id="fra1" scrolling="no" src="/Home/About"></iframe>
+    <iframe id="fra1" scrolling="no" src="/Home/About"></iframe>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
     $(document).ready(function () {
 
@@ -97,7 +104,10 @@
     });
 
 
-
+        function postback(oper) {
+            form1.action = "/TheGridReport/Index?oper=" + oper;
+            form1.submit();
+        }
 
     function showrep() {
             var guid = "@Model.guid";
@@ -106,4 +116,4 @@
 
         }
 
-</script>
+    </script>
