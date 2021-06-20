@@ -79,6 +79,10 @@ namespace UI.Controllers
                 intColIndex += 1;
             }
 
+            string strFind = GenerateTrdx_FindBlock(ref strXmlContent, "<Cells>", "</Cells>");
+            string strReplace = "<Cells>" + string.Join("", blocks.Where(p => p.Key == "TableCell").Select(p => p.Value)).Replace("'", "\"") + "</Cells>";
+            GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
+
             //TheGridInput input = new TheGridInput() { j72id = v.j72id, entity = gridState.j72Entity };
 
             //var cSup = new UI.TheGridSupport(input, Factory, _colsProvider);
@@ -86,6 +90,16 @@ namespace UI.Controllers
             return View(v);
         }
 
+        private string GenerateTrdx_FindBlock(ref string strContent, string strStartElement, string strEndElement)
+        {
+            int x = strContent.IndexOf(strStartElement);
+            int y = strContent.IndexOf(strEndElement, x + 1);
+            if (x == -1 || y == -1)
+            {
+                return "???##not-merged: " + strStartElement;
+            }
+            return strContent.Substring(x, strEndElement.Length + y - x);
+        }
         private string GenerateTrdx_getColumnGroup(BO.TheGridColumn col, int intColIndex,double dblWidth_CM, TheGridReportViewModel v)
         {
             var s = new System.Text.StringBuilder();
@@ -107,6 +121,10 @@ namespace UI.Controllers
             return s.ToString();
         }
 
+        private void GenerateTrdx_ParseResult(ref string strContent,string strFind,string strReplace)
+        {
+            strContent = strContent.Replace(strFind, strReplace,StringComparison.OrdinalIgnoreCase);
+        }
         private string GenerateTrdx_getTableCell(BO.TheGridColumn col, int intColIndex, double dblWidth_CM, TheGridReportViewModel v)
         {
             var s = new System.Text.StringBuilder();
@@ -246,5 +264,7 @@ namespace UI.Controllers
             }
             return s;
         }
+
+        
     }
 }
