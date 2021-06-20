@@ -73,6 +73,11 @@ namespace UI.Controllers
 
             
             string strSQL = Factory.gridBL.GetLastFinalSql();
+            if (strSQL.Contains("@d1"))
+            {
+                strSQL = strSQL.Replace("@d1", $"convert(datetime,'{BO.BAS.ObjectDate2String(mq.global_d1,"dd.MM.yyyy")}',104)");
+                strSQL = strSQL.Replace("@d2", $"convert(datetime,'{BO.BAS.ObjectDate2String(mq.global_d2, "dd.MM.yyyy")}',104)");
+            }
 
             double dblDPI = 96; double dblWidthComplete_CM = 0; int intColIndex = 0;
             double dblRatio = v.ZoomPercentage / 100.00;
@@ -298,7 +303,7 @@ namespace UI.Controllers
             mq.TopRecordsOnly = v.MaxTopRecs;
             mq.IsRecordValid = null;    //brát v potaz i archivované záznamy
             mq.SetPids(pids);
-
+            
             mq.explicit_columns = _colsProvider.ParseTheGridColumns(v.prefix, gridState.j72Columns, Factory);
 
             if (string.IsNullOrEmpty(v.master_prefix))

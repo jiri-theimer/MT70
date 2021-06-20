@@ -77,6 +77,7 @@ namespace BL
         public string GetLastFinalSql()
         {
             if (_q == null) return null;
+            
             return _q.FinalSql;
         }
         public DataTable GetList(BO.baseQuery mq,bool bolGetTotalsRow=false)
