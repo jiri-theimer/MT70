@@ -13,7 +13,9 @@ namespace UI.Models
         public int master_pid { get; set; }
         public List<int> pids { get; set; }
 
-        public string TrdxRepFileName { get; set; }
+        public string TrdxRepSourceFileName { get; set; }
+        public string TrdxRepDestFileName { get; set; }
+        public string guid { get; set; }
 
         public string Header { get; set; }
         public int MarginLeft { get; set; }

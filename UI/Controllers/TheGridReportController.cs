@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Encodings.Web;
 using UI.Models;
 
 namespace UI.Controllers
@@ -17,9 +18,29 @@ namespace UI.Controllers
             _colsProvider = cp;
             _pp = pp;
         }
-        public IActionResult Index(int j72id, string pids, string master_prefix, int master_pid)
+
+        public IActionResult ReportViewer(string guid)
         {
-            var v = new TheGridReportViewModel() { j72id = j72id, master_prefix = master_prefix, master_pid = master_pid };
+            var v = new TheGridReportViewModel() { guid = guid };
+            v.TrdxRepDestFileName = v.guid + ".trdx";
+            if (!System.IO.File.Exists(Factory.x35GlobalParamBL.ReportFolder() + "\\" + v.TrdxRepDestFileName))
+            {
+                return this.StopPage(true, "Nelze najít soubor: " + v.TrdxRepDestFileName);
+                
+                
+            }
+
+            return View(v);
+
+        }
+
+        public IActionResult Index(int j72id, string pids, string master_prefix, int master_pid,string guid)
+        {
+            var v = new TheGridReportViewModel() { j72id = j72id, master_prefix = master_prefix, master_pid = master_pid,guid=guid };
+            if (string.IsNullOrEmpty(v.guid))
+            {
+                v.guid = Factory.CurrentUser.j03Login + "_temp_gridreport";
+            }
             InhaleDefaults(v);
 
             var gridState = Factory.j72TheGridTemplateBL.LoadState(j72id, Factory.CurrentUser.pid);
@@ -31,35 +52,42 @@ namespace UI.Controllers
                 v.pids = BO.BAS.ConvertString2ListInt(pids);
             }
 
+            v.TrdxRepDestFileName = v.guid + ".trdx";
 
-            v.TrdxRepFileName = FindRepFile(v);
-            if (string.IsNullOrEmpty(v.TrdxRepFileName))
+            v.TrdxRepSourceFileName = FindRepFile(v);
+            if (string.IsNullOrEmpty(v.TrdxRepSourceFileName))
             {
-                this.AddMessage("V systému nelze najít template rep soubor."));
+                this.AddMessage("V systému nelze najít template rep soubor.");
                 return View(v);
             }
-            if (!System.IO.File.Exists(Factory.App.AppRootFolder + "\\templates\\" + v.TrdxRepFileName))
+            if (!System.IO.File.Exists(Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName))
             {
-                this.AddMessageTranslated(string.Format("V systému chybí template rep soubor {0}.", v.TrdxRepFileName));
+                this.AddMessageTranslated(string.Format("V systému chybí template rep soubor {0}.", Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName));
                 return View(v);
             }
 
-
+            
             var mq = InhaleMyQuery(v, gridState, pids);
 
             var dt = Factory.gridBL.GetList(mq, false);
 
-            this.AddMessageTranslated(dt.Rows.Count.ToString());
+            
             string strSQL = Factory.gridBL.GetLastFinalSql();
 
             double dblDPI = 96; double dblWidthComplete_CM = 0; int intColIndex = 0;
             double dblRatio = v.ZoomPercentage / 100.00;
 
-            string strXmlContent = System.IO.File.ReadAllText(Factory.App.AppRootFolder + "\\templates\\" + v.TrdxRepFileName);
+            string strXmlContent = System.IO.File.ReadAllText(Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName);            
+
             var blocks = new List<BO.StringPair>();
 
             foreach (var col in mq.explicit_columns)
             {
+                
+                if ((col.Prefix=="p41" || col.Prefix.Substring(0,1)=="l") && col.Header.Substring(0,1) == "L" && col.Header.Length==2)
+                {
+                    col.Header = Factory.CurrentUser.getP07Level(Convert.ToInt32(col.Header.Substring(1,1)), true);
+                }
                 double dblWidth_CM = 3.00;
                 string strBlock = GenerateTrdx_getTableCell(col, intColIndex, dblWidth_CM, v);
 
@@ -79,9 +107,59 @@ namespace UI.Controllers
                 intColIndex += 1;
             }
 
+            
+
             string strFind = GenerateTrdx_FindBlock(ref strXmlContent, "<Cells>", "</Cells>");
             string strReplace = "<Cells>" + string.Join("", blocks.Where(p => p.Key == "TableCell").Select(p => p.Value)).Replace("'", "\"") + "</Cells>";
             GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
+
+            strFind = GenerateTrdx_FindBlock(ref strXmlContent, "<Columns>", "</Columns>");
+            strReplace = "<Columns>" + string.Join("", blocks.Where(p => p.Key == "Column").Select(p => p.Value)).Replace("'", "\"") + "</Columns>";
+            GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
+
+            strFind = GenerateTrdx_FindBlock(ref strXmlContent, "<ColumnGroups>", "</ColumnGroups>");
+            strReplace = "<ColumnGroups>" + string.Join("", blocks.Where(p => p.Key == "TableGroup").Select(p => p.Value)).Replace("'", "\"") + "</ColumnGroups>";
+            GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
+
+            strFind = ("<MarginsU Left='10mm' Right='5mm' Top='5mm' Bottom='5mm' />").Replace("'", "\"");
+            strReplace=$"<MarginsU Left='{v.MarginLeft}mm' Right='{v.MarginRight}mm' Top='{v.MarginTop}mm' Bottom='{v.MarginBottom}mm' />";
+            GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
+
+            GenerateTrdx_ParseResult(ref strXmlContent, "#sql#", HtmlEncoder.Default.Encode(strSQL)); //pro telerik report je třeba sql zahešovat
+
+            
+
+            if (v.PageBreakColumn != null)
+            {
+                var cols = _colsProvider.ParseTheGridColumns(v.prefix, v.PageBreakColumn, Factory);
+                var colPageBy = cols[0];
+                GenerateTrdx_ParseResult(ref strXmlContent, "#sql_pageby#", HtmlEncoder.Default.Encode(CompletePageBreakBySql(strSQL, colPageBy)));
+                strFind = "=Fields.page_record_name";
+                strReplace = colPageBy.Header + ": {Fields.page_record_name}";
+                GenerateTrdx_ParseResult(ref strXmlContent, strFind, strReplace);
+            }
+            if (!string.IsNullOrEmpty(v.Header))
+            {
+                v.Header = v.Header.Replace("&", "#");
+            }
+            
+            GenerateTrdx_ParseResult(ref strXmlContent, "#header#", v.Header);
+
+            if (v.GroupByColumn != null)
+            {
+                var cols = _colsProvider.ParseTheGridColumns(v.prefix, v.GroupByColumn, Factory);
+                var colGroupBy = cols[0];
+                strReplace = colGroupBy.UniqueName;
+
+                strXmlContent = strXmlContent.Replace("Fields.groupby_field_select", "Fields." + strReplace);
+                strXmlContent = strXmlContent.Replace("Fields.groupby_field_groupby", "Fields." + strReplace);
+                strXmlContent = strXmlContent.Replace("Fields.groupby_field_orderby", "Fields." + strReplace);
+                strXmlContent = strXmlContent.Replace("groupby_field_alias", colGroupBy.Header);
+            }
+
+            
+
+            System.IO.File.WriteAllText(Factory.x35GlobalParamBL.ReportFolder() + "\\" + v.TrdxRepDestFileName, strXmlContent);
 
             //TheGridInput input = new TheGridInput() { j72id = v.j72id, entity = gridState.j72Entity };
 
@@ -123,7 +201,8 @@ namespace UI.Controllers
 
         private void GenerateTrdx_ParseResult(ref string strContent,string strFind,string strReplace)
         {
-            strContent = strContent.Replace(strFind, strReplace,StringComparison.OrdinalIgnoreCase);
+            //strContent = strContent.Replace(strFind, strReplace,StringComparison.OrdinalIgnoreCase);
+            strContent = strContent.Replace(strFind, strReplace);
         }
         private string GenerateTrdx_getTableCell(BO.TheGridColumn col, int intColIndex, double dblWidth_CM, TheGridReportViewModel v)
         {
@@ -144,7 +223,7 @@ namespace UI.Controllers
                     break;
             }
 
-            s.AppendLine($"<TableCell RowIndex='0' ColumnIndex='{intColIndex}' RowSpan='1' ColumnSpan='1'>")
+            s.AppendLine($"<TableCell RowIndex='0' ColumnIndex='{intColIndex}' RowSpan='1' ColumnSpan='1'>");
             s.AppendLine("<ReportItem>");
             s.AppendLine($"<TextBox Width='{strW}' Height='0.5cm' Left='0cm' Top='0cm' Value='= {strValue}' {strFormat} Name='textBox_col{intColIndex}' StyleName='Office.TableBody'>");
             s.AppendLine($"<Style TextAlign='{strAlign}' VerticalAlign='Middle'>");
@@ -157,7 +236,7 @@ namespace UI.Controllers
 
             if (col.IsShowTotals)
             {
-                strValue = "Value='=sum(Fields." + c.UniqueName + ")'";
+                strValue = "Value='=sum(Fields." + col.UniqueName + ")'";
             }
             else
             {
@@ -216,6 +295,7 @@ namespace UI.Controllers
             }
 
             var mq = new BO.InitMyQuery().Load(gridState.j72Entity, v.master_prefix, v.master_pid, myqueryinline);
+            mq.TopRecordsOnly = v.MaxTopRecs;
             mq.IsRecordValid = null;    //brát v potaz i archivované záznamy
             mq.SetPids(pids);
 
@@ -266,5 +346,40 @@ namespace UI.Controllers
         }
 
         
+        private string CompletePageBreakBySql(string strSQL, BO.TheGridColumn col)
+        {
+            
+            if (col.SqlSyntaxGroupBy == null) return null;
+
+            int x = strSQL.IndexOf(" FROM ");
+            strSQL = BO.BAS.RightString(strSQL, strSQL.Length - x);
+            int y = strSQL.IndexOf(" ORDER BY ");
+            if (y > 0)
+            {
+                strSQL = strSQL.Substring(0, y);                    
+            }
+
+            string s = "SELECT DISTINCT";
+            if (col.SqlSyntax == null)
+            {
+                s += " " + col.SqlSyntaxGroupBy + " AS page_record_pid," + col.UniqueName + " AS page_record_name";
+            }
+            else
+            {
+                s += " " + col.SqlSyntaxGroupBy + " AS page_record_pid," + col.SqlSyntax + " AS page_record_name";
+            }
+            s += strSQL;
+
+            if (col.SqlSyntax == null)
+            {
+                s += " ORDER BY " + col.UniqueName;
+            }
+            else
+            {
+                s += " ORDER BY " + col.SqlSyntax;
+            }
+
+            return s;
+        }
     }
 }

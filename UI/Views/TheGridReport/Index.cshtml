@@ -83,15 +83,27 @@
 
     $(document).ready(function () {
 
-        
+
 
         var frah = _device.innerHeight - $("#fra1").offset().top - 20;
         var fraw = _device.innerWidth - $("#fra1").offset().left-40;
-        
+
         $("#fra1").height(frah);
         $("#fra1").width(fraw);
 
 
+        showrep();
+
     });
+
+
+
+
+    function showrep() {
+            var guid = "@Model.guid";
+            $("#fra1").attr("src", "/TheGridReport/ReportViewer?guid=" + guid);
+
+
+        }
 
 </script>

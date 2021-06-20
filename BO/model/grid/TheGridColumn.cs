@@ -25,6 +25,7 @@ namespace BO
         public string TranslateLang2 { get; set; }
         public string TranslateLang3 { get; set; }
         public string SqlSyntax { get; set; }
+        public string SqlSyntaxGroupBy { get; set; }
         public TheGridDefColFlag DefaultColumnFlag { get; set; }
         public string DesignerGroup { get; set; }
         public bool IsSortable { get; set; } = true;
