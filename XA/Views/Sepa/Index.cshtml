@@ -12,74 +12,81 @@
 
     <button id="cmdOK" type="button" onclick="generovat()">Vygenerovat XML</button>
 
-    @if(Model.GeneratedFileName != null)
-            {
-                <a target="_blank" href="/Sepa/Download?guid=@Model.Guid">Stáhnout vygenerovaný soubor</a>
-            }
+    @if (Model.GeneratedFileName != null)
+    {
+        <a target="_blank" href="/Sepa/Download?guid=@Model.Guid">Stáhnout vygenerovaný soubor</a>
+    }
 
-<form id="form1" asp-controller="Sepa" asp-action="Index" method="POST">
-    <input type="hidden" asp-for="@Model.Guid" />
-    <input type="hidden" asp-for="@Model.GeneratedFileName" />
-    <table>
-        <tr>
-            <td>
-                Název příjemce:
-            </td>
-            <td>
-                <input type="text" asp-for="@Model.Vystavovatel" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Ulice:
-            </td>
-            <td>
-                <input type="text" asp-for="@Model.VystavovatelUlice" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Město:
-            </td>
-            <td>
-                <input type="text" asp-for="@Model.VystavovatelMesto" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                BIC:
-            </td>
-            <td>
-                <input type="text" asp-for="@Model.PrijemceBIC" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                IBAN:
-            </td>
-            <td>
-                <input type="text" asp-for="@Model.PrijemceIBAN" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                CID:
-            </td>
-            <td>
-                <input type="text" asp-for="@Model.PrijemceCID" />
-            </td>
-        </tr>
+    <form id="form1" asp-controller="Sepa" asp-action="Index" method="POST" enctype="multipart/form-data">
+        
 
-        <tr>
-            <td>
-                Splatnost:
-            </td>
-            <td>
-                <input type="date" asp-for="@Model.DatumSplatnosti" />
-            </td>
-        </tr>
-    </table>
-</form>
+        <input type="hidden" asp-for="@Model.ImportOrigFileName" />
+        <input type="hidden" asp-for="@Model.Guid" />
+        <input type="hidden" asp-for="@Model.GuidImport" value="@Model.GuidImport" />
+        <input type="hidden" asp-for="@Model.GeneratedFileName" />
+
+        <input id="file4import" type="file" name="file4import" />
+
+        <table>
+            <tr>
+                <td>
+                    Název příjemce:
+                </td>
+                <td>
+                    <input type="text" asp-for="@Model.Vystavovatel" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ulice:
+                </td>
+                <td>
+                    <input type="text" asp-for="@Model.VystavovatelUlice" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Město:
+                </td>
+                <td>
+                    <input type="text" asp-for="@Model.VystavovatelMesto" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    BIC:
+                </td>
+                <td>
+                    <input type="text" asp-for="@Model.PrijemceBIC" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    IBAN:
+                </td>
+                <td>
+                    <input type="text" asp-for="@Model.PrijemceIBAN" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    CID:
+                </td>
+                <td>
+                    <input type="text" asp-for="@Model.PrijemceCID" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Splatnost:
+                </td>
+                <td>
+                    <input type="date" asp-for="@Model.DatumSplatnosti" />
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 
 

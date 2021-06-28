@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using ClosedXML.Excel;
 using System.Xml;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace XA.Controllers
 {
@@ -17,7 +20,7 @@ namespace XA.Controllers
             _app = app;
             _env = env;
         }
-        private XmlWriter _wr { get; set; }
+        
         public IActionResult Index()
         {
             var v = new XA.Models.sepa.SepaViewModel() { 
@@ -38,9 +41,26 @@ namespace XA.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(XA.Models.sepa.SepaViewModel v)
+        public IActionResult Index(IFormFile file4import, XA.Models.sepa.SepaViewModel v)
         {
-            Generovat(v);
+           if (file4import !=null)
+            {
+                v.GuidImport = BO.BAS.GetGuid();
+                v.ImportOrigFileName = file4import.FileName;
+                string strTempFullPath = _app.LogFolder + "\\" + v.GuidImport + "_" + file4import.FileName;
+                using (var stream = new FileStream(strTempFullPath, FileMode.Create))
+                {
+                    
+                    file4import.CopyTo(stream);
+                }
+            }
+
+            Handle_Import(v);
+            if (v.lisRecords != null)
+            {
+                Handle_Generovat(v);
+            }
+            
             return View(v);
         }
 
@@ -52,94 +72,128 @@ namespace XA.Controllers
             return File(fileBytes, "text/xml", "sepa.xml");
         }
 
-        private void Generovat(XA.Models.sepa.SepaViewModel v)
+        private void Handle_Import(XA.Models.sepa.SepaViewModel v)
         {
-            string strClientID = "1298";
-            DateTime datPodepsaniMandatu = DateTime.Today.AddDays(-20);
-            string strClientBankaPlatceBIC = "GENODED1MRB";
-            string strClientJmenoPlatce = "BARI Mönchengladbach OHG";
-            string strClientIBAN = "DE29310605177202767014";
-            string strFakturaVS = "1520211269";
-            double decFakturaCastka = 8949.50;
-            double decSoucetCastek = 8949.50;
-            int intPocetInkas = 1;
+            if (string.IsNullOrEmpty(v.GuidImport))
+            {
+                return;
+            }
+            string strTempFullPath = _app.LogFolder + "\\" + v.GuidImport + "_" + v.ImportOrigFileName;
+            v.lisRecords = new List<XA.Models.sepa.XlsRecord>();
 
-            XmlWriterSettings settings = new XmlWriterSettings() { CloseOutput = true, Indent = true, Encoding = System.Text.Encoding.UTF8 };
+            using (var workbook = new XLWorkbook(strTempFullPath))
+            {
+                var worksheet = workbook.Worksheets.First();
+                for (int row = 2; row < 10000; row++)
+                {
+                    if (worksheet.Cell(row, 1).Value != null && worksheet.Cell(row, 1).Value.ToString() != "")
+                    {
+                        var c = new XA.Models.sepa.XlsRecord();
+                        c.ClientID = worksheet.Cell(row, 1).Value.ToString();
+                        c.Jmeno = worksheet.Cell(row, 2).Value.ToString();                        
+                        c.IBAN= worksheet.Cell(row, 3).Value.ToString();
+                        c.BIC = worksheet.Cell(row, 4).Value.ToString();
+                        if (worksheet.Cell(row, 5).Value != null && !string.IsNullOrEmpty(worksheet.Cell(row, 5).Value.ToString()))
+                        {
+                            c.PodepsaniMandatu = BO.BAS.String2Date(worksheet.Cell(row, 5).Value.ToString());
+                        }
+                        c.FakturaVS= worksheet.Cell(row, 6).Value.ToString();
+                        c.FakturaCastka = Convert.ToDouble(worksheet.Cell(row, 7).Value);
+                        if (worksheet.Cell(row, 8).Value !=null && worksheet.Cell(row, 8).Value.ToString() != "")
+                        {
+                            c.FakturaMena = worksheet.Cell(row, 8).Value.ToString();
+                        }
+                        else
+                        {
+                            c.FakturaMena = "EUR";
+                        }
+                        
+                        v.lisRecords.Add(c);
+                    }
+                }
+            }
+        }
+        private void Handle_Generovat(XA.Models.sepa.SepaViewModel v)
+        {
+            
+            double decSoucetCastek = v.lisRecords.Sum(p=>p.FakturaCastka);
+            int intPocetInkas = v.lisRecords.Count();            
+
+            var c = new clsXmlSupport(_app.LogFolder + "\\" + v.Guid + ".xml");
+
+            
+            c.wstart("Document", "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02");
+            
+            c.wstart("CstmrDrctDbtInitn");
+            c.wstart("GrpHdr");
+            c.wss("MsgId", v.Guid);
+            c.wsdatetime("CreDtTm", DateTime.Now);
+            c.wsint("NbOfTxs", intPocetInkas);
+            c.wsnum("CtrlSum", decSoucetCastek);
+            c.wstart("InitgPty");
+            c.wss("Nm", v.Vystavovatel);
+            c.wend(); //InitgPty
+            c.wend(); //GrpHdr
+
+            c.wstart("PmtInf");
+            c.wss("PmtInfId", v.Guid);
+            c.wss("PmtMtd", "DD");
+            c.wsbool("BtchBookg", true);
+            c.wsint("NbOfTxs", intPocetInkas);
+            c.wsnum("CtrlSum", decSoucetCastek);
+
+            c.wstart("PmtTpInf");
+            c.wstart("SvcLvl"); c.wss("Cd", "SEPA"); c.wend();
+            c.wstart("LclInstrm"); c.wss("Cd", "CORE"); c.wend();
+            c.wss("SeqTp", "RCUR");
+            c.wend(); //PmtTpInf
+
+            c.wsdate("ReqdColltnDt", v.DatumSplatnosti);
+            c.wstart("Cdtr"); c.wss("Nm", v.Vystavovatel); c.wend();
+            c.wstart("CdtrAcct"); c.wstart("Id"); c.wss("IBAN", v.PrijemceIBAN); c.wend(); c.wend(); //CdtrAcct
+            c.wstart("CdtrAgt"); c.wstart("FinInstnId"); c.wss("BIC", v.PrijemceBIC); c.wend(); c.wend();//CdtrAgt
+            c.wss("ChrgBr", "SLEV");
+
+            foreach(var rec in v.lisRecords)
+            {
+                c.wstart("DrctDbtTxInf");
+                c.wstart("PmtId"); c.wss("EndToEndId", "NOTPROVIDED"); c.wend();
+
+                c.wstart("InstdAmt");
+                c.oneattribute("Ccy", rec.FakturaMena);
+                c.purestring(BO.BAS.GN(rec.FakturaCastka));
+                c.wend(); //InstdAmt
+
+                c.wstart("DrctDbtTx");
+                c.wstart("MndtRltdInf"); c.wss("MndtId", rec.ClientID); c.wsdate("DtOfSgntr", rec.PodepsaniMandatu); c.wend();
+
+                c.wstart("CdtrSchmeId");
+                c.wstart("Id");
+                c.wstart("PrvtId");
+                c.wstart("Othr"); c.wss("Id", v.PrijemceCID);
+                c.wstart("SchmeNm"); c.wss("Prtry", "SEPA"); c.wend();
+                c.wend(4); //CdtrSchmeId+Id+PrvtId+Othr
+
+                c.wend(); //DrctDbtTx
 
 
-            //_wr = XmlWriter.Create(@"c:\temp\sepa10.xml", settings);
-            string strPath = _app.LogFolder + "\\" + v.Guid + ".xml";
-            _wr = XmlWriter.Create(strPath, settings);
+                c.wstart("DbtrAgt");
+                c.wstart("FinInstnId"); c.wss("BIC", rec.BIC); c.wend();
+                c.wend(); //DbtrAgt
 
-            _wr.WriteStartElement("Document", "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02");
-            wstart("CstmrDrctDbtInitn");
-            wstart("GrpHdr");
-            wss("MsgId", v.Guid);
-            wsdatetime("CreDtTm", DateTime.Now);
-            wsint("NbOfTxs", 1);
-            wsnum("CtrlSum", decSoucetCastek);
-            wstart("InitgPty");
-            wss("Nm", v.Vystavovatel);
-            wend(); //InitgPty
-            wend(); //GrpHdr
+                c.wstart("Dbtr"); c.wss("Nm", rec.Jmeno); c.wend();
+                c.wstart("DbtrAcct");
+                c.wstart("Id"); c.wss("IBAN", rec.IBAN); c.wend();
+                c.wend(); //DbtrAcct
 
-            wstart("PmtInf");
-            wss("PmtInfId", v.Guid);
-            wss("PmtMtd", "DD");
-            wsbool("BtchBookg", true);
-            wsint("NbOfTxs", intPocetInkas);
-            wsnum("CtrlSum", decSoucetCastek);
-
-            wstart("PmtTpInf");
-            wstart("SvcLvl"); wss("Cd", "SEPA"); wend();
-            wstart("LclInstrm"); wss("Cd", "CORE"); wend();
-            wss("SeqTp", "RCUR");
-            wend(); //PmtTpInf
-
-            wsdate("ReqdColltnDt", v.DatumSplatnosti);
-            wstart("Cdtr"); wss("Nm", v.Vystavovatel); wend();
-            wstart("CdtrAcct"); wstart("Id"); wss("IBAN", strClientIBAN); wend(); wend(); //CdtrAcct
-            wstart("CdtrAgt"); wstart("FinInstnId"); wss("BIC", v.PrijemceBIC); wend(); wend();//CdtrAgt
-            wss("ChrgBr", "SLEV");
+                c.wstart("RmtInf"); c.wss("Ustrd", rec.FakturaVS); c.wend();
 
 
-            wstart("DrctDbtTxInf");
-            wstart("PmtId"); wss("EndToEndId", "NOTPROVIDED"); wend();
+                c.wend(); //DrctDbtTxInf
+            }
+            
 
-            wstart("InstdAmt");
-            oneattribute("Ccy", "EUR");
-            purestring(BO.BAS.GN(decFakturaCastka));
-            wend(); //InstdAmt
-
-            wstart("DrctDbtTx");
-            wstart("MndtRltdInf"); wss("MndtId", strClientID); wsdate("DtOfSgntr", datPodepsaniMandatu); wend();
-
-            wstart("CdtrSchmeId");
-            wstart("Id");
-            wstart("PrvtId");
-            wstart("Othr"); wss("Id", v.PrijemceCID);
-            wstart("SchmeNm"); wss("Prtry", "SEPA"); wend();
-            wend(4); //CdtrSchmeId+Id+PrvtId+Othr
-
-            wend(); //DrctDbtTx
-
-
-            wstart("DbtrAgt");
-            wstart("FinInstnId"); wss("BIC", strClientBankaPlatceBIC); wend();
-            wend(); //DbtrAgt
-
-            wstart("Dbtr"); wss("Nm", strClientJmenoPlatce); wend();
-            wstart("DbtrAcct");
-            wstart("Id"); wss("IBAN", strClientIBAN); wend();
-            wend(); //DbtrAcct
-
-            wstart("RmtInf"); wss("Ustrd", strFakturaVS); wend();
-
-
-            wend(); //DrctDbtTxInf
-
-            _wr.Flush();
-            _wr.Close();
+            c.flushandclose();
 
             v.GeneratedFileName = v.Guid + ".xml";
 
@@ -147,71 +201,8 @@ namespace XA.Controllers
         }
 
 
-        private void wstart(string strStartElementName)
-        {
-            _wr.WriteStartElement(strStartElementName);
-        }
-        private void wend(int krat = 1)
-        {
-            for (int i = 1; i <= krat; i++)
-            {
-                _wr.WriteEndElement();
-            }
 
-        }
-
-        private void oneattribute(string strName,string strValue)
-        {
-            _wr.WriteAttributeString(strName, strValue);
-        }
-        private void purestring(string s)
-        {
-            _wr.WriteString(s);
-        }
-        private void wss(string strElement, string s)
-        {
-            _wr.WriteElementString(strElement, s);
-        }
         
-        private void wsdate(string strElement, DateTime d)
-        {
-            _wr.WriteElementString(strElement, DAT(d));
-        }
-        private void wsdatetime(string strElement, DateTime d)
-        {
-            _wr.WriteElementString(strElement, DATISO(d));
-        }
-        private void wsnum(string strElement, double n)
-        {
-            _wr.WriteElementString(strElement, NUM(n));
-        }
-        private void wsint(string strElement, int n)
-        {
-            _wr.WriteElementString(strElement, n.ToString());
-        }
-        private void wsbool(string strElement,bool b)
-        {
-            if (b)
-            {
-                _wr.WriteElementString(strElement,"true");
-            }
-            else
-            {
-                _wr.WriteElementString(strElement, "false");
-            }
-            
-        }
-        private string NUM(double n)
-        {
-            return BO.BAS.GN(n);
-        }
-        private string DAT(DateTime d)
-        {
-            return BO.BAS.ObjectDate2String(d, "yyyy-MM-dd");
-        }
-        private string DATISO(DateTime d)
-        {
-            return BO.BAS.ObjectDateTime2String(d, "yyyy-MM-ddTHH:mm:ssZ");
-        }
+        
     }
 }

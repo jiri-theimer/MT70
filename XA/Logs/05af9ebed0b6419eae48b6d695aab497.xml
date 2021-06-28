@@ -2,20 +2,20 @@
 <Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.02">
   <CstmrDrctDbtInitn>
     <GrpHdr>
-      <MsgId>41d9f8eac92042d5892481fd281b86fe</MsgId>
-      <CreDtTm>2021-06-28T16:06:15Z</CreDtTm>
+      <MsgId>05af9ebed0b6419eae48b6d695aab497</MsgId>
+      <CreDtTm>2021-06-28T21:55:19Z</CreDtTm>
       <NbOfTxs>1</NbOfTxs>
-      <CtrlSum>8949.5</CtrlSum>
+      <CtrlSum>79124.4</CtrlSum>
       <InitgPty>
         <Nm>SCHAFFER PARTNER</Nm>
       </InitgPty>
     </GrpHdr>
     <PmtInf>
-      <PmtInfId>41d9f8eac92042d5892481fd281b86fe</PmtInfId>
+      <PmtInfId>05af9ebed0b6419eae48b6d695aab497</PmtInfId>
       <PmtMtd>DD</PmtMtd>
       <BtchBookg>true</BtchBookg>
-      <NbOfTxs>1</NbOfTxs>
-      <CtrlSum>8949.5</CtrlSum>
+      <NbOfTxs>2</NbOfTxs>
+      <CtrlSum>79124.4</CtrlSum>
       <PmtTpInf>
         <SvcLvl>
           <Cd>SEPA</Cd>
@@ -31,7 +31,7 @@
       </Cdtr>
       <CdtrAcct>
         <Id>
-          <IBAN>DE29310605177202767014</IBAN>
+          <IBAN>DE30760200700003660788</IBAN>
         </Id>
       </CdtrAcct>
       <CdtrAgt>
@@ -44,11 +44,11 @@
         <PmtId>
           <EndToEndId>NOTPROVIDED</EndToEndId>
         </PmtId>
-        <InstdAmt Ccy="EUR">8949.5</InstdAmt>
+        <InstdAmt Ccy="EUR">78999.4</InstdAmt>
         <DrctDbtTx>
           <MndtRltdInf>
-            <MndtId>1298</MndtId>
-            <DtOfSgntr>2021-06-08</DtOfSgntr>
+            <MndtId>123456</MndtId>
+            <DtOfSgntr>2020-08-21</DtOfSgntr>
           </MndtRltdInf>
           <CdtrSchmeId>
             <Id>
@@ -65,19 +65,59 @@
         </DrctDbtTx>
         <DbtrAgt>
           <FinInstnId>
-            <BIC>GENODED1MRB</BIC>
+            <BIC>33344443</BIC>
           </FinInstnId>
         </DbtrAgt>
         <Dbtr>
-          <Nm>BARI Mönchengladbach OHG</Nm>
+          <Nm>First Hill ltd</Nm>
         </Dbtr>
         <DbtrAcct>
           <Id>
-            <IBAN>DE29310605177202767014</IBAN>
+            <IBAN>98098098098</IBAN>
           </Id>
         </DbtrAcct>
         <RmtInf>
-          <Ustrd>1520211269</Ustrd>
+          <Ustrd>2021933</Ustrd>
+        </RmtInf>
+      </DrctDbtTxInf>
+      <DrctDbtTxInf>
+        <PmtId>
+          <EndToEndId>NOTPROVIDED</EndToEndId>
+        </PmtId>
+        <InstdAmt Ccy="EUR">125</InstdAmt>
+        <DrctDbtTx>
+          <MndtRltdInf>
+            <MndtId>654321</MndtId>
+            <DtOfSgntr>2021-01-01</DtOfSgntr>
+          </MndtRltdInf>
+          <CdtrSchmeId>
+            <Id>
+              <PrvtId>
+                <Othr>
+                  <Id>CZ58ZZZ10272</Id>
+                  <SchmeNm>
+                    <Prtry>SEPA</Prtry>
+                  </SchmeNm>
+                </Othr>
+              </PrvtId>
+            </Id>
+          </CdtrSchmeId>
+        </DrctDbtTx>
+        <DbtrAgt>
+          <FinInstnId>
+            <BIC>CC999999</BIC>
+          </FinInstnId>
+        </DbtrAgt>
+        <Dbtr>
+          <Nm>Your First Help ltd</Nm>
+        </Dbtr>
+        <DbtrAcct>
+          <Id>
+            <IBAN>3434323232</IBAN>
+          </Id>
+        </DbtrAcct>
+        <RmtInf>
+          <Ustrd>2021934</Ustrd>
         </RmtInf>
       </DrctDbtTxInf>
     </PmtInf>
