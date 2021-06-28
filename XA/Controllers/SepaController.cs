@@ -3,174 +3,215 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SepaInkaso;
+using Microsoft.AspNetCore.Hosting;
+using System.Xml;
 
 namespace XA.Controllers
 {
     public class SepaController : Controller
     {
+        private readonly IWebHostEnvironment _env;
+        private readonly BL.RunningApp _app;
+        public SepaController(BL.RunningApp app,IWebHostEnvironment env)
+        {
+            _app = app;
+            _env = env;
+        }
+        private XmlWriter _wr { get; set; }
         public IActionResult Index()
         {
-            string strGUID = BO.BAS.GetGuid();
-            DateTime datDatumSplatnosti = DateTime.Today.AddDays(1);
-            string strVystavovatel = "SCHAFFER PARTNER";
-            string strVystavovatelUlice = "Vodičkova 710/31";
-            string strVystavovatelMesto = "Praha 1";
-            string strPrijemceIBAN = "DE30760200700003660788";
-            string strPrijemceBIC = "HYVEDEMM460";
-            //string strIBAN_Poplatky = null;
-            string strClientID = "1298 ALECUR GmbH";
+            var v = new XA.Models.sepa.SepaViewModel() { 
+                Guid = BO.BAS.GetGuid()
+                , Vystavovatel = "SCHAFFER PARTNER"
+                , VystavovatelMesto = "Praha 1"
+                , VystavovatelUlice = "Vodičkova 710/31"
+                ,PrijemceIBAN= "DE30760200700003660788"
+                ,PrijemceBIC= "HYVEDEMM460"
+                ,PrijemceCID= "CZ58ZZZ10272"                
+                ,DatumSplatnosti= DateTime.Today.AddDays(10)
+            };
+
+            
+
+
+            return View(v);
+        }
+
+        [HttpPost]
+        public IActionResult Index(XA.Models.sepa.SepaViewModel v)
+        {
+            Generovat(v);
+            return View(v);
+        }
+
+        public ActionResult Download(string guid)
+        {
+            byte[] fileBytes = System.IO.File.ReadAllBytes(_app.LogFolder + "\\" + guid+".xml");
+            Response.Headers["Content-Type"] = "text/xml";
+            Response.Headers["Content-Length"] = fileBytes.Length.ToString();
+            return File(fileBytes, "text/xml", "sepa.xml");
+        }
+
+        private void Generovat(XA.Models.sepa.SepaViewModel v)
+        {
+            string strClientID = "1298";
             DateTime datPodepsaniMandatu = DateTime.Today.AddDays(-20);
-            string strPrijemceCID = "CZ58ZZZ10272";
             string strClientBankaPlatceBIC = "GENODED1MRB";
             string strClientJmenoPlatce = "BARI Mönchengladbach OHG";
             string strClientIBAN = "DE29310605177202767014";
             string strFakturaVS = "1520211269";
-            decimal decFakturaCastka = DN(8949.50);
-            decimal decSoucetCastek = DN(8949.50);
+            double decFakturaCastka = 8949.50;
+            double decSoucetCastek = 8949.50;
             int intPocetInkas = 1;
 
-            var doc = new Document();
-            var cd1 = new CustomerDirectDebitInitiationV02();
-            
-            cd1.GrpHdr = new GroupHeader39() { MsgId = strGUID, CreDtTm = DateTime.Now, NbOfTxs = intPocetInkas.ToString(), CtrlSum = decSoucetCastek };
-
-            
-
-            cd1.GrpHdr.InitgPty = new PartyIdentification32() { Nm = strVystavovatel };
-
-            string[] adresaVystavovatel = new string[2];
-            adresaVystavovatel[0] = strVystavovatelUlice;
-            adresaVystavovatel[1] = strVystavovatelMesto;
-            cd1.GrpHdr.InitgPty.PstlAdr = new PostalAddress6() { Ctry = "CZ", AdrLine = adresaVystavovatel };
+            XmlWriterSettings settings = new XmlWriterSettings() { CloseOutput = true, Indent = true, Encoding = System.Text.Encoding.UTF8 };
 
 
+            //_wr = XmlWriter.Create(@"c:\temp\sepa10.xml", settings);
+            string strPath = _app.LogFolder + "\\" + v.Guid + ".xml";
+            _wr = XmlWriter.Create(strPath, settings);
 
-            PaymentInstructionInformation4[] pmis = new PaymentInstructionInformation4[1];
-            pmis[0] = new PaymentInstructionInformation4() { 
-                PmtInfId = strGUID
-                ,BtchBookg=true
-                ,NbOfTxs="1"
-                ,ReqdColltnDt= datDatumSplatnosti
-                ,ChrgBr= ChargeBearerType1Code.SLEV
-            };
-            
-            
-            pmis[0].Cdtr = new PartyIdentification32() { Nm = strVystavovatel };  //jméno příjemce
-            pmis[0].Cdtr.PstlAdr = new PostalAddress6() { AdrLine = adresaVystavovatel };  //adresa příjemce
-            pmis[0].CdtrAcct = new CashAccount16();
-            pmis[0].CdtrAcct.Id = new AccountIdentification4Choice(); //číslo účtu příjemce ve formátu IBAN
-            pmis[0].CdtrAcct.Id.Item = strPrijemceIBAN;
-               
-            pmis[0].CdtrAgt = new BranchAndFinancialInstitutionIdentification4();
-            pmis[0].CdtrAgt.FinInstnId = new FinancialInstitutionIdentification7() { BIC = strPrijemceBIC };   //kód banky příjemce ve formátu BIC / SWIFT kódu            
+            _wr.WriteStartElement("Document", "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02");
+            wstart("CstmrDrctDbtInitn");
+            wstart("GrpHdr");
+            wss("MsgId", v.Guid);
+            wsdatetime("CreDtTm", DateTime.Now);
+            wsint("NbOfTxs", 1);
+            wsnum("CtrlSum", decSoucetCastek);
+            wstart("InitgPty");
+            wss("Nm", v.Vystavovatel);
+            wend(); //InitgPty
+            wend(); //GrpHdr
 
-            //pmis[0].ChrgBr = ChargeBearerType1Code.SLEV; //typ poplatku SLEV – plátce hradí poplatky své banky, příjemce hradí poplatky své banky
+            wstart("PmtInf");
+            wss("PmtInfId", v.Guid);
+            wss("PmtMtd", "DD");
+            wsbool("BtchBookg", true);
+            wsint("NbOfTxs", intPocetInkas);
+            wsnum("CtrlSum", decSoucetCastek);
 
+            wstart("PmtTpInf");
+            wstart("SvcLvl"); wss("Cd", "SEPA"); wend();
+            wstart("LclInstrm"); wss("Cd", "CORE"); wend();
+            wss("SeqTp", "RCUR");
+            wend(); //PmtTpInf
 
-            
-
-            //if (strIBAN_Poplatky != null)
-            //{
-            //    //účet pro poplatky
-            //    pmis[0].ChrgsAcct = new CashAccount16CZ();
-            //    pmis[0].ChrgsAcct.Id = new AccountIdentification4CZ() { IBAN = strIBAN_Poplatky };
-            //}
-
-
-
-            pmis[0].PmtTpInf = new PaymentTypeInformation20();
-            pmis[0].PmtTpInf.SvcLvl = new ServiceLevel8Choice(); //typ služby, konstanta: SEPA
-            pmis[0].PmtTpInf.SvcLvl.ItemElementName = ItemChoiceType4.Cd;
-            pmis[0].PmtTpInf.SvcLvl.Item = "SEPA";
-            
-
-            //pmis[0].PmtTpInf.SvcLvl.Cd = ExternalServiceLevel1CodeCZ.SEPA;  //typ služby, konstanta: SEPA
-            pmis[0].PmtTpInf.LclInstrm = new LocalInstrument2Choice();   //platební schema, konstanta: CORE
-            pmis[0].PmtTpInf.LclInstrm.ItemElementName = ItemChoiceType5.Cd;
-            pmis[0].PmtTpInf.LclInstrm.Item = "CORE";
-            pmis[0].PmtTpInf.SeqTp = SequenceType1Code.RCUR; //pořadí SEPA inkasa
+            wsdate("ReqdColltnDt", v.DatumSplatnosti);
+            wstart("Cdtr"); wss("Nm", v.Vystavovatel); wend();
+            wstart("CdtrAcct"); wstart("Id"); wss("IBAN", strClientIBAN); wend(); wend(); //CdtrAcct
+            wstart("CdtrAgt"); wstart("FinInstnId"); wss("BIC", v.PrijemceBIC); wend(); wend();//CdtrAgt
+            wss("ChrgBr", "SLEV");
 
 
+            wstart("DrctDbtTxInf");
+            wstart("PmtId"); wss("EndToEndId", "NOTPROVIDED"); wend();
 
-            DirectDebitTransactionInformation9[] items = new DirectDebitTransactionInformation9[10];  //jednotlivé pohledávky
-            items[0] = new DirectDebitTransactionInformation9();
-            items[0].PmtId = new PaymentIdentification1() { EndToEndId = "NOTPROVIDED" };
+            wstart("InstdAmt");
+            oneattribute("Ccy", "EUR");
+            purestring(BO.BAS.GN(decFakturaCastka));
+            wend(); //InstdAmt
 
-            items[0].InstdAmt = new ActiveOrHistoricCurrencyAndAmount() { Ccy = "EUR", Value = decFakturaCastka };
+            wstart("DrctDbtTx");
+            wstart("MndtRltdInf"); wss("MndtId", strClientID); wsdate("DtOfSgntr", datPodepsaniMandatu); wend();
 
-            items[0].DrctDbtTx = new DirectDebitTransaction6();
-            items[0].DrctDbtTx.MndtRltdInf = new MandateRelatedInformation6() { MndtId = strClientID, DtOfSgntr= datPodepsaniMandatu }; //číslo mandátu (dohody o inkasování mezi příjemcem a plátcem
-            items[0].DrctDbtTx.CdtrSchmeId = new PartyIdentification32();
-                        
-            var cprvid = new PersonIdentification5();
-            GenericPersonIdentification1[] gifs=new GenericPersonIdentification1[1];
-            gifs[0] = new GenericPersonIdentification1();
-            gifs[0].Id = strPrijemceCID;            //CID příjemce   
-            gifs[0].SchmeNm = new PersonIdentificationSchemeName1Choice();
-            gifs[0].SchmeNm.ItemElementName = ItemChoiceType1.Prtry;
-            gifs[0].SchmeNm.Item = "SEPA";
-            cprvid.Othr = gifs;
+            wstart("CdtrSchmeId");
+            wstart("Id");
+            wstart("PrvtId");
+            wstart("Othr"); wss("Id", v.PrijemceCID);
+            wstart("SchmeNm"); wss("Prtry", "SEPA"); wend();
+            wend(4); //CdtrSchmeId+Id+PrvtId+Othr
 
-            items[0].DrctDbtTx.CdtrSchmeId.Id = new Party6Choice() { Item = cprvid };
-
-            items[0].DbtrAgt = new BranchAndFinancialInstitutionIdentification4();  //banka plátce
-            items[0].DbtrAgt.FinInstnId = new FinancialInstitutionIdentification7() { BIC = strClientBankaPlatceBIC };
-            items[0].Dbtr = new PartyIdentification32() {Nm=strClientJmenoPlatce };  //jméno plátce
-            items[0].DbtrAcct = new CashAccount16() { Id = new AccountIdentification4Choice() };
-            items[0].DbtrAcct.Id.Item = strClientIBAN; //číslo účtu příjemce ve formátu IBAN
-
-            string[] strVS = { strFakturaVS };
-            items[0].RmtInf = new RemittanceInformation5() { Ustrd = strVS };      //Nestrukturovaná zpráva pro plátce: variabilní symbol
+            wend(); //DrctDbtTx
 
 
-            pmis[0].DrctDbtTxInf = items;
+            wstart("DbtrAgt");
+            wstart("FinInstnId"); wss("BIC", strClientBankaPlatceBIC); wend();
+            wend(); //DbtrAgt
+
+            wstart("Dbtr"); wss("Nm", strClientJmenoPlatce); wend();
+            wstart("DbtrAcct");
+            wstart("Id"); wss("IBAN", strClientIBAN); wend();
+            wend(); //DbtrAcct
+
+            wstart("RmtInf"); wss("Ustrd", strFakturaVS); wend();
 
 
-            
+            wend(); //DrctDbtTxInf
 
-            cd1.PmtInf = pmis;
+            _wr.Flush();
+            _wr.Close();
 
-            
-
-
-            doc.CstmrDrctDbtInitn = cd1;
+            v.GeneratedFileName = v.Guid + ".xml";
 
 
-            //var paymentinstruction = new CustomerDirectDebitInitiationV02();
-
-
-            //paymentinstruction.PmtInfId = BO.BAS.GetGuid();
-            //paymentinstruction.PmtMtd = "DD";
-
-            string strDestPath = @"c:\temp\sepa8.xml";
-
-            System.Xml.Serialization.XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(typeof(Document));
-            
-            System.IO.TextWriter tw = new System.IO.StreamWriter(strDestPath);
-           
-            xs.Serialize(tw, doc);
-            tw.Close();           
-
-            var s = System.IO.File.ReadAllText(strDestPath);
-            if (!s.Contains("<ChrgBr>SLEV</ChrgBr>"))
-            {
-                s = s.Replace("</CdtrAgt>", "</CdtrAgt>" + System.Environment.NewLine + "<ChrgBr>SLEV</ChrgBr>");
-                System.IO.File.WriteAllText(@"c:\temp\sepa9.xml", s);
-            }
-            
-
-            return View();
         }
 
 
-
-
-
-
-        private Decimal DN(double n)
+        private void wstart(string strStartElementName)
         {
-            return Convert.ToDecimal(n);
+            _wr.WriteStartElement(strStartElementName);
+        }
+        private void wend(int krat = 1)
+        {
+            for (int i = 1; i <= krat; i++)
+            {
+                _wr.WriteEndElement();
+            }
+
+        }
+
+        private void oneattribute(string strName,string strValue)
+        {
+            _wr.WriteAttributeString(strName, strValue);
+        }
+        private void purestring(string s)
+        {
+            _wr.WriteString(s);
+        }
+        private void wss(string strElement, string s)
+        {
+            _wr.WriteElementString(strElement, s);
+        }
+        
+        private void wsdate(string strElement, DateTime d)
+        {
+            _wr.WriteElementString(strElement, DAT(d));
+        }
+        private void wsdatetime(string strElement, DateTime d)
+        {
+            _wr.WriteElementString(strElement, DATISO(d));
+        }
+        private void wsnum(string strElement, double n)
+        {
+            _wr.WriteElementString(strElement, NUM(n));
+        }
+        private void wsint(string strElement, int n)
+        {
+            _wr.WriteElementString(strElement, n.ToString());
+        }
+        private void wsbool(string strElement,bool b)
+        {
+            if (b)
+            {
+                _wr.WriteElementString(strElement,"true");
+            }
+            else
+            {
+                _wr.WriteElementString(strElement, "false");
+            }
+            
+        }
+        private string NUM(double n)
+        {
+            return BO.BAS.GN(n);
+        }
+        private string DAT(DateTime d)
+        {
+            return BO.BAS.ObjectDate2String(d, "yyyy-MM-dd");
+        }
+        private string DATISO(DateTime d)
+        {
+            return BO.BAS.ObjectDateTime2String(d, "yyyy-MM-ddTHH:mm:ssZ");
         }
     }
 }

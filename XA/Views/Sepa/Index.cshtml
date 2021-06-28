@@ -1,10 +1,98 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model XA.Models.sepa.SepaViewModel
+@inject BL.Factory _f
+
 @{
+
 }
 
+
+
 <div class="text-center">
-    <h1 class="display-4">SEPA Inkaso</h1>
-    
+    <h1 class="display-4">Generování XML SEPA Inkaso</h1>
+
+    <button id="cmdOK" type="button" onclick="generovat()">Vygenerovat XML</button>
+
+    @if(Model.GeneratedFileName != null)
+            {
+                <a target="_blank" href="/Sepa/Download?guid=@Model.Guid">Stáhnout vygenerovaný soubor</a>
+            }
+
+<form id="form1" asp-controller="Sepa" asp-action="Index" method="POST">
+    <input type="hidden" asp-for="@Model.Guid" />
+    <input type="hidden" asp-for="@Model.GeneratedFileName" />
+    <table>
+        <tr>
+            <td>
+                Název příjemce:
+            </td>
+            <td>
+                <input type="text" asp-for="@Model.Vystavovatel" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Ulice:
+            </td>
+            <td>
+                <input type="text" asp-for="@Model.VystavovatelUlice" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Město:
+            </td>
+            <td>
+                <input type="text" asp-for="@Model.VystavovatelMesto" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                BIC:
+            </td>
+            <td>
+                <input type="text" asp-for="@Model.PrijemceBIC" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                IBAN:
+            </td>
+            <td>
+                <input type="text" asp-for="@Model.PrijemceIBAN" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                CID:
+            </td>
+            <td>
+                <input type="text" asp-for="@Model.PrijemceCID" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Splatnost:
+            </td>
+            <td>
+                <input type="date" asp-for="@Model.DatumSplatnosti" />
+            </td>
+        </tr>
+    </table>
+</form>
 </div>
+
+
+<script type="text/javascript">
+
+    function generovat() {
+        form1.submit();
+    }
+    
+
+
+
+   
+
+
+</script>

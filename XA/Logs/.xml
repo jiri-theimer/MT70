@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.02">
+  <CstmrDrctDbtInitn>
+    <GrpHdr>
+      <MsgId />
+      <CreDtTm>2021-06-28T16:03:09Z</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <CtrlSum>8949.5</CtrlSum>
+      <InitgPty>
+        <Nm>SCHAFFER PARTNER</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId />
+      <PmtMtd>DD</PmtMtd>
+      <BtchBookg>true</BtchBookg>
+      <NbOfTxs>1</NbOfTxs>
+      <CtrlSum>8949.5</CtrlSum>
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>SEPA</Cd>
+        </SvcLvl>
+        <LclInstrm>
+          <Cd>CORE</Cd>
+        </LclInstrm>
+        <SeqTp>RCUR</SeqTp>
+      </PmtTpInf>
+      <ReqdColltnDt>2021-07-08</ReqdColltnDt>
+      <Cdtr>
+        <Nm>SCHAFFER PARTNER</Nm>
+      </Cdtr>
+      <CdtrAcct>
+        <Id>
+          <IBAN>DE29310605177202767014</IBAN>
+        </Id>
+      </CdtrAcct>
+      <CdtrAgt>
+        <FinInstnId>
+          <BIC>HYVEDEMM460</BIC>
+        </FinInstnId>
+      </CdtrAgt>
+      <ChrgBr>SLEV</ChrgBr>
+      <DrctDbtTxInf>
+        <PmtId>
+          <EndToEndId>NOTPROVIDED</EndToEndId>
+        </PmtId>
+        <InstdAmt Ccy="EUR">8949.5</InstdAmt>
+        <DrctDbtTx>
+          <MndtRltdInf>
+            <MndtId>1298</MndtId>
+            <DtOfSgntr>2021-06-08</DtOfSgntr>
+          </MndtRltdInf>
+          <CdtrSchmeId>
+            <Id>
+              <PrvtId>
+                <Othr>
+                  <Id>CZ58ZZZ10272</Id>
+                  <SchmeNm>
+                    <Prtry>SEPA</Prtry>
+                  </SchmeNm>
+                </Othr>
+              </PrvtId>
+            </Id>
+          </CdtrSchmeId>
+        </DrctDbtTx>
+        <DbtrAgt>
+          <FinInstnId>
+            <BIC>GENODED1MRB</BIC>
+          </FinInstnId>
+        </DbtrAgt>
+        <Dbtr>
+          <Nm>BARI Mönchengladbach OHG</Nm>
+        </Dbtr>
+        <DbtrAcct>
+          <Id>
+            <IBAN>DE29310605177202767014</IBAN>
+          </Id>
+        </DbtrAcct>
+        <RmtInf>
+          <Ustrd>1520211269</Ustrd>
+        </RmtInf>
+      </DrctDbtTxInf>
+    </PmtInf>
+  </CstmrDrctDbtInitn>
+</Document>
