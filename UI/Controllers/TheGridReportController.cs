@@ -59,6 +59,12 @@ namespace UI.Controllers
                     case "orientation":
                         Factory.CBL.SetUserParam("thegridreport-orientation", v.PageOrientation.ToString());
                         break;
+                    case "zoom":
+                        Factory.CBL.SetUserParam("thegridreport-zoom", v.ZoomPercentage.ToString());
+                        break;
+                    case "toprecs":
+                        Factory.CBL.SetUserParam("thegridreport-toprecs", v.MaxTopRecs.ToString());
+                        break;
                 }
                 return View(v);
             }
