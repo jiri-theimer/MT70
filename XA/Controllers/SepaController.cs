@@ -43,6 +43,7 @@ namespace XA.Controllers
         [HttpPost]
         public IActionResult Index(IFormFile file4import, XA.Models.sepa.SepaViewModel v)
         {
+            
            if (file4import !=null)
             {
                 v.GuidImport = BO.BAS.GetGuid();
@@ -53,6 +54,10 @@ namespace XA.Controllers
                     
                     file4import.CopyTo(stream);
                 }
+            }
+            else
+            {
+                return View(v);
             }
 
             Handle_Import(v);

@@ -10,12 +10,18 @@
 <div class="text-center">
     <h1 class="display-4">Generování XML SEPA Inkaso</h1>
 
-    <button id="cmdOK" type="button" onclick="generovat()">Vygenerovat XML</button>
+    <button id="cmdOK" class="btn btn-primary" type="button" onclick="generovat()">Vygenerovat XML</button>
 
     @if (Model.GeneratedFileName != null)
     {
         <a target="_blank" href="/Sepa/Download?guid=@Model.Guid">Stáhnout vygenerovaný soubor</a>
     }
+    @if(Model.GuidImport == null)
+            {
+                <div class="alert alert-danger">
+                    Na vstupu chybí nahrát XLS soubor.
+                </div>
+            }
 
     <form id="form1" asp-controller="Sepa" asp-action="Index" method="POST" enctype="multipart/form-data">
         
@@ -25,15 +31,23 @@
         <input type="hidden" asp-for="@Model.GuidImport" value="@Model.GuidImport" />
         <input type="hidden" asp-for="@Model.GeneratedFileName" />
 
-        <input id="file4import" type="file" name="file4import" />
-
-        <table>
+        <div class="card">
+            <div class="card-header">
+                XLS soubor s pevnými sloupci: ClientID, Jméno, IBAN, BIC, DatumPodpisu, Faktura-VS, Faktura-Částka, Měna
+            </div>
+            <div class="card-body">
+                <input id="file4import" type="file" name="file4import" />
+            </div>
+        </div>
+        
+        <h4>Hlavička výstupu:</h4>
+        <table class="table table-borderless">
             <tr>
                 <td>
                     Název příjemce:
                 </td>
                 <td>
-                    <input type="text" asp-for="@Model.Vystavovatel" />
+                    <input class="form-control" type="text" asp-for="@Model.Vystavovatel" />
                 </td>
             </tr>
             <tr>
@@ -41,7 +55,7 @@
                     Ulice:
                 </td>
                 <td>
-                    <input type="text" asp-for="@Model.VystavovatelUlice" />
+                    <input class="form-control" type="text" asp-for="@Model.VystavovatelUlice" />
                 </td>
             </tr>
             <tr>
@@ -49,7 +63,7 @@
                     Město:
                 </td>
                 <td>
-                    <input type="text" asp-for="@Model.VystavovatelMesto" />
+                    <input class="form-control" type="text" asp-for="@Model.VystavovatelMesto" />
                 </td>
             </tr>
             <tr>
@@ -57,7 +71,7 @@
                     BIC:
                 </td>
                 <td>
-                    <input type="text" asp-for="@Model.PrijemceBIC" />
+                    <input class="form-control" type="text" asp-for="@Model.PrijemceBIC" />
                 </td>
             </tr>
             <tr>
@@ -65,7 +79,7 @@
                     IBAN:
                 </td>
                 <td>
-                    <input type="text" asp-for="@Model.PrijemceIBAN" />
+                    <input class="form-control" type="text" asp-for="@Model.PrijemceIBAN" />
                 </td>
             </tr>
             <tr>
@@ -73,7 +87,7 @@
                     CID:
                 </td>
                 <td>
-                    <input type="text" asp-for="@Model.PrijemceCID" />
+                    <input class="form-control" type="text" asp-for="@Model.PrijemceCID" />
                 </td>
             </tr>
 
@@ -82,7 +96,7 @@
                     Splatnost:
                 </td>
                 <td>
-                    <input type="date" asp-for="@Model.DatumSplatnosti" />
+                    <input class="form-control" type="date" asp-for="@Model.DatumSplatnosti" />
                 </td>
             </tr>
         </table>
