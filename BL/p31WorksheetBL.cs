@@ -23,6 +23,7 @@ namespace BL
         public bool Move2Bin(bool move2bin, List<int> p31ids);
         public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
         public IEnumerable<BO.p31WorksheetTimelineDay> GetList_TimelineDays(List<int> j02ids, DateTime d1, DateTime d2, int j70id);
+        public BO.p31Rate LoadRate(BO.p51TypeFlagENUM flag, DateTime d, int j02id, int p41id, int p32id);
 
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
@@ -529,6 +530,31 @@ namespace BL
 
             return c;
 
+        }
+
+
+        public BO.p31Rate LoadRate(BO.p51TypeFlagENUM flag,DateTime d,int j02id,int p41id, int p32id)
+        {
+            var ret = new BO.p31Rate() { flag = flag };
+
+            var pars = new Dapper.DynamicParameters();
+            pars.Add("date_rate", d, System.Data.DbType.DateTime);
+            pars.Add("p51TypeFlag", (int)flag, System.Data.DbType.Int32);
+            pars.Add("p41id", p41id, System.Data.DbType.Int32);
+            pars.Add("j02id", j02id, System.Data.DbType.Int32);
+            pars.Add("p32id", p32id, System.Data.DbType.Int32);
+            pars.Add("p51id", null, System.Data.DbType.Int32);
+            pars.Add("ret_j27id", null, System.Data.DbType.Int32, System.Data.ParameterDirection.Output);
+            pars.Add("ret_rate", null, System.Data.DbType.Double, System.Data.ParameterDirection.Output);
+
+            if (_db.RunSp("p31_getrate_tu", ref pars, false) == "1")
+            {
+                ret.j27ID= pars.Get<int>("ret_j27id");
+                ret.Value = pars.Get<double>("ret_rate");
+                if (ret.j27ID > 0) ret.j27Code = _mother.FBL.LoadCurrencyByID(ret.j27ID).j27Code;
+            }
+
+            return ret;
         }
 
     }

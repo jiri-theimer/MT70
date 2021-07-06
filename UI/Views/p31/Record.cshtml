@@ -96,6 +96,7 @@
             <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Hodiny"):</label>
             <div class="col-sm-2 col-md-2">
                 <myhours asp-for="Rec.Value_Orig" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
+
             </div>
         </div>
     }
@@ -239,17 +240,40 @@
     }
 }
 
-<mystitky entity="p31Worksheet" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+<table>
+    <tr style="vertical-align:top;">
+        <td>
+            <mystitky entity="p31Worksheet" asp-for="@Model.TagPids" tagnames="@Model.TagNames" taghtml="@Model.TagHtml" buttontext="@_f.tra("Oštítkovat")"></mystitky>
+        </td>
+        <td>
+            <a id="cmdMore" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false">@_f.tra("Více")</a>
+        </td>
+    </tr>
+</table>
 
-
-@Html.Raw("</div>")
-
-<input type="hidden" asp-for="@Model.ShowTaskComboFlag" value="@Model.ShowTaskComboFlag" />
-
-<script type="text/javascript">
-    var _p33id = "";
-    @if(Model.RecP34 != null)
+<div id="divMore" style="display:none;background-color:aliceblue;">
+    
+    @if (_f.CurrentUser.IsRatesAccess && (Model.RecP34.p33ID == BO.p33IdENUM.Cas || (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)))
     {
+        <button type="button" class="btn btn-outline-secondary" onclick="simulation()"><span class="k-icon k-i-dollar"></span>@_f.tra("Simulace sazby")</button>
+    }
+
+</div>
+    
+
+
+
+    @Html.Raw("</div>")
+
+    <input type="hidden" asp-for="@Model.ShowTaskComboFlag" value="@Model.ShowTaskComboFlag" />
+
+    <script type="text/javascript">
+    var _p41id = "@(Model.Rec.p41ID)";
+    var _j02id = "@(Model.Rec.j02ID)";
+var _p32id = "@(Model.Rec.p32ID)";
+var _p33id = "";
+@if(Model.RecP34 != null)
+{
         @:_p33id = "@((int) Model.RecP34.p33ID)";
     }
 
@@ -315,6 +339,10 @@
       }
 
 
+        $("#cmdMore").click(function () {
+            $("#divMore").toggle();
+        });
+
 
         $("#Rec_p31Text").on("paste", function (e) {
             handle_clipboard_textarea(document.getElementById("Rec_p31Text"), e);
@@ -363,7 +391,7 @@
 
         mynumber_changevalue("Rec_Amount_WithVat_Orig", vcdph, 2);
         mynumber_changevalue("Rec_Amount_Vat_Orig", dphcastka, 2);
-        
+
     }
     function handle_recalc_after_vcdph() {
         if (_p33id != "5") return;
@@ -375,8 +403,8 @@
         var dphcastka = _roundnum((vcdph - bezdph), 2);
 
         mynumber_changevalue("Rec_Amount_WithoutVat_Orig", bezdph, 2);
-        mynumber_changevalue("Rec_Amount_Vat_Orig", dphcastka, 2);        
-        
+        mynumber_changevalue("Rec_Amount_Vat_Orig", dphcastka, 2);
+
     }
 
     function handle_recalc_after_pieces() {
@@ -385,7 +413,7 @@
         var celkem = _roundnum(pocet * cenaks, 2);
 
         if ($("#PiecePriceFlag").val() == "1") {
-            //kusová cena bez DPH            
+            //kusová cena bez DPH
             mynumber_changevalue("Rec_Amount_WithoutVat_Orig", celkem, 2);
             handle_recalc_after_bezdph();
         }
@@ -396,4 +424,12 @@
         }
 
     }
-</script>
+
+    function simulation() {
+        var d = $("#p31Datehelper").val();
+
+        _window_open("/p31oper/RateSimulation?d=" + d + "&p41id=" + _p41id + "&p32id=" + _p32id + "&j02id=" + _j02id);
+        
+
+    }
+    </script>

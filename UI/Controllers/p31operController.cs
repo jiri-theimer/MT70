@@ -10,8 +10,41 @@ namespace UI.Controllers
 {
     public class p31operController : BaseController
     {
-        
-        //Nastavení vykazování hodin
+        public IActionResult RateSimulation(int flag,int p41id,int j02id,int p32id,string d)
+        {
+            var v = new p31RateViewModel() { j02ID = j02id, p41ID = p41id, p32ID = p32id, d = BO.BAS.String2Date(d) };
+            if (v.p41ID==0 || v.p32ID == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí projekt nebo aktivita.");
+            }
+            v.RecP41 = Factory.p41ProjectBL.Load(v.p41ID);
+            v.p51ID_BillingRate = v.RecP41.p51ID_Billing;
+            v.p51ID_CostRate =v.RecP41.p51ID_Internal;
+            if (v.p51ID_BillingRate == 0 && v.RecP41.p28ID_Client>0)
+            {
+                v.p51ID_BillingRate = Factory.p28ContactBL.Load(v.RecP41.p28ID_Client).p51ID_Billing;
+            }
+
+            var c = Factory.p31WorksheetBL.LoadRate(BO.p51TypeFlagENUM.BillingRates, BO.BAS.String2Date(d), j02id, p41id, p32id);
+            v.BillRate = c.Value;
+            v.j27Code_BillingRate = c.j27Code;
+            if (c.Value != 0 && v.p51ID_BillingRate==0)
+            {
+                //root ceník fakturačních sazeb
+                var recP51Root=Factory.p51PriceListBL.LoadRootPriceList(DateTime.Now);
+                v.p51ID_BillingRate = recP51Root.pid;
+
+            }
+            c = Factory.p31WorksheetBL.LoadRate(BO.p51TypeFlagENUM.CostRates, BO.BAS.String2Date(d), j02id, p41id, p32id);
+            v.CostRate = c.Value;
+            v.j27Code_CostRate = c.j27Code;
+
+            
+
+            return View(v);
+        }
+
+        //Uživatelovo nastavení formátu vykazování hodin
         public IActionResult hes(string pagesource)
         {
             var v = new hesViewModel() {PageSource= pagesource, HoursFormat = Factory.CurrentUser.j03DefaultHoursFormat, TotalFlagValue = Factory.CurrentUser.j03HoursEntryFlagV7 };

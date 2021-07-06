@@ -9,6 +9,7 @@ namespace BL
     public interface Ip51PriceListBL
     {
         public BO.p51PriceList Load(int pid);
+        public BO.p51PriceList LoadRootPriceList(DateTime d);
         public BO.p51PriceList LoadByTempGuid(string tempguid);
         public IEnumerable<BO.p51PriceList> GetList(BO.myQueryP51 mq);
         public int Save(BO.p51PriceList rec, List<BO.p52PriceList_Item> lisP52);
@@ -36,6 +37,10 @@ namespace BL
         public BO.p51PriceList Load(int pid)
         {
             return _db.Load<BO.p51PriceList>(GetSQL1(" WHERE a.p51ID=@pid"), new { pid = pid });
+        }
+        public BO.p51PriceList LoadRootPriceList(DateTime d)
+        {
+            return _db.Load<BO.p51PriceList>(GetSQL1(" WHERE a.p51TypeFlag=5 AND @d BETWEEN a.p51ValidFrom AND a.p51ValidUntil"), new { d = d });
         }
         public BO.p51PriceList LoadByTempGuid(string tempguid)
         {
