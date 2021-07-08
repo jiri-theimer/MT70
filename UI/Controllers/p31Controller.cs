@@ -379,6 +379,10 @@ namespace UI.Controllers
             {
                 ret.error = Factory.tra("[Čas do] musí být menší než 24:00.");
             }
+            if (t1>0 && t2 == 0)
+            {
+                t2 = t1 + 60 * 60;
+            }
             if (t1 > t2)
             {
                 ret.error = Factory.tra("[Čas do] musí být větší než [Čas od].");
