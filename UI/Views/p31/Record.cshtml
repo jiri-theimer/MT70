@@ -98,6 +98,12 @@
                 <myhours asp-for="Rec.Value_Orig" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
 
             </div>
+            <div class="col-sm-1 col-md-1">
+                <input type="text" class="form-control" placeholder="@_f.tra("Čas od")" asp-for="@Model.Rec.TimeFrom" onchange="handle_recalc_duration()" />                
+            </div>
+            <div class="col-sm-1 col-md-1">
+                <input type="text" class="form-control" placeholder="@_f.tra("Čas do")" asp-for="@Model.Rec.TimeUntil" onchange="handle_recalc_duration()" />
+            </div>
         </div>
     }
     if (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)
@@ -252,22 +258,22 @@
 </table>
 
 <div id="divMore" style="display:none;background-color:aliceblue;">
-    
+
     @if (_f.CurrentUser.IsRatesAccess && (Model.RecP34.p33ID == BO.p33IdENUM.Cas || (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)))
     {
         <button type="button" class="btn btn-outline-secondary" onclick="simulation()"><span class="k-icon k-i-dollar"></span>@_f.tra("Simulace sazby")</button>
     }
 
 </div>
-    
 
 
 
-    @Html.Raw("</div>")
 
-    <input type="hidden" asp-for="@Model.ShowTaskComboFlag" value="@Model.ShowTaskComboFlag" />
+@Html.Raw("</div>")
 
-    <script type="text/javascript">
+<input type="hidden" asp-for="@Model.ShowTaskComboFlag" value="@Model.ShowTaskComboFlag" />
+
+<script type="text/javascript">
     var _p41id = "@(Model.Rec.p41ID)";
     var _j02id = "@(Model.Rec.j02ID)";
 var _p32id = "@(Model.Rec.p32ID)";
@@ -347,6 +353,34 @@ var _p33id = "";
         $("#Rec_p31Text").on("paste", function (e) {
             handle_clipboard_textarea(document.getElementById("Rec_p31Text"), e);
         });
+
+        @if (Model.RecP34.p33ID == BO.p33IdENUM.Cas)
+        {
+            <text>
+        handle_setup_cas_intervals("Rec_TimeFrom", "@Model.CasOdDoIntervals");
+        handle_setup_cas_intervals("Rec_TimeUntil", "@Model.CasOdDoIntervals");
+
+        $("#Rec_TimeFrom").on("selected.xdsoft", function (e, data) {
+            handle_recalc_duration();
+        });
+        $("#Rec_TimeFrom").on("focus", function (e, data) {
+            $(this).select();
+        });
+        $("#Rec_TimeUntil").on("selected.xdsoft", function (e, data) {
+            handle_recalc_duration();
+        });
+        $("#Rec_TimeUntil").on("focus", function (e, data) {
+            $(this).select();
+        });
+
+            </text>
+
+
+        }
+
+
+
+
     });
 
     function postback(oper) {
@@ -429,7 +463,42 @@ var _p33id = "";
         var d = $("#p31Datehelper").val();
 
         _window_open("/p31oper/RateSimulation?d=" + d + "&p41id=" + _p41id + "&p32id=" + _p32id + "&j02id=" + _j02id);
-        
 
-    }
-    </script>
+
+        }
+
+
+
+        function handle_setup_cas_intervals(controlid,intervals) {
+            var arr = intervals.split("|");
+            $("#" + controlid).autocomplete({
+                source: [arr],
+                visibleLimit: 20,
+                openOnFocus: true,
+                highlight: false,
+                autoselect: true
+            });
+
+            $("#" + controlid).prop("filled", true);
+
+            $("#" + controlid).on("focus", function (e, data) {
+                $(this).select();
+            });
+        }
+
+        function handle_recalc_duration() {
+            var t1 = $("#Rec_TimeFrom").val();
+            var t2 = $("#Rec_TimeUntil").val();
+            $.post(_ep("/p31/Record_RecalcDuration"), { timefrom: t1, timeuntil: t2 }, function (data) {
+                //spočítat hodiny z t1 - t2
+                if (data.error != null) {
+                    _notify_message(data.error);
+                    return;
+                }
+                $("#Rec_TimeFrom").val(data.t1);
+                $("#Rec_TimeUntil").val(data.t2);
+                $("#Rec_Value_Orig").val(data.duration);
+            });
+        }
+
+</script>

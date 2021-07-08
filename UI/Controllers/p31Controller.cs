@@ -117,8 +117,12 @@ namespace UI.Controllers
                     v.Rec.p31MarginHidden = v.RecP32.p32MarginHidden;
                     v.Rec.p31MarginTransparent = v.RecP32.p32MarginTransparent;
                 }
+
+                
                 
             }
+
+
             
 
         }
@@ -198,6 +202,17 @@ namespace UI.Controllers
                         v.Rec.p32ID = v.RecP32.pid;
                         v.SelectedComboP32Name = v.RecP32.p32Name;
                         
+                    }
+                }
+                if (v.RecP34.p33ID == BO.p33IdENUM.Cas)
+                {
+                    if (Factory.CBL.LoadUserParam("p31_TimeInputInterval", "30") == "30")
+                    {
+                        v.CasOdDoIntervals = "08:00|08:30|09:00|09:30|10:00|10:30|11:00|11:30|12:00|12:30|13:00|13:30|14:00|14:30|15:00|15:30|16:00|16:30|17:00|17:30|18:00";
+                    }
+                    else
+                    {
+                        v.CasOdDoIntervals = "08:00|09:00|10:00|11:00|12:00|13:00|14:00|14:30|15:00|15:30|16:00|16:30|17:00|17:30|18:00|19:00";
                     }
                 }
             }
@@ -352,6 +367,31 @@ namespace UI.Controllers
             return Factory.p31WorksheetBL.InhaleRecDisposition(recP31);
             
             
+        }
+
+        public UI.Models.p31oper.p31CasOdDo Record_RecalcDuration(string timefrom,string timeuntil)
+        {
+            var ret = new UI.Models.p31oper.p31CasOdDo();
+
+            int t1 = BO.basTime.ConvertTimeToSeconds(timefrom);
+            int t2 = BO.basTime.ConvertTimeToSeconds(timeuntil);
+            if (t2 > 26 * 60 * 60)
+            {
+                ret.error = Factory.tra("[Čas do] musí být menší než 24:00.");
+            }
+            if (t1 > t2)
+            {
+                ret.error = Factory.tra("[Čas do] musí být větší než [Čas od].");
+            }
+            if (t1 < 0)
+            {
+                t1 = BO.basTime.ConvertTimeToSeconds("01:00");
+                ret.error = Factory.tra("[Čas do] musí být větší než [Čas od].");
+            }
+            ret.t1 = BO.basTime.GetTimeFromSeconds(t1);
+            ret.t2 = BO.basTime.GetTimeFromSeconds(t2);
+            ret.duration = BO.basTime.GetTimeFromSeconds(t2 - t1);
+            return ret;
         }
     }
 }

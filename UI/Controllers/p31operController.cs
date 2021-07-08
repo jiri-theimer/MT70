@@ -12,6 +12,10 @@ namespace UI.Controllers
     {
         public IActionResult RateSimulation(int flag,int p41id,int j02id,int p32id,string d)
         {
+            if (!Factory.CurrentUser.IsRatesAccess)
+            {
+                return this.StopPage(true, "Nemáte oprávnění vidět sazby úkonů.");
+            }
             var v = new p31RateViewModel() { j02ID = j02id, p41ID = p41id, p32ID = p32id, d = BO.BAS.String2Date(d) };
             if (v.p41ID==0 || v.p32ID == 0)
             {

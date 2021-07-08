@@ -33,5 +33,7 @@ namespace UI.Models.Record
         public int ShowTaskComboFlag { get; set; }  //0-default, 1-ano, 2-ne
 
         public int PiecePriceFlag { get; set; }
+
+        public string CasOdDoIntervals { get; set; }
     }
 }

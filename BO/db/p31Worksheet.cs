@@ -181,10 +181,15 @@ namespace BO
             get
             {
                 if (this.p31DateTimeFrom_Orig == null)
-                    return "00:00";
+                {
+                    return null;
+                }
                 else
+                {
                     return BO.BAS.ObjectDateTime2String(this.p31DateTimeFrom_Orig, "HH:mm");
-                    
+                }
+
+
             }
         }
         public string TimeUntil
@@ -192,7 +197,7 @@ namespace BO
             get
             {
                 if (this.p31DateTimeUntil_Orig == null)
-                    return "00:00";
+                    return null;
                 else
                     return BO.BAS.ObjectDateTime2String(this.p31DateTimeUntil_Orig, "HH:mm");
                 
