@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace XA
+namespace BO.CLS
 {
-    public class clsXmlSupport
+    public class XmlSupport
     {
         private XmlWriter _wr { get; set; }
         private string _XmlFullPath { get; set; }
-        public clsXmlSupport(string strXmlFullPath)
+        public XmlSupport(string strXmlFullPath)
         {
             _XmlFullPath = strXmlFullPath;
             XmlWriterSettings settings = new XmlWriterSettings() { CloseOutput = true, Indent = true, Encoding = System.Text.Encoding.UTF8 };
@@ -23,9 +24,9 @@ namespace XA
         {
             _wr.WriteStartElement(strStartElementName);
         }
-        public void wstart(string strStartElementName,string ns)
+        public void wstart(string strStartElementName, string ns)
         {
-            _wr.WriteStartElement(strStartElementName,ns);
+            _wr.WriteStartElement(strStartElementName, ns);
         }
         public void wend(int krat = 1)
         {
@@ -82,6 +83,7 @@ namespace XA
         {
             _wr.Flush();
             _wr.Close();
+            
         }
         private string NUM(double n)
         {

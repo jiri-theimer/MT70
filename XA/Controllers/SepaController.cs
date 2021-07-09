@@ -124,7 +124,7 @@ namespace XA.Controllers
             double decSoucetCastek = v.lisRecords.Sum(p=>p.FakturaCastka);
             int intPocetInkas = v.lisRecords.Count();            
 
-            var c = new clsXmlSupport(_app.LogFolder + "\\" + v.Guid + ".xml");
+            var c = new BO.CLS.XmlSupport(_app.LogFolder + "\\" + v.Guid + ".xml");
 
             
             c.wstart("Document", "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02");
