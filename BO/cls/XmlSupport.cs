@@ -40,6 +40,12 @@ namespace BO.CLS
         public void oneattribute(string strName, string strValue)
         {
             _wr.WriteAttributeString(strName, strValue);
+
+                       
+        }
+        public void oneattribute(string strPrefix,string strName,string strNs,string strValue)
+        {
+            _wr.WriteAttributeString(strPrefix, strName, null, strValue);
         }
         public void purestring(string s)
         {
@@ -83,6 +89,7 @@ namespace BO.CLS
         {
             _wr.Flush();
             _wr.Close();
+            _wr.Dispose();
             
         }
         private string NUM(double n)

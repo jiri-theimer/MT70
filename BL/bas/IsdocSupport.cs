@@ -17,8 +17,13 @@ namespace BL.bas
             bool bolForeignInvoice = false; double dblExchangeRate = 0; string strFileName = _dbrow["p91Code"] + ".ISDOC";
 
 
-            var c = new BO.CLS.XmlSupport(_f.x35GlobalParamBL.TempFolder() + "\\" + strFileName);
-            c.wstart("Invoice", "http://isdoc.cz/namespace/2013");
+            var c = new BO.CLS.XmlSupport(_f.x35GlobalParamBL.TempFolder() + "\\" + strFileName);            
+            c.wstart("Invoice", "http://isdoc.cz/namespace/2013");            
+            c.oneattribute("xmlns","xsd",null, "http://www.w3.org/2001/XMLSchema");
+            c.oneattribute("xmlns", "xsi",null, "http://www.w3.org/2001/XMLSchema-instance");
+            c.oneattribute("version", "6.0.1");
+            //c.oneattribute("xmlns", "http://isdoc.cz/namespace/2013");
+
             c.wss("DocumentType", "1");
             c.wss("ID", IN("p91Code"));
             c.wss("UUID", IN("p91Guid"));
@@ -28,13 +33,13 @@ namespace BL.bas
             c.wsdate("TaxPointDate", Convert.ToDateTime(_dbrow["p91DateSupply"]));
             c.wsbool("VATApplicable", true);
             c.wss("ElectronicPossibilityAgreementReference", "");
-            if (_dbrow["p91Text1"] != System.DBNull.Value)
+            if (!string.IsNullOrEmpty(IN("p91Text1")))
             {
                 c.wss("Note", IN("p91Text1"));
             }
 
             c.wss("LocalCurrencyCode", IN("j27Code_Domestic"));
-            if (_dbrow["j27ID_Domestic"] == _dbrow["j27ID"])
+            if (IN("j27ID_Domestic") == IN("j27ID"))
             {
                 c.wsnum("CurrRate", 1);
             }
@@ -56,7 +61,69 @@ namespace BL.bas
 
             Handle_InvoiceLines(p91id, _f, c, bolForeignInvoice, dblExchangeRate);
 
-            Handle_TaxTotal(c, bolForeignInvoice, dblExchangeRate);
+            c.wstart("TaxTotal");            
+            Handle_TaxSubTotal("Standard",c, bolForeignInvoice, dblExchangeRate);
+            Handle_TaxSubTotal("Low", c, bolForeignInvoice, dblExchangeRate);
+            Handle_TaxSubTotal("None", c, bolForeignInvoice, dblExchangeRate);
+            c.wsnum("TaxAmount", NUM("p91Amount_Vat"));
+            c.wend();   //TaxTotal
+
+
+            c.wstart("LegalMonetaryTotal");
+            
+            if (bolForeignInvoice)
+            {
+                c.wsnum("TaxExclusiveAmountCurr", NUM("p91Amount_WithoutVat"));
+                c.wsnum("TaxExclusiveAmount", NUM("p91Amount_WithoutVat")*dblExchangeRate);
+                c.wsnum("TaxInclusiveAmountCurr", NUM("p91Amount_WithVat"));
+                c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat")*dblExchangeRate);
+                c.wsnum("AlreadyClaimedTaxExclusiveAmountCurr", dblExchangeRate * (NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard")));
+                c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", dblExchangeRate * (NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard") + NUM("p91ProformaAmount_Vat_Low") + NUM("p91ProformaAmount_Vat_Standard")));
+                c.wsnum("DifferenceTaxExclusiveAmountCurr", NUM("p91Amount_WithoutVat") - NUM("p91ProformaBilledAmount"));
+                c.wsnum("DifferenceTaxExclusiveAmount", (NUM("p91Amount_WithoutVat") - NUM("p91ProformaBilledAmount"))*dblExchangeRate);
+                c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithVat") - NUM("p91ProformaBilledAmount"));
+                c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat") - NUM("p91ProformaBilledAmount")* dblExchangeRate);
+                c.wsnum("PayableRoundingAmountCurr", NUM("p91RoundFitAmount"));
+                c.wsnum("PayableRoundingAmount", NUM("p91RoundFitAmount")*dblExchangeRate);
+                c.wsnum("PayableAmountCurr", NUM("p91Amount_TotalDue"));
+                
+                c.wsnum("PaidDepositsAmountCurr", NUM("p91ProformaBilledAmount"));
+                c.wsnum("PaidDepositsAmount", NUM("p91ProformaBilledAmount")*dblExchangeRate);
+                c.wsnum("PayableAmount", NUM("p91Amount_TotalDue") * dblExchangeRate);
+            }
+            else
+            {
+                c.wsnum("TaxExclusiveAmount", NUM("p91Amount_WithoutVat"));
+                c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat"));
+                c.wsnum("AlreadyClaimedTaxExclusiveAmount", NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard"));
+                c.wsnum("AlreadyClaimedTaxInclusiveAmount", NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard")+NUM("p91ProformaAmount_Vat_Low")+NUM("p91ProformaAmount_Vat_Standard"));
+                c.wsnum("DifferenceTaxExclusiveAmount", NUM("p91Amount_WithoutVat") - NUM("p91ProformaBilledAmount"));
+                c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat") - NUM("p91ProformaBilledAmount"));
+                c.wsnum("PayableRoundingAmount", NUM("p91RoundFitAmount"));
+                
+                c.wsnum("PaidDepositsAmount", NUM("p91ProformaBilledAmount"));
+                c.wsnum("PayableAmount", NUM("p91Amount_TotalDue"));
+            }
+            c.wend();   //LegalMonetaryTotal
+
+            c.wstart("PaymentMeans");
+            c.wstart("Payment");
+            c.oneattribute("partialPayment", "false");
+            c.wsnum("PaidAmount", NUM("p91Amount_TotalDue"));
+            c.wss("PaymentMeansCode", "42");
+
+            c.wstart("Details");
+            c.wsdate("PaymentDueDate", Convert.ToDateTime(_dbrow["p91DateMaturity"]));
+            c.wss("ID", IN("p86BankAccount"));
+            c.wss("BankCode", IN("p86BankCode"));
+            c.wss("Name", IN("p86BankName"));
+            c.wss("IBAN", IN("p86IBAN"));
+            c.wss("BIC", IN("p86SWIFT"));
+            c.wss("VariableSymbol", IN("p91Code"));
+            c.wss("ConstantSymbol", "");
+            c.wss("SpecificSymbol", "");
+            
+            c.wend();   //Details
 
 
             c.flushandclose();
@@ -64,41 +131,122 @@ namespace BL.bas
             return strFileName;
         }
 
-        private void Handle_TaxTotal(BO.CLS.XmlSupport c, bool bolForeignInvoice, double dblExchangeRate)
-        {
-            c.wstart("TaxTotal");
-
+        private void Handle_TaxSubTotal(string fieldsuffix,BO.CLS.XmlSupport c, bool bolForeignInvoice, double dblExchangeRate)
+        {            
             c.wstart("TaxSubTotal");
-            c.wsnum("TaxableAmount", NUM("p91Amount_WithoutVat_Standard"));
-            
-            c.wsnum("TaxAmount", NUM("p91Amount_Vat_Standard"));
-            c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat_Standard"));
-
-            
-
+                        
             if (bolForeignInvoice)
             {
-                c.wsnum("AlreadyClaimedTaxableAmountCurr", 0);  //na záloze již upl., základ v sazbě v C.M.
-                c.wsnum("AlreadyClaimedTaxAmountCurr", 0);  //na záloze již upl., základ v sazbě v C.M.                
-                c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", 0);   //na záloze již upl., s daní v sazbě v C.M.
+                c.wsnum("TaxableAmountCurr", NUM("p91Amount_WithoutVat_"+ fieldsuffix));
+                c.wsnum("TaxableAmount", NUM("p91Amount_WithoutVat_"+ fieldsuffix) *dblExchangeRate);
+                
+                if (fieldsuffix == "None")
+                {
+                    c.wsnum("TaxAmountCurr", 0);
+                    c.wsnum("TaxAmount", 0);
+
+                    c.wsnum("TaxInclusiveAmountCurr", NUM("p91Amount_WithoutVat_None"));
+                    c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithoutVat_None") * dblExchangeRate);                    
+                }
+                else
+                {
+                    c.wsnum("TaxAmountCurr", NUM("p91Amount_Vat_" + fieldsuffix));
+                    c.wsnum("TaxAmount", NUM("p91Amount_Vat_" + fieldsuffix) * dblExchangeRate);
+
+                    c.wsnum("TaxInclusiveAmountCurr", NUM("p91Amount_WithVat_" + fieldsuffix));
+                    c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix) * dblExchangeRate);
+                }
+                                
+                
+                c.wsnum("DifferenceTaxableAmountCurr", NUM("p91Amount_WithoutVat_"+ fieldsuffix));
+                c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_"+ fieldsuffix) * dblExchangeRate);
+                if (fieldsuffix == "None")
+                {
+                    c.wsnum("DifferenceTaxAmountCurr", 0);
+                    c.wsnum("DifferenceTaxAmount", 0);
+                    c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithoutVat_None"));
+                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithoutVat_None") * dblExchangeRate);
+
+                    c.wsnum("AlreadyClaimedTaxableAmountCurr", NUM("p91ProformaAmount_WithoutVat_None"));  //na záloze již uplatněno, základ v sazbě v T.M.
+                    c.wsnum("AlreadyClaimedTaxableAmount", NUM("p91ProformaAmount_WithoutVat_None") * dblExchangeRate);  //na záloze již uplatněno, základ v sazbě v T.M.
+
+                    c.wsnum("AlreadyClaimedTaxAmountCurr", 0);
+                    c.wsnum("AlreadyClaimedTaxAmount", 0);
+
+                    c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", NUM("p91ProformaAmount_WithoutVat_None"));
+                    c.wsnum("AlreadyClaimedTaxInclusiveAmount", (NUM("p91ProformaAmount_WithoutVat_None") * dblExchangeRate));
+                }
+                else
+                {
+                    c.wsnum("DifferenceTaxAmountCurr", NUM("p91Amount_Vat_" + fieldsuffix));
+                    c.wsnum("DifferenceTaxAmount", NUM("p91Amount_Vat_" + fieldsuffix) * dblExchangeRate);
+                    c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithVat_" + fieldsuffix));
+                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix) * dblExchangeRate);
+
+                    c.wsnum("AlreadyClaimedTaxableAmountCurr", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix));  //na záloze již uplatněno, základ v sazbě v T.M.
+                    c.wsnum("AlreadyClaimedTaxableAmount", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix) * dblExchangeRate);  //na záloze již uplatněno, základ v sazbě v T.M.
+
+                    c.wsnum("AlreadyClaimedTaxAmountCurr", NUM("p91ProformaAmount_Vat_" + fieldsuffix));
+                    c.wsnum("AlreadyClaimedTaxAmount", NUM("p91ProformaAmount_Vat_" + fieldsuffix) * dblExchangeRate);
+
+                    c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix) + NUM("p91ProformaAmount_Vat_" + fieldsuffix));
+                    c.wsnum("AlreadyClaimedTaxInclusiveAmount", (NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix) + NUM("p91ProformaAmount_Vat_" + fieldsuffix)) * dblExchangeRate);
+                }
                 
 
 
+                
+
+            }
+            else
+            {
+                c.wsnum("TaxableAmount", NUM("p91Amount_WithoutVat_"+ fieldsuffix));
+                if (fieldsuffix == "None")
+                {
+                    c.wsnum("TaxAmount", 0);
+                    c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithoutVat_None"));
+
+                    c.wsnum("AlreadyClaimedTaxableAmount", NUM("p91ProformaAmount_WithoutVat_None"));  //na záloze již uplatněno, základ v sazbě v T.M.
+                    c.wsnum("AlreadyClaimedTaxAmount", 0);
+                    c.wsnum("AlreadyClaimedTaxInclusiveAmount", NUM("p91ProformaAmount_WithoutVat_None"));
+
+                    c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_None"));
+                    c.wsnum("DifferenceTaxAmount", 0);
+                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithoutVat_None"));                    
+                }
+                else
+                {
+                    c.wsnum("TaxAmount", NUM("p91Amount_Vat_" + fieldsuffix));
+                    c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix));
+
+                    c.wsnum("AlreadyClaimedTaxableAmount", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix));  //na záloze již uplatněno, základ v sazbě v T.M.
+                    c.wsnum("AlreadyClaimedTaxAmount", NUM("p91ProformaAmount_Vat_" + fieldsuffix));
+                    c.wsnum("AlreadyClaimedTaxInclusiveAmount", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix) + NUM("p91ProformaAmount_Vat_" + fieldsuffix));
+
+                    c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_" + fieldsuffix));
+                    c.wsnum("DifferenceTaxAmount", NUM("p91Amount_Vat_" + fieldsuffix));
+                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix));
+
+                    
+                }
+                
             }
             
-            c.wsnum("AlreadyClaimedTaxableAmount", NUM("p91ProformaAmount_WithoutVat_Standard"));  //na záloze již uplatněno, základ v sazbě v T.M.
-            c.wsnum("AlreadyClaimedTaxAmount", NUM("p91ProformaAmount_Vat_Standard"));
-            c.wsnum("AlreadyClaimedTaxInclusiveAmount", NUM("p91ProformaAmount_WithoutVat_Standard")+NUM("p91ProformaAmount_Vat_Standard"));
-
-            c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_Standard"));
-            c.wsnum("DifferenceTaxAmount", NUM("p91Amount_Vat_Standard"));
-            c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat_Standard"));
             c.wstart("TaxCategory");
-            c.wsnum("Percent", NUM("p91VatRate_Standard"));
-            c.wsbool("VATApplicable", true);
-            c.wsbool("LocalReverseChargeFlag", true);
+            if (fieldsuffix == "None")
+            {
+                c.wsnum("Percent", 0);
+            }
+            else
+            {
+                c.wsnum("Percent", NUM("p91VatRate_" + fieldsuffix));
+            }
+            //c.wss("TaxScheme", "0");
+            c.wsbool("VATApplicable", true);            
+            c.wsbool("LocalReverseChargeFlag", false);
             c.wend();   //TaxCategory
 
+            c.wend();   //TaxSubTotal
         }
 
 
@@ -114,29 +262,35 @@ namespace BL.bas
                 c.wss("ID", rec.RowPID.ToString());
                 c.wss("InvoicedQuantity", "1");
 
-                c.wsnum("LineExtensionAmountBeforeDiscount", 0);
-
-                c.wsnum("LineExtensionAmountTaxInclusiveBeforeDiscount", 0);
-                c.wsnum("LineExtensionTaxAmount", rec.DPH);
-
-
                 if (bolForeignInvoice)
                 {
+                    c.wsnum("LineExtensionAmount", rec.BezDPH * dblExchangeRate);
+                    c.wsnum("LineExtensionAmountBeforeDiscount", 0);
+                    c.wsnum("LineExtensionAmountTaxInclusiveBeforeDiscount", 0);
+                    c.wsnum("LineExtensionTaxAmount", rec.DPH);
+
                     c.wsnum("UnitPrice", rec.BezDPH * dblExchangeRate);
                     c.wsnum("UnitPriceTaxInclusive", rec.VcDPH * dblExchangeRate);
 
                     c.wsnum("LineExtensionAmountCurr", rec.BezDPH);
-                    c.wsnum("LineExtensionAmount", rec.BezDPH * dblExchangeRate);
+                    
                     c.wsnum("LineExtensionAmountTaxInclusiveCurr", rec.VcDPH * dblExchangeRate);
                     c.wsnum("LineExtensionAmountTaxInclusive", rec.VcDPH * dblExchangeRate);
                 }
                 else
                 {
+                    c.wsnum("LineExtensionAmount", rec.BezDPH);
+                    c.wsnum("LineExtensionAmountBeforeDiscount", 0);
+                    c.wsnum("LineExtensionAmountTaxInclusive", rec.VcDPH);
+                    c.wsnum("LineExtensionAmountTaxInclusiveBeforeDiscount", 0);
+                    
+                    c.wsnum("LineExtensionTaxAmount", rec.DPH);
+
                     c.wsnum("UnitPrice", rec.BezDPH);
                     c.wsnum("UnitPriceTaxInclusive", rec.VcDPH);
 
-                    c.wsnum("LineExtensionAmount", rec.BezDPH);
-                    c.wsnum("LineExtensionAmountTaxInclusive", rec.VcDPH);
+                    
+                    
                 }
 
                 c.wstart("ClassifiedTaxCategory");
@@ -168,11 +322,12 @@ namespace BL.bas
 
             c.wstart("PostalAddress");
             c.wss("StreetName", IN("p93Street"));
+            c.wss("BuildingNumber", "");
             c.wss("CityName", IN("p93City"));
             c.wss("PostalZone", IN("p93Zip"));
             c.wstart("Country");
             c.wss("IdentificationCode", IN("p93CountryCode"));
-            if (_dbrow["p93Country"] == System.DBNull.Value)
+            if (!string.IsNullOrEmpty(IN("p93Country")))
             {
                 c.wss("Name", "Česká republika");
             }
@@ -201,7 +356,7 @@ namespace BL.bas
             c.wstart("Party");
             c.wstart("PartyIdentification");
             c.wss("UserID", IN("p28ID"));
-            if (_dbrow["p91Client_RegID"] == System.DBNull.Value)
+            if (string.IsNullOrEmpty(IN("p91Client_RegID")))
             {
                 c.wss("ID", IN("p91Client_VatID"));
             }
@@ -233,7 +388,7 @@ namespace BL.bas
             c.wend();   //Country
             c.wend();   //PostalAddress
             c.wstart("PartyTaxScheme");
-            if (_dbrow["p91Client_ICDPH_SK"] != System.DBNull.Value)
+            if (!string.IsNullOrEmpty(IN("p91Client_ICDPH_SK")))
             {
                 c.wss("CompanyID", IN("p91Client_ICDPH_SK"));
                 c.wss("TaxScheme", "VAT");
@@ -253,7 +408,7 @@ namespace BL.bas
 
         private string IN(string fieldname)
         {
-            if (_dbrow[fieldname] == System.DBNull.Value)
+            if (_dbrow[fieldname] == System.DBNull.Value || _dbrow[fieldname]==null)
             {
                 return "";
             }
@@ -261,7 +416,7 @@ namespace BL.bas
         }
         private double NUM(string fieldname)
         {
-            if (_dbrow[fieldname] == System.DBNull.Value)
+            if (_dbrow[fieldname] == System.DBNull.Value || _dbrow[fieldname]==null)
             {
                 return 0;
             }
