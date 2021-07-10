@@ -472,6 +472,9 @@ namespace UI.Controllers
                     }
                     
                     break;
+                case "p91":
+                    AMI("ISDOC Export", "javascript:p91oper_isdoc()");
+                    break;
             }
             if ("p31,p41,p28,j02,p91".Contains(tgi.prefix))
             {

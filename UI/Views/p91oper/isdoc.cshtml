@@ -1,0 +1,60 @@
+﻿@model UI.Models.p91oper.isdocViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Vygenerovat ISDOC");
+
+}
+
+@addTagHelper *, UI
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdOK" class="btn btn-success">@_f.tra("Opakovat")</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+
+<form id="form1" asp-controller="p91oper" asp-action="isdoc" method="POST">
+    <input type="hidden" asp-for="@Model.p91ids" />
+    <input type="hidden" asp-for="@Model.tempsubfolder" />
+
+    <div class="modal_record_container">
+
+        @if (Model.FileNames != null && Model.FileNames.Count() > 1)
+        {
+            <a href="/FileUpload/FileDownloadTempFile?tempfilename=@(Model.tempsubfolder+".zip")">@_f.tra("Stáhnout ISDOC v ZIPu")</a>
+        }
+        @if (Model.FileNames != null && Model.FileNames.Count() == 1)
+        {
+            <a href="/FileUpload/FileDownloadTempFile?tempfilename=@(Model.lisP91.First().p91Code+".ISDOC")">@_f.tra("Stáhnout ISDOC")</a>
+        }
+    </div>
+</form>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdOK").click(function () {
+
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            form1.submit();
+
+
+        });
+
+
+
+    })
+
+
+
+
+</script>

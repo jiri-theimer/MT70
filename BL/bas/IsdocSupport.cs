@@ -9,15 +9,20 @@ namespace BL.bas
     public class IsdocSupport
     {
         private System.Data.DataRow _dbrow { get; set; }
-        public string GenerateOne(int p91id, BL.Factory _f, DL.DbHandler _db)
+        public string GenerateOne(int p91id, BL.Factory _f, DL.DbHandler _db, string tempsubfolder)
         {
             _db.RunSql("UPDATE p91Invoice set p91Guid=NEWID() WHERE p91Guid IS NULL AND p91ID=@pid", new { pid = p91id });
             System.Data.DataTable dt = getDT(p91id, _db);
             _dbrow = dt.Rows[0];
             bool bolForeignInvoice = false; double dblExchangeRate = 0; string strFileName = _dbrow["p91Code"] + ".ISDOC";
 
-
-            var c = new BO.CLS.XmlSupport(_f.x35GlobalParamBL.TempFolder() + "\\" + strFileName);
+            string strTempPath = _f.x35GlobalParamBL.TempFolder();
+            if (!string.IsNullOrEmpty(tempsubfolder))
+            {
+                strTempPath += "\\" + tempsubfolder;
+            }
+            strTempPath += "\\" + strFileName;
+            var c = new BO.CLS.XmlSupport(strTempPath);
             c.wstart("Invoice", "http://isdoc.cz/namespace/2013");
             c.oneattribute("xmlns", "xsd", null, "http://www.w3.org/2001/XMLSchema");
             c.oneattribute("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");

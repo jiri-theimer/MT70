@@ -35,7 +35,7 @@ namespace BL
         public bool Delete(int p91id, string guid, int selectedoper);
         public BO.p91InvoiceSum LoadSumRow(int pid);
 
-        public string GetIsdocXmlFile(int p91id);
+        public string GenerateIsDocFile(int p91id,string tempsubfolder);
 
     }
     class p91InvoiceBL : BaseBL, Ip91InvoiceBL
@@ -564,10 +564,10 @@ namespace BL
         }
 
 
-        public string GetIsdocXmlFile(int p91id)
+        public string GenerateIsDocFile(int p91id, string tempsubfolder)
         {
             var c = new BL.bas.IsdocSupport();
-            return c.GenerateOne(p91id, _mother, _db);
+            return c.GenerateOne(p91id, _mother, _db,tempsubfolder);
         }
     }
 }

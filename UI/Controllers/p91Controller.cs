@@ -55,8 +55,7 @@ namespace UI.Controllers
         
 
         public IActionResult Record(int pid)
-        {
-            var xx = Factory.p91InvoiceBL.GetIsdocXmlFile(pid);
+        {            
            
             var v = new p91Record() { rec_pid = pid, rec_entity = "p91" };
             if (v.rec_pid == 0)

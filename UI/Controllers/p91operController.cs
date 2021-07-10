@@ -15,6 +15,75 @@ namespace UI.Controllers
         {
             _cp = cp;
         }
+
+        public IActionResult isdoc(string p91ids)
+        {
+            var lis = BO.BAS.ConvertString2ListInt(p91ids);
+            if (lis.Count() == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí faktury.");
+            }
+            var v = new isdocViewModel() { p91ids = p91ids };
+            RefreshState_isdoc(v);
+            foreach (var c in v.lisP91)
+            {
+                if (c.p91IsDraft)
+                {
+                    return this.StopPage(true, $"{c.p91Code} je DRAFT vyúčtování, z kterého nelze vygenerovat ISDOC.");
+                }
+                if (string.IsNullOrEmpty(c.p91Client_VatID) && string.IsNullOrEmpty(c.p91Client_ICDPH_SK))
+                {
+                    return this.StopPage(true, $"U faktury {c.p91Code} chybí DIČ.");
+                }                
+            }
+
+            isdoc_generate(v);
+            return View(v);            
+        }
+
+        private void RefreshState_isdoc(isdocViewModel v)
+        {            
+            var lis = BO.BAS.ConvertString2ListInt(v.p91ids);
+            v.lisP91 = Factory.p91InvoiceBL.GetList(new BO.myQueryP91() { pids = lis });
+            if (v.lisP91.Count() > 1)
+            {
+                v.tempsubfolder = "isdoc-" + Factory.CurrentUser.j03Login + "-" + BO.BAS.ObjectDateTime2String(DateTime.Now, "dd-MM-yyyy-HH-mm-ss-fff");
+            }
+        }
+        private void isdoc_generate(isdocViewModel v)
+        {
+            if (v.tempsubfolder != null && v.lisP91.Count()>1)
+            {
+                if (!System.IO.Directory.Exists(Factory.x35GlobalParamBL.TempFolder() + "\\" + v.tempsubfolder))
+                {
+                    System.IO.Directory.CreateDirectory(Factory.x35GlobalParamBL.TempFolder() + "\\" + v.tempsubfolder);
+                }
+            }
+            v.FileNames = new List<string>();
+            foreach (var c in v.lisP91)
+            {
+                var strFile = Factory.p91InvoiceBL.GenerateIsDocFile(c.pid, v.tempsubfolder);
+                v.FileNames.Add(strFile);
+            }
+
+
+            if (v.lisP91.Count() > 1)
+            {
+                System.IO.Compression.ZipFile.CreateFromDirectory(Factory.x35GlobalParamBL.TempFolder() + "\\" + v.tempsubfolder, Factory.x35GlobalParamBL.TempFolder() + "\\" + v.tempsubfolder + ".zip");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult isdoc(isdocViewModel v, string oper)
+        {
+            RefreshState_isdoc(v);
+            
+
+            isdoc_generate(v);
+            
+            return View(v);
+        }
+
         //převést draft fakturu na oficiální číslo
         public string converfromdraft(int p91id)
         {

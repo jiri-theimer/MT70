@@ -117,7 +117,8 @@ namespace UI.Controllers
                 strSQL = strSQL.Replace("o54InlineHtml", "o54InlineText");
             }
 
-            double dblDPI = 96; double dblWidthComplete_CM = 0; int intColIndex = 0;
+            //double dblDPI = 96;
+            double dblWidthComplete_CM = 0; int intColIndex = 0;
             double dblRatio = v.ZoomPercentage / 100.00;
 
             string strXmlContent = System.IO.File.ReadAllText(Factory.App.WwwRootFolder + "\\templates\\" + v.TrdxRepSourceFileName);

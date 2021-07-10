@@ -311,6 +311,17 @@
 
         _cm(e, _pageprefix, pid, "grid");
     }
+
+    function p91oper_isdoc() {
+        var pids = $("#tg_selected_pids").val();
+        if (pids === "") {
+            _notify_message(_tg_musite_vybrat_zaznam);
+            return;
+        }
+
+        _window_open("/p91oper/isdoc?p91ids=" + pids);
+
+    }
 </script>
 
 
