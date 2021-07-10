@@ -17,10 +17,10 @@ namespace BL.bas
             bool bolForeignInvoice = false; double dblExchangeRate = 0; string strFileName = _dbrow["p91Code"] + ".ISDOC";
 
 
-            var c = new BO.CLS.XmlSupport(_f.x35GlobalParamBL.TempFolder() + "\\" + strFileName);            
-            c.wstart("Invoice", "http://isdoc.cz/namespace/2013");            
-            c.oneattribute("xmlns","xsd",null, "http://www.w3.org/2001/XMLSchema");
-            c.oneattribute("xmlns", "xsi",null, "http://www.w3.org/2001/XMLSchema-instance");
+            var c = new BO.CLS.XmlSupport(_f.x35GlobalParamBL.TempFolder() + "\\" + strFileName);
+            c.wstart("Invoice", "http://isdoc.cz/namespace/2013");
+            c.oneattribute("xmlns", "xsd", null, "http://www.w3.org/2001/XMLSchema");
+            c.oneattribute("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
             c.oneattribute("version", "6.0.1");
             //c.oneattribute("xmlns", "http://isdoc.cz/namespace/2013");
 
@@ -61,46 +61,61 @@ namespace BL.bas
 
             Handle_InvoiceLines(p91id, _f, c, bolForeignInvoice, dblExchangeRate);
 
-            c.wstart("TaxTotal");            
-            Handle_TaxSubTotal("Standard",c, bolForeignInvoice, dblExchangeRate);
+            c.wstart("TaxTotal");
+            Handle_TaxSubTotal("Standard", c, bolForeignInvoice, dblExchangeRate);
             Handle_TaxSubTotal("Low", c, bolForeignInvoice, dblExchangeRate);
             Handle_TaxSubTotal("None", c, bolForeignInvoice, dblExchangeRate);
-            c.wsnum("TaxAmount", NUM("p91Amount_Vat"));
+            if (bolForeignInvoice)
+            {
+                c.wsnum("TaxAmountCurr", NUM("p91Amount_Vat"));
+                c.wsnum("TaxAmount", NUM("p91Amount_Vat")*dblExchangeRate);
+            }
+            else
+            {
+                c.wsnum("TaxAmount", NUM("p91Amount_Vat"));
+            }
+
             c.wend();   //TaxTotal
 
 
             c.wstart("LegalMonetaryTotal");
-            
+
             if (bolForeignInvoice)
             {
+                c.wsnum("TaxExclusiveAmount", NUM("p91Amount_WithoutVat") * dblExchangeRate);
                 c.wsnum("TaxExclusiveAmountCurr", NUM("p91Amount_WithoutVat"));
-                c.wsnum("TaxExclusiveAmount", NUM("p91Amount_WithoutVat")*dblExchangeRate);
+                c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat") * dblExchangeRate);
                 c.wsnum("TaxInclusiveAmountCurr", NUM("p91Amount_WithVat"));
-                c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat")*dblExchangeRate);
-                c.wsnum("AlreadyClaimedTaxExclusiveAmountCurr", dblExchangeRate * (NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard")));
-                c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", dblExchangeRate * (NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard") + NUM("p91ProformaAmount_Vat_Low") + NUM("p91ProformaAmount_Vat_Standard")));
+
+                c.wsnum("AlreadyClaimedTaxExclusiveAmount", dblExchangeRate * (NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard")));
+                c.wsnum("AlreadyClaimedTaxExclusiveAmountCurr", NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard"));
+                c.wsnum("AlreadyClaimedTaxInclusiveAmount", dblExchangeRate * (NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard") + NUM("p91ProformaAmount_Vat_Low") + NUM("p91ProformaAmount_Vat_Standard")));
+                c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard") + NUM("p91ProformaAmount_Vat_Low") + NUM("p91ProformaAmount_Vat_Standard"));
+
+                c.wsnum("DifferenceTaxExclusiveAmount", (NUM("p91Amount_WithoutVat") - NUM("p91ProformaBilledAmount")) * dblExchangeRate);
                 c.wsnum("DifferenceTaxExclusiveAmountCurr", NUM("p91Amount_WithoutVat") - NUM("p91ProformaBilledAmount"));
-                c.wsnum("DifferenceTaxExclusiveAmount", (NUM("p91Amount_WithoutVat") - NUM("p91ProformaBilledAmount"))*dblExchangeRate);
+                c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat") - NUM("p91ProformaBilledAmount") * dblExchangeRate);
                 c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithVat") - NUM("p91ProformaBilledAmount"));
-                c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat") - NUM("p91ProformaBilledAmount")* dblExchangeRate);
+
+                c.wsnum("PayableRoundingAmount", NUM("p91RoundFitAmount") * dblExchangeRate);
                 c.wsnum("PayableRoundingAmountCurr", NUM("p91RoundFitAmount"));
-                c.wsnum("PayableRoundingAmount", NUM("p91RoundFitAmount")*dblExchangeRate);
-                c.wsnum("PayableAmountCurr", NUM("p91Amount_TotalDue"));
-                
+
+                c.wsnum("PaidDepositsAmount", NUM("p91ProformaBilledAmount") * dblExchangeRate);
                 c.wsnum("PaidDepositsAmountCurr", NUM("p91ProformaBilledAmount"));
-                c.wsnum("PaidDepositsAmount", NUM("p91ProformaBilledAmount")*dblExchangeRate);
+
                 c.wsnum("PayableAmount", NUM("p91Amount_TotalDue") * dblExchangeRate);
+                c.wsnum("PayableAmountCurr", NUM("p91Amount_TotalDue"));
             }
             else
             {
                 c.wsnum("TaxExclusiveAmount", NUM("p91Amount_WithoutVat"));
                 c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat"));
                 c.wsnum("AlreadyClaimedTaxExclusiveAmount", NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard"));
-                c.wsnum("AlreadyClaimedTaxInclusiveAmount", NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard")+NUM("p91ProformaAmount_Vat_Low")+NUM("p91ProformaAmount_Vat_Standard"));
+                c.wsnum("AlreadyClaimedTaxInclusiveAmount", NUM("p91ProformaAmount_WithoutVat_None") + NUM("p91ProformaAmount_WithoutVat_Low") + NUM("p91ProformaAmount_WithoutVat_Standard") + NUM("p91ProformaAmount_Vat_Low") + NUM("p91ProformaAmount_Vat_Standard"));
                 c.wsnum("DifferenceTaxExclusiveAmount", NUM("p91Amount_WithoutVat") - NUM("p91ProformaBilledAmount"));
                 c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat") - NUM("p91ProformaBilledAmount"));
                 c.wsnum("PayableRoundingAmount", NUM("p91RoundFitAmount"));
-                
+
                 c.wsnum("PaidDepositsAmount", NUM("p91ProformaBilledAmount"));
                 c.wsnum("PayableAmount", NUM("p91Amount_TotalDue"));
             }
@@ -122,7 +137,7 @@ namespace BL.bas
             c.wss("VariableSymbol", IN("p91Code"));
             c.wss("ConstantSymbol", "");
             c.wss("SpecificSymbol", "");
-            
+
             c.wend();   //Details
 
 
@@ -131,22 +146,22 @@ namespace BL.bas
             return strFileName;
         }
 
-        private void Handle_TaxSubTotal(string fieldsuffix,BO.CLS.XmlSupport c, bool bolForeignInvoice, double dblExchangeRate)
-        {            
+        private void Handle_TaxSubTotal(string fieldsuffix, BO.CLS.XmlSupport c, bool bolForeignInvoice, double dblExchangeRate)
+        {
             c.wstart("TaxSubTotal");
-                        
+
             if (bolForeignInvoice)
             {
-                c.wsnum("TaxableAmountCurr", NUM("p91Amount_WithoutVat_"+ fieldsuffix));
-                c.wsnum("TaxableAmount", NUM("p91Amount_WithoutVat_"+ fieldsuffix) *dblExchangeRate);
-                
+                c.wsnum("TaxableAmountCurr", NUM("p91Amount_WithoutVat_" + fieldsuffix));
+                c.wsnum("TaxableAmount", NUM("p91Amount_WithoutVat_" + fieldsuffix) * dblExchangeRate);
+
                 if (fieldsuffix == "None")
                 {
                     c.wsnum("TaxAmountCurr", 0);
                     c.wsnum("TaxAmount", 0);
 
                     c.wsnum("TaxInclusiveAmountCurr", NUM("p91Amount_WithoutVat_None"));
-                    c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithoutVat_None") * dblExchangeRate);                    
+                    c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithoutVat_None") * dblExchangeRate);
                 }
                 else
                 {
@@ -156,16 +171,13 @@ namespace BL.bas
                     c.wsnum("TaxInclusiveAmountCurr", NUM("p91Amount_WithVat_" + fieldsuffix));
                     c.wsnum("TaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix) * dblExchangeRate);
                 }
-                                
-                
-                c.wsnum("DifferenceTaxableAmountCurr", NUM("p91Amount_WithoutVat_"+ fieldsuffix));
-                c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_"+ fieldsuffix) * dblExchangeRate);
+
+
+
+
                 if (fieldsuffix == "None")
                 {
-                    c.wsnum("DifferenceTaxAmountCurr", 0);
-                    c.wsnum("DifferenceTaxAmount", 0);
-                    c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithoutVat_None"));
-                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithoutVat_None") * dblExchangeRate);
+
 
                     c.wsnum("AlreadyClaimedTaxableAmountCurr", NUM("p91ProformaAmount_WithoutVat_None"));  //na záloze již uplatněno, základ v sazbě v T.M.
                     c.wsnum("AlreadyClaimedTaxableAmount", NUM("p91ProformaAmount_WithoutVat_None") * dblExchangeRate);  //na záloze již uplatněno, základ v sazbě v T.M.
@@ -175,13 +187,18 @@ namespace BL.bas
 
                     c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", NUM("p91ProformaAmount_WithoutVat_None"));
                     c.wsnum("AlreadyClaimedTaxInclusiveAmount", (NUM("p91ProformaAmount_WithoutVat_None") * dblExchangeRate));
+
+                    c.wsnum("DifferenceTaxableAmountCurr", NUM("p91Amount_WithoutVat_None"));
+                    c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_None") * dblExchangeRate);
+                    c.wsnum("DifferenceTaxAmountCurr", 0);
+                    c.wsnum("DifferenceTaxAmount", 0);
+                    c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithoutVat_None"));
+                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithoutVat_None") * dblExchangeRate);
+
                 }
                 else
                 {
-                    c.wsnum("DifferenceTaxAmountCurr", NUM("p91Amount_Vat_" + fieldsuffix));
-                    c.wsnum("DifferenceTaxAmount", NUM("p91Amount_Vat_" + fieldsuffix) * dblExchangeRate);
-                    c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithVat_" + fieldsuffix));
-                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix) * dblExchangeRate);
+
 
                     c.wsnum("AlreadyClaimedTaxableAmountCurr", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix));  //na záloze již uplatněno, základ v sazbě v T.M.
                     c.wsnum("AlreadyClaimedTaxableAmount", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix) * dblExchangeRate);  //na záloze již uplatněno, základ v sazbě v T.M.
@@ -191,16 +208,24 @@ namespace BL.bas
 
                     c.wsnum("AlreadyClaimedTaxInclusiveAmountCurr", NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix) + NUM("p91ProformaAmount_Vat_" + fieldsuffix));
                     c.wsnum("AlreadyClaimedTaxInclusiveAmount", (NUM("p91ProformaAmount_WithoutVat_" + fieldsuffix) + NUM("p91ProformaAmount_Vat_" + fieldsuffix)) * dblExchangeRate);
+
+                    c.wsnum("DifferenceTaxableAmountCurr", NUM("p91Amount_WithoutVat_" + fieldsuffix));
+                    c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_" + fieldsuffix) * dblExchangeRate);
+                    c.wsnum("DifferenceTaxAmountCurr", NUM("p91Amount_Vat_" + fieldsuffix));
+                    c.wsnum("DifferenceTaxAmount", NUM("p91Amount_Vat_" + fieldsuffix) * dblExchangeRate);
+                    c.wsnum("DifferenceTaxInclusiveAmountCurr", NUM("p91Amount_WithVat_" + fieldsuffix));
+                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix) * dblExchangeRate);
+
                 }
-                
 
 
-                
+
+
 
             }
             else
             {
-                c.wsnum("TaxableAmount", NUM("p91Amount_WithoutVat_"+ fieldsuffix));
+                c.wsnum("TaxableAmount", NUM("p91Amount_WithoutVat_" + fieldsuffix));
                 if (fieldsuffix == "None")
                 {
                     c.wsnum("TaxAmount", 0);
@@ -212,7 +237,7 @@ namespace BL.bas
 
                     c.wsnum("DifferenceTaxableAmount", NUM("p91Amount_WithoutVat_None"));
                     c.wsnum("DifferenceTaxAmount", 0);
-                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithoutVat_None"));                    
+                    c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithoutVat_None"));
                 }
                 else
                 {
@@ -227,11 +252,11 @@ namespace BL.bas
                     c.wsnum("DifferenceTaxAmount", NUM("p91Amount_Vat_" + fieldsuffix));
                     c.wsnum("DifferenceTaxInclusiveAmount", NUM("p91Amount_WithVat_" + fieldsuffix));
 
-                    
+
                 }
-                
+
             }
-            
+
             c.wstart("TaxCategory");
             if (fieldsuffix == "None")
             {
@@ -242,7 +267,7 @@ namespace BL.bas
                 c.wsnum("Percent", NUM("p91VatRate_" + fieldsuffix));
             }
             //c.wss("TaxScheme", "0");
-            c.wsbool("VATApplicable", true);            
+            c.wsbool("VATApplicable", true);
             c.wsbool("LocalReverseChargeFlag", false);
             c.wend();   //TaxCategory
 
@@ -264,33 +289,37 @@ namespace BL.bas
 
                 if (bolForeignInvoice)
                 {
+                    c.wsnum("LineExtensionAmountCurr", rec.BezDPH);
                     c.wsnum("LineExtensionAmount", rec.BezDPH * dblExchangeRate);
                     c.wsnum("LineExtensionAmountBeforeDiscount", 0);
+                    c.wsnum("LineExtensionAmountTaxInclusiveCurr", rec.VcDPH);
+                    c.wsnum("LineExtensionAmountTaxInclusive", rec.VcDPH * dblExchangeRate);
+
                     c.wsnum("LineExtensionAmountTaxInclusiveBeforeDiscount", 0);
-                    c.wsnum("LineExtensionTaxAmount", rec.DPH);
+                    c.wsnum("LineExtensionTaxAmount", rec.DPH*dblExchangeRate);
 
                     c.wsnum("UnitPrice", rec.BezDPH * dblExchangeRate);
                     c.wsnum("UnitPriceTaxInclusive", rec.VcDPH * dblExchangeRate);
 
-                    c.wsnum("LineExtensionAmountCurr", rec.BezDPH);
-                    
-                    c.wsnum("LineExtensionAmountTaxInclusiveCurr", rec.VcDPH * dblExchangeRate);
-                    c.wsnum("LineExtensionAmountTaxInclusive", rec.VcDPH * dblExchangeRate);
+
+
+
+
                 }
                 else
                 {
                     c.wsnum("LineExtensionAmount", rec.BezDPH);
                     c.wsnum("LineExtensionAmountBeforeDiscount", 0);
                     c.wsnum("LineExtensionAmountTaxInclusive", rec.VcDPH);
-                    c.wsnum("LineExtensionAmountTaxInclusiveBeforeDiscount", 0);
-                    
+                    c.wsnum("LineExtensionAmountTaxInclusiveBeforeDiscount", rec.VcDPH);
+
                     c.wsnum("LineExtensionTaxAmount", rec.DPH);
 
                     c.wsnum("UnitPrice", rec.BezDPH);
                     c.wsnum("UnitPriceTaxInclusive", rec.VcDPH);
 
-                    
-                    
+
+
                 }
 
                 c.wstart("ClassifiedTaxCategory");
@@ -299,7 +328,7 @@ namespace BL.bas
                 c.wsbool("VATApplicable", true);
                 c.wend();
 
-                c.wstart("Item");c.wss("Description", rec.Oddil);c.wend();
+                c.wstart("Item"); c.wss("Description", rec.Oddil); c.wend();
 
                 c.wend();   //InvoiceLine
 
@@ -408,7 +437,7 @@ namespace BL.bas
 
         private string IN(string fieldname)
         {
-            if (_dbrow[fieldname] == System.DBNull.Value || _dbrow[fieldname]==null)
+            if (_dbrow[fieldname] == System.DBNull.Value || _dbrow[fieldname] == null)
             {
                 return "";
             }
@@ -416,7 +445,7 @@ namespace BL.bas
         }
         private double NUM(string fieldname)
         {
-            if (_dbrow[fieldname] == System.DBNull.Value || _dbrow[fieldname]==null)
+            if (_dbrow[fieldname] == System.DBNull.Value || _dbrow[fieldname] == null)
             {
                 return 0;
             }
