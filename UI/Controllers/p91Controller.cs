@@ -55,8 +55,9 @@ namespace UI.Controllers
         
 
         public IActionResult Record(int pid)
-        {            
-           
+        {
+            var xx = Factory.p91InvoiceBL.GeneratePohodaFaktura(pid, "25722034");
+
             var v = new p91Record() { rec_pid = pid, rec_entity = "p91" };
             if (v.rec_pid == 0)
             {
@@ -127,7 +128,7 @@ namespace UI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Record(p91Record v, string oper)
-        {
+        {            
             RefreshStateRecord(v);
             if (oper == "p28id" && v.Rec.p28ID>0)
             {

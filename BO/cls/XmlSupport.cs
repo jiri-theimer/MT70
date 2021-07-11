@@ -11,10 +11,18 @@ namespace BO.CLS
     {
         private XmlWriter _wr { get; set; }
         private string _XmlFullPath { get; set; }
-        public XmlSupport(string strXmlFullPath)
+        public XmlSupport(string strXmlFullPath,string encoding=null)
         {
             _XmlFullPath = strXmlFullPath;
-            XmlWriterSettings settings = new XmlWriterSettings() { CloseOutput = true, Indent = true, Encoding = System.Text.Encoding.UTF8 };
+            XmlWriterSettings settings = new XmlWriterSettings() { CloseOutput = true, Indent = true };
+            if (encoding == null)
+            {
+                settings.Encoding = System.Text.Encoding.UTF8;
+            }
+            else
+            {
+                settings.Encoding = System.Text.Encoding.GetEncoding(encoding);
+            }
 
             _wr = XmlWriter.Create(_XmlFullPath, settings);
         }
