@@ -10,7 +10,7 @@ namespace BL.bas
     {
         private System.Data.DataRow _dbrow { get; set; }
 
-        public string GenerateOne(int p91id, BL.Factory _f, DL.DbHandler _db,string ico)
+        public string Generate(List<int> p91ids, BL.Factory _f, DL.DbHandler _db,string ico)
         {
             System.Data.DataTable dt = getDT(p91id, _db);
             _dbrow = dt.Rows[0];
@@ -20,6 +20,21 @@ namespace BL.bas
             string strTempPath = _f.x35GlobalParamBL.TempFolder() + "\\" + strFileName;
 
             var c = new BO.CLS.XmlSupport(strTempPath, "WINDOWS-1250");
+            Handle_DataPack(c,strGUID,ico);
+
+            var lisP91 = _f.p91InvoiceBL.GetList(new BO.myQueryP91() { pids = p91ids });
+            foreach(var rec in lisP91)
+            {
+
+            }
+            c.flushandclose();
+
+            return strFileName;
+        }
+
+
+        private void Handle_DataPack(BO.CLS.XmlSupport c,string strGUID, string ico)
+        {
             c.wstart("dataPack", "http://www.stormware.cz/schema/version_2/data.xsd");
             c.oneattribute("xmlns", "xsd", null, "http://www.w3.org/2001/XMLSchema");
             c.oneattribute("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
@@ -30,13 +45,7 @@ namespace BL.bas
             c.oneattribute("programVersion", "6x");
             c.oneattribute("application", "MARKTIME");
             c.oneattribute("note", "Export MARKTIME vyúčtování");
-
-
-            c.flushandclose();
-
-            return strFileName;
         }
-
 
 
         private System.Data.DataTable getDT(int p91id, DL.DbHandler _db)

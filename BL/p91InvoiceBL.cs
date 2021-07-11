@@ -36,7 +36,7 @@ namespace BL
         public BO.p91InvoiceSum LoadSumRow(int pid);
 
         public string GenerateIsDocFile(int p91id,string tempsubfolder);
-        public string GeneratePohodaFaktura(int p91id, string ico);
+        public string GeneratePohodaFaktury(List<int> p91ids, string ico);
 
     }
     class p91InvoiceBL : BaseBL, Ip91InvoiceBL
@@ -570,10 +570,10 @@ namespace BL
             var c = new BL.bas.IsdocSupport();
             return c.GenerateOne(p91id, _mother, _db,tempsubfolder);
         }
-        public string GeneratePohodaFaktura(int p91id, string ico)
+        public string GeneratePohodaFaktury(List<int> p91ids, string ico)
         {
             var c = new BL.bas.pohoda_faktura_Support();
-            return c.GenerateOne(p91id, _mother, _db, ico);
+            return c.Generate(p91ids, _mother, _db, ico);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace UI.Controllers
 
         public IActionResult Record(int pid)
         {
-            var xx = Factory.p91InvoiceBL.GeneratePohodaFaktura(pid, "25722034");
+            var xx = Factory.p91InvoiceBL.GeneratePohodaFaktury(new List<int> { pid }, "25722034");
 
             var v = new p91Record() { rec_pid = pid, rec_entity = "p91" };
             if (v.rec_pid == 0)
