@@ -573,7 +573,8 @@ namespace BL
         public string GeneratePohodaFaktury(List<int> p91ids, string ico)
         {
             var c = new BL.bas.pohoda_faktura_Support();
-            return c.Generate(p91ids, _mother, _db, ico);
+            return null;
+            //return c.Generate(p91ids, _mother, _db,);
         }
     }
 }

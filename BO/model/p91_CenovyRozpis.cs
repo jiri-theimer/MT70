@@ -12,5 +12,10 @@ namespace BO
         public string j27Code { get; set; }
         public int Poradi { get; set; }
         public int RowPID { get; set; }
+        public int p31ID { get; set; }
+        public int p95ID { get; set; }
+        public double BezDPH_Domestic { get; set; }
+        public double DPH_Domestic { get; set; }
+        public double VcDPH_Domestic { get; set; }
     }
 }

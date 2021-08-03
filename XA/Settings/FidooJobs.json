@@ -1,20 +1,8 @@
 {
   "jobs": [
     {
-      "ApiKey": "pak1jgnBUswEVDGTkdT86v21XKMT0UYZSK0rYAq8Ecb1baMI5JskcAIZC32sMbw6",
-      "LastRun": "2021-07-02T18:20:52.6135814+02:00",
-      "RepeatMinuteInterval": 5,
-      "ExpenseImportClassState": "approved",
-      "ExpenseImportClosedOnly": true,
-      "Name": "LocalHost",
-      "RobotUser": "lamos",
-      "DefaultP32ID": 2,
-      "ExportProjects": true,
-      "ImportExpenses": true
-    },
-    {
       "ApiKey": "pak1lHKgSvgcSbMdtz2Erf2OzvZSVNepzPEXswV87WZMB7eUehY3WI09nLMrs85K",
-      "Closed": true,
+      "Closed": false,
       "LastRun": "2021-02-03T22:10:13.6717494+01:00",
       "RepeatMinuteInterval": 5,
       "ExpenseImportClassState": "approved",

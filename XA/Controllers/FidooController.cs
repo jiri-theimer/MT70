@@ -89,7 +89,19 @@ namespace XA.Controllers
 
             foreach (var onejob in lisLaunched.Where(p => p.ImportExpenses == true))
             {
-                Handle_Import_Vydaje_OneJob(onejob);    //import fidoo výdajů pro joby s ImportExpenses=true
+                string offsetToken = null;bool bolEnd = false;
+                while (bolEnd==false)
+                {
+                    offsetToken = Handle_Import_Vydaje_OneJob(onejob, offsetToken);
+                    if (string.IsNullOrEmpty(offsetToken))
+                    {
+                        bolEnd = true;
+                    }
+                }
+                //Handle_Import_Vydaje_OneJob(onejob,null);    //import fidoo výdajů pro joby s ImportExpenses=true
+
+
+                Handle_Send_p31Code(onejob);    //uložení kódu dokladu [p31Code] do výdaje na straně fidoo.
             }
 
             
@@ -151,7 +163,62 @@ namespace XA.Controllers
         }
 
 
-        public async Task<ResponseVydaje> LoadVydaje(string apikey,bool? closedonly)
+        private void Handle_Send_p31Code(FidooJob onejob)
+        {
+            var ru = new BO.RunningUser() { j03Login = onejob.RobotUser };    //robot login
+            var f = new BL.Factory(ru, _app, _ep, _tt);
+            var lisP31 = f.p31WorksheetBL.GetList(new BO.myQueryP31() { tabquery = "expense" }).Where(p => p.UserInsert == "fidoo" && !string.IsNullOrEmpty(p.p31ExternalPID) && !string.IsNullOrEmpty(p.p31Code) && p.p91ID==0);
+            LogInfo("Handle_Send_p31Code, rows: " + lisP31.Count().ToString());
+
+            foreach (var c in lisP31)
+            {
+                LogInfo("Handle_Send_p31Code, try send p31ID: " + c.pid.ToString() + ", p31Code: " + c.p31Code);
+                var ret = SendOneKodDokladu(onejob.ApiKey, c.p31ExternalPID, c.p31Code, c.p31Text);
+
+                if (!string.IsNullOrEmpty(ret.Result.message))
+                {
+                    LogInfo("SendOneKodDokladu, p31ID: "+c.pid.ToString()+ ",errorId: "  + ret.Result.errorId+": "+ret.Result.message);
+                }
+                else
+                {
+                    LogInfo("SendOneKodDokladu, p31ID: " + c.pid.ToString() + ", p31Code: "+c.p31Code+":  OK");
+                }
+                
+            }
+        }
+
+        private async Task<ResponseKodDokladu> SendOneKodDokladu(string apikey, string strP31ExternalPID, string strP31Code, string strP31Text)
+        {
+            var httpclient = _httpclientfactory.CreateClient();
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.fidoo.com/v2/expense/edit-expense"))
+            {
+                request.Headers.TryAddWithoutValidation("Accept", "application/json");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
+
+                var req = new RequestKodDokladu() { externalReferenceId = strP31Code, name = strP31Text, expenseId = strP31ExternalPID };
+
+                var s = JsonSerializer.Serialize(req);
+
+                request.Content = new StringContent(s);
+
+                request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+
+                var response = await httpclient.SendAsync(request);
+
+                var strJson = await response.Content.ReadAsStringAsync();
+
+                LogInfo("json: " + strJson);
+
+                var xx = JsonSerializer.Deserialize<ResponseKodDokladu>(strJson);
+
+                return xx;
+
+            }
+
+        }
+
+        public async Task<ResponseVydaje> LoadVydaje(string apikey,bool? closedonly,string offsetToken=null)
         {
 
             var httpclient = _httpclientfactory.CreateClient();
@@ -162,14 +229,20 @@ namespace XA.Controllers
                 request.Headers.TryAddWithoutValidation("X-Api-Key", apikey);
 
                 var input = new RequestVydaje();
-                input.from = DateTime.Now.AddDays(-100).ToLocalTime();
+                input.from = DateTime.Now.AddDays(-20).ToLocalTime();
                 input.to = DateTime.Now.ToLocalTime();
-                input.lastModifyFrom = DateTime.Now.AddDays(-100).ToLocalTime();
+                input.lastModifyFrom = DateTime.Now.AddDays(-20).ToLocalTime();
                 if (closedonly !=null && closedonly == true)
                 {
                     input.closed = true;
                 }
-                
+                input.limit = 100;
+                if (!string.IsNullOrEmpty(offsetToken))
+                {
+                    input.offsetToken = offsetToken;
+                }
+               
+
                 var s = JsonSerializer.Serialize(input);
 
                 request.Content = new StringContent(s);
@@ -185,7 +258,7 @@ namespace XA.Controllers
                 //var options = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,NumberHandling=JsonNumberHandling.AllowReadingFromString };
 
                 var xx = JsonSerializer.Deserialize<ResponseVydaje>(strJson, GetJsonOptions());
-
+                
                 return xx;
 
                 //return await response.Content.ReadAsStringAsync();
@@ -220,6 +293,8 @@ namespace XA.Controllers
             }
 
         }
+
+       
 
         public async Task<ResponseStrediska> LoadStrediska(string apikey)
         {
@@ -350,6 +425,9 @@ namespace XA.Controllers
 
             }
         }
+
+        
+        
         private async Task<ResponseAddProject> InsertOneProject(string apikey, string strCode, string strName, string strState)
         {
             var httpclient = _httpclientfactory.CreateClient();
@@ -424,11 +502,12 @@ namespace XA.Controllers
 
             while (!bolCompleted)
             {
-                var c = LoadProjekty(apikey, intOffset, projectId);                
+                var c = LoadProjekty(apikey, intOffset, projectId);
                 ret.InsertRange(0, c.Result.projects);
-
+                
                 bolCompleted = c.Result.complete;
                 intOffset += 100;
+
             }
 
             return ret;
@@ -506,21 +585,25 @@ namespace XA.Controllers
             var c = new BO.o58FieldBag() { o58Code = strCode, o58Name = strName, x24ID = x24id };
             f.o58FieldBagBL.Save(c);
         }
-        private void Handle_Import_Vydaje_OneJob(FidooJob onejob)
+        private string Handle_Import_Vydaje_OneJob(FidooJob onejob,string offsetToken)
         {
             var ru = new BO.RunningUser() { j03Login = onejob.RobotUser };    //robot login
             var f = new BL.Factory(ru, _app, _ep, _tt);
-            var lisVydaje = LoadVydaje(onejob.ApiKey,onejob.ExpenseImportClosedOnly);    //fidoo výdaje k otestování
+            var lisVydaje = LoadVydaje(onejob.ApiKey,onejob.ExpenseImportClosedOnly, offsetToken);    //fidoo výdaje k otestování
+            //var lisVydaje = LoadVydaje(onejob.ApiKey, false, offsetToken);    //fidoo výdaje k otestování
+            int x = 0;
             var lisUzivatele = UzivateleFromVydaje(onejob.ApiKey, lisVydaje.Result, f);
             var lisBag = GetFieldBag(f);
-
-            
+                                   
             BO.p33IdENUM p33id = BO.p33IdENUM.PenizeBezDPH;
-
+            
             foreach (var vydaj in lisVydaje.Result.expenseList)    //importovat pouze uzavřené fidoo výdaje
             {
+                x += 1;
+                LogInfo("Zpracovávám výdaj: #"+x.ToString()+ ", expenseId: " + vydaj.expenseId+" ## "+ BO.BAS.Number2String(vydaj.amount) + " " + vydaj.currency + " ## " + BO.BAS.ObjectDate2String(vydaj.dateTime) + " ## " + vydaj.description);
                 
                 bool bolGO = false;
+                LogInfo("vydaj.classState: " + vydaj.classState);
                 if (string.IsNullOrEmpty(onejob.ExpenseImportClassState) || vydaj.classState == onejob.ExpenseImportClassState)
                 {
                     bolGO = true;
@@ -531,6 +614,7 @@ namespace XA.Controllers
                     if (recExist != null)
                     {
                         bolGO = false;  //výdaj už byl dříve importován
+                        LogInfo("Výdaj byl již dříve importován.");
                     }
                     
                 }                
@@ -547,7 +631,7 @@ namespace XA.Controllers
                         }
                         else
                         {
-                            LogInfo("Projekt nebyl nalezen: " + lisProjekty.First().code+" ## "+ lisProjekty.First().id);                            
+                            LogInfo("Projekt nebyl nalezen: " + lisProjekty.First().code+" ## "+ lisProjekty.First().id+" ## "+BO.BAS.Number2String(vydaj.amount)+" "+vydaj.currency+" ## "+BO.BAS.ObjectDate2String(vydaj.dateTime)+" ## "+vydaj.description);                            
                         }
                     }
                     if (intP41ID == 0) bolGO = false;
@@ -637,6 +721,7 @@ namespace XA.Controllers
                 }
             }
             //výdaje jobu zpracovány
+            return lisVydaje.Result.nextOffsetToken;
 
         }
 
@@ -644,7 +729,15 @@ namespace XA.Controllers
         {
             var strPath = string.Format("{0}\\fidoo-{1}.log", _app.LogFolder, DateTime.Now.ToString("yyyy.MM.dd"));
 
-            System.IO.File.AppendAllLines(strPath, new List<string>() { "", DateTime.Now.ToString() + ": ", strMessage });
+            try
+            {
+                System.IO.File.AppendAllLines(strPath, new List<string>() { "", DateTime.Now.ToString() + ": ", strMessage });
+            }
+            catch
+            {
+                //nic
+            }
+            
         }
 
 

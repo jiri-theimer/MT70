@@ -12,6 +12,7 @@ namespace XA.Models.fidoo
         public DateTime lastModifyFrom { get; set; }
         public int limit { get; set; } = 100;
         public bool? closed { get; set; }
+        public string offsetToken { get; set; }
 
     }
 }
