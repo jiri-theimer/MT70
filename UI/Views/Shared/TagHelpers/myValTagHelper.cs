@@ -60,6 +60,8 @@ namespace UI.Views.Shared.TagHelpers
         [HtmlAttributeName("cmdpid")]
         public int CmPid { get; set; }
 
+        [HtmlAttributeName("addcssclass")]
+        public string AddCssClass { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -89,6 +91,7 @@ namespace UI.Views.Shared.TagHelpers
                     strClass = "val-readonly";
                 }                
             }
+            if (this.AddCssClass != null) strClass += " " + this.AddCssClass;
 
             output.Attributes.SetAttribute("class", strClass);
 

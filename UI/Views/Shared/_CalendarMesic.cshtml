@@ -81,7 +81,6 @@
         }
         if (bolOK)
         {
-            @Html.Raw($"<td class='{strClass}'>");
 
             strStyle = null;
             strDatum = BO.BAS.ObjectDate2String(d, "dd.MM.yyyy");
@@ -93,6 +92,8 @@
             {
                 strCisloDne = BO.BAS.ObjectDate2String(d, "dd");
             }
+            @Html.Raw($"<td class='{strClass}' data-d='{strDatum}'>");
+
             strClass = "mt_scheduler-day-link";
             if (bolOutMonth)
             {

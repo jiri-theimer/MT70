@@ -68,11 +68,11 @@ namespace UI.Views.Shared.TagHelpers
                 }
             }
 
-            sb(string.Format("<input id='{0}' class='form-control' placeholder='{1}' autocomplete='off' value='{2}' name='{3}'/>", strControlID, this.PlaceHolder, strValue, this.For.Name));
+            sb($"<input id='{strControlID}' class='form-control' placeholder='{this.PlaceHolder}' autocomplete='off' value='{strValue}' name='{this.For.Name}'/>");
 
             if (this.ShowSettingButton)
             {
-                sb("<button type='button' tabindex='-1' class='btn btn-sm btn-outline-secondary' style='padding-left:3px;padding-right:3px;' onclick='myhours_setting()'><span class='k-icon k-i-clock'></span></button>");
+                sb("<button type='button' tabindex='-1' class='btn btn-sm btn-outline-secondary' style='padding-left:3px;padding-right:3px;' onclick='myhours_setting()' title='Nastavení hodin'><span class='k-icon k-i-clock'></span></button>");
                 sb("</div>");
             }
             
@@ -81,13 +81,13 @@ namespace UI.Views.Shared.TagHelpers
 
 
             sb("<script type='text/javascript'>");
-            _sb.Append(string.Format("var c{0}=", strControlID));
+            _sb.Append($"var c{strControlID}=");
             _sb.Append("{");
-            _sb.Append(string.Format("controlid: '{0}',entryformat: '{1}',intervals:'{2}'", strControlID, this.HoursEntryFormat,this.ExplicitIntervals));
+            _sb.Append($"controlid: '{strControlID}',entryformat: '{this.HoursEntryFormat}',intervals:'{this.ExplicitIntervals}'");
             _sb.Append("};");
 
             sb("");
-            sb(string.Format("myhours_init(c{0});", strControlID));
+            sb($"myhours_init(c{strControlID});");
 
             sb("");
             sb("</script>");

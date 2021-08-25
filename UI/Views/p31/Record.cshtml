@@ -90,7 +90,7 @@
 
 @if (Model.RecP34 != null)
 {
-    if (Model.RecP34.p33ID == BO.p33IdENUM.Cas)
+    if (Model.RecP34.p33ID == BO.p33IdENUM.Cas && !Model.Setting.TimesheetEntryByMinutes)
     {
         <div class="row my-2">
             <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Hodiny"):</label>
@@ -99,11 +99,22 @@
 
             </div>
             <div class="col-sm-1 col-md-1">
-                <input type="text" class="form-control" placeholder="@_f.tra("Čas od")" asp-for="@Model.Rec.TimeFrom" onchange="handle_recalc_duration()" />                
+                <input type="text" class="form-control" placeholder="@_f.tra("Čas od")" asp-for="@Model.Rec.TimeFrom" onchange="handle_recalc_duration()" />
             </div>
             <div class="col-sm-1 col-md-1">
                 <input type="text" class="form-control" placeholder="@_f.tra("Čas do")" asp-for="@Model.Rec.TimeUntil" onchange="handle_recalc_duration()" />
             </div>
+        </div>
+    }
+    if (Model.RecP34.p33ID == BO.p33IdENUM.Cas && Model.Setting.TimesheetEntryByMinutes)
+    {
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-1 col-form-label">@_f.tra("Minuty"):</label>
+            <div class="col-sm-2 col-md-2">
+                <input type="text" class="form-control" asp-for="@Model.Rec.Value_Orig" />
+
+            </div>
+            
         </div>
     }
     if (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)
@@ -259,11 +270,13 @@
 
 <div id="divMore" style="display:none;background-color:aliceblue;">
 
-    @if (_f.CurrentUser.IsRatesAccess && (Model.RecP34.p33ID == BO.p33IdENUM.Cas || (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)))
+    @if (Model.RecP34 != null && _f.CurrentUser.IsRatesAccess && (Model.RecP34.p33ID == BO.p33IdENUM.Cas || (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)))
     {
         <button type="button" class="btn btn-outline-secondary" onclick="simulation()"><span class="k-icon k-i-dollar"></span>@_f.tra("Simulace sazby")</button>
     }
 
+
+    <button type="button" class="btn btn-outline-secondary" onclick="setting()"><span class="k-icon k-i-cogs"></span>@_f.tra("Nastavení")</button>
 </div>
 
 
@@ -354,7 +367,7 @@ var _p33id = "";
             handle_clipboard_textarea(document.getElementById("Rec_p31Text"), e);
         });
 
-        @if (Model.RecP34.p33ID == BO.p33IdENUM.Cas)
+        @if (Model.RecP34 !=null && Model.RecP34.p33ID == BO.p33IdENUM.Cas && !Model.Setting.TimesheetEntryByMinutes)
         {
             <text>
         handle_setup_cas_intervals("Rec_TimeFrom", "@Model.CasOdDoIntervals");
@@ -465,7 +478,11 @@ var _p33id = "";
         _window_open("/p31oper/RateSimulation?d=" + d + "&p41id=" + _p41id + "&p32id=" + _p32id + "&j02id=" + _j02id);
 
 
-        }
+    }
+
+    function setting() {
+        _window_open("/p31oper/hes?pagesource=timesheet");
+    }
 
 
 

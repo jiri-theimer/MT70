@@ -24,7 +24,7 @@ namespace UI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 TryLogout();
-            }            
+            }
             
             var v = new BO.LoggingUser();
             v.LangIndex = _f.App.DefaultLangIndex;

@@ -10,7 +10,7 @@ namespace BL
         public BO.p31Worksheet LoadByExternalPID(string externalpid);
         public BO.p31Worksheet LoadTempRecord(int pid, string guidTempData);
         public BO.p31Worksheet LoadMyLastCreated(bool bolLoadTheSameProjectTypeIfNoData, int intP41ID = 0, int intP34ID = 0);
-        public BO.p31WorksheetEntryInput CovertRec2Input(BO.p31Worksheet rec);
+        public BO.p31WorksheetEntryInput CovertRec2Input(BO.p31Worksheet rec, bool time_entry_by_minutes);
         public int SaveOrigRecord(BO.p31WorksheetEntryInput rec, BO.p33IdENUM p33ID, List<BO.FreeFieldInput> lisFF);
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq);
@@ -482,7 +482,7 @@ namespace BL
         {
             if (j02ids == null || j02ids.Count() == 0) j02ids = new List<int>() { _mother.CurrentUser.j02ID };
             sb("SELECT a.j02ID,min(j02.j02LastName+' '+j02.j02FirstName) as Person");
-            sb(",a.p31Date,sum(a.p31Hours_Orig) as Hours,sum(case when p32.p32IsBillable=1 then a.p31Hours_Orig end) as Hours_Billable,sum(case when p32.p32IsBillable=0 then a.p31Hours_Orig end) as Hours_NonBillable,count(case when p34x.p33id in (2,5) then 1 end) as Moneys,count(case when p34.p33id=3 then 1 end) as Pieces");
+            sb(",a.p31Date,sum(a.p31Hours_Orig) as Hours,sum(case when p32.p32IsBillable=1 then a.p31Hours_Orig end) as Hours_Billable,sum(case when p32.p32IsBillable=0 then a.p31Hours_Orig end) as Hours_NonBillable,count(case when p34x.p33id in (2,5) then 1 end) as Moneys,count(case when p34x.p33id=3 then 1 end) as Pieces");
             sb(",convert(varchar(10),a.p31Date,104) as p31DateString");
             sb(" FROM p31Worksheet a");
             sb(" INNER JOIN j02Person j02 ON a.j02ID=j02.j02ID INNER JOIN p32Activity p32 ON a.p32ID=p32.p32ID");
@@ -498,15 +498,19 @@ namespace BL
             return _db.GetList<BO.p31WorksheetTimelineDay>(sbret(), new { d1 = d1, d2 = d2 });
         }
 
-        public BO.p31WorksheetEntryInput CovertRec2Input(BO.p31Worksheet rec)
+        public BO.p31WorksheetEntryInput CovertRec2Input(BO.p31Worksheet rec,bool time_entry_by_minutes)
         {
             if (rec == null) return null;           
 
             var c = new BO.p31WorksheetEntryInput() { pid = rec.pid, j02ID = rec.j02ID, j02ID_ContactPerson = rec.j02ID_ContactPerson,p41ID=rec.p41ID,p34ID=rec.p34ID,p32ID=rec.p32ID,p56ID=rec.p56ID };
             c.p31Date = rec.p31Date; c.p31Text = rec.p31Text;
             c.Value_Orig = rec.p31Value_Orig.ToString();c.p31HoursEntryflag = rec.p31HoursEntryFlag;
+            if (time_entry_by_minutes && (c.p31HoursEntryflag==BO.p31HoursEntryFlagENUM.Hodiny || c.p31HoursEntryflag == BO.p31HoursEntryFlagENUM.Minuty))
+            {
+                c.Value_Orig = rec.p31Minutes_Orig.ToString();  //hodiny zobrazovat v minutách
+            }
             c.TimeFrom = rec.TimeFrom; c.TimeUntil = rec.TimeUntil;
-
+            
             c.j27ID_Billing_Orig = rec.j27ID_Billing_Orig;
             c.Amount_Vat_Orig = rec.p31Amount_Vat_Orig;c.Amount_WithoutVat_Orig = rec.p31Amount_WithoutVat_Orig;c.Amount_WithVat_Orig = rec.p31Amount_WithVat_Orig;
             c.VatRate_Orig = rec.p31VatRate_Orig;

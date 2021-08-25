@@ -127,26 +127,26 @@
 }
 else
 {
-<div id="divOnlyOnePanel">
-    @{
-        switch (Model.CurrentView)
-        {
-            case UI.Models.p31view.CalendarViewEnum.Month:
-            case UI.Models.p31view.CalendarViewEnum.Week:
-                @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml");
-                break;
-            case UI.Models.p31view.CalendarViewEnum.MonthAgenda:
-            case UI.Models.p31view.CalendarViewEnum.WeekAgenda:
-            case UI.Models.p31view.CalendarViewEnum.NAgenda:
-                @Html.EditorFor(m => m, "~/Views/Shared/_CalendarAgenda.cshtml");
-                break;
-            case UI.Models.p31view.CalendarViewEnum.ExactDay:
-                @Html.EditorFor(m => m, "~/Views/Shared/_CalendarDay.cshtml");
-                break;
-        }
+    <div id="divOnlyOnePanel">
+        @{
+            switch (Model.CurrentView)
+            {
+                case UI.Models.p31view.CalendarViewEnum.Month:
+                case UI.Models.p31view.CalendarViewEnum.Week:
+                    @Html.EditorFor(m => m, "~/Views/Shared/_CalendarMesic.cshtml");
+                    break;
+                case UI.Models.p31view.CalendarViewEnum.MonthAgenda:
+                case UI.Models.p31view.CalendarViewEnum.WeekAgenda:
+                case UI.Models.p31view.CalendarViewEnum.NAgenda:
+                    @Html.EditorFor(m => m, "~/Views/Shared/_CalendarAgenda.cshtml");
+                    break;
+                case UI.Models.p31view.CalendarViewEnum.ExactDay:
+                    @Html.EditorFor(m => m, "~/Views/Shared/_CalendarDay.cshtml");
+                    break;
+            }
 
-    }
-</div>
+        }
+    </div>
 }
 
 
@@ -193,9 +193,9 @@ else
 
             $(".dc").dblclick(function () {
                 var j02id = "@Model.j02ID";
-                        var d = $(this).attr("data-d");
-                        _window_open("/p31/Record?j02id=" + j02id + "&d=" + d);
-                    });
+                var d = $(this).attr("data-d");                
+                _window_open("/p31/Record?j02id=" + j02id + "&d=" + d);
+            });
 
 
             $("#cmdMore").click(function () {
@@ -442,8 +442,13 @@ else
         return (d);
     }
 
-    function p31c(d) {
-        alert(d);
+    function p31c(d,t1,t2) {
+        var j02id = "@Model.j02ID";
+        var url = "/p31/Record?j02id=" + j02id + "&d=" + d;
+        if (t1 != null) {
+            url = url + "&t1=" + t1 + "&t2=" + t2;
+        }
+        _window_open(url);
     }
     function p31_rec(pid) {
         _edit("p31", pid, "Úkon");

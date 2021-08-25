@@ -52,15 +52,7 @@ namespace UI.Controllers
         public IActionResult hes(string pagesource)
         {
             var v = new hesViewModel() {PageSource= pagesource, HoursFormat = Factory.CurrentUser.j03DefaultHoursFormat, TotalFlagValue = Factory.CurrentUser.j03HoursEntryFlagV7 };
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 2)) v.HoursInterval = 30;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 4)) v.HoursInterval = 60;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 8)) v.HoursInterval = 5;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 16)) v.HoursInterval = 10;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 32)) v.HoursInterval = 6;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 64)) v.HoursInterval = 15;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 128)) v.TimesheetEntryByMinutes = true;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 256)) v.OfferTrimming = true;
-            if (BO.BAS.bit_compare_or(v.TotalFlagValue, 512)) v.OfferContactPerson = true;
+            v.InhaleSetting();
 
             return View(v);
         }

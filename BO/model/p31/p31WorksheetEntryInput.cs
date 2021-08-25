@@ -88,7 +88,7 @@ namespace BO
         {
             _Error = errormessage;
         }
-
+        
         private int _p31Minutes_Orig { get; set; }
         public int p31Minutes_Orig
         {

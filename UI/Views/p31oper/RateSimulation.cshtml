@@ -44,7 +44,7 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Fakturační sazba"):</label>
         <div class="col-sm-3 col-md-2">
-            <myval datatype="num" value="@Model.BillRate" valueafter="@Model.j27Code_BillingRate"></myval>
+            <myval datatype="num" value="@Model.BillRate" valueafter="@Model.j27Code_BillingRate" addcssclass="fa"></myval>
         </div>
         @if (Model.p51ID_BillingRate > 0)
         {
@@ -58,7 +58,7 @@
     <div class="row my-2">
         <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Nákladová sazba"):</label>
         <div class="col-sm-3 col-md-2">
-            <myval datatype="num" value="@Model.CostRate" valueafter="@Model.j27Code_CostRate"></myval>
+            <myval datatype="num" value="@Model.CostRate" valueafter="@Model.j27Code_CostRate" addcssclass="nefa"></myval>
         </div>
     </div>
 </div>

@@ -35,5 +35,8 @@ namespace UI.Models.Record
         public int PiecePriceFlag { get; set; }
 
         public string CasOdDoIntervals { get; set; }
+
+        public UI.Models.p31oper.hesViewModel Setting { get; set; }     //nastavení vykazování
+        
     }
 }

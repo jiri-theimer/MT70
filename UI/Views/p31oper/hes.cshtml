@@ -77,9 +77,13 @@
                 <hr />
                 <input type="checkbox" asp-for="@Model.OfferTrimming" id="chkOfferTrimming" />
                 <label for="chkOfferTrimming">@_f.tra("U časových a peněžních úkonů nabízet možnost zapsat korekci")</label>
-                <hr />
-                <input type="checkbox" asp-for="@Model.OfferContactPerson" id="chkOfferContactPerson" />
-                <label for="chkOfferContactPerson">@_f.tra("Nabízet k vyplnění kontaktní osobu klienta/projektu")</label>
+                @if (1 == 2)
+                {
+                    <hr />
+                    <input type="checkbox" asp-for="@Model.OfferContactPerson" id="chkOfferContactPerson" />
+                    <label for="chkOfferContactPerson">@_f.tra("Nabízet k vyplnění kontaktní osobu klienta/projektu")</label>
+                }
+
             </div>
         </div>
     </div>
