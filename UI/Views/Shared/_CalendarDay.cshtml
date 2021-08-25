@@ -199,7 +199,7 @@
             string strText = BO.BAS.OM2(c.p31Text, 300);
 
 
-            @Html.Raw($"<div class='data_slot' style='grid-row:{(intStartIndex + 1)}/span {intSpanRows};'>{strRCM}<a class='exactdayp31reclink' onclick='p31_record_open({c.pid})'>{strLink} {strProject}</a><i style='padding-left:20px;'>{strText}</i></div>");
+            @Html.Raw($"<div class='data_slot' style='grid-row:{(intStartIndex + 1)}/span {intSpanRows};'>{strRCM}<a class='exactdayp31reclink' onclick='p31_rec({c.pid})'>{strLink} {strProject}</a><i style='padding-left:20px;'>{strText}</i></div>");
         }
     }
 
