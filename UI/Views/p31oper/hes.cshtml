@@ -3,7 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
-    Model.PageTitle = _f.tra("Nastavení vykazování hodin");
+    Model.PageTitle = _f.tra("Nastavení vykazování úkonů");
 
 }
 
@@ -67,9 +67,9 @@
         </div>
         
         
-        <div class="card my-2" style="display:@(BO.BAS.IIFS(Model.PageSource=="timesheet","block","none"))">
+        <div class="card my-2" id="divTimesheetRecordOnly" style="display:none;">
             <div class="card-header">
-                @_f.tra("Vykazování odpracovaného času")
+                @_f.tra("Další nastavení")
             </div>
             <div class="card-body">
                 <input type="checkbox" asp-for="@Model.TimesheetEntryByMinutes" id="chkTimesheetEntryByMinutes" />
@@ -84,19 +84,44 @@
                     <label for="chkOfferContactPerson">@_f.tra("Nabízet k vyplnění kontaktní osobu klienta/projektu")</label>
                 }
 
+                <hr />
+                <strong>@_f.tra("Předvyplňovat sešit a aktivitu"):</strong>
+                <div>
+                    <input type="radio" id="chk99" value="99" asp-for="@Model.ActivityFlag" />
+                    <label for="chk99">@_f.tra("Bez předvyplněného sešitu")</label>
+                </div>
+                <div>
+                    <input type="radio" id="chk0" value="0" asp-for="@Model.ActivityFlag" />
+                    <label for="chk0">@_f.tra("Předvyplnit první sešit v nabídce sešitů")</label>
+                </div>
+                <div>
+                    <input type="radio" id="chk1" value="1" asp-for="@Model.ActivityFlag" />
+                    <label for="chk1">@_f.tra("Předvyplnit sešit z naposledy vykazovaného úkonu")</label>
+                </div>
+                <div>
+                    <input type="radio" id="chk2" value="2" asp-for="@Model.ActivityFlag" />
+                    <label for="chk2">@_f.tra("Předvyplnit aktivitu+sešit z naposledy vykazovaného úkonu")</label>
+                </div>
             </div>
         </div>
     </div>
 
 
-    <input type="hidden" asp-for="@Model.PageSource" />
+
 </form>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
 
-
+        var urlparent = window.parent.location.href;
+        
+        if (urlparent.toLowerCase().indexOf("/p31/record") > 0) {
+            $("#divTimesheetRecordOnly").css("display", "block");
+        } else {
+            $("#divTimesheetRecordOnly").css("display", "none");
+        }
+        
         $("#cmdOK").click(function () {
 
             $(this).text("Processing...");

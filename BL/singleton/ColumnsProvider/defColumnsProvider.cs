@@ -168,6 +168,7 @@ namespace BL
             this.EntityName = "p34ActivityGroup";
             AA("p34Name", "Sešit", gdc1, null, "string", false, true);
             AA("p34Code", "Kód", gdc2);
+            AA("p34Ordinary", "#",gdc2);
             AA("p33ID", "Vstupí data", gdc2, "case a.p33ID when 1 then 'Čas' when 2 then 'Peníze bez DPH' when 3 then 'Kusovník' when 5 then 'Peníze+DPH' end");
             AppendTimestamp();
 

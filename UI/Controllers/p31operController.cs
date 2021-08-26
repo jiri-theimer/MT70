@@ -49,9 +49,9 @@ namespace UI.Controllers
         }
 
         //Uživatelovo nastavení formátu vykazování hodin
-        public IActionResult hes(string pagesource)
+        public IActionResult hes()
         {
-            var v = new hesViewModel() {PageSource= pagesource, HoursFormat = Factory.CurrentUser.j03DefaultHoursFormat, TotalFlagValue = Factory.CurrentUser.j03HoursEntryFlagV7 };
+            var v = new hesViewModel() {HoursFormat = Factory.CurrentUser.j03DefaultHoursFormat, TotalFlagValue = Factory.CurrentUser.j03HoursEntryFlagV7 };
             v.InhaleSetting();
 
             return View(v);
@@ -81,6 +81,10 @@ namespace UI.Controllers
                 if (v.TimesheetEntryByMinutes) v.TotalFlagValue += 128;
                 if (v.OfferTrimming) v.TotalFlagValue += 256;
                 if (v.OfferContactPerson) v.TotalFlagValue += 512;
+                if (v.ActivityFlag == 99) v.TotalFlagValue += 1024;
+                if (v.ActivityFlag == 0) v.TotalFlagValue += 2048;
+                if (v.ActivityFlag == 1) v.TotalFlagValue += 4096;
+                if (v.ActivityFlag == 2) v.TotalFlagValue += 8196;
 
                 Factory.CurrentUser.j03HoursEntryFlagV7 = v.TotalFlagValue;
                 Factory.CurrentUser.j03DefaultHoursFormat = v.HoursFormat;

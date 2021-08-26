@@ -133,15 +133,43 @@ namespace UI.Controllers
                 {
                     v.SelectedComboPerson = Factory.j02PersonBL.Load(v.Rec.j02ID).FullNameDesc;
                 }
-                if (v.Rec.p41ID == 0 && v.Rec.p34ID == 0)
+                if (v.Rec.p34ID == 0)
                 {
-                    var recLast = Factory.p31WorksheetBL.LoadMyLastCreated(true, v.Rec.p41ID, v.Rec.p34ID);
-                    if (recLast != null)
+                    LoadRecordSetting(v);
+                    switch (v.Setting.ActivityFlag)
                     {
-                        v.Rec.p41ID = recLast.p41ID; v.Rec.p34ID = recLast.p34ID; v.SelectedComboP34Name = recLast.p34Name;
-                        v.Rec.j27ID_Billing_Orig = recLast.j27ID_Billing_Orig; v.SelectedComboJ27Code = recLast.j27Code_Billing_Orig;
+                        case 0: //první sešit v nabídce sešitů
+                            var mq = new BO.myQueryP34() { j02id_for_p31_entry = v.Rec.j02ID };
+                            var lisP34 = Factory.p34ActivityGroupBL.GetList(mq);
+                            if (lisP34.Count() > 0)
+                            {
+                                v.Rec.p34ID = lisP34.First().pid; v.SelectedComboP34Name = lisP34.First().p34Name;
+                            }
+                            break;
+                        case 1: //sešit z naposledy vykazovaného úkonu
+                        case 2: //sešit z naposledy vykazovaného úkonu
+                            var recLast = Factory.p31WorksheetBL.LoadMyLastCreated(true);
+                            if (recLast != null)
+                            {
+                                v.Rec.p34ID = recLast.p34ID; v.SelectedComboP34Name = recLast.p34Name;
+                                if (v.Setting.ActivityFlag == 2)
+                                {
+                                    v.Rec.p32ID = recLast.p32ID; v.SelectedComboP32Name = recLast.p32Name;
+                                }
+                            }
+                            break;
+                        
                     }
                 }
+                //if (v.Rec.p41ID == 0 && v.Rec.p34ID == 0)
+                //{
+                //    var recLast = Factory.p31WorksheetBL.LoadMyLastCreated(true, v.Rec.p41ID, v.Rec.p34ID);
+                //    if (recLast != null)
+                //    {
+                //        v.Rec.p41ID = recLast.p41ID; v.Rec.p34ID = recLast.p34ID; v.SelectedComboP34Name = recLast.p34Name;
+                //        v.Rec.j27ID_Billing_Orig = recLast.j27ID_Billing_Orig; v.SelectedComboJ27Code = recLast.j27Code_Billing_Orig;
+                //    }
+                //}
                 if (v.Rec.p32ID > 0)
                 {
                     v.RecP32 = Factory.p32ActivityBL.Load(v.Rec.p32ID);

@@ -36,7 +36,7 @@ namespace BL
         }
         public IEnumerable<BO.p34ActivityGroup> GetList(BO.myQueryP34 mq)
         {
-            if (mq.explicit_orderby == null) mq.explicit_orderby = "a.p34Ordinary";
+            if (mq.explicit_orderby == null) mq.explicit_orderby = "a.p34Ordinary,a.p34Name";
             DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
             return _db.GetList<BO.p34ActivityGroup>(fq.FinalSql, fq.Parameters);
         }
