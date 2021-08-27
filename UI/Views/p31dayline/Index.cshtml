@@ -516,9 +516,9 @@
     }
 
     function zoom_allmonth(ctl,j02id) {
-        var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&m=@(Model.d0.Month)&y=@(Model.d0.Year)");        
+        var url = _ep("/p31dayline/Zoom?j02id=" + j02id + "&m=@(Model.d0.Month)&y=@(Model.d0.Year)");
         zoom_open(ctl, url);
-        
+
     }
     function zoom_allmonth_p28(ctl,j02id,p28id) {
         var url = _ep("/p31dayline/Zoom?j02id="+j02id+"&p28id="+p28id+"&m=@(Model.d0.Month)&y=@(Model.d0.Year)");
@@ -590,6 +590,16 @@
         }
 
         $("#timeline_tbody1").height(h);
+    }
+
+
+    function p31c(d, t1, t2,j02id) {        
+        var url = "/p31/Record?j02id=" + j02id + "&d=" + d;
+        if (t1 != undefined && t1 != null) {
+            url = url + "&t1=" + t1 + "&t2=" + t2;
+        }
+        
+        _window_open(url);
     }
 
 </script>

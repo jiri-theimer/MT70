@@ -220,7 +220,8 @@ namespace UI.Controllers
             }
             if (v.Rec.p41ID > 0)
             {
-                v.RecP41 = Factory.p41ProjectBL.Load(v.Rec.p41ID);
+                if (v.RecP41==null) v.RecP41 = Factory.p41ProjectBL.Load(v.Rec.p41ID);
+
                 if (string.IsNullOrEmpty(v.SelectedComboProject))
                 {
                     v.SelectedComboProject = v.RecP41.FullName;
@@ -312,6 +313,13 @@ namespace UI.Controllers
                     break;
                 case "p41id":
                     v.ShowTaskComboFlag = 0; v.Rec.p56ID = 0; v.SelectedComboTask = null;
+                    if (v.Rec.p41ID > 0)
+                    {
+                        v.RecP41 = Factory.p41ProjectBL.Load(v.Rec.p41ID);
+                        v.SelectedComboProject = v.RecP41.FullName;
+                    }
+                    
+                    
                     break;
             }
 

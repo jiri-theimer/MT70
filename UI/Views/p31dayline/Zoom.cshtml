@@ -25,7 +25,15 @@
 <div class="bg-light" style="padding-left: 10px;padding-top:2px;">
     @Html.Raw(BO.Symbol.p31())
 
-    <button type="button" id="cmdClose" onclick="window.parent.zoom_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+    <a class="btn btn-primary" target="_top" href="/p31calendar/Index?d=@Model.SelectedDate1&cv=5"><span class="k-icon k-i-calendar" style="margin-right:6px;"></span>@_f.tra("Agenda")</a>
+    <a class="btn btn-primary" target="_top" href="/p31calendar/Index?d=@Model.SelectedDate1&cv=6"><span class="k-icon k-i-calendar-date" style="margin-right:6px;"></span>@_f.tra("Přesný den")</a>
+
+    <button type="button" id="cmdNew" onclick="create()" class="btn btn-outline-primary"><span class="k-icon k-i-plus" style="margin-right:6px;margin-left:6px;"></span>@_f.tra("Nový")</button>
+
+
+    <button type="button" id="cmdClose" onclick="hardrefresh_top()" class="btn btn-light"><span class="k-icon k-i-reload" style="margin-right:6px;"></span>@_f.tra("Zavřít a občerstvit pozadí")</button>
+
+    <button type="button" id="cmdClose" onclick="window.parent.zoom_close()" class="btn btn-light"><span class="k-icon k-i-close" style="margin-right:6px;"></span>@_f.tra("Zavřít")</button>
 
 
 
@@ -67,6 +75,16 @@
     function hardrefresh(pid, flag) {
         var url = window.location.href;
         location.replace(url);
+    }
+
+    function hardrefresh_top() {
+
+        window.parent.top.hardrefresh();
+    }
+
+    function create() {
+        window.parent.zoom_close();
+        window.parent.p31c("@Model.SelectedDate1",null,null,"@Model.j02ID");
     }
 
 </script>

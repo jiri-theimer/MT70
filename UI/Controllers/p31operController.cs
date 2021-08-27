@@ -78,9 +78,11 @@ namespace UI.Controllers
                 if (v.HoursInterval == 10) v.TotalFlagValue += 16;
                 if (v.HoursInterval == 6) v.TotalFlagValue += 32;
                 if (v.HoursInterval == 15) v.TotalFlagValue += 64;
+
                 if (v.TimesheetEntryByMinutes) v.TotalFlagValue += 128;
                 if (v.OfferTrimming) v.TotalFlagValue += 256;
                 if (v.OfferContactPerson) v.TotalFlagValue += 512;
+
                 if (v.ActivityFlag == 99) v.TotalFlagValue += 1024;
                 if (v.ActivityFlag == 0) v.TotalFlagValue += 2048;
                 if (v.ActivityFlag == 1) v.TotalFlagValue += 4096;
