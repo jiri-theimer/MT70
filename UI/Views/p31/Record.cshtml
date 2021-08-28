@@ -196,40 +196,44 @@
 
         @if (Model.IsValueTrimming)
         {
-    <div class="card-body">
-        <input type="radio" id="chkp72ID_AfterTrimming4" asp-for="Rec.p72ID_AfterTrimming" value="Fakturovat" onchange="postback('isvaluetrimming')" />
-        <label for="chkp72ID_AfterTrimming4" class="badge-a4" style="margin:1px;">@_f.tra("Fakturovat")</label>
-        <br />
-        <input type="radio" id="chkp72ID_AfterTrimming6" asp-for="Rec.p72ID_AfterTrimming" value="ZahrnoutDoPausalu" onchange="postback('isvaluetrimming')" />
-        <label for="chkp72ID_AfterTrimming6" class="badge-a6" style="margin:1px;">@_f.tra("Zahrnout do paušálu")</label>
-        <br />
-        <input type="radio" id="chkp72ID_AfterTrimming3" asp-for="Rec.p72ID_AfterTrimming" value="SkrytyOdpis" onchange="postback('isvaluetrimming')" />
-        <label for="chkp72ID_AfterTrimming3" class="badge-a3" style="margin:1px;">@_f.tra("Skrytý odpis")</label>
-        <br />
-        <input type="radio" id="chkp72ID_AfterTrimming2" asp-for="Rec.p72ID_AfterTrimming" value="ViditelnyOdpis" onchange="postback('isvaluetrimming')" />
-        <label for="chkp72ID_AfterTrimming2" class="badge-a2" style="margin:1px;">@_f.tra("Viditelný odpis")</label>
-        <br />
-        <input type="radio" id="chkp72ID_AfterTrimming7" asp-for="Rec.p72ID_AfterTrimming" value="FakturovatPozdeji" onchange="postback('isvaluetrimming')" />
-        <label for="chkp72ID_AfterTrimming7" class="badge-a7" style="margin:1px;">@_f.tra("Fakturovat později")</label>
-        @if (Model.RecP34 != null)
-        {
-            @if (Model.RecP34.p33ID == BO.p33IdENUM.Cas)
-            {
-                <input type="text" class="form-control" placeholder="@_f.tra("Hodiny k fakturaci")" asp-for="Rec.Value_Trimmed" />
-            }
-            @if (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)
-            {
-                <input type="text" class="form-control" placeholder="@_f.tra("Počet k fakturaci")" asp-for="Rec.Value_Trimmed" />
-            }
-            @if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
-            {
-                <input type="text" class="form-control" placeholder="@_f.tra("Částka k fakturaci")" asp-for="Rec.Value_Trimmed" />
-            }
+            <div class="card-body">
+                <input type="radio" id="chkp72ID_AfterTrimming4" asp-for="Rec.p72ID_AfterTrimming" value="Fakturovat" onchange="postback('isvaluetrimming')" />
+                <label for="chkp72ID_AfterTrimming4" class="badge-a4" style="margin:1px;">@_f.tra("Fakturovat")</label>
 
-        }
+                <input type="radio" id="chkp72ID_AfterTrimming6" asp-for="Rec.p72ID_AfterTrimming" value="ZahrnoutDoPausalu" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
+                <label for="chkp72ID_AfterTrimming6" class="badge-a6" style="margin:1px;">@_f.tra("Zahrnout do paušálu")</label>
+
+                <input type="radio" id="chkp72ID_AfterTrimming3" asp-for="Rec.p72ID_AfterTrimming" value="SkrytyOdpis" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
+                <label for="chkp72ID_AfterTrimming3" class="badge-a3" style="margin:1px;">@_f.tra("Skrytý odpis")</label>
+
+                <input type="radio" id="chkp72ID_AfterTrimming2" asp-for="Rec.p72ID_AfterTrimming" value="ViditelnyOdpis" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
+                <label for="chkp72ID_AfterTrimming2" class="badge-a2" style="margin:1px;">@_f.tra("Viditelný odpis")</label>
+
+                <input type="radio" id="chkp72ID_AfterTrimming7" asp-for="Rec.p72ID_AfterTrimming" value="FakturovatPozdeji" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
+                <label for="chkp72ID_AfterTrimming7" class="badge-a7" style="margin:1px;">@_f.tra("Fakturovat později")</label>
+                <div>
+                    @if (Model.RecP34 != null)
+                    {
+                        @if (Model.RecP34.p33ID == BO.p33IdENUM.Cas)
+                        {
+                            <input type="text" class="form-control" placeholder="@_f.tra("Hodiny k fakturaci")" asp-for="Rec.Value_Trimmed" />
+                        }
+                        @if (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)
+                        {
+                            <input type="text" class="form-control" placeholder="@_f.tra("Počet k fakturaci")" asp-for="Rec.Value_Trimmed" />
+                        }
+                        @if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
+                        {
+                            <input type="text" class="form-control" placeholder="@_f.tra("Částka k fakturaci")" asp-for="Rec.Value_Trimmed" />
+                        }
+
+                    }
+                </div>
 
 
-    </div>
+
+
+            </div>
         }
 
     </div>
