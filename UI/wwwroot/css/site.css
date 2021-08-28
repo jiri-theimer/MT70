@@ -1296,7 +1296,12 @@ td.tdnum {
     height: 15px;
 }
 
-
+.a7 {
+    background-color: gold;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
 
 .badge-a2 {
     background-color: red;

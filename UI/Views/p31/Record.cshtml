@@ -115,10 +115,10 @@
                     <input type="text" class="form-control" asp-for="@Model.Rec.Value_Orig" />
                     <button type="button" tabindex="-1" class="btn btn-sm btn-outline-secondary" style="padding-left: 3px; padding-right: 3px;" onclick="setting()" title="Nastavení hodin"><span class="k-icon k-i-clock"></span></button>
                 </div>
-                
+
 
             </div>
-            
+
         </div>
     }
     if (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)
@@ -185,6 +185,37 @@
 </div>
 
 @Html.EditorFor(m => m.ff1, "~/Views/Shared/_FreeFields.cshtml")
+
+@if (Model.Setting.OfferTrimming)
+{
+    <div class="card">
+        <div class="card-header">
+            <input type="checkbox" id="chkIsValueTrimming" asp-for="@Model.IsValueTrimming" onchange="postback('isvaluetrimming')" />
+            <label for="chkIsValueTrimming">@_f.tra("Zapsat korekci úkonu")</label>
+        </div>
+
+        @if (Model.IsValueTrimming)
+        {
+            <div class="card-body">
+                <input type="radio" id="chkp72ID_AfterTrimming4" asp-for="Rec.p72ID_AfterTrimming" value="Fakturovat" />                
+                <label for="chkp72ID_AfterTrimming4" class="badge-a4" style="margin:1px;">@_f.tra("Fakturovat")</label>
+                <br />
+                <input type="radio" id="chkp72ID_AfterTrimming6" asp-for="Rec.p72ID_AfterTrimming" value="ZahrnoutDoPausalu" />                
+                <label for="chkp72ID_AfterTrimming6" class="badge-a6" style="margin:1px;">@_f.tra("Zahrnout do paušálu")</label>
+                <br />
+                <input type="radio" id="chkp72ID_AfterTrimming3" asp-for="Rec.p72ID_AfterTrimming" value="SkrytyOdpis" />                
+                <label for="chkp72ID_AfterTrimming3" class="badge-a3" style="margin:1px;">@_f.tra("Skrytý odpis")</label>
+                <br />
+                <input type="radio" id="chkp72ID_AfterTrimming2" asp-for="Rec.p72ID_AfterTrimming" value="ViditelnyOdpis" />                
+                <label for="chkp72ID_AfterTrimming2" class="badge-a2" style="margin:1px;">@_f.tra("Viditelný odpis")</label>
+                <br />
+                <input type="radio" id="chkp72ID_AfterTrimming7" asp-for="Rec.p72ID_AfterTrimming" value="FakturovatPozdeji" />                
+                <label for="chkp72ID_AfterTrimming7" class="badge-a7" style="margin:1px;">@_f.tra("Fakturovat později")</label>
+            </div>
+        }
+
+    </div>
+}
 
 @if (Model.RecP34 != null)
 {
@@ -290,9 +321,11 @@
 
 <input type="hidden" asp-for="@Model.ShowTaskComboFlag" value="@Model.ShowTaskComboFlag" />
 
+
+
 <script type="text/javascript">
-    var _p41id = "@(Model.Rec.p41ID)";
-    var _j02id = "@(Model.Rec.j02ID)";
+var _p41id = "@(Model.Rec.p41ID)";
+var _j02id = "@(Model.Rec.j02ID)";
 var _p32id = "@(Model.Rec.p32ID)";
 var _p33id = "";
 @if(Model.RecP34 != null)
