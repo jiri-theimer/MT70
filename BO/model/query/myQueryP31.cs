@@ -11,7 +11,7 @@ namespace BO
     {
         public int j02id { get; set; }
         public int p28id { get; set; }
-        public int p41id { get; set; }
+        public int p41id { get; set; }        
         public int p32id { get; set; }
         public int p91id { get; set; }
         public int p56id { get; set; }
