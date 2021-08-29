@@ -243,6 +243,16 @@ namespace BO
 
             return false;
         }
+        public bool IsRecommendedHHMM_Trimmed()
+        {
+            if (this.p33ID == p33IdENUM.Cas)
+            {
+                if (this.p31Value_Trimmed.ToString().Length > 5)
+                    return true; // desetinné číslo s velkým počtem desetinných míst
+            }
+
+            return false;
+        }
 
         public string Project
         {

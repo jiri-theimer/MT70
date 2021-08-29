@@ -535,7 +535,12 @@ namespace BL
             c.p72ID_AfterTrimming = rec.p72ID_AfterTrimming;
             if (rec.p72ID_AfterTrimming != BO.p72IdENUM._NotSpecified)
             {
-                c.Value_Trimmed = rec.p31Value_Trimmed.ToString();
+                c.Value_Trimmed = rec.p31Value_Trimmed.ToString();                        
+                if (rec.IsRecommendedHHMM_Trimmed())
+                {
+                    c.p31HHMM_Trimmed = BO.basTime.ShowAsHHMM(c.Value_Trimmed);
+                    c.Value_Trimmed = c.p31HHMM_Trimmed;
+                }
             }
 
             return c;
