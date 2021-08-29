@@ -531,7 +531,12 @@ namespace BL
                 c.p31Calc_Pieces = rec.p31Calc_Pieces;
                 
             }
-            
+
+            c.p72ID_AfterTrimming = rec.p72ID_AfterTrimming;
+            if (rec.p72ID_AfterTrimming != BO.p72IdENUM._NotSpecified)
+            {
+                c.Value_Trimmed = rec.p31Value_Trimmed.ToString();
+            }
 
             return c;
 

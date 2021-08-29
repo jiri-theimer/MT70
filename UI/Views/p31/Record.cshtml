@@ -198,34 +198,36 @@
         {
             <div class="card-body">
                 <input type="radio" id="chkp72ID_AfterTrimming4" asp-for="Rec.p72ID_AfterTrimming" value="Fakturovat" onchange="postback('isvaluetrimming')" />
-                <label for="chkp72ID_AfterTrimming4" class="badge-a4" style="margin:1px;">@_f.tra("Fakturovat")</label>
+                <label for="chkp72ID_AfterTrimming4" class="badge-a4">@_f.tra("Fakturovat")</label>
 
                 <input type="radio" id="chkp72ID_AfterTrimming6" asp-for="Rec.p72ID_AfterTrimming" value="ZahrnoutDoPausalu" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
-                <label for="chkp72ID_AfterTrimming6" class="badge-a6" style="margin:1px;">@_f.tra("Zahrnout do paušálu")</label>
+                <label for="chkp72ID_AfterTrimming6" class="badge-a6">@_f.tra("Zahrnout do paušálu")</label>
 
                 <input type="radio" id="chkp72ID_AfterTrimming3" asp-for="Rec.p72ID_AfterTrimming" value="SkrytyOdpis" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
-                <label for="chkp72ID_AfterTrimming3" class="badge-a3" style="margin:1px;">@_f.tra("Skrytý odpis")</label>
+                <label for="chkp72ID_AfterTrimming3" class="badge-a3">@_f.tra("Skrytý odpis")</label>
 
                 <input type="radio" id="chkp72ID_AfterTrimming2" asp-for="Rec.p72ID_AfterTrimming" value="ViditelnyOdpis" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
-                <label for="chkp72ID_AfterTrimming2" class="badge-a2" style="margin:1px;">@_f.tra("Viditelný odpis")</label>
+                <label for="chkp72ID_AfterTrimming2" class="badge-a2">@_f.tra("Viditelný odpis")</label>
 
-                <input type="radio" id="chkp72ID_AfterTrimming7" asp-for="Rec.p72ID_AfterTrimming" value="FakturovatPozdeji" onchange="postback('isvaluetrimming')" style="margin-left:15px;" />
-                <label for="chkp72ID_AfterTrimming7" class="badge-a7" style="margin:1px;">@_f.tra("Fakturovat později")</label>
-                <div>
-                    @if (Model.RecP34 != null)
+                
+                <div style="margin-top:10px;">
+                    @if (Model.RecP34 != null && (Model.Rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat || Model.Rec.p72ID_AfterTrimming == BO.p72IdENUM.FakturovatPozdeji))
                     {
+
                         @if (Model.RecP34.p33ID == BO.p33IdENUM.Cas)
                         {
-                            <input type="text" class="form-control" placeholder="@_f.tra("Hodiny k fakturaci")" asp-for="Rec.Value_Trimmed" />
+                            <span>@_f.tra("Hodiny k fakturaci"):</span>
                         }
                         @if (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)
                         {
-                            <input type="text" class="form-control" placeholder="@_f.tra("Počet k fakturaci")" asp-for="Rec.Value_Trimmed" />
+                            <span>@_f.tra("Počet k fakturaci"):</span>
                         }
                         @if (Model.RecP34.p33ID == BO.p33IdENUM.PenizeBezDPH || Model.RecP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu)
                         {
-                            <input type="text" class="form-control" placeholder="@_f.tra("Částka k fakturaci")" asp-for="Rec.Value_Trimmed" />
+                            <span>@_f.tra("Částka k fakturaci"):</span>                            
                         }
+
+                        <input type="text" class="form-control" asp-for="Rec.Value_Trimmed" value="@Model.Rec.Value_Trimmed" />
 
                     }
                 </div>
@@ -348,9 +350,9 @@
 <script type="text/javascript">
 var _p41id = "@(Model.Rec.p41ID)";
 var _j02id = "@(Model.Rec.j02ID)";
-var _p32id = "@(Model.Rec.p32ID)";
-var _p33id = "";
-@if(Model.RecP34 != null)
+                    var _p32id = "@(Model.Rec.p32ID)";
+                    var _p33id = "";
+                    @if(Model.RecP34 != null)
 {
         @:_p33id = "@((int) Model.RecP34.p33ID)";
     }

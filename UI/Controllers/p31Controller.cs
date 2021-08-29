@@ -73,7 +73,6 @@ namespace UI.Controllers
                 LoadRecordSetting(v);
                 v.Rec = Factory.p31WorksheetBL.CovertRec2Input(recP31,v.Setting.TimesheetEntryByMinutes);
                                 
-
                 v.p31Date = v.Rec.p31Date;
                 v.SelectedComboP32Name = recP31.p32Name;
                 v.SelectedComboP34Name = recP31.p34Name;
@@ -93,6 +92,10 @@ namespace UI.Controllers
                 if (v.Rec.j19ID > 0)
                 {
                     v.SelectedComboJ19Name = Factory.FBL.LoadJ19(v.Rec.j19ID).j19Name;
+                }
+                if (v.Rec.p72ID_AfterTrimming != BO.p72IdENUM._NotSpecified)
+                {
+                    v.IsValueTrimming = true;                   
                 }
                 v.SetTagging(Factory.o51TagBL.GetTagging("p31", v.rec_pid));
 
@@ -322,6 +325,14 @@ namespace UI.Controllers
                     
                     break;
                 case "isvaluetrimming":
+                    if (v.Rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat || v.Rec.p72ID_AfterTrimming == BO.p72IdENUM.FakturovatPozdeji)
+                    {
+                        v.Rec.Value_Trimmed = v.Rec.Value_Orig;
+                    }
+                    else
+                    {
+                        v.Rec.Value_Trimmed = "0";
+                    }
                     break;
             }
 
@@ -365,7 +376,7 @@ namespace UI.Controllers
                 c.p32ID = v.Rec.p32ID;
 
                 c.Value_Orig = v.Rec.Value_Orig;
-
+                                
                 switch (v.RecP34.p33ID)
                 {
                     case BO.p33IdENUM.Cas:
@@ -411,7 +422,11 @@ namespace UI.Controllers
                 c.TimeFrom = v.Rec.TimeFrom;
                 c.TimeUntil = v.Rec.TimeUntil;
 
-
+                if (v.IsValueTrimming)
+                {
+                    c.p72ID_AfterTrimming = v.Rec.p72ID_AfterTrimming;
+                    c.Value_Trimmed = v.Rec.Value_Trimmed;
+                }
 
 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
