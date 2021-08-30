@@ -24,8 +24,11 @@ namespace UI.Controllers
 
         private void SetupTempData(IEnumerable<BO.p31Worksheet> lisP31,string guid,int p72id,int p91id, int approvinglevel)
         {
+            int intLastP41ID = 0;int intP41ID = 0;
+
             foreach (var rec in lisP31)
             {
+                intP41ID = rec.p41ID;
                 var c = new BO.p31WorksheetApproveInput() { p31ID = rec.pid, p33ID = rec.p33ID, Guid = guid,p31Date=rec.p31Date, p31ApprovingLevel = rec.p31ApprovingLevel };
                 if (rec.p71ID == BO.p71IdENUM.Nic)
                 {
@@ -60,6 +63,7 @@ namespace UI.Controllers
                     c.Value_Approved_Billing = 0;
                 }
 
+                intLastP41ID = intP41ID;
             }
         }
 
@@ -76,8 +80,7 @@ namespace UI.Controllers
             {
                 lisPIDs = BO.BAS.ConvertString2ListInt(pids);
             }
-            var mq = new BO.myQueryP31() { MyRecordsDisponible = true, p31statequery = 3 }; //nevyúčtované
-
+            var mq = new BO.myQueryP31() { MyRecordsDisponible = true, p31statequery = 3 }; //nevyúčtované            
             switch (prefix)
             {
                 case "p31":
@@ -96,7 +99,7 @@ namespace UI.Controllers
 
             }
 
-            mq = new BO.myQueryP31() { MyRecordsDisponible = true, p31statequery = 3, pids = p31ids };
+            mq = new BO.myQueryP31() { MyRecordsDisponible = true, p31statequery = 3, pids = p31ids,explicit_orderby = "a.p41ID,a.p31ID"};
 
             return Factory.p31WorksheetBL.GetList(mq);
         }
