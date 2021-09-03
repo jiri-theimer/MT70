@@ -27,7 +27,6 @@
     <Folder Include="Areas\Mobile\Models\" />
     <Folder Include="Connected Services\" />
     <Folder Include="Data\" />
-    <Folder Include="Models\p31approve\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\lib\bootstrap\" />

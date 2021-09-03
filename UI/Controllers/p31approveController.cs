@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using UI.Models.p31approve;
 
 namespace UI.Controllers
 {
@@ -15,27 +15,137 @@ namespace UI.Controllers
             {
                 return this.StopPage(true, "pids or guid missing.");
             }
+            var v = new GatewayViewModel() { guid = guid,pidsinline=pids,prefix=prefix,p91id=p91id,p72id=(BO.p72IdENUM) p72id,approvinglevel=approvinglevel };
 
-            var lisP31 = GetRecords(guid, pids, prefix);
-            SetupTempData(lisP31,guid, p72id,p91id, approvinglevel);
+
+            v.lisP31 = GetRecords(v);
+            SetupTempData(v);
 
             return View();
         }
 
-        private void SetupTempData(IEnumerable<BO.p31Worksheet> lisP31,string guid,int p72id,int p91id, int approvinglevel)
+        private void SetupTempData(GatewayViewModel v)
         {
-            int intLastP41ID = 0;int intP41ID = 0;
+            int intLastP41ID = 0;int intP41ID = 0;int intSpatnaKorekceRows = 0;BO.p41Project recP41 = null;
 
-            foreach (var rec in lisP31)
+            foreach (var rec in v.lisP31)
             {
                 intP41ID = rec.p41ID;
-                var c = new BO.p31WorksheetApproveInput() { p31ID = rec.pid, p33ID = rec.p33ID, Guid = guid,p31Date=rec.p31Date, p31ApprovingLevel = rec.p31ApprovingLevel };
+                var c = new BO.p31WorksheetApproveInput() { p31ID = rec.pid, p33ID = rec.p33ID, Guid = v.guid,p31Date=rec.p31Date, p31ApprovingLevel = rec.p31ApprovingLevel };
                 if (rec.p71ID == BO.p71IdENUM.Nic)
                 {
                     //dosud neprošlo schvalováním
                     c.Rate_Internal_Approved = rec.p31Rate_Internal_Orig;
-                    c.p31ApprovingLevel = approvinglevel;
+                    c.p31ApprovingLevel = v.approvinglevel;
+                    if (v.DoDefaultApproveState)
+                    {
+                        c.p71id = BO.p71IdENUM.Schvaleno;
+                        if (rec.p32IsBillable)
+                        {
+                            c.p72id = BO.p72IdENUM.Fakturovat;
+                            c.Value_Approved_Billing = rec.p31Value_Orig;
+                            c.Value_Approved_Internal = rec.p31Value_Orig;
+                            switch (c.p33ID)
+                            {
+                                case BO.p33IdENUM.Cas:
+                                case BO.p33IdENUM.Kusovnik:
+                                    c.Rate_Billing_Approved = rec.p31Rate_Billing_Orig;
+                                    c.VatRate_Approved = rec.p31VatRate_Orig;
+                                    if ((rec.p31Rate_Billing_Orig==0 && rec.p32ManualFeeFlag==0) || (rec.p31Amount_WithoutVat_Orig==0 && rec.p32ManualFeeFlag == 0))
+                                    {
+                                        c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                    }
+                                    if (rec.p32ManualFeeFlag == 1)
+                                    {
+                                        c.p32ManualFeeFlag = 1;
+                                        c.ManualFee_Approved = rec.p31Amount_WithoutVat_Orig;
+                                    }
+                                    if (rec.p72ID_AfterTrimming != BO.p72IdENUM._NotSpecified)
+                                    {
+                                        //uživatel zadal v úkonu výchozí korekci pro schvalování
+                                        c.p72id = rec.p72ID_AfterTrimming;
+                                        if (c.p72id == BO.p72IdENUM.Fakturovat)
+                                        {
+                                            c.Value_Approved_Billing = rec.p31Value_Trimmed;
+                                            if (c.Rate_Billing_Approved == 0)
+                                            {
+                                                //korekce zní na status [fakturovat], ale hodinová sazba je nulová -> je třeba nahodit paušál
+                                                c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                                c.Value_Approved_Billing = 0;
+                                                if (intSpatnaKorekceRows == 0)
+                                                {
+                                                    var cTmpErr = new BO.p85Tempbox() { p85GUID = "err-" + v.guid, p85DataPID=rec.pid, p85FreeText01= "Minimálně u jednoho úkonu zapisovač navrhl korekcí status [Fakturovat], ale úkon má nulovou fakturační sazbu.<hr>V takovém případě systém nahazuje status [Zahrnout do paušálu]." };
+                                                    this.Factory.p85TempboxBL.Save(cTmpErr);
 
+                                                }
+                                                intSpatnaKorekceRows += 1;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            c.Rate_Billing_Approved = 0;
+                                            c.Value_Approved_Billing = 0;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //fakturovatelné hodiny mohou být záměrně nulovány do paušálu nebo odpisu
+                                        if (intP41ID != intLastP41ID || recP41==null)
+                                        {
+                                            recP41 = this.Factory.p41ProjectBL.Load(intP41ID);
+                                        }
+                                        if (recP41.p72ID_BillableHours != BO.p72IdENUM._NotSpecified)
+                                        {
+                                            c.p72id = recP41.p72ID_BillableHours;   //v projektu je explicitně nastavený fakturační status, kterým se mají nulovat fakturovatelné hodiny
+                                        }
+                                    }
+                                    break;
+                                case BO.p33IdENUM.PenizeBezDPH:
+                                    if (rec.p31Value_Orig == 0)
+                                    {
+                                        c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                    }
+                                    break;
+                                case BO.p33IdENUM.PenizeVcDPHRozpisu:
+                                    c.VatRate_Approved = rec.p31VatRate_Orig;
+                                    if (rec.p31Value_Orig == 0)
+                                    {
+                                        c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                    }
+                                    switch (rec.p72ID_AfterTrimming)
+                                    {
+                                        case BO.p72IdENUM._NotSpecified:
+                                        case BO.p72IdENUM.Fakturovat:
+                                            c.p72id = rec.p72ID_AfterTrimming ;
+                                            c.Value_Approved_Billing = rec.p31Value_Trimmed;
+                                            break;
+                                        default:
+                                            c.p72id = rec.p72ID_AfterTrimming;
+                                            c.Value_Approved_Billing = 0;
+                                            break;
+                                    }
+                                    break;
+                            }
+                            if (rec.p31MarginHidden !=0 || rec.p31MarginTransparent != 0)
+                            {
+                                //navýšit částku o expense marži
+                                c.Value_Approved_Billing = rec.p31Value_Orig + (rec.p31Value_Orig * rec.p31MarginHidden / 100);
+                                c.Value_Approved_Billing = c.Value_Approved_Billing + (c.Value_Approved_Billing * rec.p31MarginTransparent / 100);
+                            }
+                        }
+                        else
+                        {
+                            c.Value_Approved_Internal = rec.p31Value_Orig;
+                            if (rec.p72ID_AfterTrimming ==BO.p72IdENUM._NotSpecified || rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat)
+                            {
+                                c.p72id=
+                            }
+                            else
+                            {
+                                c.p72id = rec.p72ID_AfterTrimming;
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -57,9 +167,9 @@ namespace UI.Controllers
                         c.p31Value_FixPrice = rec.p31Value_FixPrice;
                     }
                 }
-                if (p72id>0 && p72id !=4 && (rec.p33ID==BO.p33IdENUM.Cas || rec.p33ID == BO.p33IdENUM.Kusovnik))
+                if (v.p72id !=BO.p72IdENUM._NotSpecified && v.p72id !=BO.p72IdENUM.Fakturovat && (rec.p33ID==BO.p33IdENUM.Cas || rec.p33ID == BO.p33IdENUM.Kusovnik))
                 {
-                    c.p72id = (BO.p72IdENUM)p72id;
+                    c.p72id = v.p72id;
                     c.Value_Approved_Billing = 0;
                 }
 
@@ -67,21 +177,21 @@ namespace UI.Controllers
             }
         }
 
-        private IEnumerable<BO.p31Worksheet> GetRecords(string guid, string pids, string prefix)
+        private IEnumerable<BO.p31Worksheet> GetRecords(GatewayViewModel v)
         {
             var lisPIDs = new List<int>();
             var p31ids = new List<int>();
-            if (guid != null)
+            if (v.guid != null)
             {
-                var lisTemp = Factory.p85TempboxBL.GetList(guid, true, prefix);
+                var lisTemp = Factory.p85TempboxBL.GetList(v.guid, true, v.prefix);
                 lisPIDs = lisTemp.Select(p => p.p85DataPID).ToList();
             }
             else
             {
-                lisPIDs = BO.BAS.ConvertString2ListInt(pids);
+                lisPIDs = BO.BAS.ConvertString2ListInt(v.pidsinline);
             }
             var mq = new BO.myQueryP31() { MyRecordsDisponible = true, p31statequery = 3 }; //nevyúčtované            
-            switch (prefix)
+            switch (v.prefix)
             {
                 case "p31":
                     p31ids = lisPIDs;
@@ -92,7 +202,7 @@ namespace UI.Controllers
                 case "p41":
                     foreach (int pid in lisPIDs)
                     {
-                        BO.Reflexe.SetPropertyValue(mq, prefix = "id", pid);
+                        BO.Reflexe.SetPropertyValue(mq, v.prefix + "id", pid);
                         p31ids.InsertRange(0, Factory.p31WorksheetBL.GetList(mq).Select(p => p.pid));
                     }
                     break;
