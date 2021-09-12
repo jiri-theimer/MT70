@@ -91,6 +91,12 @@ namespace UI.Controllers
             lis.Add(Factory.EProvider.ByPrefix("p91"));
             lis.Add(Factory.EProvider.ByPrefix("p90"));
 
+            lis.Add(Factory.EProvider.ByPrefix("le1"));
+            lis.Add(Factory.EProvider.ByPrefix("le2"));
+            lis.Add(Factory.EProvider.ByPrefix("le3"));
+            lis.Add(Factory.EProvider.ByPrefix("le4"));
+            lis.Add(Factory.EProvider.ByPrefix("le5"));
+
             return lis;
         }
 

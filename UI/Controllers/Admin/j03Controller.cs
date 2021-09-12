@@ -137,20 +137,14 @@ namespace UI.Controllers
                         c.j02ID = 0;    //zakládáme nový osobní profil
                         var cJ02 = new BO.j02Person()
                         {
-                            j02Email = v.RecJ02.j02Email
-                            ,
-                            j02TitleBeforeName = v.RecJ02.j02TitleBeforeName
-                            ,
-                            j02FirstName = v.RecJ02.j02FirstName
-                            ,
-                            j02LastName = v.RecJ02.j02LastName
-                            ,
-                            j02TitleAfterName = v.RecJ02.j02TitleAfterName
-                            ,
-                            j02Code = v.RecJ02.j02Code
-                            ,
-                            j02Mobile = v.RecJ02.j02Mobile
-                            ,
+                            j02IsIntraPerson=true,
+                            j02Email = v.RecJ02.j02Email,
+                            j02TitleBeforeName = v.RecJ02.j02TitleBeforeName,
+                            j02FirstName = v.RecJ02.j02FirstName,
+                            j02LastName = v.RecJ02.j02LastName,
+                            j02TitleAfterName = v.RecJ02.j02TitleAfterName,
+                            j02Code = v.RecJ02.j02Code,
+                            j02Mobile = v.RecJ02.j02Mobile,
                             j02Phone = v.RecJ02.j02Phone
                         };
                         if (!Factory.j02PersonBL.ValidateBeforeSave(cJ02))

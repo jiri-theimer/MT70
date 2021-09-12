@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace UI.Models.p31approve
 {
-    public class GatewayViewModel
+    public class GatewayViewModel:BaseViewModel
     {
         public string guid { get; set; }
         public string prefix { get; set; }

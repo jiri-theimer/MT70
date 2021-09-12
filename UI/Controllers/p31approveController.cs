@@ -15,19 +15,28 @@ namespace UI.Controllers
             {
                 return this.StopPage(true, "pids or guid missing.");
             }
-            var v = new GatewayViewModel() { guid = guid,pidsinline=pids,prefix=prefix,p91id=p91id,p72id=(BO.p72IdENUM) p72id,approvinglevel=approvinglevel };
+            
 
+            var v = new GatewayViewModel() { guid = guid,pidsinline=pids,prefix=prefix,p91id=p91id,p72id=(BO.p72IdENUM) p72id,approvinglevel=approvinglevel };
 
             v.lisP31 = GetRecords(v);
             SetupTempData(v);
 
-            return View();
+            return this.RedirectToAction("Inline",v);
+            
         }
-
+        public IActionResult Inline(GatewayViewModel v)
+        {
+            return View(v);
+        }
+        public IActionResult Grid(GatewayViewModel v)
+        {
+            return View(v);
+        }
         private void SetupTempData(GatewayViewModel v)
         {
             int intLastP41ID = 0;int intP41ID = 0;int intSpatnaKorekceRows = 0;BO.p41Project recP41 = null;
-
+            if (v.guid == null) v.guid = BO.BAS.GetGuid();
             foreach (var rec in v.lisP31)
             {
                 intP41ID = rec.p41ID;
@@ -138,7 +147,7 @@ namespace UI.Controllers
                             c.Value_Approved_Internal = rec.p31Value_Orig;
                             if (rec.p72ID_AfterTrimming ==BO.p72IdENUM._NotSpecified || rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat)
                             {
-                                c.p72id=
+                                c.p72id = this.Factory.p31WorksheetBL.Get_p72ID_NonBillableWork(c.p31ID);
                             }
                             else
                             {
@@ -173,8 +182,15 @@ namespace UI.Controllers
                     c.Value_Approved_Billing = 0;
                 }
 
+                if (!this.Factory.p31WorksheetBL.Save_Approving(c,true))
+                {
+
+                }
+
                 intLastP41ID = intP41ID;
+
             }
+
         }
 
         private IEnumerable<BO.p31Worksheet> GetRecords(GatewayViewModel v)

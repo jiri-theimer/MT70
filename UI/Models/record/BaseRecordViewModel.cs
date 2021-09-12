@@ -19,6 +19,7 @@ namespace UI.Models
         public string TagPids { get; set; }
         public string TagNames { get; set; }
         public string TagHtml { get; set; }
+        public string TagEntity { get; set; } = "p41Project";
 
         public void SetTagging(BO.TaggingHelper tg)
         {            

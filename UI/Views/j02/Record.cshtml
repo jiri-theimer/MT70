@@ -5,15 +5,17 @@
 
     Layout = "~/Views/Shared/_LayoutRecord.cshtml";
     if (Model.Rec == null) return;
-    if (Model.Rec.j02IsIntraPerson)
+    if (Model.RadioIsIntraPerson==1)
     {
         Model.PageTitle = _f.tra("Osobní profil");
     }
     else
     {
         Model.PageTitle = _f.tra("Kontaktní osoba");
+
     }
     Model.PageSymbol = BO.Symbol.j02();
+    
 
 }
 @addTagHelper *, UI
@@ -43,7 +45,7 @@
                     <div class="card-body">
 
                         <input type="radio" id="RadioIsIntraPerson1" asp-for="@Model.RadioIsIntraPerson" value="1" onchange="postback('postback')">
-                        <label for="RadioIsIntraPerson1">@_f.tra("Osobní profil s uživatelským účtem")</label>
+                        <label for="RadioIsIntraPerson1">@_f.tra("Osobní profil pro uživatelský účet")</label>
                         <br />
                         <input type="radio" id="RadioIsIntraPerson0" asp-for="@Model.RadioIsIntraPerson" value="0" onchange="postback('postback')">
                         <label for="RadioIsIntraPerson0">@_f.tra("Kontaktní osoba klienta")</label>

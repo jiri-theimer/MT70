@@ -43,7 +43,16 @@ namespace BO
         {
             get
             {
-                return BO.BAS.InInt(_Prefix.Replace("p","3").Replace("j","1").Replace("o","2"));
+                int x = BO.BASX29.GetInt(_Prefix);
+                if (x == 0)
+                {
+                    return BO.BAS.InInt(_Prefix.Replace("p", "3").Replace("j", "1").Replace("o", "2"));
+                }
+                else
+                {
+                    return x;
+                }
+                
             }
         }
         public int x29ID { get; set; }

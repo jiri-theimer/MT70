@@ -453,13 +453,26 @@ namespace UI.Controllers
             AMI("Záloha", "javascript:_edit('p90',0)");
             //AMI("Poznámka", "javascript:_edit('b07',0)");
             DIV();
-            AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
-            AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)");
+            //AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
+            if (Factory.CurrentUser.IsAdmin)
+            {
+                AMI("Uživatelský účet", "javascript:_window_open('/j03/Record?pid=0', 1)");
+            }
+            if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_J02_ContactPerson_Create))
+            {
+                AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)");
+            }
+            
             return _menusup.FlushResult_UL(_lis,true, false);
         }
 
         public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
         {
+            if ("p31,p41,p28,j02,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
+            {               
+                AMI("Schválit/Vyúčtovat", "javascript:tg_approve()");
+            }
+
             switch (tgi.prefix)
             {
                 case "p31":
@@ -476,7 +489,7 @@ namespace UI.Controllers
                     AMI("ISDOC Export", "javascript:p91oper_isdoc()");
                     break;
             }
-            if ("p31,p41,p28,j02,p91".Contains(tgi.prefix))
+            if ("p31,p41,p28,j02,p91,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
             {
                 DIV();
                 AMI("Oštítkovat", "javascript:tg_tagging()", "♣");

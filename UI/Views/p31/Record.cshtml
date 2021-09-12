@@ -49,7 +49,7 @@
         <label class="col-sm-1 col-md-1 col-form-label">@(_f.tra("Úkol")):</label>
 
         <div class="col-sm-11 col-md-11">
-            <mycombo entity="p56Task" asp-for="Rec.p56ID" selectedtext="@Model.SelectedComboTask" myqueryinline="p41id|int|@(Model.Rec.p41ID)|j02id|int|@(Model.Rec.j02ID)"></mycombo>
+            <mycombo entity="p56Task" asp-for="Rec.p56ID" selectedtext="@Model.SelectedComboTask" myqueryinline="p41id|int|@(Model.Rec.p41ID)|j02id|int|@(Model.Rec.j02ID)" event_after_changevalue="p56id_change"></mycombo>
         </div>
     </div>
 }
@@ -486,7 +486,9 @@ var _j02id = "@(Model.Rec.j02ID)";
     function p41id_change(p41id) {
         postback("p41id");
     }
-
+    function p56id_change(p56id) {
+        postback("p56id");
+    }
 
     function handle_recalc_after_bezdph() {
         if (_p33id != "5") return;

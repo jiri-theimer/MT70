@@ -324,6 +324,13 @@ namespace UI.Controllers
                     
                     
                     break;
+                case "p56id":
+                    if (v.Rec.p56ID > 0)
+                    {
+                        v.RecP56 = Factory.p56TaskBL.Load(v.Rec.p56ID);
+                        v.SelectedComboTask = v.RecP56.FullName;                        
+                    }
+                    break;
                 case "isvaluetrimming":
                     if (v.Rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat || v.Rec.p72ID_AfterTrimming == BO.p72IdENUM.FakturovatPozdeji)
                     {

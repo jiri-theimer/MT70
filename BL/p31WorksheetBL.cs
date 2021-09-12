@@ -24,6 +24,9 @@ namespace BL
         public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
         public IEnumerable<BO.p31WorksheetTimelineDay> GetList_TimelineDays(List<int> j02ids, DateTime d1, DateTime d2, int j70id);
         public BO.p31Rate LoadRate(BO.p51TypeFlagENUM flag, DateTime d, int j02id, int p41id, int p32id);
+        public BO.p72IdENUM Get_p72ID_NonBillableWork(int p31id);
+        public bool Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata);
+        public bool Validate_Before_Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata);
 
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
@@ -570,6 +573,96 @@ namespace BL
             }
 
             return ret;
+        }
+
+        public BO.p72IdENUM Get_p72ID_NonBillableWork(int p31id)
+        {
+            var pars = new Dapper.DynamicParameters();
+            pars.Add("p31id", p31id, System.Data.DbType.Int32);
+            pars.Add("ret_p72id", null, System.Data.DbType.Int32, System.Data.ParameterDirection.Output);
+
+            if (_db.RunSp("p31_inhale_p72id_nonbillable", ref pars, false) == "1")
+            {
+                return (BO.p72IdENUM) pars.Get<int>("ret_p72id");
+
+            }
+            else
+            {
+                return BO.p72IdENUM.SkrytyOdpis;
+            }            
+        }
+
+        public bool Validate_Before_Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata)
+        {
+            if (c.p71id == BO.p71IdENUM.Nic) return true;   //vrátit do rozpracovanosti
+            if (c.p71id == BO.p71IdENUM.Neschvaleno) return true;   //nahozeno jako neschváleno
+            if (istempdata && string.IsNullOrEmpty(c.Guid))
+            {
+                this.AddMessage("Pro temp data musí být předán GUID_TempData.");return false;
+            }
+            if (!istempdata && !string.IsNullOrEmpty(c.Guid))
+            {
+                this.AddMessage("Je předáván GUID_TempData, ale bolTempData=false."); return false;
+            }
+            if (c.p71id==BO.p71IdENUM.Schvaleno && c.p72id == BO.p72IdENUM._NotSpecified)
+            {
+                this.AddMessage("Schválený úkon musí mít přiřazen některý z fakturačních statusů.");return false;
+            }
+
+            return true;
+        }
+
+        public bool Save_Approving(BO.p31WorksheetApproveInput c,bool istempdata)
+        {
+            if (!Validate_Before_Save_Approving(c, istempdata)) return false;
+
+            var pars = new Dapper.DynamicParameters();
+            if (!string.IsNullOrEmpty(c.Guid))
+            {
+                pars.Add("guid", c.Guid, System.Data.DbType.String);
+            }
+            pars.Add("p31id", c.p31ID, System.Data.DbType.Int32);
+            pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);
+            pars.Add("p71id", (int)c.p71id, System.Data.DbType.Int32);
+            pars.Add("p72id", (int)c.p72id, System.Data.DbType.Int32);
+            pars.Add("approvingset", null, System.Data.DbType.String);
+            pars.Add("value_approved_internal", c.Value_Approved_Internal, System.Data.DbType.Double);
+            pars.Add("value_approved_billing", c.Value_Approved_Billing, System.Data.DbType.Double);
+            pars.Add("rate_billing_approved", c.Rate_Billing_Approved, System.Data.DbType.Double);
+            pars.Add("rate_internal_approved", c.Rate_Internal_Approved, System.Data.DbType.Double);
+            pars.Add("p31Text", c.p31Text, System.Data.DbType.String);
+            pars.Add("vatrate_approved", c.VatRate_Approved, System.Data.DbType.Double);
+            pars.Add("dat_p31date", c.p31Date, System.Data.DbType.DateTime);
+            pars.Add("approving_level", c.p31ApprovingLevel, System.Data.DbType.Int32);
+            pars.Add("value_fixprice", c.p31Value_FixPrice, System.Data.DbType.Double);
+            pars.Add("manualfee_approved", c.ManualFee_Approved, System.Data.DbType.Double);
+            pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
+
+            if (!string.IsNullOrEmpty(c.Guid))
+            {
+                //TEMP - dočasná data
+                if (_db.RunSp("p31_save_approving_temp", ref pars, true) == "1")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                //uložení schvalování do ostrých dat
+                if (_db.RunSp("p31_save_approving", ref pars, true) == "1")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            
         }
 
     }

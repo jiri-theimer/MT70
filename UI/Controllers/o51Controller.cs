@@ -15,14 +15,19 @@ namespace UI.Controllers
         ///štítky
         ///
         public IActionResult MultiSelect(string entity,string o51ids)
-        {            
-            var v = new TagsMultiSelect();
-            v.Entity = entity;            
-            int intX29ID = BO.BASX29.GetInt(v.Entity);
-            
+        {
+            var v = new TagsMultiSelect() { Entity = entity };
+                
+            int intX29ID_Prvni = BO.BASX29.GetInt(v.Entity);
+            int intX29ID_Druhy = -1;
+            if (entity.Substring(0, 2) == "le")
+            {
+                intX29ID_Druhy = 141;
+            }
+
             IEnumerable<BO.o51Tag> lisTags = Factory.o51TagBL.GetList(new BO.myQueryO51());
-            v.ApplicableTags_Multi = lisTags.Where(p => p.o53IsMultiSelect == true && (p.x29IDs == null || p.x29IDs.Contains(intX29ID.ToString())));
-            v.ApplicableTags_Single = lisTags.Where(p => p.o53IsMultiSelect == false && (p.x29IDs == null || p.x29IDs.Contains(intX29ID.ToString())));
+            v.ApplicableTags_Multi = lisTags.Where(p => p.o53IsMultiSelect == true && (p.x29IDs == null || p.x29IDs.Contains(intX29ID_Prvni.ToString()) || p.x29IDs.Contains(intX29ID_Druhy.ToString())));
+            v.ApplicableTags_Single = lisTags.Where(p => p.o53IsMultiSelect == false && (p.x29IDs == null || p.x29IDs.Contains(intX29ID_Prvni.ToString()) || p.x29IDs.Contains(intX29ID_Druhy.ToString())));
 
             if (String.IsNullOrEmpty(o51ids) == false)
             {
@@ -33,7 +38,7 @@ namespace UI.Controllers
             
 
             var mq = new BO.myQuery("o53TagGroup");
-            var lisGroups = Factory.o53TagGroupBL.GetList(mq).Where(p =>p.o53IsMultiSelect==false && ( p.x29IDs == null || p.x29IDs.Contains(intX29ID.ToString()))).ToList();
+            var lisGroups = Factory.o53TagGroupBL.GetList(mq).Where(p =>p.o53IsMultiSelect==false && ( p.x29IDs == null || p.x29IDs.Contains(intX29ID_Prvni.ToString()) || p.x29IDs.Contains(intX29ID_Druhy.ToString()))).ToList();
             v.SingleCombos = new List<SingleSelectCombo>();
             foreach (var group in lisGroups)
             {
@@ -209,9 +214,16 @@ namespace UI.Controllers
             v.j72ID = j72id;
             v.Record_Entity = gridState.j72Entity;
             v.Record_Pids = pids;
-            
-            int intX29ID = BO.BASX29.GetInt(v.Record_Entity);
-            v.lisO53 = Factory.o53TagGroupBL.GetList(new BO.myQuery("o53TagGroup")).Where(p => p.x29IDs == null || p.x29IDs.Contains(intX29ID.ToString()));
+
+            string strPrefix = v.Record_Entity.Substring(0, 3);
+            int intX29ID_Prvni = BO.BASX29.GetInt(strPrefix);
+            int intX29ID_Druhy = -1;
+            if (strPrefix.Substring(0, 2) == "le")
+            {
+                intX29ID_Druhy = 141;
+            }
+
+            v.lisO53 = Factory.o53TagGroupBL.GetList(new BO.myQuery("o53TagGroup")).Where(p => p.x29IDs == null || p.x29IDs.Contains(intX29ID_Prvni.ToString()) || p.x29IDs.Contains(intX29ID_Druhy.ToString()));
             if (v.SelectedO53ID > 0)
             {
                 v.RecO53 = Factory.o53TagGroupBL.Load(v.SelectedO53ID);

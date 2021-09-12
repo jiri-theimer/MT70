@@ -17,18 +17,22 @@ namespace BL
 
             SetupPallete();
 
-            DL.DbHandler db = new DL.DbHandler(_app.ConnectString, new BO.RunningUser(), _app.LogFolder);
-            var dt = db.GetDataTable("select x29ID,LEFT(x29TableName,3) as Prefix from x29Entity");
-            foreach (System.Data.DataRow dbrow in dt.Rows)
+            if (_lis.Any(p => p.x29ID == 0))
             {
-                if (_lis.Any(p => p.Prefix == dbrow["Prefix"].ToString()))
+                DL.DbHandler db = new DL.DbHandler(_app.ConnectString, new BO.RunningUser(), _app.LogFolder);
+                var dt = db.GetDataTable("select x29ID,LEFT(x29TableName,3) as Prefix from x29Entity");
+                foreach (System.Data.DataRow dbrow in dt.Rows)
                 {
-                    ByPrefix(dbrow["Prefix"].ToString()).x29ID = Convert.ToInt32(dbrow["x29ID"]);
-                    
+                    if (_lis.Any(p => p.Prefix == dbrow["Prefix"].ToString()))
+                    {
+                        ByPrefix(dbrow["Prefix"].ToString()).x29ID = Convert.ToInt32(dbrow["x29ID"]);
+
+                    }
+
+
                 }
-                
-                
             }
+            
         }
 
         public BO.TheEntity ByPrefix(string strPrefix)
@@ -174,6 +178,7 @@ namespace BL
             BO.TheEntity c = new BO.TheEntity() { TableName = strTabName, AliasPlural = strPlural, AliasSingular = strSingular, SqlFromGrid = strSqlFromGrid, SqlOrderByCombo = strSqlOrderByCombo, SqlOrderBy = strSqlOrderBy };
             c.TranslateLang1 = _tt.DoTranslate(strPlural, 1,"TheEntitiesProvider:AE");
             c.TranslateLang2 = _tt.DoTranslate(strPlural, 2, "TheEntitiesProvider:AE");
+            c.x29ID = BO.BASX29.GetInt(c.Prefix);
             _lis.Add(c);
 
         }

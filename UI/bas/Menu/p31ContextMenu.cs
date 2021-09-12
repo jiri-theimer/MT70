@@ -38,7 +38,11 @@ namespace UI.Menu
                 AMI_Clone("p31", pid);
             }
 
-
+            if (disp.CanApprove || disp.CanApproveAndEdit)
+            {
+                AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p31&pids={pid}',2)", "k-i-edit");
+            }
+            
 
             AMI("Další", null, null, null, "more");
                         

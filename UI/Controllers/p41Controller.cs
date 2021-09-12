@@ -167,7 +167,11 @@ namespace UI.Controllers
             {
                 v.RecP42 = Factory.p42ProjectTypeBL.Load(v.Rec.p42ID);
                 v.lisParentLevels = Factory.p07ProjectLevelBL.GetList(new BO.myQuery("p07")).Where(p => p.p07Level<v.RecP42.p07Level);
-
+                v.TagEntity = "le"+v.RecP42.p07Level.ToString();
+            }
+            else
+            {
+                v.TagEntity = "p41Project";
             }
             
 

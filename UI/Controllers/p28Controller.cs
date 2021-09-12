@@ -219,13 +219,29 @@ namespace UI.Controllers
                 return View(v);
             }
             if (oper== "ares")
-            {                
-                AresImport(v);
+            {
+                try
+                {
+                    AresImport(v);
+                }catch(Exception ex)
+                {
+                    this.AddMessageTranslated(ex.Message);
+
+                }
+                
                 return View(v);
             }
             if (oper == "vies")
             {
-                ViesImport(v);
+                try
+                {
+                    ViesImport(v);
+                }
+                catch (Exception ex)
+                {
+                    this.AddMessageTranslated(ex.Message);                   
+                }
+                
                 return View(v);
             }
             if (oper == "add_o37")
@@ -423,8 +439,10 @@ namespace UI.Controllers
             var c = vatQuery.CheckVATNumberAsync(strCountryCode, strDic);
             if (!c.Result.Valid)
             {
-                this.AddMessageTranslated(v.Rec.p28VatID+": "+Factory.tra("Subjekt nelze ověřit.")); return;
+                this.AddMessageTranslated(v.Rec.p28VatID + ": " + Factory.tra("Subjekt nelze ověřit.")); return;
             }
+            
+            
             v.Rec.p28CompanyName = c.Result.Name;
             if (string.IsNullOrEmpty(c.Result.Address) || c.Result.Address.Length<10)
             {
@@ -477,6 +495,8 @@ namespace UI.Controllers
             {
                 v.Rec.p28VatID = c.DIC;
             }
+
+            
 
             var adresa = new o37Repeater() { TempGuid = BO.BAS.GetGuid(), o36ID = BO.o36IdEnum.InvoiceAddress };
             if (v.lisO37.Where(p => p.o36ID == BO.o36IdEnum.InvoiceAddress && p.IsTempDeleted==false).Count() > 0)

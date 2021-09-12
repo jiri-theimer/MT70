@@ -13,6 +13,7 @@ namespace UI.Models.Record
         public BO.p41Project RecP41 { get; set; }
         public BO.p34ActivityGroup RecP34 { get; set; }
         public BO.p32Activity RecP32 { get; set; }
+        public BO.p56Task RecP56 { get; set; }
 
         public FreeFieldsViewModel ff1 { get; set; }
         
