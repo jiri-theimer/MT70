@@ -90,12 +90,19 @@ namespace UI.Controllers
             lis.Add(Factory.EProvider.ByPrefix("o23"));
             lis.Add(Factory.EProvider.ByPrefix("p91"));
             lis.Add(Factory.EProvider.ByPrefix("p90"));
-
-            lis.Add(Factory.EProvider.ByPrefix("le1"));
-            lis.Add(Factory.EProvider.ByPrefix("le2"));
-            lis.Add(Factory.EProvider.ByPrefix("le3"));
-            lis.Add(Factory.EProvider.ByPrefix("le4"));
-            lis.Add(Factory.EProvider.ByPrefix("le5"));
+            
+            for(int i = 1; i <= 5; i++)
+            {
+                if (this.Factory.CurrentUser.getP07Level(i,false) != null)
+                {
+                    Factory.EProvider.ByPrefix("le" + (i).ToString()).AliasPlural = this.Factory.CurrentUser.getP07Level(i, false)+" ["+Factory.tra("Pouze verze 7")+"]";
+                    lis.Add(Factory.EProvider.ByPrefix("le" + i.ToString()));
+                }
+                //Factory.EProvider.ByPrefix("le" + (6 - i).ToString()).AliasPlural = this.Factory.CurrentUser.getP07Level(5 - i,false);
+                
+            }
+            
+            
 
             return lis;
         }

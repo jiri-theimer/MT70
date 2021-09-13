@@ -235,7 +235,8 @@ namespace UI.Controllers
                     this.AddMessage("Tato vazba již existuje.");return View(v);
                 }                
                 var c = new x19Repeator() { x20ID = v.SelectedX20ID, TempGuid = BO.BAS.GetGuid(), x19RecordPID = v.SelectedBindPid, SelectedX20Name = v.SelectedBindName };
-                c.SelectedBindText = Factory.CBL.GetObjectAlias(v.SelectedBindEntity.Substring(0, 3), v.SelectedBindPid);
+                c.SelectedBindText = Factory.CBL.GetObjectAlias(v.SelectedBindEntity.Substring(0, 3), v.SelectedBindPid);                
+                v.SelectedBindText = c.SelectedBindText;
                 var cx20 = Factory.x18EntityCategoryBL.LoadX20(v.SelectedX20ID);
                 if (!cx20.x20IsMultiSelect)
                 {
