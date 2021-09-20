@@ -287,6 +287,7 @@ namespace UI
                 switch (mq.Prefix)
                 {
                     case "p31":
+                    case "app":
                         switch (Convert.ToInt32(dbRow["p33ID"]))
                         {
                             case 2:
@@ -339,6 +340,7 @@ namespace UI
                 switch (mq.Prefix)
                 {
                     case "p31":
+                    case "app":
                         _s.Append(" style='width:20px;" + UI.TheGridRowSymbol.p31_td_style(dbRow) + "'>");
                         _s.Append(UI.TheGridRowSymbol.p31_td_inner(dbRow));
                         if (dbRow["o23ID_First"] != System.DBNull.Value)
@@ -359,7 +361,7 @@ namespace UI
                 _s.Append("</td>");
 
                 strRowClass = "td2";
-                if (mq.Prefix == "p31")
+                if (mq.Prefix == "p31" || mq.Prefix=="app")
                 {
                     if (!Convert.ToBoolean(dbRow["p32IsBillable"]))
                     {
@@ -416,6 +418,7 @@ namespace UI
             switch (this.gridinput.query.Prefix)
             {
                 case "p31":
+                case "app":
                     _s.Append($"<input type='hidden' id='tabgrid1_rows_time' value='{dt.Rows[0]["RowsTime"]}'/>");
                     _s.Append($"<input type='hidden' id='tabgrid1_rows_expense' value='{dt.Rows[0]["RowsExpense"]}'/>");
                     _s.Append($"<input type='hidden' id='tabgrid1_rows_fee' value='{dt.Rows[0]["RowsFee"]}'/>");

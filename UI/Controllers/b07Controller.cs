@@ -20,8 +20,17 @@ namespace UI.Controllers
             var mq = new BO.myQueryB07();
             if (master_entity.Substring(0, 2) == "le")
             {
-                mq.leindex = Convert.ToInt32(master_entity.Substring(2, 1));
-                mq.lepid = v.master_pid;
+                if (master_entity == "le5")
+                {
+                    mq.x29id = 141;
+                    mq.recpid = v.master_pid;
+                }
+                else
+                {
+                    mq.leindex = Convert.ToInt32(master_entity.Substring(2, 1));
+                    mq.lepid = v.master_pid;
+                }
+                
             }
             else
             {
@@ -29,6 +38,7 @@ namespace UI.Controllers
                 mq.recpid = v.master_pid;
             }
             v.lisB07 = Factory.b07CommentBL.GetList(mq).Where(p => p.b07WorkflowInfo == null && p.b07Value !="upload");
+            
 
             v.lisO27 = Factory.o27AttachmentBL.GetList(new BO.myQueryO27() { b07ids = v.lisB07.Select(p => p.pid).ToList() });
             return View(v);

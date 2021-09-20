@@ -5,10 +5,9 @@
     string strClass = null;
     string strHodiny = null;
 
-    int h0 = 8;
-    if (DateTime.Now.Hour < h0) h0 = DateTime.Now.Hour;
-    int h1 = 19;
-    if (DateTime.Now.Hour > h1) h1 = DateTime.Now.Hour;
+
+    if (DateTime.Now.Hour < Model.h0) Model.h0 = DateTime.Now.Hour;
+    if (DateTime.Now.Hour > Model.h1) Model.h1 = DateTime.Now.Hour;
 
 
     double _dblHodiny = Model.lisP31.Sum(p => p.p31Hours_Orig);
@@ -16,20 +15,20 @@
     IEnumerable<BO.p31Worksheet> qryP31 = Model.lisP31.Where(p => p.p31DateTimeFrom_Orig != null);  //úkony s přesným časem
     IEnumerable<BO.p31Worksheet> qryP31NoTime = Model.lisP31.Where(p => p.p31DateTimeFrom_Orig == null);  //úkony bez přesného času
 
-    if (qryP31.Any(p => Convert.ToDateTime(p.p31DateTimeFrom_Orig).Hour < h0))
+    if (qryP31.Any(p => Convert.ToDateTime(p.p31DateTimeFrom_Orig).Hour < Model.h0))
     {
-        h0 = qryP31.Min(p => Convert.ToDateTime(p.p31DateTimeFrom_Orig).Hour);
+        Model.h0 = qryP31.Min(p => Convert.ToDateTime(p.p31DateTimeFrom_Orig).Hour);
     }
-    if (qryP31.Any(p => Convert.ToDateTime(p.p31DateTimeUntil_Orig).Hour > h1))
+    if (qryP31.Any(p => Convert.ToDateTime(p.p31DateTimeUntil_Orig).Hour > Model.h1 + 1))
     {
-        h1 = qryP31.Max(p => Convert.ToDateTime(p.p31DateTimeUntil_Orig).Hour);
+        Model.h1 = qryP31.Max(p => Convert.ToDateTime(p.p31DateTimeUntil_Orig).Hour);
     }
     var hours_slots = new List<string>();
     var hhmm_slots = new List<string>();
     var blocks = new List<string>();
     var time_slots = new List<DateTime>();
 
-    for (int h = h0; h <= h1; h++)
+    for (int h = Model.h0; h <= Model.h1; h++)
     {
         hours_slots.Add(BO.BAS.RightString("0" + h.ToString(), 2) + ":00");
         for (int m = 5; m <= 60; m += 5)
@@ -41,6 +40,7 @@
             time_slots.Add(dx);
         }
     }
+    hhmm_slots.Add((Model.h1 + 1).ToString() + ":00");
 
     <div class="input-group" style="border-bottom:solid 1px black;margin-bottom:2px;">
         <div style="margin-left:55px;">
@@ -65,7 +65,30 @@
 
             </select>
         </div>
-
+        <div style="margin-left:20px;">
+            <select asp-for="@Model.h0" onchange="change_h0(this)" title="@_f.tra("Od")">
+                <option value="6">06:00</option>
+                <option value="7">07:00</option>
+                <option value="8">08:00</option>
+                <option value="9">09:00</option>
+                <option value="10">10:00</option>
+                <option value="12">12.00</option>
+            </select>
+        </div>
+        <div style="width:20px;text-align:center;">
+            -
+        </div>
+        <div>
+            <select asp-for="@Model.h1" onchange="change_h1(this)" title="@_f.tra("Do")">
+                <option value="15">16:00</option>
+                <option value="16">17:00</option>
+                <option value="18">19:00</option>
+                <option value="19">20:00</option>
+                <option value="20">21:00</option>
+                <option value="22">23:00</option>
+                <option value="23">24:00</option>
+            </select>
+        </div>
     </div>
 
     @if (qryP31NoTime.Count() > 0)
@@ -132,7 +155,7 @@
     @Html.Raw($"<div id='grid_day_container' class='grid-day-container' style='grid-template-rows:{string.Join(" ", blocks)};'>");
 
     int y = 5; int x = 0;
-    for (int h = h0; h <= h1; h++)
+    for (int h = Model.h0; h <= Model.h1; h++)
     {
         string ss = BO.BAS.RightString("0" + h.ToString(), 2) + ":00";
         @Html.Raw($"<div class='hour_slot' style='grid-row:{(x + 1)}/span 12;'>{ss}</div>");
@@ -146,6 +169,7 @@
                 {
                     ss += " - " + hhmm_slots[x + Model.DayView_MinutesGap / 5];
                 }
+               
                 @Html.Raw($"<button type='button' class='minute_slot' style='grid-row:{(x + 1)}/span {Model.DayView_MinutesGap / 5};' title='{ss}' slot='{hhmm_slots[x]}' slot_interval='{ss}'></button>");
 
                 y = 0;
@@ -264,7 +288,7 @@
                 var t1 = ts[0];
                 ts = arr[arr.length - 1].split(" - ");
                 var t2 = "";
-                if (ts.length >= 1) t2 = ts[1];
+                if (ts.length >= 1) t2 = ts[1];                
                 p31c(_strDatum, t1, t2);
 
             },

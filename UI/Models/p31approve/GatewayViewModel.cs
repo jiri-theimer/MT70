@@ -17,5 +17,9 @@ namespace UI.Models.p31approve
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
 
         public bool DoDefaultApproveState { get; set; } = true;
+
+
+        public TheGridInput gridinput { get; set; }
+        public int j72ID { get; set; }
     }
 }

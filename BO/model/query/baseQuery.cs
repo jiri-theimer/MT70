@@ -105,6 +105,7 @@ namespace BO
         public bool? iswip { get; set; }        //rozpracované úkony
         public bool? isinvoiced { get; set; }   //vyúčtované úkony
         public bool? isapproved_and_wait4invoice { get; set; }  //schváleno a čeká na vyúčtování
+        
 
         public string period_field { get; set; }
         public DateTime? global_d1 { get; set; }

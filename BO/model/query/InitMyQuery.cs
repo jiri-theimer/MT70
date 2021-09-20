@@ -56,6 +56,8 @@ namespace BO
                     return handle_myquery_reflexe(new BO.myQueryP28());
                 case "p31":
                     return handle_myquery_reflexe(new BO.myQueryP31());
+                case "app":
+                    return handle_myquery_reflexe(new BO.myQueryP31() { Prefix = "app" });
                 case "p32":
                     return handle_myquery_reflexe(new BO.myQueryP32());
                 case "p34":
@@ -129,6 +131,9 @@ namespace BO
             {
                 switch (_master_prefix)
                 {
+                    case "le5":
+                        BO.Reflexe.SetPropertyValue(mq, "p41id", _master_pid);                       
+                        break;
                     case "le4":
                         BO.Reflexe.SetPropertyValue(mq, "leindex", 4);
                         BO.Reflexe.SetPropertyValue(mq, "lepid", _master_pid);

@@ -31,6 +31,9 @@ namespace UI.Models.p31view
         public int m0 { get; set; }
         public int y0 { get; set; }
 
+        public int h0 { get; set; } = 8; //u přesného dne první hodina
+        public int h1 { get; set; } = 19; //u přesného dne poslední hodina
+
         public int FirstDayOfWeek = 7;
 
         public bool ShowWeekend { get; set; }

@@ -73,7 +73,8 @@ namespace UI
         public List<NavTab> getMasterTabs(string prefix,int pid,bool loadsums)
         {
             _tabs = new List<NavTab>();
-            
+            BO.p41ProjectSum cp41 = null;
+
             switch (prefix)
             {
                 case "j02":                    
@@ -117,7 +118,7 @@ namespace UI
                 case "le3":
                 case "le4":
                 case "le5":
-                    var cp41 = _f.p41ProjectBL.LoadSumRow(pid);
+                    cp41 = _f.p41ProjectBL.LoadSumRow(pid);
                     _tabs.Add(AddTab("Tab1", "tab1", "/p41/Tab1?pid=" + AppendPid2Url(pid), false));
                     _tabs.Add(AddTab("Úkony", "p31Worksheet", "/TheGrid/SlaveView?prefix=p31",true, Badge3(cp41.p31_Wip_Time_Count, cp41.p31_Wip_Expense_Count, cp41.p31_Wip_Fee_Count, "badge bg-warning text-dark")));
                     _tabs.Add(AddTab("Hodiny", "p31time", "/TheGrid/SlaveView?prefix=p31&myqueryinline=tabquery|string|time",true, Badge2(cp41.p31_Wip_Time_Count, cp41.p31_Approved_Time_Count)));
@@ -169,11 +170,16 @@ namespace UI
             if (_f.CurrentUser.p07LevelsCount > 1 && (prefix=="le4" || prefix=="le3" || prefix=="le2" || prefix=="le1"))
             {
                 int intLevelIndex = Convert.ToInt32(prefix.Substring(2, 1));
+                int intBadgeChild = 0;
                 for(int i = intLevelIndex+1; i <= 5; i++)
                 {
                     if (_f.CurrentUser.getP07Level(i,true) != null)
                     {
-                        _tabs.Add(AddTab(_f.CurrentUser.getP07Level(i, false), "le"+i.ToString(), "/TheGrid/SlaveView?prefix=le"+i.ToString(), true));
+                        if (i == 5) intBadgeChild = cp41.le5_Count;
+                        if (i == 4) intBadgeChild = cp41.le4_Count;
+                        if (i == 3) intBadgeChild = cp41.le3_Count;
+                        if (i == 2) intBadgeChild = cp41.le2_Count;
+                        _tabs.Add(AddTab(_f.CurrentUser.getP07Level(i, false), "le"+i.ToString(), "/TheGrid/SlaveView?prefix=le"+i.ToString(), true,Badge1(intBadgeChild)));
                     }
                 }
             }

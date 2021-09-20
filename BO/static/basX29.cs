@@ -11,7 +11,7 @@ namespace BO
         public static string GetPrefixDb(string prefix)
         {
             if (prefix == "le5" || prefix == "le4" || prefix == "le3" || prefix == "le2" || prefix == "le1") return "p41";
-
+            if (prefix == "app") return "p31";
             return prefix;
         }
         public static string GetPrefix(BO.x29IdEnum x29id)

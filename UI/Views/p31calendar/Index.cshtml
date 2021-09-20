@@ -476,6 +476,16 @@ else
             reload();
         });
     }
+    function change_h0(cbx) {
+        $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-h0", value: cbx.value }, function (data) {
+            reload();
+        });
+    }
+    function change_h1(cbx) {
+        $.post(_ep("/Common/SetUserParam"), { key: "p31calendar-h1", value: cbx.value }, function (data) {
+            reload();
+        });
+    }
 
     function reccm(e,p31id) {
         _cm(e, "p31Worksheet", p31id, "calendar");

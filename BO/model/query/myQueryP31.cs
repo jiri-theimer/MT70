@@ -24,7 +24,7 @@ namespace BO
         public int p71id { get; set; }
         public string tabquery { get; set; }
         
-        
+        public string tempguid { get; set; }
 
         public myQueryP31()
         {
@@ -172,6 +172,12 @@ namespace BO
                 s += " OR a.j02ID IN (select j02ID FROM j02Person WHERE j02LastName LIKE '%'+@expr+'%')";
                 AQ(s, "expr", _searchstring);
 
+            }
+
+            if (this.tempguid != null)
+            {
+                //platí pro p31Worksheet_Temp
+                AQ("a.p31GUID=@tempguid", "tempguid", this.tempguid);
             }
 
 

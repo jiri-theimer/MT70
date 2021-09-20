@@ -81,8 +81,7 @@ namespace BL
             return _q.FinalSql;
         }
         public DataTable GetList(BO.baseQuery mq,bool bolGetTotalsRow=false)
-        {          
-           
+        {                     
             var sb = new System.Text.StringBuilder();
             sb.Append("SELECT ");
             if (mq.TopRecordsOnly > 0)
@@ -91,8 +90,7 @@ namespace BL
             }
           
             if (mq.explicit_columns == null || mq.explicit_columns.Count()==0)
-            {
-                
+            {                
                 mq.explicit_columns = new BL.TheColumnsProvider(_mother.EProvider,_mother.Translator).getDefaultPallete(false,mq,_mother);    //na vstupu není přesný výčet sloupců -> pracovat s default sadou
             }
             if (bolGetTotalsRow)
@@ -110,7 +108,8 @@ namespace BL
                 sb.Append($",COUNT(a.{mq.PrefixDb}ID) as RowsCount");     //sumační dotaz gridu
                 switch (mq.Prefix)
                 {
-                    case "p31": //součty pro hodnoty záložek hodiny/výdaje/odměny                        
+                    case "p31": //součty pro hodnoty záložek hodiny/výdaje/odměny
+                    case "app":
                         sb.Append(",SUM(case when p34x.p33ID=1 then 1 end) as RowsTime");
                         sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=1 then 1 end) as RowsExpense");
                         sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=2 then 1 end) as RowsFee");
@@ -132,7 +131,7 @@ namespace BL
             if (mq.explicit_selectsql != null){
                 sb.Append("," + mq.explicit_selectsql);
             }
-
+           
             sb.Append(" FROM ");
             
             sb.Append(ce.SqlFromGrid);    //úvodní FROM klauzule s primární "a" tabulkou            

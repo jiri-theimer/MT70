@@ -38,6 +38,7 @@ namespace UI.Controllers
                 v.Rec.TimeFrom = t1;
                 if (t2 != null)
                 {
+                    if (t2 == "24:00") t2 = "23:59";
                     v.Rec.TimeUntil = t2;
                     var xx = Record_RecalcDuration(t1, t2);
                     if (xx.error == null)

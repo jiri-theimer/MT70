@@ -1,0 +1,40 @@
+﻿@model UI.Models.p31approve.GatewayViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Schvalování");
+
+}
+
+@addTagHelper *, UI
+
+<form id="form1" asp-controller="p31approve" asp-action="Grid" method="POST">
+    <div class="bg-light" style="padding:10px;">
+        <button type="button" id="cmdOK" class="btn btn-success">OK</button>
+
+        <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+
+
+    </div>
+
+    <input type="hidden" asp-for="@Model.guid" />
+    <input type="hidden" asp-for="@Model.j72ID" />
+</form>
+
+<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+    });
+
+
+</script>

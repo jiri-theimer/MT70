@@ -38,6 +38,11 @@ namespace BO
 
         public bool Recur_Tasks_Exist { get; set; }
         public string upozorneni { get; set; }
+
+        public int le5_Count { get; set; }
+        public int le4_Count { get; set; }
+        public int le3_Count { get; set; }
+        public int le2_Count { get; set; }
     }
 
 }

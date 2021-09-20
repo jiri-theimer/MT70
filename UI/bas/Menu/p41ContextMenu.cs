@@ -50,14 +50,22 @@ namespace UI.Menu
 
             DIV();
 
+            
+            AMI("Další", null, null, null, "more");
+
+            AMI_Memo("p41", pid, "more");
+            AMI_Doc("p41", pid, "more");
+            AMI_SendMail("p41", pid, "more");
+
+
             AMI("Vazby", null, null, null, "bind");
             if (rec.p28ID_Client > 0)
             {
-                AMI(rec.Client,"/Record/RecPage?prefix=p28&pid="+rec.p28ID_Client.ToString(),null,"bind",null,"_top");
+                AMI(rec.Client, "/Record/RecPage?prefix=p28&pid=" + rec.p28ID_Client.ToString(), null, "bind", null, "_top");
             }
-            if (rec.p41ID_P07Level1>0 && rec.p41ID_P07Level1 !=rec.pid)
-            {                
-                AMI(f.CBL.GetObjectAlias("p41",rec.p41ID_P07Level1), "/Record/RecPage?prefix=le1&pid=" + rec.p41ID_P07Level1.ToString(), null, "bind", null, "_top");
+            if (rec.p41ID_P07Level1 > 0 && rec.p41ID_P07Level1 != rec.pid)
+            {
+                AMI(f.CBL.GetObjectAlias("p41", rec.p41ID_P07Level1), "/Record/RecPage?prefix=le1&pid=" + rec.p41ID_P07Level1.ToString(), null, "bind", null, "_top");
             }
             if (rec.p41ID_P07Level2 > 0 && rec.p41ID_P07Level2 != rec.pid)
             {
@@ -71,14 +79,6 @@ namespace UI.Menu
             {
                 AMI(f.CBL.GetObjectAlias("p41", rec.p41ID_P07Level4), "/Record/RecPage?prefix=le4&pid=" + rec.p41ID_P07Level4.ToString(), null, "bind", null, "_top");
             }
-            AMI("Další", null, null, null, "more");
-
-            AMI_Memo("p41", pid, "more");
-            AMI_Doc("p41", pid, "more");
-            AMI_SendMail("p41", pid, "more");
-
-
-            
 
         }
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UI.Models.p31approve;
+using UI.Models;
 
 namespace UI.Controllers
 {
@@ -22,7 +23,7 @@ namespace UI.Controllers
             v.lisP31 = GetRecords(v);
             SetupTempData(v);
 
-            return this.RedirectToAction("Inline",v);
+            return this.RedirectToAction("Grid",v);
             
         }
         public IActionResult Inline(GatewayViewModel v)
@@ -30,9 +31,21 @@ namespace UI.Controllers
             return View(v);
         }
         public IActionResult Grid(GatewayViewModel v)
-        {
+        {            
+            v.j72ID = Factory.CBL.LoadUserParamInt("p31approve-j72id");
+            
+            RefreshState_Grid(v);
             return View(v);
         }
+
+        private void RefreshState_Grid(GatewayViewModel v)
+        {
+            string strMyQuery = "tempguid|string|" + v.guid;
+            v.gridinput = new TheGridInput() { entity = "approve",j72id=v.j72ID, myqueryinline = strMyQuery, oncmclick = "", ondblclick = "" };
+            v.gridinput.query = new BO.InitMyQuery().Load("approve", null, 0, strMyQuery);
+        }
+
+
         private void SetupTempData(GatewayViewModel v)
         {
             int intLastP41ID = 0;int intP41ID = 0;int intSpatnaKorekceRows = 0;BO.p41Project recP41 = null;
@@ -123,7 +136,8 @@ namespace UI.Controllers
                                     }
                                     switch (rec.p72ID_AfterTrimming)
                                     {
-                                        case BO.p72IdENUM._NotSpecified:
+                                        case BO.p72IdENUM._NotSpecified:                                            
+                                            break;
                                         case BO.p72IdENUM.Fakturovat:
                                             c.p72id = rec.p72ID_AfterTrimming ;
                                             c.Value_Approved_Billing = rec.p31Value_Trimmed;

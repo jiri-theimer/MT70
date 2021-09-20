@@ -53,6 +53,8 @@ namespace UI.Controllers.p31view
             if (v.CurrentView == CalendarViewEnum.ExactDay)
             {
                 v.DayView_MinutesGap = Factory.CBL.LoadUserParamInt("p31calendar-minutesgap", 15);
+                v.h0 = Factory.CBL.LoadUserParamInt("p31calendar-h0", 8);
+                v.h1 = Factory.CBL.LoadUserParamInt("p31calendar-h1", 19);
             }
 
             v.RecJ02 = Factory.j02PersonBL.Load(v.j02ID);
