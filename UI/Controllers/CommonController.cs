@@ -30,7 +30,17 @@ namespace UI.Controllers
             return this.Factory.CBL.DeleteRecord(entity, pid);
         }
 
-
+        public string SetPids2Temp(List<int> arr)
+        {
+            string guid = BO.BAS.GetGuid();
+            foreach(int pid in arr)
+            {
+                var c = new BO.p85Tempbox() { p85GUID = guid, p85DataPID = pid };
+                Factory.p85TempboxBL.Save(c);
+            }
+            return guid;
+        }
+        
         public BO.Result SetUserParam(string key, string value)
         {
             if (Factory.CBL.SetUserParam(key, value))

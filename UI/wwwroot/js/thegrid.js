@@ -996,8 +996,20 @@ function tg_approve() {
 
         return;
     }
-    url = url + "&pids=" + pids;
-    _window_open(url, 2);
+
+    var arr = pids.split(",");
+
+    if (arr.length > 50) {
+        $.post(_ep("/Common/SetPids2Temp"), { arr: arr }, function (data) {
+            _window_open(url + "&guid=" + data, 2);
+        });
+    } else {
+        _window_open(url + "&pids=" + pids, 2);
+        
+    }
+    
+    
+    
 
 }
 

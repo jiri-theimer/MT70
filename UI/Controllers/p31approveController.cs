@@ -23,6 +23,7 @@ namespace UI.Controllers
             v.lisP31 = GetRecords(v);
             SetupTempData(v);
 
+            v.lisP31 = null;v.pidsinline = null;    //z důvodu, aby se nepřenášeli obrovská data přes querystring
             return this.RedirectToAction("Grid",v);
             
         }
@@ -220,9 +221,8 @@ namespace UI.Controllers
             var lisPIDs = new List<int>();
             var p31ids = new List<int>();
             if (v.guid != null)
-            {
-                var lisTemp = Factory.p85TempboxBL.GetList(v.guid, true, v.prefix);
-                lisPIDs = lisTemp.Select(p => p.p85DataPID).ToList();
+            {                
+                lisPIDs = Factory.p85TempboxBL.GetPidsFromTemp(v.guid);
             }
             else
             {

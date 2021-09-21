@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace BL
 {
@@ -11,6 +12,7 @@ namespace BL
         public IEnumerable<BO.p85Tempbox> GetList(string strGUID, bool bolIncludeDeleted = false, string strPrefix = null);
         public int Save(BO.p85Tempbox rec);
         public BO.p85Tempbox VirtualDelete(int intPID);
+        public List<int> GetPidsFromTemp(string guid);
     }
     class p85TempboxBL : BaseBL, Ip85TempboxBL
     {
@@ -103,6 +105,12 @@ namespace BL
             p.AddDateTime("p85FreeDate04", rec.p85FreeDate04);
 
             return _db.SaveRecord("p85Tempbox", p, rec);
+        }
+
+        public List<int> GetPidsFromTemp(string guid)
+        {
+            var lisTemp = GetList(guid, true);
+            return lisTemp.Select(p => p.p85DataPID).ToList();
         }
     }
 }

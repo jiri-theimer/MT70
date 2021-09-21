@@ -30,20 +30,27 @@
 
     </div>
 
-    
+
 
     <input type="hidden" asp-for="@Model.guid" />
     <input type="hidden" asp-for="@Model.j72ID" />
 </form>
-
-<div class="row">
-    <div class="col-10">
-        <vc:the-grid input="@Model.gridinput"></vc:the-grid>
-    </div>
-    <div class="col-2" style="background-color:red;">
-
-    </div>
-</div>
+@if (_f.CurrentUser.j03Ping_InnerWidth > 1200)
+{
+    <table cellpadding="0" cellspacing="0" width="100%">
+        <tr style="vertical-align:top;">
+            <td>
+                <vc:the-grid input="@Model.gridinput"></vc:the-grid>
+            </td>
+            <td style="background-color:red;width:300px;">
+            </td>
+        </tr>
+    </table>
+}
+else
+{
+    <vc:the-grid input="@Model.gridinput"></vc:the-grid>
+}
 
 
 
@@ -65,7 +72,7 @@
         form1.submit();
     }
 
-    function hardrefresh(pid,flag) {
+    function hardrefresh(pid, flag) {
         postback("postback");
     }
 </script>
