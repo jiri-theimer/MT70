@@ -34,6 +34,7 @@
 
     <input type="hidden" asp-for="@Model.guid" />
     <input type="hidden" asp-for="@Model.j72ID" />
+    <input type="hidden" asp-for="@Model.Rec_Pid" />
 </form>
 @if (_f.CurrentUser.j03Ping_InnerWidth > 1200)
 {
@@ -53,8 +54,8 @@
                         <td>
                             @_f.tra("Datum"):
                         </td>
-                        <td>                            
-                            <span class="val-readonly" id="Rec_Datum"></span>
+                        <td>
+                            <span class="val-readonly-wrap" id="Rec_Datum"></span>
                         </td>
                     </tr>
                     <tr>
@@ -62,7 +63,23 @@
                             @_f.tra("Jméno"):
                         </td>
                         <td>
-                            <span class="val-readonly" id="Rec_Jmeno"></span>                            
+                            <span class="val-readonly-wrap" id="Rec_Jmeno"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Projekt"):
+                        </td>
+                        <td>
+                            <span class="val-readonly-wrap" id="Rec_Projekt"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Aktivita"):
+                        </td>
+                        <td>
+                            <span class="val-readonly-wrap" id="Rec_Aktivita"></span>
                         </td>
                     </tr>
                     <tr>
@@ -91,7 +108,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea class="form-control" asp-for="@Model.Rec_Popis"></textarea>
+                            <textarea class="form-control" id="Rec_Popis"></textarea>
                         </td>
                     </tr>
                 </table>
@@ -125,9 +142,12 @@ else
 
     function thegrid_handle_rowselect(pid) {        
         $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
-            
+
+            $("#Rec_Pid").val(pid);
             $("#Rec_Jmeno").text(data.jmeno);
             $("#Rec_Datum").text(data.datum);
+            $("#Rec_Projekt").text(data.projekt);
+            $("#Rec_Aktivita").text(data.aktivita);
             $("#Rec_Popis").text(data.popis);
 
             _resize_textareas();

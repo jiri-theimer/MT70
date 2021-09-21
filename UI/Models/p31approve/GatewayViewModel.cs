@@ -22,11 +22,10 @@ namespace UI.Models.p31approve
         public TheGridInput gridinput { get; set; }
         public int j72ID { get; set; }
 
+        public int Rec_Pid { get; set; }
         public string Rec_HodinyKFakturaci { get; set; }
         public string Rec_HodinyVPausaulu { get; set; }
         public double Rec_SazbaKFakturaci { get; set; }
-        public string Rec_Datum { get; set; }
-        public string Rec_Jmeno { get; set; }
-        public string Rec_Popis { get; set; }
+       
     }
 }

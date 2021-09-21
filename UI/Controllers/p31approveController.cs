@@ -255,7 +255,7 @@ namespace UI.Controllers
         public GridRecord LoadGridRecord(int p31id,string guid)
         {
             var rec = this.Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
-            var c = new GridRecord() { Datum = BO.BAS.ObjectDate2String(rec.p31Date), Popis = rec.p31Text,Jmeno=rec.Person };
+            var c = new GridRecord() { Datum = BO.BAS.ObjectDate2String(rec.p31Date), Popis = rec.p31Text,Jmeno=rec.Person,Projekt=rec.Project,Aktivita=rec.p32Name };
 
             return c;
         }
