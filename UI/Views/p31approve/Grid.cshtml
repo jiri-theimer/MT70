@@ -44,14 +44,11 @@
                 <vc:the-grid input="@Model.gridinput"></vc:the-grid>
             </td>
             <td style="width:300px;">
+                <h5>@_f.tra("Vybraný úkon")</h5>
                 <table>
+
                     <tr>
-                        <td colspan="2">
-                            <h5>@_f.tra("Vybraný úkon")</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
+                        <td style="width:120px;">
                             @_f.tra("Datum"):
                         </td>
                         <td>
@@ -63,15 +60,15 @@
                             @_f.tra("Jméno"):
                         </td>
                         <td>
-                            <span class="val-readonly-wrap" id="Rec_Jmeno"></span>
+                            <span class="val-readonly" id="Rec_Jmeno"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            @_f.tra("Projekt"):
+                            <span id="lblProjekt">@_f.tra("Projekt"):</span>
                         </td>
                         <td>
-                            <span class="val-readonly-wrap" id="Rec_Projekt"></span>
+                            <span class="val-readonly" id="Rec_Projekt"></span>
                         </td>
                     </tr>
                     <tr>
@@ -79,7 +76,7 @@
                             @_f.tra("Aktivita"):
                         </td>
                         <td>
-                            <span class="val-readonly-wrap" id="Rec_Aktivita"></span>
+                            <span class="val-readonly" id="Rec_Aktivita"></span>
                         </td>
                     </tr>
                     <tr>
@@ -104,6 +101,14 @@
                         </td>
                         <td>
                             <mynumber asp-for="@Model.Rec_SazbaKFakturaci"></mynumber>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Cena k fakturaci"):
+                        </td>
+                        <td>
+                            <mynumber asp-for="@Model.Rec_BezDph"></mynumber>
                         </td>
                     </tr>
                     <tr>
@@ -150,6 +155,10 @@ else
             $("#Rec_Aktivita").text(data.aktivita);
             $("#Rec_Popis").text(data.popis);
 
+            mynumber_changevalue("Rec_BezDph", data.bezdph, 2);
+            mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
+            
+            $("#lblProjekt").html(data.pl+":");
             _resize_textareas();
         });
     }

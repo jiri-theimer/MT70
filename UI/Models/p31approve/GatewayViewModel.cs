@@ -26,6 +26,8 @@ namespace UI.Models.p31approve
         public string Rec_HodinyKFakturaci { get; set; }
         public string Rec_HodinyVPausaulu { get; set; }
         public double Rec_SazbaKFakturaci { get; set; }
-       
+        public double Rec_BezDph { get; set; }
+
+
     }
 }
