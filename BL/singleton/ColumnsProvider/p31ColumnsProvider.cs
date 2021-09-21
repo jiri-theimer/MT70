@@ -96,7 +96,7 @@ namespace BL
             oc = AF("ISH_NaklSazba", "ISH x Nákl.sazba", "a.p31Hours_Approved_Internal*a.p31Rate_Internal_Approved", "num", true);
             oc = AF("ISH_FaktSazba", "ISH x Fakt.sazba", "a.p31Hours_Approved_Internal*a.p31Rate_Billing_Approved", "num", true);
             oc = AF("p31Value_Approved_Billing", "Schválené kusy", "case when p34x.p33ID=3 and a.p72ID_AfterApprove=4 then a.p31Value_Approved_Billing end", "num", true);
-            oc = AFNUM0("p31Rate_Billing_Approved", "Úroveň schvalování");
+            oc = AFNUM0("p31ApprovingLevel", "Úroveň schvalování");
             oc = AF("p31Approved_When", "Schváleno kdy", null, "datetime");
             oc = AF("p31VatRate_Approved", "Sazba DPH po schvalování", null, "num", false);
             oc = AF("SchvaleneHodinyVPausalu", "Hodiny v paušálu", "case when p34x.p33ID=1 and a.p72ID_AfterApprove=6 then case when isnull(a.p31Value_FixPrice,0)<>0 then a.p31Value_FixPrice else p31Hours_Orig end end", "num", true);

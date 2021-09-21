@@ -10,29 +10,41 @@
 @addTagHelper *, UI
 
 <form id="form1" asp-controller="p31approve" asp-action="Grid" method="POST">
-    <div class="bg-light" style="padding:10px;">
-        <button type="button" id="cmdOK" class="btn btn-success">OK</button>
+    <div class="bg-light input-group m-0" style="padding:10px;">
+        <button type="button" id="cmdSaveOnly" class="btn btn-success m-1">@_f.tra("Pouze uložit schvalování")</button>
+        <button type="button" id="cmdSaveAndBilling" class="btn btn-primary m-1">@_f.tra("Uložit schvalování a pokračovat vyúčtováním")</button>
+
+
+        <div class="dropdown m-1">
+            <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                <span id="TheGridIcon" class="k-icon k-i-table"></span>
+                <span id="TheGridName">Grid<strong> & </strong>@_f.tra("Sloupce")</span>
+            </button>
+            <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
+                Loading...
+            </div>
+        </div>
 
         <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
 
 
     </div>
 
-    <div class="dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
-            <span id="TheGridIcon" class="k-icon k-i-table"></span>
-            <span id="TheGridName">Grid<strong> & </strong>@_f.tra("Sloupce")</span>
-        </button>
-        <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
-            Loading...
-        </div>
-    </div>
+    
 
     <input type="hidden" asp-for="@Model.guid" />
     <input type="hidden" asp-for="@Model.j72ID" />
 </form>
 
-<vc:the-grid input="@Model.gridinput"></vc:the-grid>
+<div class="row">
+    <div class="col-10">
+        <vc:the-grid input="@Model.gridinput"></vc:the-grid>
+    </div>
+    <div class="col-2" style="background-color:red;">
+
+    </div>
+</div>
+
 
 
 
@@ -47,4 +59,13 @@
     });
 
 
+    function postback(oper) {
+
+        form1.action = _ep("/p31approve/Grid?oper=" + oper);
+        form1.submit();
+    }
+
+    function hardrefresh(pid,flag) {
+        postback("postback");
+    }
 </script>

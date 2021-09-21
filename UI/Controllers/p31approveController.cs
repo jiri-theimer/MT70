@@ -38,6 +38,13 @@ namespace UI.Controllers
             return View(v);
         }
 
+        [HttpPost]
+        public IActionResult Grid(GatewayViewModel v,string oper)
+        {
+            RefreshState_Grid(v);
+            return View(v);
+        }
+
         private void RefreshState_Grid(GatewayViewModel v)
         {
             string strMyQuery = "tempguid|string|" + v.guid;
