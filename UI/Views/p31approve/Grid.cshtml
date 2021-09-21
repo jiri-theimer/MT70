@@ -42,7 +42,59 @@
             <td>
                 <vc:the-grid input="@Model.gridinput"></vc:the-grid>
             </td>
-            <td style="background-color:red;width:300px;">
+            <td style="width:300px;">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <h5>@_f.tra("Vybraný úkon")</h5>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Datum"):
+                        </td>
+                        <td>                            
+                            <span class="val-readonly" id="Rec_Datum"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Jméno"):
+                        </td>
+                        <td>
+                            <span class="val-readonly" id="Rec_Jmeno"></span>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Hodiny k fakturaci"):
+                        </td>
+                        <td>
+                            <myhours asp-for="@Model.Rec_HodinyKFakturaci" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Hodiny v paušálu"):
+                        </td>
+                        <td>
+                            <myhours asp-for="@Model.Rec_HodinyVPausaulu" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Sazba"):
+                        </td>
+                        <td>
+                            <mynumber asp-for="@Model.Rec_SazbaKFakturaci"></mynumber>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea class="form-control" asp-for="@Model.Rec_Popis"></textarea>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -59,11 +111,28 @@ else
 
 
 <script type="text/javascript">
+    var _guid = "@Model.guid";
+
     $(document).ready(function () {
 
+        document.addEventListener("thegrid_rowselect", function (e) {       //změna řádku gridu: automaticky vyvolávaná událost z gridu
+            thegrid_handle_rowselect(e.detail.pid);
+        });
 
 
     });
+
+
+    function thegrid_handle_rowselect(pid) {        
+        $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
+            
+            $("#Rec_Jmeno").text(data.jmeno);
+            $("#Rec_Datum").text(data.datum);
+            $("#Rec_Popis").text(data.popis);
+
+            _resize_textareas();
+        });
+    }
 
 
     function postback(oper) {
@@ -71,6 +140,8 @@ else
         form1.action = _ep("/p31approve/Grid?oper=" + oper);
         form1.submit();
     }
+
+    
 
     function hardrefresh(pid, flag) {
         postback("postback");

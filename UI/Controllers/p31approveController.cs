@@ -251,5 +251,13 @@ namespace UI.Controllers
 
             return Factory.p31WorksheetBL.GetList(mq);
         }
+
+        public GridRecord LoadGridRecord(int p31id,string guid)
+        {
+            var rec = this.Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
+            var c = new GridRecord() { Datum = BO.BAS.ObjectDate2String(rec.p31Date), Popis = rec.p31Text,Jmeno=rec.Person };
+
+            return c;
+        }
     }
 }
