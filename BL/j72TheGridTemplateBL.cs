@@ -407,10 +407,14 @@ namespace BL
                             case "p91":
                                 s = "p31Date,p31_j02__j02Person__fullname_desc,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,p31Hours_Invoiced,p31Rate_Billing_Invoiced,p31Amount_WithoutVat_Invoiced,p31VatRate_Invoiced,p31Text";
                                 break;
+                            case "app": //schvalování
+                                s = "a__p31Worksheet__p31Date,p31_j02__j02Person__fullname_desc,p31_p41_p28__p28Contact__p28Name,p31_p41__p41Project__p41Name,p31_p32__p32Activity__p32Name,a__p31Worksheet__p31Hours_Approved_Billing,a__p31Worksheet__p31Rate_Billing_Approved,a__p31Worksheet__p31Amount_WithoutVat_Approved,a__p31Worksheet__p31Hours_Orig,a__p31Worksheet__p31Rate_Billing_Orig,a__p31Worksheet__p31Amount_WithoutVat_Orig,a__p31Worksheet__p31Text,a__p31Worksheet__SchvaleneHodinyVPausalu";
+                                break;
                         }
                     }
                     
                     break;
+                
                 case "p28":
                     s = "a__p28Contact__p28Name,a__p28Contact__p28RegID,a__p28Contact__p28VatID,p28_address_primary__view_PrimaryAddress__FullAddress,a__p28Contact__AllFreeTags_p28";
                     break;

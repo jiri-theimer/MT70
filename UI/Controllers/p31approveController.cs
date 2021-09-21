@@ -41,8 +41,9 @@ namespace UI.Controllers
         private void RefreshState_Grid(GatewayViewModel v)
         {
             string strMyQuery = "tempguid|string|" + v.guid;
-            v.gridinput = new TheGridInput() { entity = "approve",j72id=v.j72ID, myqueryinline = strMyQuery, oncmclick = "", ondblclick = "" };
-            v.gridinput.query = new BO.InitMyQuery().Load("approve", null, 0, strMyQuery);
+            v.gridinput = new TheGridInput() { entity = "p31Worksheet",j72id=v.j72ID, myqueryinline = strMyQuery, oncmclick = "", ondblclick = "",master_entity="approve" };
+            v.gridinput.query = new BO.InitMyQuery().Load("p31", "app", 0, strMyQuery);
+            
         }
 
 

@@ -110,6 +110,7 @@ namespace BO
         public string period_field { get; set; }
         public DateTime? global_d1 { get; set; }
         public DateTime? global_d2 { get; set; }
+        public string master_prefix { get; set; }
        
 
         public DateTime global_d2_235959

@@ -88,6 +88,20 @@ namespace BL
             oc = AFNUM_OCAS( "Vyfakturovano_Hodiny_Odpis", "Vyúčt.hodiny [Odpis]", "p31_ocas.Vyfakturovano_Hodiny_Odpis", true); oc.IHRC = true;
             oc = AFNUM_OCAS( "Vyfakturovano_Honorar", "Vyúčtovaný honorář", "p31_ocas.Vyfakturovano_Honorar", true); oc.IHRC = true;
 
+            this.CurrentFieldGroup = "Schvalování";//-----------Schvalování---------------------
+            oc = AF("p31Hours_Approved_Billing", "Schválené hodiny", "case when p34x.p33ID=1 and a.p72ID_AfterApprove=4 then a.p31Hours_Approved_Billing end", "num", true);
+            oc = AF("p31Rate_Billing_Approved", "Schválená sazba", "case when p34x.p33ID IN (1,3) and a.p72ID_AfterApprove=4 then a.p31Rate_Billing_Approved end", "num",false);
+            oc = AF("p31Amount_WithoutVat_Approved", "Schváleno bez DPH", "case when a.p72ID_AfterApprove=4 then a.p31Amount_WithoutVat_Approved end", "num", true);
+            oc = AF("p31Hours_Approved_Internal", "Interně schválené hodiny", null, "num", true);
+            oc = AF("ISH_NaklSazba", "ISH x Nákl.sazba", "a.p31Hours_Approved_Internal*a.p31Rate_Internal_Approved", "num", true);
+            oc = AF("ISH_FaktSazba", "ISH x Fakt.sazba", "a.p31Hours_Approved_Internal*a.p31Rate_Billing_Approved", "num", true);
+            oc = AF("p31Value_Approved_Billing", "Schválené kusy", "case when p34x.p33ID=3 and a.p72ID_AfterApprove=4 then a.p31Value_Approved_Billing end", "num", true);
+            oc = AFNUM0("p31Rate_Billing_Approved", "Úroveň schvalování");
+            oc = AF("p31Approved_When", "Schváleno kdy", null, "datetime");
+            oc = AF("p31VatRate_Approved", "Sazba DPH po schvalování", null, "num", false);
+            oc = AF("SchvaleneHodinyVPausalu", "Hodiny v paušálu", "case when p34x.p33ID=1 and a.p72ID_AfterApprove=6 then case when isnull(a.p31Value_FixPrice,0)<>0 then a.p31Value_FixPrice else p31Hours_Orig end end", "num", true);
+            oc = AF("KorekceHodinPausal", "Korekce hodin v paušálu", "case when p34x.p33ID=1 then a.p31Value_FixPrice end", "num", true);
+            
 
             this.CurrentFieldGroup = "Nákladová cena";//-----------Nákladová cena---------------------
             oc = AF("p31Rate_Internal_Orig", "Nákladová sazba", null, "num"); oc.IHRC = true;

@@ -108,8 +108,7 @@ namespace BL
                 sb.Append($",COUNT(a.{mq.PrefixDb}ID) as RowsCount");     //sumační dotaz gridu
                 switch (mq.Prefix)
                 {
-                    case "p31": //součty pro hodnoty záložek hodiny/výdaje/odměny
-                    case "app":
+                    case "p31": //součty pro hodnoty záložek hodiny/výdaje/odměny                    
                         sb.Append(",SUM(case when p34x.p33ID=1 then 1 end) as RowsTime");
                         sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=1 then 1 end) as RowsExpense");
                         sb.Append(",SUM(case when p34x.p33ID IN (2,5) AND p34x.p34IncomeStatementFlag=2 then 1 end) as RowsFee");
@@ -133,8 +132,15 @@ namespace BL
             }
            
             sb.Append(" FROM ");
-            
-            sb.Append(ce.SqlFromGrid);    //úvodní FROM klauzule s primární "a" tabulkou            
+            if (ce.Prefix == "p31" && mq.master_prefix == "app")
+            {
+                sb.Append(ce.SqlFromGrid.Replace("p31Worksheet a", "p31Worksheet_Temp a"));  //temp data pro schvalování
+            }
+            else
+            {
+                sb.Append(ce.SqlFromGrid);    //úvodní FROM klauzule s primární "a" tabulkou
+            }
+                        
           
             List<string> relSqls = new List<string>();
             foreach (BO.TheGridColumn col in mq.explicit_columns.Where(x => x.RelName != null && x.RelName != "a"))

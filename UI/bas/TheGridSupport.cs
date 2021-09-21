@@ -145,7 +145,7 @@ namespace UI
             ret.sortdir = gridState.j75SortOrder;
 
             _grid.Columns = _colsProvider.ParseTheGridColumns(mq.Prefix, gridState.j72Columns, _Factory);
-
+            if (gridState.j72MasterEntity != null) mq.master_prefix = gridState.j72MasterEntity.Substring(0, 3);
 
 
             mq.explicit_columns = _grid.Columns.ToList();
@@ -286,8 +286,7 @@ namespace UI
                 }
                 switch (mq.Prefix)
                 {
-                    case "p31":
-                    case "app":
+                    case "p31":                    
                         switch (Convert.ToInt32(dbRow["p33ID"]))
                         {
                             case 2:
@@ -339,8 +338,7 @@ namespace UI
 
                 switch (mq.Prefix)
                 {
-                    case "p31":
-                    case "app":
+                    case "p31":                    
                         _s.Append(" style='width:20px;" + UI.TheGridRowSymbol.p31_td_style(dbRow) + "'>");
                         _s.Append(UI.TheGridRowSymbol.p31_td_inner(dbRow));
                         if (dbRow["o23ID_First"] != System.DBNull.Value)
@@ -361,7 +359,7 @@ namespace UI
                 _s.Append("</td>");
 
                 strRowClass = "td2";
-                if (mq.Prefix == "p31" || mq.Prefix=="app")
+                if (mq.Prefix == "p31")
                 {
                     if (!Convert.ToBoolean(dbRow["p32IsBillable"]))
                     {
@@ -417,8 +415,7 @@ namespace UI
             _s.Append($"<th class='th0' title='{_Factory.tra("Celkový počet záznamů")}' colspan=3 style='width:60px;'><span id='tabgrid1_rows' class='badge bg-primary'>{string.Format("{0:#,0}", dt.Rows[0]["RowsCount"])}</span></th>");
             switch (this.gridinput.query.Prefix)
             {
-                case "p31":
-                case "app":
+                case "p31":                
                     _s.Append($"<input type='hidden' id='tabgrid1_rows_time' value='{dt.Rows[0]["RowsTime"]}'/>");
                     _s.Append($"<input type='hidden' id='tabgrid1_rows_expense' value='{dt.Rows[0]["RowsExpense"]}'/>");
                     _s.Append($"<input type='hidden' id='tabgrid1_rows_fee' value='{dt.Rows[0]["RowsFee"]}'/>");
@@ -731,7 +728,7 @@ namespace UI
                     this.gridinput.query.lisJ73 = _Factory.j72TheGridTemplateBL.GetList_j73(gridState.j72ID, gridState.j72Entity.Substring(0, 3));
                 }
             }
-
+            if (gridState.j72MasterEntity != null) this.gridinput.query.master_prefix = gridState.j72MasterEntity.Substring(0, 3);
 
             return _Factory.gridBL.GetList(this.gridinput.query);
         }
