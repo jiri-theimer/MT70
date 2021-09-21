@@ -17,7 +17,7 @@ namespace UI.Models.p31approve
         public string Projekt { get; set; }
         public string pl { get; set; }
         public string Aktivita { get; set; }
-        public int p33ID { get; set; }
+        public int p33id { get; set; }
         public int p72ID { get; set; }
         public int uroven { get; set; }
     }

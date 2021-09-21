@@ -79,7 +79,7 @@
                             <span class="val-readonly" id="Rec_Aktivita"></span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="trHodinyKFakturaci">
                         <td>
                             @_f.tra("Hodiny k fakturaci"):
                         </td>
@@ -87,7 +87,7 @@
                             <myhours asp-for="@Model.Rec_HodinyKFakturaci" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="trHodinyVPausalu">
                         <td>
                             @_f.tra("Hodiny v paušálu"):
                         </td>
@@ -95,7 +95,7 @@
                             <myhours asp-for="@Model.Rec_HodinyVPausaulu" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="trSazbaKFakturaci">
                         <td>
                             @_f.tra("Sazba"):
                         </td>
@@ -103,7 +103,7 @@
                             <mynumber asp-for="@Model.Rec_SazbaKFakturaci"></mynumber>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="trBezDph">
                         <td>
                             @_f.tra("Cena k fakturaci"):
                         </td>
@@ -169,9 +169,30 @@ else
             $("#Rec_UrovenSchvalovani").val(data.uroven);
 
             mynumber_changevalue("Rec_BezDph", data.bezdph, 2);
-            mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
-            $("#Rec_HodinyKFakturaci").val(data.hodiny);
-            $("#Rec_HodinyVPausaulu").val(data.hodinypausal);
+
+            if (data.p33id == 1) {
+                $("#trHodinyKFakturaci").css("visibility", "visible");
+                $("#trHodinyVPausalu").css("visibility", "visible");
+                $("#Rec_HodinyKFakturaci").val(data.hodiny);
+                $("#Rec_HodinyVPausaulu").val(data.hodinypausal);
+                
+            } else {
+                $("#trHodinyKFakturaci").css("visibility", "hidden");
+                $("#trHodinyVPausalu").css("visibility", "hidden");
+                
+            }
+            if (data.p33id == 1 || data.p33id==3) {               
+                $("#trSazbaKFakturaci").css("visibility", "visible");
+                $("#trBezDph").css("visibility", "hidden");
+                mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
+            } else {                
+                $("#trSazbaKFakturaci").css("visibility", "hidden");
+                $("#trBezDph").css("visibility", "visible");
+            }
+
+
+            
+            
             
             
             $("#lblProjekt").html(data.pl+":");

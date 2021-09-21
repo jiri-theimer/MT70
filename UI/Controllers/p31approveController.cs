@@ -257,7 +257,7 @@ namespace UI.Controllers
             var rec = this.Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
             var recP41 = this.Factory.p41ProjectBL.Load(rec.p41ID);
 
-            var c = new GridRecord() { Datum = BO.BAS.ObjectDate2String(rec.p31Date), Popis = rec.p31Text,Jmeno=rec.Person,Projekt=rec.Project,Aktivita=rec.p32Name,p33ID=(int)rec.p33ID };
+            var c = new GridRecord() { Datum = BO.BAS.ObjectDate2String(rec.p31Date), Popis = rec.p31Text,Jmeno=rec.Person,Projekt=rec.Project,Aktivita=rec.p32Name,p33id=(int)rec.p33ID };
             c.pl = this.Factory.CurrentUser.getP07Level(recP41.p07Level,true);
             c.uroven = rec.p31ApprovingLevel;
             c.sazba = rec.p31Rate_Billing_Approved;
