@@ -43,7 +43,7 @@
             <td>
                 <vc:the-grid input="@Model.gridinput"></vc:the-grid>
             </td>
-            <td style="width:300px;">
+            <td style="width:300px;visibility:hidden;" id="tabRecord">
                 <h5>@_f.tra("Vybraný úkon")</h5>
                 <table>
 
@@ -160,6 +160,7 @@ else
     function thegrid_handle_rowselect(pid) {        
         $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
 
+            $("#tabRecord").css("visibility", "visible");
             $("#Rec_Pid").val(pid);
             $("#Rec_Jmeno").text(data.jmeno);
             $("#Rec_Datum").text(data.datum);
