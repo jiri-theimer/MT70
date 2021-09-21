@@ -259,8 +259,25 @@ namespace UI.Controllers
 
             var c = new GridRecord() { Datum = BO.BAS.ObjectDate2String(rec.p31Date), Popis = rec.p31Text,Jmeno=rec.Person,Projekt=rec.Project,Aktivita=rec.p32Name,p33ID=(int)rec.p33ID };
             c.pl = this.Factory.CurrentUser.getP07Level(recP41.p07Level,true);
+            c.uroven = rec.p31ApprovingLevel;
             c.sazba = rec.p31Rate_Billing_Approved;
             c.bezdph = rec.p31Amount_WithoutVat_Approved;
+            if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T" || rec.IsRecommendedHHMM_Approved())
+            {
+                c.hodiny = BO.basTime.ShowAsHHMM(rec.p31Hours_Approved_Billing.ToString());
+            }
+            else
+            {
+                c.hodiny = rec.p31Hours_Approved_Billing.ToString();
+            }
+            if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T")
+            {
+                c.hodinypausal = BO.basTime.ShowAsHHMM(rec.p31Value_FixPrice.ToString());
+            }
+            else
+            {
+                c.hodinypausal = rec.p31Value_FixPrice.ToString();
+            }
 
             return c;
         }

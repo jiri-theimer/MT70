@@ -68,7 +68,7 @@
                             <span id="lblProjekt">@_f.tra("Projekt"):</span>
                         </td>
                         <td>
-                            <span class="val-readonly" id="Rec_Projekt"></span>
+                            <span class="val-readonly-wrap" id="Rec_Projekt"></span>
                         </td>
                     </tr>
                     <tr>
@@ -116,6 +116,18 @@
                             <textarea class="form-control" id="Rec_Popis"></textarea>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Úroveň schvalování"):
+                        </td>
+                        <td>
+                            <select asp-for="@Model.Rec_UrovenSchvalovani">
+                                <option value="0">#0</option>
+                                <option value="1">#1</option>
+                                <option value="2">#2</option>
+                            </select>
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>
@@ -154,9 +166,13 @@ else
             $("#Rec_Projekt").text(data.projekt);
             $("#Rec_Aktivita").text(data.aktivita);
             $("#Rec_Popis").text(data.popis);
+            $("#Rec_UrovenSchvalovani").val(data.uroven);
 
             mynumber_changevalue("Rec_BezDph", data.bezdph, 2);
             mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
+            $("#Rec_HodinyKFakturaci").val(data.hodiny);
+            $("#Rec_HodinyVPausaulu").val(data.hodinypausal);
+            
             
             $("#lblProjekt").html(data.pl+":");
             _resize_textareas();

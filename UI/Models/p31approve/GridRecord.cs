@@ -9,8 +9,8 @@ namespace UI.Models.p31approve
     {
         public string Datum { get; set; }
         public string Jmeno { get; set; }
-        public string HodinyKFakturaci { get; set; }
-        public string HodinyVPausaulu { get; set; }
+        public string hodiny { get; set; }
+        public string hodinypausal { get; set; }
         public double bezdph { get; set; }
         public double sazba { get; set; }
         public string Popis { get; set; }
@@ -19,5 +19,6 @@ namespace UI.Models.p31approve
         public string Aktivita { get; set; }
         public int p33ID { get; set; }
         public int p72ID { get; set; }
+        public int uroven { get; set; }
     }
 }
