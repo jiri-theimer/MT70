@@ -35,6 +35,7 @@
     <input type="hidden" asp-for="@Model.guid" />
     <input type="hidden" asp-for="@Model.j72ID" />
     <input type="hidden" asp-for="@Model.Rec_Pid" />
+    <input type="hidden" asp-for="@Model.Rec_p33ID" />
 </form>
 @if (_f.CurrentUser.j03Ping_InnerWidth > 1200)
 {
@@ -43,10 +44,40 @@
             <td>
                 <vc:the-grid input="@Model.gridinput"></vc:the-grid>
             </td>
-            <td style="width:300px;visibility:hidden;" id="tabRecord">
-                <h5>@_f.tra("Vybraný úkon")</h5>
-                <table>
+            <td style="width:300px;">
+                <h5 id="recNadpis">@_f.tra("Vyberte úkon")</h5>
+                
+                <table id="tabRecord" style="display:none;">
+                    <tr>
+                        <td colspan="2">
+                            <button type="button" class="btn btn-success">@_f.tra("Uložit změny")</button>
+                            <hr />
 
+
+                            <input type="radio" id="chkp71ID_1" asp-for="Rec_p71ID" value="1" onchange="handle_rec_change()" />
+                            <label for="chkp71ID_1">@_f.tra("Schváleno")</label>
+                            <input type="radio" id="chkp71ID_2" asp-for="Rec_p71ID" value="2" onchange="handle_rec_change()" style="margin-left:5px;" />
+                            <label for="chkp71ID_2">@_f.tra("Neschváleno")</label>
+                            <input type="radio" id="chkp71ID_0" asp-for="Rec_p71ID" value="0" onchange="handle_rec_change()" style="margin-left:5px;" />
+                            <label for="chkp71ID_0">@_f.tra("Rozpracováno")</label>
+                        </td>
+                    </tr>
+                    <tr id="trP72ID">
+                        <td colspan="2">                            
+                            <hr />
+                            <input type="radio" id="chkp72ID_4" asp-for="Rec_p72ID" value="4" onchange="handle_rec_change()" />
+                            <label for="chkp72ID_4" class="badge-a4">@_f.tra("Fakturovat")</label>
+                            <br />
+                            <input type="radio" id="chkp72ID_6" asp-for="Rec_p72ID" value="6" onchange="handle_rec_change()" />
+                            <label for="chkp72ID_6" class="badge-a6">@_f.tra("Zahrnout do paušálu")</label>
+                            <br />
+                            <input type="radio" id="chkp72ID_3" asp-for="Rec_p72ID" value="3" onchange="handle_rec_change()" />
+                            <label for="chkp72ID_3" class="badge-a3">@_f.tra("Skrytý odpis")</label>
+                            <br />
+                            <input type="radio" id="chkp72ID_2" asp-for="Rec_p72ID" value="2" onchange="handle_rec_change()" />
+                            <label for="chkp72ID_2" class="badge-a2">@_f.tra("Viditelný odpis")</label>
+                        </td>
+                    </tr>
                     <tr>
                         <td style="width:120px;">
                             @_f.tra("Datum"):
@@ -79,7 +110,7 @@
                             <span class="val-readonly" id="Rec_Aktivita"></span>
                         </td>
                     </tr>
-                    <tr id="trHodinyKFakturaci">
+                    <tr id="trHodinyKFakturaci" data-p33id="1">
                         <td>
                             @_f.tra("Hodiny k fakturaci"):
                         </td>
@@ -87,7 +118,7 @@
                             <myhours asp-for="@Model.Rec_HodinyKFakturaci" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
                         </td>
                     </tr>
-                    <tr id="trHodinyVPausalu">
+                    <tr id="trHodinyVPausalu" data-p33id="1">
                         <td>
                             @_f.tra("Hodiny v paušálu"):
                         </td>
@@ -95,7 +126,7 @@
                             <myhours asp-for="@Model.Rec_HodinyVPausaulu" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
                         </td>
                     </tr>
-                    <tr id="trSazbaKFakturaci">
+                    <tr id="trSazbaKFakturaci" data-p33id="13">
                         <td>
                             @_f.tra("Sazba"):
                         </td>
@@ -103,12 +134,20 @@
                             <mynumber asp-for="@Model.Rec_SazbaKFakturaci"></mynumber>
                         </td>
                     </tr>
-                    <tr id="trBezDph">
+                    <tr id="trBezDph" data-p33id="25">
                         <td>
                             @_f.tra("Cena k fakturaci"):
                         </td>
                         <td>
                             <mynumber asp-for="@Model.Rec_BezDph"></mynumber>
+                        </td>
+                    </tr>
+                    <tr id="trDphSazba" data-p33id="25">
+                        <td>
+                            @_f.tra("DPH sazba %"):
+                        </td>
+                        <td>
+                            <mynumber asp-for="@Model.Rec_DphSazba"></mynumber>
                         </td>
                     </tr>
                     <tr>
@@ -157,11 +196,21 @@ else
     });
 
 
-    function thegrid_handle_rowselect(pid) {        
-        $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
+    function thegrid_handle_rowselect(pid) {     
+        $("#tabRecord").css("display", "block");
+        $("#recNadpis").css("display", "none");
 
-            $("#tabRecord").css("visibility", "visible");
+        $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
+            
             $("#Rec_Pid").val(pid);
+            $("#Rec_p33ID").val(data.p33id);
+                        
+            $("#chkp71ID_" + data.p71id).prop("checked", true);
+            if (data.p72id > 0)
+            {
+                $("#chkp72ID_" + data.p72id).prop("checked", true);
+            }
+            
             $("#Rec_Jmeno").text(data.jmeno);
             $("#Rec_Datum").text(data.datum);
             $("#Rec_Projekt").text(data.projekt);
@@ -169,7 +218,7 @@ else
             $("#Rec_Popis").text(data.popis);
             $("#Rec_UrovenSchvalovani").val(data.uroven);
 
-            mynumber_changevalue("Rec_BezDph", data.bezdph, 2);
+            
 
             if (data.p33id == 1) {
                 $("#trHodinyKFakturaci").css("visibility", "visible");
@@ -185,20 +234,61 @@ else
             if (data.p33id == 1 || data.p33id==3) {               
                 $("#trSazbaKFakturaci").css("visibility", "visible");
                 $("#trBezDph").css("visibility", "hidden");
+                $("#trDphSazba").css("visibility", "hidden");
                 mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
+
             } else {                
                 $("#trSazbaKFakturaci").css("visibility", "hidden");
                 $("#trBezDph").css("visibility", "visible");
+                $("#trDphSazba").css("visibility", "visible");
+
+                mynumber_changevalue("Rec_DphSazba", data.dphsazba, 0);
+                mynumber_changevalue("Rec_BezDph", data.bezdph, 2);
             }
 
 
             
-            
+            handle_rec_change();
             
             
             $("#lblProjekt").html(data.pl+":");
             _resize_textareas();
         });
+    }
+
+    function handle_rec_change() {
+        var p71id = $('input[name=Rec_p71ID]:checked').val();
+        var p72id = $('input[name=Rec_p72ID]:checked').val();
+        var p33id = $("#Rec_p33ID");
+
+        $("#trP72ID").css("visibility", "visible");
+        $("[data-p33id=1]").css("visibility", "visible");
+        $("[data-p33id=13]").css("visibility", "visible");
+        $("[data-p33id=25]").css("visibility", "visible");
+
+        if (p71id == "0" || p71id == "2") {
+            $("#trP72ID").css("visibility", "hidden");
+            $("[data-p33id=1]").css("visibility", "hidden");
+            $("[data-p33id=13]").css("visibility", "hidden");
+            $("[data-p33id=25]").css("visibility", "hidden");
+        }
+
+        //následně už pouze skrývat nepotřebné:
+        if (p33id == 1 || p33id==3) {
+            $("#trDphSazba").css("visibility", "hidden");
+            $("#trBezDph").css("visibility", "hidden");
+            
+        }
+        if (p33id != 1) {
+            $("#trHodinyKFakturaci").css("visibility", "hidden");
+        }
+        if (p33id != 1 && p33id != 3) {
+            $("#trSazbaKFakturaci").css("visibility", "hidden");
+        }
+        if ((p33id == 1 && p72id != 6) || p33id>1) {
+            $("#trHodinyVPausalu").css("visibility", "hidden");
+        }
+        
     }
 
 

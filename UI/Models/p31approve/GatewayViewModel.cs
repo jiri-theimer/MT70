@@ -23,11 +23,16 @@ namespace UI.Models.p31approve
         public int j72ID { get; set; }
 
         public int Rec_Pid { get; set; }
+        public int Rec_p71ID { get; set; }
+        public int Rec_p72ID { get; set; }
+        public int Rec_p33ID { get; set; }
         public string Rec_HodinyKFakturaci { get; set; }
         public string Rec_HodinyVPausaulu { get; set; }
         public double Rec_SazbaKFakturaci { get; set; }
         public double Rec_BezDph { get; set; }
         public int Rec_UrovenSchvalovani { get; set; }
+
+        public double Rec_DphSazba { get; set; }
 
 
     }
