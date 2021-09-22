@@ -11,6 +11,7 @@ namespace UI.Models.p31approve
         public string Jmeno { get; set; }
         public string hodiny { get; set; }
         public string hodinypausal { get; set; }
+        public string hodinyinterni { get; set; }
         public double bezdph { get; set; }
         public double dphsazba { get; set; }
         public double sazba { get; set; }
@@ -18,6 +19,7 @@ namespace UI.Models.p31approve
         public string Projekt { get; set; }
         public string pl { get; set; }
         public string Aktivita { get; set; }
+        public string j27code { get; set; }
         public int p33id { get; set; }
         public int p71id { get; set; }
         public int p72id { get; set; }

@@ -34,6 +34,6 @@ namespace UI.Models.p31approve
 
         public double Rec_DphSazba { get; set; }
 
-
+        public string Rec_InterniHodiny { get; set; }
     }
 }

@@ -120,7 +120,8 @@
                     </tr>
                     <tr id="trSazbaKFakturaci" data-p33id="13">
                         <td>
-                            @_f.tra("Fakturační sazba"):
+                            @_f.tra("Sazba")
+                            <span id="j27code_sazba">:</span>
                         </td>
                         <td>
                             <mynumber asp-for="@Model.Rec_SazbaKFakturaci"></mynumber>
@@ -137,7 +138,8 @@
 
                     <tr id="trBezDph" data-p33id="25">
                         <td>
-                            @_f.tra("Cena k fakturaci"):
+                            @_f.tra("Bez DPH")
+                            <span id="j27code_bezdph">:</span>
                         </td>
                         <td>
                             <mynumber asp-for="@Model.Rec_BezDph"></mynumber>
@@ -154,6 +156,14 @@
                     <tr>
                         <td colspan="2">
                             <textarea class="form-control" id="Rec_Popis"></textarea>
+                        </td>
+                    </tr>
+                    <tr id="trHodinyInterni" data-p33id="1">
+                        <td>
+                            @_f.tra("Interně schválené hodiny"):
+                        </td>
+                        <td>
+                            <myhours asp-for="@Model.Rec_InterniHodiny" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
                         </td>
                     </tr>
                     <tr>
@@ -218,13 +228,14 @@ else
             $("#Rec_Aktivita").text(data.aktivita);
             $("#Rec_Popis").text(data.popis);
             $("#Rec_UrovenSchvalovani").val(data.uroven);
-
+            $("#j27code_bezdph").text("("+data.j27code+"):");
+            $("#j27code_sazba").text("("+data.j27code+"):");
             
 
             if (data.p33id == 1) {                
                 $("#Rec_HodinyKFakturaci").val(data.hodiny);
                 $("#Rec_HodinyVPausaulu").val(data.hodinypausal);
-                
+                $("#Rec_InterniHodiny").val(data.hodinyinterni);
             }
             if (data.p33id == 1 || data.p33id==3) {                               
                 mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
@@ -271,6 +282,7 @@ else
         }
         if (p33id != 1) {
             $("#trHodinyKFakturaci").css("visibility", "hidden");
+            $("#trHodinyInterni").css("visibility", "hidden");
         }
         if (p33id != 1 && p33id != 3) {
             $("#trSazbaKFakturaci").css("visibility", "hidden");

@@ -264,6 +264,7 @@ namespace UI.Controllers
             c.uroven = rec.p31ApprovingLevel;
             c.sazba = rec.p31Rate_Billing_Approved;
             c.bezdph = rec.p31Amount_WithoutVat_Approved;
+            c.j27code = rec.j27Code_Billing_Orig;
             c.dphsazba = rec.p31VatRate_Approved;
             if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T" || rec.IsRecommendedHHMM_Approved())
             {
@@ -273,13 +274,21 @@ namespace UI.Controllers
             {
                 c.hodiny = rec.p31Hours_Approved_Billing.ToString();
             }
-            if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T")
+            if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T" || rec.p31Value_FixPrice.ToString().Length > 5)
             {
                 c.hodinypausal = BO.basTime.ShowAsHHMM(rec.p31Value_FixPrice.ToString());
             }
             else
             {
                 c.hodinypausal = rec.p31Value_FixPrice.ToString();
+            }
+            if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T" || rec.p31Hours_Approved_Internal.ToString().Length > 5)
+            {
+                c.hodinyinterni = BO.basTime.ShowAsHHMM(rec.p31Hours_Approved_Internal.ToString());
+            }
+            else
+            {
+                c.hodinyinterni = rec.p31Hours_Approved_Internal.ToString();
             }
 
             return c;
