@@ -144,7 +144,11 @@ namespace BL
             
             return this.Translator.DoTranslate(strExpression, langindex);
         }
-
+        public string GetFirstNotifyMessage()
+        {
+            if (CurrentUser.Messages4Notify == null) return null;
+            return CurrentUser.Messages4Notify[0].Value;
+        }
         
         public ICBL CBL
         {

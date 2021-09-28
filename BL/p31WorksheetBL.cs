@@ -617,6 +617,27 @@ namespace BL
                 this.AddMessage("Schválený úkon musí mít přiřazen některý z fakturačních statusů.");return false;
             }
 
+            if (c.p72id==BO.p72IdENUM.Fakturovat || c.p72id == BO.p72IdENUM.FakturovatPozdeji)
+            {
+                if (c.p33ID==BO.p33IdENUM.Cas && c.Value_Approved_Billing==0)
+                {
+                    this.AddMessage("Hodiny k fakturaci nesmí být NULA."); return false;
+                }
+                if (c.p33ID == BO.p33IdENUM.Kusovnik && c.Value_Approved_Billing == 0)
+                {
+                    this.AddMessage("Počet kusů k fakturaci nesmí být NULA."); return false;
+                }
+                if ((c.p33ID == BO.p33IdENUM.Cas || c.p33ID==BO.p33IdENUM.Kusovnik) && c.Rate_Billing_Approved == 0)
+                {
+                    this.AddMessage("Sazba k fakturaci nesmí být NULA."); return false;
+                }
+                if ((c.p33ID == BO.p33IdENUM.PenizeBezDPH || c.p33ID==BO.p33IdENUM.PenizeVcDPHRozpisu) && c.Value_Approved_Billing == 0)
+                {
+                    this.AddMessage("Částka bez DPH nesmí být NULA."); return false;
+                }
+                
+            }
+
             return true;
         }
 

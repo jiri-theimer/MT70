@@ -293,5 +293,101 @@ namespace UI.Controllers
 
             return c;
         }
+
+        public BO.Result SaveTempRecord(GridRecord rec,int p31id,string guid)
+        {
+            var ret = new BO.Result(false);
+            var c = new BO.p31WorksheetApproveInput() { p31ID = p31id,Guid=guid,p33ID=(BO.p33IdENUM) rec.p33id };
+            var recTemp = Factory.p31WorksheetBL.LoadTempRecord(c.p31ID,c.Guid);
+
+            c.p71id = (BO.p71IdENUM)rec.p71id;
+            c.p31Date = recTemp.p31Date;
+
+            switch (c.p71id)
+            {
+                case BO.p71IdENUM.Nic:
+                    //rozpracováno
+                    if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                    {
+                        ret.Message = Factory.GetFirstNotifyMessage();
+                        ret.Flag = BO.ResultEnum.Failed;
+                        return ret;
+                    }
+                    else
+                    {
+                        return ret;
+                    }                    
+                case BO.p71IdENUM.Neschvaleno:
+                    //neschváleno
+                    if (Factory.p31WorksheetBL.Save_Approving(c, true))
+                    {
+                        return ret;
+                    }
+                    else
+                    {
+                        ret.Message = Factory.GetFirstNotifyMessage();
+                        ret.Flag = BO.ResultEnum.Failed;
+                        return ret;
+                    }
+                case BO.p71IdENUM.Schvaleno:
+                    //schváleno
+                    c.p72id = (BO.p72IdENUM)rec.p72id;
+                    c.p31Text = rec.Popis;
+                    c.p31ApprovingLevel = rec.uroven;
+                    break;
+            }
+
+            
+            
+           
+            switch (c.p33ID)
+            {
+                case BO.p33IdENUM.Cas:
+                    if (c.p72id == BO.p72IdENUM.Fakturovat || c.p72id == BO.p72IdENUM.FakturovatPozdeji)
+                    {
+                        c.Value_Approved_Billing = BO.basTime.ShowAsDec(rec.hodiny);
+                        c.Rate_Billing_Approved = rec.sazba;
+                        if (c.Value_Approved_Billing == 0) c.Value_Approved_Billing = recTemp.p31Value_Orig;
+                    }
+                    if (c.p72id == BO.p72IdENUM.ZahrnoutDoPausalu)
+                    {
+                        c.p31Value_FixPrice = BO.basTime.ShowAsDec(rec.hodinypausal);
+                    }
+
+                    c.Value_Approved_Internal = BO.basTime.ShowAsDec(rec.hodinyinterni);
+                    c.Rate_Internal_Approved = recTemp.p31Rate_Internal_Approved;
+                    
+                    break;
+                case BO.p33IdENUM.Kusovnik:
+                    if (c.p72id == BO.p72IdENUM.Fakturovat || c.p72id == BO.p72IdENUM.FakturovatPozdeji)
+                    {
+                        c.Value_Approved_Billing = BO.basTime.ShowAsDec(rec.hodiny);
+                        if (c.Value_Approved_Billing == 0) c.Value_Approved_Billing = recTemp.p31Value_Orig;
+
+                        c.Rate_Billing_Approved = rec.sazba;
+                    }
+                    
+                    
+                    break;
+                case BO.p33IdENUM.PenizeBezDPH:
+                case BO.p33IdENUM.PenizeVcDPHRozpisu:
+                    if (c.p72id == BO.p72IdENUM.Fakturovat || c.p72id == BO.p72IdENUM.FakturovatPozdeji)
+                    {
+                        c.VatRate_Approved = rec.dphsazba;
+                        if (c.VatRate_Approved == 0) c.VatRate_Approved = recTemp.p31VatRate_Orig;
+                    }
+                    
+
+                    break;
+            }
+            if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+            {
+                ret.Message = Factory.GetFirstNotifyMessage();
+                ret.Flag = BO.ResultEnum.Failed;                
+            }
+            
+            return ret;
+
+        }
     }
 }

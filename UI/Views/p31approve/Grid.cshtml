@@ -50,7 +50,7 @@
                 <table id="tabRecord" style="display:none;">
                     <tr>
                         <td colspan="2">
-                            <button type="button" class="btn btn-success">@_f.tra("Uložit změny")</button>
+                            <button type="button" class="btn btn-success" onclick="save_temp_record()">@_f.tra("Uložit změny")</button>
                             <hr />
 
 
@@ -207,21 +207,21 @@ else
     });
 
 
-    function thegrid_handle_rowselect(pid) {     
+    function thegrid_handle_rowselect(pid) {
         $("#tabRecord").css("display", "block");
         $("#recNadpis").css("display", "none");
 
         $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
-            
+
             $("#Rec_Pid").val(pid);
             $("#Rec_p33ID").val(data.p33id);
-                        
+
             $("#chkp71ID_" + data.p71id).prop("checked", true);
             if (data.p72id > 0)
             {
                 $("#chkp72ID_" + data.p72id).prop("checked", true);
             }
-            
+
             $("#Rec_Jmeno").text(data.jmeno);
             $("#Rec_Datum").text(data.datum);
             $("#Rec_Projekt").text(data.projekt);
@@ -230,27 +230,27 @@ else
             $("#Rec_UrovenSchvalovani").val(data.uroven);
             $("#j27code_bezdph").text("("+data.j27code+"):");
             $("#j27code_sazba").text("("+data.j27code+"):");
-            
 
-            if (data.p33id == 1) {                
+
+            if (data.p33id == 1) {
                 $("#Rec_HodinyKFakturaci").val(data.hodiny);
                 $("#Rec_HodinyVPausaulu").val(data.hodinypausal);
                 $("#Rec_InterniHodiny").val(data.hodinyinterni);
             }
-            if (data.p33id == 1 || data.p33id==3) {                               
+            if (data.p33id == 1 || data.p33id==3) {
                 mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
 
-            } else {                
-                
+            } else {
+
                 mynumber_changevalue("Rec_DphSazba", data.dphsazba, 0);
                 mynumber_changevalue("Rec_BezDph", data.bezdph, 2);
             }
 
 
-            
+
             handle_rec_change();
-            
-            
+
+
             $("#lblProjekt").html(data.pl+":");
             _resize_textareas();
         });
@@ -272,13 +272,13 @@ else
             $("[data-p33id=13]").css("visibility", "hidden");
             $("[data-p33id=25]").css("visibility", "hidden");
         }
-        
+
         //následně už pouze skrývat (hidden) nepotřebné, protože aktuálně je vše viditelné!
 
         if (p33id == 1 || p33id==3 || p72id==6 || p72id==3 || p72id==2) {
             $("#trDphSazba").css("visibility", "hidden");
             $("#trBezDph").css("visibility", "hidden");
-            
+
         }
         if (p33id != 1) {
             $("#trHodinyKFakturaci").css("visibility", "hidden");
@@ -294,7 +294,7 @@ else
             $("#trSazbaKFakturaci").css("visibility", "hidden");
             $("#trHodinyKFakturaci").css("visibility", "hidden");
         }
-        
+
     }
 
 
@@ -304,9 +304,45 @@ else
         form1.submit();
     }
 
-    
+
 
     function hardrefresh(pid, flag) {
         postback("postback");
+    }
+
+
+    function save_temp_record() {
+        var pid = $("#Rec_Pid").val();
+        var p71id = $('input[name=Rec_p71ID]:checked').val();
+        var p72id = $('input[name=Rec_p72ID]:checked').val();
+        var p33id = $("#Rec_p33ID").val();
+
+        var c = {
+            p31id: pid,
+            p71id: p71id,
+            p72id: p72id,
+            p33id: p33id,
+            uroven: $("#Rec_UrovenSchvalovani").val(),
+            hodiny: $("#Rec_HodinyKFakturaci").val(),
+            hodinyinterni: $("#Rec_InterniHodiny").val(),
+            sazba: $("#numRec_SazbaKFakturaci").val(),
+            hodinypausal: $("#Rec_HodinyVPausaulu").val(),
+            popis: $("#Rec_Popis").text(),
+            bezdph: $("#numRec_BezDph").val(),
+            dphsazba: $("#numRec_DphSazba").val()
+            
+        };
+        
+
+        $.post(_ep("/p31approve/SaveTempRecord"), {rec: c, p31id: pid, guid: _guid }, function (data) {
+            
+            if (data.message != null) {
+                _notify_message(data.message);
+                return;
+            }
+
+
+            tg_post_handler("refresh");
+        });
     }
 </script>
