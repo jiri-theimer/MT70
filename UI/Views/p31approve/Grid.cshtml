@@ -204,6 +204,10 @@ else
         });
 
 
+        document.addEventListener("thegrid_rebound", event => {
+            LocalAfterGridRefresh();
+        });
+
     });
 
 
@@ -226,11 +230,11 @@ else
             $("#Rec_Datum").text(data.datum);
             $("#Rec_Projekt").text(data.projekt);
             $("#Rec_Aktivita").text(data.aktivita);
-            $("#Rec_Popis").text(data.popis);
+            $("#Rec_Popis").val(data.popis);
             $("#Rec_UrovenSchvalovani").val(data.uroven);
             $("#j27code_bezdph").text("("+data.j27code+"):");
             $("#j27code_sazba").text("("+data.j27code+"):");
-
+            
 
             if (data.p33id == 1) {
                 $("#Rec_HodinyKFakturaci").val(data.hodiny);
@@ -327,7 +331,7 @@ else
             hodinyinterni: $("#Rec_InterniHodiny").val(),
             sazba: $("#numRec_SazbaKFakturaci").val(),
             hodinypausal: $("#Rec_HodinyVPausaulu").val(),
-            popis: $("#Rec_Popis").text(),
+            popis: $("#Rec_Popis").val(),
             bezdph: $("#numRec_BezDph").val(),
             dphsazba: $("#numRec_DphSazba").val()
             
@@ -341,8 +345,18 @@ else
                 return;
             }
 
-
+            
             tg_post_handler("refresh");
+            
         });
+    }
+
+
+    function LocalAfterGridRefresh() {
+        
+        var pid = $("#Rec_Pid").val();
+        tg_go2pid(pid);
+        thegrid_handle_rowselect(pid);
+        
     }
 </script>

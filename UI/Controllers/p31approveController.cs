@@ -375,6 +375,8 @@ namespace UI.Controllers
                     {
                         c.VatRate_Approved = rec.dphsazba;
                         if (c.VatRate_Approved == 0) c.VatRate_Approved = recTemp.p31VatRate_Orig;
+                        c.Value_Approved_Billing = rec.bezdph;
+                        if (c.Value_Approved_Billing == 0) c.Value_Approved_Billing = recTemp.p31Value_Orig;
                     }
                     
 

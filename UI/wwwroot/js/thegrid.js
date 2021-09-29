@@ -205,6 +205,8 @@ function tg_post_handler(strOper, strKey, strValue) {
 
         document.dispatchEvent(event_thegridbound);
 
+
+        
         
     })
         .fail(function (error) {
@@ -409,7 +411,7 @@ function tg_go2pid(pid) {       //již musí být ze serveru odstránkováno!
 
         row.scrollIntoView({ block: "start", behavior: "smooth" });
         
-
+        
         //var rowpos = $(row).position();
         //$("#container_vScroll").scrollTop(rowpos.top);
     }
