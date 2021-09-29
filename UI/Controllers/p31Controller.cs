@@ -451,6 +451,7 @@ namespace UI.Controllers
                         var mq = new BO.myQueryP31();
                         mq.SetPids(c.pid.ToString());
                         var lisP31 = this.Factory.p31WorksheetBL.GetList(mq);
+                        Factory.p31WorksheetBL.DeleteTempRecord(v.GuidApprove, c.pid);
                         BL.bas.p31Support.SetupTempApproving(this.Factory, lisP31, v.GuidApprove, 0,true, BO.p72IdENUM.Fakturovat);
                     }
 

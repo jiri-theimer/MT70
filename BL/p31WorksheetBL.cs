@@ -27,6 +27,7 @@ namespace BL
         public BO.p72IdENUM Get_p72ID_NonBillableWork(int p31id);
         public bool Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata);
         public bool Validate_Before_Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata);
+        public void DeleteTempRecord(string guid, int p31id);
 
     }
     class p31WorksheetBL : BaseBL, Ip31WorksheetBL
@@ -639,6 +640,11 @@ namespace BL
             }
 
             return true;
+        }
+
+        public void DeleteTempRecord(string guid,int p31id)
+        {
+            _db.RunSql("DELETE FROM p31Worksheet_Temp where p31GUID=@guid AND p31ID=@pid", new { guid = guid, pid = p31id });
         }
 
         public bool Save_Approving(BO.p31WorksheetApproveInput c,bool istempdata)

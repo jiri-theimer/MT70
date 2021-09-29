@@ -60,6 +60,8 @@ namespace BL
             return _db.Load<BO.p85Tempbox>(sbret(), new { pid = intPID });
         }
 
+        
+
         public int Save(BO.p85Tempbox rec)
         {
             var p = new DL.Params4Dapper();
