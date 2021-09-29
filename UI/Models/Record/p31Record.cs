@@ -40,5 +40,7 @@ namespace UI.Models.Record
         public UI.Models.p31oper.hesViewModel Setting { get; set; }     //nastavení vykazování
         
         public bool IsValueTrimming { get; set; }   //zapisuje se korekce
+
+        public string GuidApprove { get; set; }
     }
 }

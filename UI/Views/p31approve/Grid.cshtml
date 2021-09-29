@@ -110,6 +110,14 @@
                             <span class="val-readonly" id="Rec_Aktivita"></span>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Vykázáno"):
+                        </td>
+                        <td>
+                            <span class="val-readonly" id="Rec_Vykazano"></span>
+                        </td>
+                    </tr>
                     <tr id="trHodinyKFakturaci" data-p33id="1">
                         <td>
                             @_f.tra("Hodiny k fakturaci"):
@@ -178,6 +186,11 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a href="javascript:edit_source_rec()">@_f.tra("Upravit zdrojový úkon")</a>
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>
@@ -214,7 +227,7 @@ else
     function thegrid_handle_rowselect(pid) {
         $("#tabRecord").css("display", "block");
         $("#recNadpis").css("display", "none");
-
+       
         $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
 
             $("#Rec_Pid").val(pid);
@@ -230,6 +243,7 @@ else
             $("#Rec_Datum").text(data.datum);
             $("#Rec_Projekt").text(data.projekt);
             $("#Rec_Aktivita").text(data.aktivita);
+            $("#Rec_Vykazano").text(data.vykazano)
             $("#Rec_Popis").val(data.popis);
             $("#Rec_UrovenSchvalovani").val(data.uroven);
             $("#j27code_bezdph").text("("+data.j27code+"):");
@@ -311,6 +325,12 @@ else
 
 
     function hardrefresh(pid, flag) {
+        if ($("#Rec_Pid").val() != "") {
+            LocalAfterGridRefresh();
+            return;
+        }
+        
+
         postback("postback");
     }
 
@@ -358,5 +378,10 @@ else
         tg_go2pid(pid);
         thegrid_handle_rowselect(pid);
         
+    }
+
+    function edit_source_rec() {
+        var pid = $("#Rec_Pid").val();
+        _window_open("/p31/Record?pid=" + pid + "&approve_guid=" + _guid);
     }
 </script>

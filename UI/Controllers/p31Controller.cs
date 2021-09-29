@@ -24,9 +24,9 @@ namespace UI.Controllers
 
 
 
-        public IActionResult Record(int pid, bool isclone, int p41id, int j02id, int p34id, int p56id, string d, string t1, string t2)
+        public IActionResult Record(int pid, bool isclone, int p41id, int j02id, int p34id, int p56id, string d, string t1, string t2,string approve_guid)
         {
-            var v = new p31Record() { rec_pid = pid, rec_entity = "p31" };
+            var v = new p31Record() { rec_pid = pid, rec_entity = "p31",GuidApprove=approve_guid };
             if (pid == 0 && d != null)
             {
                 v.p31Date = BO.BAS.String2Date(d);
@@ -444,6 +444,15 @@ namespace UI.Controllers
                 if (c.pid > 0)
                 {
                     Factory.o51TagBL.SaveTagging("p31", c.pid, v.TagPids);
+
+                    if (v.GuidApprove != null)
+                    {
+                        //úprava úkonu, který se právě schvaluje
+                        var mq = new BO.myQueryP31();
+                        mq.SetPids(c.pid.ToString());
+                        var lisP31 = this.Factory.p31WorksheetBL.GetList(mq);
+                        BL.bas.p31Support.SetupTempApproving(this.Factory, lisP31, v.GuidApprove, 0,true, BO.p72IdENUM.Fakturovat);
+                    }
 
                     v.SetJavascript_CallOnLoad(c.pid);
                     return View(v);

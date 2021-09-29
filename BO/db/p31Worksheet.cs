@@ -214,7 +214,7 @@ namespace BO
             {
                 if (this.p31Value_Orig_Entried != "")
                 {
-                    if (this.p31Value_Orig_Entried.IndexOf(":") > 0)
+                    if (this.p31Value_Orig_Entried !=null && this.p31Value_Orig_Entried.IndexOf(":") > 0)
                         return true; // původně zadaná hodnota obsahuje rovnou hodnota v HH:MM
                 }
                 if (this.p31Value_Orig.ToString().Length > 5)

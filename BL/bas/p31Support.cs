@@ -192,5 +192,170 @@ namespace BL.bas
 
             return ret;
         }
+
+
+
+        public static void SetupTempApproving(BL.Factory _f,IEnumerable<BO.p31Worksheet> lisP31,string strGUID,int intApprovingLevel,bool bolDoDefaultApproveState,BO.p72IdENUM p72id)
+        {
+            int intLastP41ID = 0; int intP41ID = 0; int intSpatnaKorekceRows = 0; BO.p41Project recP41 = null;
+            
+            foreach (var rec in lisP31)
+            {
+                intP41ID = rec.p41ID;
+                var c = new BO.p31WorksheetApproveInput() { p31ID = rec.pid, p33ID = rec.p33ID, Guid = strGUID, p31Date = rec.p31Date, p31ApprovingLevel = rec.p31ApprovingLevel };
+                if (rec.p71ID == BO.p71IdENUM.Nic)
+                {
+                    //dosud neprošlo schvalováním
+                    c.Rate_Internal_Approved = rec.p31Rate_Internal_Orig;
+                    c.p31ApprovingLevel = intApprovingLevel;
+                    if (bolDoDefaultApproveState)
+                    {
+                        c.p71id = BO.p71IdENUM.Schvaleno;
+                        if (rec.p32IsBillable)
+                        {
+                            c.p72id = BO.p72IdENUM.Fakturovat;
+                            c.Value_Approved_Billing = rec.p31Value_Orig;
+                            c.Value_Approved_Internal = rec.p31Value_Orig;
+                            switch (c.p33ID)
+                            {
+                                case BO.p33IdENUM.Cas:
+                                case BO.p33IdENUM.Kusovnik:
+                                    c.Rate_Billing_Approved = rec.p31Rate_Billing_Orig;
+                                    c.VatRate_Approved = rec.p31VatRate_Orig;
+                                    if ((rec.p31Rate_Billing_Orig == 0 && rec.p32ManualFeeFlag == 0) || (rec.p31Amount_WithoutVat_Orig == 0 && rec.p32ManualFeeFlag == 0))
+                                    {
+                                        c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                    }
+                                    if (rec.p32ManualFeeFlag == 1)
+                                    {
+                                        c.p32ManualFeeFlag = 1;
+                                        c.ManualFee_Approved = rec.p31Amount_WithoutVat_Orig;
+                                    }
+                                    if (rec.p72ID_AfterTrimming != BO.p72IdENUM._NotSpecified)
+                                    {
+                                        //uživatel zadal v úkonu výchozí korekci pro schvalování
+                                        c.p72id = rec.p72ID_AfterTrimming;
+                                        if (c.p72id == BO.p72IdENUM.Fakturovat)
+                                        {
+                                            c.Value_Approved_Billing = rec.p31Value_Trimmed;
+                                            if (c.Rate_Billing_Approved == 0)
+                                            {
+                                                //korekce zní na status [fakturovat], ale hodinová sazba je nulová -> je třeba nahodit paušál
+                                                c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                                c.Value_Approved_Billing = 0;
+                                                if (intSpatnaKorekceRows == 0)
+                                                {
+                                                    var cTmpErr = new BO.p85Tempbox() { p85GUID = "err-" + strGUID, p85DataPID = rec.pid, p85FreeText01 = "Minimálně u jednoho úkonu zapisovač navrhl korekcí status [Fakturovat], ale úkon má nulovou fakturační sazbu.<hr>V takovém případě systém nahazuje status [Zahrnout do paušálu]." };
+                                                    _f.p85TempboxBL.Save(cTmpErr);
+
+                                                }
+                                                intSpatnaKorekceRows += 1;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            c.Rate_Billing_Approved = 0;
+                                            c.Value_Approved_Billing = 0;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //fakturovatelné hodiny mohou být záměrně nulovány do paušálu nebo odpisu
+                                        if (intP41ID != intLastP41ID || recP41 == null)
+                                        {
+                                            recP41 = _f.p41ProjectBL.Load(intP41ID);
+                                        }
+                                        if (recP41.p72ID_BillableHours != BO.p72IdENUM._NotSpecified)
+                                        {
+                                            c.p72id = recP41.p72ID_BillableHours;   //v projektu je explicitně nastavený fakturační status, kterým se mají nulovat fakturovatelné hodiny
+                                        }
+                                    }
+                                    break;
+                                case BO.p33IdENUM.PenizeBezDPH:
+                                    if (rec.p31Value_Orig == 0)
+                                    {
+                                        c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                    }
+                                    break;
+                                case BO.p33IdENUM.PenizeVcDPHRozpisu:
+                                    c.VatRate_Approved = rec.p31VatRate_Orig;
+                                    if (rec.p31Value_Orig == 0)
+                                    {
+                                        c.p72id = BO.p72IdENUM.ZahrnoutDoPausalu;
+                                    }
+                                    switch (rec.p72ID_AfterTrimming)
+                                    {
+                                        case BO.p72IdENUM._NotSpecified:
+                                            break;
+                                        case BO.p72IdENUM.Fakturovat:
+                                            c.p72id = rec.p72ID_AfterTrimming;
+                                            c.Value_Approved_Billing = rec.p31Value_Trimmed;
+                                            break;
+                                        default:
+                                            c.p72id = rec.p72ID_AfterTrimming;
+                                            c.Value_Approved_Billing = 0;
+                                            break;
+                                    }
+                                    break;
+                            }
+                            if (rec.p31MarginHidden != 0 || rec.p31MarginTransparent != 0)
+                            {
+                                //navýšit částku o expense marži
+                                c.Value_Approved_Billing = rec.p31Value_Orig + (rec.p31Value_Orig * rec.p31MarginHidden / 100);
+                                c.Value_Approved_Billing = c.Value_Approved_Billing + (c.Value_Approved_Billing * rec.p31MarginTransparent / 100);
+                            }
+                        }
+                        else
+                        {
+                            c.Value_Approved_Internal = rec.p31Value_Orig;
+                            if (rec.p72ID_AfterTrimming == BO.p72IdENUM._NotSpecified || rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat)
+                            {
+                                c.p72id = _f.p31WorksheetBL.Get_p72ID_NonBillableWork(c.p31ID);
+                            }
+                            else
+                            {
+                                c.p72id = rec.p72ID_AfterTrimming;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //již dříve prošlo schvalováním
+                    c.p71id = rec.p71ID;
+                    c.p72id = rec.p72ID_AfterApprove;
+                    c.Value_Approved_Billing = rec.p31Value_Approved_Billing;
+                    c.Value_Approved_Internal = rec.p31Value_Approved_Internal;
+                    c.VatRate_Approved = rec.p31VatRate_Approved;
+                    c.Rate_Billing_Approved = rec.p31Rate_Billing_Approved;
+                    c.Rate_Internal_Approved = rec.p31Rate_Internal_Approved;
+                    c.p32ManualFeeFlag = rec.p32ManualFeeFlag;
+                    if (rec.p32ManualFeeFlag == 1)
+                    {
+                        c.ManualFee_Approved = rec.p31Amount_WithoutVat_Approved;
+                    }
+                    if (c.p72id == BO.p72IdENUM.ZahrnoutDoPausalu)
+                    {
+                        c.p31Value_FixPrice = rec.p31Value_FixPrice;
+                    }
+                }
+                if (p72id != BO.p72IdENUM._NotSpecified && p72id != BO.p72IdENUM.Fakturovat && (rec.p33ID == BO.p33IdENUM.Cas || rec.p33ID == BO.p33IdENUM.Kusovnik))
+                {
+                    c.p72id = p72id;
+                    c.Value_Approved_Billing = 0;
+                }
+
+                if (!_f.p31WorksheetBL.Save_Approving(c, true))
+                {
+
+                }
+
+                intLastP41ID = intP41ID;
+
+            }
+
+        }
+
+
     }
 }
