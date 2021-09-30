@@ -257,6 +257,10 @@ namespace UI.Controllers
         public GridRecord LoadGridRecord(int p31id,string guid)
         {
             var rec = this.Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
+            if (rec == null)
+            {
+                return new GridRecord() { errormessage = "Záznam nelze načíst: rec is null" };
+            }
             var recP41 = this.Factory.p41ProjectBL.Load(rec.p41ID);
 
             var c = new GridRecord() {Datum = BO.BAS.ObjectDate2String(rec.p31Date), Popis = rec.p31Text,Jmeno=rec.Person,Projekt=rec.Project,Aktivita=rec.p32Name,p33id=(int)rec.p33ID };
@@ -279,12 +283,14 @@ namespace UI.Controllers
                     {
                         c.vykazano = BO.BAS.Number2String(rec.p31Hours_Orig);
                     }
+                    c.vykazano_sazba = BO.BAS.Number2String(rec.p31Rate_Billing_Orig) + " " + rec.j27Code_Billing_Orig;
                     break;
                 case BO.p33IdENUM.Kusovnik:
                     c.vykazano = BO.BAS.Number2String(rec.p31Value_Orig);
+                    c.vykazano_sazba = BO.BAS.Number2String(rec.p31Rate_Billing_Orig) + " " + rec.j27Code_Billing_Orig;
                     break;
                 default:
-                    c.vykazano = BO.BAS.Number2String(rec.p31Amount_WithoutVat_Orig);
+                    c.vykazano = BO.BAS.Number2String(rec.p31Amount_WithoutVat_Orig) + " " + rec.j27Code_Billing_Orig;
                     break;
 
             }
@@ -319,6 +325,63 @@ namespace UI.Controllers
             return c;
         }
 
+        public BO.Result SaveTempBatch(string pids,int p71id,int p72id,string guid)
+        {
+            var ret = new BO.Result(false);
+            var p31ids = BO.BAS.ConvertString2ListInt(pids);
+            int x = 0;
+            var errs = new List<string>();
+
+            foreach(int p31id in p31ids)
+            {
+                x += 1;
+                var rec = Factory.p31WorksheetBL.Load(p31id);
+                var recTemp = Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
+                var c = new BO.p31WorksheetApproveInput() { p31ID = p31id, Guid = guid, p33ID = recTemp.p33ID, p31Date= recTemp.p31Date };
+                c.p71id = (BO.p71IdENUM)p71id;
+                c.p31ApprovingLevel = recTemp.p31ApprovingLevel;
+
+                switch (c.p71id)
+                {
+                    case BO.p71IdENUM.Nic:
+                        if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                        {
+                            errs.Add("#"+x.ToString()+": "+Factory.GetFirstNotifyMessage());
+                        }
+                        break;
+                    case BO.p71IdENUM.Neschvaleno:
+                        if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                        {
+                            errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
+                        }
+                        break;
+                    case BO.p71IdENUM.Schvaleno:
+                        c.p72id = (BO.p72IdENUM)p72id;
+                        if ((c.p72id==BO.p72IdENUM.Fakturovat || c.p72id == BO.p72IdENUM.FakturovatPozdeji))
+                        {
+                            c.Rate_Billing_Approved = recTemp.p31Rate_Billing_Orig;
+                            c.Value_Approved_Billing = recTemp.p31Value_Orig;
+                            c.VatRate_Approved = recTemp.p31VatRate_Approved;
+
+                            if (c.Rate_Billing_Approved==0) c.Rate_Billing_Approved = rec.p31Rate_Billing_Orig;
+                            if (c.Value_Approved_Billing==0) c.Value_Approved_Billing = rec.p31Value_Orig;
+                            
+                        }
+                        if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                        {
+                            errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
+                        }
+                        break;
+                }
+            }
+
+            if (errs.Count() > 0)
+            {
+                ret.Message = string.Join("<hr>", errs);                
+            }
+
+            return ret;
+        }
         public BO.Result SaveTempRecord(GridRecord rec,int p31id,string guid)
         {
             var ret = new BO.Result(false);

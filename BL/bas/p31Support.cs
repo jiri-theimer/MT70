@@ -214,6 +214,7 @@ namespace BL.bas
                         if (rec.p32IsBillable)
                         {
                             c.p72id = BO.p72IdENUM.Fakturovat;
+                            if (p72id == BO.p72IdENUM.FakturovatPozdeji) c.p72id = p72id;
                             c.Value_Approved_Billing = rec.p31Value_Orig;
                             c.Value_Approved_Internal = rec.p31Value_Orig;
                             switch (c.p33ID)
@@ -288,6 +289,7 @@ namespace BL.bas
                                         case BO.p72IdENUM._NotSpecified:
                                             break;
                                         case BO.p72IdENUM.Fakturovat:
+                                        case BO.p72IdENUM.FakturovatPozdeji:
                                             c.p72id = rec.p72ID_AfterTrimming;
                                             c.Value_Approved_Billing = rec.p31Value_Trimmed;
                                             break;
@@ -308,7 +310,7 @@ namespace BL.bas
                         else
                         {
                             c.Value_Approved_Internal = rec.p31Value_Orig;
-                            if (rec.p72ID_AfterTrimming == BO.p72IdENUM._NotSpecified || rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat)
+                            if (rec.p72ID_AfterTrimming == BO.p72IdENUM._NotSpecified || rec.p72ID_AfterTrimming == BO.p72IdENUM.FakturovatPozdeji || rec.p72ID_AfterTrimming == BO.p72IdENUM.Fakturovat)
                             {
                                 c.p72id = _f.p31WorksheetBL.Get_p72ID_NonBillableWork(c.p31ID);
                             }
@@ -339,7 +341,7 @@ namespace BL.bas
                         c.p31Value_FixPrice = rec.p31Value_FixPrice;
                     }
                 }
-                if (p72id != BO.p72IdENUM._NotSpecified && p72id != BO.p72IdENUM.Fakturovat && (rec.p33ID == BO.p33IdENUM.Cas || rec.p33ID == BO.p33IdENUM.Kusovnik))
+                if (p72id != BO.p72IdENUM._NotSpecified && p72id != BO.p72IdENUM.Fakturovat && p72id != BO.p72IdENUM.FakturovatPozdeji && (rec.p33ID == BO.p33IdENUM.Cas || rec.p33ID == BO.p33IdENUM.Kusovnik))
                 {
                     c.p72id = p72id;
                     c.Value_Approved_Billing = 0;

@@ -20,10 +20,13 @@ namespace UI.Models.p31approve
         public string pl { get; set; }
         public string Aktivita { get; set; }
         public string vykazano { get; set; }
+        public string vykazano_sazba { get; set; }
         public string j27code { get; set; }
         public int p33id { get; set; }
         public int p71id { get; set; }
         public int p72id { get; set; }
         public int uroven { get; set; }
+
+        public string errormessage { get; set; }
     }
 }

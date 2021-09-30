@@ -483,7 +483,9 @@ function _toolbar_warn2save_changes(message) {
 //spustit hardrefresh na volající stránkce
 
 function _reload_layout_and_close(pid, flag) {
-
+    if (flag === null || flag==="") {
+        flag = window.location.href;
+    }
     if (window !== top) {
         window.parent.hardrefresh(pid, flag);
         window.parent._window_close();

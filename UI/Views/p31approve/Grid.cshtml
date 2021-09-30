@@ -25,6 +25,10 @@
             </div>
         </div>
 
+        <button type="button" id="cmdBatch4" onclick="batch(1,4)" class="btn btn-sm">4</button>
+        <button type="button" id="cmdBatch4" onclick="batch(1,3)" class="btn btn-sm">3</button>
+        <button type="button" id="cmdBatch4" onclick="batch(1,6)" class="btn btn-sm">6</button>
+
         <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
 
 
@@ -121,6 +125,15 @@
                             <span class="val-readonly" id="Rec_Vykazano"></span>
                         </td>
                     </tr>
+                    <tr id="trSazba" data-p33id="13">
+                        <td>
+                            @_f.tra("Sazba"):
+                        </td>
+                        <td>
+                            <span class="val-readonly" id="Rec_Sazba"></span>
+                        </td>
+                    </tr>
+
                     <tr id="trHodinyKFakturaci" data-p33id="1">
                         <td>
                             @_f.tra("Hodiny k fakturaci"):
@@ -138,12 +151,15 @@
                             <mynumber asp-for="@Model.Rec_SazbaKFakturaci"></mynumber>
                         </td>
                     </tr>
-                    <tr id="trHodinyVPausalu" data-p33id="1">
+                    <tr id="trHodinyVPausalu" data-p33id="1" style="vertical-align:top;">
                         <td>
                             @_f.tra("Hodiny v paušálu"):
                         </td>
                         <td>
                             <myhours asp-for="@Model.Rec_HodinyVPausaulu" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
+                            <i>
+                                0 = @_f.tra("Vykázané hodiny")
+                            </i>
                         </td>
                     </tr>
 
@@ -230,9 +246,12 @@ else
     function thegrid_handle_rowselect(pid) {
         $("#tabRecord").css("display", "block");
         $("#recNadpis").css("display", "none");
-       
+        
         $.post(_ep("/p31approve/LoadGridRecord"), { p31id: pid, guid: _guid }, function (data) {
-
+            if (data.errormessage != null) {
+                _notify_message(data.errormessage);
+                return;
+            }
             $("#Rec_Pid").val(pid);
             $("#Rec_p33ID").val(data.p33id);
 
@@ -259,8 +278,8 @@ else
                 $("#Rec_InterniHodiny").val(data.hodinyinterni);
             }
             if (data.p33id == 1 || data.p33id==3) {
-                mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);
-
+                mynumber_changevalue("Rec_SazbaKFakturaci", data.sazba, 2);                
+                $("#Rec_Sazba").text(data.vykazano_sazba);
             } else {
 
                 mynumber_changevalue("Rec_DphSazba", data.dphsazba, 0);
@@ -293,6 +312,7 @@ else
             $("[data-p33id=1]").css("visibility", "hidden");
             $("[data-p33id=13]").css("visibility", "hidden");
             $("[data-p33id=25]").css("visibility", "hidden");
+            $("#trSazba").css("visibility", "visible");
         }
 
         if (p71id == "0") {
@@ -312,6 +332,7 @@ else
         }
         if (p33id != 1 && p33id != 3) {
             $("#trSazbaKFakturaci").css("visibility", "hidden");
+            $("#trSazba").css("visibility", "hidden");
         }
         if ((p33id == 1 && p72id != 6) || p33id>1) {
             $("#trHodinyVPausalu").css("visibility", "hidden");
@@ -332,13 +353,14 @@ else
 
 
 
-    function hardrefresh(pid, flag) {
-        if ($("#Rec_Pid").val() != "") {
+    function hardrefresh(pid, flag) {        
+        if (flag.toLowerCase().indexOf("p31/record")>0)
+        {
             LocalAfterGridRefresh();
             return;
         }
         
-
+               
         postback("postback");
     }
 
@@ -390,6 +412,22 @@ else
 
     function edit_source_rec() {
         var pid = $("#Rec_Pid").val();
-        _window_open("/p31/Record?approve_pid=" + pid + "&approve_guid=" + _guid);
+        _window_open("/p31/Record?pid=" + pid + "&approve_guid=" + _guid);
+    }
+
+    function batch(p71id, p72id) {
+        var pids = $("#tg_selected_pids").val();
+        if (pids === "") {
+            _notify_message(_tg_musite_vybrat_zaznam);
+            return;
+        }
+
+
+        $.post(_ep("/p31approve/SaveTempBatch"), { pids: pids, p71id: p71id, p72id: p72id, guid: _guid }, function (data) {
+            _notify_message(data.message);
+            return;
+            postback("postback");
+
+        });
     }
 </script>
