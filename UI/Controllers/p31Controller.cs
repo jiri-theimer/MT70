@@ -9,6 +9,7 @@ using UI.Models.Info;
 
 namespace UI.Controllers
 {
+    
     public class p31Controller : BaseController
     {
         public IActionResult Info(int pid, bool isrecord)
@@ -22,16 +23,16 @@ namespace UI.Controllers
             return View(v);
         }
 
+        
 
-
-        public IActionResult Record(int pid, bool isclone, int p41id, int j02id, int p34id, int p56id, string d, string t1, string t2,string approve_guid)
+        public IActionResult Record(int pid, bool isclone, int p41id, int j02id, int p34id, int p56id, string d, string t1, string t2, string approve_guid)
         {
-            var v = new p31Record() { rec_pid = pid, rec_entity = "p31",GuidApprove=approve_guid };
+            var v = new p31Record() { rec_pid = pid, rec_entity = "p31", GuidApprove = approve_guid };
             if (pid == 0 && d != null)
             {
                 v.p31Date = BO.BAS.String2Date(d);
             }
-
+            
             v.Rec = new BO.p31WorksheetEntryInput() { pid = pid, p41ID = p41id, p34ID = p34id, j02ID = j02id };
             if (pid == 0 && t1 != null)
             {
@@ -114,6 +115,8 @@ namespace UI.Controllers
 
             return View(v);
         }
+
+       
 
         private void Handle_Defaults(p31Record v)
         {
@@ -449,10 +452,13 @@ namespace UI.Controllers
                     {
                         //úprava úkonu, který se právě schvaluje
                         var mq = new BO.myQueryP31();
-                        mq.SetPids(c.pid.ToString());
+                        mq.SetPids(c.pid.ToString());                        
                         var lisP31 = this.Factory.p31WorksheetBL.GetList(mq);
                         Factory.p31WorksheetBL.DeleteTempRecord(v.GuidApprove, c.pid);
-                        BL.bas.p31Support.SetupTempApproving(this.Factory, lisP31, v.GuidApprove, 0,true, BO.p72IdENUM.Fakturovat);
+                        BO.p72IdENUM p72id = BO.p72IdENUM.Fakturovat;
+                        var recTemp = Factory.p31WorksheetBL.LoadTempRecord(c.pid, v.GuidApprove);
+                        if (recTemp != null) p72id = recTemp.p72ID_AfterApprove;
+                        BL.bas.p31Support.SetupTempApproving(this.Factory, lisP31, v.GuidApprove, 0,true, p72id);
                     }
 
                     v.SetJavascript_CallOnLoad(c.pid);

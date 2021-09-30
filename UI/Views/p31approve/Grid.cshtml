@@ -76,6 +76,9 @@
                             <br />
                             <input type="radio" id="chkp72ID_2" asp-for="Rec_p72ID" value="2" onchange="handle_rec_change()" />
                             <label for="chkp72ID_2" class="badge-a2">@_f.tra("Viditelný odpis")</label>
+                            <br />
+                            <input type="radio" id="chkp72ID_7" asp-for="Rec_p72ID" value="7" onchange="handle_rec_change()" />
+                            <label for="chkp72ID_7" class="badge-a7">@_f.tra("Fakturovat později")</label>
                         </td>
                     </tr>
                     <tr>
@@ -161,7 +164,7 @@
                             <mynumber asp-for="@Model.Rec_DphSazba"></mynumber>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="trPopis">
                         <td colspan="2">
                             <textarea class="form-control" id="Rec_Popis"></textarea>
                         </td>
@@ -174,7 +177,7 @@
                             <myhours asp-for="@Model.Rec_InterniHodiny" showsettingbutton="true" hoursentryformat="@(_f.CurrentUser.j03DefaultHoursFormat)" hoursentryflag="@(_f.CurrentUser.j03HoursEntryFlagV7)"></myhours>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="trUrovenSchvalovani">
                         <td>
                             @_f.tra("Úroveň schvalování"):
                         </td>
@@ -280,6 +283,7 @@ else
         var p33id = $("#Rec_p33ID").val();
 
         $("#trP72ID").css("visibility", "visible");
+        $("#trUrovenSchvalovani").css("visibility", "visible");
         $("[data-p33id=1]").css("visibility", "visible");
         $("[data-p33id=13]").css("visibility", "visible");
         $("[data-p33id=25]").css("visibility", "visible");
@@ -289,6 +293,10 @@ else
             $("[data-p33id=1]").css("visibility", "hidden");
             $("[data-p33id=13]").css("visibility", "hidden");
             $("[data-p33id=25]").css("visibility", "hidden");
+        }
+
+        if (p71id == "0") {
+            $("#trUrovenSchvalovani").css("visibility", "hidden");
         }
 
         //následně už pouze skrývat (hidden) nepotřebné, protože aktuálně je vše viditelné!
@@ -382,6 +390,6 @@ else
 
     function edit_source_rec() {
         var pid = $("#Rec_Pid").val();
-        _window_open("/p31/Record?pid=" + pid + "&approve_guid=" + _guid);
+        _window_open("/p31/Record?approve_pid=" + pid + "&approve_guid=" + _guid);
     }
 </script>
