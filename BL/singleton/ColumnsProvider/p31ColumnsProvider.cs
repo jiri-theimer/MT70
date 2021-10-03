@@ -15,7 +15,7 @@ namespace BL
             this.CurrentFieldGroup = "Root";//-----------Root---------------------
             oc =AF("p31Text", "Text");oc.DefaultColumnFlag = gdc1;
             AF("OdradkovanyText", "Odřádkovaný text", "REPLACE(a.p31Text,CHAR(10),'<br>')");
-            oc=AF("EditovatelnyText", "Editovatelný text", "CASE WHEN CHARINDEX(CHAR(10),a.p31Text)>0 OR LEN(a.p31Text)>170 THEN '<textarea style=''width:349px;height:100px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' ELSE '<textarea style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' END");
+            oc=AF("EditovatelnyText", "Editovatelný text", "CASE WHEN CHARINDEX(CHAR(10),a.p31Text)>0 OR LEN(a.p31Text)>170 THEN '<textarea onchange=''p31text_edi('+convert(varchar(10),a.p31ID)+')'' style=''width:349px;height:100px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' ELSE '<textarea onchange=''p31text_edi('+convert(varchar(10),a.p31ID)+')'' style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' END");
             oc.FixedWidth = 350;oc.IsSortable = false;
             AF("p31Code", "Kód dokladu");
          
