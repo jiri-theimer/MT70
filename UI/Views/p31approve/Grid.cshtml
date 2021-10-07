@@ -25,11 +25,15 @@
             </div>
         </div>
 
-        <button type="button" id="cmdBatch4" onclick="batch(1,4)" class="btn btn-sm">4</button>
-        <button type="button" id="cmdBatch4" onclick="batch(1,3)" class="btn btn-sm">3</button>
-        <button type="button" id="cmdBatch4" onclick="batch(1,6)" class="btn btn-sm">6</button>
+        <button type="button" id="cmdBatch4" onclick="batch(1,4)" class="btn btn-sm btn-light"><span class="k-icon k-i-check-outline" style="color:green;"></span>@_f.tra("Fakturovat")</button>
+        <button type="button" id="cmdBatch4" onclick="batch(1,6)" class="btn btn-sm btn-light"><span class="k-icon k-i-check-outline" style="color:pink;"></span>@_f.tra("Paušál")</button>
+        <button type="button" id="cmdBatch4" onclick="batch(1,2)" class="btn btn-sm btn-light"><span class="k-icon k-i-check-outline" style="color: red;"></span>@_f.tra("Viditelný odpis")</button>
+        <button type="button" id="cmdBatch4" onclick="batch(1,3)" class="btn btn-sm btn-light"><span class="k-icon k-i-check-outline" style="color: brown;"></span>@_f.tra("Skrytý odpis")</button>
 
-        <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+        <button type="button" id="cmdBatch4" onclick="batch(0,0)" class="btn btn-sm btn-dark">@_f.tra("Vrátit na rozpracováno")</button>
+
+
+        <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-sm btn-light">@_f.tra("Zavřít")</button>
 
 
     </div>
@@ -424,9 +428,25 @@ else
 
 
         $.post(_ep("/p31approve/SaveTempBatch"), { pids: pids, p71id: p71id, p72id: p72id, guid: _guid }, function (data) {
-            _notify_message(data.message);
-            return;
-            postback("postback");
+            if (data.message != null) {
+                _notify_message(data.message);
+            }
+
+            tg_post_handler("refresh");
+            //LocalAfterGridRefresh();
+
+        });
+    }
+        
+    function p31text_temp(txt, p31id) {
+        var s = $(txt).val();
+        
+        $.post(_ep("/p31approve/UpdateTempText"), { p31id: p31id, s: s, guid: _guid }, function (data) {
+            if (data.flag == 0) {
+                _notify_message(data.flag + ", message: " + data.message);
+            } else {
+                _notify_message("Úpravy uloženy.", "info");
+            }                        
 
         });
     }

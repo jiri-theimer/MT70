@@ -16,7 +16,7 @@
 
 
 <div class="input-group m-0" style="padding-top:1px;">
-    
+
     <div>
         <ul id="overgridtabs" class="nav nav-tabs">
             @foreach (var tab in Model.OverGridTabs)
@@ -209,7 +209,7 @@
 
             var selectedtab = $("#navtabs").find(".active");
             tabUrl = $(selectedtab).attr("href");
-            
+
             document.getElementById("fra_subgrid").src = tabUrl;
 
             handle_render_tabs(pid);
@@ -252,7 +252,7 @@
     function tabclick(tab) {    //uložit aktuální záložku do profilu uživatele
         $("#navtabs .nav-link").removeClass("active");
         $(tab).addClass("active");
-        _load_ajax_async("/Common/SetUserParam", { key: "masterview-tab-" + _pageprefix, value: tab.id.replace("tab", "") })            
+        _load_ajax_async("/Common/SetUserParam", { key: "masterview-tab-" + _pageprefix, value: tab.id.replace("tab", "") })
 
     }
 
@@ -264,18 +264,18 @@
 
     }
 
-        function reload() {
+    function reload()
+    {
+        _redirect("/TheGrid/MasterView?prefix=" + _pageprefix);
+    }
 
-            _redirect("/TheGrid/MasterView?prefix=" + _pageprefix);
-        }
 
-
-        function change_grid(j72id) {
+    function change_grid(j72id) {
             $.post("/Common/SetUserParam", { key: "masterview-j72id-" + _pageprefix,value:j72id  }, function (data) {
                 reload();
 
             });
-        }
+    }
 
 
 

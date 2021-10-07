@@ -104,5 +104,29 @@ namespace UI.Controllers
         }
 
 
+        public BO.Result UpdateText(int p31id, string s)
+        {
+            var rec = Factory.p31WorksheetBL.Load(p31id);
+            var disp=Factory.p31WorksheetBL.InhaleRecDisposition(rec);
+            if (disp.OwnerAccess && disp.RecordState == BO.p31RecordState.Editing)
+            {
+                if (Factory.p31WorksheetBL.UpdateText(p31id, s))
+                {
+                    return new BO.Result(false);
+                }
+                else
+                {
+                    return new BO.Result(true, Factory.GetFirstNotifyMessage());
+                }
+            }
+            else
+            {
+                return new BO.Result(true, Factory.tra("Chybí oprávnění k editaci úkonu"));
+            }
+            
+        }
     }
+
+
+    
 }

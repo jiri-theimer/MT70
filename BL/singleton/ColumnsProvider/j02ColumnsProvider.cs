@@ -12,7 +12,7 @@ namespace BL
         {
             this.EntityName = "j02Person";
 
-            oc=AF("fullname_desc", "Příjmení+Jméno", "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string",false);oc.DefaultColumnFlag = gdc1;oc.NotShowRelInHeader = true;
+            oc=AF("fullname_desc", "Osoba", "a.j02LastName+' '+a.j02FirstName+isnull(' '+a.j02TitleBeforeName,'')", "string",false);oc.DefaultColumnFlag = gdc1;oc.NotShowRelInHeader = true;
 
             oc=AF("fullname_asc", "Jméno+Příjmení", "isnull(a.j02TitleBeforeName+' ','')+a.j02FirstName+' '+a.j02LastName+isnull(' '+a.j02TitleAfterName,'')", "string");oc.NotShowRelInHeader = true;
 

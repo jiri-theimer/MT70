@@ -278,11 +278,29 @@ namespace UI.Controllers
                     if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T" || rec.IsRecommendedHHMM())
                     {
                         c.vykazano = rec.p31HHMM_Orig;
+                        if (rec.p31Hours_Approved_Billing < rec.p31Hours_Orig)
+                        {
+                            c.vykazano += " (" + BO.basTime.ShowAsHHMM((rec.p31Hours_Approved_Billing-rec.p31Hours_Orig).ToString()) + ")";
+                        }
+                        if (rec.p31Hours_Approved_Billing > rec.p31Hours_Orig)
+                        {
+                            c.vykazano += " (+" + BO.basTime.ShowAsHHMM((rec.p31Hours_Approved_Billing - rec.p31Hours_Orig).ToString()) + ")";
+                        }
+
                     }
                     else
                     {
                         c.vykazano = BO.BAS.Number2String(rec.p31Hours_Orig);
+                        if (rec.p31Hours_Approved_Billing < rec.p31Hours_Orig)
+                        {
+                            c.vykazano += " (" + (rec.p31Hours_Approved_Billing- rec.p31Hours_Orig).ToString() + ")";
+                        }
+                        if (rec.p31Hours_Approved_Billing > rec.p31Hours_Orig)
+                        {
+                            c.vykazano += " (+" + (rec.p31Hours_Approved_Billing - rec.p31Hours_Orig).ToString() + ")";
+                        }
                     }
+                    
                     c.vykazano_sazba = BO.BAS.Number2String(rec.p31Rate_Billing_Orig) + " " + rec.j27Code_Billing_Orig;
                     break;
                 case BO.p33IdENUM.Kusovnik:
@@ -381,6 +399,18 @@ namespace UI.Controllers
             }
 
             return ret;
+        }
+
+        public BO.Result UpdateTempText(int p31id, string s, string guid)
+        {
+            if (Factory.p31WorksheetBL.UpdateTempText(p31id,s, guid))
+            {
+                return new BO.Result(false);
+            }
+            else
+            {
+                return new BO.Result(true, Factory.GetFirstNotifyMessage());
+            }            
         }
         public BO.Result SaveTempRecord(GridRecord rec,int p31id,string guid)
         {

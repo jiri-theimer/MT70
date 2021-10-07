@@ -48,7 +48,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="cmdMainMenuNew" role="button" data-bs-toggle="dropdown" aria-expanded="false" tabindex="-1">@_f.tra("NOVÝ")</a>
                             <ul id="ulNew" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdMainMenuNew"><li>Loading....</li></ul>
-                        </li>                       
+                        </li>
 
                         @foreach (MenuItem recMenu in lisMenuItems)
                         {
@@ -89,6 +89,7 @@
     <script src="~/js/thegrid.js" asp-append-version="true"></script>
     <script src="~/js/contextmenu.js" asp-append-version="true"></script>
     <script src="~/js/mycontrols.js" asp-append-version="true"></script>
+    <script src="~/js/layoutshare.js" asp-append-version="true"></script>
 
     <div id="site_loading1">Loading...</div>
     <div>
@@ -195,7 +196,7 @@
                 return;
             }
             var url = "/Menu/" + method + "?userdevice=" + _device.type;
-            
+
             if (method == "MainMenu") {
                 url = url + "&currenturl=" + encodeURI(location.href);
             }
@@ -271,7 +272,7 @@
         }
 
         function _window_open(url, flag, header,layout) {
-            if (url != "") {                
+            if (url != "") {
                 $("#myModalFrame").css("visibility", "hidden");
             }
             _modal_current_layout = layout;

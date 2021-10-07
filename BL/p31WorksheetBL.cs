@@ -15,6 +15,8 @@ namespace BL
         public BO.p31ValidateBeforeSave ValidateBeforeSaveOrigRecord(BO.p31WorksheetEntryInput rec);
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq);
         public void UpdateExternalPID(int pid, string strExternalPID);
+        public bool UpdateText(int pid, string strText);
+        public bool UpdateTempText(int pid, string strText, string tempguid);
         public BO.p31RecDisposition InhaleRecDisposition(BO.p31Worksheet rec);
         public bool UpdateInvoice(int p91id, List<BO.p31WorksheetInvoiceChange> lisP31, List<BO.FreeFieldInput> lisFFI);
         public bool RemoveFromInvoice(int p91id, List<int> p31ids);
@@ -698,6 +700,31 @@ namespace BL
                 }
             }
             
+        }
+
+
+        public bool UpdateText(int pid, string strText)
+        {
+            if (string.IsNullOrEmpty(strText))
+            {
+                this.AddMessage("Text úkonu je prázdný.");
+                return false;
+            }
+            return _db.RunSql("UPDATE p31Worksheet set p31Text=@s WHERE p31ID=@pid", new { s = strText, pid = pid });
+        }
+        public bool UpdateTempText(int pid, string strText, string tempguid)
+        {
+            if (string.IsNullOrEmpty(strText))
+            {
+                this.AddMessage("Text úkonu je prázdný.");
+                return false;
+            }
+            if (string.IsNullOrEmpty(tempguid))
+            {
+                this.AddMessage("Chybí guid.");
+                return false;
+            }
+            return _db.RunSql("UPDATE p31Worksheet_Temp set p31Text=@s WHERE p31ID=@pid AND p31GUID=@guid", new { s = strText, pid = pid, guid = tempguid });
         }
 
     }

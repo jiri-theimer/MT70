@@ -15,7 +15,7 @@ namespace BL
             this.CurrentFieldGroup = "Root";//-----------Root---------------------
             oc =AF("p31Text", "Text");oc.DefaultColumnFlag = gdc1;
             AF("OdradkovanyText", "Odřádkovaný text", "REPLACE(a.p31Text,CHAR(10),'<br>')");
-            oc=AF("EditovatelnyText", "Editovatelný text", "CASE WHEN CHARINDEX(CHAR(10),a.p31Text)>0 OR LEN(a.p31Text)>170 THEN '<textarea onchange=''p31text_edi('+convert(varchar(10),a.p31ID)+')'' style=''width:349px;height:100px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' ELSE '<textarea onchange=''p31text_edi('+convert(varchar(10),a.p31ID)+')'' style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' END");
+            oc=AF("EditovatelnyText", "Upravit text úkonu", "CASE WHEN a.p71ID IS NULL THEN CASE WHEN CHARINDEX(CHAR(10),a.p31Text)>0 OR LEN(a.p31Text)>170 THEN '<textarea onchange=''_p31text_edi(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;height:100px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' ELSE '<textarea onchange=''_p31text_edi(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' END ELSE a.p31Text END");
             oc.FixedWidth = 350;oc.IsSortable = false;
             AF("p31Code", "Kód dokladu");
          
@@ -104,7 +104,11 @@ namespace BL
             oc = AF("p31VatRate_Approved", "Sazba DPH po schvalování", null, "num", false);
             oc = AF("SchvaleneHodinyVPausalu", "Hodiny v paušálu", "case when p34x.p33ID=1 and a.p72ID_AfterApprove=6 then case when isnull(a.p31Value_FixPrice,0)<>0 then a.p31Value_FixPrice else p31Hours_Orig end end", "num", true);
             oc = AF("KorekceHodinPausal", "Korekce hodin v paušálu", "case when p34x.p33ID=1 then a.p31Value_FixPrice end", "num", true);
-            
+            oc = AF("KorekceSchvalHodin", "Rozdíl hodin", "case when a.p71ID=1 AND p34x.p33ID=1 and a.p31Hours_Approved_Billing<>p31Hours_Orig then a.p31Hours_Approved_Billing-p31Hours_Orig end", "num",true);
+            oc = AF("KorekceSchvalBezDph", "Rozdíl Bez dph", "case when a.p71ID=1 AND a.p31Amount_WithoutVat_Approved<>a.p31Amount_WithoutVat_Orig then a.p31Amount_WithoutVat_Approved-a.p31Amount_WithoutVat_Orig end", "num", true);
+
+            oc = AF("SchvalovaniText", "Upravit text úkonu", "CASE WHEN CHARINDEX(CHAR(10),a.p31Text)>0 OR LEN(a.p31Text)>170 THEN '<textarea onchange=''p31text_temp(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;height:100px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' ELSE '<textarea onchange=''p31text_temp(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' END");
+            oc.FixedWidth = 350; oc.IsSortable = false;
 
             this.CurrentFieldGroup = "Nákladová cena";//-----------Nákladová cena---------------------
             oc = AF("p31Rate_Internal_Orig", "Nákladová sazba", null, "num"); oc.IHRC = true;
