@@ -25,21 +25,21 @@
     <!-- Tab panes -->
     <ul class="nav nav-tabs" role="tablist">
         <li>
-            <button class="btn btn-outline-secondary dropdown-toggle" id="cmdMore" title="@_f.tra("Nastavení")">
-                <span class="k-icon k-i-gear"></span>
+            <button class="btn btn-outline-secondary dropdown-toggle " id="cmdMore" title="@_f.tra("Nastavení")">
+                <i class="material-icons-outlined-btn">settings</i>
             </button>
         </li>
         <li style="width:170px;">
             <mycombo entity="j02Person" asp-for="@Model.j02ID" search-result-width="600" placeholder="@_f.tra("Osoba")" selectedtext="@Model.RecJ02.FullNameDesc" view-flag="1" myqueryinline="allowed_for_p31_entry|bool|1|j02isintraperson|bool|1" event_after_changevalue="j02id_change"></mycombo>
         </li>
         <li style="margin-left:1px;">
-            <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary" onclick="month_prev()"><span class="k-icon k-i-arrow-end-left"></span></button>
+            <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary px-2" onclick="month_prev()"><i class="material-icons-outlined-btn">first_page</i></button>
         </li>
         <li style="width:110px;">
             <mydate asp-for="@Model.d0"></mydate>
         </li>
         <li>
-            <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary" onclick="month_next()"><span class="k-icon k-i-arrow-end-right"></span></button>
+            <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary px-2" onclick="month_next()"><i class="material-icons-outlined-btn">last_page</i></button>
         </li>
 
         <li class="nav-item onetab" role="presentation">

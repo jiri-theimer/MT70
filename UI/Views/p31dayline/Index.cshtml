@@ -29,13 +29,13 @@
             <button class="btn btn-outline-secondary dropdown-toggle" id="cmdMore">@_f.tra("Zobrazení")</button>
         </div>
         <div style="margin-left:1px;">
-            <button title="@_f.tra("Předchozí")" type="button" class="btn btn-outline-secondary" onclick="month_prev()"><span class="k-icon k-i-arrow-end-left"></span></button>
+            <button title="@_f.tra("Předchozí")" type="button" class="btn btn-sm btn-outline-secondary" onclick="month_prev()"><i class="material-icons-outlined-btn">first_page</i></button>
         </div>
         <div style="width:130px;">
             <mydate asp-for="@Model.d0"></mydate>
         </div>
         <div>
-            <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary" onclick="month_next()"><span class="k-icon k-i-arrow-end-right"></span></button>
+            <button title="@_f.tra("Další")" type="button" class="btn btn-outline-secondary" onclick="month_next()"><i class="material-icons-outlined-btn">last_page</i></button>
         </div>
         <div id="divQueryJ02" style="width: 200px;">
             <mycombochecklist asp-for="@Model.j02IDs" entity="j02Person" myqueryinline="j02isintraperson|bool|1" placeholder="@_f.tra("Osoby/jednotlivci")" selectedtext="@Model.SelectedPersons" event_after_changevalue="handle_can_reload"></mycombochecklist>
