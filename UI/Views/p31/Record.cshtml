@@ -331,11 +331,11 @@
 
     @if (Model.RecP34 != null && _f.CurrentUser.IsRatesAccess && (Model.RecP34.p33ID == BO.p33IdENUM.Cas || (Model.RecP34.p33ID == BO.p33IdENUM.Kusovnik)))
     {
-        <button type="button" class="btn btn-outline-secondary" onclick="simulation()"><span class="k-icon k-i-dollar"></span>@_f.tra("Simulace sazby")</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="simulation()"><span class="material-icons-outlined-btn">attach_money</span>@_f.tra("Simulace sazby")</button>
     }
 
 
-    <button type="button" class="btn btn-outline-secondary" onclick="setting()"><span class="k-icon k-i-cogs"></span>@_f.tra("Nastavení")</button>
+    <button type="button" class="btn btn-outline-secondary" onclick="setting()"><span class="material-icons-outlined-btn">settings</span>@_f.tra("Nastavení")</button>
 </div>
 
 
