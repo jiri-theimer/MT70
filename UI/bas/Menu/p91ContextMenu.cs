@@ -29,16 +29,16 @@ namespace UI.Menu
 
             if (disp.OwnerAccess)
             {
-                AMI("Upravit kartu vyúčtování", $"javascript:_edit('p91',{pid})", "k-i-edit");
+                AMI("Upravit kartu vyúčtování", $"javascript:_edit('p91',{pid})", "edit_note");
                 
             }
             if (rec.p91Amount_Billed > 0)
             {
-                AMI("Zapsat/Odstranit úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')", "$");
+                AMI("Zapsat/Odstranit úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')", "payments");
             }
             else
             {
-                AMI("Zapsat úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')", "$");
+                AMI("Zapsat úhradu", $"javascript: _window_open('/p91oper/p94?p91id={pid}')", "payments");
             }
             
 
@@ -51,7 +51,7 @@ namespace UI.Menu
                 {
                     var recOD = f.p91InvoiceBL.Load(rec.p91ID_CreditNoteBind);
                     var recP92 = f.p92InvoiceTypeBL.Load(recOD.p92ID);
-                    AMI("Sestava opravovaného dokladu", $"javascript: _window_open('/x31/ReportContext?pid={recOD.pid}&prefix=p91&x31id={recP92.x31ID_Invoice}')", "k-i-print");
+                    AMI("Sestava opravovaného dokladu", $"javascript: _window_open('/x31/ReportContext?pid={recOD.pid}&prefix=p91&x31id={recP92.x31ID_Invoice}')", "print");
                 }
             }
             else
@@ -60,24 +60,24 @@ namespace UI.Menu
                 if (recOD != null)
                 {
                     var recP92 = f.p92InvoiceTypeBL.Load(recOD.p92ID);
-                    AMI("Sestava opravného dokladu", $"javascript: _window_open('/x31/ReportContext?pid={recOD.pid}&prefix=p91&x31id={recP92.x31ID_Invoice}')", "k-i-print");
+                    AMI("Sestava opravného dokladu", $"javascript: _window_open('/x31/ReportContext?pid={recOD.pid}&prefix=p91&x31id={recP92.x31ID_Invoice}')", "print");
                 }
             }
 
             AMI("Další", null, null, null, "more");
             if (rec.p92InvoiceType == BO.p92InvoiceTypeENUM.ClientInvoice)
             {
-                AMI("Spárovat fakturu s úhradou zálohy", $"javascript: _window_open('/p91oper/proforma?p91id={pid}')", "k-i-reset-color", "more");
-                AMI("Vytvořit k faktuře opravný doklad", $"javascript: _window_open('/p91oper/creditnote?p91id={pid}')", "k-i-reset-color", "more");
+                AMI("Spárovat fakturu s úhradou zálohy", $"javascript: _window_open('/p91oper/proforma?p91id={pid}')", "receipt", "more");
+                AMI("Vytvořit k faktuře opravný doklad", $"javascript: _window_open('/p91oper/creditnote?p91id={pid}')", "money_off", "more");
             }
             if (!BO.BAS.bit_compare_or(rec.p91LockFlag, 2))
             {
-                AMI("Převést vyúčtování na jinou měnu", $"javascript: _window_open('/p91oper/j27?p91id={pid}')", "$", "more");
+                AMI("Převést vyúčtování na jinou měnu", $"javascript: _window_open('/p91oper/j27?p91id={pid}')", "currency_yen", "more");
                 if (rec.p91ExchangeRate != 1)
                 {
-                    AMI("Aktualizovat měnový kurz", $"javascript: _window_open('/p91oper/exupdate?p91id={pid}')", "$", "more");
+                    AMI("Aktualizovat měnový kurz", $"javascript: _window_open('/p91oper/exupdate?p91id={pid}')", "monetization_on", "more");
                 }
-                AMI("Převést vyúčtování na jinou DPH sazbu", $"javascript: _window_open('/p91oper/vat?p91id={pid}')", "%", "more");
+                AMI("Převést vyúčtování na jinou DPH sazbu", $"javascript: _window_open('/p91oper/vat?p91id={pid}')", "percent", "more");
             }
             
             DIV(null, "more");

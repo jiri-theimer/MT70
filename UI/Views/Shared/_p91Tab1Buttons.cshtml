@@ -35,22 +35,22 @@
 
 
 
-<a id="cmdRecPage" class="btn btn-sm btn-outline-secondary" href="/Record/RecPage?prefix=p91&pid=@Model.pid" target="_top" title="@_f.tra("Stránka vyúčtování")"><span class="k-icon k-i-layout"></span></a>
+<a id="cmdRecPage" class="btn btn-sm btn-outline-secondary" href="/Record/RecPage?prefix=p91&pid=@Model.pid" target="_top" title="@_f.tra("Stránka vyúčtování")"><span class="material-icons-outlined-btn">maps_home_work</span></a>
 
 
-<button type="button" class="btn btn-sm btn-warning" onclick="p91report(@(Model.RecP92.x31ID_Invoice),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava dokladu")</button>
+<button type="button" class="btn btn-sm btn-warning" onclick="p91report(@(Model.RecP92.x31ID_Invoice),@Model.pid)"><span class="material-icons-outlined-btn">print</span> @_f.tra("Sestava dokladu")</button>
 
 @if (Model.RecP92.x31ID_Attachment > 0)
 {
-    <button type="button" class="btn btn-sm btn-info" onclick="p91report(@(Model.RecP92.x31ID_Attachment),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Sestava přílohy")</button>
+    <button type="button" class="btn btn-sm btn-info" onclick="p91report(@(Model.RecP92.x31ID_Attachment),@Model.pid)"><span class="material-icons-outlined-btn">print</span> @_f.tra("Sestava přílohy")</button>
 }
 @if (Model.RecP92.x31ID_Letter > 0)
 {
-    <button type="button" class="btn btn-sm btn-success" onclick="p91report(@(Model.RecP92.x31ID_Letter),@Model.pid)"><span class="k-icon k-i-print"></span> @_f.tra("Průvodní dopis")</button>
+    <button type="button" class="btn btn-sm btn-success" onclick="p91report(@(Model.RecP92.x31ID_Letter),@Model.pid)"><span class="material-icons-outlined-btn">print</span> @_f.tra("Průvodní dopis")</button>
 }
 
 
-<button type="button" class="btn btn-sm btn-outline-secondary" onclick="p91sendmail(@Model.pid)"><span class="k-icon k-i-email"></span> @_f.tra("Odeslat zprávu")</button>
+<button type="button" class="btn btn-sm btn-outline-secondary" onclick="p91sendmail(@Model.pid)"><span class="material-icons-outlined-btn">email</span> @_f.tra("Odeslat zprávu")</button>
 
 @if (Model.Rec.p91IsDraft)
 {
@@ -59,15 +59,15 @@
 
 @if (Model.Rec.p92InvoiceType == BO.p92InvoiceTypeENUM.CreditNote && Model.Rec.p91ID_CreditNoteBind > 0)
 {
-    <button type="button" class="btn btn-sm btn-danger" onclick="_window_open('/x31/ReportContext?x31id=@(_intX31ID_DobropisovanaFaktura)&prefix=p91&pid=@(Model.Rec.p91ID_CreditNoteBind)')"><span class="k-icon k-i-print"></span> @_f.tra("Opravovaný doklad")</button>
+    <button type="button" class="btn btn-sm btn-danger" onclick="_window_open('/x31/ReportContext?x31id=@(_intX31ID_DobropisovanaFaktura)&prefix=p91&pid=@(Model.Rec.p91ID_CreditNoteBind)')"><span class="material-icons-outlined-btn">print</span> @_f.tra("Opravovaný doklad")</button>
     @if (_intX31ID_DobropisovanaPriloha > 0)
     {
-        <button type="button" class="btn btn-sm btn-danger" onclick="_window_open('/x31/ReportContext?x31id=@(_intX31ID_DobropisovanaPriloha)&prefix=p91&pid=@(Model.Rec.p91ID_CreditNoteBind)')"><span class="k-icon k-i-print"></span> @_f.tra("Příloha opravovaného dokladu")</button>
+        <button type="button" class="btn btn-sm btn-danger" onclick="_window_open('/x31/ReportContext?x31id=@(_intX31ID_DobropisovanaPriloha)&prefix=p91&pid=@(Model.Rec.p91ID_CreditNoteBind)')"><span class="material-icons-outlined-btn">print</span> @_f.tra("Příloha opravovaného dokladu")</button>
     }
 
 
 }
 @if (_intP91ID_OpravnyDoklad > 0)
 {
-    <button type="button" class="btn btn-sm btn-danger" onclick="_window_open('/x31/ReportContext?x31id=@(_intX31ID_OpravnyDoklad)&prefix=p91&pid=@(_intP91ID_OpravnyDoklad)')"><span class="k-icon k-i-print"></span> @_f.tra("Opravný doklad")</button>
+    <button type="button" class="btn btn-sm btn-danger" onclick="_window_open('/x31/ReportContext?x31id=@(_intX31ID_OpravnyDoklad)&prefix=p91&pid=@(_intP91ID_OpravnyDoklad)')"><span class="material-icons-outlined-btn">print</span> @_f.tra("Opravný doklad")</button>
 }

@@ -62,7 +62,7 @@ namespace BO
         }
         public static string p90()
         {
-            return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>paid</span>";
+            return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>receipt</span>";
         }
         public static string p31()
         {
