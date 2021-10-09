@@ -30,10 +30,10 @@ namespace UI.Menu
 
             if (disp.OwnerAccess)
             {
-                AMI("Upravit kartu zálohy", $"javascript:_edit('p90',{pid})", "k-i-edit");
+                AMI("Upravit kartu zálohy", $"javascript:_edit('p90',{pid})", "edit_note");
                 AMI_Clone("p90", pid);
             }
-            AMI("Zapsat úhradu zálohy", $"javascript: _window_open('/p82/Record?pid=0&p90id={pid}')");
+            AMI("Zapsat úhradu zálohy", $"javascript: _window_open('/p82/Record?pid=0&p90id={pid}')", "payments");
 
             DIV();
             

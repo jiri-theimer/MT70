@@ -28,7 +28,7 @@ namespace UI.Menu
             {
                 if (rec.j02VirtualParentID == 0)
                 {
-                    AMI("Upravit kartu osoby", $"javascript:_edit('j02',{pid})", "k-i-edit");
+                    AMI("Upravit kartu osoby", $"javascript:_edit('j02',{pid})", "edit_note");
                     AMI_Clone("j02", pid);
                 }
                 else
@@ -40,7 +40,7 @@ namespace UI.Menu
                     DIV();
                     if (rec.j03ID > 0)
                     {
-                        AMI("Uživatelský účet", $"javascript:_edit('j03',{rec.j03ID})", "k-i-user");
+                        AMI("Uživatelský účet", $"javascript:_edit('j03',{rec.j03ID})", "person");
                     }
                     else
                     {

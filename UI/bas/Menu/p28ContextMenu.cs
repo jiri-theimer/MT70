@@ -25,7 +25,7 @@ namespace UI.Menu
             DIV();
             if (disp.OwnerAccess)
             {
-                AMI("Upravit kartu klienta", $"javascript:_edit('p28',{pid})", "k-i-edit");
+                AMI("Upravit kartu klienta", $"javascript:_edit('p28',{pid})", "edit_note");
                 AMI_Clone("p28", pid);
             }
 
@@ -35,7 +35,7 @@ namespace UI.Menu
             DIV();
 
             var lisP30 = f.p30Contact_PersonBL.GetList(new BO.myQueryP30() { p28id = pid });
-            AMI(string.Format("Kontaktní osoby ({0})",lisP30.Count()), null, "☺", null, "contactpersons");
+            AMI(string.Format("Kontaktní osoby ({0})",lisP30.Count()), null, "face", null, "contactpersons");
             AMI("Nová kontaktní osoba", $"javascript: _window_open('/j02/Record?pid=0&isintraperson=false&p28id={pid}')", null, "contactpersons");
             
             foreach(var c in lisP30)

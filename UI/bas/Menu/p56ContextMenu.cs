@@ -25,7 +25,7 @@ namespace UI.Menu
             DIV();
             if (disp.OwnerAccess)
             {
-                AMI("Upravit kartu úkolu", $"javascript:_edit('p56',{pid})", "k-i-edit");
+                AMI("Upravit kartu úkolu", $"javascript:_edit('p56',{pid})", "edit_note");
                 AMI_Clone("p56", pid);
             }
 

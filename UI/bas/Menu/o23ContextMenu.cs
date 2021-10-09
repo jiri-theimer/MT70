@@ -27,7 +27,7 @@ namespace UI.Menu
 
             if (disp.OwnerAccess)
             {
-                AMI("Upravit kartu dokumentu", $"javascript:_edit('o23',{pid})", "k-i-edit");
+                AMI("Upravit kartu dokumentu", $"javascript:_edit('o23',{pid})", "edit_note");
                 AMI_Clone("o23", pid);
             }
 

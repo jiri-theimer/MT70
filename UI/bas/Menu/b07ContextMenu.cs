@@ -16,7 +16,7 @@ namespace UI.Menu
             
             if (rec.j02ID_Owner==f.CurrentUser.j02ID || f.CurrentUser.IsAdmin)
             {
-                AMI("Upravit/Odstranit poznámku", $"javascript:_edit('b07',{pid})", "k-i-edit");
+                AMI("Upravit/Odstranit poznámku", $"javascript:_edit('b07',{pid})", "edit_note");
                 AMI_Clone("b07", pid);
             }
 
