@@ -41,7 +41,7 @@ namespace UI.Menu
             DIV();
             if (disp.OwnerAccess)
             {
-                AMI("Upravit kartu projektu", $"javascript:_edit('p41',{pid})", "k-i-edit");
+                AMI("Upravit kartu projektu", $"javascript:_edit('p41',{pid})", "edit_note");
                 AMI_Clone("p41", pid);
             }
 

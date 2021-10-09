@@ -280,7 +280,7 @@ namespace UI.Menu
                         }
                         if (bolSupportIcons)
                         {
-                            strImg = "<span class='k-icon' style='width:30px;'></span>";
+                            strImg = "<span style='width:30px;'></span>";
                             if (c.Icon != null)
                             {
                                 if (c.Icon.Length == 1)
@@ -288,8 +288,8 @@ namespace UI.Menu
                                     strImg = "<span style='margin-left:10px;margin-right:5px;font-size:150%;color:royalblue;'>" + c.Icon + "</span>";     //1 unicode character
                                 }
                                 else
-                                {
-                                    strImg = string.Format("<span class='k-icon {0}' style='width:30px;color:#2D89EF;'></span>", c.Icon);
+                                {                                    
+                                    strImg = string.Format("<span class='material-icons-outlined-btn' style='width:30px;'>{0}</span>", c.Icon);   //google icon
                                 }
 
                             }
@@ -302,8 +302,9 @@ namespace UI.Menu
                         bool bolHasChilds = false;
                         if (c.ID != null && menuitems.Where(p => p.ParentID == c.ID).Count() > 0)
                         {
-                            bolHasChilds = true;
-                            c.Name += " ("+menuitems.Where(p => p.ParentID == c.ID).Count().ToString()+ ")<span class='k-icon k-i-arrow-60-right' style='float:right;'></span>";
+                            bolHasChilds = true;                            
+                            c.Name += " (" + menuitems.Where(p => p.ParentID == c.ID).Count().ToString() + ")<span style='color:gray;float:right;font-size:150%;'>⇢</span>";
+
                         }
 
 
@@ -311,7 +312,7 @@ namespace UI.Menu
                         {
                             if (bolHasChilds)
                             {
-                                sb.Append($"<li{strStyle}><a><span class='k-icon' style='width:20px;'></span>{c.Name}</a>");
+                                sb.Append($"<li{strStyle}><span class='material-icons-outlined-btn' style='width:30px;'>more_horiz</span>{c.Name}");
                             }
                             else
                             {
@@ -339,7 +340,26 @@ namespace UI.Menu
                                 else
                                 {
                                     if (cc.Target != null) cc.Target = " target='" + cc.Target + "'";
-                                    sb.Append(string.Format("<li><a class='dropdown-item' href=\"{0}\"{1}>{2}</a></li>", cc.Url, cc.Target, cc.Name));
+                                    strImg = "<span style='margin-left:10px;'></span>";
+                                    if (bolSupportIcons)
+                                    {
+                                        strImg = "<span style='width:30px;'></span>";
+                                        if (cc.Icon != null)
+                                        {
+                                            if (cc.Icon.Length == 1)
+                                            {
+                                                strImg = "<span style='margin-left:10px;margin-right:5px;font-size:150%;color:royalblue;'>" + cc.Icon + "</span>";     //1 unicode character
+                                            }
+                                            else
+                                            {
+                                                strImg = string.Format("<span class='material-icons-outlined-btn' style='width:30px;'>{0}</span>", cc.Icon);   //google icon
+                                            }
+
+                                        }
+                                    }
+                                    sb.Append($"<li><a class='dropdown-item' href=\"{cc.Url}\"{cc.Target}>{strImg}{cc.Name}</a></li>");
+                                                                        
+                                    
                                 }
 
                             }

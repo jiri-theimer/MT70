@@ -24,12 +24,12 @@ namespace UI.Menu
             {
                 if (disp.OwnerAccess && disp.RecordState==BO.p31RecordState.Editing)
                 {
-                    AMI("Upravit", $"javascript:_edit('p31',{pid})", "k-i-edit");
+                    AMI("Upravit", $"javascript:_edit('p31',{pid})", "edit_note");
 
                 }
                 else
                 {
-                    AMI("Detail", $"javascript:_edit('p31',{pid})", "k-i-edit");
+                    AMI("Detail", $"javascript:_edit('p31',{pid})", "edit_note");
                 }
             }
 
@@ -40,7 +40,7 @@ namespace UI.Menu
 
             if (disp.CanApprove || disp.CanApproveAndEdit)
             {
-                AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p31&pids={pid}',2)", "k-i-edit");
+                AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p31&pids={pid}',2)", "approval");
             }
             
 

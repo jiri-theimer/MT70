@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown" style="border-bottom:solid 1px silver;border-top:solid 1px silver;">
             <ul class="navbar-nav m-0">
                 <li class="nav-item m-2">
-                    <button type="button" id="cmdSaveMyToolbar" action="@Model.ControllorName" class="btn btn-success"><span class="k-icon k-i-save" style="margin-right:6px;"></span>@_f.tra("Uložit změny")</button>
+                    <button type="button" id="cmdSaveMyToolbar" action="@Model.ControllorName" class="btn btn-success"><span class="material-icons-outlined-btn" style="color:lime;">save</span>@_f.tra("Uložit změny")</button>
 
                 </li>
                 @if (Model.IsApply)
@@ -31,44 +31,44 @@
                 @if (Model.IsDelete)
                 {
                     <li class="nav-item m-2">
-                        <button type="button" class="btn btn-danger ml-2" onclick="toolbar_try_delete()"><span class="k-icon k-i-cancel-outline" style="margin-right:6px;"></span>@_f.tra("Odstranit")</button>
+                        <button type="button" class="btn btn-danger ml-2" onclick="toolbar_try_delete()"><span class="material-icons-outlined-btn" style="color:black;">delete_forever</span>@_f.tra("Odstranit")</button>
 
                     </li>
                 }
                 @if (Model.IsRefresh)
                 {
                     <li class="nav-item my-2">
-                        <a asp-action="@Model.ControllorName" onclick="before_clicked(event)" class="btn btn-light" title="@_f.tra("Občerstvit")" asp-route-pid="@Model.RecordPID"><span class="k-icon k-i-reload"></span></a>
+                        <a asp-action="@Model.ControllorName" onclick="before_clicked(event)" class="btn btn-light" title="@_f.tra("Občerstvit")" asp-route-pid="@Model.RecordPID"><span class="material-icons-outlined-btn">refresh</span></a>
 
                     </li>
                 }
                 @if (Model.IsClone)
                 {
                     <li class="nav-item my-2 mx-1">
-                        <a asp-action="@Model.ControllorName" onclick="before_clicked(event)" class="btn btn-light" asp-route-pid="@Model.RecordPID" asp-route-isclone="true"><span class="k-icon k-i-copy" style="margin-right:6px;"></span>@_f.tra("Kopírovat")</a>
+                        <a asp-action="@Model.ControllorName" onclick="before_clicked(event)" class="btn btn-light" asp-route-pid="@Model.RecordPID" asp-route-isclone="true"><span class="material-icons-outlined-btn">content_copy</span>@_f.tra("Kopírovat")</a>
                     </li>
                 }
                 @if (Model.IsToArchive)
                 {
                     <li class="nav-item my-2">
-                        <button type="button" onclick="toolbar_handle_archive(1)" class="btn btn-light"><span class="k-icon k-i-delete" style="margin-right:6px;"></span>@_f.tra("Přesunout do archivu")</button>
+                        <button type="button" onclick="toolbar_handle_archive(1)" class="btn btn-light"><span class="material-icons-outlined-btn" style="color:red;">delete</span>@_f.tra("Přesunout do archivu")</button>
                     </li>
                 }
                 @if (Model.IsFromArchive)
                 {
                     <li class="nav-item my-2">
-                        <button type="button" onclick="toolbar_handle_archive(2)" class="btn btn-warning">@_f.tra("Obnovit z archivu")</button>
+                        <button type="button" onclick="toolbar_handle_archive(2)" class="btn btn-warning"><span class="material-icons-outlined-btn" style="color:black;">restore_from_trash</span>@_f.tra("Obnovit z archivu")</button>
                     </li>
                 }
 
                 @if (Model.IsClose)
                 {
                     <li class="nav-item my-2 mx-1">
-                        <button type="button" onclick="_window_close()" class="btn btn-light"><span class="k-icon k-i-close" style="margin-right:6px;"></span>@_f.tra("Zavřít")</button>
+                        <button type="button" onclick="_window_close()" class="btn btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
                     </li>
                 }
-                <li class="nav-item my-2">
-                    <button type="button" onclick="_helppage()" class="btn btn-light"><b>? </b>@_f.tra("Nápověda")</button>
+                <li class="nav-item my-2" title="@_f.tra("Nápověda")">
+                    <button type="button" onclick="_helppage()" class="btn btn-light" style="margin-left:20px;"><span class="material-icons-outlined-btn">help_outline</span></button>
                 </li>
                 <li class="nav-item">
                     <div>
