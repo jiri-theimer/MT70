@@ -119,23 +119,23 @@
 
             <div class="card">
                 <div class="card-header">
-                    <span class="k-icon k-i-lock"></span>
-                    <span class="k-icon k-i-lock" style="color:blue;"></span>
-                    <span class="k-icon k-i-lock" style="color:hotpink;"></span>
+                    <span class="material-icons-outlined">lock</span>
+                    <span class="material-icons-outlined" style="color:blue;">lock</span>
+                    <span class="material-icons-outlined" style="color:hotpink;">lock</span>
                     @_f.tra("Zámky nad vyúčtováním")
                 </div>
                 <div class="card-body">
                     <div>
                         <input type="checkbox" id="chkLockFlag2" asp-for="@Model.Isp91LockFlag2" />
-                        <label for="chkLockFlag2">@_f.tra("Zákaz upravovat cenu vyúčtování") <span class="k-icon k-i-lock" style="color:black;"></span></label>
+                        <label for="chkLockFlag2">@_f.tra("Zákaz upravovat cenu vyúčtování") <span class="material-icons-outlined" style="color:black;">lock</span></label>
                     </div>
                     <div>
                         <input type="checkbox" id="chkLockFlag4" asp-for="@Model.Isp91LockFlag4" />
-                        <label for="chkLockFlag4">@_f.tra("Zákaz manipulace s úkony s nulovou cenou (zahrnout do paušálu/odpis)") <span class="k-icon k-i-lock" style="color:blue;"></span></label>
+                        <label for="chkLockFlag4">@_f.tra("Zákaz manipulace s úkony s nulovou cenou (zahrnout do paušálu/odpis)") <span class="material-icons-outlined" style="color:blue;">lock</span></label>
                     </div>
                     <div>
                         <input type="checkbox" id="chkLockFlag8" asp-for="@Model.Isp91LockFlag8" />
-                        <label for="chkLockFlag8">@_f.tra("Zákaz upravovat/odstraňovat kartu vyúčtování (s výjimkou administrátora)") <span class="k-icon k-i-lock" style="color:hotpink;"></span></label>
+                        <label for="chkLockFlag8">@_f.tra("Zákaz upravovat/odstraňovat kartu vyúčtování (s výjimkou administrátora)") <span class="material-icons-outlined" style="color:hotpink;">lock</span></label>
                     </div>
                 </div>
             </div>

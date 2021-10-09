@@ -22,7 +22,11 @@ namespace BO
         }
         public static string p41()
         {
-            return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>work</span>";
+            return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>work_outline</span>";
+        }
+        public static string p56()
+        {
+            return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>task</span>";
         }
         public static string p51()
         {
@@ -38,7 +42,7 @@ namespace BO
         }
         public static string o53()
         {
-            return "<span style='color:black;font-size:170%;color:red;' class='material-icons-outlined'>local_offer</span>";
+            return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>holiday_village</span>";
         }
         public static string o38()
         {

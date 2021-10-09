@@ -509,7 +509,7 @@ namespace UI.Controllers
         public string TheGridP31StateQuery(TheGridUIContext tgi)  //menu pro zobrazení filtrování stavu úkonů
         {
             _menusup = new TheMenuSupport(Factory);
-            string s0 = "k-i-radiobutton"; string s1 = "k-i-radiobutton-checked";
+            string s0 = "radio_button_unchecked"; string s1 = "radio_button_checked";
             string strKey = "grid-" + tgi.prefix;
             if (!string.IsNullOrEmpty(tgi.master_entity))
             {

@@ -17,17 +17,19 @@
 {
 <div class="bg-light" style="padding:10px;">
 
-    <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
 
 
     <span class="badge rounded-pill bg-primary fs-5">
         @(_disp.LockedReasonMessage)
-        
+
     </span>
     <span class="fs-5">
-        
+
         @Html.Raw(TheGridRowSymbol.p31_symbol(Model.Rec))
     </span>
+
+    <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
+    
 </div>
 }
 

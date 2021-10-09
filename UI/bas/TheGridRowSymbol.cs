@@ -20,13 +20,13 @@ namespace UI
                         switch (Convert.ToInt32(dbrow["p72ID_AfterTrimming"]))
                         {
                             case 6: //korekce: paušál
-                                return "<span class='k-icon k-i-arrow-down' style='color:pink;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:pink;'>south</span>";
                             case 2: //korekce: viditelný odpis
-                                return "<span class='k-icon k-i-arrow-down' style='color:red;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:red;'>south</span>";
                             case 3: //korekce: skrytý odpis
-                                return "<span class='k-icon k-i-arrow-down' style='color:brown;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:brown;'>south</span>";
                             case 4: //korekce: fakturovat
-                                return "<span class='k-icon k-i-arrows-swap' style='color:green;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:green;'>import_export</span>";
                         }
                     }
                 }
@@ -38,22 +38,22 @@ namespace UI
                         switch (Convert.ToInt32(dbrow["p72ID_AfterApprove"]))
                         {
                             case 4:
-                                return "<span class='k-icon k-i-check-outline' style='color:green;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:green;'>approval</span>";
                             case 6:
-                                return "<span class='k-icon k-i-check-outline' style='color:pink;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:pink;'>approval</span>";
                             case 3:
-                                return "<span class='k-icon k-i-check-outline' style='color:brown;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:brown;'>approval</span>";
                             case 2:
-                                return "<span class='k-icon k-i-check-outline' style='color:red;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:red;'>approval</span>";
                             case 7:
-                                return "<span class='k-icon k-i-question' style='color:gold;'></span>";
+                                return "<span class='material-icons-outlined-nosize' style='color:gold;'>approval</span>";
 
                         }
 
                     }
                     if (intP71ID == 2)
                     {
-                        return "<span class='k-icon k-i-minus-circle' style='color:red;'></span>"; //neschváleno
+                        return "<span class='material-icons-outlined-nosize' style='color:red;'>thumb_down_off_alt</span>"; //neschváleno
                     }
 
                 }
@@ -63,7 +63,7 @@ namespace UI
             {
                 if (Convert.ToBoolean(dbrow["p91IsDraft"]))
                 {
-                    return "<span class='k-icon k-i-pin'></span>";
+                    return "<span class='material-icons-outlined-nosize'>push_pin</span>";
                 }
             }
 
@@ -103,13 +103,13 @@ namespace UI
                         switch (rec.p72ID_AfterApprove)
                         {
                             case BO.p72IdENUM.ZahrnoutDoPausalu: //korekce: paušál
-                                return "<span class='k-icon k-i-arrow-down' style='color:pink;'></span>";
+                                return "<span class='material-icons-outlined' style='color:pink;'>south</span>";
                             case BO.p72IdENUM.ViditelnyOdpis: //korekce: viditelný odpis
-                                return "<span class='k-icon k-i-arrow-down' style='color:red;'></span>";
+                                return "<span class='material-icons-outlined' style='color:red;'>south</span>";
                             case BO.p72IdENUM.SkrytyOdpis: //korekce: skrytý odpis
-                                return "<span class='k-icon k-i-arrow-down' style='color:brown;'></span>";
+                                return "<span class='material-icons-outlined' style='color:brown;'>south</span>";
                             case BO.p72IdENUM.Fakturovat: //korekce: fakturovat
-                                return "<span class='k-icon k-i-arrows-swap' style='color:green;'></span>";
+                                return "<span class='material-icons-outlined' style='color:green;'>import_export</span>";
                         }
                     }
                 }
@@ -121,20 +121,20 @@ namespace UI
                         switch (rec.p72ID_AfterApprove)
                         {
                             case BO.p72IdENUM.Fakturovat:
-                                return "<span class='k-icon k-i-check-outline' style='color:green;'></span>";
+                                return "<span class='material-icons-outlined' style='color:green;'>approval</span>";
                             case BO.p72IdENUM.ZahrnoutDoPausalu:
-                                return "<span class='k-icon k-i-check-outline' style='color:pink;'></span>";
+                                return "<span class='material-icons-outlined' style='color:pink;'>approval</span>";
                             case BO.p72IdENUM.SkrytyOdpis:
-                                return "<span class='k-icon k-i-check-outline' style='color:brown;'></span>";
+                                return "<span class='material-icons-outlined' style='color:brown;'>approval</span>";
                             case BO.p72IdENUM.ViditelnyOdpis:
-                                return "<span class='k-icon k-i-check-outline' style='color:red;'></span>";
+                                return "<span class='material-icons-outlined' style='color:red;'>approval</span>";
 
                         }
 
                     }
                     if (rec.p71ID == BO.p71IdENUM.Neschvaleno)
                     {
-                        return "<span class='k-icon k-i-minus-circle' style='color:red;'></span>"; //neschváleno
+                        return "<span class='material-icons-outlined' style='color:red;'>thumb_down_alt</span>"; //neschváleno
                     }
 
                 }
@@ -145,7 +145,7 @@ namespace UI
                 
                 if (rec.p91IsDraft)
                 {
-                    return "<span class='k-icon k-i-pin'></span>";
+                    return "<span class='material-icons-outlined-nosize'>push_pin</span>";
                 }
             }
 
@@ -159,27 +159,27 @@ namespace UI
             {
                 if (Convert.ToBoolean(dbrow["p91IsDraft"]))
                 {
-                    return "<span class='k-icon k-i-pin'></span>";
+                    return "<span class='material-icons-outlined-nosize'>push_pin</span>";
                 }
             }
             else
             {
                 if (BO.BAS.bit_compare_or(lockflag, 8))
                 {
-                    return "<span class='k-icon k-i-lock' style='color:magenta;'></span>";
+                    return "<span class='material-icons-outlined-nosize' style='color:magenta;'>lock</span>";
 
                 }
                 else
                 {
                     if (BO.BAS.bit_compare_or(lockflag, 4))
                     {
-                        return "<span class='k-icon k-i-lock' style='color:blue;'></span>";
+                        return "<span class='material-icons-outlined-nosize' style='color:blue;'>lock</span>";
                     }
                     else
                     {
                         if (BO.BAS.bit_compare_or(lockflag, 2))
                         {
-                            return "<span class='k-icon k-i-lock'></span>";   //zámek ceny vyúčtování
+                            return "<span class='material-icons-outlined-nosize'>lock</span>";   //zámek ceny vyúčtování
                         }
                     }
                 }
