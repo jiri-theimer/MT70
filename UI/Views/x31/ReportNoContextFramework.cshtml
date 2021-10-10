@@ -65,7 +65,7 @@
     </div>
     <div class="col-auto">
         <button id="cmdSendByMail" type="button" class="btn btn-light" style="display:none;">
-            <span class="k-icon k-i-hyperlink-email"></span>
+            <span class="material-icons-outlined-btn">email</span>
             @_f.tra("Odeslat poštou")
         </button>
     </div>
@@ -74,7 +74,7 @@
     @if (_f.CurrentUser.IsAdmin)
     {
         <div class="col-auto nonmobile" style="width:40px;">
-            <button id="cmdRecord" type="button" class="btn btn-light" title="@_f.tra("Administrace sestavy")"><span class="k-icon k-i-cogs"></span></button>
+            <button id="cmdRecord" type="button" class="btn btn-light" title="@_f.tra("Administrace sestavy")"><span class="material-icons-outlined-btn">settings</span></button>
         </div>
     }
 

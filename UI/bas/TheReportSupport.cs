@@ -19,9 +19,18 @@ namespace UI
 
             var per = new UI.Models.PeriodViewModel() { UserParamKey = "report-period" };
             per.InhaleUserPeriodSetting(pp, f);
-            
+            if (per.d1 ==null)
+            {
+                per.d1 = new DateTime(2000, 1, 1);
+            }
+            if (per.d2 == null)
+            {
+                per.d2 = new DateTime(3000, 1, 1);
+            }
+
             uriReportSource.Parameters.Add("datfrom", per.d1);
             uriReportSource.Parameters.Add("datuntil", per.d2);
+
 
             Telerik.Reporting.Processing.ReportProcessor processor = new Telerik.Reporting.Processing.ReportProcessor(f.App.Configuration);
 

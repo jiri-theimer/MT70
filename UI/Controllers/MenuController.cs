@@ -552,8 +552,8 @@ namespace UI.Controllers
 
         public string RecPageSetting(string prefix)  //menu pro nastavení stránky záznamu
         {
-            string icon0 = "k-i-checkbox";
-            string icon1 = "k-i-checkbox-checked";
+            string icon0 = "toggle_on";
+            string icon1 = "toggle_off";
 
             HEADER("Nastavit zobrazení stránky");
             string skey = $"recpage-{prefix}-panel-grid";
