@@ -343,7 +343,7 @@ namespace UI
                         _s.Append(UI.TheGridRowSymbol.p31_td_inner(dbRow));
                         if (dbRow["o23ID_First"] != System.DBNull.Value)
                         {
-                            _s.Append("<span class='k-icon k-i-attachment'></span>");
+                            _s.Append("<span class='material-icons-outlined-nosize'>attachment</span>");
                         }
                         break;
                     case "p91":
@@ -560,7 +560,7 @@ namespace UI
 
         private void RenderButtonMore()
         {
-            _s.Append("<button type='button' class='btn btn-sm btn-outline-secondary'  style='margin-left:6px;padding-top:0px;padding-bottom:0px;' onclick='tg_button_more(this)'>#</button>");
+            _s.Append("<button type='button' class='btn btn-sm btn-outline-secondary' title='GRID records' style='margin-left:6px;padding-top:0px;padding-bottom:0px;' onclick='tg_button_more(this)'>#</button>");
             _s.Append("<span id='gridcurrow'></span>");
         }
 
@@ -617,11 +617,11 @@ namespace UI
                 sb.AppendLine("<tr>");
                 if (c.j72HashJ73Query)
                 {
-                    sb.Append("<td style='width:20px;'><span class='k-icon k-i-filter text-danger'></span></td>");
+                    sb.Append("<td style='width:20px;'><span class='material-icons-outlined-nosize text-danger'>filter_alt</span></td>");
                 }
                 else
                 {
-                    sb.Append("<td style='width:20px;'><span class='k-icon k-i-table'></span></td>");
+                    sb.Append("<td style='width:20px;'><span class='material-icons-outlined-nosize'>grid_on</span></td>");
                 }
 
 
@@ -643,9 +643,9 @@ namespace UI
 
             sb.AppendLine("<ul style='border:0px;list-style-type: none;border-top:solid 1px silver;'>");
 
-            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_gridreport()'><span class='k-icon k-i-subreport' style='width:30px;'></span>GRID-REPORT</a></li>", j72id));
-            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='k-icon k-i-file-excel' style='width:30px;'></span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
-            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='k-icon k-i-file-csv' style='width:30px;'></span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
+            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_gridreport()'><span class='material-icons-outlined' style='width:30px;'>architecture</span>GRID-REPORT</a></li>", j72id));
+            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='material-icons-outlined' style='width:30px;'>cloud_download</span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
+            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='material-icons-outlined' style='width:30px;'>cloud_download</span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
 
             //sb.AppendLine("<li><hr class='hr-mini' /></li>");
             //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(20)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 20)) + "</a></li>");

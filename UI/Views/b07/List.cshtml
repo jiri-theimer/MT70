@@ -9,7 +9,7 @@
 @addTagHelper *, UI
 
 <div>
-    <a class="btn btn-sm btn-outline-success" href="javascript:_window_open('/b07/Record?pid=0&prefix=@(Model.master_entity.Substring(0,3))&recpid=@(Model.master_pid)')"><span class="k-icon k-i-plus"></span> @_f.tra("Nový")</a>
+    <a class="btn btn-sm btn-outline-success" href="javascript:_window_open('/b07/Record?pid=0&prefix=@(Model.master_entity.Substring(0,3))&recpid=@(Model.master_pid)')"><span class="material-icons-outlined-btn">add</span> @_f.tra("Nový")</a>
 </div>
 
 
@@ -36,7 +36,7 @@
             @if (c.b07Date != null)
             {
                 <div style="color:royalblue;">
-                    <span class="k-icon k-i-calendar"></span>
+                    <span class="material-icons-outlined">event</span>
                     <strong>
                         @if (Convert.ToDateTime(c.b07Date).Hour > 0)
                         {
@@ -52,7 +52,7 @@
             @if (c.b07ReminderDate != null && Convert.ToDateTime(c.b07ReminderDate) > DateTime.Now.AddMinutes(60))
             {
                 <div style="color:red;">
-                    <span class="k-icon k-i-clock"></span>
+                    <span class="material-icons-outlined">notifications</span>
                     <strong>
                         @(BO.BAS.ObjectDateTime2String(c.b07Date))
                     </strong>
@@ -63,7 +63,7 @@
                 <div>
                     
                     <a href="@c.b07LinkUrl" target="_blank">
-                        <span class="k-icon k-i-hyperlink-globe"></span>
+                        <span class="material-icons-outlined">language</span>
                         @c.b07LinkName
                     </a>
                 </div>
@@ -81,7 +81,7 @@
                     <div>
                         
                         <a target="_blank" href="/FileUpload/FileDownloadInline?downloadguid=@cc.o27GUID">
-                            <span class="k-icon k-i-download"></span>
+                            <span class="material-icons-outlined">file_download</span>
                             @cc.o27OriginalFileName
                         </a>
                         <span>@(BO.BAS.FormatFileSize(cc.o27FileSize))</span>

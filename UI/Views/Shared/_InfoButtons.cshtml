@@ -40,15 +40,15 @@
 <a class="cm" onclick="_cm(event,'@(BO.BASX29.GetEntity(Model.prefix))','@(Model.pid)','info')">&#9776;</a>
 @if (Model.disp.OwnerAccess)
 {
-    <a class="btn btn-sm btn-outline-secondary" href="javascript:_edit('@(Model.prefix)',@Model.pid)" title="@_f.tra("Upravit kartu záznamu")"><span class="k-icon k-i-edit"></span></a>
+    <a class="btn btn-sm btn-outline-secondary" href="javascript:_edit('@(Model.prefix)',@Model.pid)" title="@_f.tra("Upravit kartu záznamu")"><span class="material-icons-outlined-btn" style="font-size:16px;">edit_note</span></a>
 }
 
 @if (_bolPageAccess)
 {
-    <a class="btn btn-sm btn-outline-secondary" href="/Record/RecPage?prefix=@(Model.prefix)&pid=@Model.pid" title="@_f.tra("Stránka záznamu")" target="_top"><span class="k-icon k-i-layout"></span></a>
+    <a class="btn btn-sm btn-outline-secondary" href="/Record/RecPage?prefix=@(Model.prefix)&pid=@Model.pid" title="@_f.tra("Stránka záznamu")" target="_top"><span class="material-icons-outlined-btn" style="font-size:16px;">maps_home_work</span></a>
 
 }
 @if (_bolGridAccess)
 {
-    <a class="btn btn-sm btn-outline-secondary" href="@(_GridUrl)" target="_top" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
+    <a class="btn btn-sm btn-outline-secondary" href="@(_GridUrl)" target="_top" title="GRID"><span class="material-icons-outlined-btn" style="font-size:16px;">grid_on</span></a>
 }

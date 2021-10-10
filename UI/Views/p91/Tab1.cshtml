@@ -50,15 +50,15 @@
 
             @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 2))
             {
-                <span class="k-icon k-i-lock" style="color:black;"></span>
+                <span class="material-icons-outlined-nosize" style="color:black;">lock</span>
             }
             @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 4))
             {
-                <span class="k-icon k-i-lock" style="color: blue;"></span>
+                <span class="material-icons-outlined-nosize" style="color: blue;">lock</span>
             }
             @if (BO.BAS.bit_compare_or(Model.Rec.p91LockFlag, 8))
             {
-                <span class="k-icon k-i-lock" style="color: hotpink;"></span>
+                <span class="material-icons-outlined-nosize" style="color: hotpink;">lock</span>
             }
         </h6>
         <div class="row">
@@ -236,7 +236,7 @@
                             @BO.BAS.Number2String(c.p99Amount_WithoutVat)
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-outline-warning" href="javascript:_window_open('/x31/ReportContext?x31id=@(c.x31ID_Payment)&prefix=p82&pid=@(c.p82ID)')"><span class="k-icon k-i-print"></span></a>
+                            <a class="btn btn-sm btn-outline-warning" href="javascript:_window_open('/x31/ReportContext?x31id=@(c.x31ID_Payment)&prefix=p82&pid=@(c.p82ID)')"><span class="material-icons-outlined-nosize">print</span></a>
                         </td>
                     </tr>
 
@@ -373,7 +373,7 @@
 
             }
             <tr>
-                <th><span class="k-icon k-i-sum"></span></th>
+                <th><span class="material-icons-outlined-nosize">functions</span></th>
                 <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.bezdph)))</th>
                 <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.hvyf)))</th>
                 <th style="text-align:right;">@(BO.BAS.Number2String(_qrystat.Sum(p=>p.hvyk)))</th>
@@ -485,12 +485,12 @@
 
 <script type="text/javascript">
     if (window.parent.window.location.href != undefined) {
-        if (window.parent.window.location.href.indexOf("RecPage")>0) {
+        if (window.parent.window.location.href.indexOf("RecPage") > 0) {
             $("#cmdRecPage").css("display", "none");
             $("#cmdCM").css("display", "none");
         }
     }
-    
+
 
     function statbyprefix_change(cbx) {
         $.post("/Common/SetUserParam", { key: "recpage-p91-statprefix", value: cbx.value }, function (data) {
@@ -508,8 +508,7 @@
 
     function converfromdraft(p91id) {
         $.post(_ep("/p91oper/converfromdraft"), { p91id: p91id }, function (data) {
-            if (data == "0")
-            {
+            if (data == "0") {
                 alert("Error");
             }
             location.reload(location.href);
@@ -517,8 +516,8 @@
         });
     }
 
-    function p91report(x31id,p91id) {
-        _window_open("/x31/ReportContext?prefix=p91&pid=" + p91id+"&x31id="+x31id);
+    function p91report(x31id, p91id) {
+        _window_open("/x31/ReportContext?prefix=p91&pid=" + p91id + "&x31id=" + x31id);
     }
     function p91sendmail(p91id) {
         _window_open("/Mail/SendMail?x29id=391&recpid=" + p91id);

@@ -84,7 +84,7 @@ namespace BL
                             sb.Append("</tr>");
                         }
                         sb.Append("<tr>");
-                        sb.Append(string.Format("<td><span style='color:red;'>♣</span>{0}:</td>", c.o53Name));
+                        sb.Append(string.Format("<td><span class='material-icons-outlined-nosize' style='color:#4682B4;'>local_offer</span>{0}:</td>", c.o53Name));
                         sb.Append("<td style='padding:4px;'>");
                         if (ret.TagNames == "")
                         {
