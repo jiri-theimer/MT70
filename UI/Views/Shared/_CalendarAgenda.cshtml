@@ -129,7 +129,7 @@
             strCisloDne = BO.BAS.ObjectDate2String(d, "dd");
             if (d == DateTime.Today)
             {
-                strCisloDne += "<span class='k-icon k-i-star' style='color:orange;'></span>";
+                strCisloDne += "<span class='material-icons-outlined' style='color:lime;'>star</span>";
             }
             if (bolHoliday) strCisloDne += "🍷";
             strCisloDne += "<br>" + BO.BAS.ObjectDate2String(d, "dddd");
@@ -233,7 +233,7 @@
 
                     if (recP31.p33ID == BO.p33IdENUM.Cas && recP31.p31DateTimeFrom_Orig != null && recP31.p31DateTimeUntil_Orig != null)
                     {
-                        strHodiny += "<span class='k-icon k-i-clock' style='color:blue;'></span><small>" + recP31.TimeFrom + " - " + recP31.TimeUntil + "</small>";
+                        strHodiny += "<span class='material-icons-outlined-nosize' style='color:blue;'>schedule</span><small>" + recP31.TimeFrom + " - " + recP31.TimeUntil + "</small>";
                     }
 
 

@@ -71,7 +71,7 @@
 
 
 <h4>
-    <span class="k-icon k-i-table-properties" style="font-size:170%;"></span>
+    <span class="material-icons-outlined" style="font-size:170%;">grid_on</span>
     @_f.tra("GRID") [@_header]
     @_f.tra("Návrhář"):
     @if (Model.Rec.j72IsSystem == false)
@@ -127,7 +127,7 @@
             </td>
             <td>
                 <button type="button" id="cmdRemove" class="btn btn-outline-primary py-0" style="margin-top:100px;">
-                    <span class="k-icon k-i-arrow-60-left"></span>
+                    <span class="material-icons-outlined-btn">arrow_back</span>
                 </button>
             </td>
             <td>
@@ -141,11 +141,11 @@
 
 
 
-                <button type="button" id="cmdUp" class="btn btn-outline-primary py-0">
-                    <span class="k-icon k-i-arrow-60-up"></span>
+                <button type="button" id="cmdUp" class="btn btn-outline-primary py-0" title="@_f.tra("Posunout nahoru")">
+                    <span class="material-icons-outlined-btn">keyboard_double_arrow_up</span>
                 </button>
-                <button type="button" id="cmdDown" class="btn btn-outline-primary py-0">
-                    <span class="k-icon k-i-arrow-60-down"></span>
+                <button type="button" id="cmdDown" class="btn btn-outline-primary py-0" title="@_f.tra("Posunout dolu")">
+                    <span class="material-icons-outlined-btn">keyboard_double_arrow_down</span>
                 </button>
             </td>
         </tr>
@@ -154,7 +154,7 @@
     {
         <div class="card" style="min-width:1200px;">
             <div class="card-header">
-                <span class="k-icon k-i-filter"></span> @_f.tra("Vnitřní filtrovací podmínka")
+                <span class="material-icons-outlined">filter_alt</span> @_f.tra("Vnitřní filtrovací podmínka")
             </div>
             <div class="card-body">
                 <button type="button" class="btn btn-primary" onclick="handle_j73_append()">@_f.tra("Přidat řádek")</button>
@@ -351,7 +351,7 @@
         $("#tree1").kendoTreeView(
             {
                 dataSource: dstree1,
-                template: "<div class='#: item.customvalue3 #'><img src='#:item.customvalue2#'/><span class='tree_item'> #: item.text # </span><button type='button' class='btn btn-sm btn-primary button_field_append' data-entity='#: item.customvalue1 #' data-field='#: item.id #' data-alias='#: item.text #'><span class='k-icon k-icon k-i-arrow-60-right'></span></button></div>"
+                template: "<div class='#: item.customvalue3 #'><img src='#:item.customvalue2#'/><span class='tree_item'> #: item.text # </span><button type='button' class='btn btn-outline-primary py-0 button_field_append' data-entity='#: item.customvalue1 #' data-field='#: item.id #' data-alias='#: item.text #'><span class='material-icons-outlined-btn'>east</span></button></div>"
             }
         );
         

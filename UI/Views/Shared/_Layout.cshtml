@@ -104,16 +104,16 @@
                 <table style="width:100%;" cellpadding="0" cellspacing="0">
                     <tr>
                         <td style="width:20px;">
-                            <a href="javascript:_window_close()" style="margin-left:3px;margin-right:3px;"><span class="k-icon k-i-close" style="color:navy;"></span></a>
+                            <a href="javascript:_window_close()" style="margin-left:3px;margin-right:3px;"><span class="material-icons-outlined-btn" style="color:black;">close</span></a>
                         </td>
                         <td>
                             <span id="myModalContentHeader"></span>
                         </td>
                         <td style="width:30px;">
-                            <a href="javascript:_window_toggle()"><span id="spanToggle" class="k-icon k-i-window-maximize" style="color:navy;"></span></a>
+                            <a href="javascript:_window_toggle()"><span id="spanToggle" class="material-icons-outlined-btn" style="color:black;">crop_landscape</span></a>
                         </td>
                         <td style="width:30px;">
-                            <a href="javascript:_window_close()"><span class="k-icon k-i-close" style="color:navy;"></span></a>
+                            <a href="javascript:_window_close()"><span class="material-icons-outlined-btn" style="color:black;">close</span></a>
                         </td>
                     </tr>
                 </table>
@@ -307,7 +307,7 @@
                 if (_device.innerHeight < h) h = _device.innerHeight;
                 x = (_device.innerWidth - w) / 2;
                 y = (_device.innerHeight - h) / 2;
-                $("#spanToggle").attr("class", "k-icon k-i-window-maximize");
+                $("#spanToggle").text("crop_landscape");
             }
             if (flag === 2) {   //okno na fullsreen 100%
                 $("#myModalFrame").css("padding", "0");
@@ -315,7 +315,7 @@
                 h = _device.innerHeight;
                 x = 0;
                 y = 0;
-                $("#spanToggle").attr("class", "k-icon k-i-window-restore");
+                $("#spanToggle").text("close_fullscreen");
             }
 
             $(okno).css("width", w);

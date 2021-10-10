@@ -611,7 +611,7 @@ namespace UI
 
             var lis = _Factory.j72TheGridTemplateBL.GetList(recJ72.j72Entity, recJ72.j03ID, recJ72.j72MasterEntity);
             sb.AppendLine("<table style='width:100%;'>");
-            string strGridNavrhar = _Factory.tra("Grid návrhář");
+            string strGridNavrhar = _Factory.tra("Návrhář sloupců");
             foreach (var c in lis)
             {
                 sb.AppendLine("<tr>");
@@ -633,9 +633,9 @@ namespace UI
                 {
                     c.j72Name += " ✔";
                 }
-                sb.Append(string.Format("<td><a class='nav-link py-0' href='javascript:change_grid({0})'>{1}</a></td>", c.pid, c.j72Name));
+                sb.Append($"<td><a class='nav-link py-0' href='javascript:change_grid({c.pid})'>{c.j72Name}</a></td>");
 
-                sb.AppendLine(string.Format("<td style='width:80px;'><a title='" + strGridNavrhar + "' class='btn btn-sm btn-outline-secondary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={0}\",2);'>{1}</a></td>", c.pid, _Factory.tra("GRID návrhář")));
+                sb.AppendLine($"<td style='width:100px;'><a title='{strGridNavrhar}' class='btn btn-sm btn-outline-secondary py-0' href='javascript:_window_open(\"/TheGridDesigner/Index?j72id={c.pid}\",2);'>{_Factory.tra("Návrhář sloupců")}</a></td>");
                 sb.AppendLine("</tr>");
             }
             sb.AppendLine("</table>");
@@ -643,7 +643,7 @@ namespace UI
 
             sb.AppendLine("<ul style='border:0px;list-style-type: none;border-top:solid 1px silver;'>");
 
-            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_gridreport()'><span class='material-icons-outlined' style='width:30px;'>architecture</span>GRID-REPORT</a></li>", j72id));
+            sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_gridreport()'><span class='material-icons-outlined' style='width:30px;'>design_services</span>GRID-REPORT</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='material-icons-outlined' style='width:30px;'>cloud_download</span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='material-icons-outlined' style='width:30px;'>cloud_download</span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
 
