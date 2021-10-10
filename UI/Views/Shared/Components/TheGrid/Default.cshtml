@@ -77,7 +77,7 @@
                                     <div class="input-group">
                                         <input type="text" id="txtqry_@c.UniqueName" class="form-control query_textbox" autocomplete="off" value="@strValue" style="@_strStyle" />
                                         <span class="qryalias" id="qryalias_@c.UniqueName" style="@strStyleAlias">@strValueAlias</span>
-                                        <button type='button' class="btn btn-light query_button py-0 px-1" id="cmdqry_@c.UniqueName" tabindex="-1"><span class="k-icon k-i-filter-sm"></span></button>
+                                        <button type='button' class="btn btn-light query_button py-0 px-1" id="cmdqry_@c.UniqueName" tabindex="-1"><span class="material-icons-outlined-nosize">filter_alt</span></button>
 
                                     </div>
                                 </text>
@@ -85,7 +85,7 @@
                             else
                             {
                                 <span class="qryalias" id="qryalias_@c.UniqueName" @_strStyle>@strValueAlias</span>
-                                <button type='button' id="cmdqry_@c.UniqueName" tabindex="-1" class="btn btn-light btn-sm py-0 px-1 query_button"><span class="k-icon k-i-filter-sm"></span></button>
+                                <button type='button' id="cmdqry_@c.UniqueName" tabindex="-1" class="btn btn-light btn-sm py-0 px-1 query_button"><span class="material-icons-outlined-nosize">filter_alt</span></button>
                             }
                             <input type="hidden" id="hidqry_@c.UniqueName" value="@strValue" />
                             <input type="hidden" id="hidoper_@c.UniqueName" value="@strOper" />
@@ -121,7 +121,7 @@
 <div id="tg_div_filter" style="display: none; width: 300px;">
     <div class="card" style="margin: 0px; padding: 0px; border-width: 2px;">
         <div class="card-header">
-            <span class="k-icon k-i-filter"></span>
+            <span class="material-icons-outlined-nosize">filter_alt</span>
             <span id="tg_div_filter_header"></span>
             <button class="btn btn-light px-1 py-0" style="float:right;" onclick="tg_filter_hide_popup()">&times;</button>
         </div>
@@ -223,7 +223,9 @@
             {
                 <text>
 
-                $("#TheGridIcon").attr("class", "k-icon k-i-filter text-danger");
+                $("#TheGridIcon").css("color", "red");                
+                $("#TheGridIcon").text("filter_alt");
+            
                 </text>
             }
             @if (!Model.GridState.j72IsSystem)

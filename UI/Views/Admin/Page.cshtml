@@ -42,7 +42,7 @@
     </div>
     <div class="dropdown col-auto">
         <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
-            <span id="TheGridIcon" class="k-icon k-i-table"></span>
+            <span id="TheGridIcon" class="material-icons-outlined-nosize">grid_on</span>
             <span id="TheGridName">@_f.tra("Sloupce")</span>
         </button>
         <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
@@ -51,13 +51,13 @@
     </div>
     <div class="dropdown col-auto">
         <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridSelMenu" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="k-icon k-i-checkbox-checked"></span>
+            <span class="material-icons-outlined-nosize">check_box</span>
             @_f.tra("Zaškrtlé záznamy")
         </button>
         <ul id="ulGridSelMenu" class="dropdown-menu dynamicmenu_container" aria-labelledby="cmdGridSelMenu"></ul>
     </div>
     <div class="nonmobile ml-2 col-auto">
-        <a class="btn btn-light" href="/Admin/Page?area=@(Model.area)&prefix=@(Model.prefix)" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+        <a class="btn btn-light" href="/Admin/Page?area=@(Model.area)&prefix=@(Model.prefix)" title="@_f.tra("Občerstvit")"><span class="material-icons-outlined-btn">refresh</span></a>
     </div>
     @if (Model.prefix != "j92" && Model.prefix != "j90" && Model.prefix != "x40")
     {

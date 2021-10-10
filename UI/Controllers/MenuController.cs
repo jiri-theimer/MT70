@@ -65,29 +65,29 @@ namespace UI.Controllers
         }
         public string CurrentUserMyProfile()
         {                
-            AMI("Aktuální stránku uložit jako domovskou", "javascript:_save_as_home_page()", "k-i-heart-outline");
+            AMI("Aktuální stránku uložit jako domovskou", "javascript:_save_as_home_page()", "favorite_border");
             if (Factory.CurrentUser.j03HomePageUrl !=null)
             {
-                AMI("Vyčistit odkaz na domovskou stránku", "javascript:_clear_home_page()", "k-i-heart-outline k-flip-v");
+                AMI("Vyčistit odkaz na domovskou stránku", "javascript:_clear_home_page()", "heart_broken");
             }
-            AMI("Tovární HOME stránka (Dashboard)", "/Dashboard/Index", "k-i-star-outline");
+            AMI("Tovární HOME stránka (Dashboard)", "/Dashboard/Index", "dashboard");
 
             DIV();
             
             if (Factory.CurrentUser.j04IsMenu_MyProfile)
             {
-                AMI("Můj profil", "/Home/MyProfile", "k-i-user");
+                AMI("Můj profil", "/Home/MyProfile", "person");
             }
             
-            AMI("Odeslat zprávu", "javascript:_window_open('/Mail/SendMail',1)", "k-i-email");
+            AMI("Odeslat zprávu", "javascript:_window_open('/Mail/SendMail',1)", "email");
 
-            AMI("Změnit přístupové heslo", "/Home/ChangePassword", "k-i-password");
+            AMI("Změnit přístupové heslo", "/Home/ChangePassword", "password");
             
             DIV();
-            AMI("Nápověda", "javascript: _window_open('/x51/Index')", "k-i-question");
-            AMI("O aplikaci", "/Home/About", "k-i-information");
+            AMI("Nápověda", "javascript: _window_open('/x51/Index')", "help_outline");
+            AMI("O aplikaci", "/Home/About", "info");
             DIV();
-            AMI("Odhlásit se", "/Home/logout", "k-i-logout");
+            AMI("Odhlásit se", "/Home/logout", "logout");
 
 
 
@@ -140,29 +140,29 @@ namespace UI.Controllers
         }
         public string AdminMenu(string area, string prefix)
         {
-            MenuItem c = AMI("Úvod", "/Admin/Index?signpost=false", "k-i-home");
+            MenuItem c = AMI("Úvod", "/Admin/Index?signpost=false", "settings");
             c.CssClass = BO.BAS.IIFS(area == null, "topmenulink_active", "topmenulink");
-            c =AMI("Správa uživatelů", aurl("users"), "k-i-user");
+            c =AMI("Správa uživatelů", aurl("users"), "manage_accounts");
             c.CssClass = tmclass("users", area);
-            c =AMI("Vykazování úkonů", aurl("worksheet"), "k-i-clock");
+            c =AMI("Vykazování úkonů", aurl("worksheet"), "schedule");
             c.CssClass = tmclass("worksheet", area);
-            c = AMI("Projekty", aurl("projects"), "k-i-wrench");
+            c = AMI("Projekty", aurl("projects"), "work");
             c.CssClass = tmclass("projects", area);
-            c = AMI("Klienti", aurl("clients"), "k-i-wrench");
+            c = AMI("Klienti", aurl("clients"), "business");
             c.CssClass = tmclass("clients", area);
-            c =AMI("Vyúčtování", aurl("billing"), "k-i-dollar");
+            c =AMI("Vyúčtování", aurl("billing"), "receipt_long");
             c.CssClass = tmclass("billing", area);
-            c = AMI("Zálohy", aurl("proforma"), "k-i-dollar");
+            c = AMI("Zálohy", aurl("proforma"), "receipt");
             c.CssClass = tmclass("proforma", area);            
-            c = AMI("Štítky", aurl("tags"), "k-i-wrench");
+            c = AMI("Štítky", aurl("tags"), "local_offer");
             c.CssClass = tmclass("tags", area);
-            c = AMI("Dokumenty", aurl("docs"), "k-i-wrench");
+            c = AMI("Dokumenty", aurl("docs"), "file_present");
             c.CssClass = tmclass("docs", area);
-            c = AMI("Úkoly", aurl("tasks"), "k-i-wrench");
+            c = AMI("Úkoly", aurl("tasks"), "task");
             c.CssClass = tmclass("tasks", area);
-            c = AMI("Střediska", aurl("centres"), "k-i-wrench");
+            c = AMI("Střediska", aurl("centres"), "category");
             c.CssClass = tmclass("centres", area);
-            c =AMI("Různé", aurl("misc"), "k-i-fields-more");
+            c =AMI("Různé", aurl("misc"), "miscellaneous_services");
             c.CssClass = tmclass("misc", area);
 
             //AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
@@ -416,7 +416,7 @@ namespace UI.Controllers
             s += _menusup.FlushResult_UL(_lis,true, false);
             s += "</ul>";
             s += "<hr>";
-            s += "<div><button type='button' class='btn btn-sm btn-outline-primary' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='k-icon k-i-gear'></span>MENU</button></div>";
+            s += "<div><button type='button' class='btn btn-sm btn-outline-primary' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='material-icons-outlined-btn'>settings</span>MENU odkazy</button></div>";
            
 
             return s;
@@ -470,7 +470,7 @@ namespace UI.Controllers
         {
             if ("p31,p41,p28,j02,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
             {               
-                AMI("Schválit/Vyúčtovat", "javascript:tg_approve()");
+                AMI("Schválit/Vyúčtovat", "javascript:tg_approve()","approval");
             }
 
             switch (tgi.prefix)
@@ -492,13 +492,13 @@ namespace UI.Controllers
             if ("p31,p41,p28,j02,p91,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
             {
                 DIV();
-                AMI("Oštítkovat", "javascript:tg_tagging()", "♣");
+                AMI("Oštítkovat", "javascript:tg_tagging()", "local_offer");
             }
 
             DIV();
-            AMI("GRID-REPORT", "javascript:tg_gridreport_selected()", "k-i-subreport");
-            AMI("MS EXCEL Export", "javascript:tg_export('xlsx','selected')", "k-i-file-excel");
-            AMI("CSV Export", "javascript:tg_export('csv','selected')", "k-i-file-csv");
+            AMI("GRID-REPORT", "javascript:tg_gridreport_selected()", "view_list");
+            AMI("MS EXCEL Export", "javascript:tg_export('xlsx','selected')", "cloud_download");
+            AMI("CSV Export", "javascript:tg_export('csv','selected')", "cloud_download");
 
 
             

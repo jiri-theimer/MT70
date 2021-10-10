@@ -166,10 +166,10 @@ function tg_refresh_sorter(sortfield, sortdir) {
     });
     var ths = $("#th_" + sortfield);
     if (sortdir === "asc") {
-        $(ths).html($(ths).html() + "<span class='k-icon k-i-sort-asc' style='color:blue;'></span>");
+        $(ths).html($(ths).html() + "<span class='material-icons-outlined-btn'>arrow_drop_up</span>");
     }
     if (sortdir === "desc") {
-        $(ths).html($(ths).html() + "<span class='k-icon k-i-sort-desc' style='color:blue;'></span>");
+        $(ths).html($(ths).html() + "<span class='material-icons-outlined-btn'>arrow_drop_down</span>");
     }
 }
 
