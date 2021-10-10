@@ -20,7 +20,7 @@
     {
         <div class="dropdown nonmobile">
             <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                <span id="TheGridIcon" class="k-icon k-i-table"></span>
+                <span id="TheGridIcon" class="material-icons-outlined-nosize">grid_on</span>
                 <span id="TheGridName">Grid<strong> & </strong>@_f.tra("Sloupce")</span>
             </button>
             <div id="divGridMenu" class="dropdown-menu" aria-labelledby="cmdGridMenu">
@@ -31,10 +31,10 @@
 
 
     <div id="divPageCommands">
-        <a class="btn btn-light" href="/Record/RecPage?prefix=@(Model.prefix)&pid=@(Model.pid)" title="@_f.tra("Občerstvit")"><span class="k-icon k-i-reload"></span></a>
+        <a class="btn btn-light" href="/Record/RecPage?prefix=@(Model.prefix)&pid=@(Model.pid)" title="@_f.tra("Občerstvit")"><span class="material-icons-outlined-btn">refresh</span></a>
         @if (_f.CurrentUser.j04IsMenu_Contact)
         {
-            <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="k-icon k-i-table-row-groups"></span></a>
+            <a class="btn btn-light" href="@Model.Go2GridUrl" title="GRID"><span class="material-icons-outlined-btn">grid_on</span></a>
         }
 
     </div>
@@ -49,7 +49,7 @@
     <div class="nonmobile" style="margin-left:auto;">
         <div class="dropdown">
             <button class="btn btn-light dropdown-toggle" type="button" id="cmdPageSetting" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="k-icon k-i-gears"></span>
+                <span class="material-icons-outlined-nosize">settings</span>
                 @_f.tra("Nastavení stránky")
             </button>
             <div id="divRecPageSetting" class="dropdown-menu" aria-labelledby="cmdPageSetting" style="width:350px;">

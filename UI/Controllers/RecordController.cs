@@ -12,7 +12,7 @@ namespace UI.Controllers
     {
         public IActionResult RecPage(string prefix, int pid)
         {
-            if (prefix == "le5") prefix = "p41";
+            //if (prefix == "le5") prefix = "p41";
             var v = new RecPageViewModel() { Factory = this.Factory, pid = pid, prefix = prefix };
             
             if (v.pid == 0)
