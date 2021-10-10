@@ -66,7 +66,7 @@
     {
         <div class="dropdown">
             <button class="@(Model.P31StateQueryCssClass)" type="button" id="cmdP31StateQuery" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="k-icon k-i-filter-sm" style="color:silver;"></span>
+                <span class="material-icons-outlined-nosize">filter_alt</span>
                 @(Model.P31StateQueryAlias)
             </button>
             <ul id="ulP31StateQuery" class="dropdown-menu" aria-labelledby="cmdP31StateQuery"></ul>
@@ -76,10 +76,10 @@
     @if (Model.IsCanbeMasterView)
     {
         <div style="margin-left:auto;margin-right:2px;" class="nonmobile btn-group">
-            <button type="button" class="btn btn-light" onclick="switch_to_masterview()"><span class="k-icon k-i-table-row-insert-below"></span> @_f.tra("Zapnou spodní panel")</button>
+            <button type="button" class="btn btn-light" onclick="switch_to_masterview()"><span class="material-icons-outlined-nosize">toggle_on</span> @_f.tra("Zapnou spodní panel")</button>
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridDblclickSetting" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="k-icon k-i-gears"></span>
+                    <span class="material-icons-outlined-nosize">settings</span>
                     @_f.tra("Dvojklik")
                 </button>
                 <ul id="ulGridDblclickSetting" class="dropdown-menu" aria-labelledby="cmdGridDblclickSetting">
@@ -156,7 +156,7 @@
         var s = "@Model.dblClickSetting";
 
         if (s == "recpage") {
-            _redirect("/" + _pageprefix + "/RecPage?pid=" + pid);
+            _redirect("/Record/RecPage?prefix=" + _pageprefix + "&pid=" + pid);
         } else {
             _edit(_pageprefix, pid);
         }

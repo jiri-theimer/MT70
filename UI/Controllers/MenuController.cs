@@ -496,7 +496,7 @@ namespace UI.Controllers
             }
 
             DIV();
-            AMI("GRID-REPORT", "javascript:tg_gridreport_selected()", "view_list");
+            AMI("GRID-REPORT", "javascript:tg_gridreport_selected()", "design_services");
             AMI("MS EXCEL Export", "javascript:tg_export('xlsx','selected')", "cloud_download");
             AMI("CSV Export", "javascript:tg_export('csv','selected')", "cloud_download");
 
@@ -536,11 +536,11 @@ namespace UI.Controllers
 
         public string TheGridDblclickSetting(TheGridUIContext tgi)  //menu pro nastavení doubleclick grid záznamu
         {
-            string strIconEdit = "k-i-radiobutton";string strIconPage = "k-i-radiobutton-checked";
+            string strIconEdit = "radio_button_unchecked"; string strIconPage = "radio_button_checked";
             if (Factory.CBL.LoadUserParam("grid-" + tgi.prefix + "-dblclick", "edit") == "edit")
             {
-                strIconEdit = "k-i-radiobutton-checked";
-                strIconPage = "k-i-radiobutton";
+                strIconEdit = "radio_button_checked";
+                strIconPage = "radio_button_unchecked";
             }
             HEADER("Nastavit si cíl dvojkliku myší na grid záznamu");
             AMI("Upravit kartu záznamu", "javascript:tg_dblclick_save_setting('edit')", strIconEdit);

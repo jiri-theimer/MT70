@@ -45,7 +45,7 @@ namespace UI.Menu
             {
                 s = "/TheGrid/FlatView?prefix="+prefix+"&go2pid=" + pid.ToString();
             }
-            return AMI(strName, s, "table_rows", null,null,"_top");
+            return AMI(strName, s, "grid_on", null,null,"_top");
         }
         public MenuItem AMI_Clone(string prefix, int pid)
         {

@@ -62,7 +62,7 @@
 
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" type="button" id="cmdGridDblclickSetting" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="k-icon k-i-gears"></span>
+                    <span class="material-icons-outlined-nosize">settings</span>
                     @_f.tra("Dvojklik")
                 </button>
                 <ul id="ulGridDblclickSetting" class="dropdown-menu" aria-labelledby="cmdGridDblclickSetting">
@@ -130,7 +130,7 @@
 
             var strDblSetting = "@Model.dblClickSetting";
             if (strDblSetting == "recpage") {
-                _redirect("/" + _pageprefix + "/RecPage?pid=" + pid);
+                _redirect("/Record/RecPage?prefix=" + _pageprefix + "&pid=" + pid);
                 return;
             }
             switch (_pagemasterprefix) {
