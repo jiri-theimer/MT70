@@ -150,7 +150,7 @@ else
 }
 
 
-<div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:8000;display:none;"></div>
+<div id="zoomwin" style="position:absolute;top:0px;left:0px;z-index:1000;display:none;"></div>
 
 <script type="text/javascript">
     var _cv = "@((int)Model.CurrentView)";
@@ -457,6 +457,13 @@ else
     }
     function p31_rec(pid) {
         _edit("p31", pid, "Úkon");
+    }
+    function p31bystat(prefix,pid) {
+        var j02id = "@Model.j02ID";
+
+        var url = "/p31/Record?j02id=" + j02id + "&newrec_prefix=" + prefix+"&newrec_pid=" + pid;
+        
+        _window_open(url);
     }
 
 

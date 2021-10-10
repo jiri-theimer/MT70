@@ -208,6 +208,11 @@
         }
 
         function _window_open(url, flag, header, layout) {
+            if (location.href.indexOf("p31dayline/Zoom") > 0) {
+                //otevření okna se ZOOM okna v rámci kalendáře nebo dayline
+                window.parent._window_open(url, flag, header, layout);
+                return;
+            }
             if (typeof header === "undefined") header = "";
             if (document.getElementById("myModalContainer")) {
                 //modal div na stránce již existuje

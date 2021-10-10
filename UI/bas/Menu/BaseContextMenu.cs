@@ -11,6 +11,7 @@ namespace UI.Menu
         protected BL.Factory _f;
         protected int pid { get; set; }
         private List<MenuItem> _lis;
+        
 
         public BaseContextMenu(BL.Factory f,int pid)
         {
@@ -22,6 +23,8 @@ namespace UI.Menu
         {
             return _lis;
         }
+
+        
 
         public MenuItem AMI(string strName, string strUrl, string icon = null, string strParentID = null, string strID = null, string strTarget = null)
         {
@@ -46,6 +49,7 @@ namespace UI.Menu
         }
         public MenuItem AMI_Clone(string prefix, int pid)
         {
+
             return AMI("Kopírovat", $"javascript:_clone('{prefix}',{pid})", "content_copy");
             
         }

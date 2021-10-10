@@ -92,6 +92,7 @@
                 callOnMenuShow(menu);
                 return false;
             }            
+            
             $.post("/Menu/ContextMenu", { entity: menuEntity, pid: menuPid, source: menuSource, master_entity: menuMasterEntity }, function (data) {
                 //menu položky natahované dynamicky ze serveru
                 if (_device.type === "Phone") {

@@ -25,15 +25,29 @@ namespace UI.Controllers
 
         
 
-        public IActionResult Record(int pid, bool isclone, int p41id, int j02id, int p34id, int p56id, string d, string t1, string t2, string approve_guid)
+        public IActionResult Record(int pid, bool isclone, int j02id, int p34id,string newrec_prefix, int newrec_pid, string d, string t1, string t2, string approve_guid)
         {
             var v = new p31Record() { rec_pid = pid, rec_entity = "p31", GuidApprove = approve_guid };
             if (pid == 0 && d != null)
             {
                 v.p31Date = BO.BAS.String2Date(d);
-            }
+            }            
             
-            v.Rec = new BO.p31WorksheetEntryInput() { pid = pid, p41ID = p41id, p34ID = p34id, j02ID = j02id };
+            v.Rec = new BO.p31WorksheetEntryInput() { pid = pid, p34ID = p34id, j02ID = j02id };
+            switch (newrec_prefix)
+            {
+                case "p41":
+                    v.Rec.p41ID = newrec_pid;                    
+                    break;
+                case "p32":
+                    v.RecP32 = Factory.p32ActivityBL.Load(newrec_pid);
+                    v.Rec.p32ID = v.RecP32.pid;
+                    v.SelectedComboP32Name = v.RecP32.p32Name;
+                    break;
+                case "p28":
+                    break;
+            }
+
             if (pid == 0 && t1 != null)
             {
                 v.Rec.TimeFrom = t1;

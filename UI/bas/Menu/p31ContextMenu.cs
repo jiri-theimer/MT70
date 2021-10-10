@@ -24,7 +24,7 @@ namespace UI.Menu
             {
                 if (disp.OwnerAccess && disp.RecordState==BO.p31RecordState.Editing)
                 {
-                    AMI("Upravit", $"javascript:_edit('p31',{pid})", "edit_note");
+                    AMI("Upravit", $"javascript:window.parent._edit('p31',{pid})", "edit_note");
 
                 }
                 else
