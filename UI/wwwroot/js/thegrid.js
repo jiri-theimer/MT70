@@ -437,6 +437,23 @@ function tg_select(records_count) {     //označí prvních X (records_count) z�
 
 }
 
+function tg_select_bycss(trcssclass) {     //označí řádky podle css třídy
+    tg_clear_selection();
+    var arr = [];
+    var rows = $("#tabgrid1_tbody ." + trcssclass);
+    for (var i = 0; i < rows.length; i++) {
+        $(rows[i]).addClass("selrow");
+        var pid = rows[i].id.replace("r", "");
+        arr.push(pid);
+
+        $("#chk" + pid).prop("checked", true);
+    }
+    tg_save_selected_pids(arr.join(","));
+    tg_div_close_synthetic_divs();
+    _notify_message("Počet záznamů: " + arr.length, "info");
+
+}
+
 function tg_pager(pageindex) {  //změna stránky
     tg_post_handler("pager", "pagerindex", pageindex);
 
@@ -1165,11 +1182,18 @@ function tg_button_more(cmd) {
 
     }
 
-    var s = "<div class='card'><div class='card-header'>Vybrat záznamy v přehledu <button type='button' class='btn' onclick='tg_div_close_synthetic_divs()'><span aria-hidden='true'>&times;</span></button></div>";
+    var s = "<div class='card'><div class='card-header'>Vybrat (zaškrtnout) záznamy v přehledu <button type='button' class='btn' onclick='tg_div_close_synthetic_divs()'><span aria-hidden='true'>&times;</span></button></div>";
     s += "<div class='card-body d-grid gap-2'>";
-    s += "<button type='button' onclick='tg_select(20)' class='btn btn-outline-secondary'>Vybrat prvních #20</button>";
-    s += "<button type='button' onclick='tg_select(50)' class='btn btn-outline-secondary'>Vybrat prvních #50</button>";
-    s += "<button type='button' onclick='tg_select(100)' class='btn btn-outline-secondary'>Vybrat prvních #100</button>";
+    s += "<button type='button' onclick='tg_select(20)' class='btn btn-outline-secondary'>Prvních #20</button>";
+    s += "<button type='button' onclick='tg_select(50)' class='btn btn-outline-secondary'>Prvních #50</button>";
+    s += "<button type='button' onclick='tg_select(100)' class='btn btn-outline-secondary'>Prvních #100</button>";
+    if (_tg_entity.substr(0, 3) === "p31")
+    {
+        s += "<button type='button' onclick='tg_select_bycss(\"trexp\")' class='btn btn-outline-secondary'>Pouze výdaje</button>";
+        s += "<button type='button' onclick='tg_select_bycss(\"trfee\")' class='btn btn-outline-secondary'>Pouze pevné odměny</button>";
+        s += "<button type='button' onclick='tg_select_bycss(\"trpc\")' class='btn btn-outline-secondary'>Pouze kusovník</button>";
+    }
+    
     s += "<button type='button' onclick='tg_select(1000)' class='btn btn-outline-secondary'>Vybrat všechny záznamy na stránce</button>";
 
     s += "</div></div>";
