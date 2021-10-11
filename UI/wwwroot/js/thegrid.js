@@ -1133,7 +1133,17 @@ function tg_p31statequery_change(val) {     //filtrování podle stavu úkonu
     k += "-p31statequery";
     
     $.post(_ep("/Common/SetUserParam"), { key: k, value: val }, function (data) {
-        location.reload(location.href);
+        var url = location.href;
+        
+        if (document.getElementById("tempguid")) {
+            //schvalovací dialog
+            url = url + "&tempguid=" + $("#tempguid").val();
+            location.replace(url);
+        } else {
+            location.reload(url);
+        }
+   
+        
     });
 }
 

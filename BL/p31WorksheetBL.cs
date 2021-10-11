@@ -132,7 +132,9 @@ namespace BL
 
         public IEnumerable<BO.p31Worksheet> GetList(BO.myQueryP31 mq)
         {
-            DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(), mq, _mother.CurrentUser);
+            bool bolTemp = false;
+            if (mq.tempguid != null) bolTemp = true;
+            DL.FinalSqlCommand fq = DL.basQuery.GetFinalSql(GetSQL1(null,0,bolTemp), mq, _mother.CurrentUser);
             return _db.GetList<BO.p31Worksheet>(fq.FinalSql, fq.Parameters);
         }
 

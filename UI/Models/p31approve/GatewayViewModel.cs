@@ -7,7 +7,7 @@ namespace UI.Models.p31approve
 {
     public class GatewayViewModel:BaseViewModel
     {
-        public string guid { get; set; }
+        public string tempguid { get; set; }
         public string prefix { get; set; }
         public string pidsinline { get; set; }
         public BO.p72IdENUM p72id { get; set; }

@@ -10,22 +10,29 @@ namespace UI.Controllers
 {
     public class p31approveController : BaseController 
     {
-        public IActionResult Index(string guid,string pids,string prefix,int p72id,int p91id,int approvinglevel)
+        public IActionResult Index(string guid,string pids,string prefix,int p72id,int p91id,int approvinglevel,string tempguid)
         {
-            if (string.IsNullOrEmpty(pids) && string.IsNullOrEmpty(guid))
+            if (string.IsNullOrEmpty(pids) && string.IsNullOrEmpty(guid) && string.IsNullOrEmpty(tempguid))
             {
                 return this.StopPage(true, "pids or guid missing.");
             }
             
 
-            var v = new GatewayViewModel() { guid = guid,pidsinline=pids,prefix=prefix,p91id=p91id,p72id=(BO.p72IdENUM) p72id,approvinglevel=approvinglevel };
+            var v = new GatewayViewModel() { tempguid = tempguid, pidsinline=pids,prefix=prefix,p91id=p91id,p72id=(BO.p72IdENUM) p72id,approvinglevel=approvinglevel };
 
-            v.lisP31 = GetRecords(v);
-            if (v.guid == null)
+            
+            if (v.tempguid == null)
             {
-                v.guid = BO.BAS.GetGuid();
-                BL.bas.p31Support.SetupTempApproving(this.Factory, v.lisP31, v.guid, v.approvinglevel, v.DoDefaultApproveState, v.p72id);
+                v.lisP31 = GetRecords(v, guid);
+                v.tempguid = BO.BAS.GetGuid();
+                BL.bas.p31Support.SetupTempApproving(this.Factory, v.lisP31, v.tempguid, v.approvinglevel, v.DoDefaultApproveState, v.p72id);
             }
+            else
+            {
+                var mq = new BO.myQueryP31() {tempguid = v.tempguid };
+                v.lisP31 = Factory.p31WorksheetBL.GetList(mq);
+            }
+            
             
             
 
@@ -56,7 +63,7 @@ namespace UI.Controllers
 
         private void RefreshState_Index(GatewayViewModel v)
         {
-            string strMyQuery = "tempguid|string|" + v.guid;
+            string strMyQuery = "tempguid|string|" + v.tempguid;
             if (v.SelectedTab != null)
             {
                 strMyQuery += "|tabquery|string|" + v.SelectedTab;
@@ -241,13 +248,13 @@ namespace UI.Controllers
 
         //}
 
-        private IEnumerable<BO.p31Worksheet> GetRecords(GatewayViewModel v)
+        private IEnumerable<BO.p31Worksheet> GetRecords(GatewayViewModel v,string pidsguid)
         {
             var lisPIDs = new List<int>();
             var p31ids = new List<int>();
-            if (v.guid != null)
+            if (pidsguid != null)
             {                
-                lisPIDs = Factory.p85TempboxBL.GetPidsFromTemp(v.guid);
+                lisPIDs = Factory.p85TempboxBL.GetPidsFromTemp(pidsguid);
             }
             else
             {
@@ -273,7 +280,7 @@ namespace UI.Controllers
             }
 
             mq = new BO.myQueryP31() { MyRecordsDisponible = true, p31statequery = 3, pids = p31ids,explicit_orderby = "a.p41ID,a.p31ID"};
-
+            
             return Factory.p31WorksheetBL.GetList(mq);
         }
 
