@@ -21,9 +21,13 @@ namespace UI.Controllers
             var v = new GatewayViewModel() { guid = guid,pidsinline=pids,prefix=prefix,p91id=p91id,p72id=(BO.p72IdENUM) p72id,approvinglevel=approvinglevel };
 
             v.lisP31 = GetRecords(v);
-            if (v.guid == null) v.guid = BO.BAS.GetGuid();
+            if (v.guid == null)
+            {
+                v.guid = BO.BAS.GetGuid();
+                BL.bas.p31Support.SetupTempApproving(this.Factory, v.lisP31, v.guid, v.approvinglevel, v.DoDefaultApproveState, v.p72id);
+            }
             
-            BL.bas.p31Support.SetupTempApproving(this.Factory, v.lisP31, v.guid, v.approvinglevel, v.DoDefaultApproveState, v.p72id);
+            
 
 
             if (Factory.CBL.LoadUserParamInt("grid-p31-approve-p31statequery", 0) > 0 && Factory.CBL.LoadUserParamValidityMinutes("grid-p31-approve-p31statequery") > 1)
