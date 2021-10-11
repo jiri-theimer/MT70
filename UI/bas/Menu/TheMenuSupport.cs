@@ -307,7 +307,7 @@ namespace UI.Menu
                             c.Name += " (" + menuitems.Where(p => p.ParentID == c.ID).Count().ToString() + ")<span style='color:gray;float:right;font-size:150%;'>⇢</span>";
 
                         }
-
+                        
 
                         if (c.Url == null)
                         {

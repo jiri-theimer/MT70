@@ -410,14 +410,14 @@ namespace UI.Controllers
                 }
                 
             }
-                       
-            
-            var s = "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
+
+            var s = "<div>";
+            s+= "<ul style='list-style-type:none; columns:2;-webkit-columns: 2;-moz-columns:2;'>";
             s += _menusup.FlushResult_UL(_lis,true, false);
             s += "</ul>";
             s += "<hr>";
             s += "<div><button type='button' class='btn btn-sm btn-outline-primary' onclick=\"_window_open('/Home/MyMainMenuLinks',1)\"><span class='material-icons-outlined-btn'>settings</span>MENU odkazy</button></div>";
-           
+            s += "</div>";
 
             return s;
         }
@@ -428,7 +428,7 @@ namespace UI.Controllers
             {
                 if (Factory.CurrentUser.p07LevelsCount == 1)
                 {
-                    AMI(Factory.CurrentUser.getP07Level(5, true), "javascript:_edit('p41',0)"); //nový projekt, pouze jedna vertikální úroveň
+                    AMI(Factory.CurrentUser.getP07Level(5, true), "javascript:_edit('p41',0)", "work_outline"); //nový projekt, pouze jedna vertikální úroveň
                 }
                 else
                 {
@@ -436,7 +436,7 @@ namespace UI.Controllers
                     {
                         if (Factory.CurrentUser.getP07Level(i, true) != null)
                         {
-                            AMI(Factory.CurrentUser.getP07Level(i, true), $"javascript:_edit('le{i}',0)");
+                            AMI(Factory.CurrentUser.getP07Level(i, true), $"javascript:_edit('le{i}',0)", "work_outline");
                         }
                     }
                     DIV();
@@ -444,23 +444,24 @@ namespace UI.Controllers
             }
             if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P28_Creator) || Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P28_Draft_Creator))
             {
-                AMI("Klient", "javascript:_edit('p28',0)");
+                AMI("Klient", "javascript:_edit('p28',0)","business");
             }
-            AMI("Úkol", "javascript:_edit('p56',0)");            
+            AMI("Úkol", "javascript:_edit('p56',0)","task");            
             if (Factory.CurrentUser.p07LevelsCount == 1) DIV();           
-            AMI("Dokument", "javascript:_window_open('/o23/SelectDocType')");
-            
-            AMI("Záloha", "javascript:_edit('p90',0)");
+            AMI("Dokument", "javascript:_window_open('/o23/SelectDocType')", "file_present");
+
+
+            AMI("Záloha", "javascript:_edit('p90',0)", "receipt");
             //AMI("Poznámka", "javascript:_edit('b07',0)");
             DIV();
             //AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
             if (Factory.CurrentUser.IsAdmin)
             {
-                AMI("Uživatelský účet", "javascript:_window_open('/j03/Record?pid=0', 1)");
+                AMI("Uživatelský účet", "javascript:_window_open('/j03/Record?pid=0', 1)","person");
             }
             if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_J02_ContactPerson_Create))
             {
-                AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)");
+                AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)", "face");
             }
             
             return _menusup.FlushResult_UL(_lis,true, false);
