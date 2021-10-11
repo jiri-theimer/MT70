@@ -14,6 +14,7 @@ namespace BL
         public DateTime? LoadUserParamDate(string strKey);
         public bool SetUserParam(string strKey, string strValue);
         public double LoadUserParamValidityHours(string strKey);
+        public double LoadUserParamValidityMinutes(string strKey);
         public string EstimateRecordCode(string entity);
         public void ClearUserParamsCache();
         public int SaveRecordCode(string codevalue, string prefix, int pid);
@@ -130,7 +131,16 @@ namespace BL
                 return (DateTime.Now - d).TotalHours;
             }
             return 0;
-
+        }
+        public double LoadUserParamValidityMinutes(string strKey)
+        {
+            Handle_UpdateParamsCache();
+            if (_userparams.Any(p => p.Key == strKey))
+            {
+                DateTime d = _userparams.First(p => p.Key == strKey).DateUpdate;
+                return (DateTime.Now - d).TotalMinutes;
+            }
+            return 0;
         }
         public string LoadUserParam(string strKey, string strDefault = null, double maxhoursvalid = 0.00)
         {

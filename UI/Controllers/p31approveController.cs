@@ -23,37 +23,55 @@ namespace UI.Controllers
             v.lisP31 = GetRecords(v);
             if (v.guid == null) v.guid = BO.BAS.GetGuid();
             BL.bas.p31Support.SetupTempApproving(this.Factory, v.lisP31, v.guid, v.approvinglevel, v.DoDefaultApproveState, v.p72id);
-            //SetupTempData(v);
 
-            v.lisP31 = null;v.pidsinline = null;    //z důvodu, aby se nepřenášeli obrovská data přes querystring
-            return this.RedirectToAction("Grid",v);
-            
-        }
-        public IActionResult Inline(GatewayViewModel v)
-        {
-            return View(v);
-        }
-        public IActionResult Grid(GatewayViewModel v)
-        {            
+
+            if (Factory.CBL.LoadUserParamInt("grid-p31-approve-p31statequery", 0) > 0 && Factory.CBL.LoadUserParamValidityMinutes("grid-p31-approve-p31statequery") > 1)
+            {
+                //nechceme mít na úvod filtrování podle stavu úkonů
+                Factory.CBL.SetUserParam("grid-p31-approve-p31statequery", "0");
+                Factory.CBL.ClearUserParamsCache();
+            }
+
             v.j72ID = Factory.CBL.LoadUserParamInt("p31approve-j72id");
-            
-            RefreshState_Grid(v);
+
+            RefreshState_Index(v);
             return View(v);
+
+            
+            
         }
+        
 
         [HttpPost]
-        public IActionResult Grid(GatewayViewModel v,string oper)
+        public IActionResult Index(GatewayViewModel v,string oper)
         {
-            RefreshState_Grid(v);
+            RefreshState_Index(v);
             return View(v);
         }
 
-        private void RefreshState_Grid(GatewayViewModel v)
+        private void RefreshState_Index(GatewayViewModel v)
         {
             string strMyQuery = "tempguid|string|" + v.guid;
+            if (v.SelectedTab != null)
+            {
+                strMyQuery += "|tabquery|string|" + v.SelectedTab;
+            }
             v.gridinput = new TheGridInput() { entity = "p31Worksheet",j72id=v.j72ID, myqueryinline = strMyQuery, oncmclick = "", ondblclick = "",master_entity="approve" };
             v.gridinput.query = new BO.InitMyQuery().Load("p31", "app", 0, strMyQuery);
             
+            var cTabs = new NavTabsSupport(Factory);
+            v.OverGridTabs = cTabs.getOverGridTabs("approve", v.SelectedTab, false);
+
+            v.P31StateQueryAlias = Factory.tra("Stav úkonů");
+            v.P31StateQueryCssClass = "btn btn-light dropdown-toggle";
+
+            v.gridinput.query.p31statequery = Factory.CBL.LoadUserParamInt("grid-p31-approve-p31statequery", 0);
+            if (v.gridinput.query.p31statequery > 0)
+            {
+                v.P31StateQueryCssClass = "btn btn-light dropdown-toggle filtered";
+                v.P31StateQueryAlias = new UI.Menu.TheMenuSupport(Factory).getP31StateQueryAlias(v.gridinput.query.p31statequery);
+            }
+
         }
 
 

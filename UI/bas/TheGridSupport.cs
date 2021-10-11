@@ -647,12 +647,7 @@ namespace UI
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"xlsx\")'><span class='material-icons-outlined' style='width:30px;'>cloud_download</span>" + _Factory.tra("MS-EXCEL Export (vše)") + "</a></li>", j72id));
             sb.AppendLine(string.Format("<li><a class='dropdown-item px-0' href='javascript:tg_export(\"csv\")'><span class='material-icons-outlined' style='width:30px;'>cloud_download</span>" + _Factory.tra("CSV Export (vše)") + "</a></li>", j72id));
 
-            //sb.AppendLine("<li><hr class='hr-mini' /></li>");
-            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(20)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 20)) + "</a></li>");
-            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(50)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 50)) + "</a></li>");
-            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(100)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra(string.Format("Zaškrtnout prvních {0}", 100)) + "</a></li>");
-            //sb.AppendLine("<li><a class='dropdown-item px-0' href='javascript:tg_select(1000)'><span class='k-icon k-i-checkbox-checked' style='width:30px;'></span>" + _Factory.tra("Zaškrtnout všechny záznamy na stránce") + "</a></li>");
-
+            
 
             sb.AppendLine("</ul>");
 

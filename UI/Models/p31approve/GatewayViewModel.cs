@@ -35,5 +35,12 @@ namespace UI.Models.p31approve
         public double Rec_DphSazba { get; set; }
 
         public string Rec_InterniHodiny { get; set; }
+
+        public string SelectedTab { get; set; }
+        public List<NavTab> OverGridTabs { get; set; }
+        
+        public string P31StateQueryCssClass { get; set; }
+        public string P31StateQueryAlias { get; set; }
+        
     }
 }

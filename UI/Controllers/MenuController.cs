@@ -516,17 +516,23 @@ namespace UI.Controllers
                 strKey += "-" + tgi.master_entity;
             }
             strKey += "-p31statequery";
-
+            
             int val = Factory.CBL.LoadUserParamInt(strKey, 0);
 
             AMI("Nefiltrovat", "javascript:tg_p31statequery_change('0')", BO.BAS.IIFS(val == 0, s1, s0));
             var arr = new List<int> { 1, 2,16,17, 3,4,5,6,7,8,9,10,11,12,13,14,15 };
+            if (tgi.pathname.Contains("p31approve/"))
+            {
+                //sada filtrovacích stavů pro schvalovací dialog
+                arr = new List<int> {4, 5, 6, 7, 8, 9 };
+            }
             foreach(int x in arr)
             {
                 MenuItem mi=AMI(_menusup.getP31StateQueryAlias(x), $"javascript:tg_p31statequery_change('{x}')", BO.BAS.IIFS(val == x, s1, s0));
+               
                 if (x == val) mi.IsActive = true;
 
-                //if (x == 1 || x == 3 || x == 4) mi.CssClass = "dropdown-item";
+               
                 
             }
             

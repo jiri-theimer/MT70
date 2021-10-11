@@ -80,5 +80,9 @@ namespace BO
         {
             return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>email</span>";
         }
+        public static string report()
+        {
+            return "<span style='color:black;font-size:170%;' class='material-icons-outlined'>print</span>";
+        }
     }
 }

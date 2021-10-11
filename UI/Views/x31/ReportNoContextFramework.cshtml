@@ -2,7 +2,7 @@
 @inject BL.Factory _f
 
 @{
-    Model.PageTitle = _f.tra("Tiskové sestavy");
+    Model.PageTitle = _f.tra("Tiskové sestavy");    
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
@@ -60,7 +60,7 @@
 
 
     <div class="col-auto nonmobile tabovergrid">
-        <span id="spanX31Name"></span>
+        <span id="spanX31Name">@_f.tra("Vyberte tiskovou sestavu")...</span>
 
     </div>
     <div class="col-auto">
@@ -71,7 +71,7 @@
     </div>
     
 
-    @if (_f.CurrentUser.IsAdmin)
+    @if (_f.CurrentUser.IsAdmin && Model.SelectedReport !=null)
     {
         <div class="col-auto nonmobile" style="width:40px;">
             <button id="cmdRecord" type="button" class="btn btn-light" title="@_f.tra("Administrace sestavy")"><span class="material-icons-outlined-btn">settings</span></button>
@@ -83,6 +83,7 @@
 
 <div id="mySidebar" class="sidebar">
     <h4 class="header">
+        <span class="material-icons-outlined">print</span>
         @Model.PageTitle
     </h4>
 
