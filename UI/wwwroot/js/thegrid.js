@@ -1137,7 +1137,7 @@ function tg_select_all_toggle() {
 function tg_dblclick_save_setting(val) {    //nastavení dvojkliku na grid záznamu
     var prefix = _tg_entity.substr(0, 3);
     $.post(_ep("/Common/SetUserParam"), { key: "grid-" + prefix + "-dblclick", value: val }, function (data) {
-        location.reload(location.href);
+        location.replace(location.href);
     });
 }
 
@@ -1152,14 +1152,14 @@ function tg_p31statequery_change(val) {     //filtrování podle stavu úkonu
     $.post(_ep("/Common/SetUserParam"), { key: k, value: val }, function (data) {
         var url = location.href;
         
-        if (document.getElementById("tempguid")) {
+        if (document.getElementById("tempguid"))
+        {
             //schvalovací dialog
             url = url + "&tempguid=" + $("#tempguid").val();
-            location.replace(url);
-        } else {
-            location.reload(url);
+                   
         }
-   
+        
+        location.replace(url);
         
     });
 }
