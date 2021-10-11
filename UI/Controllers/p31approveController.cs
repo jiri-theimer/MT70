@@ -22,6 +22,7 @@ namespace UI.Controllers
 
             v.lisP31 = GetRecords(v);
             if (v.guid == null) v.guid = BO.BAS.GetGuid();
+            
             BL.bas.p31Support.SetupTempApproving(this.Factory, v.lisP31, v.guid, v.approvinglevel, v.DoDefaultApproveState, v.p72id);
 
 

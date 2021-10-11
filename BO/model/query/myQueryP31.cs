@@ -113,11 +113,13 @@ namespace BO
             {
                 if (this.iswip == true)
                 {
-                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p41x.p41BillingFlag<99", null,null);
+                    //AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p41x.p41BillingFlag<99", null,null);
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL", null, null);
                 }
                 else
                 {
-                    AQ("a.p71ID IS NOT NULL AND p41x.p41BillingFlag<99", null, null);
+                    //AQ("a.p71ID IS NOT NULL AND p41x.p41BillingFlag<99", null, null);
+                    AQ("a.p71ID IS NOT NULL", null, null);
                 }                
             }
             if (this.isinvoiced != null)
@@ -135,11 +137,13 @@ namespace BO
             {
                 if (this.isapproved_and_wait4invoice == true)
                 {
-                    AQ("a.p71ID=1 AND a.p91ID IS NULL AND p41x.p41BillingFlag<99", null, null);
+                    //AQ("a.p71ID=1 AND a.p91ID IS NULL AND p41x.p41BillingFlag<99", null, null);
+                    AQ("a.p71ID=1 AND a.p91ID IS NULL", null, null);
                 }
                 else
                 {
-                    AQ("a.p91ID IS NULL AND p41x.p41BillingFlag<99", null, null);
+                    //AQ("a.p91ID IS NULL AND p41x.p41BillingFlag<99", null, null);
+                    AQ("a.p91ID IS NULL", null, null);
                 }
             }
 
@@ -192,9 +196,11 @@ namespace BO
                 case 1: //Rozpracované
                     this.iswip = true; break;
                 case 2://rozpracované s korekcí
-                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND a.p72ID_AfterTrimming IS NOT NULL AND p41x.p41BillingFlag<99", null, null); break;
+                    //AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND a.p72ID_AfterTrimming IS NOT NULL AND p41x.p41BillingFlag<99", null, null); break;
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND a.p72ID_AfterTrimming IS NOT NULL", null, null); break;
                 case 3://nevyúčtované
-                    AQ("a.p91ID IS NULL AND GETDATE()<a.p31ValidUntil AND p41x.p41BillingFlag<99", null, null); break;
+                    //AQ("a.p91ID IS NULL AND GETDATE()<a.p31ValidUntil AND p41x.p41BillingFlag<99", null, null); break;
+                    AQ("a.p91ID IS NULL AND GETDATE()<a.p31ValidUntil", null, null); break;
                 case 4://schválené
                     this.isapproved_and_wait4invoice = true; break;  //AQ("a.p71ID=1 AND a.p91ID IS NULL", null, null); break;
                 case 5://schválené jako fakturovat
@@ -220,9 +226,11 @@ namespace BO
                 case 15: //v archivu
                     AQ("a.p31ValidUntil<GETDATE()", null, null); break;
                 case 16://rozpracované Fa aktivita
-                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=1 AND p41x.p41BillingFlag<99", null, null); break;
+                    //AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=1 AND p41x.p41BillingFlag<99", null, null); break;
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=1", null, null); break;
                 case 17://rozpracované Fa aktivita
-                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=0 AND p41x.p41BillingFlag<99", null, null); break;
+                    //AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=0 AND p41x.p41BillingFlag<99", null, null); break;
+                    AQ("a.p71ID IS NULL AND a.p91ID IS NULL AND p32x.p32IsBillable=0", null, null); break;
             }
         }
     }
