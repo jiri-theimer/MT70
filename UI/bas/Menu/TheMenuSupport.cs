@@ -67,23 +67,23 @@ namespace UI.Menu
         {
             var ret = new List<MenuItem>();
 
-            ret.Add(new MenuItem() { Name = _f.tra("Dashboard"), Url = "/Dashboard/Index",ID="cmdDashboard" });
+            ret.Add(new MenuItem() { Name = _f.tra("Dashboard"), Url = "/Dashboard/Index",ID="cmdDashboard",Icon="dashboard" });
             if (_f.CurrentUser.IsAdmin)
             {
-                ret.Add(new MenuItem() { Name = _f.tra("Administrace"), Url = "/Admin/Index?signpost=true", ID = "cmdAdmin" });
+                ret.Add(new MenuItem() { Name = _f.tra("Administrace"), Url = "/Admin/Index?signpost=true", ID = "cmdAdmin",Icon="settings" });
             }
             if (_f.CurrentUser.j04IsMenu_Worksheet)
             {
-                ret.Add(GRD("p31",false));
-                ret.Add(new MenuItem() { Name = _f.tra("Kalendář"), Url = "/p31calendar/Index",ID="cmdCalendar" });
-                ret.Add(new MenuItem() { Name = "Dayline",Url="/p31dayline/Index",ID="cmdDayline"});
-                ret.Add(new MenuItem() { Name = _f.tra("Součty"), Url = "/p31/Totals",ID="cmdTotals" });
-            }
+                ret.Add(GRD("p31",false, "history_toggle_off"));
+                ret.Add(new MenuItem() { Name = _f.tra("Kalendář"), Url = "/p31calendar/Index",ID="cmdCalendar",Icon= "date_range" });
+                ret.Add(new MenuItem() { Name = "Dayline",Url="/p31dayline/Index",ID="cmdDayline",Icon= "calendar_view_month"});
+                ret.Add(new MenuItem() { Name = _f.tra("Součty"), Url = "/p31/Totals",ID="cmdTotals",Icon= "functions" });
+                }
             if (_f.CurrentUser.j04IsMenu_Project)
             {
                 if (_f.CurrentUser.p07LevelsCount <= 1)
                 {
-                    ret.Add(GRD("p41", true));
+                    ret.Add(GRD("p41", true, "business"));
                 }
                 else
                 {
@@ -91,7 +91,8 @@ namespace UI.Menu
                     {
                         if (_f.CurrentUser.getP07Level(i,false) != null)
                         {
-                            ret.Add(GRD("le"+i.ToString(), true));
+                                                        
+                            ret.Add(GRD("le" + i.ToString(), true, "work_outline"));
                         }
                     }
                         
@@ -100,33 +101,33 @@ namespace UI.Menu
             }
             if (_f.CurrentUser.j04IsMenu_Task)
             {
-                ret.Add(GRD("p56", true));
+                ret.Add(GRD("p56", true, "task"));
             }
             if (_f.CurrentUser.j04IsMenu_Contact)
             {
-                ret.Add(GRD("p28",true));
+                ret.Add(GRD("p28",true, "business"));
             }
             if (_f.CurrentUser.j04IsMenu_Invoice)
             {
-                ret.Add(GRD("p91",true));
+                ret.Add(GRD("p91",true, "receipt_long"));
             }
             if (_f.CurrentUser.j04IsMenu_Proforma)
             {
-                ret.Add(GRD("p90",true));
+                ret.Add(GRD("p90",true, "receipt"));
             }
             if (_f.CurrentUser.j04IsMenu_People)
             {
-                ret.Add(GRD("j02",true));
+                ret.Add(GRD("j02",true,"face"));
             }
             if (_f.CurrentUser.j04IsMenu_Notepad)
             {
-                ret.Add(GRD("o23",true));
+                ret.Add(GRD("o23",true, "file_present"));
             }
             if (_f.CurrentUser.j04IsMenu_Report)
             {
-                ret.Add(new MenuItem() { Name = _f.tra("Tiskové sestavy"), Url = "/x31/ReportNoContextFramework",ID="cmdReports" });
+                ret.Add(new MenuItem() { Name = _f.tra("Tiskové sestavy"), Url = "/x31/ReportNoContextFramework",ID="cmdReports",Icon="print" });
             }
-            ret.Add(GRD("b07",false));
+            ret.Add(GRD("b07",false, "speaker_notes"));
 
 
             //ret.Add(new MenuItem() { Name = "Stránka projektu", Url = "/Record/RecPage?prefix=p41", ID = "recpagep41" });
@@ -134,14 +135,14 @@ namespace UI.Menu
             //ret.Add(new MenuItem() { Name = "Stránka vyúčtování", Url = "/Record/RecPage?prefix=p91", ID = "recpagep91" });
             //ret.Add(new MenuItem() { Name = "Stránka osoby", Url = "/Record/RecPage?prefix=j02", ID = "recpagej02" });
             //ret.Add(new MenuItem() { Name = "Stránka úkolu", Url = "/Record/RecPage?prefix=p56", ID = "recpagep56" });
-           
+
 
             return ret;
         }
 
-        private MenuItem GRD(string prefix,bool bolIsCanBeGrid11)
+        private MenuItem GRD(string prefix,bool bolIsCanBeGrid11,string icon=null)
         {
-            var c = new MenuItem() { ID = "cmd" + prefix,IsCanBeGrid11= bolIsCanBeGrid11 };
+            var c = new MenuItem() { ID = "cmd" + prefix,IsCanBeGrid11= bolIsCanBeGrid11,Icon=icon };
            
             switch (_f.CurrentUser.j03LangIndex)
             {

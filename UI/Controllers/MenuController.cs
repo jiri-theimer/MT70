@@ -403,7 +403,7 @@ namespace UI.Controllers
             cMenu.HandleUrlOfGridLinks(lis);
             foreach (var c in lis)
             {
-                var mi=AMI(c.Name, c.Url);
+                var mi=AMI(c.Name, c.Url,c.Icon);
                 if (currenturl !=null && currenturl.Contains(c.Url))
                 {
                     mi.IsActive = true; //aktuální url, na kterém stojí uživatel
