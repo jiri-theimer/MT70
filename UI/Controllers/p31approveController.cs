@@ -66,14 +66,16 @@ namespace UI.Controllers
                     var errs=SaveApproving(v);
                     if (errs.Count == 0)
                     {
-                        v.SetJavascript_CallOnLoad("ok");
+                        v.SetJavascript_CallOnLoad(0);
+                        return View(v);
                     }
                     else
                     {
                         this.AddMessageTranslated(string.Join("<hr>", errs));
+                        return View(v);
                     }
-                    break;
-                
+                   
+
             }
 
                         
