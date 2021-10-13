@@ -32,17 +32,19 @@ namespace DL
                     
                     if (has_err_ret && string.IsNullOrEmpty(pars.Get<string>("err_ret"))==false)
                     {
-                        this.CurrentUser.AddMessage(pars.Get<string>("err_ret"));
+                        this.CurrentUser.AddMessage(pars.Get<string>("err_ret"));                        
                         return pars.Get<string>("err_ret");
 
                     }
                     else
-                    {
+                    {                        
                         return "1";
                     }
+                    
                 }
                 catch (Exception e)
                 {
+                    con.Close();
                     log_error(e, strProcName, pars).GetAwaiter().GetResult();
                     return e.Message;
 
@@ -63,6 +65,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
+                    con.Close();
                     log_error(e, strSQL).GetAwaiter().GetResult();
                     return default(T);
                 }
@@ -80,6 +83,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
+                    con.Close();
                     log_error(e, strSQL, param).GetAwaiter().GetResult();
                     return default(T);
                 }
@@ -96,6 +100,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
+                    con.Close();
                     log_error(e, strSQL, pars).GetAwaiter().GetResult();
                     return default(T);
                 }
@@ -117,6 +122,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
+                    con.Close();
                     log_error(e, strSQL).GetAwaiter().GetResult();
                     return null;
                 }
@@ -138,6 +144,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
+                    con.Close();
                     log_error(e, strSQL, param).GetAwaiter().GetResult();
                     return null;
                 }
@@ -160,6 +167,7 @@ namespace DL
                 }
                 catch (Exception e)
                 {
+                    con.Close();
                     log_error(e, strSQL, pars).GetAwaiter().GetResult();
                     return null;
                 }
@@ -197,10 +205,11 @@ namespace DL
                 }
                 catch (Exception e)
                 {
+                    
                     log_error(e, strSQL).GetAwaiter().GetResult();
                 }
 
-
+                con.Close();
                 return dt;
 
             }

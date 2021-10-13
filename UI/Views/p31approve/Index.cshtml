@@ -38,7 +38,7 @@
                 @foreach (var tab in Model.OverGridTabs)
                 {
                     <li class="nav-item onetab">
-                        <a class="@tab.CssClass" id="@tab.ClientID" href="@tab.Url" onclick="tab_overgrid_click(this)" style="padding-bottom:2px;">
+                        <a class="@tab.CssClass" id="@tab.ClientID" href="@tab.Url" style="padding-bottom:2px;">
                             @{
                                 @Html.Raw(tab.Name)
                                 if (tab.Badge != null)
@@ -109,57 +109,45 @@
                     </tr>
                     <tr id="trP72ID">
                         <td colspan="2">
-                            <hr />
                             <input type="radio" id="chkp72ID_4" asp-for="Rec_p72ID" value="4" onchange="handle_rec_change()" />
                             <label for="chkp72ID_4" class="badge-a4">@_f.tra("Fakturovat")</label>
+                            <br />
+                            <input type="radio" id="chkp72ID_7" asp-for="Rec_p72ID" value="7" onchange="handle_rec_change()" />
+                            <label for="chkp72ID_7" class="badge-a7">@_f.tra("Fakturovat později")</label>
                             <br />
                             <input type="radio" id="chkp72ID_6" asp-for="Rec_p72ID" value="6" onchange="handle_rec_change()" />
                             <label for="chkp72ID_6" class="badge-a6">@_f.tra("Zahrnout do paušálu")</label>
                             <br />
-                            <input type="radio" id="chkp72ID_3" asp-for="Rec_p72ID" value="3" onchange="handle_rec_change()" />
-                            <label for="chkp72ID_3" class="badge-a3">@_f.tra("Skrytý odpis")</label>
-                            <br />
                             <input type="radio" id="chkp72ID_2" asp-for="Rec_p72ID" value="2" onchange="handle_rec_change()" />
                             <label for="chkp72ID_2" class="badge-a2">@_f.tra("Viditelný odpis")</label>
                             <br />
-                            <input type="radio" id="chkp72ID_7" asp-for="Rec_p72ID" value="7" onchange="handle_rec_change()" />
-                            <label for="chkp72ID_7" class="badge-a7">@_f.tra("Fakturovat později")</label>
+                            <input type="radio" id="chkp72ID_3" asp-for="Rec_p72ID" value="3" onchange="handle_rec_change()" />
+                            <label for="chkp72ID_3" class="badge-a3">@_f.tra("Skrytý odpis")</label>
+
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:120px;">
-                            @_f.tra("Datum"):
-                        </td>
-                        <td>
+                        <td colspan="2">
                             <span class="val-readonly-wrap" id="Rec_Datum"></span>
                         </td>
+                        
                     </tr>
+                   
                     <tr>
-                        <td>
-                            @_f.tra("Jméno"):
-                        </td>
-                        <td>
-                            <span class="val-readonly" id="Rec_Jmeno"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span id="lblProjekt">@_f.tra("Projekt"):</span>
-                        </td>
-                        <td>
+                        <td colspan="2" id="tdProjekt">
                             <span class="val-readonly-wrap" id="Rec_Projekt"></span>
+                            
                         </td>
+                       
                     </tr>
                     <tr>
-                        <td>
-                            @_f.tra("Aktivita"):
-                        </td>
-                        <td>
+                        
+                        <td colspan="2" title="@_f.tra("Aktivita")">
                             <span class="val-readonly" id="Rec_Aktivita"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="width:150px;">
                             @_f.tra("Vykázáno"):
                         </td>
                         <td>
@@ -168,7 +156,7 @@
                     </tr>
                     <tr id="trSazba" data-p33id="13">
                         <td>
-                            @_f.tra("Sazba"):
+                            @_f.tra("Výchozí fakturační sazba"):
                         </td>
                         <td>
                             <span class="val-readonly" id="Rec_Sazba"></span>
@@ -185,7 +173,7 @@
                     </tr>
                     <tr id="trSazbaKFakturaci" data-p33id="13">
                         <td>
-                            @_f.tra("Sazba")
+                            @_f.tra("Fakturační sazba")
                             <span id="j27code_sazba">:</span>
                         </td>
                         <td>
@@ -223,7 +211,7 @@
                     </tr>
                     <tr id="trPopis">
                         <td colspan="2">
-                            <textarea class="form-control" id="Rec_Popis"></textarea>
+                            <textarea class="form-control" id="Rec_Popis" style="max-height:300px !important;overflow:auto !important;"></textarea>
                         </td>
                     </tr>
                     <tr id="trHodinyInterni" data-p33id="1">
@@ -281,6 +269,30 @@ else
             LocalAfterGridRefresh();
         });
 
+        
+        _resize_textareas();        
+        if ($("#Rec_Pid").val() == "0" || $("#Rec_Pid").val() == "") {            
+            //automaticky označit první záznam v gridu
+            var rows = $('#tabgrid1 tr');
+            if (rows.length > 0) {
+                var pid = rows[0].id.replace("r", "");
+                $("#Rec_Pid").val(pid);
+                LocalAfterGridRefresh();
+            }
+        }
+
+
+        $("#cmdSaveOnly").click(function () {
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            postback("saveonly")
+        });
+        $("#cmdSaveAndBilling").click(function () {
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            postback("saveandbilling")
+        });
+        
     });
 
 
@@ -302,8 +314,29 @@ else
                 $("#chkp72ID_" + data.p72id).prop("checked", true);
             }
 
-            $("#Rec_Jmeno").text(data.jmeno);
-            $("#Rec_Datum").text(data.datum);
+            //$("#Rec_Jmeno").text(data.jmeno);
+            var datjme = data.datum;                        
+            switch (data.p71id) {
+                case 2:
+                    datjme += "😡"; break;
+                case 0:
+                    datjme += "😶"; break;
+                default:
+                    switch (data.p72id) {
+                        case 4:
+                            datjme += "😀"; break;
+                        case 6:
+                            datjme += "😏"; break;
+                        case 2:
+                            datjme += "😒"; break;
+                        case 3:
+                            datjme += "😖"; break;
+                        case 7:
+                            datjme += "😉"; break;
+                    }
+            }           
+            $("#Rec_Datum").text(datjme + " " + data.jmeno);
+
             $("#Rec_Projekt").text(data.projekt);
             $("#Rec_Aktivita").text(data.aktivita);
             $("#Rec_Vykazano").text(data.vykazano)
@@ -332,7 +365,7 @@ else
             handle_rec_change();
 
 
-            $("#lblProjekt").html(data.pl+":");
+            $("#tdProjekt").attr("title", data.pl);
             _resize_textareas();
         });
     }

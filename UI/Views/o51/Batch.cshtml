@@ -16,15 +16,15 @@
 <form id="form1" asp-controller="o51" asp-action="Batch" method="POST">
 
     <div class="bg-light" style="padding:10px;">
-        <button type="submit" class="btn btn-primary" asp-route-oper="append" style="display:none;">@_f.tra("Oštítkovat záznamy")</button>
+        <button type="submit" class="btn btn-primary" asp-route-oper="append" style="display:none;"><span class="material-icons-outlined-btn">done</span>@_f.tra("Oštítkovat záznamy")</button>
 
-        <button type="submit" class="btn btn-success" asp-route-oper="replace">@_f.tra("V záznamech aktualizovat zvolený štítek")</button>
+        <button type="submit" class="btn btn-success" asp-route-oper="replace"><span class="material-icons-outlined-btn">sync</span>@_f.tra("V záznamech aktualizovat zvolený štítek")</button>
 
         <button type="submit" class="btn btn-warning" asp-route-oper="remove" style="display:none;">@_f.tra("V záznamech vyjmout vybrané štítky")</button>
 
-        <button type="submit" class="btn btn-danger" asp-route-oper="clear">@_f.tra("V záznamech vyčistit všechny položky vybraného štítku")</button>
+        <button type="submit" class="btn btn-danger" asp-route-oper="clear"><span class="material-icons-outlined-btn">clear</span>@_f.tra("V záznamech vyčistit všechny položky vybraného štítku")</button>
 
-        <button type="button" onclick="_window_close()" class="btn btn-light">@_f.tra("Zavřít")</button>
+        <button type="button" onclick="_window_close()" class="btn btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
 
 
 

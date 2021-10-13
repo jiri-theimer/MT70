@@ -107,7 +107,8 @@ namespace BL
             oc = AF("KorekceSchvalHodin", "Rozdíl hodin", "case when a.p71ID=1 AND p34x.p33ID=1 and a.p31Hours_Approved_Billing<>p31Hours_Orig then a.p31Hours_Approved_Billing-p31Hours_Orig end", "num",true);
             oc = AF("KorekceSchvalBezDph", "Rozdíl Bez dph", "case when a.p71ID=1 AND a.p31Amount_WithoutVat_Approved<>a.p31Amount_WithoutVat_Orig then a.p31Amount_WithoutVat_Approved-a.p31Amount_WithoutVat_Orig end", "num", true);
 
-            oc = AF("SchvalovaniText", "Upravit text úkonu", "CASE WHEN CHARINDEX(CHAR(10),a.p31Text)>0 OR LEN(a.p31Text)>170 THEN '<textarea onchange=''p31text_temp(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;height:100px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' ELSE '<textarea onchange=''p31text_temp(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' END");
+            //oc = AF("SchvalovaniText", "Upravit text úkonu", "CASE WHEN CHARINDEX(CHAR(10),a.p31Text)>0 OR LEN(a.p31Text)>170 THEN '<textarea onchange=''p31text_temp(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;height:100px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' ELSE '<textarea onchange=''p31text_temp(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>' END");
+            oc = AF("SchvalovaniText", "Upravit text úkonu", "'<textarea onchange=''p31text_temp(this,'+convert(varchar(10),a.p31ID)+')'' style=''width:349px;overflow:auto;''>'+ISNULL(a.p31Text,'')+'</textarea>'");
             oc.FixedWidth = 350; oc.IsSortable = false;
 
             this.CurrentFieldGroup = "Nákladová cena";//-----------Nákladová cena---------------------
