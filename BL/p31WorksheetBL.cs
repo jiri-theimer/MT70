@@ -27,7 +27,7 @@ namespace BL
         public IEnumerable<BO.p31WorksheetTimelineDay> GetList_TimelineDays(List<int> j02ids, DateTime d1, DateTime d2, int j70id);
         public BO.p31Rate LoadRate(BO.p51TypeFlagENUM flag, DateTime d, int j02id, int p41id, int p32id);
         public BO.p72IdENUM Get_p72ID_NonBillableWork(int p31id);
-        public bool Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata);
+        public bool Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata,bool isvalidatebefore);
         public bool Validate_Before_Save_Approving(BO.p31WorksheetApproveInput c, bool istempdata);
         public void DeleteTempRecord(string guid, int p31id);
 
@@ -651,9 +651,13 @@ namespace BL
             _db.RunSql("DELETE FROM p31Worksheet_Temp where p31GUID=@guid AND p31ID=@pid", new { guid = guid, pid = p31id });
         }
 
-        public bool Save_Approving(BO.p31WorksheetApproveInput c,bool istempdata)
+        public bool Save_Approving(BO.p31WorksheetApproveInput c,bool istempdata, bool isvalidatebefore)
         {
-            if (!Validate_Before_Save_Approving(c, istempdata)) return false;
+            if (isvalidatebefore)
+            {
+                if (!Validate_Before_Save_Approving(c, istempdata)) return false;
+            }
+            
 
             var pars = new Dapper.DynamicParameters();
             if (!string.IsNullOrEmpty(c.Guid))
@@ -662,8 +666,24 @@ namespace BL
             }
             pars.Add("p31id", c.p31ID, System.Data.DbType.Int32);
             pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);
-            pars.Add("p71id", (int)c.p71id, System.Data.DbType.Int32);
-            pars.Add("p72id", (int)c.p72id, System.Data.DbType.Int32);
+            if (c.p71id == BO.p71IdENUM.Nic)
+            {
+                pars.Add("p71id", null, System.Data.DbType.Int32);
+                pars.Add("p72id", null, System.Data.DbType.Int32);
+            }
+            else
+            {
+                pars.Add("p71id", (int)c.p71id, System.Data.DbType.Int32);
+                if (c.p72id == BO.p72IdENUM._NotSpecified)
+                {
+                    pars.Add("p72id", null, System.Data.DbType.Int32);
+                }
+                else
+                {
+                    pars.Add("p72id", (int)c.p72id, System.Data.DbType.Int32);
+                }
+            }
+                        
             pars.Add("approvingset", null, System.Data.DbType.String);
             pars.Add("value_approved_internal", c.Value_Approved_Internal, System.Data.DbType.Double);
             pars.Add("value_approved_billing", c.Value_Approved_Billing, System.Data.DbType.Double);

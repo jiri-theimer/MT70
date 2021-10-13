@@ -254,13 +254,13 @@ namespace UI.Controllers
                 switch (c.p71id)
                 {
                     case BO.p71IdENUM.Nic:
-                        if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                        if (!Factory.p31WorksheetBL.Save_Approving(c, true,true))
                         {
                             errs.Add("#"+x.ToString()+": "+Factory.GetFirstNotifyMessage());
                         }
                         break;
                     case BO.p71IdENUM.Neschvaleno:
-                        if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                        if (!Factory.p31WorksheetBL.Save_Approving(c, true,true))
                         {
                             errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
                         }
@@ -317,7 +317,7 @@ namespace UI.Controllers
             {
                 case BO.p71IdENUM.Nic:
                     //rozpracováno
-                    if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                    if (!Factory.p31WorksheetBL.Save_Approving(c, true,true))
                     {
                         ret.Message = Factory.GetFirstNotifyMessage();
                         ret.Flag = BO.ResultEnum.Failed;
@@ -329,7 +329,7 @@ namespace UI.Controllers
                     }                    
                 case BO.p71IdENUM.Neschvaleno:
                     //neschváleno
-                    if (Factory.p31WorksheetBL.Save_Approving(c, true))
+                    if (Factory.p31WorksheetBL.Save_Approving(c, true,true))
                     {
                         return ret;
                     }
@@ -392,7 +392,7 @@ namespace UI.Controllers
 
                     break;
             }
-            if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+            if (!Factory.p31WorksheetBL.Save_Approving(c, true,true))
             {
                 ret.Message = Factory.GetFirstNotifyMessage();
                 ret.Flag = BO.ResultEnum.Failed;                
@@ -410,7 +410,7 @@ namespace UI.Controllers
 
             foreach (var rec in v.lisP31)
             {
-                var c = new BO.p31WorksheetApproveInput() { p31ID = rec.pid, p33ID = rec.p33ID,p31Date=rec.p31Date,p31Text=rec.p31Text };
+                var c = new BO.p31WorksheetApproveInput() { p31ID = rec.pid, p33ID = rec.p33ID,p31Date=rec.p31Date,p31Text=rec.p31Text,p32ID=rec.p32ID, p32ManualFeeFlag=rec.p32ManualFeeFlag };
                 c.p71id = rec.p71ID;
                 c.p31ApprovingLevel = rec.p31ApprovingLevel;
                 c.p72id = rec.p72ID_AfterApprove;
@@ -418,13 +418,33 @@ namespace UI.Controllers
                 c.Value_Approved_Billing = rec.p31Value_Approved_Billing;
                 c.Value_Approved_Internal = rec.p31Value_Approved_Internal;
                
-                c.Rate_Billing_Approved = rec.p31Rate_Billing_Approved;
+                
                 c.Rate_Internal_Approved = rec.p31Rate_Internal_Approved;
 
-                c.p31Value_FixPrice = rec.p31Value_FixPrice;
-                c.VatRate_Approved = rec.p31VatRate_Approved;
+                if (c.p72id == BO.p72IdENUM.ZahrnoutDoPausalu)
+                {
+                    c.p31Value_FixPrice = rec.p31Value_FixPrice;
+                }
+                else
+                {
+                    c.p31Value_FixPrice = 0;
+                }
+                if (rec.p32ManualFeeFlag == 1)
+                {
+                    c.p32ManualFeeFlag = 1;
+                    c.ManualFee_Approved = rec.p31Amount_WithoutVat_Approved;
+                }
+                else
+                {
+                    c.Rate_Billing_Approved = rec.p31Rate_Billing_Approved;
+                }
+                if (c.p33ID == BO.p33IdENUM.PenizeBezDPH || c.p33ID==BO.p33IdENUM.PenizeVcDPHRozpisu)
+                {
+                    c.VatRate_Approved = rec.p31VatRate_Approved;
+                }
+                
 
-                if (!Factory.p31WorksheetBL.Save_Approving(c, false))
+                if (!Factory.p31WorksheetBL.Save_Approving(c, false,true))
                 {
                     errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
                 }
