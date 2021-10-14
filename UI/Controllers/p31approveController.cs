@@ -75,6 +75,9 @@ namespace UI.Controllers
                 case "rate":
                     UpdateTempRate(v.batchpids, v.BatchInvoiceRate, v.tempguid);                    
                     return View(v);
+                case "approvinglevel":
+                    UpdateTempApprovingLevel(v.batchpids, v.BatchApproveLevel, v.tempguid);
+                    return View(v);
 
             }
 
@@ -450,17 +453,17 @@ namespace UI.Controllers
         }
 
 
-        private bool UpdateTempRate(string pids, double newrate, string guid)
+        private void UpdateTempRate(string pids, double newrate, string guid)
         {
             
             if (newrate <= 0)
             {
                 this.AddMessage("Fakturační sazba musí být větší než NULA.");
-                return false;
+                return;
             }
             var p31ids = BO.BAS.ConvertString2ListInt(pids);
-            var errs = new List<string>();
             int x = 1;
+      
             foreach (int p31id in p31ids)
             {
                 var rec = Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
@@ -469,26 +472,38 @@ namespace UI.Controllers
                 c.Rate_Billing_Approved = newrate;
                 if (rec.p33ID !=BO.p33IdENUM.Cas && rec.p33ID != BO.p33IdENUM.Kusovnik)
                 {
-
+                    this.AddMessageTranslated("#" + x.ToString() + ": " + Factory.tra("Sazbu lze měnit pouze pro časové nebo kusovníkové úkony."));
                 }
-                if (!Factory.p31WorksheetBL.Save_Approving(c, true, true))
+                else
                 {
-                    errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
+                    Factory.p31WorksheetBL.Save_Approving(c, true, true);
                 }
+                
                 x += 1;
-            }
-
-            if (errs.Count() > 0)
-            {
-                //this.AddMessageTranslated(string.Join("<hr>", errs));
-                return false;
             }
 
             
 
-            return true;
-
         }
 
+        private void UpdateTempApprovingLevel(string pids, int newlevel, string guid)
+        {
+
+           
+            var p31ids = BO.BAS.ConvertString2ListInt(pids);
+            foreach (int p31id in p31ids)
+            {
+                var rec = Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
+                var c = BL.bas.p31Support.InhaleApprovingInput(rec);
+                c.Guid = guid;
+                c.p31ApprovingLevel = newlevel;
+             
+                Factory.p31WorksheetBL.Save_Approving(c, true, true);
+
+            }
+
+
+
+        }
     }
 }

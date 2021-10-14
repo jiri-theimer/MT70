@@ -103,7 +103,7 @@
                             </select>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-secondary" onclick="batch_level()">OK</button>
+                            <button type="button" class="btn btn-secondary" onclick="batch_approvinglevel()">OK</button>
                         </td>
                     </tr>
                 </table>
@@ -317,7 +317,7 @@ else
             if (rows.length > 0) {
                 var pid = rows[0].id.replace("r", "");
                 $("#Rec_Pid").val(pid);
-                LocalAfterGridRefresh();
+                //LocalAfterGridRefresh();
             }
         }
         
@@ -354,6 +354,7 @@ else
                 return;
             }
             $("#Rec_Pid").val(pid);
+            $("#batchpids").val("");
             $("#Rec_p33ID").val(data.p33id);
 
             $("#chkp71ID_" + data.p71id).prop("checked", true);
@@ -545,14 +546,16 @@ else
             _notify_message(_tg_musite_vybrat_zaznam);
             return;
         }
-
+        $("#batchpids").val(pids);
 
         $.post(_ep("/p31approve/SaveTempBatch"), { pids: pids, p71id: p71id, p72id: p72id, guid: _guid }, function (data) {
             if (data.message != null) {
                 _notify_message(data.message);
             }
 
+            
             tg_post_handler("refresh");
+            tg_select_explicit_pids(pids);
             //LocalAfterGridRefresh();
 
         });
@@ -581,5 +584,17 @@ else
         postback("rate");
 
         
+    }
+
+    function batch_approvinglevel() {
+        var pids = $("#tg_selected_pids").val();
+        if (pids === "") {
+            _notify_message(_tg_musite_vybrat_zaznam);
+            return;
+        }
+        $("#batchpids").val(pids);
+        postback("approvinglevel");
+
+
     }
 </script>
