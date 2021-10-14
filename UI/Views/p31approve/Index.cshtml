@@ -310,21 +310,9 @@ else
         });
 
         
-        _resize_textareas();        
-        if ($("#Rec_Pid").val() == "0" || $("#Rec_Pid").val() == "") {            
-            //automaticky označit první záznam v gridu
-            var rows = $('#tabgrid1 tr');
-            if (rows.length > 0) {
-                var pid = rows[0].id.replace("r", "");
-                $("#Rec_Pid").val(pid);
-                //LocalAfterGridRefresh();
-            }
-        }
+        _resize_textareas();                            
         
-        if ($("#batchpids").val() != "") {
-            
-            tg_select_explicit_pids($("#batchpids").val());            
-        }
+        
 
 
         $("#cmdSaveOnly").click(function () {
@@ -340,6 +328,17 @@ else
         $("#cmdMore").click(function () {
             $("#divMore").toggle();
         });
+
+        
+        if ($("#batchpids").val() == "" && ($("#Rec_Pid").val() == "0" || $("#Rec_Pid").val() == "")) {
+            //automaticky označit první záznam v gridu            
+            var rows = $('#tabgrid1 tr');
+            if (rows.length > 0) {
+                var pid = rows[0].id.replace("r", "");
+                $("#Rec_Pid").val(pid);                
+            }
+        }
+        LocalAfterGridRefresh();
         
     });
 
@@ -481,7 +480,8 @@ else
     function hardrefresh(pid, flag) {        
         if (flag.toLowerCase().indexOf("p31/record")>0)
         {
-            LocalAfterGridRefresh();
+
+            tg_post_handler("refresh");
             return;
         }
         
@@ -528,16 +528,29 @@ else
 
 
     function LocalAfterGridRefresh() {
+                
+        var pids = $("#batchpids").val();
+        if (pids != "") {
+            tg_select_explicit_pids(pids,true);
+            var arr = pids.split(",");
+            $("#Rec_Pid").val(arr[0]);           
+            thegrid_handle_rowselect(arr[0]);
+            return;
+        }
         
         var pid = $("#Rec_Pid").val();
-        tg_go2pid(pid);
-        thegrid_handle_rowselect(pid);
+        if (pid != "" && pid !="0") {
+            tg_go2pid(pid);
+            thegrid_handle_rowselect(pid);
+        }
+        
         
     }
 
     function edit_source_rec() {
         var pid = $("#Rec_Pid").val();
         _window_open("/p31/Record?pid=" + pid + "&approve_guid=" + _guid);
+        
     }
 
     function batch(p71id, p72id) {
@@ -552,11 +565,10 @@ else
             if (data.message != null) {
                 _notify_message(data.message);
             }
-
             
-            tg_post_handler("refresh");
-            tg_select_explicit_pids(pids);
-            //LocalAfterGridRefresh();
+            tg_post_handler("refresh");            
+            
+
 
         });
     }

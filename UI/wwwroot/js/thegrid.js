@@ -418,7 +418,7 @@ function tg_go2pid(pid) {       //již musí být ze serveru odstránkováno!
 
 }
 
-function tg_select_explicit_pids(pids) {
+function tg_select_explicit_pids(pids,scroll_into_view) {
     if (pids === null || pids === "") {
         return;
     }
@@ -436,6 +436,12 @@ function tg_select_explicit_pids(pids) {
         }
                 
         tg_save_selected_pids(arr.join(","));
+    }
+
+    if (scroll_into_view && arr.length>0)
+    {
+        var row = document.getElementById("r" + arr[0]);
+        row.scrollIntoView({ block: "start", behavior: "smooth" });
     }
 }
 
