@@ -62,19 +62,19 @@ namespace UI.Controllers
             switch (oper)
             {
                 case "saveonly":
-                case "saveandbilling":
-                    var errs=SaveApproving(v);
-                    if (errs.Count == 0)
+                case "saveandbilling":                   
+                    if (SaveApproving(v))
                     {
                         v.SetJavascript_CallOnLoad(0);
                         return View(v);
                     }
                     else
-                    {
-                        this.AddMessageTranslated(string.Join("<hr>", errs));
+                    {                        
                         return View(v);
                     }
-                   
+                case "rate":
+                    UpdateTempRate(v.batchpids, v.BatchInvoiceRate, v.tempguid);                    
+                    return View(v);
 
             }
 
@@ -235,6 +235,8 @@ namespace UI.Controllers
             return c;
         }
 
+        
+
         public BO.Result SaveTempBatch(string pids,int p71id,int p72id,string guid)
         {
             var ret = new BO.Result(false);
@@ -277,7 +279,7 @@ namespace UI.Controllers
                             if (c.Value_Approved_Billing==0) c.Value_Approved_Billing = rec.p31Value_Orig;
                             
                         }
-                        if (!Factory.p31WorksheetBL.Save_Approving(c, true))
+                        if (!Factory.p31WorksheetBL.Save_Approving(c, true,true))
                         {
                             errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
                         }
@@ -292,7 +294,7 @@ namespace UI.Controllers
 
             return ret;
         }
-
+        
         public BO.Result UpdateTempText(int p31id, string s, string guid)
         {
             if (Factory.p31WorksheetBL.UpdateTempText(p31id,s, guid))
@@ -402,56 +404,91 @@ namespace UI.Controllers
 
         }
 
-        private List<string> SaveApproving(GatewayViewModel v)
+        private bool SaveApproving(GatewayViewModel v)
         {
-            var errs = new List<string>();int x = 1;
+            
             var mq = new BO.myQueryP31() { tempguid = v.tempguid };
             v.lisP31 = Factory.p31WorksheetBL.GetList(mq);
-
-            foreach (var rec in v.lisP31)
+            if (v.lisP31.Count() == 0)
             {
-                var c = new BO.p31WorksheetApproveInput() { p31ID = rec.pid, p33ID = rec.p33ID,p31Date=rec.p31Date,p31Text=rec.p31Text,p32ID=rec.p32ID, p32ManualFeeFlag=rec.p32ManualFeeFlag };
-                c.p71id = rec.p71ID;
-                c.p31ApprovingLevel = rec.p31ApprovingLevel;
-                c.p72id = rec.p72ID_AfterApprove;
+                this.AddMessage("Žádné úkony ke schválení.");
+                return false;
+            }
 
-                c.Value_Approved_Billing = rec.p31Value_Approved_Billing;
-                c.Value_Approved_Internal = rec.p31Value_Approved_Internal;
-               
-                
-                c.Rate_Internal_Approved = rec.p31Rate_Internal_Approved;
+            for(int pokus = 1; pokus <= 2; pokus++)
+            {
+                //pokus=1:kontrola, pokus=2:uložení
+                var errs = new List<string>(); int x = 1;
+                if (pokus==2 && errs.Count > 0)
+                {
+                    this.AddMessageTranslated(string.Join("<hr>", errs));
+                    return false;
+                }
+                foreach (var rec in v.lisP31)
+                {
+                    var c = BL.bas.p31Support.InhaleApprovingInput(rec);
 
-                if (c.p72id == BO.p72IdENUM.ZahrnoutDoPausalu)
-                {
-                    c.p31Value_FixPrice = rec.p31Value_FixPrice;
+                    if (pokus == 1)
+                    {
+                        if (!Factory.p31WorksheetBL.Validate_Before_Save_Approving(c,false))
+                        {
+                            errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
+                        }
+                    }
+                    else
+                    {
+                        Factory.p31WorksheetBL.Save_Approving(c, false, true);
+                    }
+                    
+                    x += 1;
                 }
-                else
-                {
-                    c.p31Value_FixPrice = 0;
-                }
-                if (rec.p32ManualFeeFlag == 1)
-                {
-                    c.p32ManualFeeFlag = 1;
-                    c.ManualFee_Approved = rec.p31Amount_WithoutVat_Approved;
-                }
-                else
-                {
-                    c.Rate_Billing_Approved = rec.p31Rate_Billing_Approved;
-                }
-                if (c.p33ID == BO.p33IdENUM.PenizeBezDPH || c.p33ID==BO.p33IdENUM.PenizeVcDPHRozpisu)
-                {
-                    c.VatRate_Approved = rec.p31VatRate_Approved;
-                }
-                
+            }
 
-                if (!Factory.p31WorksheetBL.Save_Approving(c, false,true))
+
+
+            return true;
+        }
+
+
+        private bool UpdateTempRate(string pids, double newrate, string guid)
+        {
+            
+            if (newrate <= 0)
+            {
+                this.AddMessage("Fakturační sazba musí být větší než NULA.");
+                return false;
+            }
+            var p31ids = BO.BAS.ConvertString2ListInt(pids);
+            var errs = new List<string>();
+            int x = 1;
+            foreach (int p31id in p31ids)
+            {
+                var rec = Factory.p31WorksheetBL.LoadTempRecord(p31id, guid);
+                var c = BL.bas.p31Support.InhaleApprovingInput(rec);
+                c.Guid = guid;
+                c.Rate_Billing_Approved = newrate;
+                if (rec.p33ID !=BO.p33IdENUM.Cas && rec.p33ID != BO.p33IdENUM.Kusovnik)
+                {
+
+                }
+                if (!Factory.p31WorksheetBL.Save_Approving(c, true, true))
                 {
                     errs.Add("#" + x.ToString() + ": " + Factory.GetFirstNotifyMessage());
                 }
                 x += 1;
             }
 
-            return errs;
+            if (errs.Count() > 0)
+            {
+                //this.AddMessageTranslated(string.Join("<hr>", errs));
+                return false;
+            }
+
+            
+
+            return true;
+
         }
+
     }
 }

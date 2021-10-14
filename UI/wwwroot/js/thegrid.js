@@ -418,6 +418,27 @@ function tg_go2pid(pid) {       //již musí být ze serveru odstránkováno!
 
 }
 
+function tg_select_explicit_pids(pids) {
+    if (pids === null || pids === "") {
+        return;
+    }
+    tg_clear_selection();
+    var arr = [];
+    var rows = $("#tabgrid1_tbody tr");
+    pids = ","+pids + ",";
+
+    for (var i = 0; i < rows.length; i++) {
+        var pid = rows[i].id.replace("r", "");
+        if (pids.indexOf(","+pid+",") > -1) {
+            $(rows[i]).addClass("selrow");
+            arr.push(pid);
+            $("#chk" + pid).prop("checked", true);
+        }
+                
+        tg_save_selected_pids(arr.join(","));
+    }
+}
+
 function tg_select(records_count) {     //označí prvních X (records_count) záznamů
     tg_clear_selection();
     var arr = [];

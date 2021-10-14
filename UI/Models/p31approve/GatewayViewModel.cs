@@ -41,6 +41,10 @@ namespace UI.Models.p31approve
         
         public string P31StateQueryCssClass { get; set; }
         public string P31StateQueryAlias { get; set; }
+
+        public string batchpids { get; set; }
+        public double BatchInvoiceRate { get; set; }
+        public int BatchApproveLevel { get; set; }
         
     }
 }

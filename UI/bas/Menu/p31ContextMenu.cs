@@ -40,7 +40,9 @@ namespace UI.Menu
 
             if (disp.CanApprove || disp.CanApproveAndEdit)
             {
-                AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p31&pids={pid}',2)", "approval");
+                AMI(BO.BAS.IIFS(rec.p71ID == BO.p71IdENUM.Nic, "Schválit/Vyúčtovat","Pře-schválit/Vyúčtovat"), $"javascript: _window_open('/p31approve/Index?prefix=p31&pids={pid}', 2)", "approval");
+
+
             }
             
 

@@ -26,10 +26,10 @@
             </div>
         </div>
 
-        
+
 
         <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-sm btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
-        
+
 
     </div>
     <div class="input-group m-0">
@@ -69,8 +69,46 @@
             <button type="button" class="btn btn-sm btn-outline-secondary" id="cmdBatch0" onclick="batch(0,0)"><span class="material-icons-outlined-btn">backspace</span>@_f.tra("Rozpracováno")</button>
 
         </div>
+        <div style="margin-left:5px;">
+            <button class="btn btn-outline-secondary dropdown-toggle py-1" type="button" id="cmdMore">@_f.tra("Více")</button>
+        </div>
 
-        
+    </div>
+
+    <div id="divMore" style="background-color:aliceblue;display:none;">
+        <div class="card">
+
+            <div class="card-body">
+                <table>
+                    <tr>
+                        <td>
+                            @_f.tra("Vybraným nahodit fakturační sazbu"):
+                        </td>
+                        <td>
+                            <mynumber asp-for="@Model.BatchInvoiceRate"></mynumber>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-secondary" onclick="batch_rate()">OK</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @_f.tra("Vybraným nahodit schvalovací úroveň"):
+                        </td>
+                        <td>
+                            <select class="form-control" asp-for="@Model.BatchApproveLevel">
+                                <option value="0">#0</option>
+                                <option value="1">#1</option>
+                                <option value="2">#2</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-secondary" onclick="batch_level()">OK</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 
 
@@ -80,7 +118,9 @@
     <input type="hidden" asp-for="@Model.Rec_Pid" />
     <input type="hidden" asp-for="@Model.Rec_p33ID" />
     <input type="hidden" asp-for="@Model.SelectedTab" />
-    
+    <input type="hidden" asp-for="@Model.SelectedTab" />
+    <input type="hidden" asp-for="@Model.batchpids" />
+
 </form>
 @if (_f.CurrentUser.j03Ping_InnerWidth > 1200)
 {
@@ -280,6 +320,11 @@ else
                 LocalAfterGridRefresh();
             }
         }
+        
+        if ($("#batchpids").val() != "") {
+            
+            tg_select_explicit_pids($("#batchpids").val());            
+        }
 
 
         $("#cmdSaveOnly").click(function () {
@@ -291,6 +336,9 @@ else
             $(this).text("Processing...");
             $(this).attr("disabled", true);
             postback("saveandbilling")
+        });
+        $("#cmdMore").click(function () {
+            $("#divMore").toggle();
         });
         
     });
@@ -521,5 +569,17 @@ else
             }                        
 
         });
+    }
+
+    function batch_rate() {
+        var pids = $("#tg_selected_pids").val();
+        if (pids === "") {
+            _notify_message(_tg_musite_vybrat_zaznam);
+            return;
+        }
+        $("#batchpids").val(pids);
+        postback("rate");
+
+        
     }
 </script>
