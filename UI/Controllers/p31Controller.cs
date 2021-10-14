@@ -37,7 +37,17 @@ namespace UI.Controllers
             switch (newrec_prefix)
             {
                 case "p41":
-                    v.Rec.p41ID = newrec_pid;                    
+                    v.Rec.p41ID = newrec_pid;
+                    v.RecP41 = Factory.p41ProjectBL.Load(newrec_pid);
+                    v.SelectedLevelIndex = v.RecP41.p07Level;
+                    break;
+                case "le5":
+                case "le4":
+                case "le3":
+                case "le2":
+                case "le1":
+                    v.Rec.p41ID = newrec_pid;
+                    v.SelectedLevelIndex =Convert.ToInt32(BO.BAS.RightString(newrec_prefix,1));
                     break;
                 case "p32":
                     v.RecP32 = Factory.p32ActivityBL.Load(newrec_pid);
@@ -88,7 +98,7 @@ namespace UI.Controllers
                 }
                 LoadRecordSetting(v);
                 v.Rec = Factory.p31WorksheetBL.CovertRec2Input(recP31,v.Setting.TimesheetEntryByMinutes);
-                                
+                                              
                 v.p31Date = v.Rec.p31Date;
                 v.SelectedComboP32Name = recP31.p32Name;
                 v.SelectedComboP34Name = recP31.p34Name;
@@ -96,6 +106,8 @@ namespace UI.Controllers
                 v.SelectedComboProject = recP31.Project;
                 v.SelectedComboTask = recP31.p56Name;
                 v.SelectedComboJ27Code = recP31.j27Code_Billing_Orig;
+                if (v.RecP41 == null) v.RecP41 = Factory.p41ProjectBL.Load(v.Rec.p41ID);
+                v.SelectedLevelIndex = v.RecP41.p07Level;
 
                 if (v.Rec.p28ID_Supplier > 0)
                 {
@@ -134,7 +146,10 @@ namespace UI.Controllers
 
         private void Handle_Defaults(p31Record v)
         {
-            v.SelectedLevelIndex = 5;
+            if (v.SelectedLevelIndex == 0)
+            {
+                v.SelectedLevelIndex = 5;
+            }
             if (v.p31Date == null)
             {
                 v.p31Date = DateTime.Today;

@@ -26,9 +26,14 @@ namespace UI.Menu
 
         
 
-        public MenuItem AMI(string strName, string strUrl, string icon = null, string strParentID = null, string strID = null, string strTarget = null)
+        public MenuItem AMI(string strName, string strUrl, string icon = null, string strParentID = null, string strID = null, string strTarget = null,string strAfterName=null)
         {
-            var c = new MenuItem() { Name = _f.tra(strName), Url = strUrl, Target = strTarget, ID = strID, ParentID = strParentID, Icon = icon };
+            var c = new MenuItem() { Url = strUrl, Target = strTarget, ID = strID, ParentID = strParentID, Icon = icon };
+            c.Name = _f.tra(strName);
+            if (strAfterName != null)
+            {
+                c.Name += " " + strAfterName;
+            }
             _lis.Add(c);
             return c;
         }

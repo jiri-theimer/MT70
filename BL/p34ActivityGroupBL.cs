@@ -48,7 +48,7 @@ namespace BL
             {
                 strEntryFlags = "1,2,4";
             }
-            string s = "INNER JOIN p43ProjectType_Workload p43 ON a.p34ID=p43.p34ID";
+            string s = " INNER JOIN p43ProjectType_Workload p43 ON a.p34ID=p43.p34ID";
             s += " WHERE p43.p42ID=@p42id AND a.p34ValidFrom<=getdate() AND a.p34ValidUntil>=getdate()";
             if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P31_Creator))
             {

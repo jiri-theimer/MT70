@@ -45,6 +45,52 @@ namespace UI.Menu
                 AMI_Clone("p41", pid);
             }
 
+            if (!rec.isclosed && !rec.p41IsDraft && _f.CurrentUser.j04IsMenu_Worksheet)
+            {
+                DIV();                
+                var lisP34 = _f.p34ActivityGroupBL.GetList_WorksheetEntryInProject(rec.pid, rec.p42ID, _f.CurrentUser.j02ID);
+                if (lisP34.Count() > 0)
+                {
+                    AMI("Vykázat úkon", null, "approval", null, "p31create");
+                    foreach (BO.p34ActivityGroup c in lisP34.Take(10))
+                    {
+                        string strIcon = "more_time";
+                        switch (c.p33ID)
+                        {
+                            case BO.p33IdENUM.Kusovnik:
+                                strIcon = "handyman"; break;
+                            case BO.p33IdENUM.PenizeBezDPH:
+                            case BO.p33IdENUM.PenizeVcDPHRozpisu:
+                                strIcon = "paid"; break;
+                        }
+                        AMI(c.p34Name, $"javascript: _window_open('/p31/Record?newrec_prefix=p41&newrec_pid={pid}&p34id={c.pid}')", strIcon, "p31create");
+                    }
+                }
+                
+
+                var mq = new BO.myQueryP31() { isinvoiced=false };                
+                if (rec.p07Level < 5)
+                {
+                    mq.leindex = rec.p07Level;
+                    mq.lepid = rec.pid;
+                }
+                else
+                {
+                    mq.p41id = rec.pid;
+                }                
+                var lisP31 = _f.p31WorksheetBL.GetList(mq);
+                if (lisP31.Count() > 0)
+                {
+                    
+                    int intWIP = lisP31.Where(p => p.p71ID ==BO.p71IdENUM.Nic).Count();
+                    int intAPP = lisP31.Where(p => p.p71ID != BO.p71IdENUM.Nic).Count();
+                    AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p41&pids={pid}', 2)", "approval",null,null,null,"("+intWIP.ToString()+"x + "+intAPP.ToString()+"x)");
+                }
+                
+
+            }
+            
+
             DIV();
             AMI_Report("p41", pid);
 
