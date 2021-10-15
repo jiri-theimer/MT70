@@ -296,5 +296,20 @@ namespace UI.Controllers
             }
             return true;
         }
+
+        public IActionResult SelectProject(string source_prefix, int source_pid,int leindex)
+        {
+            if (leindex == 0) leindex = 5;
+            var v = new UI.Models.p41.SelectProjectViewModel() { source_prefix = source_prefix,source_pid=source_pid,leindex=5 };
+
+            var mq = new BO.myQueryP41("le" + v.leindex.ToString());
+            switch (v.source_prefix)
+            {
+                case "p28":
+                    mq.p28id = v.source_pid;break;
+            }
+            v.lisP41 = Factory.p41ProjectBL.GetList(mq);
+            return View(v);
+        }
     }
 }

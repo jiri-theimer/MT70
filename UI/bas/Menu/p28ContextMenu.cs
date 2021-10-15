@@ -30,6 +30,21 @@ namespace UI.Menu
             }
 
             DIV();
+            var mq = new BO.myQueryP41("le5") { MyRecordsDisponible = true, p28id = rec.pid };
+            var lisP41 = _f.p41ProjectBL.GetList(mq);
+            if (lisP41.Count() > 0)
+            {
+                if (lisP41.Count() == 1)
+                {
+                    AMI("Vykázat úkon", $"javascript: _window_open('/p31/Record?newrec_prefix=p41&newrec_pid={lisP41.First().pid}')", "more_time");
+                }
+                else
+                {
+                    AMI("Vykázat úkon", $"javascript: _window_open('/p41/SelectProject?source_prefix=p28&source_pid={rec.pid}')", "more_time");
+                }
+            }
+            
+
             AMI_Report("p28", pid);
 
             DIV();

@@ -68,9 +68,9 @@ namespace UI.Views.Shared.TagHelpers
                 {
                     sb.AppendLine("<li>");
                 }
-                
-                sb.Append(string.Format("<input type='radio' id='chk{0}_{1}' name='my{0}' onclick='myradiolist_checked(\"{0}\",\"{1}\",\"{3}\")' {2} />", this.For.Name, strValue, strChecked,this.Event_After_ChangeValue));
-                sb.Append(string.Format("<label  for='chk{0}_{1}'>{2}</label>", this.For.Name, strValue, strText));
+
+                sb.Append($"<input type='radio' id='chk{this.For.Name}_{strValue}' name='my{this.For.Name}' onclick='myradiolist_checked(\"{this.For.Name}\",\"{strValue}\",\"{this.Event_After_ChangeValue}\")' {strChecked} />");
+                sb.Append($"<label  for='chk{this.For.Name}_{strValue}'>{strText}</label>");
                 
 
                 sb.AppendLine("</li>");
@@ -79,7 +79,7 @@ namespace UI.Views.Shared.TagHelpers
             }
             sb.AppendLine("</ul>");
 
-            sb.Append(string.Format("<input type='hidden' id='{0}' name='{0}' value='{1}' />", this.For.Name, strModelValue));
+            sb.Append($"<input type='hidden' id='{this.For.Name}' name='{this.For.Name}' value='{strModelValue}' />");
 
             output.Content.AppendHtml(sb.ToString());
 

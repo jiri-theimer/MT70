@@ -1,0 +1,58 @@
+﻿@model UI.Models.p41.SelectProjectViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Vybrat projekt");
+    Model.PageSymbol = BO.Symbol.p41();
+
+}
+
+@addTagHelper *, UI
+
+<div class="bg-light" style="padding:10px;">
+    <button type="button" id="cmdOK" class="btn btn-success"><span class="material-icons-outlined-btn">done</span>OK</button>
+
+    <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
+
+
+
+</div>
+
+<myradiolist asp-for="@Model.SelectedPid" datasource="@Model.lisP41" textfield="PrefferedName" valuefield="pid" event_after_changevalue="goon"></myradiolist>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#cmdOK").click(function () {
+            var prefix = "@Model.source_prefix";
+            var recpid = "@Model.source_pid";
+            var pid = $("#SelectedPid").val();
+            if (pid == "0" || pid == "") {
+                _notify_message("Musíte vybrat projekt.");
+                return;
+            }
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+
+            var url = _ep("/p31/Record?pid=0&p41id=" + pid);
+            
+
+            _redirect(url);
+
+
+        });
+
+
+
+    })
+
+
+    function goon(p41id) {
+        alert(p41id);
+    }
+
+
+</script>
