@@ -79,6 +79,36 @@ namespace UI.Menu
             return AMI("CHANGE-LOG", $"javascript: _window_open('/Record/ChangeLog?prefix={prefix}&pid={pid}',2)", "k-i-stick", parentmenuid);
         }
 
+        public void AMI_Vykazat(BO.p41Project rec,int p56id=0)
+        {
+            if (rec.isclosed || rec.p41IsDraft ||  !_f.CurrentUser.j04IsMenu_Worksheet)
+            {
+                return; //není oprávnění a podmínky pro vykazování úkonů v projektu
+            }
+            var lisP34 = _f.p34ActivityGroupBL.GetList_WorksheetEntryInProject(rec.pid, rec.p42ID, _f.CurrentUser.j02ID);
+            if (lisP34.Count() > 0)
+            {
+                AMI("Vykázat úkon", null, "approval", null, "p31create");
+                foreach (BO.p34ActivityGroup c in lisP34.Take(10))
+                {
+                    string strIcon = "more_time";
+                    switch (c.p33ID)
+                    {
+                        case BO.p33IdENUM.Kusovnik:
+                            strIcon = "handyman"; break;
+                        case BO.p33IdENUM.PenizeBezDPH:
+                        case BO.p33IdENUM.PenizeVcDPHRozpisu:
+                            strIcon = "paid"; break;
+                    }
+                    string url = $"javascript: _window_open('/p31/Record?newrec_prefix=p41&newrec_pid={rec.pid}&p34id={c.pid}')";
+                    if (p56id > 0)
+                    {
+                        url = $"javascript: _window_open('/p31/Record?newrec_prefix=p56&newrec_pid={p56id}&p34id={c.pid}')";
+                    }
+                    AMI(c.p34Name, url, strIcon, "p31create");
+                }
+            }
+        }
         public void DIV(string strName = null, string strParentID = null)
         {
             _lis.Add(new MenuItem() { IsDivider = true, Name = BO.BAS.OM2(strName, 30), ParentID = strParentID });
@@ -91,5 +121,7 @@ namespace UI.Menu
         {
             _lis.Add(new MenuItem() { IsHeader = true, Name = BO.BAS.OM2(strName, 100) });
         }
+
+
     }
 }

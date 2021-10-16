@@ -11,7 +11,7 @@ namespace UI.Menu
         {
             var rec = f.p56TaskBL.Load(pid);
             var disp = f.p56TaskBL.InhaleRecDisposition(rec);
-
+            
             if (source != "recpage")
             {
                 HEADER(rec.p57Name+": "+rec.p56Code);
@@ -30,6 +30,12 @@ namespace UI.Menu
             }
 
             DIV();
+            if (rec.p41ID > 0 && disp.IsReceiver)
+            {
+                var recP41 = _f.p41ProjectBL.Load(rec.p41ID);
+                AMI_Vykazat(recP41,pid);
+            }
+            
             AMI_Report("p56", pid);
 
             DIV();

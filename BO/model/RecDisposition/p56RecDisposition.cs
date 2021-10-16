@@ -8,5 +8,6 @@ namespace BO
 {
     public class p56RecDisposition: BaseRecDisposition
     {
+        public bool IsReceiver { get; set; }
     }
 }

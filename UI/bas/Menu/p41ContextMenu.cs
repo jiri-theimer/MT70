@@ -47,27 +47,9 @@ namespace UI.Menu
 
             if (!rec.isclosed && !rec.p41IsDraft && _f.CurrentUser.j04IsMenu_Worksheet)
             {
-                DIV();                
-                var lisP34 = _f.p34ActivityGroupBL.GetList_WorksheetEntryInProject(rec.pid, rec.p42ID, _f.CurrentUser.j02ID);
-                if (lisP34.Count() > 0)
-                {
-                    AMI("Vykázat úkon", null, "approval", null, "p31create");
-                    foreach (BO.p34ActivityGroup c in lisP34.Take(10))
-                    {
-                        string strIcon = "more_time";
-                        switch (c.p33ID)
-                        {
-                            case BO.p33IdENUM.Kusovnik:
-                                strIcon = "handyman"; break;
-                            case BO.p33IdENUM.PenizeBezDPH:
-                            case BO.p33IdENUM.PenizeVcDPHRozpisu:
-                                strIcon = "paid"; break;
-                        }
-                        AMI(c.p34Name, $"javascript: _window_open('/p31/Record?newrec_prefix=p41&newrec_pid={pid}&p34id={c.pid}')", strIcon, "p31create");
-                    }
-                }
+                DIV();
+                AMI_Vykazat(rec);
                 
-
                 var mq = new BO.myQueryP31() { isinvoiced=false };                
                 if (rec.p07Level < 5)
                 {

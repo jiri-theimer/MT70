@@ -152,6 +152,13 @@ namespace BL
         {
             var c = new BO.p56RecDisposition();
 
+            var lis = _mother.x67EntityRoleBL.GetList_X69(356, rec.pid);            
+            if (_mother.x67EntityRoleBL.IamReceiverOfList(lis))
+            {
+                c.IsReceiver = true;    //je řešitel úkolu
+            }
+            
+
             if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin)
             {
                 c.OwnerAccess = true; c.ReadAccess = true;

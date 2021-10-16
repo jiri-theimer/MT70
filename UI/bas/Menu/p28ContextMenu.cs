@@ -24,7 +24,7 @@ namespace UI.Menu
             
             DIV();
             if (disp.OwnerAccess)
-            {
+            {                
                 AMI("Upravit kartu klienta", $"javascript:_edit('p28',{pid})", "edit_note");
                 AMI_Clone("p28", pid);
             }
@@ -36,10 +36,10 @@ namespace UI.Menu
             {
                 if (lisP41.Count() == 1)
                 {
-                    AMI("Vykázat úkon", $"javascript: _window_open('/p31/Record?newrec_prefix=p41&newrec_pid={lisP41.First().pid}')", "more_time");
+                    AMI_Vykazat(lisP41.First());
                 }
                 else
-                {
+                {                    
                     AMI("Vykázat úkon", $"javascript: _window_open('/p41/SelectProject?source_prefix=p28&source_pid={rec.pid}')", "more_time");
                 }
             }

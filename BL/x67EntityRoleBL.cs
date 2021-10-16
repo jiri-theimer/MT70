@@ -14,6 +14,7 @@ namespace BL
         public IEnumerable<BO.o28ProjectRole_Workload> GetListO28(int x67id);
         public IEnumerable<BO.x69EntityRole_Assign> GetList_X69(int x29id, int recpid);
         public IEnumerable<BO.x67EntityRole> GetList_BoundSlaves(int x67id);
+        public bool IamReceiverOfList(IEnumerable<BO.x69EntityRole_Assign> lis);
 
     }
     class x67EntityRoleBL:BaseBL, Ix67EntityRoleBL
@@ -153,6 +154,24 @@ namespace BL
             sb(" ORDER BY x67.x67Ordinary,a.x67ID");
 
             return _db.GetList<BO.x69EntityRole_Assign>(sbret(), new { recpid = recpid,x29id=x29id });
+        }
+
+        public bool IamReceiverOfList(IEnumerable<BO.x69EntityRole_Assign> lis)
+        {
+            foreach(var c in lis)
+            {
+                if (c.j02ID == _mother.CurrentUser.j02ID) return true;
+                if (c.j11ID>0 && _mother.CurrentUser.j11IDs != null)
+                {
+                    if ((","+ _mother.CurrentUser.j11IDs + ",").Contains(c.j11ID.ToString()))
+                    {
+                        return true;
+                    }
+                        
+                }
+            }
+
+            return false;
         }
     }
 }

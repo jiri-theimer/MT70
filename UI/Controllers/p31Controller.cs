@@ -49,6 +49,14 @@ namespace UI.Controllers
                     v.Rec.p41ID = newrec_pid;
                     v.SelectedLevelIndex =Convert.ToInt32(BO.BAS.RightString(newrec_prefix,1));
                     break;
+                case "p56":
+                    v.RecP56 = Factory.p56TaskBL.Load(newrec_pid);
+                    v.Rec.p56ID = v.RecP56.pid;
+                    v.RecP41 = Factory.p41ProjectBL.Load(v.RecP56.p41ID);
+                    v.Rec.p41ID = v.RecP41.pid;
+                    v.SelectedLevelIndex = v.RecP41.p07Level;
+                    v.SelectedComboTask = v.RecP56.FullName;
+                    break;
                 case "p32":
                     v.RecP32 = Factory.p32ActivityBL.Load(newrec_pid);
                     v.Rec.p32ID = v.RecP32.pid;
