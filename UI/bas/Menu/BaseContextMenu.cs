@@ -38,10 +38,10 @@ namespace UI.Menu
             return c;
         }
 
-        public MenuItem AMI_RecPage(string strName, string prefix,int pid)
+        public MenuItem AMI_RecPage(string strName, string prefix,int pid,string parentid=null,string icon= "maps_home_work")
         {
             //return AMI(strName, $"javascript:_location_replace_top('/{prefix}/RecPage?pid={pid}')", "k-i-layout");
-            return AMI(strName, $"/Record/RecPage?prefix={prefix}&pid={pid}", "maps_home_work", null,null,"_top");
+            return AMI(strName, $"/Record/RecPage?prefix={prefix}&pid={pid}", icon, parentid, null,"_top");
         }
         public MenuItem AMI_RecGrid(string strName, string prefix, int pid)
         {

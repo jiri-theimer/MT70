@@ -51,6 +51,37 @@ namespace UI.Menu
             AMI_SendMail("p31", pid, "more");
             AMI_ChangeLog("p31", pid, "more");
 
+            
+            if (_f.CurrentUser.j04IsMenu_Project)
+            {
+                AMI("Vazby", null, null, null, "rel");
+                var recP41 = _f.p41ProjectBL.Load(rec.p41ID);
+                if (f.CurrentUser.p07LevelsCount > 1)
+                {
+                    AMI_RecPage(recP41.FullName, "le" + recP41.p07Level.ToString(), recP41.pid, "rel", "work_outline");
+                }
+                else
+                {
+                    AMI_RecPage(recP41.FullName, "p41", recP41.pid, "rel", "work_outline");
+
+                }
+                if (recP41.p28ID_Client > 0 && _f.CurrentUser.j04IsMenu_Contact)
+                {
+                    AMI_RecPage(_f.p28ContactBL.Load(recP41.p28ID_Client).p28name, "p28", recP41.p28ID_Client, "rel", "business");
+                }
+                if (rec.p56ID > 0 && _f.CurrentUser.j04IsMenu_Task)
+                {
+                    AMI_RecPage(_f.p56TaskBL.Load(rec.p56ID).FullName, "p56", rec.p56ID, "rel", "task");
+                }
+                if (_f.CurrentUser.j04IsMenu_People)
+                {
+                    AMI_RecPage(_f.j02PersonBL.Load(rec.j02ID).FullNameAsc, "j02", rec.j02ID, "rel", "face");
+                }
+
+            }
+            
+            
+
         }
     }
 }

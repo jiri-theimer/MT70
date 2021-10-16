@@ -308,7 +308,7 @@ namespace UI.Controllers
                 case "p28":
                     mq.p28id = v.source_pid;break;
             }
-            v.lisP41 = Factory.p41ProjectBL.GetList(mq);
+            v.lisP41 = Factory.p41ProjectBL.GetList(mq).OrderBy(p => p.FullName);
             return View(v);
         }
     }
