@@ -15,6 +15,7 @@ namespace BL
         public IEnumerable<BO.o37Contact_Address> GetList_o37(int p28id);
         public BO.p28RecDisposition InhaleRecDisposition(BO.p28Contact rec);
         public BO.p28ContactSum LoadSumRow(int pid);
+        public bool TestIfApprovingPerson(int p28id);
     }
     class p28ContactBL : BaseBL, Ip28ContactBL
     {
@@ -297,6 +298,25 @@ namespace BL
         public BO.p28ContactSum LoadSumRow(int pid)
         {
             return _db.Load<BO.p28ContactSum>("EXEC dbo._core_p28_inhale_sumrow @j03id_sys,@pid", new { j03id_sys = _mother.CurrentUser.pid, pid = pid });
+        }
+
+        public bool TestIfApprovingPerson(int p28id)
+        {
+            if (_mother.CurrentUser.IsApprovingPerson) return true; //globální oprávnění schvalovat
+            //o28PerFlags: 3,4
+            sb("SELECT a.x69RecordPID as Value");
+            sb(" FROM x69EntityRole_Assign a INNER JOIN x67EntityRole x67 ON a.x67ID=x67.x67ID");
+            sb(" INNER JOIN p41Project p41 ON a.x69RecordPID=p41.p41ID");
+            sb(" INNER JOIN o28ProjectRole_Workload o28 ON x67.x67ID=x67.x67ID");
+            sb(" WHERE x67.x29ID=141 AND p41.p28ID_Client=@p28id AND p41.p41ValidUntil>GETDATE() AND o28.o28PermFlag IN (3,4)");
+
+            if (_db.Load<BO.GetInteger>(sbret(), new { p28id = p28id }) == null)
+            {
+                return false;
+            }
+
+            return true;
+
         }
     }
 }

@@ -18,6 +18,7 @@ namespace BL
         public BO.p41RecDisposition InhaleRecDisposition(BO.p41Project rec);
         public bool ExistWaitingWorksheetForInvoicing(int p41id);
         public bool ExistWaitingWorksheetForApproving(int p41id);
+        public bool TestIfApprovingPerson(BO.p41Project recP41);
 
     }
     class p41ProjectBL : BaseBL, Ip41ProjectBL
@@ -276,6 +277,8 @@ namespace BL
         {
             var c = new BO.p41RecDisposition();
 
+            
+
             if (rec.j02ID_Owner == _mother.CurrentUser.j02ID || _mother.CurrentUser.IsAdmin || _mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P41_Owner))
             {
                 c.OwnerAccess = true; c.ReadAccess = true;
@@ -305,6 +308,31 @@ namespace BL
                 return true;
             }
             return false;
+        }
+
+        public bool TestIfApprovingPerson(BO.p41Project recP41)
+        {
+            if (_mother.CurrentUser.IsApprovingPerson) return true; //globální oprávnění schvalovat
+            //o28PerFlags: 3,4
+            sb("SELECT a.x69RecordPID as Value");
+            sb(" FROM x69EntityRole_Assign a INNER JOIN x67EntityRole x67 ON a.x67ID=x67.x67ID");
+            sb(" INNER JOIN o28ProjectRole_Workload o28 ON x67.x67ID=x67.x67ID");
+            if (recP41.j18ID > 0)
+            {
+                sb(" WHERE ((x67.x29ID=118 AND a.x69RecordPID=" + recP41.j18ID.ToString() + ") OR (x67.x29ID=141 AND a.x69RecordPID=@p41id)) AND o28.o28PermFlag IN (3,4)");
+            }
+            else
+            {
+                sb(" WHERE a.x69RecordPID=@p41id AND x67.x29ID=141 AND o28.o28PermFlag IN (3,4)");
+            }
+            
+            if (_db.Load<BO.GetInteger>(sbret(), new { p41id = recP41.pid }) == null)
+            {
+                return false;
+            }
+
+            return true;
+
         }
     }
 }

@@ -50,25 +50,27 @@ namespace UI.Menu
                 DIV();
                 AMI_Vykazat(rec);
                 
-                var mq = new BO.myQueryP31() { isinvoiced=false };                
-                if (rec.p07Level < 5)
+                if (_f.p41ProjectBL.TestIfApprovingPerson(rec))
                 {
-                    mq.leindex = rec.p07Level;
-                    mq.lepid = rec.pid;
+                    var mq = new BO.myQueryP31() { isinvoiced = false };
+                    if (rec.p07Level < 5)
+                    {
+                        mq.leindex = rec.p07Level;
+                        mq.lepid = rec.pid;
+                    }
+                    else
+                    {
+                        mq.p41id = rec.pid;
+                    }
+                    var lisP31 = _f.p31WorksheetBL.GetList(mq);
+                    if (lisP31.Count() > 0)
+                    {
+                        int intWIP = lisP31.Where(p => p.p71ID == BO.p71IdENUM.Nic).Count();
+                        int intAPP = lisP31.Where(p => p.p71ID != BO.p71IdENUM.Nic).Count();
+                        AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p41&pids={pid}', 2)", "approval", null, null, null, "(" + intWIP.ToString() + "x + " + intAPP.ToString() + "x)");
+                    }
                 }
-                else
-                {
-                    mq.p41id = rec.pid;
-                }                
-                var lisP31 = _f.p31WorksheetBL.GetList(mq);
-                if (lisP31.Count() > 0)
-                {
-                    
-                    int intWIP = lisP31.Where(p => p.p71ID ==BO.p71IdENUM.Nic).Count();
-                    int intAPP = lisP31.Where(p => p.p71ID != BO.p71IdENUM.Nic).Count();
-                    AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p41&pids={pid}', 2)", "approval",null,null,null,"("+intWIP.ToString()+"x + "+intAPP.ToString()+"x)");
-                }
-                
+                                
 
             }
             

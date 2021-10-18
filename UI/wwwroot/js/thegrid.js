@@ -462,6 +462,8 @@ function tg_select(records_count) {     //označí prvních X (records_count) z�
     tg_save_selected_pids(arr.join(","));
     tg_div_close_synthetic_divs();
 
+    
+
 }
 
 function tg_select_bycss(trcssclass) {     //označí řádky podle css třídy
@@ -477,6 +479,11 @@ function tg_select_bycss(trcssclass) {     //označí řádky podle css třídy
     }
     tg_save_selected_pids(arr.join(","));
     tg_div_close_synthetic_divs();
+    if (rows.length > 10 && arr.length > 0) {
+        var row = document.getElementById("r" + arr[0]);       
+        row.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+
     _notify_message("Počet záznamů: " + arr.length, "info");
 
 }

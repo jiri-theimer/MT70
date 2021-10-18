@@ -43,7 +43,20 @@ namespace UI.Menu
                     AMI("Vykázat úkon", $"javascript: _window_open('/p41/SelectProject?source_prefix=p28&source_pid={rec.pid}')", "more_time");
                 }
             }
-            
+
+            if (_f.p28ContactBL.TestIfApprovingPerson(rec.pid))
+            {
+                var mq2 = new BO.myQueryP31() { isinvoiced = false };
+                mq2.p28id = rec.pid;                
+                var lisP31 = _f.p31WorksheetBL.GetList(mq2);
+                if (lisP31.Count() > 0)
+                {
+                    int intWIP = lisP31.Where(p => p.p71ID == BO.p71IdENUM.Nic).Count();
+                    int intAPP = lisP31.Where(p => p.p71ID != BO.p71IdENUM.Nic).Count();
+                    AMI("Schválit/Vyúčtovat", $"javascript: _window_open('/p31approve/Index?prefix=p28&pids={pid}', 2)", "approval", null, null, null, "(" + intWIP.ToString() + "x + " + intAPP.ToString() + "x)");
+                }
+            }
+
 
             AMI_Report("p28", pid);
 
