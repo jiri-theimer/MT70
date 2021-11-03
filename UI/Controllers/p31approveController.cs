@@ -65,6 +65,10 @@ namespace UI.Controllers
                 case "saveandbilling":                   
                     if (SaveApproving(v))
                     {
+                        if (oper== "saveandbilling")
+                        {
+                            return RedirectToAction("Index", "p31invoice", new { tempguid = v.tempguid });
+                        }
                         v.SetJavascript_CallOnLoad(0);
                         return View(v);
                     }

@@ -173,16 +173,24 @@ namespace XA.Controllers
             foreach (var c in lisP31)
             {
                 LogInfo("Handle_Send_p31Code, try send p31ID: " + c.pid.ToString() + ", p31Code: " + c.p31Code);
-                var ret = SendOneKodDokladu(onejob.ApiKey, c.p31ExternalPID, c.p31Code, c.p31Text);
+                try
+                {
+                    var ret = SendOneKodDokladu(onejob.ApiKey, c.p31ExternalPID, c.p31Code, c.p31Text);
 
-                if (!string.IsNullOrEmpty(ret.Result.message))
-                {
-                    LogInfo("SendOneKodDokladu, p31ID: "+c.pid.ToString()+ ",errorId: "  + ret.Result.errorId+": "+ret.Result.message);
+                    if (!string.IsNullOrEmpty(ret.Result.message))
+                    {
+                        LogInfo("SendOneKodDokladu, p31ID: " + c.pid.ToString() + ",errorId: " + ret.Result.errorId + ": " + ret.Result.message);
+                    }
+                    else
+                    {
+                        LogInfo("SendOneKodDokladu, p31ID: " + c.pid.ToString() + ", p31Code: " + c.p31Code + ":  OK");
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    LogInfo("SendOneKodDokladu, p31ID: " + c.pid.ToString() + ", p31Code: "+c.p31Code+":  OK");
+                    LogInfo("SendOneKodDokladu, p31ID: " + c.pid.ToString() + ", p31Code: " + c.p31Code + ", chyba: "+ex.Message);
                 }
+                
                 
             }
         }
@@ -209,10 +217,17 @@ namespace XA.Controllers
                 var strJson = await response.Content.ReadAsStringAsync();
 
                 LogInfo("json: " + strJson);
+                if (!string.IsNullOrEmpty(strJson))
+                {
+                    var xx = JsonSerializer.Deserialize<ResponseKodDokladu>(strJson);
 
-                var xx = JsonSerializer.Deserialize<ResponseKodDokladu>(strJson);
-
-                return xx;
+                    return xx;
+                }
+                else
+                {
+                    return null;
+                }
+                
 
             }
 

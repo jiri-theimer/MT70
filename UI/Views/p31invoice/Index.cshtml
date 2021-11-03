@@ -1,0 +1,139 @@
+﻿@model UI.Models.p31invoice.GatewayViewModel
+@inject BL.Factory _f
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Model.PageTitle = _f.tra("Vyúčtování");
+    Model.PageSymbol = BO.Symbol.p91();
+
+}
+
+@addTagHelper *, UI
+
+
+<form id="form1" asp-controller="p31approve" asp-action="Index" method="POST">
+    <div class="bg-light input-group m-0" style="padding-bottom:10px;">
+        <button type="button" id="cmdSave" class="btn btn-success m-1">@_f.tra("Vygenerovat vyúčtování")</button>
+
+        <button class="btn btn-secondary dropdown-toggle m-1" type="button" id="cmdMore" style="margin-left:20px;">@_f.tra("Přidat do jiného vyúčtování")</button>
+
+        <button type="button" id="cmdClose" onclick="_window_close()" class="btn btn-sm btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
+
+
+    </div>
+
+    <div id="divMore" style="background-color:aliceblue;display:none;">
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Přidat schválené úkony do již existujícícho vyúčtování")
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal_record_container">
+        <div class="row">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum plnění"):</label>
+            <div class="col-sm-1 col-md-2">
+                <mydate asp-for="@Model.p91DateSupply"></mydate>
+            </div>
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Začátek období"):</label>
+            <div class="col-sm-1 col-md-2">
+                <mydate asp-for="@Model.p91Datep31_From"></mydate>
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum vystavení"):</label>
+            <div class="col-sm-1 col-md-2">
+                <mydate asp-for="@Model.p91DateSupply"></mydate>
+            </div>
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Konec období"):</label>
+            <div class="col-sm-1 col-md-2">
+                <mydate asp-for="@Model.p91Datep31_Until"></mydate>
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient"):</label>
+            <div class="col-sm-11 col-md-10">
+                <mycombo entity="p28Contact" asp-for="@Model.OneP28ID" selectedtext="@Model.OneP28Name" filter-flag="1"></mycombo>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Rozdělit na více vyúčtování")?
+            </div>
+            <div class="card-body">
+                <input type="radio" id="chkScale1" asp-for="@Model.BillingScale" value="1" />
+                <label for="chkScale1">@_f.tra("Vše dohromady v jednom vyúčtování")</label>
+                <br />
+                <input type="radio" id="chkScale2" asp-for="@Model.BillingScale" value="2" />
+                <label for="chkScale2">@_f.tra("Vyúčtování za každého klienta projektu")</label>
+                <br />
+                <input type="radio" id="chkScale3" asp-for="@Model.BillingScale" value="3" />
+                <label for="chkScale3">@_f.tra("Vyúčtování za každý projekt")</label>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                @_f.tra("Generovat DRAFT nebo oficiální doklady")?
+            </div>
+            <div class="card-body">
+                <input type="radio" id="chkDraftTrue" asp-for="@Model.IsDraft" value="True" />
+                <label for="chkDraftTrue">@_f.tra("Generovat DRAFT číslo")</label>
+                <br />
+                <input type="radio" id="chkDraftFalse" asp-for="@Model.IsDraft" value="False" />
+                <label for="chkDraftFalse">@_f.tra("Generovat oficiální číslo")</label>
+            </div>
+
+        </div>
+    </div>
+
+
+        
+        
+
+
+
+
+
+        <input type="hidden" asp-for="@Model.tempguid" />
+</form>
+
+
+
+<script type="text/javascript">
+    var _guid = "@Model.tempguid";
+
+    $(document).ready(function () {
+
+
+        _resize_textareas();
+
+
+
+
+        $("#cmdSave").click(function () {
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            postback("saveonly")
+        });
+      
+        $("#cmdMore").click(function () {
+            $("#divMore").toggle();
+        });
+
+
+
+    });
+
+
+    
+</script>

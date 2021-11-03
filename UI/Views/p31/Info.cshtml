@@ -16,19 +16,24 @@
 @if (Model.IsRecord)
 {
 <div class="bg-light" style="padding:10px;">
+    @if (Model.Rec.p91ID == 0 && Model.Rec.p71ID != BO.p71IdENUM.Nic)
+    {
+        <button type="button" class="btn btn-primary" onclick="reapprove()">@_f.tra("Pře-schválit")</button>
+    }
 
 
+    <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
 
-    <span class="badge rounded-pill bg-primary fs-5">
-        @(_disp.LockedReasonMessage)
+</div>
 
-    </span>
+<div class="alert alert-primary" role="alert">
     <span class="fs-5">
 
         @Html.Raw(TheGridRowSymbol.p31_symbol(Model.Rec))
     </span>
-
-    <button type="button" id="cmdClose" onclick="window.parent._window_close()" class="btn btn-light"><span class="material-icons-outlined-btn">close</span>@_f.tra("Zavřít")</button>
+    <strong style="margin-left:10px;">
+        @(_disp.LockedReasonMessage)
+    </strong>
     
 </div>
 }
@@ -379,3 +384,10 @@
         </div>
     }
 </div>
+
+<script type="text/javascript">
+    function reapprove() {
+        parent.window._window_toggle();
+        _redirect("/p31approve/Index?prefix=p31&pids=@Model.Rec.pid");
+    }
+</script>

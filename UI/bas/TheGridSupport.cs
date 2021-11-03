@@ -561,7 +561,7 @@ namespace UI
         private void RenderButtonMore()
         {
             //_s.Append("<button type='button' class='btn btn-outline-secondary' title='GRID records' style='margin-left:6px;padding-top:0px;padding-bottom:0px;' onclick='tg_button_more(this)'><i class='material-icons-outlined-btn'>library_add_check</i></button>");
-            _s.Append("<a title='GRID records' style='margin-left:6px;' href='#' onclick='tg_button_more(this)'><i class='material-icons-outlined-btn'>library_add_check</i></a>");
+            _s.Append("<a title='Zaškrtnout hromadně' style='margin-left:6px;' href='#' onclick='tg_button_more(this)'><i class='material-icons-outlined-btn'>library_add_check</i></a>");
             _s.Append("<span id='gridcurrow'></span>");
         }
 
