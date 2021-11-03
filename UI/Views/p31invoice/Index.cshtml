@@ -104,6 +104,9 @@
                 <th style="width:120px;">
                     @_f.tra("Splatnost")
                 </th>
+                <th style="width:100px;">
+                    @_f.tra("Bez DPH")
+                </th>
                 <th style="min-width:200px;">
                     @_f.tra("Typ faktury")
                 </th>
@@ -121,6 +124,11 @@
                     </td>
                     <td>
                         <mydate asp-for="@Model.lisP91_Scale1[i].DateMaturity"></mydate>
+                    </td>
+                    <td style="text-align:right;">
+                        @Model.lisP91_Scale1[i].WithoutVat
+                        <input type="hidden" asp-for="@Model.lisP91_Scale1[i].WithoutVat" />
+
                     </td>
                     <td>
                         <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale1[i].p92ID" selectedtext="@Model.lisP91_Scale1[i].p92Name" search-result-width="600"></mycombo>
@@ -142,6 +150,9 @@
                 <th style="width:120px;">
                     @_f.tra("Splatnost")
                 </th>
+                <th style="width:100px;">
+                    @_f.tra("Bez DPH")
+                </th>
                 <th style="min-width:200px;">
                     @_f.tra("Typ faktury")
                 </th>
@@ -159,6 +170,11 @@
                     </td>
                     <td>
                         <mydate asp-for="@Model.lisP91_Scale2[i].DateMaturity"></mydate>
+                    </td>
+                    <td style="text-align:right;">
+                        @Model.lisP91_Scale2[i].WithoutVat
+                        <input type="hidden" asp-for="@Model.lisP91_Scale2[i].WithoutVat" />
+                        
                     </td>
                     <td>
                         <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale2[i].p92ID" selectedtext="@Model.lisP91_Scale2[i].p92Name" search-result-width="600"></mycombo>
@@ -183,6 +199,9 @@
                 <th style="width:120px;">
                     @_f.tra("Splatnost")
                 </th>
+                <th style="width:100px;">
+                    @_f.tra("Bez DPH")
+                </th>
                 <th style="min-width:200px;">
                     @_f.tra("Typ faktury")
                 </th>
@@ -205,6 +224,11 @@
                     </td>
                     <td>
                         <mydate asp-for="@Model.lisP91_Scale3[i].DateMaturity"></mydate>
+                    </td>
+                    <td style="text-align:right;">
+                        @Model.lisP91_Scale3[i].WithoutVat
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].WithoutVat" />
+
                     </td>
                     <td>
                         <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale3[i].p92ID" selectedtext="@Model.lisP91_Scale3[i].p92Name" search-result-width="600"></mycombo>

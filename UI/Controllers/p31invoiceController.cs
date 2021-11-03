@@ -46,7 +46,11 @@ namespace UI.Controllers
                     cc.p28ID = v.lisP31.Where(p => p.p28ID_Client > 0).First().p28ID_Client;
                     var recP28 = Factory.p28ContactBL.Load(cc.p28ID);
                     cc.p28Name = recP28.p28name;
-                }                
+                }
+                foreach(var dbl in v.lisP31.Where(p=>p.p31Amount_WithoutVat_Approved !=0).GroupBy(p => p.j27ID_Billing_Orig))
+                {
+                    cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p=>p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
+                }
                 v.lisP91_Scale1.Add(cc);
             }
             if (v.BillingScale==2 && v.lisP91_Scale2 == null)
@@ -61,7 +65,13 @@ namespace UI.Controllers
                         cc.p28ID = c.First().p28ID_Client;
                         var recP28 = Factory.p28ContactBL.Load(c.First().p28ID_Client);
                         cc.p28Name = recP28.p28name;
-                    }                                       
+                    }
+                    foreach (var dbl in c.Where(p => p.p31Amount_WithoutVat_Approved != 0).GroupBy(p => p.j27ID_Billing_Orig))
+                    {
+                        cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p=>p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
+                    }
+
+                    
                     v.lisP91_Scale2.Add(cc);
                 }
             }
@@ -77,8 +87,12 @@ namespace UI.Controllers
                     {
                         var recP28 = Factory.p28ContactBL.Load(cc.p28ID);
                         cc.p28Name = recP28.p28name;
-                    }                    
-                    
+                    }
+                    foreach (var dbl in c.Where(p=>p.p31Amount_WithoutVat_Approved !=0).GroupBy(p => p.j27ID_Billing_Orig))
+                    {
+                        cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p=>p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
+                    }
+
                     v.lisP91_Scale3.Add(cc);
                 }
             }

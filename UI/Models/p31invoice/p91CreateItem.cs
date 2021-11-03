@@ -11,5 +11,7 @@ namespace UI.Models.p31invoice
         public string p41Name { get; set; }
         public string p28Name { get; set; }
         public string p92Name { get; set; }
+        public string WithoutVat { get; set; }
+        
     }
 }
