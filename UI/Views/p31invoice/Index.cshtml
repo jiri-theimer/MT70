@@ -101,7 +101,7 @@
                 <th>
                     @_f.tra("Klient")
                 </th>
-                <th style="width:100px;">
+                <th style="width:120px;">
                     @_f.tra("Splatnost")
                 </th>
                 <th style="min-width:200px;">
@@ -123,7 +123,7 @@
                         <mydate asp-for="@Model.lisP91_Scale1[i].DateMaturity"></mydate>
                     </td>
                     <td>
-                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale1[i].p92ID" selectedtext="@Model.lisP91_Scale1[i].p92Name"></mycombo>
+                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale1[i].p92ID" selectedtext="@Model.lisP91_Scale1[i].p92Name" search-result-width="600"></mycombo>
                     </td>
                     <td>
                         <input type="text" class="form-control" asp-for="@Model.lisP91_Scale1[i].InvoiceText1" />
@@ -139,7 +139,7 @@
                 <th>
                     @_f.tra("Klient")
                 </th>
-                <th style="width:100px;">
+                <th style="width:120px;">
                     @_f.tra("Splatnost")
                 </th>
                 <th style="min-width:200px;">
@@ -161,7 +161,7 @@
                         <mydate asp-for="@Model.lisP91_Scale2[i].DateMaturity"></mydate>
                     </td>
                     <td>
-                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale2[i].p92ID" selectedtext="@Model.lisP91_Scale2[i].p92Name"></mycombo>
+                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale2[i].p92ID" selectedtext="@Model.lisP91_Scale2[i].p92Name" search-result-width="600"></mycombo>
                     </td>
                     <td>
                         <input type="text" class="form-control" asp-for="@Model.lisP91_Scale2[i].InvoiceText1" />
@@ -180,7 +180,7 @@
                 <th>
                     @_f.tra("Projekt")
                 </th>
-                <th style="width:100px;">
+                <th style="width:120px;">
                     @_f.tra("Splatnost")
                 </th>
                 <th style="min-width:200px;">
@@ -207,7 +207,7 @@
                         <mydate asp-for="@Model.lisP91_Scale3[i].DateMaturity"></mydate>
                     </td>
                     <td>
-                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale3[i].p92ID" selectedtext="@Model.lisP91_Scale3[i].p92Name"></mycombo>
+                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale3[i].p92ID" selectedtext="@Model.lisP91_Scale3[i].p92Name" search-result-width="600"></mycombo>
                     </td>
                     <td>
                         <input type="text" class="form-control" asp-for="@Model.lisP91_Scale3[i].InvoiceText1" />

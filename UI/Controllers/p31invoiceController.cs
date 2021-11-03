@@ -33,12 +33,14 @@ namespace UI.Controllers
 
         private void RefreshState(GatewayViewModel v)
         {
+            DateTime datMaturityDef = DateTime.Today.AddDays(Factory.x35GlobalParamBL.LoadParamInt("DefMaturityDays",10));
+
             var mq = new BO.myQueryP31() { tempguid = v.tempguid };
             v.lisP31 = Factory.p31WorksheetBL.GetList(mq).OrderBy(p => p.Project);
             if (v.BillingScale == 1 && v.lisP91_Scale1 == null)
             {
                 v.lisP91_Scale1 = new List<p91CreateItem>();
-                var cc = new p91CreateItem();
+                var cc = new p91CreateItem() { DateMaturity = datMaturityDef };
                 if (v.lisP31.Where(p => p.p28ID_Client > 0).Count() > 0)
                 {
                     cc.p28ID = v.lisP31.Where(p => p.p28ID_Client > 0).First().p28ID_Client;
@@ -53,7 +55,7 @@ namespace UI.Controllers
                 var lis = v.lisP31.GroupBy(p => p.p28ID_Client);
                 foreach(var c in lis)
                 {
-                    var cc = new p91CreateItem();
+                    var cc = new p91CreateItem() { DateMaturity = datMaturityDef };
                     if (c.First().p28ID_Client > 0)
                     {
                         cc.p28ID = c.First().p28ID_Client;
@@ -69,7 +71,7 @@ namespace UI.Controllers
                 var lis = v.lisP31.GroupBy(p => p.p41ID);
                 foreach (var c in lis)
                 {
-                    var cc = new p91CreateItem() {p41ID=c.First().p41ID,p41Name=c.First().p41Name };
+                    var cc = new p91CreateItem() { DateMaturity = datMaturityDef,p41ID = c.First().p41ID,p41Name=c.First().p41Name };
                     cc.p28ID = c.First().p28ID_Client;
                     if (cc.p28ID > 0)
                     {
