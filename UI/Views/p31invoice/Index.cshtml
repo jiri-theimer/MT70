@@ -11,7 +11,7 @@
 @addTagHelper *, UI
 
 
-<form id="form1" asp-controller="p31approve" asp-action="Index" method="POST">
+<form id="form1" asp-controller="p31invoice" asp-action="Index" method="POST">
     <div class="bg-light input-group m-0" style="padding-bottom:10px;">
         <button type="button" id="cmdSave" class="btn btn-success m-1">@_f.tra("Vygenerovat vyúčtování")</button>
 
@@ -56,30 +56,28 @@
             </div>
         </div>
 
-        <div class="row my-2">
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Klient"):</label>
-            <div class="col-sm-11 col-md-10">
-                <mycombo entity="p28Contact" asp-for="@Model.OneP28ID" selectedtext="@Model.OneP28Name" filter-flag="1"></mycombo>
-            </div>
 
-        </div>
 
-        <div class="card">
-            <div class="card-header">
-                @_f.tra("Rozdělit na více vyúčtování")?
-            </div>
-            <div class="card-body">
-                <input type="radio" id="chkScale1" asp-for="@Model.BillingScale" value="1" />
-                <label for="chkScale1">@_f.tra("Vše dohromady v jednom vyúčtování")</label>
-                <br />
-                <input type="radio" id="chkScale2" asp-for="@Model.BillingScale" value="2" />
-                <label for="chkScale2">@_f.tra("Vyúčtování za každého klienta projektu")</label>
-                <br />
-                <input type="radio" id="chkScale3" asp-for="@Model.BillingScale" value="3" />
-                <label for="chkScale3">@_f.tra("Vyúčtování za každý projekt")</label>
-            </div>
+        @if (Model.lisP31.Count() > 1 && Model.lisP31.GroupBy(p => p.p41ID).Count() > 1)
+        {
+            <div class="card">
+                <div class="card-header">
+                    @_f.tra("Rozdělit na více vyúčtování (faktur)")?
+                </div>
+                <div class="card-body">
+                    <input type="radio" id="chkScale1" asp-for="@Model.BillingScale" value="1" onchange="postback('scale')" />
+                    <label for="chkScale1">@_f.tra("Vše dohromady v jednom vyúčtování")</label>
+                    <br />
+                    <input type="radio" id="chkScale2" asp-for="@Model.BillingScale" value="2" onchange="postback('scale')" />
+                    <label for="chkScale2">@_f.tra("Vyúčtování za každého klienta projektu")</label>
+                    <br />
+                    <input type="radio" id="chkScale3" asp-for="@Model.BillingScale" value="3" onchange="postback('scale')" />
+                    <label for="chkScale3">@_f.tra("Vyúčtování za každý projekt")</label>
+                </div>
 
-        </div>
+            </div>
+        }
+
 
         <div class="card">
             <div class="card-header">
@@ -96,15 +94,136 @@
         </div>
     </div>
 
+    @if (Model.BillingScale == 1)
+    {
+        <table>
+            <tr>
+                <th>
+                    @_f.tra("Klient")
+                </th>
+                <th style="width:100px;">
+                    @_f.tra("Splatnost")
+                </th>
+                <th style="min-width:200px;">
+                    @_f.tra("Typ faktury")
+                </th>
+                <th style="min-width:300px;">
+                    @_f.tra("Text faktury")
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.lisP91_Scale1.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Model.lisP91_Scale1[i].p28Name
+                        <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28Name" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28ID" />
+                    </td>
+                    <td>
+                        <mydate asp-for="@Model.lisP91_Scale1[i].DateMaturity"></mydate>
+                    </td>
+                    <td>
+                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale1[i].p92ID" selectedtext="@Model.lisP91_Scale1[i].p92Name"></mycombo>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" asp-for="@Model.lisP91_Scale1[i].InvoiceText1" />
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    @if (Model.BillingScale == 2)
+    {
+        <table>
+            <tr>
+                <th>
+                    @_f.tra("Klient")
+                </th>
+                <th style="width:100px;">
+                    @_f.tra("Splatnost")
+                </th>
+                <th style="min-width:200px;">
+                    @_f.tra("Typ faktury")
+                </th>
+                <th style="min-width:300px;">
+                    @_f.tra("Text faktury")
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.lisP91_Scale2.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Model.lisP91_Scale2[i].p28Name
+                        <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28Name" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28ID" />
+                    </td>
+                    <td>
+                        <mydate asp-for="@Model.lisP91_Scale2[i].DateMaturity"></mydate>
+                    </td>
+                    <td>
+                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale2[i].p92ID" selectedtext="@Model.lisP91_Scale2[i].p92Name"></mycombo>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" asp-for="@Model.lisP91_Scale2[i].InvoiceText1" />
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    @if (Model.BillingScale == 3)
+    {
+        <table>
+            <tr>
+                <th>
+                    @_f.tra("Klient")
+                </th>
+                <th>
+                    @_f.tra("Projekt")
+                </th>
+                <th style="width:100px;">
+                    @_f.tra("Splatnost")
+                </th>
+                <th style="min-width:200px;">
+                    @_f.tra("Typ faktury")
+                </th>
+                <th style="min-width:300px;">
+                    @_f.tra("Text faktury")
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.lisP91_Scale3.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Model.lisP91_Scale3[i].p28Name
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28Name" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28ID" />
+                    </td>
+                    <td>
+                        @Model.lisP91_Scale3[i].p41Name
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p41Name" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p41ID" />
+                    </td>
+                    <td>
+                        <mydate asp-for="@Model.lisP91_Scale3[i].DateMaturity"></mydate>
+                    </td>
+                    <td>
+                        <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale3[i].p92ID" selectedtext="@Model.lisP91_Scale3[i].p92Name"></mycombo>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" asp-for="@Model.lisP91_Scale3[i].InvoiceText1" />
+                    </td>
+                </tr>
+            }
+        </table>
+    }
 
-        
-        
+
+
+    <button type="button" onclick="postback('postback')">postback</button>
 
 
 
-
-
-        <input type="hidden" asp-for="@Model.tempguid" />
+    <input type="hidden" asp-for="@Model.tempguid" />
 </form>
 
 
@@ -123,9 +242,9 @@
         $("#cmdSave").click(function () {
             $(this).text("Processing...");
             $(this).attr("disabled", true);
-            postback("saveonly")
+            postback("save")
         });
-      
+
         $("#cmdMore").click(function () {
             $("#divMore").toggle();
         });
@@ -135,5 +254,15 @@
     });
 
 
-    
+
+    function postback(oper) {
+        form1.action = _ep("/p31invoice/Index?oper=" + oper);
+        form1.submit();
+    }
+
+    function hardrefresh(pid, flag) {
+
+        postback("postback");
+    }
+
 </script>

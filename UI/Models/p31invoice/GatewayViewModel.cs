@@ -9,11 +9,13 @@ namespace UI.Models.p31invoice
     {
         public string tempguid { get; set; }
 
-        public int OneP28ID { get; set; }
-        public string OneP28Name { get; set; }
+       
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
 
-        public List<BO.p91Create> lisP91 { get; set; }
+        public List<p91CreateItem> lisP91_Scale1 { get; set; }
+        public List<p91CreateItem> lisP91_Scale2 { get; set; }
+        public List<p91CreateItem> lisP91_Scale3 { get; set; }
+
         public DateTime? p91DateSupply { get; set; }
         public DateTime? p91Date { get; set; }
         public DateTime? p91Datep31_From { get; set; }
