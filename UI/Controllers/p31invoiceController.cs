@@ -90,6 +90,7 @@ namespace UI.Controllers
                     {
                         cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                     }
+                    cc.p41ID = c.First().p41ID; cc.p41Name = c.First().p41Name;
 
                     v.lisP91_Scale3.Add(cc);
                 }
