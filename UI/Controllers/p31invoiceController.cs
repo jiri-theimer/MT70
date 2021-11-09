@@ -50,7 +50,7 @@ namespace UI.Controllers
                 {
                     cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                 }
-                cc.p41ID = v.lisP31.First().p41ID;
+                cc.p41ID = v.lisP31.First().p41ID; cc.p41Name = c.First().p41Name;
                 v.lisP91_Scale1.Add(cc);
             }
             if (v.BillingScale == 2 && v.lisP91_Scale2 == null)
@@ -68,7 +68,7 @@ namespace UI.Controllers
                     {
                         cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                     }
-
+                    cc.p41ID = c.First().p41ID;cc.p41Name = c.First().p41Name;
 
                     v.lisP91_Scale2.Add(cc);
                 }
