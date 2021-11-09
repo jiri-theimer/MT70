@@ -350,8 +350,8 @@ namespace UI.Controllers
                         c.p51ID_Billing = v.SelectedP51ID_Flag3;
                     }
                 }
-                
 
+                c.p92ID = v.Rec.p92ID;
                 c.p28BillingMemo = v.Rec.p28BillingMemo;                
                 c.p28InvoiceDefaultText1 = v.Rec.p28InvoiceDefaultText1;
                 c.p28InvoiceDefaultText2 = v.Rec.p28InvoiceDefaultText2;

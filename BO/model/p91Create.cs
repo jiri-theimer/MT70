@@ -18,6 +18,7 @@ namespace BO
         public DateTime DateP31_From { get; set; }
         public DateTime DateP31_Until { get; set; }
         public string InvoiceText1 { get; set; }
+        public string InvoiceText2 { get; set; }
         public int j02ID_ContactPerson { get; set; }
     }
 }

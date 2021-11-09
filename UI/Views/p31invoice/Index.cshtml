@@ -39,7 +39,7 @@
             <div class="col-sm-1 col-md-2">
                 <mydate asp-for="@Model.p91DateSupply"></mydate>
             </div>
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Začátek období"):</label>
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Začátek účtovaného období"):</label>
             <div class="col-sm-1 col-md-2">
                 <mydate asp-for="@Model.p91Datep31_From"></mydate>
             </div>
@@ -50,7 +50,7 @@
             <div class="col-sm-1 col-md-2">
                 <mydate asp-for="@Model.p91DateSupply"></mydate>
             </div>
-            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Konec období"):</label>
+            <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Konec účtovaného období"):</label>
             <div class="col-sm-1 col-md-2">
                 <mydate asp-for="@Model.p91Datep31_Until"></mydate>
             </div>
@@ -113,14 +113,18 @@
                 <th style="min-width:300px;">
                     @_f.tra("Text faktury")
                 </th>
+                <th style="min-width:150px;">
+                    @_f.tra("Technický text")
+                </th>
             </tr>
             @for (int i = 0; i < Model.lisP91_Scale1.Count(); i++)
             {
-                <tr>
+                <tr style="vertical-align:top;">
                     <td>
                         @Model.lisP91_Scale1[i].p28Name
                         <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28Name" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28ID" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale1[i].BillingMemo" />
                     </td>
                     <td>
                         <mydate asp-for="@Model.lisP91_Scale1[i].DateMaturity"></mydate>
@@ -134,9 +138,20 @@
                         <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale1[i].p92ID" selectedtext="@Model.lisP91_Scale1[i].p92Name" search-result-width="600"></mycombo>
                     </td>
                     <td>
-                        <input type="text" class="form-control" asp-for="@Model.lisP91_Scale1[i].InvoiceText1" />
+                        <textarea asp-for="@Model.lisP91_Scale1[i].InvoiceText1" style="width:300px;"></textarea>
+                    </td>
+                    <td>
+                        <textarea asp-for="@Model.lisP91_Scale1[i].InvoiceText2" style="width:150px;"></textarea>
                     </td>
                 </tr>
+                @if (Model.lisP91_Scale1[i].BillingMemo != null)
+                {
+                    <tr>
+                        <td colspan="6" style="background-color: #F0FFF0;">
+                            <i><strong>Model.lisP91_Scale1[i].BillingMemo</strong></i>
+                        </td>
+                    </tr>
+                }
             }
         </table>
     }
@@ -159,10 +174,13 @@
                 <th style="min-width:300px;">
                     @_f.tra("Text faktury")
                 </th>
+                <th style="min-width:150px;">
+                    @_f.tra("Technický text")
+                </th>
             </tr>
             @for (int i = 0; i < Model.lisP91_Scale2.Count(); i++)
             {
-                <tr>
+                <tr style="vertical-align:top;">
                     <td>
                         @Model.lisP91_Scale2[i].p28Name
                         <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28Name" />
@@ -174,13 +192,16 @@
                     <td style="text-align:right;">
                         @Model.lisP91_Scale2[i].WithoutVat
                         <input type="hidden" asp-for="@Model.lisP91_Scale2[i].WithoutVat" />
-                        
+
                     </td>
                     <td>
                         <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale2[i].p92ID" selectedtext="@Model.lisP91_Scale2[i].p92Name" search-result-width="600"></mycombo>
                     </td>
                     <td>
-                        <input type="text" class="form-control" asp-for="@Model.lisP91_Scale2[i].InvoiceText1" />
+                        <textarea asp-for="@Model.lisP91_Scale2[i].InvoiceText1" style="width:300px;"></textarea>
+                    </td>
+                    <td>
+                        <textarea asp-for="@Model.lisP91_Scale2[i].InvoiceText2" style="width:150px;"></textarea>
                     </td>
                 </tr>
             }
@@ -208,10 +229,13 @@
                 <th style="min-width:300px;">
                     @_f.tra("Text faktury")
                 </th>
+                <th style="min-width:150px;">
+                    @_f.tra("Technický text")
+                </th>
             </tr>
             @for (int i = 0; i < Model.lisP91_Scale3.Count(); i++)
             {
-                <tr>
+                <tr style="vertical-align:top;">
                     <td>
                         @Model.lisP91_Scale3[i].p28Name
                         <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28Name" />
@@ -234,7 +258,12 @@
                         <mycombo entity="p92InvoiceType" asp-for="@Model.lisP91_Scale3[i].p92ID" selectedtext="@Model.lisP91_Scale3[i].p92Name" search-result-width="600"></mycombo>
                     </td>
                     <td>
-                        <input type="text" class="form-control" asp-for="@Model.lisP91_Scale3[i].InvoiceText1" />
+                        <textarea asp-for="@Model.lisP91_Scale3[i].InvoiceText1" style="width:300px;"></textarea>
+
+                    </td>
+                    <td>
+                        <textarea asp-for="@Model.lisP91_Scale3[i].InvoiceText2" style="width:150px;"></textarea>
+
                     </td>
                 </tr>
             }

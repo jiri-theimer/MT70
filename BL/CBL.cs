@@ -23,6 +23,7 @@ namespace BL
         //public string GetRecordAlias(string entity, int pid);
         public string GetObjectAlias(string prefix, int pid);
         public void SaveLastCallingRecPid(string prefix, int pid, string caller, bool test_if_changed_pid, bool test_if_changedpid_hoursvalidity);  //uložit informaci o naposledy navštíveném záznamu
+        public string MergeTextWithOneDate(string strExpr, DateTime d1, DateTime d2);   //vrátí text sloučený o zkratky [MM], [YYYY], [DD] apod.
     }
     class CBL : BaseBL, ICBL
     {
@@ -233,6 +234,7 @@ namespace BL
 
         public void SaveLastCallingRecPid(string prefix, int pid, string caller,bool test_if_changed_pid,bool test_if_changedpid_hoursvalidity)
         {
+            //uložit naposledy navštívený záznam
             if (pid == 0 || prefix == null) return;
             if (caller == "grid" || caller == "recpage")
             {
@@ -259,6 +261,23 @@ namespace BL
                
             }
 
+        }
+
+        public string MergeTextWithOneDate(string strExpr,DateTime d1,DateTime d2)
+        {
+            if (string.IsNullOrEmpty(strExpr)) return strExpr;
+
+            string s = _db.Load<BO.GetString>("SELECT dbo.get_parsed_text_with_period(@expr,@d,0) as Value",new { expr = strExpr, d = d1 }).Value;
+            if (strExpr.Contains("1]"))
+            {
+                s=_db.Load<BO.GetString>("SELECT dbo.get_parsed_text_with_period(@expr,@d,1) as Value", new { expr = s, d = d1 }).Value;
+            }
+            if (strExpr.Contains("2]"))
+            {
+                s = _db.Load<BO.GetString>("SELECT dbo.get_parsed_text_with_period(@expr,@d,2) as Value", new { expr = s, d = d2 }).Value;
+            }
+
+            return s;
         }
 
         
