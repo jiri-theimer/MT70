@@ -48,7 +48,7 @@
         <div class="row my-2">
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Datum vystavení"):</label>
             <div class="col-sm-1 col-md-2">
-                <mydate asp-for="@Model.p91DateSupply"></mydate>
+                <mydate asp-for="@Model.p91Date"></mydate>
             </div>
             <label class="col-sm-1 col-md-2 col-form-label">@_f.tra("Konec účtovaného období"):</label>
             <div class="col-sm-1 col-md-2">
@@ -122,8 +122,18 @@
                 <tr style="vertical-align:top;">
                     <td>
                         @Model.lisP91_Scale1[i].p28Name
+                        @if (Model.lisP91_Scale1[i].p28ID != Model.lisP91_Scale1[i].p28ID_Invoice)
+                        {
+                            <div>
+                                <i>
+                                    @Model.lisP91_Scale1[i].p28Name_Invoice
+                                </i>
+                            </div>
+                        }
                         <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28Name" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28Name_Invoice" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28ID" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale1[i].p28ID_Invoice" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale1[i].BillingMemo" />
                     </td>
                     <td>
@@ -182,9 +192,21 @@
             {
                 <tr style="vertical-align:top;">
                     <td>
+
                         @Model.lisP91_Scale2[i].p28Name
+                        @if (Model.lisP91_Scale2[i].p28ID != Model.lisP91_Scale2[i].p28ID_Invoice)
+                        {
+                            <div>
+                                <i>
+                                    @Model.lisP91_Scale2[i].p28Name_Invoice
+                                </i>
+                            </div>
+                        }
                         <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28Name" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28Name_Invoice" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28ID" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28ID_Invoice" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale2[i].BillingMemo" />
                     </td>
                     <td>
                         <mydate asp-for="@Model.lisP91_Scale2[i].DateMaturity"></mydate>
@@ -204,6 +226,14 @@
                         <textarea asp-for="@Model.lisP91_Scale2[i].InvoiceText2" style="width:150px;"></textarea>
                     </td>
                 </tr>
+                @if (Model.lisP91_Scale2[i].BillingMemo != null)
+                {
+                    <tr>
+                        <td colspan="6" style="background-color: #F0FFF0;">
+                            <i><strong>Model.lisP91_Scale2[i].BillingMemo</strong></i>
+                        </td>
+                    </tr>
+                }
             }
         </table>
     }
@@ -238,8 +268,19 @@
                 <tr style="vertical-align:top;">
                     <td>
                         @Model.lisP91_Scale3[i].p28Name
+                        @if (Model.lisP91_Scale3[i].p28ID != Model.lisP91_Scale3[i].p28ID_Invoice)
+                        {
+                            <div>
+                                <i>
+                                    @Model.lisP91_Scale3[i].p28Name_Invoice
+                                </i>
+                            </div>
+                        }
                         <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28Name" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28Name_Invoice" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28ID" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28ID_Invoice" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].BillingMemo" />
                     </td>
                     <td>
                         @Model.lisP91_Scale3[i].p41Name
@@ -266,6 +307,14 @@
 
                     </td>
                 </tr>
+                @if (Model.lisP91_Scale3[i].BillingMemo != null)
+                {
+                    <tr>
+                        <td colspan="6" style="background-color: #F0FFF0;">
+                            <i><strong>Model.lisP91_Scale3[i].BillingMemo</strong></i>
+                        </td>
+                    </tr>
+                }
             }
         </table>
     }

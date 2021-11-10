@@ -17,11 +17,7 @@ namespace UI.Controllers
                 return this.StopPage(true, "guid missing.");
             }
             var v = new GatewayViewModel() { tempguid = tempguid, p91Date = DateTime.Today, p91DateSupply = DateTime.Today, BillingScale = 1, IsDraft = true };
-            if (v.lisP31.Count() > 0)
-            {
-                v.p91Datep31_From = v.lisP31.Min(p => p.p31Date);
-                v.p91Datep31_Until = v.lisP31.Max(p => p.p31Date);
-            }
+            
 
             RefreshState(v);
 
@@ -37,6 +33,11 @@ namespace UI.Controllers
 
             var mq = new BO.myQueryP31() { tempguid = v.tempguid };
             v.lisP31 = Factory.p31WorksheetBL.GetList(mq).OrderBy(p => p.Project);
+            if (v.lisP31.Count() > 0)
+            {
+                if (v.p91Datep31_From==null) v.p91Datep31_From = v.lisP31.Min(p => p.p31Date);
+                if (v.p91Datep31_Until==null) v.p91Datep31_Until = v.lisP31.Max(p => p.p31Date);
+            }
             if (v.BillingScale == 1 && v.lisP91_Scale1 == null)
             {
                 v.lisP91_Scale1 = new List<p91CreateItem>();
@@ -50,7 +51,7 @@ namespace UI.Controllers
                 {
                     cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                 }
-                cc.p41ID = v.lisP31.First().p41ID; cc.p41Name = c.First().p41Name;
+                cc.p41ID = v.lisP31.First().p41ID; cc.p41Name = v.lisP31.First().p41Name;
                 v.lisP91_Scale1.Add(cc);
             }
             if (v.BillingScale == 2 && v.lisP91_Scale2 == null)
@@ -69,7 +70,7 @@ namespace UI.Controllers
                         cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                     }
                     cc.p41ID = c.First().p41ID;cc.p41Name = c.First().p41Name;
-
+                   
                     v.lisP91_Scale2.Add(cc);
                 }
             }
@@ -107,16 +108,18 @@ namespace UI.Controllers
             switch (oper)
             {
                 case "save":
+                    
                     var lisP91 = GetInvoiceItems(v);
                     if (lisP91.Count() == 0)
                     {
                         this.AddMessage("Na vstupu chybí položky vyúčtování.");
                         return View(v);
                     }
-                    if (1 == 1)
+                    
+                    if (Save(v))
                     {
-                        v.SetJavascript_CallOnLoad(0);
-
+                        v.SetJavascript_CallOnLoad(1);
+                        return View(v);
                     }
 
                     return View(v);
@@ -130,14 +133,24 @@ namespace UI.Controllers
         private List<p91CreateItem> GetInvoiceItems(GatewayViewModel v)
         {
             var lis = new List<p91CreateItem>();
-            if (v.BillingScale == 1)
+            switch (v.BillingScale)
             {
-                lis = v.lisP91_Scale1;                
-                
+                case 1:
+                    lis = v.lisP91_Scale1;
+                    break;
+                case 2:
+                    lis = v.lisP91_Scale2;
+                    break;
+                case 3:
+                    lis = v.lisP91_Scale3;
+                    break;
+
             }
 
             return lis;
         }
+
+       
 
         private p91CreateItem InhaleClientSetting(GatewayViewModel v, p91CreateItem ret, int p28id)
         {
@@ -185,6 +198,69 @@ namespace UI.Controllers
             }
 
             return ret;
+        }
+
+        private void InhaleProjectSetting(GatewayViewModel v, p91CreateItem ret,int p41id)
+        {
+            var recP41 = Factory.p41ProjectBL.Load(p41id);
+            if (recP41.p28ID_Billing > 0)
+            {
+                ret.p28ID_Invoice = recP41.p28ID_Billing;
+                ret.p28Name_Invoice = Factory.p28ContactBL.Load(recP41.p28ID_Billing).p28name;
+            }
+               
+
+        }
+
+
+        private bool Save(GatewayViewModel v)
+        {
+            var lis = GetInvoiceItems(v);
+            
+            if (v.p91Date == null || v.p91Datep31_From == null || v.p91Datep31_Until == null || v.p91DateSupply == null)
+            {
+                this.AddMessage("Datumy [Vystavení], [Plnění], [Začátek] a [Konec] jsou povinná k vyplnění.");
+                return false;
+            }
+            foreach(var rec in lis)
+            {
+                if (rec.p28ID == 0)
+                {
+                    this.AddMessage("Ve vyúčtování chybí vazba na klienta.");
+                    return false;
+                }
+                if (rec.p92ID == 0)
+                {
+                    this.AddMessage("Ve vyúčtování chybí vazba na typ faktury.");
+                    return false;
+                }
+            }
+            var errs = new List<int>();
+
+            foreach(var rec in lis)
+            {
+                var c = new BO.p91Create() {TempGUID=v.tempguid, DateIssue = Convert.ToDateTime(v.p91Date),DateSupply=Convert.ToDateTime(v.p91DateSupply),DateP31_From=Convert.ToDateTime(v.p91Datep31_From),DateP31_Until=Convert.ToDateTime(v.p91Datep31_Until) };
+                c.p28ID = rec.p28ID_Invoice;
+                
+                c.p92ID = rec.p92ID;
+                c.InvoiceText1 = rec.InvoiceText1;c.InvoiceText2 = rec.InvoiceText2;
+                c.DateMaturity = rec.DateMaturity;
+                c.IsDraft = v.IsDraft;
+                if (Factory.p91InvoiceBL.Create(c) == 0)
+                {
+                    errs.Add(1);
+                }
+            }
+
+            if (errs.Count() > 0)
+            {
+                this.AddMessage("Při generování vyúčtování došlo k chybám.");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }
