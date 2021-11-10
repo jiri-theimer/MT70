@@ -52,6 +52,10 @@ namespace UI.Controllers
                     cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                 }
                 cc.p41ID = v.lisP31.First().p41ID; cc.p41Name = v.lisP31.First().p41Name;
+                if (cc.p41ID > 0)
+                {
+                    InhaleProjectSetting(v, cc, cc.p41ID);
+                }
                 v.lisP91_Scale1.Add(cc);
             }
             if (v.BillingScale == 2 && v.lisP91_Scale2 == null)
@@ -70,6 +74,10 @@ namespace UI.Controllers
                         cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                     }
                     cc.p41ID = c.First().p41ID;cc.p41Name = c.First().p41Name;
+                    if (cc.p41ID > 0)
+                    {
+                        InhaleProjectSetting(v, cc, cc.p41ID);
+                    }
                    
                     v.lisP91_Scale2.Add(cc);
                 }
@@ -92,7 +100,10 @@ namespace UI.Controllers
                         cc.WithoutVat += " " + BO.BAS.Number2String(dbl.Sum(p => p.p31Amount_WithoutVat_Approved)) + dbl.First().j27Code_Billing_Orig;
                     }
                     cc.p41ID = c.First().p41ID; cc.p41Name = c.First().p41Name;
-
+                    if (cc.p41ID > 0)
+                    {
+                        InhaleProjectSetting(v, cc, cc.p41ID);
+                    }
                     v.lisP91_Scale3.Add(cc);
                 }
             }
@@ -233,6 +244,14 @@ namespace UI.Controllers
                 {
                     this.AddMessage("Ve vyúčtování chybí vazba na typ faktury.");
                     return false;
+                }
+            }
+            if (Factory.p85TempboxBL.GetList(v.tempguid, false, "p31").Count() == 0)
+            {
+                foreach(var c in v.lisP31)
+                {
+                    var rec = new BO.p85Tempbox() { p85GUID = v.tempguid, p85DataPID = c.pid, p85Prefix = "p31" };
+                    Factory.p85TempboxBL.Save(rec);
                 }
             }
             var errs = new List<int>();
