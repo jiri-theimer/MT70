@@ -38,7 +38,7 @@ namespace UI.Menu
                 AMI_Clone("p31", pid);
             }
 
-            if (disp.CanApprove || disp.CanApproveAndEdit)
+            if (rec.p91ID==0 && ( disp.CanApprove || disp.CanApproveAndEdit))
             {
                 AMI(BO.BAS.IIFS(rec.p71ID == BO.p71IdENUM.Nic, "Schválit/Vyúčtovat","Pře-schválit/Vyúčtovat"), $"javascript: _window_open('/p31approve/Index?prefix=p31&pids={pid}', 2)", "approval");
 

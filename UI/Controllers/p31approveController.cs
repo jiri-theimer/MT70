@@ -32,9 +32,12 @@ namespace UI.Controllers
                 var mq = new BO.myQueryP31() {tempguid = v.tempguid };
                 v.lisP31 = Factory.p31WorksheetBL.GetList(mq);
             }
-            
-            
-            
+
+            if (v.lisP31.Count() == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí nevyúčtované úkony.");
+            }
+
 
 
             if (Factory.CBL.LoadUserParamInt("grid-p31-approve-p31statequery", 0) > 0 && Factory.CBL.LoadUserParamValidityMinutes("grid-p31-approve-p31statequery") > 1)
