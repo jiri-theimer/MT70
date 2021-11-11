@@ -207,6 +207,7 @@
                         <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28ID" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale2[i].p28ID_Invoice" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale2[i].BillingMemo" />
+                        <input type="hidden" asp-for="@Model.lisP91_Scale2[i].TempGUID" />
                     </td>
                     <td>
                         <mydate asp-for="@Model.lisP91_Scale2[i].DateMaturity"></mydate>
@@ -276,6 +277,7 @@
                                 </i>
                             </div>
                         }
+                        <input type="hidden" asp-for="@Model.lisP91_Scale3[i].TempGUID" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28Name" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28Name_Invoice" />
                         <input type="hidden" asp-for="@Model.lisP91_Scale3[i].p28ID" />

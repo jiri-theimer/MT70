@@ -42,7 +42,7 @@ namespace UI.Controllers
             {
                 v.lisP91_Scale1 = new List<p91CreateItem>();
 
-                var cc = new p91CreateItem() { DateMaturity = datMaturityDef };
+                var cc = new p91CreateItem() { DateMaturity = datMaturityDef,TempGUID=BO.BAS.GetGuid() };
                 if (v.lisP31.Where(p => p.p28ID_Client > 0).Count() > 0)
                 {
                     InhaleClientSetting(v, cc, v.lisP31.Where(p => p.p28ID_Client > 0).First().p28ID_Client);
@@ -64,7 +64,7 @@ namespace UI.Controllers
                 var lis = v.lisP31.GroupBy(p => p.p28ID_Client);
                 foreach (var c in lis)
                 {
-                    var cc = new p91CreateItem() { DateMaturity = datMaturityDef };
+                    var cc = new p91CreateItem() { DateMaturity = datMaturityDef,TempGUID=BO.BAS.GetGuid() };
                     if (c.First().p28ID_Client > 0)
                     {
                         InhaleClientSetting(v, cc, c.First().p28ID_Client);
@@ -88,7 +88,7 @@ namespace UI.Controllers
                 var lis = v.lisP31.GroupBy(p => p.p41ID);
                 foreach (var c in lis)
                 {
-                    var cc = new p91CreateItem() { DateMaturity = datMaturityDef, p41ID = c.First().p41ID, p41Name = c.First().p41Name };
+                    var cc = new p91CreateItem() { DateMaturity = datMaturityDef, p41ID = c.First().p41ID, p41Name = c.First().p41Name,TempGUID=BO.BAS.GetGuid() };
                     cc.p28ID = c.First().p28ID_Client;
                     if (cc.p28ID > 0)
                     {
@@ -248,17 +248,30 @@ namespace UI.Controllers
             }
             if (Factory.p85TempboxBL.GetList(v.tempguid, false, "p31").Count() == 0)
             {
-                foreach(var c in v.lisP31)
+                int intLastP28ID = 0;
+                int intLastP41ID = 0;
+                string strGUID = v.tempguid;
+                foreach(var c in v.lisP31.OrderBy(p=>p.p28ID_Client).ThenBy(p=>p.p41ID))
                 {
-                    var rec = new BO.p85Tempbox() { p85GUID = v.tempguid, p85DataPID = c.pid, p85Prefix = "p31" };
+                    if (v.BillingScale==2 && c.p28ID_Client != intLastP28ID)
+                    {
+                        strGUID = lis.Where(p => p.p28ID == c.p28ID_Client).First().TempGUID;
+                    }
+                    if (v.BillingScale == 3 && c.p41ID != intLastP41ID)
+                    {
+                        strGUID = lis.Where(p => p.p41ID == c.p41ID).First().TempGUID;
+                    }
+                    var rec = new BO.p85Tempbox() { p85GUID =strGUID, p85DataPID = c.pid, p85Prefix = "p31" };
                     Factory.p85TempboxBL.Save(rec);
+                    intLastP28ID = c.p28ID_Client;
+                    intLastP41ID = c.p41ID;
                 }
             }
             var errs = new List<int>();
 
             foreach(var rec in lis)
             {
-                var c = new BO.p91Create() {TempGUID=v.tempguid, DateIssue = Convert.ToDateTime(v.p91Date),DateSupply=Convert.ToDateTime(v.p91DateSupply),DateP31_From=Convert.ToDateTime(v.p91Datep31_From),DateP31_Until=Convert.ToDateTime(v.p91Datep31_Until) };
+                var c = new BO.p91Create() {TempGUID=rec.TempGUID, DateIssue = Convert.ToDateTime(v.p91Date),DateSupply=Convert.ToDateTime(v.p91DateSupply),DateP31_From=Convert.ToDateTime(v.p91Datep31_From),DateP31_Until=Convert.ToDateTime(v.p91Datep31_Until) };
                 c.p28ID = rec.p28ID_Invoice;
                 
                 c.p92ID = rec.p92ID;
