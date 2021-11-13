@@ -24,7 +24,7 @@ namespace UI.Models.p31invoice
         public bool IsDraft { get; set; }
         public int BillingScale { get; set; }   //1: vše dohromady, 2: za každého klienta, 3: za každý projekt
 
-        
-        
+        public int SelectedInvoiceP91ID { get; set; }
+        public string SelectedInvoiceText { get; set; }
     }
 }

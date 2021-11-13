@@ -42,7 +42,10 @@ namespace UI.Menu
             {
                 AMI(BO.BAS.IIFS(rec.p71ID == BO.p71IdENUM.Nic, "Schválit/Vyúčtovat","Pře-schválit/Vyúčtovat"), $"javascript: _window_open('/p31approve/Index?prefix=p31&pids={pid}', 2)", "approval");
 
-
+                if (f.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Creator, BO.x53PermValEnum.GR_P91_Draft_Creator))
+                {
+                    AMI("Přidat do vybraného vyúčtování", $"javascript: _window_open('/p31invoice/Append2Invoice?pids={pid}',2)", "receipt_long");
+                }
             }
             
 

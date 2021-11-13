@@ -10,6 +10,46 @@ namespace UI.Controllers
 {
     public class p31invoiceController : BaseController
     {
+        public IActionResult Append2Invoice(string pids)
+        {
+            if (string.IsNullOrEmpty(pids) || BO.BAS.ConvertString2ListInt(pids).Count()==0)
+            {
+                return this.StopPage(true, "pids missing.");
+            }
+            var v = new Append2InvoiceViewModel() { pids=pids };
+
+            RefreshState_Append2Invoice(v);
+            if (v.lisP31.Count() == 0)
+            {
+                return this.StopPage(true, "Na vstupu chybí minimálně jeden nevyúčtovaný úkon.");
+            }
+
+
+            return View(v);
+        }
+
+        private void RefreshState_Append2Invoice(Append2InvoiceViewModel v)
+        {
+            var mq = new BO.myQueryP31() { pids = BO.BAS.ConvertString2ListInt(v.pids) };
+            mq.isinvoiced = false;
+            
+            v.lisP31 = Factory.p31WorksheetBL.GetList(mq);
+        }
+
+        [HttpPost]
+        public IActionResult Append2Invoice(Append2InvoiceViewModel v, string oper)
+        {
+            RefreshState_Append2Invoice(v);
+            if (v.SelectedInvoiceP91ID == 0)
+            {
+                this.AddMessage("Chybí cílové vyúčtování (faktura).");
+                return View(v);
+            }
+           
+            return RedirectToAction("Index", "p31approve",new { pids=v.pids,prefix="p31",p91id=v.SelectedInvoiceP91ID});
+        }
+
+
         public IActionResult Index(string tempguid)
         {
             if (string.IsNullOrEmpty(tempguid))
@@ -17,16 +57,16 @@ namespace UI.Controllers
                 return this.StopPage(true, "guid missing.");
             }
             var v = new GatewayViewModel() { tempguid = tempguid, p91Date = DateTime.Today, p91DateSupply = DateTime.Today, BillingScale = 1, IsDraft = true };
-            
 
-            RefreshState(v);
+
+            RefreshState_Index(v);
             
 
 
             return View(v);
         }
 
-        private void RefreshState(GatewayViewModel v)
+        private void RefreshState_Index(GatewayViewModel v)
         {
             DateTime datMaturityDef = DateTime.Today.AddDays(Factory.x35GlobalParamBL.LoadParamInt("DefMaturityDays", 10));
 
@@ -112,7 +152,7 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult Index(GatewayViewModel v, string oper)
         {
-            RefreshState(v);
+            RefreshState_Index(v);
 
 
             switch (oper)
@@ -132,6 +172,35 @@ namespace UI.Controllers
                         return View(v);
                     }
 
+                    return View(v);
+                case "append2invoice":
+                    if (v.SelectedInvoiceP91ID == 0)
+                    {
+                        this.AddMessage("Chybí cílové vyúčtování (faktura).");
+                        return View(v);
+                    }
+                    var recP91 = Factory.p91InvoiceBL.Load(v.SelectedInvoiceP91ID);
+                    var dispP91 = Factory.p91InvoiceBL.InhaleRecDisposition(recP91);
+                    if (!dispP91.OwnerAccess)
+                    {
+                        foreach(var rec in v.lisP31)
+                        {
+                            var dispP41 = Factory.p41ProjectBL.InhaleRecDisposition(Factory.p41ProjectBL.Load(rec.p41ID));
+                            if (!dispP41.p91_DraftCreate)
+                            {
+                                this.AddMessageTranslated(rec.Project+": "+Factory.tra("V projektu nemáte oprávnění vytvářet vyúčtování."));                                
+                            }
+                            if (!recP91.p91IsDraft && rec.p71ID==BO.p71IdENUM.Schvaleno && rec.p72ID_AfterApprove==BO.p72IdENUM.Fakturovat)
+                            {
+                                this.AddMessageTranslated(rec.Project + ": " + Factory.tra("S vaším oprávněním můžete do tohoto vyúčtování vkládat pouze úkony s nulovou fakturační cenou!"));
+                            }
+                        }
+                    }
+                    if (Factory.p31WorksheetBL.Append2Invoice(v.SelectedInvoiceP91ID, v.lisP31.Select(p => p.pid).ToList()))
+                    {
+                        v.SetJavascript_CallOnLoad(1);
+                        return View(v);
+                    }
                     return View(v);
 
             }
@@ -245,27 +314,35 @@ namespace UI.Controllers
                     return false;
                 }
             }
-            if (Factory.p85TempboxBL.GetList(v.tempguid, false, "p31").Count() == 0)
+            int intLastP28ID = 0;
+            int intLastP41ID = 0;
+            string strGUID = v.tempguid;string strLastGUID = null;
+            IEnumerable<BO.p85Tempbox> lisTemp = null;
+            foreach (var c in v.lisP31.OrderBy(p => p.p28ID_Client).ThenBy(p => p.p41ID))
             {
-                int intLastP28ID = 0;
-                int intLastP41ID = 0;
-                string strGUID = v.tempguid;
-                foreach(var c in v.lisP31.OrderBy(p=>p.p28ID_Client).ThenBy(p=>p.p41ID))
+                if (v.BillingScale == 2 && c.p28ID_Client != intLastP28ID)
                 {
-                    if (v.BillingScale==2 && c.p28ID_Client != intLastP28ID)
-                    {
-                        strGUID = lis.Where(p => p.p28ID == c.p28ID_Client).First().TempGUID;
-                    }
-                    if (v.BillingScale == 3 && c.p41ID != intLastP41ID)
-                    {
-                        strGUID = lis.Where(p => p.p41ID == c.p41ID).First().TempGUID;
-                    }
-                    var rec = new BO.p85Tempbox() { p85GUID =strGUID, p85DataPID = c.pid, p85Prefix = "p31" };
-                    Factory.p85TempboxBL.Save(rec);
-                    intLastP28ID = c.p28ID_Client;
-                    intLastP41ID = c.p41ID;
+                    strGUID = lis.Where(p => p.p28ID == c.p28ID_Client).First().TempGUID;
                 }
+                if (v.BillingScale == 3 && c.p41ID != intLastP41ID)
+                {
+                    strGUID = lis.Where(p => p.p41ID == c.p41ID).First().TempGUID;
+                }
+                if (strGUID != strLastGUID)
+                {
+                    lisTemp = Factory.p85TempboxBL.GetList(strGUID, false, "p31");
+                }
+                if (lisTemp.Where(p => p.p85DataPID == c.pid).Count() == 0)
+                {
+                    var rec = new BO.p85Tempbox() { p85GUID = strGUID, p85DataPID = c.pid, p85Prefix = "p31" };
+                    Factory.p85TempboxBL.Save(rec);
+                }
+
+                intLastP28ID = c.p28ID_Client;
+                intLastP41ID = c.p41ID;
+                strLastGUID = strGUID;
             }
+
             var errs = new List<int>();
 
             foreach(var rec in lis)

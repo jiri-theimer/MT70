@@ -120,6 +120,7 @@
     <input type="hidden" asp-for="@Model.SelectedTab" />
     <input type="hidden" asp-for="@Model.SelectedTab" />
     <input type="hidden" asp-for="@Model.batchpids" />
+    <input type="hidden" asp-for="@Model.p91id" />
 
 </form>
 @if (_f.CurrentUser.j03Ping_InnerWidth > 1200)
@@ -299,6 +300,9 @@ else
     var _guid = "@Model.tempguid";
 
     $(document).ready(function () {
+        if ($(window).width() < 1200) {
+            parent.window._window_toggle();            
+        }
 
         document.addEventListener("thegrid_rowselect", function (e) {       //změna řádku gridu: automaticky vyvolávaná událost z gridu
             thegrid_handle_rowselect(e.detail.pid);

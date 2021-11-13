@@ -29,6 +29,8 @@
             </div>
             <div class="card-body">
 
+                <mycombo entity="p91Invoice" asp-for="@Model.SelectedInvoiceP91ID" selectedtext="@Model.SelectedInvoiceText" placeholder="@_f.tra("Vyberte cílové vyúčtování")" filter-flag="1"></mycombo>
+                <button type="button" class="btn btn-success" id="cmdAppend2Invoice">@_f.tra("Potvrdit")</button>
             </div>
         </div>
     </div>
@@ -158,7 +160,7 @@
                 {
                     <tr>
                         <td colspan="6" style="background-color: #F0FFF0;">
-                            <i><strong>Model.lisP91_Scale1[i].BillingMemo</strong></i>
+                            <i><strong>@Model.lisP91_Scale1[i].BillingMemo</strong></i>
                         </td>
                     </tr>
                 }
@@ -349,6 +351,14 @@
             postback("save")
         });
 
+        $("#cmdAppend2Invoice").click(function () {
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            postback("append2invoice");
+        });
+
+        
+
         $("#cmdMore").click(function () {
             $("#divMore").toggle();
         });
@@ -368,5 +378,7 @@
 
         postback("postback");
     }
+
+    
 
 </script>

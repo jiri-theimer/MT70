@@ -23,6 +23,7 @@ namespace BL
         public bool RemoveFromApprove(List<int> p31ids);
         public bool Move2Invoice(int p91id_dest, int p31id);
         public bool Move2Bin(bool move2bin, List<int> p31ids);
+        public bool Append2Invoice(int p91id_dest, List<int> pids);
         public bool ValidateVatRate(double vatrate, int p41id, DateTime d, int j27id);
         public IEnumerable<BO.p31WorksheetTimelineDay> GetList_TimelineDays(List<int> j02ids, DateTime d1, DateTime d2, int j70id);
         public BO.p31Rate LoadRate(BO.p51TypeFlagENUM flag, DateTime d, int j02id, int p41id, int p32id);
@@ -427,6 +428,31 @@ namespace BL
             pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
 
             if (_db.RunSp("p31_move_to_another_invoice", ref pars, true) != "1")
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool Append2Invoice(int p91id_dest, List<int> pids)
+        {
+            if (p91id_dest == 0)
+            {
+                this.AddMessage("Chybí cílové vyúčtování (faktura)."); return false;
+            }
+            if (pids==null || pids.Count() == 0)
+            {
+                this.AddMessageTranslated("Na vstupu chybí úkony."); return false;
+            }
+            var guid = BO.BAS.GetGuid();
+            _db.RunSql("INSERT INTO p85TempBox(p85GUID,p85Prefix,p85DataPID) SELECT @guid,'p31',p31ID FROM p31Worksheet WHERE p31ID IN (" + string.Join(",", pids) + ")",new { guid=guid});
+
+            var pars = new Dapper.DynamicParameters();            
+            pars.Add("p91id", p91id_dest, System.Data.DbType.Int32);
+            pars.Add("guid", guid, System.Data.DbType.String);
+            pars.Add("j03id_sys", _db.CurrentUser.pid, System.Data.DbType.Int32);
+            pars.Add("err_ret", "", System.Data.DbType.String, System.Data.ParameterDirection.Output);
+
+            if (_db.RunSp("p31_append_invoice", ref pars, true) != "1")
             {
                 return false;
             }
