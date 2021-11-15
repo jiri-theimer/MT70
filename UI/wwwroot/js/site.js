@@ -472,7 +472,7 @@ function _init_qtip_onpage() {
 //upozornění uživatele na editaci prvku na formuláři
 function _toolbar_warn2save_changes(message) {
     if (typeof message === "undefined") {
-        message = "Změny potvrďte tlačítkem [Uložit změny]."
+        message = "Změny potvrďte tlačítkem [Uložit změny].";
     }
     if ($("#toolbar_changeinfo").length) {
         $("#toolbar_changeinfo").text(message);
@@ -491,6 +491,15 @@ function _reload_layout_and_close(pid, flag) {
         window.parent._window_close();
     } else {
         hardrefresh(pid, flag);
+    }
+}
+
+function _close_and_reload_parentsite(url) {
+    if (window !== top) {
+        window.parent.location.replace(url);
+        window.parent._window_close();
+    } else {
+        location.replace(url);
     }
 }
 
@@ -789,3 +798,5 @@ function handle_clipboard_textarea(ctl, e) { //očištění html znaků z clipbo
 
     $(ctl).val($(ctl).val() + s_dest);
 }
+
+

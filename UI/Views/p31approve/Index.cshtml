@@ -12,8 +12,16 @@
 
 <form id="form1" asp-controller="p31approve" asp-action="Index" method="POST">
     <div class="bg-light input-group m-0" style="padding-bottom:10px;">
-        <button type="button" id="cmdSaveOnly" class="btn btn-success m-1">@_f.tra("Pouze uložit schvalování")</button>
-        <button type="button" id="cmdSaveAndBilling" class="btn btn-primary m-1">@_f.tra("Uložit schvalování a pokračovat vyúčtováním")</button>
+        @if (Model.p91id == 0)
+        {
+            <button type="button" id="cmdSaveOnly" class="btn btn-success m-1">@_f.tra("Pouze uložit schvalování")</button>
+            <button type="button" id="cmdSaveAndBilling" class="btn btn-primary m-1">@_f.tra("Uložit schvalování a pokračovat vyúčtováním")</button>
+        }
+        else
+        {
+            <button type="button" id="cmdAppend2Invoice" class="btn btn-success m-1">@_f.tra("Vložit úkony do vyúčtování") @(Model.RecP91_Append2Invoice.p91Code)</button>
+        }
+
 
 
         <div class="dropdown m-1">
@@ -329,6 +337,12 @@ else
             $(this).attr("disabled", true);
             postback("saveandbilling")
         });
+        $("#cmdAppend2Invoice").click(function () {
+            $(this).text("Processing...");
+            $(this).attr("disabled", true);
+            postback("append2invoice")
+        });
+        
         $("#cmdMore").click(function () {
             $("#divMore").toggle();
         });

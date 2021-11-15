@@ -11,7 +11,7 @@ namespace UI.Models.p31approve
         public string prefix { get; set; }
         public string pidsinline { get; set; }
         public BO.p72IdENUM p72id { get; set; }
-        public int p91id { get; set; }
+        
         public int approvinglevel { get; set; }
 
         public IEnumerable<BO.p31Worksheet> lisP31 { get; set; }
@@ -45,6 +45,9 @@ namespace UI.Models.p31approve
         public string batchpids { get; set; }
         public double BatchInvoiceRate { get; set; }
         public int BatchApproveLevel { get; set; }
-        
+
+
+        public int p91id { get; set; }
+        public BO.p91Invoice RecP91_Append2Invoice { get; set; }
     }
 }

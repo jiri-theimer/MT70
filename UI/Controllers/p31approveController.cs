@@ -65,12 +65,48 @@ namespace UI.Controllers
             switch (oper)
             {
                 case "saveonly":
-                case "saveandbilling":                   
+                case "saveandbilling":
+                case "append2invoice":
                     if (SaveApproving(v))
                     {
                         if (oper== "saveandbilling")
                         {
                             return RedirectToAction("Index", "p31invoice", new { tempguid = v.tempguid });
+                        }
+                        if (oper == "append2invoice")
+                        {                            
+                            var dispP91 = Factory.p91InvoiceBL.InhaleRecDisposition(v.RecP91_Append2Invoice);
+                            if (!dispP91.OwnerAccess)
+                            {
+                                foreach (var rec in v.lisP31)
+                                {
+                                    var dispP41 = Factory.p41ProjectBL.InhaleRecDisposition(Factory.p41ProjectBL.Load(rec.p41ID));
+                                    if (!dispP41.p91_DraftCreate)
+                                    {
+                                        this.AddMessageTranslated(rec.Project + ": " + Factory.tra("V projektu nemáte oprávnění vytvářet vyúčtování."));
+                                        return View(v);
+                                    }
+                                    if (!v.RecP91_Append2Invoice.p91IsDraft && rec.p71ID == BO.p71IdENUM.Schvaleno && rec.p72ID_AfterApprove == BO.p72IdENUM.Fakturovat)
+                                    {
+                                        this.AddMessageTranslated(rec.Project + ": " + Factory.tra("S vaším oprávněním můžete do tohoto vyúčtování vkládat pouze úkony s nulovou fakturační cenou!"));
+                                        return View(v);
+                                        
+                                    }
+                                }
+                            }
+                            if (Factory.p31WorksheetBL.Append2Invoice(v.p91id, v.lisP31.Select(p => p.pid).ToList()))
+                            {
+                                if (Factory.CurrentUser.j04IsMenu_Invoice)
+                                {
+                                    v.SetJavascript_CallOnLoad($"/Record/RecPage?prefix=p91&pid={v.p91id}");
+                                }
+                                else
+                                {
+                                    v.SetJavascript_CallOnLoad(1);
+                                }                                
+                                return View(v);
+                            }
+
                         }
                         v.SetJavascript_CallOnLoad(0);
                         return View(v);
@@ -79,6 +115,8 @@ namespace UI.Controllers
                     {                        
                         return View(v);
                     }
+                
+
                 case "rate":
                     UpdateTempRate(v.batchpids, v.BatchInvoiceRate, v.tempguid);                    
                     return View(v);
@@ -113,6 +151,11 @@ namespace UI.Controllers
             {
                 v.P31StateQueryCssClass = "btn btn-light dropdown-toggle filtered";
                 v.P31StateQueryAlias = new UI.Menu.TheMenuSupport(Factory).getP31StateQueryAlias(v.gridinput.query.p31statequery);
+            }
+
+            if (v.p91id > 0)
+            {
+                v.RecP91_Append2Invoice = Factory.p91InvoiceBL.Load(v.p91id);
             }
 
         }

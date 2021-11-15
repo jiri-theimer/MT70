@@ -76,6 +76,11 @@ namespace UI.Menu
                 {
                     AMI_RecPage(_f.p56TaskBL.Load(rec.p56ID).FullName, "p56", rec.p56ID, "rel", "task");
                 }
+                if (rec.p91ID>0 && _f.CurrentUser.j04IsMenu_Invoice)
+                {
+                    var recP91 = _f.p91InvoiceBL.Load(rec.p91ID);
+                    AMI_RecPage(recP91.p92Name+": "+ recP91.p91Code, "p91", rec.p91ID, "rel", "receipt_long");
+                }
                 if (_f.CurrentUser.j04IsMenu_People)
                 {
                     AMI_RecPage(_f.j02PersonBL.Load(rec.j02ID).FullNameAsc, "j02", rec.j02ID, "rel", "face");
