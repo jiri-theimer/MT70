@@ -495,6 +495,10 @@ namespace UI.Controllers
                 DIV();
                 AMI("Oštítkovat", "javascript:tg_tagging()", "local_offer");
             }
+            if (tgi.prefix=="p31" || tgi.prefix=="p56" || tgi.prefix == "o22")
+            {
+                AMI("Exportovat do Kalendáře (iCalendar)", "javascript:tg_ical()", "event");
+            }
 
             DIV();
             AMI("GRID-REPORT", "javascript:tg_gridreport_selected()", "design_services");

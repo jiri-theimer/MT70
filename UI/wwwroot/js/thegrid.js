@@ -1028,6 +1028,19 @@ function tg_tagging() {
     _window_open(url, 2);
 
 }
+function tg_ical() {
+    var prefix = _tg_entity.substr(0, 3);
+    var url = "/iCalendar/" + prefix;
+    var pids = $("#tg_selected_pids").val();
+    if (pids === "") {
+        _notify_message(_tg_musite_vybrat_zaznam);
+
+        return;
+    }
+    url = url + "?pids=" + pids;    
+    location.replace(url);
+
+}
 function tg_batchupdate(prefix) {
     var pids = $("#tg_selected_pids").val();
     if (pids === "") {

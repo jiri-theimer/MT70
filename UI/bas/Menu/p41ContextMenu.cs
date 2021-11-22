@@ -86,12 +86,13 @@ namespace UI.Menu
             AMI_Memo("p41", pid, "more");
             AMI_Doc("p41", pid, "more");
             AMI_SendMail("p41", pid, "more");
+            AMI("Export do kalendáře", "ical");
 
 
             AMI("Vazby", null, null, null, "bind");
             if (rec.p28ID_Client > 0)
             {
-                AMI(rec.Client, "/Record/RecPage?prefix=p28&pid=" + rec.p28ID_Client.ToString(), null, "bind", null, "_top");
+                AMI(_f.tra("Klient")+": "+rec.Client, "/Record/RecPage?prefix=p28&pid=" + rec.p28ID_Client.ToString(), null, "bind", null, "_top");
             }
             if (rec.p41ID_P07Level1 > 0 && rec.p41ID_P07Level1 != rec.pid)
             {

@@ -47,8 +47,9 @@ namespace UI.Menu
             AMI_Doc("p56", pid, "more");
             AMI_SendMail("p56", pid, "more");
 
+            AMI("Exportovat do Kalendáře (iCalendar)", "/iCalendar/p56?pids=" + rec.pid.ToString(), "event", "more");
 
-            
+
 
         }
     }

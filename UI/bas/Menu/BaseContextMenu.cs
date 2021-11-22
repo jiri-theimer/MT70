@@ -76,7 +76,7 @@ namespace UI.Menu
         }
         public MenuItem AMI_ChangeLog(string prefix, int pid, string parentmenuid = "more")
         {
-            return AMI("CHANGE-LOG", $"javascript: _window_open('/Record/ChangeLog?prefix={prefix}&pid={pid}',2)", "k-i-stick", parentmenuid);
+            return AMI("CHANGE-LOG", $"javascript: _window_open('/Record/ChangeLog?prefix={prefix}&pid={pid}',2)", "timeline", parentmenuid);
         }
 
         public void AMI_Vykazat(BO.p41Project rec,int p56id=0)

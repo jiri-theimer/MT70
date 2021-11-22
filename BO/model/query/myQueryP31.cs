@@ -11,8 +11,11 @@ namespace BO
     {
         public int j02id { get; set; }
         public int p28id { get; set; }
-        public int p41id { get; set; }        
+        public int p41id { get; set; }
+        public List<int> p41ids { get; set; }
         public int p32id { get; set; }
+        public List<int> p32ids { get; set; }
+       
         public int p91id { get; set; }
         public int p56id { get; set; }
         public int p70id { get; set; }
@@ -73,6 +76,10 @@ namespace BO
             {
                 AQ("a.p41ID=@p41id", "p41id", this.p41id);
             }
+            if (this.p41ids != null)
+            {
+                AQ("a.p41ID IN (" + string.Join(",", this.p41ids) + ")", null, null);
+            }
             if (this.p28id > 0)
             {
                 AQ("a.p41ID IN (select p41ID FROM p41Project WHERE p28ID_Client=@p28id)", "p28id", this.p28id);
@@ -84,6 +91,10 @@ namespace BO
             if (this.p32id > 0)
             {
                 AQ("a.p32ID=@p32id", "p32id", this.p32id);
+            }
+            if (this.p32ids != null)
+            {
+                AQ("a.p32ID IN (" + string.Join(",", this.p32ids) + ")", null, null);
             }
             if (this.p56id > 0)
             {
