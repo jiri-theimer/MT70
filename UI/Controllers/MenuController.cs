@@ -421,9 +421,39 @@ namespace UI.Controllers
 
             return s;
         }
-        public string MenuNewRecord(string prefix)
+        public string MenuNewRecord()
         {
-            DIV();
+            if (Factory.CurrentUser.j04IsMenu_Worksheet)
+            {
+                var lisP34 = Factory.p34ActivityGroupBL.GetList_WorksheetEntry_InAllProjects(Factory.CurrentUser.j02ID);
+                if (lisP34.Count() < 10)
+                {
+                    foreach (var recP34 in lisP34)
+                    {
+                        var strIcon = "more_time";
+                        if ((recP34.p33ID==BO.p33IdENUM.PenizeBezDPH || recP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu) && recP34.p34IncomeStatementFlag==BO.p34IncomeStatementFlagENUM.Vydaj)
+                        {
+                            strIcon = "price_change";
+                        }
+                        if ((recP34.p33ID == BO.p33IdENUM.PenizeBezDPH || recP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu) && recP34.p34IncomeStatementFlag == BO.p34IncomeStatementFlagENUM.Prijem)
+                        {
+                            strIcon = "price_check";
+                        }
+                        if (recP34.p33ID == BO.p33IdENUM.Kusovnik)
+                        {
+                            strIcon = "calculate";
+                        }
+                        AMI(recP34.p34Name, $"javascript:_p31_create({recP34.pid})",strIcon);
+                    }
+                }
+                else
+                {
+                    AMI("Vykázat úkon", $"javascript:_p31_create()", "more_time");
+                }
+                DIV();
+            }
+            
+            
             if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Creator) || Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Draft_Creator))
             {
                 if (Factory.CurrentUser.p07LevelsCount == 1)

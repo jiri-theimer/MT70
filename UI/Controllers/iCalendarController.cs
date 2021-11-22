@@ -24,7 +24,7 @@ namespace UI.Controllers
 
         }
 
-        public IActionResult p31(string pids,string p32ids,string p41ids,string d1,string d2)    //spuštění ručně přes prohlížeč
+        public IActionResult p31(string pids,string p32ids,string p41ids,string d1,string d2, string disposition)    //spuštění ručně přes prohlížeč
         {
             if (string.IsNullOrEmpty(pids) && string.IsNullOrEmpty(p32ids) && string.IsNullOrEmpty(p32ids) && string.IsNullOrEmpty(p41ids) && (string.IsNullOrEmpty(d1) || string.IsNullOrEmpty(d2)))
             {
@@ -38,8 +38,14 @@ namespace UI.Controllers
 
             string s = c.Generate_p31_Calendar(pids, p32ids, p41ids, gd1, gd2);
 
-            //Response.Headers["Content-Disposition"] = "inline; filename=marktime_calendar.ics";
-            Response.Headers["Content-Disposition"] = $"filename=marktime_p31_calendar.ics";
+            var strDisposition = "filename=marktime_p31_calendar.ics";
+
+            if (!string.IsNullOrEmpty(disposition))
+            {
+                strDisposition = disposition + "; " + strDisposition;
+            }
+            Response.Headers["Content-Disposition"] = strDisposition;
+            
             var fileContentResult = new FileContentResult(System.Text.Encoding.UTF8.GetBytes(s), "text/calendar");
             return fileContentResult;
 
@@ -50,7 +56,7 @@ namespace UI.Controllers
 
         }
 
-        public IActionResult p56(string pids, string p57ids, string p41ids, string d1, string d2)    //spuštění ručně přes prohlížeč
+        public IActionResult p56(string pids, string p57ids, string p41ids, string d1, string d2,string disposition)    //spuštění ručně přes prohlížeč
         {
             if (string.IsNullOrEmpty(pids) && string.IsNullOrEmpty(p57ids) && string.IsNullOrEmpty(p41ids) && (string.IsNullOrEmpty(d1) || string.IsNullOrEmpty(d2)))
             {
@@ -64,7 +70,13 @@ namespace UI.Controllers
 
             string s = c.Generate_p56_Calendar(pids,null,p57ids,"", gd1, gd2);
         
-            Response.Headers["Content-Disposition"] = $"filename=marktime_p56_calendar.ics";
+            var strDisposition = "filename=marktime_p56_calendar.ics";
+            
+            if (!string.IsNullOrEmpty(disposition))
+            {
+                strDisposition = disposition + "; " + strDisposition;
+            }
+            Response.Headers["Content-Disposition"] = strDisposition;
             var fileContentResult = new FileContentResult(System.Text.Encoding.UTF8.GetBytes(s), "text/calendar");
             return fileContentResult;
 

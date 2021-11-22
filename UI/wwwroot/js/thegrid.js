@@ -1030,14 +1030,14 @@ function tg_tagging() {
 }
 function tg_ical() {
     var prefix = _tg_entity.substr(0, 3);
-    var url = "/iCalendar/" + prefix;
+    var url = "/iCalendar/" + prefix +"?disposition=attachment";
     var pids = $("#tg_selected_pids").val();
     if (pids === "") {
         _notify_message(_tg_musite_vybrat_zaznam);
 
         return;
     }
-    url = url + "?pids=" + pids;    
+    url = url + "&pids=" + pids;    
     location.replace(url);
 
 }

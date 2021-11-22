@@ -12,6 +12,7 @@ namespace BL
         public IEnumerable<BO.p34ActivityGroup> GetList(BO.myQueryP34 mq);
         public int Save(BO.p34ActivityGroup rec, int intP32ID_SystemDefault = 0);
         public IEnumerable<BO.p34ActivityGroup> GetList_WorksheetEntryInProject(int p41id, int p42id, int j02id);
+        public IEnumerable<BO.p34ActivityGroup> GetList_WorksheetEntry_InAllProjects(int j02id);
 
     }
     class p34ActivityGroupBL : BaseBL, Ip34ActivityGroupBL
@@ -62,6 +63,31 @@ namespace BL
             s += " ORDER BY a.p34Ordinary,a.p34Name";
 
             return _db.GetList<BO.p34ActivityGroup>(GetSQL1(s), new { p42id = p42id,p41id=p41id,j02id=j02id });
+        }
+        public IEnumerable<BO.p34ActivityGroup> GetList_WorksheetEntry_InAllProjects(int j02id)
+        {
+            var strEntryFlags = "1,2";
+            if (j02id != _mother.CurrentUser.j02ID)
+            {
+                strEntryFlags = "1,2,4";
+            }
+            
+            var s = " WHERE getdate() BETWEEN a.p34ValidFrom AND a.p34ValidUntil AND a.p34ID IN (select p34ID FROM p43ProjectType_Workload)";
+            if (_mother.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P31_Creator))
+            {
+                //právo vykazovat do všech projektů    
+                s += " ORDER BY a.p34Ordinary,a.p34Name";
+                return _db.GetList<BO.p34ActivityGroup>(GetSQL1(s));
+            }
+            s += " AND (a.p34ID IN (";
+            s += "SELECT a1.p34ID FROM o28ProjectRole_Workload a1 INNER JOIN x69EntityRole_Assign a2 ON a1.x67ID=a2.x67ID INNER JOIN x67EntityRole a3 ON a2.x67ID=a3.x67ID";
+            s += " WHERE a3.x29ID=141 AND a1.o28EntryFlag IN (" + strEntryFlags + ") AND (a2.j02ID=@j02id OR a2.j11ID IN (SELECT j11ID FROM j12Team_Person WHERE j02ID=@j02id))";
+            s += ")";
+
+            s += ")";
+
+            return _db.GetList<BO.p34ActivityGroup>(GetSQL1(s), new {j02id = j02id });
+
         }
 
         public int Save(BO.p34ActivityGroup rec,int intP32ID_SystemDefault=0)
