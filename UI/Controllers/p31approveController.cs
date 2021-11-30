@@ -220,7 +220,7 @@ namespace UI.Controllers
             switch (rec.p33ID)
             {
                 case BO.p33IdENUM.Cas:
-                    if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T" || rec.IsRecommendedHHMM())
+                    if (this.Factory.CurrentUser.j03DefaultHoursFormat == "T" || rec.IsRecommendedHHMM() || (rec.p31Hours_Approved_Billing - rec.p31Hours_Orig).ToString().Length>5)
                     {
                         c.vykazano = rec.p31HHMM_Orig;
                         if (rec.p31Hours_Approved_Billing < rec.p31Hours_Orig)

@@ -1079,6 +1079,16 @@ function tg_approve() {
 
 }
 
+function tg_append2invoice() {    
+    var pids = $("#tg_selected_pids").val();
+    if (pids === "") {
+        _notify_message(_tg_musite_vybrat_zaznam);
+        return;
+    }
+    
+    _window_open("/p31invoice/Append2Invoice?pids=" + pids, 2);
+}
+
 
 
 function tg_clear_selection() {

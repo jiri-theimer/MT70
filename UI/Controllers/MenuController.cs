@@ -499,10 +499,21 @@ namespace UI.Controllers
 
         public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
         {
-            if ("p31,p41,p28,j02,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
-            {               
-                AMI("Schválit/Vyúčtovat", "javascript:tg_approve()","approval");
+            
+            if (this.Factory.CurrentUser.IsApprovingPerson)
+            {
+                if ("p31,p41,p28,j02,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
+                {
+                    AMI("Schválit/Vyúčtovat", "javascript:tg_approve()", "approval");
+                }
+                if (this.Factory.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Creator, BO.x53PermValEnum.GR_P91_Draft_Creator))
+                {
+                    
+                   
+                    AMI("Přidat do vybraného vyúčtování", "javascript:tg_append2invoice()", "receipt_long");
+                }
             }
+            
 
             switch (tgi.prefix)
             {
