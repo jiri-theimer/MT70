@@ -29,17 +29,23 @@ namespace UI.Menu
 
             if (rec.b07RecordPID>0 && rec.x29ID != BO.x29IdEnum._NotSpecified)
             {
-                DIV();
+                
                 string prefix = BO.BASX29.GetPrefix(rec.x29ID);
                 string strAlias = f.CBL.GetObjectAlias(prefix, rec.b07RecordPID);
 
-                //AMI("Vazby", null, null, null, "binding");
-                AMI(strAlias, "/"+prefix+"/RecPage?pid="+rec.b07RecordPID.ToString(),null,null,null,"_top");
+                AMI("Vazby", null, null, null, "bind");
+                
+                if (prefix == "p41")
+                {
+                    var recP41 = _f.p41ProjectBL.Load(rec.b07RecordPID);
+                    prefix = "le"+recP41.p07Level.ToString();
+                }
+                
+                AMI_RecPage(strAlias, prefix, rec.b07RecordPID, "bind");
 
             }
-            
 
-            
+                        
 
         }
     }

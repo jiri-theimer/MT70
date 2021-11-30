@@ -44,13 +44,13 @@ namespace UI.Menu
             AMI_Doc("p90", pid, "more");
             AMI_SendMail("p90", pid,"more");
 
-            
 
 
-
-
-
-
+            AMI("Vazby", null, null, null, "bind");
+            if (rec.p28ID > 0)
+            {
+                AMI_RecPage(_f.tra("Klient") + ": " + rec.p28Name, "p28", rec.p28ID, "bind");
+            }            
 
         }
     }

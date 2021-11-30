@@ -86,29 +86,29 @@ namespace UI.Menu
             AMI_Memo("p41", pid, "more");
             AMI_Doc("p41", pid, "more");
             AMI_SendMail("p41", pid, "more");
-            AMI("Export do kalendáře", "ical");
-
-
+            
             AMI("Vazby", null, null, null, "bind");
             if (rec.p28ID_Client > 0)
             {
-                AMI(_f.tra("Klient")+": "+rec.Client, "/Record/RecPage?prefix=p28&pid=" + rec.p28ID_Client.ToString(), null, "bind", null, "_top");
+                AMI_RecPage(_f.tra("Klient") + ": " + rec.Client, "p28", rec.p28ID_Client, "bind");                
             }
             if (rec.p41ID_P07Level1 > 0 && rec.p41ID_P07Level1 != rec.pid)
             {
-                AMI(f.CBL.GetObjectAlias("p41", rec.p41ID_P07Level1), "/Record/RecPage?prefix=le1&pid=" + rec.p41ID_P07Level1.ToString(), null, "bind", null, "_top");
+                
+                AMI_RecPage(_f.p41ProjectBL.Load(rec.p41ID_P07Level1).TypePlusName, "le1", rec.p41ID_P07Level1, "bind");
+                
             }
             if (rec.p41ID_P07Level2 > 0 && rec.p41ID_P07Level2 != rec.pid)
             {
-                AMI(f.CBL.GetObjectAlias("p41", rec.p41ID_P07Level2), "/Record/RecPage?prefix=le2&pid=" + rec.p41ID_P07Level2.ToString(), null, "bind", null, "_top");
+                AMI_RecPage(_f.p41ProjectBL.Load(rec.p41ID_P07Level2).TypePlusName, "le2", rec.p41ID_P07Level2, "bind");                               
             }
             if (rec.p41ID_P07Level3 > 0 && rec.p41ID_P07Level3 != rec.pid)
             {
-                AMI(f.CBL.GetObjectAlias("p41", rec.p41ID_P07Level3), "/Record/RecPage?prefix=le3&pid=" + rec.p41ID_P07Level3.ToString(), null, "bind", null, "_top");
+                AMI_RecPage(_f.p41ProjectBL.Load(rec.p41ID_P07Level3).TypePlusName, "le3", rec.p41ID_P07Level3, "bind");                                
             }
             if (rec.p41ID_P07Level4 > 0 && rec.p41ID_P07Level4 != rec.pid)
             {
-                AMI(f.CBL.GetObjectAlias("p41", rec.p41ID_P07Level4), "/Record/RecPage?prefix=le4&pid=" + rec.p41ID_P07Level4.ToString(), null, "bind", null, "_top");
+                AMI_RecPage(_f.p41ProjectBL.Load(rec.p41ID_P07Level4).TypePlusName, "le4", rec.p41ID_P07Level4, "bind");
             }
 
         }

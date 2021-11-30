@@ -195,6 +195,12 @@ namespace BO
             }
         }
         
-        
+        public string TypePlusName
+        {
+            get
+            {
+                return this.p42name + ": " + this.p41Name;
+            }
+        }
     }
 }

@@ -89,12 +89,13 @@ namespace UI.Menu
             AMI("Vazby", null, null, null, "bind");
             if (rec.p28ID > 0)
             {
-                AMI(_f.tra("Klient")+": "+rec.p28Name, "/Record/RecPage?prefix=p28&pid=" + rec.p28ID.ToString(), null, "bind", null, "_top");
+                AMI_RecPage(_f.tra("Klient") + ": " + rec.p28Name, "p28", rec.p28ID, "bind");                
             }
             if (rec.p41ID_First > 0)
             {
                 var recP41 = _f.p41ProjectBL.Load(rec.p41ID_First);
-                AMI(recP41.p42name+": "+ recP41.FullName, "/Record/RecPage?prefix=p41&pid=" + rec.p41ID_First.ToString(), null, "bind", null, "_top");
+                AMI_RecPage(recP41.TypePlusName, "le"+ recP41.p07Level.ToString(), rec.p41ID_First, "bind");
+                
             }
            
 

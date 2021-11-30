@@ -30,9 +30,10 @@ namespace UI.Menu
             }
 
             DIV();
-            if (rec.p41ID > 0 && disp.IsReceiver)
-            {
-                var recP41 = _f.p41ProjectBL.Load(rec.p41ID);
+            var recP41 = _f.p41ProjectBL.Load(rec.p41ID);
+
+            if (disp.IsReceiver)
+            {                
                 AMI_Vykazat(recP41,pid);
             }
             
@@ -50,7 +51,13 @@ namespace UI.Menu
             AMI("Exportovat do Kalendáře (iCalendar)", "/iCalendar/p56?pids=" + rec.pid.ToString(), "event", "more");
 
 
-
+            AMI("Vazby", null, null, null, "bind");
+            
+            AMI_RecPage(recP41.TypePlusName, "le" + recP41.p07Level.ToString(), rec.p41ID, "bind");
+            if (recP41.p28ID_Client > 0)
+            {
+                AMI_RecPage(_f.tra("Klient")+": "+recP41.Client, "p28", recP41.p28ID_Client, "bind");
+            }
         }
     }
 }

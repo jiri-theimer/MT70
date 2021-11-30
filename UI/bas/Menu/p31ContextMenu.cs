@@ -65,32 +65,32 @@ namespace UI.Menu
                 var recP41 = _f.p41ProjectBL.Load(rec.p41ID);
                 if (f.CurrentUser.p07LevelsCount > 1)
                 {
-                    AMI_RecPage(recP41.p42name + ": " + recP41.FullName, "le" + recP41.p07Level.ToString(), recP41.pid, "rel", "work_outline");
+                    AMI_RecPage(recP41.p42name + ": " + recP41.FullName, "le" + recP41.p07Level.ToString(), recP41.pid, "rel");
                 }
                 else
                 {
-                    AMI_RecPage(recP41.p42name+": "+ recP41.FullName, "p41", recP41.pid, "rel", "work_outline");
+                    AMI_RecPage(recP41.p42name+": "+ recP41.FullName, "p41", recP41.pid, "rel");
 
                 }
                 if (recP41.p28ID_Client > 0 && _f.CurrentUser.j04IsMenu_Contact)
                 {
                     var recP28 = _f.p28ContactBL.Load(recP41.p28ID_Client);
-                    AMI_RecPage(_f.tra("Klient")+": "+ recP28.p28name, "p28", recP41.p28ID_Client, "rel", "business");
+                    AMI_RecPage(_f.tra("Klient")+": "+ recP28.p28name, "p28", recP41.p28ID_Client, "rel");
                 }
                 if (rec.p56ID > 0 && _f.CurrentUser.j04IsMenu_Task)
                 {
                     var recP56 = _f.p56TaskBL.Load(rec.p56ID);
-                    AMI_RecPage(recP56.p57Name+": "+ recP56.FullName, "p56", rec.p56ID, "rel", "task");
+                    AMI_RecPage(recP56.p57Name+": "+ recP56.FullName, "p56", rec.p56ID, "rel");
                 }
                 if (rec.p91ID>0 && _f.CurrentUser.j04IsMenu_Invoice)
                 {
                     var recP91 = _f.p91InvoiceBL.Load(rec.p91ID);
-                    AMI_RecPage(recP91.p92Name+": "+ recP91.p91Code, "p91", rec.p91ID, "rel", "receipt_long");
+                    AMI_RecPage(recP91.p92Name+": "+ recP91.p91Code, "p91", rec.p91ID, "rel");
                 }
                 if (_f.CurrentUser.j04IsMenu_People)
                 {
                     var recJ02 = _f.j02PersonBL.Load(rec.j02ID);
-                    AMI_RecPage(recJ02.j07Name+": "+ recJ02.FullNameAsc, "j02", rec.j02ID, "rel", "face");
+                    AMI_RecPage(recJ02.j07Name+": "+ recJ02.FullNameAsc, "j02", rec.j02ID, "rel");
                 }
 
             }

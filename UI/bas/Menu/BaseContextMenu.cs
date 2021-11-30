@@ -38,9 +38,13 @@ namespace UI.Menu
             return c;
         }
 
-        public MenuItem AMI_RecPage(string strName, string prefix,int pid,string parentid=null,string icon= "maps_home_work")
+        public MenuItem AMI_RecPage(string strName, string prefix,int pid,string parentid=null,string icon= null)
         {
             //return AMI(strName, $"javascript:_location_replace_top('/{prefix}/RecPage?pid={pid}')", "k-i-layout");
+            if (icon == null)
+            {
+                icon = get_menu_icon(prefix);
+            }
             return AMI(strName, $"/Record/RecPage?prefix={prefix}&pid={pid}", icon, parentid, null,"_top");
         }
         public MenuItem AMI_RecGrid(string strName, string prefix, int pid)
@@ -123,5 +127,29 @@ namespace UI.Menu
         }
 
 
+        public string get_menu_icon(string prefix)
+        {
+            switch (prefix)
+            {
+                case "p28":
+                    return "business";
+                case "p56":
+                    return "task";
+                case "p91":
+                    return "receipt_long";
+                case "j02":
+                    return "face";
+                case "p41":
+                    return "work_outline";
+                case "le1":
+                case "le2":
+                case "le3":
+                case "le4":
+                case "le5":
+                    return "work_outline";
+                default:
+                    return "maps_home_work";
+            }
+        }
     }
 }
