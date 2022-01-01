@@ -94,33 +94,7 @@ namespace BL
                 return Configuration.GetSection("App")["CssCustomSkin"];
             }
         }
-        public bool PasswordRequireDigit {
-            get
-            {
-                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireDigit"]);
-            }
-        }
-        public bool PasswordRequireLowercase { get
-            {
-                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireLowercase"]);
-            }
-        }
-        public bool PasswordRequireUppercase { get {
-                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireUppercase"]);
-            }
-        }
-        public bool PasswordRequireNonAlphanumeric { get {
-                return Convert.ToBoolean(Configuration.GetSection("PasswordChecker")["RequireNonAlphanumeric"]);
-            }
-        }
-        public int PasswordMinLength { get {
-                return Convert.ToInt32(Configuration.GetSection("PasswordChecker")["MinLength"]);
-            }
-        }
-        public int PasswordMaxLength { get {
-                return Convert.ToInt32(Configuration.GetSection("PasswordChecker")["MaxLength"]);
-            }
-        }
+        
 
         public bool IsCloud
         {

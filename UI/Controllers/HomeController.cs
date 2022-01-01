@@ -117,8 +117,8 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult ChangePassword(Models.ChangePasswordViewModel v)
         {
-            var c = new BO.CLS.PasswordChecker();
-            var res = c.CheckPassword(v.NewPassword, Factory.App.PasswordMinLength, Factory.App.PasswordMaxLength, Factory.App.PasswordRequireDigit, Factory.App.PasswordRequireUppercase, Factory.App.PasswordRequireLowercase, Factory.App.PasswordRequireNonAlphanumeric);
+            var c = new BL.bas.PasswordChecker();
+            var res = c.CheckPassword(v.NewPassword);
             if (res.Flag == BO.ResultEnum.Failed)
             {
                 this.AddMessage(res.Message); return View(v);
