@@ -64,34 +64,11 @@ namespace UI.Controllers
             return _menusup.FlushResult_UL(lis, true, true, source);
         }
         public string CurrentUserMyProfile()
-        {                
-            AMI("Aktuální stránku uložit jako domovskou", "javascript:_save_as_home_page()", "favorite_border");
-            if (Factory.CurrentUser.j03HomePageUrl !=null)
-            {
-                AMI("Vyčistit odkaz na domovskou stránku", "javascript:_clear_home_page()", "heart_broken");
-            }
-            AMI("Tovární HOME stránka (Dashboard)", "/Dashboard/Index", "dashboard");
+        {
+            var lis = new NoContext_MyProfileMenu(Factory).GetItems();
+            return _menusup.FlushResult_UL(lis, true, false);
 
-            DIV();
-            
-            if (Factory.CurrentUser.j04IsMenu_MyProfile)
-            {
-                AMI("Můj profil", "/Home/MyProfile", "person");
-            }
-            
-            AMI("Odeslat zprávu", "javascript:_window_open('/Mail/SendMail',1)", "email");
-
-            AMI("Změnit přístupové heslo", "/Home/ChangePassword", "password");
-            
-            DIV();
-            AMI("Nápověda", "javascript: _window_open('/x51/Index')", "help_outline");
-            AMI("O aplikaci", "/Home/About", "info");
-            DIV();
-            AMI("Odhlásit se", "/Home/logout", "logout");
-
-
-
-            return _menusup.FlushResult_UL(_lis,true,false);
+           
         }
         public string CurrentUserLangIndex()
         {
@@ -127,270 +104,20 @@ namespace UI.Controllers
             return _menusup.FlushResult_UL(_lis,true,false);
         }
         
-        private string tmclass(string area,string curarea)
-        {
-            if (area == curarea)
-            {
-                return "topmenulink_active";
-            }
-            else
-            {
-                return "topmenulink";
-            }
-        }
+       
         public string AdminMenu(string area, string prefix)
         {
-            MenuItem c = AMI("Úvod", "/Admin/Index?signpost=false", "settings");
-            c.CssClass = BO.BAS.IIFS(area == null, "topmenulink_active", "topmenulink");
-            c =AMI("Správa uživatelů", aurl("users"), "manage_accounts");
-            c.CssClass = tmclass("users", area);
-            c =AMI("Vykazování úkonů", aurl("worksheet"), "schedule");
-            c.CssClass = tmclass("worksheet", area);
-            c = AMI("Projekty", aurl("projects"), "work");
-            c.CssClass = tmclass("projects", area);
-            c = AMI("Klienti", aurl("clients"), "business");
-            c.CssClass = tmclass("clients", area);
-            c =AMI("Vyúčtování", aurl("billing"), "receipt_long");
-            c.CssClass = tmclass("billing", area);
-            c = AMI("Zálohy", aurl("proforma"), "receipt");
-            c.CssClass = tmclass("proforma", area);            
-            c = AMI("Štítky", aurl("tags"), "local_offer");
-            c.CssClass = tmclass("tags", area);
-            c = AMI("Dokumenty", aurl("docs"), "file_present");
-            c.CssClass = tmclass("docs", area);
-            c = AMI("Úkoly", aurl("tasks"), "task");
-            c.CssClass = tmclass("tasks", area);
-            c = AMI("Střediska", aurl("centres"), "category");
-            c.CssClass = tmclass("centres", area);
-            c =AMI("Různé", aurl("misc"), "miscellaneous_services");
-            c.CssClass = tmclass("misc", area);
+            var lis = new NoContext_AdminMenu(Factory,area,prefix).GetItems();
+            return _menusup.FlushResult_UL(lis, true, false);
 
-            //AMI("Globální parametry", "javascript: _window_open('/x35/x35Params',1)", "k-i-gear");
-
-            switch (area)
-            {
-                case "projects":
-                    Handle_AdminProjects(prefix);break;
-                case "clients":
-                    Handle_AdminClients(prefix);break;
-                case "users":
-                    Handle_AdminUsers(prefix); break;
-                case "worksheet":
-                    Handle_AdminWorksheet(prefix);break;
-                case "billing":
-                    Handle_AdminBilling(prefix);break;
-                case "proforma":
-                    Handle_AdminProforma(prefix); break;
-                case "docs":
-                    Handle_AdminDocs(prefix);break;
-                case "tasks":
-                    Handle_AdminTasks(prefix); break;
-                case "tags":
-                    Handle_AdminTags(prefix); break;
-                case "centres":
-                    Handle_AdminCentres(prefix); break;
-                case "misc":
-                    Handle_AdminMisc(prefix);break;
-
-            }
             
-            
-            return _menusup.FlushResult_UL(_lis,true,true);
         }
        
-        private void Handle_AdminUsers(string prefix)
-        {
-            //DIV_TRANS("Správa uživatelů");
-            AMI("Uživatelské účty", aurl("users","j03"));
-            AMI("Aplikační role", aurl("users","j04"));
-            DIV();
-            AMI("Přihlásit se pod jinou identitou", "/Admin/LogAsUser");
-            
-            DIV_TRANS("Osobní profily");
-            AMI("Osobní profily", aurl("users","j02"));
-            AMI("Pozice", aurl("users","j07"));
-            AMI("Týmy osob", aurl("users","j11"));
-            AMI("Nadřízení/Podřízení", aurl("users","j05"));
-
-            DIV_TRANS("Časový fond");
-            AMI("Pracovní fondy", aurl("users","c21"));
-            AMI("Dny svátků", aurl("users","c26"));
-
-            
-
-            DIV_TRANS("Provoz");
-            AMI("PING Log", aurl("users","j92"));
-            
-            AMI("LOGIN Log", aurl("users","j90"));
-            
-            DIV_TRANS("Pošta");
-            AMI("Poštovní účty", aurl("users","o40"));
-            AMI("Šablony poštovních zpráv", aurl("users", "j61", "myqueryinline=x29id|int|j02"));
-            AMI("OUTBOX", aurl("users","x40"));
-            
-                       
-            handle_selected_item(prefix);
-            
-        }
-
-        public string aurl(string area,string prefix)
-        {
-            return "/Admin/Page?area=" + area + "&prefix=" + prefix;
-        }
-        public string aurl(string area, string prefix,string ocas)
-        {
-            return "/Admin/Page?area=" + area + "&prefix=" + prefix+"&"+ocas;
-        }
-        public string aurl(string area)
-        {
-            return "/Admin/Page?area=" + area;
-        }
-
-        private void Handle_AdminWorksheet(string prefix)
-        {
-            //DIV_TRANS("Vykazování úkonů");
-            AMI("Sešity", aurl("worksheet","p34"));
-            AMI("Aktivity", aurl("worksheet","p32"));
-            DIV();
-            AMI("Fakturační oddíly", aurl("worksheet","p95"));
-            AMI("Odvětví aktivit", aurl("worksheet","p38"));
-            AMI("Klastry aktivit", aurl("worksheet","p61"));
-
-            DIV();
-            AMI("Uzamknutá období", aurl("worksheet","p36"));
-            AMI("Jednotky kusovníkových úkonů", aurl("worksheet","p35"));
-
-            DIV_TRANS("Hodinové sazby");
-            AMI("Ceníky sazeb", aurl("worksheet","p51"));
-
-            AMI("Uživatelská pole", aurl("worksheet","x28","myqueryinline=x29id|int|331"));
-            handle_selected_item(prefix);
-
-        }
-        public void Handle_AdminBilling(string prefix)
-        {            
-            AMI("Typy faktur", aurl("billing","p92"));
-            AMI("Bankovní účty", aurl("billing","p86"));            
-            AMI("Vystavovatelé faktur", aurl("billing","p93"));
-            DIV();
-            AMI("Měnové kurzy", aurl("billing","m62"));
-            AMI("DPH sazby", aurl("billing","p53"));
-            AMI("Fakturační oddíly", aurl("billing","p95"));
-            AMI("Zaokrouhlovací pravidla faktury", aurl("billing","p98"));
-            AMI("Struktury rozpisu částky faktury", aurl("billing","p80"));
-            AMI("Režijní přirážky k fakturaci", aurl("billing","p63"));
-
-            DIV();
-            
-            AMI("Ceníky sazeb", aurl("billing", "p51"));
-
-            AMI("Šablony poštovních zpráv", aurl("billing", "j61", "myqueryinline=x29id|int|391"));
-            DIV();
-            AMI("Role uživatelů ve vyúčtování", aurl("billing", "x67", "myqueryinline=x29id|int|391"));
-            AMI("Uživatelská pole", aurl("billing","x28","myqueryinline=x29id|int|391"));
-            
-
-            handle_selected_item(prefix);
-
-        }
-        public void Handle_AdminProforma(string prefix)
-        {
-            AMI("Typy záloh", aurl("proforma", "p89"));
-
-            AMI("Role uživatelů v zálohách", aurl("proforma", "x67", "myqueryinline=x29id|int|390"));            
-            AMI("Uživatelská pole", aurl("proforma", "x28", "myqueryinline=x29id|int|390"));
-            AMI("Šablony poštovních zpráv", aurl("proforma", "j61", "myqueryinline=x29id|int|390"));
-
-            handle_selected_item(prefix);
-
-        }
-
-        public void Handle_AdminTasks(string prefix)
-        {
-            AMI("Typy úkolů", aurl("tasks", "p57"));
-
-            AMI("Role uživatelů v úkolech", aurl("tasks", "x67", "myqueryinline=x29id|int|356"));
-            AMI("Uživatelská pole", aurl("tasks", "x28", "myqueryinline=x29id|int|356"));
-            AMI("Šablony poštovních zpráv", aurl("tasks", "j61", "myqueryinline=x29id|int|356"));
-
-            handle_selected_item(prefix);
-
-        }
         
-        public void Handle_AdminProjects(string prefix)
-        {            
-            AMI("Vertikální úrovně projektů", "javascript:_window_open('/p07/ProjectLevels')");
-            DIV();
-            AMI("Typy projektů", aurl("projects","p42"));
-            AMI("Role uživatelů v projektech", aurl("projects","x67","myqueryinline=x29id|int|141"));
 
+      
 
-            AMI("Uživatelská pole", aurl("projects","x28","myqueryinline=x29id|int|141"));
-
-            handle_selected_item(prefix);
-
-        }
-        private void Handle_AdminClients(string prefix)
-        {
-            
-            AMI("Typy klientů", aurl("clients","p29"));
-            AMI("Role uživatelů v klientech", aurl("clients","x67","myqueryinline=x29id|int|328"));
-
-            AMI("Uživatelská pole", aurl("clients","x28","myqueryinline=x29id|int|328"));
-
-            handle_selected_item(prefix);
-
-        }
-        private void Handle_AdminDocs(string prefix)
-        {
-            AMI("Typy dokumentů", aurl("docs", "x18"));            
-            AMI("Role uživatelů v dokumentu", aurl("docs", "x67", "myqueryinline=x29id|int|223"));
-            AMI("Role uživatelů v typu dokumentu", aurl("docs", "x67", "myqueryinline=x29id|int|918"));
-
-            handle_selected_item(prefix);
-        }
-        private void Handle_AdminCentres(string prefix)
-        {
-            AMI("Střediska", aurl("centres", "j18"));
-            AMI("Role uživatelů ve středisku", aurl("centres", "x67", "myqueryinline=x29id|int|118"));
-            
-
-            handle_selected_item(prefix);
-        }
-        private void Handle_AdminTags(string prefix)
-        {
-            AMI("Skupiny štítků", aurl("tags", "o53"));
-            AMI("Položky štítků", aurl("tags", "o51"));
-            
-            handle_selected_item(prefix);
-        }
-        private void Handle_AdminMisc(string prefix)
-        {
-            
-            AMI("Číselné řady", aurl("misc","x38"));
-            
-            AMI("Autocomplete položky", aurl("misc", "o15"));
-            
-            AMI("Daňové regiony", aurl("misc","j17"));
-            
-            DIV_TRANS("Uživatelská pole");
-            AMI("Katalog uživatelských polí", aurl("misc", "x28"));
-            AMI("Skupiny uživatelských polí", aurl("misc", "x27"));
-
-            DIV_TRANS("Technologie");
-            AMI("Dashboard Widgety", aurl("misc", "x55"));
-            AMI("Notifikace událostí", aurl("misc", "x46"));
-            AMI("Report šablony", aurl("misc", "x31"));
-            AMI("Report kategorie", aurl("misc", "j25"));
-
-           
-            AMI("Uživatelská nápověda", aurl("misc","x51"));
-            AMI("Aplikační překlad", aurl("misc","x97"));
-
-            handle_selected_item(prefix);
-
-        }
-
+        
         public string MainMenu(string currenturl)
         {
             var cMenu = new UI.Menu.TheMenuSupport(Factory);
@@ -423,133 +150,15 @@ namespace UI.Controllers
         }
         public string MenuNewRecord()
         {
-            if (Factory.CurrentUser.j04IsMenu_Worksheet)
-            {
-                var lisP34 = Factory.p34ActivityGroupBL.GetList_WorksheetEntry_InAllProjects(Factory.CurrentUser.j02ID);
-                if (lisP34.Count() < 10)
-                {
-                    foreach (var recP34 in lisP34)
-                    {
-                        var strIcon = "more_time";
-                        if ((recP34.p33ID==BO.p33IdENUM.PenizeBezDPH || recP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu) && recP34.p34IncomeStatementFlag==BO.p34IncomeStatementFlagENUM.Vydaj)
-                        {
-                            strIcon = "price_change";
-                        }
-                        if ((recP34.p33ID == BO.p33IdENUM.PenizeBezDPH || recP34.p33ID == BO.p33IdENUM.PenizeVcDPHRozpisu) && recP34.p34IncomeStatementFlag == BO.p34IncomeStatementFlagENUM.Prijem)
-                        {
-                            strIcon = "price_check";
-                        }
-                        if (recP34.p33ID == BO.p33IdENUM.Kusovnik)
-                        {
-                            strIcon = "calculate";
-                        }
-                        AMI(recP34.p34Name, $"javascript:_p31_create({recP34.pid})",strIcon);
-                    }
-                }
-                else
-                {
-                    AMI("Vykázat úkon", $"javascript:_p31_create()", "more_time");
-                }
-                DIV();
-            }
-            
-            
-            if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Creator) || Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P41_Draft_Creator))
-            {
-                if (Factory.CurrentUser.p07LevelsCount == 1)
-                {
-                    AMI(Factory.CurrentUser.getP07Level(5, true), "javascript:_edit('p41',0)", "work_outline"); //nový projekt, pouze jedna vertikální úroveň
-                }
-                else
-                {
-                    for (int i = 1; i <= 5; i++)   //v systému více vertikálních úrovní
-                    {
-                        if (Factory.CurrentUser.getP07Level(i, true) != null)
-                        {
-                            AMI(Factory.CurrentUser.getP07Level(i, true), $"javascript:_edit('le{i}',0)", "work_outline");
-                        }
-                    }
-                    DIV();
-                }                                
-            }
-            if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P28_Creator) || Factory.CurrentUser.TestPermission(x53PermValEnum.GR_P28_Draft_Creator))
-            {
-                AMI("Klient", "javascript:_edit('p28',0)","business");
-            }
-            AMI("Úkol", "javascript:_edit('p56',0)","task");            
-            if (Factory.CurrentUser.p07LevelsCount == 1) DIV();           
-            AMI("Dokument", "javascript:_window_open('/o23/SelectDocType')", "file_present");
-
-
-            AMI("Záloha", "javascript:_edit('p90',0)", "receipt");
-            //AMI("Poznámka", "javascript:_edit('b07',0)");
-            DIV();
-            //AMI("Interní osoba s uživatelským účtem", "javascript:_window_open('/j02/Record?pid=0&isintraperson=true', 1)");
-            if (Factory.CurrentUser.IsAdmin)
-            {
-                AMI("Uživatelský účet", "javascript:_window_open('/j03/Record?pid=0', 1)","person");
-            }
-            if (Factory.CurrentUser.TestPermission(x53PermValEnum.GR_J02_ContactPerson_Create))
-            {
-                AMI("Kontaktní osoba klienta", "javascript:_window_open('/j02/Record?pid=0&isintraperson=false', 1)", "face");
-            }
-            
-            return _menusup.FlushResult_UL(_lis,true, false);
+            var lis = new NoContext_NewRecMenu(Factory).GetItems();
+            return _menusup.FlushResult_UL(lis,true, false);
         }
 
         public string TheGridSelMenu(TheGridUIContext tgi)  //menu pro označené grid záznamy
         {
-            
-            if (this.Factory.CurrentUser.IsApprovingPerson)
-            {
-                if ("p31,p41,p28,j02,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
-                {
-                    AMI("Schválit/Vyúčtovat", "javascript:tg_approve()", "approval");
-                }
-                if (this.Factory.CurrentUser.TestPermission(BO.x53PermValEnum.GR_P91_Creator, BO.x53PermValEnum.GR_P91_Draft_Creator))
-                {
-                    
-                   
-                    AMI("Přidat do vybraného vyúčtování", "javascript:tg_append2invoice()", "receipt_long");
-                }
-            }
-            
+            var lis = new NoContext_GridSelMenu(Factory, tgi).GetItems();
+            return _menusup.FlushResult_UL(lis, true, false);
 
-            switch (tgi.prefix)
-            {
-                case "p31":
-                    if (tgi.master_entity == "p91Invoice")
-                    {
-                        AMI("Vyjmout úkony z vyúčtování", "javascript:p91oper_p31operbatch('remove')");
-                        AMI("Zahrnout do paušálu", "javascript:p91oper_p31operbatch('p70-6')");
-                        AMI("Viditelný odpis", "javascript:p91oper_p31operbatch('p70-2')");
-                        AMI("Skrytý odpis", "javascript:p91oper_p31operbatch('p70-3')");
-                    }
-                    
-                    break;
-                case "p91":
-                    AMI("ISDOC Export", "javascript:p91oper_isdoc()");
-                    break;
-            }
-            if ("p31,p41,p28,j02,p91,p56,le1,le2,le3,le4,le5".Contains(tgi.prefix))
-            {
-                DIV();
-                AMI("Oštítkovat", "javascript:tg_tagging()", "local_offer");
-            }
-            if (tgi.prefix=="p31" || tgi.prefix=="p56" || tgi.prefix == "o22")
-            {
-                AMI("Exportovat do Kalendáře (iCalendar)", "javascript:tg_ical()", "event");
-            }
-
-            DIV();
-            AMI("GRID-REPORT", "javascript:tg_gridreport_selected()", "design_services");
-            AMI("MS EXCEL Export", "javascript:tg_export('xlsx','selected')", "cloud_download");
-            AMI("CSV Export", "javascript:tg_export('csv','selected')", "cloud_download");
-
-
-            
-
-            return _menusup.FlushResult_UL(_lis,true, false);
         }
 
         public string TheGridP31StateQuery(TheGridUIContext tgi)  //menu pro zobrazení filtrování stavu úkonů
@@ -631,18 +240,7 @@ namespace UI.Controllers
         }
 
 
-        private void handle_selected_item(string prefix)
-        {
-            if (prefix != null)
-            {
-                if (_lis.Where(p => p.Url != null && p.Url.Contains("=" + prefix)).Count() > 0)
-                {
-                    _lis.Where(p => p.Url != null && p.Url.Contains("=" + prefix)).First().IsActive = true;
-                }
-            }
-        }
-
-
+       
         
 
 
