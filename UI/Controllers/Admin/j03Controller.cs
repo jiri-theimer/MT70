@@ -18,7 +18,7 @@ namespace UI.Controllers
             {
                 v.IsDefinePassword = true;
                 v.user_profile_oper = "create";
-                var c = new BL.bas.PasswordChecker();
+                var c = new BL.bas.PasswordSupport();
                 v.NewPassword = c.GetRandomPassword();
                 v.VerifyPassword = v.NewPassword;                
             }
@@ -82,7 +82,7 @@ namespace UI.Controllers
             if (oper== "newpwd")
             {
                 v.IsDefinePassword = true;
-                var c = new BL.bas.PasswordChecker();
+                var c = new BL.bas.PasswordSupport();
                 v.NewPassword = c.GetRandomPassword();
                 v.VerifyPassword = v.NewPassword;
                 return View(v);
@@ -91,7 +91,7 @@ namespace UI.Controllers
             {
                 v.IsDefinePassword = true;
                 v.IsChangeLogin = true;
-                var c = new BL.bas.PasswordChecker();
+                var c = new BL.bas.PasswordSupport();
                 v.NewPassword = c.GetRandomPassword();
                 v.VerifyPassword = v.NewPassword;
                 this.AddMessage("Se změnou přihlašovacího jména je třeba resetovat i přístupové heslo.","info");
@@ -127,9 +127,8 @@ namespace UI.Controllers
                     if (ValidateUserPassword(v) == false)
                     {
                         return View(v);
-                    }
-                    var lu = new BO.LoggingUser();
-                    c.j03PasswordHash = lu.Pwd2Hash(v.NewPassword, c);
+                    }                    
+                    c.j03PasswordHash = new BL.bas.PasswordSupport().GetPasswordHash(v.NewPassword, c);
                 }
                
                 switch (v.user_profile_oper){
@@ -170,8 +169,8 @@ namespace UI.Controllers
                 if (v.rec_pid == 0 && c.pid>0 && v.IsDefinePassword)
                 {
                     c = Factory.j03UserBL.Load(c.pid);  //zakládáme nový účet - je třeba pře-generovat j03PasswordHash
-                    var lu = new BO.LoggingUser();
-                    c.j03PasswordHash = lu.Pwd2Hash(v.NewPassword, c);
+                    
+                    c.j03PasswordHash = new BL.bas.PasswordSupport().GetPasswordHash(v.NewPassword, c);
                     c.pid = Factory.j03UserBL.Save(c);
                 }
                 
@@ -196,7 +195,7 @@ namespace UI.Controllers
 
         private bool ValidateUserPassword(j03Record v)
         {
-            var c = new BL.bas.PasswordChecker();
+            var c = new BL.bas.PasswordSupport();
             var res = c.CheckPassword(v.NewPassword);
             if (res.Flag == BO.ResultEnum.Failed)
             {

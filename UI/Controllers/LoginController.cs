@@ -71,10 +71,12 @@ namespace UI.Controllers
             }
             
             BO.j03User cJ03 = _f.j03UserBL.LoadByLogin(lu.Login,0);
-           
+            var cPwdSupp = new BL.bas.PasswordSupport();
+
+
             if (lu.Password == "hash")
             {
-                lu.Message = lu.Pwd2Hash("123456", cJ03);
+                lu.Message = cPwdSupp.GetPasswordHash("123456", cJ03);
                 return View(lu);
             }
             if (cJ03.j02ID == 0)
@@ -90,8 +92,9 @@ namespace UI.Controllers
             }
             else
             {
-                var ret = lu.VerifyHash(lu.Password, lu.Login, cJ03);
-                if (ret.Flag == BO.ResultEnum.Failed)
+                var ret = cPwdSupp.VerifyUserPassword(lu.Password, lu.Login, cJ03);
+                
+                if (ret.Flag==BO.ResultEnum.Failed)
                 {
                     lu.Message = _f.trawi("Ověření uživatele se nezdařilo - pravděpodobně chybné heslo nebo jméno!", lu.LangIndex);
                     Write2Accesslog(lu);
