@@ -77,6 +77,9 @@ namespace UI.Controllers
                 c.x55DataTablesButtons = v.Rec.x55DataTablesButtons;
                 c.x55Help = v.HtmlHelp;
                 c.x55Skin = v.Rec.x55Skin;
+                c.x55ChartHeaders = v.Rec.x55ChartHeaders;
+                c.x55ChartSql = v.Rec.x55ChartSql;
+                c.x55ChartType = v.Rec.x55ChartType;
 
                 c.ValidUntil = v.Toolbar.GetValidUntil(c);
                 c.ValidFrom = v.Toolbar.GetValidFrom(c);

@@ -26,6 +26,7 @@ namespace UI.Controllers
 
         public IActionResult Index()
         {
+            
             if (HttpContext.Request.Path.Value.Length <= 1)
             {
                 //úvodní spuštění: otestovat nastavení domovské stránky
@@ -36,8 +37,8 @@ namespace UI.Controllers
                 }
             }
 
-
-            return Widgets("index");
+            string skin = Factory.CBL.LoadUserParam("Widgets-Skin", "index");
+            return Widgets(skin);
         }
 
         public IActionResult Widgets(string skin)
@@ -59,13 +60,17 @@ namespace UI.Controllers
             
             return View(v);
         }
-        
 
-      
 
-        
 
-        
+        public BO.Result ChangeSkin(string skin)
+        {
+            Factory.CBL.SetUserParam("Widgets-Skin", skin);
+            return new BO.Result(false);
+        }
+
+
+
 
         private string parse_badge(int intCount)
         {
@@ -131,6 +136,15 @@ namespace UI.Controllers
         {
             foreach (var rec in v.lisUserWidgets)
             {
+                string strStaticHtml = rec.x55Content;
+                if (rec.x55ChartSql != null && rec.x55ChartHeaders != null)
+                {
+                    string s = rec.x55ChartSql;
+                    s = DL.BAS.ParseMergeSQL(s, Factory.CurrentUser.j02ID.ToString()).Replace("@j04id", Factory.CurrentUser.j04ID.ToString().Replace("@j03id", Factory.CurrentUser.pid.ToString()));
+                    var dt = Factory.gridBL.GetListFromPureSql(s);
+                    var cGen = new BO.CLS.Datatable2Chart();
+                    strStaticHtml += cGen.CreateGoogleChartHtml(dt, rec.x55ChartType, rec.x55ChartHeaders);
+                }
                 if (rec.x55TableSql != null && rec.x55TableColHeaders != null)
                 {
                     string s = rec.x55TableSql;
@@ -141,23 +155,23 @@ namespace UI.Controllers
                         rec.IsUseDatatables = true;
                     }
                     var cGen = new BO.CLS.Datatable2Html(new BO.CLS.Datatable2HtmlDef() { ColHeaders = rec.x55TableColHeaders, ColTypes = rec.x55TableColTypes, ClientID = rec.x55Code, IsUseDatatables = rec.IsUseDatatables });
-                    rec.x55Content = cGen.CreateHtmlTable(dt, 1000);
-                    
+                    strStaticHtml += cGen.CreateHtmlTable(dt, 1000);
+
                 }
-                else
+
+                switch (rec.x55Code.ToLower())
                 {
-                    switch (rec.x55Code.ToLower())
-                    {
-                        case "pandulak":
-                            var strPandulakDir = Factory.App.AppRootFolder + "\\wwwroot\\images\\pandulak";
-                            rec.x55Content = string.Format("<img src='/images/pandulak/{0}'/>",basUI.getPandulakImage(strPandulakDir));
-                            if (v.ColumnsPerPage <= 2)
-                            {
-                                rec.x55Content += string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir));
-                            }
-                            break;
-                    }
+                    case "pandulak":
+                        var strPandulakDir = Factory.App.AppRootFolder + "\\wwwroot\\images\\pandulak";
+                        strStaticHtml += string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir));
+                        if (v.ColumnsPerPage <= 2)
+                        {
+                            strStaticHtml += string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir));
+                        }
+                        break;
                 }
+                rec.x55Content = strStaticHtml;
+
                 if (rec.IsUseDatatables && rec.x55DataTablesButtons > BO.x55DataTablesBtns.None)
                 {
                     v.IsExportButtons = true;   //zobrazovat tlačítka XLS/CSV/COPY

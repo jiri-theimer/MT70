@@ -43,6 +43,10 @@
 
 
 }
+@if (Model.lisUserWidgets.Exists(p => p.x55ChartSql != null))
+{
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+}
 
 <div id="@(BO.BAS.IIFS(Model.IsSubform,"header_subform","header_index"))" class="row bg-light">
     @if (!Model.IsSubform)
@@ -58,46 +62,60 @@
         </div>
     }
 
-    
-<div class="dropdown col-auto">
-    
-    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="cmdInsertWidget" data-bs-toggle="dropdown" aria-expanded="false">
-        @_f.tra("Vložit widget na plochu")
-    </a>
+
+    <div class="dropdown col-auto">
+
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="cmdInsertWidget" data-bs-toggle="dropdown" aria-expanded="false">
+            @_f.tra("Vložit widget na plochu")
+        </a>
 
 
-    <ul id="rp1_menu" class="dropdown-menu" style="list-style:none;columns:2;width:700px;" aria-labelledby="cmdInsertWidget">
+        <ul id="rp1_menu" class="dropdown-menu" style="list-style:none;columns:2;width:700px;" aria-labelledby="cmdInsertWidget">
 
-        @foreach (var c in Model.lisAllWidgets)
-        {
-            <li class="nav-item p-2">
-                @if (Model.lisUserWidgets.Where(p => p.pid == c.pid).Count() > 0)
-                {
-                    <span style="color:silver;">@c.x55Name</span>
-                }
-                else
-                {
-                    <a href="javascript:handle_insert_snippet(@c.pid)">@c.x55Name</a>
-                }
-
-
-            </li>
-        }
+            @foreach (var c in Model.lisAllWidgets)
+            {
+                <li class="nav-item p-2">
+                    @if (Model.lisUserWidgets.Where(p => p.pid == c.pid).Count() > 0)
+                    {
+                        <span style="color:silver;">@c.x55Name</span>
+                    }
+                    else
+                    {
+                        <a href="javascript:handle_insert_snippet(@c.pid)">@c.x55Name</a>
+                    }
 
 
-
-    </ul>
+                </li>
+            }
 
 
 
+        </ul>
 
 
-</div>
+
+
+
+    </div>
     <div class="col-auto">
         <select asp-for="@Model.ColumnsPerPage" class="form-select" onchange="handle_pocet_sloupcu(this)" title="@_f.tra("Počet sloupců na ploše")">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select asp-for="@Model.Skin" class="form-select" onchange="handle_change_skin(this)" title="Skin">
+            <option value="index">#0 Výchozí skin</option>
+            <option value="zeus">#1 Zeus</option>
+            <option value="hera">#2 Héra</option>
+            <option value="apolon">#3 Apolón</option>
+            <option value="ares">#4 Arés</option>
+            <option value="hefaistos">#5 Héfaistos</option>
+            <option value="artemis">#6 Artemis</option>
+            <option value="afrodita">#7 Afrodita</option>
+            <option value="athena">#8 Athéna</option>
+            <option value="hermes">#9 Hermés</option>
         </select>
     </div>
 </div>
@@ -349,6 +367,12 @@
 
         });
     }
+    function handle_change_skin(cbx) {
+        $.post("/Dashboard/ChangeSkin", { skin: cbx.value }, function (data) {
+            location.replace("/Dashboard/Index?skin=" + cbx.value);
+        });
+    }
+
     function widget_help(x55id) {
         _window_open("/x55/Help?pid=" + x55id);
     }
