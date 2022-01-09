@@ -10,7 +10,7 @@
 
 @section header_content{
     <link rel="stylesheet" href="/lib/jquery-ui/jquery-ui.min_sortable.css" />
-    @if (Model.lisUserWidgets.Any(p => p.IsUseDatatables))
+    @if (Model.lisUserWidgets.Exists(p => p.x55TableSql !=null))
     {
         <link rel="stylesheet" href="/lib/datatables/css/jquery.dataTables.min.css" />
 
@@ -24,7 +24,7 @@
 
 
 <script src="/lib/jquery-ui/jquery-ui.min_sortable.js"></script>
-@if (Model.lisUserWidgets.Where(p => p.IsUseDatatables).Count() > 0)
+@if (Model.lisUserWidgets.Exists(p => p.x55TableSql !=null))
 {
     <script src="/lib/datatables/js/jquery.dataTables.min.js"></script>
 
@@ -48,7 +48,7 @@
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 }
 
-<div id="@(BO.BAS.IIFS(Model.IsSubform,"header_subform","header_index"))" class="row bg-light">
+<div id="@(BO.BAS.IIFS(Model.IsSubform, "header_subform", "header_index"))" class="row bg-light">
     @if (!Model.IsSubform)
     {
         <div class="col-auto">
@@ -123,7 +123,7 @@
 
 
 
-<div id="@(BO.BAS.IIFS(Model.IsSubform,"container_subform","container_index"))" class="row">
+<div id="@(BO.BAS.IIFS(Model.IsSubform, "container_subform", "container_index"))" class="row">
     <div class="column @Model.BoxColCss" id="col1">
         @foreach (var c in Model.DockStructure.Col1)
         {
@@ -138,8 +138,9 @@
                     {
                         <a class="float-end btn btn-sm btn-light py-0 px-1 mx-3" title="@_f.tra("Widget nápověda")" href="javascript:widget_help(@c.pid)">?</a>
                     }
+                    <a class="float-end btn btn-sm btn-light py-0 px-1 mx-3" title="@_f.tra("Obnovit obsah widgetu")" href="javascript:load_widget_content(@c.pid)">⟲</a>
                 </div>
-                <div class="portlet-content" @Html.Raw(c.CssContentDiv)>
+                <div id="box_content_@(c.pid)" class="portlet-content" @Html.Raw(c.CssContentDiv)>
                     @Html.Raw(c.x55Content)
 
                 </div>
@@ -163,8 +164,9 @@
                         {
                             <a class="float-end btn btn-sm btn-light py-0 px-1 mx-3" title="@_f.tra("Widget nápověda")" href="javascript:widget_help(@c.pid)">?</a>
                         }
+                        <a class="float-end btn btn-sm btn-light py-0 px-1 mx-3" title="@_f.tra("Obnovit obsah widgetu")" href="javascript:load_widget_content(@c.pid)">⟲</a>
                     </div>
-                    <div class="portlet-content" @Html.Raw(c.CssContentDiv)>
+                    <div id="box_content_@(c.pid)" class="portlet-content" @Html.Raw(c.CssContentDiv)>
                         @Html.Raw(c.x55Content)
                     </div>
                 </div>
@@ -188,8 +190,9 @@
                         {
                             <a class="float-end btn btn-sm btn-light py-0 px-1 mx-3" title="@_f.tra("Widget nápověda")" href="javascript:widget_help(@c.pid)">?</a>
                         }
+                        <a class="float-end btn btn-sm btn-light py-0 px-1 mx-3" title="@_f.tra("Obnovit obsah widgetu")" href="javascript:load_widget_content(@c.pid)">⟲</a>
                     </div>
-                    <div class="portlet-content" @Html.Raw(c.CssContentDiv)>
+                    <div id="box_content_@(c.pid)" class="portlet-content" @Html.Raw(c.CssContentDiv)>
                         @Html.Raw(c.x55Content)
                     </div>
                 </div>
@@ -248,63 +251,10 @@
         }
 
 
-
-        @foreach(var c in Model.lisUserWidgets.Where(p => p.IsUseDatatables))
+        @foreach (var c in Model.lisUserWidgets)
         {
             <text>
-
-        $("#@(c.x55Code)").DataTable({
-            stateSave: true,
-            language: {
-                url:"@(Model.DataTables_Localisation)"
-
-            },
-            dom: "Blfrtip",
-            buttons: [
-                @if (Model.IsPdfButtons)
-                {
-                    <text>
-                {
-                    extend: 'pdfHtml5',
-                    footer: true,
-                    orientation: 'portrait',
-                    pageSize: 'A4',
-                    text: '@_f.tra("PDF (na výšku)")'
-                },
-                {
-                    extend: "pdfHtml5",
-                    footer: true,
-                    orientation: "landscape",
-                    pageSize: 'A4',
-                    text: "@_f.tra("PDF (na šířku)")"
-                },
-                    </text>
-                }
-                @if (Model.IsExportButtons)
-                {
-
-                    <text>
-                {
-                    extend: "excelHtml5",
-                    footer: true,
-                    text: "XLS"
-                },
-                { extend: "csvHtml5", footer: true },
-                { extend: "copyHtml5", footer: true },
-                {
-                    extend: "print",
-                    text: "@_f.tra("Tisk")",
-                    footer: true,
-                    autoPrint: true
-                }
-                    </text>
-
-                }
-            ],
-            paging: true
-
-        });
-
+            load_widget_content(@c.pid,@Model.ColumnsPerPage);
             </text>
         }
 
@@ -376,6 +326,33 @@
     function widget_help(x55id) {
         _window_open("/x55/Help?pid=" + x55id);
     }
+
+    function load_widget_content(x55id) {
+        var h = $("#box_content_" + x55id).height();
+        $("#box_content_" + x55id).html("<div style='height:"+h+"px;'><strong>Loading...</strong></div>");
+
+        $.post("/Dashboard/GetWidgetHtmlContent", { x55id: x55id, columnsperpage:@Model.ColumnsPerPage }, function (data) {            
+
+            $("#box_content_" + x55id).html(data.x55Content);
+
+            if (data.isUseDatatables)
+            {
+                //splněna podmínka pro práci s pluginem Datatables
+                if (data.x55DataTablesButtons == 3) {
+                    datatables_init_buttons_export_print_pdf(data.x55Code, "cs_CZ");
+                }
+                if (data.x55DataTablesButtons == 2) {
+                    datatables_init_buttons_export_print(data.x55Code, "cs_CZ");
+                }
+                if (data.x55DataTablesButtons < 2) {
+                    datatables_init_nobuttons(data.x55Code, "cs_CZ");
+                }
+            }
+
+            
+
+        });
+    }
     function clear_to_factory_confirm() {
         var s = "@_f.tra("Dojde k přepsání plochy tovární sadou widgetů pro vaší aplikační roli.")";
         s += "⚡OK?";
@@ -394,6 +371,98 @@
 
 
             });
+
+    }
+
+    function datatables_init_nobuttons(tableid, lang)
+    {
+        $("#"+tableid).DataTable({
+            stateSave: true,
+            language: {
+                url: "/lib/datatables/localisation/"+lang+".json"
+
+            },
+            dom: "Blfrtip",            
+            paging: true
+
+        });
+    }
+    function datatables_init_buttons_export_print(tableid, lang)
+    {
+        alert(tableid);
+        $("#"+tableid).DataTable({
+            stateSave: true,
+            language: {
+                url: "/lib/datatables/localisation/"+lang+".json"
+
+            },
+            dom: "Blfrtip",
+            buttons: [
+
+                {
+                    extend: "excelHtml5",
+                    footer: true,
+                    text: "XLS"
+                },
+                { extend: "csvHtml5", footer: true },
+                { extend: "copyHtml5", footer: true },
+                {
+                    extend: "print",
+                    text: "Tisk",
+                    footer: true,
+                    autoPrint: true
+                }
+            ],
+            paging: true
+
+        });
+    }
+        
+
+    function datatables_init_buttons_export_print_pdf(tableid,lang)
+    {
+        $("#"+tableid).DataTable({
+            stateSave: true,
+            language: {
+                url: "/lib/datatables/localisation/"+lang+".json"
+
+            },
+            dom: "Blfrtip",
+            buttons: [
+
+                {
+                    extend: 'pdfHtml5',
+                    footer: true,
+                    orientation: 'portrait',
+                    pageSize: 'A4',
+                    text: 'PDF (na výšku)'
+                },
+                {
+                    extend: "pdfHtml5",
+                    footer: true,
+                    orientation: "landscape",
+                    pageSize: 'A4',
+                    text: "PDF (na šířku)"
+                },
+
+                {
+                    extend: "excelHtml5",
+                    footer: true,
+                    text: "XLS"
+                },
+                { extend: "csvHtml5", footer: true },
+                { extend: "copyHtml5", footer: true },
+                {
+                    extend: "print",
+                    text: "Tisk",
+                    footer: true,
+                    autoPrint: true
+                }
+            ],
+            paging: true
+
+        });
+
 
     }
 </script>
