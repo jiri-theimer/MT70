@@ -19,12 +19,15 @@ namespace UI.Models
         public IEnumerable<BO.x55Widget> lisAllWidgets { get; set; }
         public List<BO.x55Widget> lisUserWidgets { get; set; }
         public int ColumnsPerPage { get; set; }
+        public int PageAutoRefreshPerSeconds { get; set; }
 
         public string DataTables_Localisation { get; set; }
 
+        public bool IsDataTables { get; set; }
         public bool IsPdfButtons { get; set; }
         public bool IsExportButtons { get; set; }
         public bool IsPrintButton { get; set; }
+        public bool IsCharts { get; set; }
 
     }
 }

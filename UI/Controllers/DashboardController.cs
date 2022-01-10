@@ -18,15 +18,15 @@ namespace UI.Controllers
             _colsProvider = cp;
         }
 
-       
 
-       
 
-        
+
+
+
 
         public IActionResult Index()
         {
-            
+
             if (HttpContext.Request.Path.Value.Length <= 1)
             {
                 //úvodní spuštění: otestovat nastavení domovské stránky
@@ -47,15 +47,15 @@ namespace UI.Controllers
             {
                 skin = "index";
             }
-            var v = new WidgetsViewModel() { Skin = skin,IsSubform=false };
-            if (v.Skin=="inspector" || v.Skin == "school")
+            var v = new WidgetsViewModel() { Skin = skin, IsSubform = false };
+            if (v.Skin == "inspector" || v.Skin == "school")
             {
                 v.IsSubform = true;
             }
 
-            
+
             PrepareWidgets(v);
-            
+
             return View(v);
         }
 
@@ -119,33 +119,39 @@ namespace UI.Controllers
         public BO.Result SavePocetSloupcu(int x, string skin)
         {
             Factory.CBL.SetUserParam("Widgets-ColumnsPerPage-" + skin, x.ToString());
-            return new BO.Result(false);            
+            return new BO.Result(false);
+        }
+        public BO.Result SavePageAutoRefresh(int x,string skin)
+        {
+            Factory.CBL.SetUserParam("Widgets-PageAutoRefresh-" + skin, x.ToString());
+            return new BO.Result(false);
         }
 
         public BO.Result Clear2FactoryState(string skin)    //vyčistí plochu do továrního nastavení
         {
             Factory.x55WidgetBL.Clear2FactoryState(Factory.x55WidgetBL.LoadState(Factory.CurrentUser.pid, skin));
-            return new BO.Result(false);            
+            return new BO.Result(false);
         }
 
 
-        
-        
+
+
         //rozvržení prostoru na ploše
         private void PrepareWidgets(WidgetsViewModel v)
         {
             var mq = new BO.myQuery("x55") { IsRecordValid = true, MyRecordsDisponible = true, CurrentUser = Factory.CurrentUser };
-            var hodnoty = new List<string>() { null,v.Skin };
+            var hodnoty = new List<string>() { null, v.Skin };
             if (v.Skin == "inspector" || v.Skin == "index")
             {
                 hodnoty.Add("inspector_index");
             }
             v.lisAllWidgets = Factory.x55WidgetBL.GetList(mq).Where(p => hodnoty.Contains(p.x55Skin));
-           
+
 
 
             v.lisUserWidgets = new List<BO.x55Widget>();
             v.ColumnsPerPage = Factory.CBL.LoadUserParamInt("Widgets-ColumnsPerPage-" + v.Skin, 2);
+            v.PageAutoRefreshPerSeconds = Factory.CBL.LoadUserParamInt("Widgets-PageAutoRefresh-" + v.Skin, 0);
             v.recX56 = Factory.x55WidgetBL.LoadState(Factory.CurrentUser.pid, v.Skin);
             v.DockStructure = new WidgetsEnvironment(v.recX56.x56DockState);
 
@@ -214,19 +220,31 @@ namespace UI.Controllers
 
                 }
 
-                if (c.x55TableSql !=null && c.x55TableColHeaders !=null && c.x55DataTablesButtons > BO.x55DataTablesBtns.None)
+            }
+            if (v.lisUserWidgets.Exists(p => p.x55TableSql != null && p.x55TableColHeaders != null))
+            {
+                v.IsDataTables = true;
+            }
+            if (v.IsDataTables)
+            {
+                if (v.lisUserWidgets.Exists(p => p.x55DataTablesButtons > BO.x55DataTablesBtns.None))
                 {
                     v.IsExportButtons = true;   //zobrazovat tlačítka XLS/CSV/COPY
                 }
-                if (c.x55TableSql != null && c.x55TableColHeaders != null && c.x55DataTablesButtons == BO.x55DataTablesBtns.ExportPrintPdf)
+                if (v.lisUserWidgets.Exists(p => p.x55DataTablesButtons == BO.x55DataTablesBtns.ExportPrintPdf))
                 {
                     v.IsPdfButtons = true;      //zobrazovat i tlačítko PDF
                 }
-                if (v.IsPdfButtons || c.x55DataTablesButtons == BO.x55DataTablesBtns.ExportPrint)
+                if (v.IsPdfButtons || v.lisUserWidgets.Exists(p => p.x55DataTablesButtons == BO.x55DataTablesBtns.ExportPrint))
                 {
                     v.IsPrintButton = true;      //zobrazovat i tlačítko PDF
                 }
             }
+            if (v.lisUserWidgets.Exists(p => p.x55ChartSql != null && p.x55ChartHeaders != null))
+            {
+                v.IsCharts = true;
+            }
+
             switch (v.ColumnsPerPage)
             {
                 case 1:
@@ -243,19 +261,18 @@ namespace UI.Controllers
 
 
         //načtení html obsahu jednoho boxu
-        public BO.x55Widget GetWidgetHtmlContent(int x55id,int columnsperpage)   
-        {            
+        public BO.x55Widget GetWidgetHtmlContent(int x55id, int columnsperpage)
+        {
             var rec = Factory.x55WidgetBL.Load(x55id);
-            var sb = new System.Text.StringBuilder();
+            string strHtml = rec.x55Content;
 
-            sb.AppendLine(rec.x55Content);
             if (rec.x55ChartSql != null && rec.x55ChartHeaders != null)
             {
                 string s = rec.x55ChartSql;
                 s = DL.BAS.ParseMergeSQL(s, Factory.CurrentUser.j02ID.ToString()).Replace("@j04id", Factory.CurrentUser.j04ID.ToString().Replace("@j03id", Factory.CurrentUser.pid.ToString()));
                 var dt = Factory.gridBL.GetListFromPureSql(s);
                 var cGen = new BO.CLS.Datatable2Chart();
-                sb.AppendLine(cGen.CreateGoogleChartHtml(dt, rec.x55ChartType, rec.x55ChartHeaders));
+                strHtml += cGen.CreateGoogleChartHtml(dt, rec.x55ChartType, rec.x55ChartHeaders);
             }
             if (rec.x55TableSql != null && rec.x55TableColHeaders != null)
             {
@@ -265,10 +282,10 @@ namespace UI.Controllers
                 if (dt.Rows.Count >= rec.x55DataTablesLimit && rec.x55DataTablesLimit > 0)
                 {
                     rec.IsUseDatatables = true; //splněna podmínka pro zobrazení tabulky přes plugin DataTables
-                    
+
                 }
                 var cGen = new BO.CLS.Datatable2Html(new BO.CLS.Datatable2HtmlDef() { ColHeaders = rec.x55TableColHeaders, ColTypes = rec.x55TableColTypes, ClientID = rec.x55Code, IsUseDatatables = rec.IsUseDatatables });
-                sb.AppendLine(cGen.CreateHtmlTable(dt, 1000));
+                strHtml += cGen.CreateHtmlTable(dt, 1000);
 
             }
 
@@ -276,14 +293,14 @@ namespace UI.Controllers
             {
                 case "pandulak":
                     var strPandulakDir = Factory.App.AppRootFolder + "\\wwwroot\\images\\pandulak";
-                   sb.AppendLine(string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir)));
+                    strHtml = string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir));
                     if (columnsperpage <= 2)
                     {
-                        sb.AppendLine(string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir)));
+                        strHtml += string.Format("<img src='/images/pandulak/{0}'/>", basUI.getPandulakImage(strPandulakDir));
                     }
                     break;
             }
-            rec.x55Content = sb.ToString();
+            rec.x55Content = strHtml;
             return rec;
 
 

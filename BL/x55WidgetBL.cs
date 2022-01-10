@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BL
 {
@@ -59,7 +60,7 @@ namespace BL
             var p = new DL.Params4Dapper();
             p.AddInt("pid", rec.x55ID);
             p.AddString("x55Name", rec.x55Name);
-            p.AddString("x55Code", rec.x55Code);
+            p.AddString("x55Code", rec.x55Code.Replace(".","_").Replace(" ",""));
             p.AddString("x55TableSql", rec.x55TableSql);
             p.AddString("x55TableColHeaders", rec.x55TableColHeaders);
             p.AddString("x55TableColTypes", rec.x55TableColTypes);
@@ -113,6 +114,8 @@ namespace BL
             {
                 this.AddMessageTranslated(string.Format(_mother.tra("V systému již existuje jiný widget s kódem: {0}."), rec.x55Code)); return false;
             }
+            rec.x55Code = Regex.Replace(rec.x55Code, "[^a-zA-Z0-9]", "_"); //kód raději pouze pro alfanumerické znaky
+
             if (!string.IsNullOrEmpty(rec.x55ChartSql) && rec.x55ChartType == null)
             {
                 this.AddMessage("Chybí vyplnit [Typ grafu]."); return false;

@@ -9,8 +9,14 @@
 @addTagHelper *, UI
 
 @section header_content{
+
+    @if (Model.PageAutoRefreshPerSeconds > 0)
+    {
+        <meta http-equiv="refresh" content="@Model.PageAutoRefreshPerSeconds">
+    }
+
     <link rel="stylesheet" href="/lib/jquery-ui/jquery-ui.min_sortable.css" />
-    @if (Model.lisUserWidgets.Exists(p => p.x55TableSql !=null))
+    @if (Model.IsDataTables)
     {
         <link rel="stylesheet" href="/lib/datatables/css/jquery.dataTables.min.css" />
 
@@ -24,7 +30,7 @@
 
 
 <script src="/lib/jquery-ui/jquery-ui.min_sortable.js"></script>
-@if (Model.lisUserWidgets.Exists(p => p.x55TableSql !=null))
+@if (Model.IsDataTables)
 {
     <script src="/lib/datatables/js/jquery.dataTables.min.js"></script>
 
@@ -43,7 +49,7 @@
 
 
 }
-@if (Model.lisUserWidgets.Exists(p => p.x55ChartSql != null))
+@if (Model.IsCharts)
 {
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 }
@@ -116,6 +122,15 @@
             <option value="afrodita">#7 Afrodita</option>
             <option value="athena">#8 Athéna</option>
             <option value="hermes">#9 Hermés</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select asp-for="@Model.PageAutoRefreshPerSeconds" class="form-select" onchange="handle_autorefresh(this)" title="@_f.tra("Automaticky obnovovat stránku")">
+            <option value="0">@_f.tra("Bez auto-obnovování")</option>
+            <option value="30">@_f.tra("Po 30ti sekundách")</option>
+            <option value="60">@_f.tra("Po 60ti sekundách")</option>
+            <option value="300">@_f.tra("Po 5ti minutách")</option>
+            <option value="600">@_f.tra("Po 10ti minutách")</option>
         </select>
     </div>
 </div>
@@ -317,6 +332,12 @@
 
         });
     }
+    function handle_autorefresh(cbx) {
+        $.post("/Dashboard/SavePageAutoRefresh", { x: cbx.value, skin: "@Model.Skin" }, function (data) {
+            reload();
+
+        });
+    }
     function handle_change_skin(cbx) {
         $.post("/Dashboard/ChangeSkin", { skin: cbx.value }, function (data) {
             location.replace("/Dashboard/Index?skin=" + cbx.value);
@@ -331,7 +352,7 @@
         var h = $("#box_content_" + x55id).height();
         $("#box_content_" + x55id).html("<div style='height:"+h+"px;'><strong>Loading...</strong></div>");
 
-        $.post("/Dashboard/GetWidgetHtmlContent", { x55id: x55id, columnsperpage:@Model.ColumnsPerPage }, function (data) {            
+        $.post("/Dashboard/GetWidgetHtmlContent", { x55id: x55id, columnsperpage:@Model.ColumnsPerPage }, function (data) {
 
             $("#box_content_" + x55id).html(data.x55Content);
 
@@ -349,7 +370,7 @@
                 }
             }
 
-            
+
 
         });
     }
@@ -382,14 +403,13 @@
                 url: "/lib/datatables/localisation/"+lang+".json"
 
             },
-            dom: "Blfrtip",            
+            dom: "Blfrtip",
             paging: true
 
         });
     }
     function datatables_init_buttons_export_print(tableid, lang)
     {
-        alert(tableid);
         $("#"+tableid).DataTable({
             stateSave: true,
             language: {
@@ -417,7 +437,7 @@
 
         });
     }
-        
+
 
     function datatables_init_buttons_export_print_pdf(tableid,lang)
     {

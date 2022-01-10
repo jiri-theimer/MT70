@@ -391,8 +391,7 @@ namespace BL
             this.EntityName = "x55Widget";
             AA("x55Name", "Widget", gdc1, null, "string", false, true);
             AA("x55Code", "Kód widgetu", gdc2, null, "string", false, true);
-            AA("x55Description", "Poznámka", gdc2);
-            AA("x55Skin", "Cílový dashboard");
+            AA("x55Description", "Poznámka", gdc2);            
             AA("x55DataTablesLimit", "Minimum záznamů pro [DataTables]", gdc2);
             AFNUM0("x55Ordinal", "#").DefaultColumnFlag = gdc2;
             AppendTimestamp();
